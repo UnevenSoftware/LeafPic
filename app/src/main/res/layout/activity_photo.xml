@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:theme="@style/Theme.AppCompat.NoActionBar"
               android:layout_width="match_parent"
@@ -6,11 +7,22 @@
               android:background="@color/material_grey_900"
               android:orientation="vertical">
 
+=======
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_material_dark"
+    >
+>>>>>>> f374dfcb86ae2de8058c415136b87db23c28e09d
     <include layout="@layout/toolbar"
              android:id="@+id/my_awesome_toolbar"/>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/current_picture"
+        android:background="@color/background_material_dark"
     />
 </LinearLayout>

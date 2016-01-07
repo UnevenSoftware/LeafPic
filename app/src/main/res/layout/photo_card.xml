@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.leafpic.app.Views.CheckableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="140dp">
+<com.leafpic.app.Views.CheckableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    >
     <ImageView
-            android:id="@+id/pic"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+        android:id="@+id/pic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
     />
-
 </com.leafpic.app.Views.CheckableFrameLayout>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,11 +27,19 @@
 
             <!--VIEW divider DIVIDE IMMAGINE DALL TESTO SOTTO-->
             <View android:id="@+id/divider"
+<<<<<<< HEAD
                   android:layout_width="match_parent"
                   android:layout_height="0dp"
                   android:layout_below="@id/picture"
                   android:background="@android:color/darker_gray"
             />
+=======
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_below="@id/picture"
+                android:background="@android:color/darker_gray"
+                />
+>>>>>>> f374dfcb86ae2de8058c415136b87db23c28e09d
 
             <LinearLayout
                 android:id="@+id/linear_card_text"
