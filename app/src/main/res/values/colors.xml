@@ -3,14 +3,14 @@
     <!--BASE COLOR-->
     <color name="status_bar">#00796b</color>
     <color name="selected_album">#4db6ac</color>
-    <color name="unselected_album">#727272</color>
+    <color name="unselected_album">#424242</color>
     <color name="navigation_bar">#009688</color>
     <color name="toolbar">#009688</color>
     <color name="album_info">#000</color>
 
     <!--GREY-->
     <color name="grey_1">#727272</color>
-
+    <color name="grey_2">#424242</color>
     <!--GREEN-->
     <color name="green_1">#727272</color>
 </resources>
