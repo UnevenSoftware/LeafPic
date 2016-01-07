@@ -27,19 +27,13 @@
 
             <!--VIEW divider DIVIDE IMMAGINE DALL TESTO SOTTO-->
             <View android:id="@+id/divider"
-<<<<<<< HEAD
+
                   android:layout_width="match_parent"
-                  android:layout_height="0dp"
-                  android:layout_below="@id/picture"
-                  android:background="@android:color/darker_gray"
-            />
-=======
-                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_below="@id/picture"
                 android:background="@android:color/darker_gray"
                 />
->>>>>>> f374dfcb86ae2de8058c415136b87db23c28e09d
+
 
             <LinearLayout
                 android:id="@+id/linear_card_text"
