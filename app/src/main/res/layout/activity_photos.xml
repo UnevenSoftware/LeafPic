@@ -7,22 +7,17 @@
 
     <include layout="@layout/toolbar"
              android:id="@+id/my_awesome_toolbar"/>
-    <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="300dp"
-                    android:background="@color/album_info"
-    >
 
-    </RelativeLayout>
 
     <GridView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/gridPhotos"
-            android:layout_gravity="center_horizontal"
             android:numColumns="3"
             android:verticalSpacing="2dp"
             android:horizontalSpacing="2dp"
             android:choiceMode="multipleChoice"
     />
+
 
 </LinearLayout>

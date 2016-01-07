@@ -28,6 +28,7 @@ public class Album implements Parcelable {
     ArrayList<Photo> photos;
     private boolean hidden = false;
     private boolean selected = false;
+
     public Album() {
         photos = new ArrayList<Photo>();
     }
@@ -50,6 +51,7 @@ public class Album implements Parcelable {
         Path = path;
         setHidden(hidden);
     }
+
     protected Album(Parcel in) {
         Path = in.readString();
         DisplayName = in.readString();
