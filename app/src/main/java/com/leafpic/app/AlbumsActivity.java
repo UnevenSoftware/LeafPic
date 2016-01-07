@@ -13,10 +13,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 import com.leafpic.app.Adapters.AlbumAdapter;
+import com.leafpic.app.Adapters.MyAdapter;
 import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,6 +33,7 @@ public class AlbumsActivity extends AppCompatActivity {
     AlbumAdapter albumAdapter;
     GridView albumgrid;
     boolean editmode = false, hidden = false;
+    RecyclerView.Adapter mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -77,10 +81,10 @@ public class AlbumsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        String drawerArrayItems[] = getResources().getStringArray(R.array.drawer_items);
+
 
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        // ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -103,22 +107,24 @@ public class AlbumsActivity extends AppCompatActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.item_drawer_layout, drawerArrayItems));
+        String drawerArrayItems[] = getResources().getStringArray(R.array.drawer_items);
+        int ICONS[] = new int[1];
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);                      // Declaring RecyclerView
+
+        mAdapter = new MyAdapter(drawerArrayItems, ICONS);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
 
         try{
 
-            final ImageView sidebar_picture = (ImageView) findViewById(R.id.sidebar_picture),
-                    current_picture = (ImageView) findViewById(R.id.current_picture);
+            final ImageView current_picture = (ImageView) findViewById(R.id.current_picture);
             DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
             .cacheInMemory(true)
             .cacheOnDisk(true)
             .build();
 
-            ImageLoader.getInstance().displayImage("http://orig13.deviantart.net/bc53/f/2013/079/e/9/dirty_white_wallpaper_by_iamslowe-d5yqet4.png",
-                    sidebar_picture,
-                    defaultOptions);
             ImageLoader.getInstance().displayImage("drawable://" + R.drawable.storage_icon,
                     current_picture,
                     defaultOptions);
@@ -128,6 +134,7 @@ public class AlbumsActivity extends AppCompatActivity {
         }
 
         Spinner spinner = (Spinner) findViewById(R.id.planets_spinner);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -150,6 +157,7 @@ public class AlbumsActivity extends AppCompatActivity {
                         albumgrid.setAdapter(albumAdapter);
                         hidden = true;
                         break;
+
                     default:break;
                 }
             }
