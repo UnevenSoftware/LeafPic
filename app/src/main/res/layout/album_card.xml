@@ -26,10 +26,10 @@
 
             <!--VIEW divider DIVIDE IMMAGINE DALL TESTO SOTTO-->
             <View android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/picture"
-                android:background="@android:color/darker_gray"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_below="@id/picture"
+                  android:background="@android:color/darker_gray"
             />
 
             <LinearLayout

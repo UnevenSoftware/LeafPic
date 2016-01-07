@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:theme="@style/Theme.AppCompat.NoActionBar"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:orientation="vertical">
+              android:layout_height="match_parent"
+              android:background="@color/material_grey_900"
+              android:orientation="vertical">
 
     <include layout="@layout/toolbar"
              android:id="@+id/my_awesome_toolbar"/>
