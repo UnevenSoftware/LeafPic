@@ -10,6 +10,13 @@ import java.util.ArrayList;
  * Created by dnld on 12/11/15.
  */
 public class Album implements Parcelable {
+/*
+    Try SOMETHING
+    BELLA STURIA
+*/
+
+
+
 
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
