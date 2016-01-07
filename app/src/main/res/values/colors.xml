@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="status_bar">#15B097</color>
-    <color name="selected_album">#000</color>
-    <color name="unselected_album">#15B097</color>
-    <color name="navigation_bar">#5500aeae</color>
-    <color name="toolbar">#15E6CD</color>
+    <!--BASE COLOR-->
+    <color name="status_bar">#00796b</color>
+    <color name="selected_album">#4db6ac</color>
+    <color name="unselected_album">#727272</color>
+    <color name="navigation_bar">#009688</color>
+    <color name="toolbar">#009688</color>
     <color name="album_info">#000</color>
 
+    <!--GREY-->
+    <color name="grey_1">#727272</color>
 
-    <!--
-    <color name="status_bar">#15B097</color>
-    <color name="selected_album">#15F999</color>
-    <color name="unselected_album">#15B097</color>
-    <color name="navigation_bar">#15F999</color>
-    -->
+    <!--GREEN-->
+    <color name="green_1">#727272</color>
 </resources>

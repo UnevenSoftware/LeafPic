@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.leafpic.app.Album;
 import com.leafpic.app.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -38,14 +40,13 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
          albums = a;
      }
 
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         RelativeLayout card_layout;
         View v;
         ImageView picture;
         TextView name;
+        TextView nphotos;
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) localContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,7 +54,7 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
             v.setTag(R.id.picture, v.findViewById(R.id.picture));
             v.setTag(R.id.picturetext, v.findViewById(R.id.picturetext));
             v.setTag(R.id.layout_card_id, v.findViewById(R.id.layout_card_id));
-
+            v.setTag(R.id.image_number_text, v.findViewById(R.id.image_number_text));
 
         } else
             v = convertView;
@@ -61,6 +62,7 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
         card_layout = (RelativeLayout) v.getTag(R.id.layout_card_id);
         picture = (ImageView) v.getTag(R.id.picture);
         name = (TextView) v.getTag(R.id.picturetext);
+        nphotos=(TextView) v.getTag(R.id.image_number_text);
 
         Album a = albums.get(position);
         //non so se serve
@@ -76,10 +78,12 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
 
         //Setta immagine
         ImageLoader.getInstance().displayImage(a.getPathCoverAlbum(), picture, defaultOptions);
+
         //setta titolo
         name.setText(a.DisplayName);
+
         //setta numero immaghini
-        //a.getImagesCount();
+        nphotos.setText(Html.fromHtml("<b><font color='#FBC02D'>"+ a.getImagesCount()+"</font></b>" + "<font color='#FFFFFF'> Photos</font>"));
 
         if (a.isSelected()) {
             //name.setBackgroundColor(localContext.getColor(R.color.selected_album));
