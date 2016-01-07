@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:theme="@style/Theme.AppCompat.NoActionBar"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"
+             android:id="@+id/my_awesome_toolbar"/>
+    <RelativeLayout android:layout_width="fill_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/album_info"
+    >
+
+    </RelativeLayout>
+
+    <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gridPhotos"
+            android:layout_gravity="center_horizontal"
+            android:numColumns="3"
+            android:verticalSpacing="2dp"
+            android:horizontalSpacing="2dp"
+            android:choiceMode="multipleChoice"
+    />
+
+</LinearLayout>

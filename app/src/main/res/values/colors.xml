@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="status_bar">#15B097</color>
+    <color name="selected_album">#000</color>
+    <color name="unselected_album">#15B097</color>
+    <color name="navigation_bar">#5500aeae</color>
+    <color name="toolbar">#15E6CD</color>
+    <color name="album_info">#000</color>
+
+
+    <!--
+    <color name="status_bar">#15B097</color>
+    <color name="selected_album">#15F999</color>
+    <color name="unselected_album">#15B097</color>
+    <color name="navigation_bar">#15F999</color>
+    -->
+</resources>

@@ -1,0 +1,32 @@
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".MainActivity"
+>
+
+    <!-- general Stuff -->
+
+
+    <!-- Albums Stuff -->
+    <item
+            android:id="@+id/deleteAlbumButton"
+            android:icon="@mipmap/ic_delete_white_36dp"
+            android:title="@string/delete_album_action"
+            app:showAsAction="ifRoom"/>
+    <item
+            android:id="@+id/shareButton"
+            android:title="Share"
+            app:showAsAction="never"/>
+    <item
+            android:id="@+id/setWallpaper"
+            android:title="Set WallPaper"
+            app:showAsAction="never"/>
+    <item
+            android:title="asdasd"
+            app:showAsAction="never"/>
+
+
+    <!-- End Albums Stuff -->
+
+</menu>

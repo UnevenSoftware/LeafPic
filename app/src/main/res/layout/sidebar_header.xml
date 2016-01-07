@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <ImageView
+
+            android:id="@+id/sidebar_picture"
+            android:layout_width="290dp"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:scaleType="centerCrop"
+    />
+    <ImageView
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/current_picture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:elevation="11dp"
+            android:clickable="true"
+            android:scaleType="centerCrop"
+    />
+    <Spinner
+            android:id="@+id/planets_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:layout_marginTop="115dp"
+            android:layout_marginStart="20dp"
+
+    />
+</FrameLayout>

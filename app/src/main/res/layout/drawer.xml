@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:layout_gravity="start"
+              android:elevation="10dp">
+
+
+    <include layout="@layout/sidebar_header"/>
+
+
+
+    <ListView android:id="@+id/left_drawer"
+              android:layout_width="290dp"
+              android:layout_height="match_parent"
+
+              android:choiceMode="singleChoice"
+              android:divider="@android:color/transparent"
+              android:dividerHeight="0dp"
+              android:background="#111"/>
+
+</LinearLayout>

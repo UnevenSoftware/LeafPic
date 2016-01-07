@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Leaf Pic</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_camera">Camera</string>
+
+    <string-array name="drawer_items">
+        <item>Local Folders</item>
+        <item>Google Foto</item>
+        <item>Imgur</item>
+        <item>500px</item>
+        <item>DropBox</item>
+        <item>Reddit</item>
+    </string-array>
+
+    <string-array name="planets_array">
+        <item>default</item>
+        <item>hidden</item>
+
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="exclude_album_option">Exclude</string>
+    <string name="delete_album_action">Delete</string>
+    <string name="exclude_album_action">Exclude</string>
+    <string name="hide_album_action">Hide</string>
+    <string name="unhide_album_action">Unhide</string>
+    <string name="refresh_hidde_folders_action">Refresh</string>
+
+    <string name="hide_album_message">Are you sure you want to hide this album?
+        (it will insert .nomedia file in the folder adn if there is others media them wont be
+        available also from other apps! use EXCLUDE option instead)
+    </string>
+    <string name="delete_album_message">Are you sure you want to delete the entire album folder?</string>
+    <string name="exclude_album_message">Are you sure you want to exclude the album?</string>
+
+</resources>

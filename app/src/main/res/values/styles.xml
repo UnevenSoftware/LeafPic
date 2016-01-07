@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#15E6CD</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimaryDark">#15B097</item>
+    </style>
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Dialog">
+
+    </style>
+
+    <style name="MyToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/toolbar</item>
+        <item name="android:elevation" tools:ignore="NewApi">5dp</item>
+        <item name="theme">@style/MyToolbarTheme</item>
+
+    </style>
+
+    <style name="MyToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">#FFF</item>
+        <item name="colorControlNormal">#FFF</item>
+        <item name="colorControlHighlight">#FFF</item>
+    </style>
+
+</resources>
