@@ -67,6 +67,25 @@ class DatabaseHandler extends SQLiteOpenHelper {
     /***
      * Normal Albums
      ***/
+    public Album getAlbum(String path) {
+        String selectQuery = "SELECT  * FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_PATH + "='" + path + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        Album a = new Album();
+        if (cursor.moveToFirst()) {
+            a = new Album(
+                    string.quoteReverse(cursor.getString(0)),
+                    string.quoteReverse(cursor.getString(1)),
+                    Boolean.getBoolean(cursor.getString(2)));
+            a.photos = getPhotosByAlbum(a.Path);
+
+        }
+        return a;
+    }
+
+
+
 
     public ArrayList<Album> getAllAlbums() {
         ArrayList<Album> contactList = new ArrayList<Album>();
@@ -378,6 +397,22 @@ class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Photo getPhoto(String path) {
+        String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
+                PHOTO_PATH + "='" + path + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        Photo a = null;
+        if (cursor.moveToFirst()) {
+            a = new Photo(
+                    string.quoteReverse(cursor.getString(0)),
+                    cursor.getString(1));
+
+
+        }
+        return a;
+    }
     public ArrayList<Photo> getPhotosByAlbum(String path) {
         ArrayList<Photo> contactList = new ArrayList<Photo>();
         String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +

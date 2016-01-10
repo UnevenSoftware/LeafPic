@@ -13,27 +13,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.*;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
-import com.leafpic.app.Adapters.AlbumAdapter;
+import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Adapters.MyAdapter;
 import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 
 public class AlbumsActivity extends AppCompatActivity {
     DatabaseHandler db = new DatabaseHandler(AlbumsActivity.this);
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
-    AlbumAdapter albumAdapter;
-    GridView albumgrid;
+
     boolean editmode = false, hidden = false;
     RecyclerView.Adapter mAdapter;
+    RecyclerView mRecyclerView;
+    AlbumsAdapter adapt;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -44,10 +44,7 @@ public class AlbumsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_albums);
 
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setStatusBarTintEnabled(false);
-        tintManager.setNavigationBarTintResource(R.color.navigation_bar);
+
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .memoryCacheExtraOptions(200, 200)
@@ -109,12 +106,13 @@ public class AlbumsActivity extends AppCompatActivity {
 
         String drawerArrayItems[] = getResources().getStringArray(R.array.drawer_items);
         int ICONS[] = new int[1];
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);                      // Declaring RecyclerView
+        RecyclerView drawerAdapter = (RecyclerView) findViewById(R.id.RecyclerView);                      // Declaring
+        // RecyclerView
 
         mAdapter = new MyAdapter(drawerArrayItems, ICONS);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        drawerAdapter.setLayoutManager(mLayoutManager);
+        drawerAdapter.setAdapter(mAdapter);
 
 
         try{
@@ -145,16 +143,26 @@ public class AlbumsActivity extends AppCompatActivity {
                 switch (position){
                     case 0:
                         albums.loadAlbums();
-                        albumAdapter = new AlbumAdapter(AlbumsActivity.this, R.layout.album_card, albums.dispAlbums);
+                        //adapt = new AlbumsAdapter(albums.dispAlbums,R.layout.album_card);
+                        //mRecyclerView.setAdapter(adapt);
+                        adapt.setDataset(albums.dispAlbums);
+                        adapt.notifyDataSetChanged();
+                        //adapt.setDataset(albums.dispAlbums);
+                        /*albumAdapter = new AlbumAdapter(AlbumsActivity.this, R.layout.album_card, albums.dispAlbums);
                         albumgrid = (GridView) findViewById(R.id.gridAlbums);
-                        albumgrid.setAdapter(albumAdapter);
+                        albumgrid.setAdapter(albumAdapter);*/
                         hidden = false;
                         break;
                     case 1:
                         albums.loadHiddenAlbums();
-                        albumAdapter = new AlbumAdapter(AlbumsActivity.this, R.layout.album_card, albums.dispAlbums);
+                        //adapt = new AlbumsAdapter(albums.dispAlbums,R.layout.album_card);
+                        // mRecyclerView.setAdapter(adapt);
+                        adapt.setDataset(albums.dispAlbums);
+                        adapt.notifyDataSetChanged();
+                        //adapt.setDataset(albums.dispAlbums);
+                        /*albumAdapter = new AlbumAdapter(AlbumsActivity.this, R.layout.album_card, albums.dispAlbums);
                         albumgrid = (GridView) findViewById(R.id.gridAlbums);
-                        albumgrid.setAdapter(albumAdapter);
+                        albumgrid.setAdapter(albumAdapter);*/
                         hidden = true;
                         break;
 
@@ -274,13 +282,13 @@ public class AlbumsActivity extends AppCompatActivity {
                     album.photos = db.getPhotosByAlbum(album.Path);
                 }
 
-                albumAdapter.notifyDataSetChanged();
+                // albumAdapter.notifyDataSetChanged();
                 break;
             case R.id.endEditAlbumMode:
                 editmode = false;
                 invalidateOptionsMenu();
                 albums.clearSelectedAlbums();
-                albumAdapter.notifyDataSetChanged();
+                // albumAdapter.notifyDataSetChanged();
                 break;
 
             case R.id.excludeAlbumButton:
@@ -292,7 +300,7 @@ public class AlbumsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         albums.excludeSelectedAlbums();
-                        albumAdapter.notifyDataSetChanged();
+                        // albumAdapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
                 });
@@ -313,7 +321,7 @@ public class AlbumsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         albums.deleteSelectedAlbums();
-                        albumAdapter.notifyDataSetChanged();
+                        //albumAdapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
 
                     }
@@ -329,7 +337,7 @@ public class AlbumsActivity extends AppCompatActivity {
             case R.id.hideAlbumButton:
                 if (hidden) {
                     albums.unHideSelectedAlbums();
-                    albumAdapter.notifyDataSetChanged();
+                    //albumAdapter.notifyDataSetChanged();
                     invalidateOptionsMenu();
                 } else {
                     AlertDialog.Builder dlg1 = new AlertDialog.Builder(
@@ -339,7 +347,7 @@ public class AlbumsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int j) {
                             albums.hideSelectedAlbums();
-                            albumAdapter.notifyDataSetChanged();
+                            //albumAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         }
                     });
@@ -352,7 +360,7 @@ public class AlbumsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             albums.excludeSelectedAlbums();
-                            albumAdapter.notifyDataSetChanged();
+                            //albumAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         }
                     });
@@ -401,10 +409,34 @@ public class AlbumsActivity extends AppCompatActivity {
         }
 
 
-        albumAdapter = new AlbumAdapter(this, R.layout.album_card, albums.dispAlbums);
-        albumgrid = (GridView) findViewById(R.id.gridAlbums);
-        albumgrid.setAdapter(albumAdapter);
-        albumgrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.gridAlbums);
+        adapt = new AlbumsAdapter(albums.dispAlbums, R.layout.album_card);
+
+        adapt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView a = (TextView) v.findViewById(R.id.picturetext);
+                String s = a.getTag().toString();
+                Album album = db.getAlbum(s);
+                album.photos = db.getPhotosByAlbum(s);
+
+                Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
+
+                Bundle b = new Bundle();
+
+                b.putParcelable("album", album);
+                intent.putExtras(b);
+                startActivity(intent);
+
+            }
+        });
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(adapt);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        /*albumgrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -440,6 +472,6 @@ public class AlbumsActivity extends AppCompatActivity {
                 return true;
             }
 
-        });
+        });*/
     }
 }

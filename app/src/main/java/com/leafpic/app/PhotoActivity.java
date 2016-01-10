@@ -2,12 +2,10 @@ package com.leafpic.app;
 
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.ImageView;
-import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -35,7 +33,6 @@ public class PhotoActivity extends AppCompatActivity {
         display.getSize(size);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .memoryCacheExtraOptions(size.x, size.y)
-                .diskCacheExtraOptions(size.x, size.y, null)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getInstance().destroy();
@@ -45,14 +42,13 @@ public class PhotoActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         f = data.getParcelable("photo");
         album = data.getParcelable("album");
-        string.showToast(this, f.Path);
+
         try {
             ImageView picture = (ImageView) findViewById(R.id.current_picture);
             DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                     .showImageOnLoading(R.drawable.ic_empty)
-                    .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+                    .imageScaleType(ImageScaleType.NONE)
                     .cacheInMemory(true)
-                    .cacheOnDisk(true)
                     .build();
 
 
@@ -101,8 +97,8 @@ public class PhotoActivity extends AppCompatActivity {
 
 
             case android.R.id.home:
-
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
+                //NavUtils.navigateUpFromSameTask(this);
                 return true;
 
 
