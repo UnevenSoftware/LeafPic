@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.GestureDetector;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,6 +35,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
@@ -77,15 +76,7 @@ public class PhotoActivity extends AppCompatActivity {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     if (picture.isReady()) {
-                        //Toast.makeText(PhotoActivity.this, "Toast", Toast.LENGTH_SHORT).show();
-                        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-                        if(hidetoolbar==false) {
-                            toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                        }
-                        else {
-                            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                        }
-                        hidetoolbar=!hidetoolbar;
+                        OneTapImage();
                     }
                     return true;
                 }
@@ -102,15 +93,16 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    public void onetap()
-    {
-        string.showToast(PhotoActivity.this, "HI");
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_photo, menu);
-        return true;
+    public void OneTapImage(){
+        //Toast.makeText(PhotoActivity.this, "Toast", Toast.LENGTH_SHORT).show();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        if(hidetoolbar==false) {
+            toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+        }
+        else {
+            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+        }
+        hidetoolbar=!hidetoolbar;
     }
 
     @Override
