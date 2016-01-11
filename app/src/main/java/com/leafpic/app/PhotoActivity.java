@@ -4,8 +4,20 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.*;
-import android.widget.ImageView;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -19,6 +31,9 @@ public class PhotoActivity extends AppCompatActivity {
 
     Album album;
     Photo f;
+
+    boolean hidetoolbar=false;
+    //Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,46 +59,53 @@ public class PhotoActivity extends AppCompatActivity {
         album = data.getParcelable("album");
 
         try {
-            ImageView picture = (ImageView) findViewById(R.id.current_picture);
+            //ImageView picture = (ImageView) findViewById(R.id.current_picture);
+            final SubsamplingScaleImageView picture = (SubsamplingScaleImageView)findViewById(R.id.imageView);
+
             DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                     .showImageOnLoading(R.drawable.ic_empty)
                     .imageScaleType(ImageScaleType.NONE)
                     .cacheInMemory(true)
                     .build();
 
+            //ImageLoader.getInstance().displayImage("file://" + f.Path, picture, defaultOptions);
+            picture.setImage(ImageSource.uri("file://" + f.Path));
+            picture.setMaxScale(10);
 
-            ImageLoader.getInstance().displayImage("file://" + f.Path, picture, defaultOptions);
-
-
-            // setTitle(album.DisplayName);
-
-
-            //photos = new HandlingPhotos(this, album.Path, album.isHidden());
-
-            /*adapter = new PhotosAdapter(this, R.layout.photo_card, album.photos);
-            photosgrid = (GridView) findViewById(R.id.gridPhotos);
-            photosgrid.setAdapter(adapter);
-            photosgrid.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //On Single Tap
+            final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Photo f = (Photo) parent.getItemAtPosition(position);
-                    string.showToast(PhotoActivity.this,f.Path);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    if (picture.isReady()) {
+                        //Toast.makeText(PhotoActivity.this, "Toast", Toast.LENGTH_SHORT).show();
+                        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+                        if(hidetoolbar==false) {
+                            toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                        }
+                        else {
+                            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                        }
+                        hidetoolbar=!hidetoolbar;
+                    }
+                    return true;
                 }
             });
-            hidden = album.isHidden();
-            */
+            picture.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+            //END TAP
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
+    public void onetap()
+    {
+        string.showToast(PhotoActivity.this, "HI");
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -101,30 +123,28 @@ public class PhotoActivity extends AppCompatActivity {
                 //NavUtils.navigateUpFromSameTask(this);
                 return true;
 
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
-
     public void initUiTweaks() {
-
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getColor(R.color.status_bar));
 
-
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setShowHideAnimationEnabled(true);
+        toolbar.setBackgroundColor(getColor(R.color.trasparent_toolbar));
         //.setDisplayHomeAsUpEnabled(true);
 
     }
+
 }

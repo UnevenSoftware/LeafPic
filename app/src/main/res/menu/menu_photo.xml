@@ -24,8 +24,8 @@
         app:showAsAction="never"
         />
     <item
-        android:title="asdasd"
-        app:showAsAction="never"
+        android:id="@+id/Rotate"
+        android:title="Rotate 90"
         />
     <!-- End Albums Stuff -->
 </menu>
