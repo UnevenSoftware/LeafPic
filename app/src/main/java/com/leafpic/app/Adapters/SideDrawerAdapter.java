@@ -11,13 +11,13 @@ import com.leafpic.app.R;
 /**
  * Created by dnld on 1/7/16.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class SideDrawerAdapter extends RecyclerView.Adapter<SideDrawerAdapter.ViewHolder> {
 
 
     private String mNavTitles[];
     private int mIcons[];
 
-    public MyAdapter(String Titles[], int Icons[]) {
+    public SideDrawerAdapter(String Titles[], int Icons[]) {
         mNavTitles = Titles;
         mIcons = Icons;
     }
@@ -29,7 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(SideDrawerAdapter.ViewHolder holder, int position) {
 
         holder.textView.setText(mNavTitles[position]);
         holder.imageView.setImageResource(R.mipmap.ic_local_storage);

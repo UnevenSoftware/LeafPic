@@ -45,8 +45,7 @@ public class PhotosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photos);
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(100, 100)
-                .diskCacheExtraOptions(100, 100, null)
+                .memoryCacheExtraOptions(50, 100)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getInstance().init(config);
@@ -64,10 +63,7 @@ public class PhotosActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ImageView is = (ImageView) v.findViewById(R.id.pic);
-
-
                     Photo a = db.getPhoto(is.getTag().toString());
-
                     Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
@@ -77,6 +73,31 @@ public class PhotosActivity extends AppCompatActivity {
                 }
             });
 
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                boolean hideToolBar = false;
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+
+                    if (hideToolBar) {
+                        //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new
+                        // AccelerateInterpolator()).start();
+                        getSupportActionBar().hide();
+                    } else {
+                        //toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                        getSupportActionBar().show();
+                    }
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 20) hideToolBar = true;
+                    else if (dy < -5) hideToolBar = false;
+
+                }
+            });
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -123,12 +144,12 @@ public class PhotosActivity extends AppCompatActivity {
             opt.setTitle(getString(R.string.hide_album_action));
         }
 
-       /* if (albums.getSelectedCount()==0) {
+        if (albums.getSelectedCount() == 0) {
             editmode = false;
             opt = menu.findItem(R.id.endEditAlbumMode);
             setOptionsAlbmuMenusItemsVisible(menu,false);
             opt.setEnabled(false).setVisible(false);
-        }*/
+        }
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -153,6 +174,10 @@ public class PhotosActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 photos.clearSelectedPhotos();
                 adapter.notifyDataSetChanged();*/
+                break;
+            case R.id.action_settings:
+                string.showToast(PhotosActivity.this, "asdasdas");
+
                 break;
 
             case R.id.excludeAlbumButton:
@@ -261,9 +286,12 @@ public class PhotosActivity extends AppCompatActivity {
 
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //.setDisplayHomeAsUpEnabled(true);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setShowHideAnimationEnabled(true);
+        }
+
 
     }
 }
