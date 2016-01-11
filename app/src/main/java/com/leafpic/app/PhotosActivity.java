@@ -45,8 +45,7 @@ public class PhotosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photos);
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(100, 100)
-                .diskCacheExtraOptions(100, 100, null)
+                .memoryCacheExtraOptions(50, 100)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getInstance().init(config);
@@ -64,10 +63,7 @@ public class PhotosActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ImageView is = (ImageView) v.findViewById(R.id.pic);
-
-
                     Photo a = db.getPhoto(is.getTag().toString());
-
                     Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
@@ -83,7 +79,7 @@ public class PhotosActivity extends AppCompatActivity {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+
                     if (hideToolBar) {
                         //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new
                         // AccelerateInterpolator()).start();
