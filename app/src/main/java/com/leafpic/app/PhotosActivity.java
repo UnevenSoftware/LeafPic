@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
-import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -20,8 +23,10 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
  * Created by dnld on 12/12/15.
  */
 public class PhotosActivity extends AppCompatActivity {
+
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
-    //HandlingPhotos photos;
+    DatabaseHandler db = new DatabaseHandler(PhotosActivity.this);
+
     Album album;
 
     GridView photosgrid;
@@ -38,6 +43,7 @@ public class PhotosActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
+
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .memoryCacheExtraOptions(100, 100)
                 .diskCacheExtraOptions(100, 100, null)
@@ -51,37 +57,32 @@ public class PhotosActivity extends AppCompatActivity {
             Bundle data = getIntent().getExtras();
             album = data.getParcelable("album");
             setTitle(album.DisplayName);
-            //photos = new HandlingPhotos(this, album.Path, album.isHidden());
 
-            adapter = new PhotosAdapter(this, R.layout.photo_card, album.photos);
-            photosgrid = (GridView) findViewById(R.id.gridPhotos);
-            photosgrid.setAdapter(adapter);
-            photosgrid.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
+            adapter = new PhotosAdapter(album.photos, R.layout.photo_card);
+            adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Photo f = (Photo) parent.getItemAtPosition(position);
-                    string.showToast(PhotosActivity.this, f.Path);
-                }
+                public void onClick(View v) {
+                    ImageView is = (ImageView) v.findViewById(R.id.pic);
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
 
-                }
-            });
-            photosgrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    Photo a = db.getPhoto(is.getTag().toString());
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Photo a = (Photo) parent.getItemAtPosition(position);
                     Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
                     b.putParcelable("photo", a);
                     intent.putExtras(b);
                     startActivity(intent);
-
                 }
             });
+
+            mRecyclerView.setHasFixedSize(true);
+            mRecyclerView.setAdapter(adapter);
+            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
             hidden = album.isHidden();
         }
         catch (Exception e){ e.printStackTrace(); }
