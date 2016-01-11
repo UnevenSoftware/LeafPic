@@ -25,6 +25,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     private int layout_ID;
     private View.OnClickListener mOnClickListener;
+    private View.OnLongClickListener mOnLongClickListener;
 
     public AlbumsAdapter(ArrayList<Album> ph, int id) {
         albums = ph;
@@ -35,6 +36,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
         v.setOnClickListener(mOnClickListener);
+        v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(v);
     }
 
@@ -54,24 +56,31 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 "color='#FFFFFF'> Photos</font>"));
         holder.name.setTag(a.Path);
 
-        /*if (a.isSelected()) {
+
+        if (a.isSelected()) {
             //name.setBackgroundColor(localContext.getColor(R.color.selected_album));
-            holder.card_layout.setBackgroundColor(holder.localContext.getColor(R.color.selected_album));
+            holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
         } else {
             //name.setBackgroundColor(localContext.getColor(R.color.unselected_album));
-            holder. card_layout.setBackgroundColor(localContext.getColor(R.color.unselected_album));
-        }*/
+            holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
+        }
 
     }
+
 
     public void setDataset(ArrayList<Album> dataset) {
         albums = dataset;
         // This isn't working
         notifyItemRangeInserted(0, dataset.size());
+
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
         mOnClickListener = lis;
+    }
+
+    public void setOnLongClickListener(View.OnLongClickListener lis) {
+        mOnLongClickListener = lis;
     }
 
 
