@@ -7,7 +7,7 @@
     <color name="navigation_bar">#009688</color>
     <color name="toolbar">#009688</color>
     <color name="album_info">#000</color>
-
+    <color name="trasparent_toolbar">#33009688</color>
     <!--GREY-->
     <color name="grey_1">#727272</color>
     <color name="grey_2">#424242</color>
