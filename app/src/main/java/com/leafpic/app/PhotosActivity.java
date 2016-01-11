@@ -77,6 +77,31 @@ public class PhotosActivity extends AppCompatActivity {
                 }
             });
 
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                boolean hideToolBar = false;
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+                    if (hideToolBar) {
+                        //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new
+                        // AccelerateInterpolator()).start();
+                        getSupportActionBar().hide();
+                    } else {
+                        //toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                        getSupportActionBar().show();
+                    }
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 20) hideToolBar = true;
+                    else if (dy < -5) hideToolBar = false;
+
+                }
+            });
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -153,6 +178,10 @@ public class PhotosActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 photos.clearSelectedPhotos();
                 adapter.notifyDataSetChanged();*/
+                break;
+            case R.id.action_settings:
+                string.showToast(PhotosActivity.this, "asdasdas");
+
                 break;
 
             case R.id.excludeAlbumButton:
@@ -261,9 +290,12 @@ public class PhotosActivity extends AppCompatActivity {
 
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //.setDisplayHomeAsUpEnabled(true);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setShowHideAnimationEnabled(true);
+        }
+
 
     }
 }

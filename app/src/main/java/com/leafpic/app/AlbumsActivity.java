@@ -18,7 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 import com.leafpic.app.Adapters.AlbumsAdapter;
-import com.leafpic.app.Adapters.MyAdapter;
+import com.leafpic.app.Adapters.SideDrawerAdapter;
 import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -99,7 +99,7 @@ public class AlbumsActivity extends AppCompatActivity {
 
         RecyclerView drawerAdapter = (RecyclerView) findViewById(R.id.RecyclerView);
 
-        mAdapter = new MyAdapter(drawerArrayItems, ICONS);
+        mAdapter = new SideDrawerAdapter(drawerArrayItems, ICONS);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         drawerAdapter.setLayoutManager(mLayoutManager);
         drawerAdapter.setAdapter(mAdapter);
