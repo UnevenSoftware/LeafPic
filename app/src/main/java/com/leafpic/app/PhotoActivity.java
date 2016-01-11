@@ -1,6 +1,5 @@
 package com.leafpic.app;
 
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,9 +8,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 
 /**
  * Created by dnld on 12/12/15.
@@ -30,17 +27,6 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        initUiTweaks();
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(size.x, size.y)
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .build();
-        ImageLoader.getInstance().destroy();
-        ImageLoader.getInstance().init(config);
         initUiTweaks();
 
         Bundle data = getIntent().getExtras();
@@ -73,7 +59,7 @@ public class PhotoActivity extends AppCompatActivity {
                     return gestureDetector.onTouchEvent(motionEvent);
                 }
             });
-            //END TAP
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,8 +102,6 @@ public class PhotoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setShowHideAnimationEnabled(true);
         toolbar.setBackgroundColor(getColor(R.color.trasparent_toolbar));
-        //.setDisplayHomeAsUpEnabled(true);
-
     }
 
 }
