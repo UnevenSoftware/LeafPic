@@ -123,12 +123,12 @@ public class PhotosActivity extends AppCompatActivity {
             opt.setTitle(getString(R.string.hide_album_action));
         }
 
-       /* if (albums.getSelectedCount()==0) {
+        if (albums.getSelectedCount() == 0) {
             editmode = false;
             opt = menu.findItem(R.id.endEditAlbumMode);
             setOptionsAlbmuMenusItemsVisible(menu,false);
             opt.setEnabled(false).setVisible(false);
-        }*/
+        }
 
         return super.onPrepareOptionsMenu(menu);
     }

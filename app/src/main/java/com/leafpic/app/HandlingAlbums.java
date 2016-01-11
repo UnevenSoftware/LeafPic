@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class HandlingAlbums {
 
     public ArrayList<Album> dispAlbums;
+    public int last_position_selecte = -1;
     private Context context;
     private ArrayList<Album> selectedAlbums;
 
@@ -53,6 +54,28 @@ public class HandlingAlbums {
         x.setSelcted(val);
         if (val) selectedAlbums.add(x);
         else selectedAlbums.remove(x);
+    }
+
+    public int selectAlbum(String a, boolean val) {
+        Album x = getAlbum(a);
+        if (x != null) {
+            x.setPath();
+            x.setSelcted(val);
+            if (val) selectedAlbums.add(x);
+            else selectedAlbums.remove(x);
+        }
+        return last_position_selecte;
+    }
+
+    public Album getAlbum(String p) {
+        for (int i = 0; i < dispAlbums.size(); i++) {
+            if (dispAlbums.get(i).Path.equals(p)) {
+                last_position_selecte = i;
+                return dispAlbums.get(i);
+
+            }
+        }
+        return null;
     }
 
     public void hideSelectedAlbums() {
