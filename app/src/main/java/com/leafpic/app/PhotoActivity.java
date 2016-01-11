@@ -1,13 +1,13 @@
 package com.leafpic.app;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.leafpic.app.Adapters.PhotosPagerAdapter;
 
 
 /**
@@ -20,6 +20,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     boolean toolbar_hidden = false;
     Toolbar toolbar;
+    PhotosPagerAdapter mCustomPagerAdapter;
+    ViewPager mViewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,31 +36,36 @@ public class PhotoActivity extends AppCompatActivity {
         album = data.getParcelable("album");
 
         try {
-            final SubsamplingScaleImageView picture = (SubsamplingScaleImageView)findViewById(R.id.imageView);
-            picture.setImage(ImageSource.uri("file://" + f.Path));
-            picture.setMaxScale(10);
-
             final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    if (picture.isReady()) {
-                        if (!toolbar_hidden) {
-                            toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                        }
-                        else {
-                            toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                        }
-                        toolbar_hidden = !toolbar_hidden;
+                    //if (picture.isReady()) {
+                    if (!toolbar_hidden) {
+                        toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                    } else {
+                        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
                     }
+                    toolbar_hidden = !toolbar_hidden;
+
                     return true;
                 }
             });
-            picture.setOnTouchListener(new View.OnTouchListener() {
+
+            mCustomPagerAdapter = new PhotosPagerAdapter(this, album.photos);
+            mViewPager = (ViewPager) findViewById(R.id.pager);
+            mViewPager.setAdapter(mCustomPagerAdapter);
+
+           /* mViewPager.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
+
                     return gestureDetector.onTouchEvent(motionEvent);
                 }
-            });
+            });*/
+
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
