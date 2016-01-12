@@ -3,6 +3,7 @@ package com.leafpic.app;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
-import android.widget.GridView;
 import android.widget.ImageView;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.utils.string;
@@ -29,7 +29,6 @@ public class PhotosActivity extends AppCompatActivity {
 
     Album album;
 
-    GridView photosgrid;
     boolean editmode = false, hidden = false;
     PhotosAdapter adapter;
 
@@ -64,6 +63,7 @@ public class PhotosActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     ImageView is = (ImageView) v.findViewById(R.id.pic);
                     Photo a = db.getPhoto(is.getTag().toString());
+
                     Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
@@ -258,10 +258,8 @@ public class PhotosActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_camera:
-                Photo s = (Photo) photosgrid.getSelectedItem();
-                string.showToast(this, s.FolderPath);
-                /*Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                startActivity(i);*/
+                Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                startActivity(i);
                 return true;
 
 

@@ -65,6 +65,14 @@ public class Album implements Parcelable {
         selected = in.readByte() != 0x00;
     }
 
+    public int getPhotoIndex(String path) {
+        for (int i = 0; i < photos.size(); i++) {
+            if (photos.get(i).Path.equals(path))
+                return i;
+        }
+        return 0;
+    }
+
     public void setPath() {
         try {
             Path = string.getBucketPathbyImagePath(photos.get(0).Path);
