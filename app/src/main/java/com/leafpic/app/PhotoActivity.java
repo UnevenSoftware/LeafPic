@@ -1,19 +1,22 @@
 package com.leafpic.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
+import com.leafpic.app.utils.string;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by dnld on 12/12/15.
@@ -46,6 +49,7 @@ public class PhotoActivity extends AppCompatActivity {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     //if (picture.isReady()) {
+                    string.showToast(getApplicationContext(), "click");
                     if (!toolbar_hidden) {
                         toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
                     } else {
@@ -60,18 +64,14 @@ public class PhotoActivity extends AppCompatActivity {
             mCustomPagerAdapter = new PhotosPagerAdapter(this, album.photos);
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
+            mViewPager.setCurrentItem(album.getPhotoIndex(f.Path));
 
-           /* mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            /*mViewPager.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                    return gestureDetector.onTouchEvent(motionEvent);
+                public boolean onTouch(View v, MotionEvent event) {
+                    return gestureDetector.onTouchEvent(event);
                 }
             });*/
-
-
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,6 +93,27 @@ public class PhotoActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 //NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.shareButton:
+
+
+                String file_path = album.photos.get(mViewPager.getCurrentItem()).Path;
+                string.showToast(this, file_path);
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+                try {
+                    f.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
+                startActivity(Intent.createChooser(share, "Share Image"));
+
+
                 return true;
 
             default:

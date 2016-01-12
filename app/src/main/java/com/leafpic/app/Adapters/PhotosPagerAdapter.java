@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.Photo;
@@ -45,12 +44,11 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
         picture.setMaxScale(10);
 
         container.addView(itemView);
-
         return itemView;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+        container.removeView((View) object);
     }
 }
