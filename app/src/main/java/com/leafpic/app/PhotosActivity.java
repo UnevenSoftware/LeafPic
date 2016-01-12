@@ -11,8 +11,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.*;
+import android.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,7 +34,8 @@ public class PhotosActivity extends AppCompatActivity {
     DatabaseHandler db = new DatabaseHandler(PhotosActivity.this);
 
     Album album;
-
+    boolean hideToolBar = false;
+    Toolbar toolbar;
     boolean editmode = false, hidden = false;
     PhotosAdapter adapter;
 
@@ -57,6 +64,9 @@ public class PhotosActivity extends AppCompatActivity {
             setTitle(album.DisplayName);
 
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
+
+            //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
             adapter = new PhotosAdapter(album.photos, R.layout.photo_card);
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -74,20 +84,21 @@ public class PhotosActivity extends AppCompatActivity {
             });
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                boolean hideToolBar = false;
+
 
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
 
                     if (hideToolBar) {
-                        //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new
+                        //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
                         // AccelerateInterpolator()).start();
-                        getSupportActionBar().hide();
+                        //getSupportActionBar().hide();
                     } else {
                         //toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                        getSupportActionBar().show();
+                        //getSupportActionBar().show();
                     }
+                    hideToolBar=!hideToolBar;
                 }
 
                 @Override
@@ -281,14 +292,16 @@ public class PhotosActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getColor(R.color.status_bar));
 
-
         /**** ToolBar*/
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        if (toolbar != null) {
+        toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setShowHideAnimationEnabled(true);
+        /*if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setShowHideAnimationEnabled(true);
-        }
+        }*/
 
 
     }

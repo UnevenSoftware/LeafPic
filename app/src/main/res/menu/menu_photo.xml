@@ -8,24 +8,28 @@
 
     <!-- Albums Stuff -->
     <item
-        android:id="@+id/deleteAlbumButton"
-        android:icon="@mipmap/ic_delete_white_36dp"
+        android:id="@+id/deletePhoto"
+        android:icon="@mipmap/ic_delete_white_24dp"
         android:title="@string/delete_album_action"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/shareButton"
+        android:icon="@mipmap/ic_share_white_24dp"
         android:title="Share"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/setWallpaper"
         android:title="Set WallPaper"
+        android:icon="@mipmap/ic_done_white_24dp"
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/Rotate"
+        android:id="@+id/rotatePhoto"
+        android:icon="@mipmap/ic_rotate_right_white_24dp"
         android:title="Rotate 90"
+        app:showAsAction="never"
         />
     <!-- End Albums Stuff -->
 </menu>

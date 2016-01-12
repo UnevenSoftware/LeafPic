@@ -15,25 +15,23 @@
     <!-- Albums Stuff -->
     <item
         android:id="@+id/deleteAlbumButton"
-        android:icon="@mipmap/ic_delete_white_36dp"
+        android:icon="@mipmap/ic_delete_white_24dp"
         android:title="@string/delete_album_action"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/endEditAlbumMode"
-        android:icon="@mipmap/ic_done_white_36dp"
+        android:icon="@mipmap/ic_done_white_24dp"
         android:title="DONE"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/excludeAlbumButton"
-        android:icon="@mipmap/ic_do_not_disturb_white_36dp"
         android:title="@string/exclude_album_action"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:icon="@mipmap/ic_visibility_off_white_36dp"
         android:title="@string/hide_album_action"
         app:showAsAction="never"
         />
