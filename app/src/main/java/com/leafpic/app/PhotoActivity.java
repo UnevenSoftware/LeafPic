@@ -7,9 +7,15 @@ import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.utils.string;
 
@@ -95,8 +101,6 @@ public class PhotoActivity extends AppCompatActivity {
                 //NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.shareButton:
-
-
                 String file_path = album.photos.get(mViewPager.getCurrentItem()).Path;
                 string.showToast(this, file_path);
                 Intent share = new Intent(Intent.ACTION_SEND);
@@ -112,10 +116,12 @@ public class PhotoActivity extends AppCompatActivity {
                 }
                 share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
                 startActivity(Intent.createChooser(share, "Share Image"));
-
+                return true;
+            case R.id.deletePhoto:
 
                 return true;
-
+            case R.id.rotatePhoto:
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
