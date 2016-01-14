@@ -286,6 +286,12 @@ public class PhotosActivity extends AppCompatActivity {
 
     public void initUiTweaks() {
 
+        /**** Navigation Bar*/
+        /*
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
+        }
+        */
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

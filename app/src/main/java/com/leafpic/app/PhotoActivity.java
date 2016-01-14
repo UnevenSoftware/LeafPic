@@ -118,9 +118,12 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             case R.id.deletePhoto:
-
+                //deleteFile(album.photos.get(mViewPager.getCurrentItem()).Path);
                 return true;
             case R.id.rotatePhoto:
+                return true;
+            case R.id.setWallpaper:
+
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -130,11 +133,17 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
+        /**** Navigation Bar*/
+        /*
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
+        }
+        */
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getColor(R.color.status_bar));
+        window.setStatusBarColor(getColor(R.color.toolbar));
 
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
