@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.leafpic.app.utils.string;
@@ -103,6 +104,15 @@ public class Album implements Parcelable {
         else
             return "drawable://" + R.drawable.ic_empty;
     }
+
+    public int getColorAlbum() {
+        if (photos.size() > 0)
+            return photos.get(0).getDominantColor();
+        else
+            return Color.DKGRAY;
+    }
+
+
 
     public int getImagesCount() {
         return photos.size();
