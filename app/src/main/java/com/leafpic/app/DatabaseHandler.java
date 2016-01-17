@@ -79,7 +79,6 @@ class DatabaseHandler extends SQLiteOpenHelper {
                     string.quoteReverse(cursor.getString(1)),
                     Boolean.getBoolean(cursor.getString(2)));
             a.photos = getPhotosByAlbum(a.Path);
-
         }
         return a;
     }
@@ -96,7 +95,8 @@ class DatabaseHandler extends SQLiteOpenHelper {
             do contactList.add(new Album(
                     string.quoteReverse(cursor.getString(0)),
                     string.quoteReverse(cursor.getString(1)),
-                    Boolean.getBoolean(cursor.getString(2))));
+                    Boolean.getBoolean(cursor.getString(2)),
+                    getDBPhotosCountByAlbum(cursor.getString(0))));
             while (cursor.moveToNext());
         }
         return contactList;
@@ -139,19 +139,16 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 string.quoteReplace(newName) + "' WHERE " + ALBUM_PATH + "='" +
                 string.quoteReplace(olderPath) + "'";
         db.execSQL(sql);
-        Log.i("sql_pattern", sql);
 
         sql = "UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_PATH + "='" +
                 string.quoteReplace(string.getAlbumPathRenamed(olderPath, newName)) + "' WHERE " + ALBUM_PATH
                 + "='" + string.quoteReplace(olderPath) + "'";
         db.execSQL(sql);
-        Log.i("sql_pattern", sql);
 
         sql = "UPDATE " + TABLE_PHOTOS + " SET " + PHOTO_FOLDER_PATH + "='" +
                 string.quoteReplace(string.getAlbumPathRenamed(olderPath, newName)) + "' WHERE " + PHOTO_FOLDER_PATH
                 + "='" + string.quoteReplace(olderPath) + "'";
         db.execSQL(sql);
-        Log.i("sql_pattern", sql);
 
         db.close();
     }
@@ -193,7 +190,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 //checkMovedPhotos();
                 //checkDeletedPhotos();
             }
-            Log();
+            //  Log();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -304,7 +301,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public int getDBPhotosCountByAlbum(String path) {
-        String countQuery = "SELECT  * FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + string
+        String countQuery = "SELECT * FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + string
                 .quoteReplace(path) + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
@@ -352,7 +349,6 @@ class DatabaseHandler extends SQLiteOpenHelper {
     void addPhoto(Photo contact) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        Log.i("asdasd", contact.Path);
         values.put(PHOTO_FOLDER_PATH, string.quoteReplace(contact.FolderPath));
         values.put(PHOTO_NAME, string.quoteReplace(contact.name));
         values.put(PHOTO_DATE_TAKEN, contact.DateTaken);
@@ -411,15 +407,14 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 !dir.getAbsolutePath().contains("Audio")) {
 
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                File temp = new File(dir, children[i]);
+            for (String child : children) {
+                File temp = new File(dir, child);
                 if (temp.isDirectory()) {
-                    ArrayList<String> paths = gethiddenImagesFromFolder(temp);
+                    ArrayList<Photo> paths = gethiddenImagesFromFolder(temp);
                     if (paths.size() > 0)
-                        for (String path : paths) {
-                            Photo f = new Photo(path);
+                        for (Photo path : paths) {
                             checkHiddenAlbum(temp.getAbsolutePath());
-                            addHiddenPhoto(f);
+                            addHiddenPhoto(path);
                         }
                     getHiddenAlbums(temp);
                 }
@@ -427,22 +422,19 @@ class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    private ArrayList<String> gethiddenImagesFromFolder(File dir) {
-        ArrayList<String> paths = new ArrayList<String>();
+    private ArrayList<Photo> gethiddenImagesFromFolder(File dir) {
+        ArrayList<Photo> paths = new ArrayList<Photo>();
         String[] children = dir.list();
         File nomediafile = new File(dir, ".nomedia");
         if (!nomediafile.exists())
             return paths;
 
-        Log.i("storiage", dir.getAbsolutePath());
-        for (int i = 0; i < children.length; i++) {
-            File temp = new File(dir, children[i]);
+        for (String child : children) {
+            File temp = new File(dir, child);
             String mime = string.getMimeType(temp.getAbsolutePath());
             if (mime != null && mime.contains("image"))
-                paths.add(temp.getAbsolutePath());
-
+                paths.add(new Photo(temp.getAbsolutePath(), String.valueOf(temp.lastModified())));
         }
-
         return paths;
     }
 
@@ -466,7 +458,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
             do contactList.add(new Album(
                     string.quoteReverse(cursor.getString(0)),
                     string.quoteReverse(cursor.getString(1)),
-                    true));
+                    true, getDBPhotosCountByAlbum(cursor.getString(0))));
             while (cursor.moveToNext());
         }
         return contactList;
@@ -507,18 +499,15 @@ class DatabaseHandler extends SQLiteOpenHelper {
                     string.quoteReverse(cursor.getString(0)),
                     string.quoteReverse(cursor.getString(1)),
                     cursor.getString(2));
-
-
         }
         return a;
     }
+
     public ArrayList<Photo> getPhotosByAlbum(String path) {
         ArrayList<Photo> contactList = new ArrayList<Photo>();
         String selectQuery = "SELECT  " + PHOTO_NAME + ", " + PHOTO_FOLDER_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
                 PHOTO_FOLDER_PATH +
-                "='" +
-                string
-                        .quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
+                "='" + string.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -531,6 +520,26 @@ class DatabaseHandler extends SQLiteOpenHelper {
                         string.quoteReverse(cursor.getString(1)),
                         cursor.getString(2)));
             } while (cursor.moveToNext());
+        }
+        return contactList;
+    }
+
+    public ArrayList<Photo> getFirstPhotosByAlbum(String path) {
+        ArrayList<Photo> contactList = new ArrayList<Photo>();
+        String selectQuery = "SELECT " + PHOTO_NAME + ", " + PHOTO_FOLDER_PATH + ", " + PHOTO_DATE_TAKEN + " " +
+                "FROM " + TABLE_PHOTOS + " WHERE " +
+                PHOTO_FOLDER_PATH +
+                "='" + string.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC  LIMIT 1";
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            contactList.add(new Photo(
+                    string.quoteReverse(cursor.getString(0)),
+                    string.quoteReverse(cursor.getString(1)),
+                    cursor.getString(2)));
         }
         return contactList;
     }

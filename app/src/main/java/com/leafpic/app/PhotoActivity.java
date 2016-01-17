@@ -17,8 +17,7 @@ import com.leafpic.app.utils.string;
  */
 public class PhotoActivity extends AppCompatActivity {
 
-    Album album;
-    Photo f;
+
     HandlingPhotos photos;
 
     boolean toolbar_hidden = false;
@@ -35,12 +34,13 @@ public class PhotoActivity extends AppCompatActivity {
 
         initUiTweaks();
 
-        Bundle data = getIntent().getExtras();
-        f = data.getParcelable("photo");
-        album = data.getParcelable("album");
-        photos = new HandlingPhotos(PhotoActivity.this, album.Path, album.isHidden());
+
 
         try {
+            Bundle data = getIntent().getExtras();
+
+            photos = data.getParcelable("album");
+            photos.setContext(PhotoActivity.this);
             final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -57,10 +57,10 @@ public class PhotoActivity extends AppCompatActivity {
                 }
             });
 
-            mCustomPagerAdapter = new PhotosPagerAdapter(this, album.photos);
+            mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
-            mViewPager.setCurrentItem(album.getPhotoIndex(f.Path));
+            mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
 
             /*mViewPager.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -91,7 +91,7 @@ public class PhotoActivity extends AppCompatActivity {
                 //NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.shareButton:
-                String file_path = album.photos.get(mViewPager.getCurrentItem()).Path;
+                String file_path = photos.photos.get(mViewPager.getCurrentItem()).Path;
                 string.showToast(this, file_path);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(string.getMimeType(file_path));
@@ -99,7 +99,7 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             case R.id.deletePhoto:
-                photos.deletePhoto(album.photos.get(mViewPager.getCurrentItem()).Path);
+                photos.deletePhoto(photos.photos.get(mViewPager.getCurrentItem()).Path);
                 mCustomPagerAdapter.notifyDataSetChanged();
                 return true;
             case R.id.rotatePhoto:

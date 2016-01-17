@@ -35,7 +35,19 @@ public class HandlingAlbums {
         dispAlbums = db.getHiddenAlbums();
         for (Album dispAlbum : dispAlbums) {
             dispAlbum.setHidden(true);
-            dispAlbum.photos = db.getPhotosByAlbum(dispAlbum.Path);
+            dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
+        }
+        db.close();
+    }
+
+    public void loadPreviewHiddenAlbums() {
+        DatabaseHandler db = new DatabaseHandler(context);
+        if (db.getDataBaseHiddenPhotosCount() == 0)
+            db.loadHiddenALbums();
+        dispAlbums = db.getHiddenAlbums();
+        for (Album dispAlbum : dispAlbums) {
+            dispAlbum.setHidden(true);
+            dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
         }
         db.close();
     }
@@ -63,6 +75,16 @@ public class HandlingAlbums {
 
         db.close();
     }
+
+    public void loadPreviewAlbums() {
+        DatabaseHandler db = new DatabaseHandler(context);
+        dispAlbums = db.getAllAlbums();
+        for (Album dispAlbum : dispAlbums)
+            dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
+
+        db.close();
+    }
+
 
     public void selectAlbum(Album a, boolean val) {
         Album x = dispAlbums.get(dispAlbums.indexOf(a));
@@ -102,9 +124,13 @@ public class HandlingAlbums {
     }
 
     public void hideAlbum(Album a) {
+        hideAlbum(a.Path);
+        dispAlbums.remove(a);
+    }
 
+    public void hideAlbum(String path) {
         DatabaseHandler db = new DatabaseHandler(context);
-        File dirName = new File(a.Path);
+        File dirName = new File(path);
         File file = new File(dirName, ".nomedia");
         if (!file.exists()) {
             try {
@@ -116,11 +142,10 @@ public class HandlingAlbums {
                 e.printStackTrace();
             }
         }
-        db.hideAlbum(a.Path);
+        db.hideAlbum(path);
         db.close();
-
-        dispAlbums.remove(a);
     }
+
 
     public void unHideSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)
@@ -130,8 +155,13 @@ public class HandlingAlbums {
     }
 
     public void unHideAlbum(Album a) {
+        unHideAlbum(a.Path);
+        dispAlbums.remove(a);
+    }
+
+    public void unHideAlbum(String path) {
         DatabaseHandler db = new DatabaseHandler(context);
-        File dirName = new File(a.Path);
+        File dirName = new File(path);
         File file = new File(dirName, ".nomedia");
         if (file.exists()) {
             try {
@@ -141,10 +171,11 @@ public class HandlingAlbums {
                 e.printStackTrace();
             }
         }
-        db.unHideAlbum(a.Path);
+        db.unHideAlbum(path);
         db.close();
-        dispAlbums.remove(a);
     }
+
+
 
     public void deleteSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)
@@ -154,12 +185,16 @@ public class HandlingAlbums {
     }
 
     public void deleteAlbum(Album a) {
-        DatabaseHandler db = new DatabaseHandler(context);
-        File dir = new File(a.Path);
-            deleteFolderRecursive(dir);
-        db.deleteAlbum(a.Path);
-        db.close();
+        deleteAlbum(a.Path);
         dispAlbums.remove(a);
+    }
+
+    public void deleteAlbum(String path) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        File dir = new File(path);
+        deleteFolderRecursive(dir);
+        db.deleteAlbum(path);
+        db.close();
     }
 
     public void excludeSelectedAlbums() {
@@ -170,11 +205,14 @@ public class HandlingAlbums {
     }
 
     public void excludeAlbum(Album a) {
-        DatabaseHandler db = new DatabaseHandler(context);
-        Log.i("asd_sring", a.Path);
-        db.excludeAlbum(a.Path);
-        db.close();
+        excludeAlbum(a.Path);
         dispAlbums.remove(a);
+    }
+
+    public void excludeAlbum(String path) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        db.excludeAlbum(path);
+        db.close();
     }
 
     void deleteFolderRecursive(File dir) {

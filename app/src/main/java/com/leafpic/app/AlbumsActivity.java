@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
@@ -35,6 +36,7 @@ public class AlbumsActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
     MediaStoreObserver observer;
+    Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -82,7 +84,6 @@ public class AlbumsActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
     public void initUiTweaks(){
 
         /**** Navigation Bar*/
@@ -98,7 +99,7 @@ public class AlbumsActivity extends AppCompatActivity {
         window.setStatusBarColor(getColor(R.color.status_bar));
 
         /**** ToolBar*/
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
         /**** Drawer*/
@@ -284,8 +285,31 @@ public class AlbumsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.sort_action:
+                View sort_btn = findViewById(R.id.sort_action);
+                PopupMenu popup = new PopupMenu(AlbumsActivity.this, sort_btn);
+                popup.setGravity(Gravity.AXIS_CLIP);
+
+                popup.getMenuInflater()
+                        .inflate(R.menu.sort, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(
+                                AlbumsActivity.this,
+                                "You Clicked : " + item.getTitle(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+                break;
+
             case R.id.refreshhiddenAlbumsButton:
-                albums.loadHiddenAlbums();
+                albums.loadPreviewHiddenAlbums();
                 adapt.notifyDataSetChanged();
                 break;
             case R.id.endEditAlbumMode:
@@ -407,10 +431,10 @@ public class AlbumsActivity extends AppCompatActivity {
 
 
         if (hidden)
-            albums.loadHiddenAlbums();
+            albums.loadPreviewHiddenAlbums();
         else {
             db.updatePhotos();
-            albums.loadAlbums();
+            albums.loadPreviewAlbums();
         }
 
 

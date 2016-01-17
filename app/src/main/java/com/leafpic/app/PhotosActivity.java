@@ -16,7 +16,6 @@ import android.view.*;
 import android.widget.EditText;
 import android.widget.ImageView;
 import com.leafpic.app.Adapters.PhotosAdapter;
-import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -27,10 +26,12 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 public class PhotosActivity extends AppCompatActivity {
 
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
+
     DatabaseHandler db = new DatabaseHandler(PhotosActivity.this);
+
     HandlingPhotos photos;
 
-    Album album;
+
     boolean hideToolBar = false;
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
@@ -38,7 +39,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        string.showToast(this, album.Path);
+        //string.showToast(this, album.Path);
         super.onResume();
 
     }
@@ -54,38 +55,39 @@ public class PhotosActivity extends AppCompatActivity {
                 .build();
         ImageLoader.getInstance().destroy();
         ImageLoader.getInstance().init(config);
+
+
         initUiTweaks();
 
 
         try {
             Bundle data = getIntent().getExtras();
-            album = data.getParcelable("album");
+            final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album.Path, album.isHidden());
 
-            setTitle(album.DisplayName);
+            setTitle(photos.DisplayName);
 
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
 
             //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            adapter = new PhotosAdapter(album.photos, R.layout.photo_card);
+            adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageView is = (ImageView) v.findViewById(R.id.pic);
-                    Photo a = db.getPhoto(is.getTag().toString());
+
+                    photos.setCurrentPhoto(is.getTag().toString());
 
                     Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                     Bundle b = new Bundle();
-                    b.putParcelable("album", album);
-                    b.putParcelable("photo", a);
+                    b.putParcelable("album", photos);
                     intent.putExtras(b);
                     startActivity(intent);
                 }
             });
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
 
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -116,7 +118,7 @@ public class PhotosActivity extends AppCompatActivity {
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-            hidden = album.isHidden();
+            hidden = photos.hidden;
         }
         catch (Exception e){ e.printStackTrace(); }
 
@@ -194,7 +196,7 @@ public class PhotosActivity extends AppCompatActivity {
                 builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        albums.renameAlbum(album.Path, input.getText().toString());
+                        albums.renameAlbum(photos.FolderPath, input.getText().toString());
                         finish();
                         //adapter.notifyDataSetChanged();
                     }
@@ -207,10 +209,7 @@ public class PhotosActivity extends AppCompatActivity {
 
                 builder.show();
                 break;
-            case R.id.action_settings:
-                string.showToast(PhotosActivity.this, "asdasdas");
 
-                break;
 
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder dasdf = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style
@@ -220,7 +219,7 @@ public class PhotosActivity extends AppCompatActivity {
                 dasdf.setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        albums.excludeAlbum(album);
+                        albums.excludeAlbum(photos.FolderPath);
                         finish();
                     }
                 });
@@ -240,7 +239,7 @@ public class PhotosActivity extends AppCompatActivity {
                 dlg.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        albums.deleteAlbum(album);
+                        albums.deleteAlbum(photos.FolderPath);
                         finish();
                     }
                 });
@@ -254,7 +253,7 @@ public class PhotosActivity extends AppCompatActivity {
 
             case R.id.hideAlbumButton:
                 if (hidden) {
-                    albums.unHideAlbum(album);
+                    albums.unHideAlbum(photos.FolderPath);
                     finish();
                 } else {
                     AlertDialog.Builder dlg1 = new AlertDialog.Builder(
@@ -263,7 +262,7 @@ public class PhotosActivity extends AppCompatActivity {
                     dlg1.setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int j) {
-                            albums.hideAlbum(album);
+                            albums.hideAlbum(photos.FolderPath);
                             finish();
                         }
                     });
@@ -275,7 +274,7 @@ public class PhotosActivity extends AppCompatActivity {
                     dlg1.setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            albums.excludeAlbum(album);
+                            albums.excludeAlbum(photos.FolderPath);
                             finish();
 
                         }
