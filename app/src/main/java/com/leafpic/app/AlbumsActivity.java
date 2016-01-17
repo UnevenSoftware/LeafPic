@@ -13,23 +13,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.*;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextThemeWrapper;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Adapters.SideDrawerAdapter;
 import com.leafpic.app.utils.string;
@@ -47,6 +34,7 @@ public class AlbumsActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
+    MediaStoreObserver observer;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -64,12 +52,34 @@ public class AlbumsActivity extends AppCompatActivity {
         initUiTweaks();
         checkPermissions();
 
+        /* observer = new MediaStoreObserver(null);
+
+        Log.d("INSTANT", "registered content observer");
+
+        this.getApplicationContext()
+                .getContentResolver()
+                .registerContentObserver(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false,
+                        observer);
+
+        Log.d("INSTANT", "registered content observer");
+*/
+    }
+
+    @Override
+    public void onDestroy() {
+        //getContentResolver().unregisterContentObserver(observer);
+        super.onDestroy();
     }
 
     @Override
     public void onResume() {
-        super.onResume();
+        /*db.updatePhotos();
+        albums.loadAlbums();
+        adapt.notifyDataSetChanged();*/
         checkPermissions();
+        //    adapt.notifyDataSetChanged();
+        super.onResume();
     }
 
 
@@ -149,16 +159,20 @@ public class AlbumsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 switch (position){
                     case 0:
-                        albums.loadAlbums();
-                        adapt.setDataset(albums.dispAlbums);
-                        adapt.notifyDataSetChanged();
                         hidden = false;
+                        checkPermissions();
+                        /*albums.loadAlbums();
+                        adapt.setDataset(albums.dispAlbums);
+                        adapt.notifyDataSetChanged();*/
+
                         break;
                     case 1:
-                        albums.loadHiddenAlbums();
-                        adapt.setDataset(albums.dispAlbums);
-                        adapt.notifyDataSetChanged();
                         hidden = true;
+                        checkPermissions();
+                        /*albums.loadHiddenAlbums();
+                        adapt.setDataset(albums.dispAlbums);
+                        adapt.notifyDataSetChanged();*/
+
                         break;
 
                     default:break;
@@ -273,7 +287,6 @@ public class AlbumsActivity extends AppCompatActivity {
             case R.id.refreshhiddenAlbumsButton:
                 albums.loadHiddenAlbums();
                 adapt.notifyDataSetChanged();
-
                 break;
             case R.id.endEditAlbumMode:
                 editmode = false;
@@ -306,7 +319,7 @@ public class AlbumsActivity extends AppCompatActivity {
             case R.id.deleteAlbumButton:
                 AlertDialog.Builder dlg = new AlertDialog.Builder(
                         new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-                dlg.setMessage(getString(R.string.delete_album_action));
+                dlg.setMessage(getString(R.string.delete_album_message));
                 dlg.setCancelable(true);
                 dlg.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
@@ -392,6 +405,7 @@ public class AlbumsActivity extends AppCompatActivity {
 
     private void loadAlbums() {
 
+
         if (hidden)
             albums.loadHiddenAlbums();
         else {
@@ -442,5 +456,6 @@ public class AlbumsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
     }
 }

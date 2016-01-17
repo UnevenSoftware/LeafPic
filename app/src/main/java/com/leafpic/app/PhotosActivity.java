@@ -11,14 +11,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextThemeWrapper;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.text.InputType;
+import android.view.*;
+import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.utils.string;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,6 +28,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     DatabaseHandler db = new DatabaseHandler(PhotosActivity.this);
+    HandlingPhotos photos;
 
     Album album;
     boolean hideToolBar = false;
@@ -41,6 +38,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        string.showToast(this, album.Path);
         super.onResume();
 
     }
@@ -51,9 +49,10 @@ public class PhotosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photos);
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(50, 100)
+                .memoryCacheExtraOptions(30, 60)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
+        ImageLoader.getInstance().destroy();
         ImageLoader.getInstance().init(config);
         initUiTweaks();
 
@@ -61,6 +60,8 @@ public class PhotosActivity extends AppCompatActivity {
         try {
             Bundle data = getIntent().getExtras();
             album = data.getParcelable("album");
+            photos = new HandlingPhotos(PhotosActivity.this, album.Path, album.isHidden());
+
             setTitle(album.DisplayName);
 
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
@@ -93,10 +94,10 @@ public class PhotosActivity extends AppCompatActivity {
                     if (hideToolBar) {
                         //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
                         // AccelerateInterpolator()).start();
-                        //getSupportActionBar().hide();
+                        getSupportActionBar().hide();
                     } else {
                         //toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                        //getSupportActionBar().show();
+                        getSupportActionBar().show();
                     }
                     hideToolBar=!hideToolBar;
                 }
@@ -125,7 +126,7 @@ public class PhotosActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_albums, menu);
+        getMenuInflater().inflate(R.menu.menu_photos, menu);
         return true;
     }
 
@@ -144,23 +145,20 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         if (hidden) {
-            opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
-            opt.setEnabled(true).setVisible(true);
+
             opt = menu.findItem(R.id.hideAlbumButton);
             opt.setTitle(getString(R.string.unhide_album_action));
         } else {
-            opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
-            opt.setEnabled(false).setVisible(false);
             opt = menu.findItem(R.id.hideAlbumButton);
             opt.setTitle(getString(R.string.hide_album_action));
         }
 
-        if (albums.getSelectedCount() == 0) {
+        /*if (albums.getSelectedCount() == 0) {
             editmode = false;
             opt = menu.findItem(R.id.endEditAlbumMode);
             setOptionsAlbmuMenusItemsVisible(menu,false);
             opt.setEnabled(false).setVisible(false);
-        }
+        }*/
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -185,6 +183,29 @@ public class PhotosActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 photos.clearSelectedPhotos();
                 adapter.notifyDataSetChanged();*/
+                break;
+            case R.id.renameAlbum:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Rename Album");
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                builder.setView(input);
+
+                builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        albums.renameAlbum(album.Path, input.getText().toString());
+                        finish();
+                        //adapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                builder.show();
                 break;
             case R.id.action_settings:
                 string.showToast(PhotosActivity.this, "asdasdas");

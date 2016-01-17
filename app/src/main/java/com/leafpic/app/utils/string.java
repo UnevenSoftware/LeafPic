@@ -27,6 +27,48 @@ public class string {
         return b[b.length - 1];
     }
 
+    public static String getPhotoNamebyPath(String path) {
+        String b[] = path.split("/");
+        return b[b.length - 1];
+    }
+
+    public static String getPhotoPathByFolderPathAndName(String folderPath, String name) {
+        return folderPath + "/" + name;
+    }
+
+    public static String[] getPhotoFolderPathAndNameByPath(String path) {
+        String rb[] = new String[2];
+        String b[] = path.split("/");
+        for (int x = 0; x < b.length - 1; x++) rb[0] += b[x] + "/";
+        rb[0] = rb[0].substring(0, rb[0].length() - 1);
+        rb[1] = b[b.length - 1];
+        return rb;
+    }
+
+    public static String getPhotoPathByFolderPathAndName(String folderPath, String name, boolean injection_sql_reverse) {
+        if (injection_sql_reverse)
+            return quoteReverse(folderPath + "/" + name);
+        else
+            return quoteReplace(folderPath + "/" + name);
+    }
+
+    public static String getAlbumPathRenamed(String olderPath, String newName) {
+        String b[] = olderPath.split("/");
+        String c = "";
+        for (int x = 0; x < b.length - 1; x++) c += b[x] + "/";
+        c += newName;
+        //c = c.substring(0, c.length() - 1);
+        return c;
+    }
+
+    public static String getPhotoPathRenamed(String olderPath, String newName) {
+        String c = "", b[] = olderPath.split("/");
+        for (int x = 0; x < b.length - 2; x++) c += b[x] + "/";
+        c += newName + "/";
+        c += b[b.length - 1];
+        return c;
+    }
+
     public static String getBucketPathbyImagePath(String path) {
         String b[] = path.split("/");
         String c = "";

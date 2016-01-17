@@ -1,17 +1,11 @@
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".PhotosActivity"
 >
 
     <!-- general Stuff -->
-    <item
-        android:id="@+id/action_settings"
-        android:title="Sort"
-        android:orderInCategory="1"
-        app:showAsAction="never"
-        />
     <!-- Albums Stuff -->
     <item
         android:id="@+id/deleteAlbumButton"
@@ -30,11 +24,32 @@
         android:title="@string/exclude_album_action"
         app:showAsAction="never"
         />
+
     <item
         android:id="@+id/hideAlbumButton"
         android:title="@string/hide_album_action"
         app:showAsAction="never"
         />
+    <item
+            android:id="@+id/refreshAlbum"
+            android:title="Refresh"
+            app:showAsAction="never"
+    />
+
+
+    <item android:id="@+id/sortPhotos"
+          android:title="Sort"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_sort_white_24dp"
+          app:showAsAction="ifRoom"
+    />
+
+    <item
+            android:id="@+id/renameAlbum"
+            android:title="@string/rename_album_action"
+            app:showAsAction="never"
+    />
+
     <!-- End Albums Stuff -->
 
 </menu>

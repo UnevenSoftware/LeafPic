@@ -26,9 +26,17 @@ class HandlingPhotos {
         db.close();
     }
 
+    public Photo getPhoto(String path) {
+        for (Photo photo : photos) {
+            if (photo.Path.equals(path))
+                return photo;
+        }
+        return null;
+    }
+
     public void selectPhoto(Photo a, boolean val) {
         Photo x = photos.get(photos.indexOf(a));
-        //x.setSelcted(val);
+        x.setSelected(val);
         if (val) selectedPhotos.add(x);
         else selectedPhotos.remove(x);
     }
@@ -40,19 +48,29 @@ class HandlingPhotos {
         clearSelectedPhotos();
     }
 
+    public void deletePhoto(String path) {
+        HandlingAlbums h = new HandlingAlbums(context);
+        DatabaseHandler db = new DatabaseHandler(context);
+        File file = new File(path);
+        h.deleteFolderRecursive(file);
+        db.deletePhotoByPath(path);
+        db.close();
+        photos.remove(getPhoto(path));
+    }
+
     public void deletePhoto(Photo a) {
         HandlingAlbums h = new HandlingAlbums(context);
         DatabaseHandler db = new DatabaseHandler(context);
-        File dir = new File(a.Path);
-        h.deleteFolderRecursive(dir);
-        db.deleteAlbum(a.Path);
+        File file = new File(a.Path);
+        h.deleteFolderRecursive(file);
+        db.deletePhotoByPath(a.Path);
         db.close();
         photos.remove(a);
     }
 
     public void clearSelectedPhotos() {
         for (Photo photo : photos) {
-            // photo.setSelcted(false);
+            photo.setSelected(false);
         }
         selectedPhotos.clear();
     }
