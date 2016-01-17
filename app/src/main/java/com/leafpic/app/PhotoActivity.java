@@ -3,26 +3,14 @@ package com.leafpic.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.utils.string;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Created by dnld on 12/12/15.
@@ -31,6 +19,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     Album album;
     Photo f;
+    HandlingPhotos photos;
 
     boolean toolbar_hidden = false;
     Toolbar toolbar;
@@ -49,6 +38,7 @@ public class PhotoActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         f = data.getParcelable("photo");
         album = data.getParcelable("album");
+        photos = new HandlingPhotos(PhotoActivity.this, album.Path, album.isHidden());
 
         try {
             final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
@@ -104,21 +94,13 @@ public class PhotoActivity extends AppCompatActivity {
                 String file_path = album.photos.get(mViewPager.getCurrentItem()).Path;
                 string.showToast(this, file_path);
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("image/jpeg");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
-                try {
-                    f.createNewFile();
-                    FileOutputStream fo = new FileOutputStream(f);
-                    fo.write(bytes.toByteArray());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                share.setType(string.getMimeType(file_path));
                 share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             case R.id.deletePhoto:
-                //deleteFile(album.photos.get(mViewPager.getCurrentItem()).Path);
+                photos.deletePhoto(album.photos.get(mViewPager.getCurrentItem()).Path);
+                mCustomPagerAdapter.notifyDataSetChanged();
                 return true;
             case R.id.rotatePhoto:
                 return true;

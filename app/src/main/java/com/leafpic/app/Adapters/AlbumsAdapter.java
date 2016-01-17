@@ -37,6 +37,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
+
         return new ViewHolder(v);
     }
 
@@ -61,12 +62,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             //name.setBackgroundColor(localContext.getColor(R.color.selected_album));
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
         } else {
-            //name.setBackgroundColor(localContext.getColor(R.color.unselected_album));
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
+            //holder.card_layout.setBackgroundColor(albums.get(position).getColorAlbum());
         }
 
     }
-
 
     public void setDataset(ArrayList<Album> dataset) {
         albums = dataset;
@@ -82,7 +82,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public void setOnLongClickListener(View.OnLongClickListener lis) {
         mOnLongClickListener = lis;
     }
-
 
     @Override
     public int getItemCount() {

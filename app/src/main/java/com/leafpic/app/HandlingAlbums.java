@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import com.leafpic.app.utils.string;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +38,21 @@ public class HandlingAlbums {
             dispAlbum.photos = db.getPhotosByAlbum(dispAlbum.Path);
         }
         db.close();
+    }
+
+    public void renameAlbum(String olderPath, String name) {
+        try {
+            DatabaseHandler db = new DatabaseHandler(context);
+            File from = new File(olderPath);
+            File to = new File(string.getAlbumPathRenamed(olderPath, name));
+            from.renameTo(to);
+            db.renameAlbum(olderPath, name);
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(from)));
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(to)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void loadAlbums() {

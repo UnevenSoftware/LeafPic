@@ -30,7 +30,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ALBUM_EXCULDED = "excluded";
 
     private static final String TABLE_PHOTOS = "Photo";
-    private static final String PHOTO_PATH = "path";
+    private static final String PHOTO_NAME = "name";
     private static final String PHOTO_FOLDER_PATH = "folderpath";
     private static final String PHOTO_DATE_TAKEN = "datetaken";
     private static final String PHOTO_EXCULDED = "excluded";
@@ -49,7 +49,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 + ALBUM_PATH + " TEXT," + ALBUM_NAME + " TEXT, " + ALBUM_HIDDEN + " TEXT, " + ALBUM_EXCULDED + " TEXT)";
 
         String CREATE_PHOTOS_TABLE = "CREATE TABLE " + TABLE_PHOTOS + "("
-                + PHOTO_PATH + " TEXT," + PHOTO_FOLDER_PATH + " TEXT, " + PHOTO_DATE_TAKEN + " TEXT, " + PHOTO_HIDDEN
+                + PHOTO_NAME + " TEXT," + PHOTO_FOLDER_PATH + " TEXT, " + PHOTO_DATE_TAKEN + " TEXT, " + PHOTO_HIDDEN
                 + " TEXT, " + PHOTO_EXCULDED + " TEXT)";
 
         db.execSQL(CREATE_PHOTOS_TABLE);
@@ -84,9 +84,6 @@ class DatabaseHandler extends SQLiteOpenHelper {
         return a;
     }
 
-
-
-
     public ArrayList<Album> getAllAlbums() {
         ArrayList<Album> contactList = new ArrayList<Album>();
         String selectQuery = "SELECT  * FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_HIDDEN + "='false' AND " +
@@ -107,7 +104,14 @@ class DatabaseHandler extends SQLiteOpenHelper {
 
     void deletePhotoByPath(String path) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_PHOTOS, PHOTO_PATH + " = ?",
+        db.delete(TABLE_PHOTOS, PHOTO_NAME + " = ?",
+                new String[]{string.quoteReplace(path)});
+        db.close();
+    }
+
+    void deletePhotoaByFolderPath(String path) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PHOTOS, PHOTO_FOLDER_PATH + " = ?",
                 new String[]{string.quoteReplace(path)});
         db.close();
     }
@@ -116,7 +120,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "DELETE FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_PATH + "='" + string.quoteReplace(path) + "'";
         db.execSQL(sql);
-       /* sql = "DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + path + "'";
+        /*sql = "DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + path + "'";
         db.execSQL(sql);*/
         db.close();
     }
@@ -125,6 +129,30 @@ class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_HIDDEN + "='true' WHERE " + ALBUM_PATH + "='" + string.quoteReplace(path) + "'";
         db.execSQL(sql);
+        db.close();
+    }
+
+    public void renameAlbum(String olderPath, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String sql = "UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_NAME + "='" +
+                string.quoteReplace(newName) + "' WHERE " + ALBUM_PATH + "='" +
+                string.quoteReplace(olderPath) + "'";
+        db.execSQL(sql);
+        Log.i("sql_pattern", sql);
+
+        sql = "UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_PATH + "='" +
+                string.quoteReplace(string.getAlbumPathRenamed(olderPath, newName)) + "' WHERE " + ALBUM_PATH
+                + "='" + string.quoteReplace(olderPath) + "'";
+        db.execSQL(sql);
+        Log.i("sql_pattern", sql);
+
+        sql = "UPDATE " + TABLE_PHOTOS + " SET " + PHOTO_FOLDER_PATH + "='" +
+                string.quoteReplace(string.getAlbumPathRenamed(olderPath, newName)) + "' WHERE " + PHOTO_FOLDER_PATH
+                + "='" + string.quoteReplace(olderPath) + "'";
+        db.execSQL(sql);
+        Log.i("sql_pattern", sql);
+
         db.close();
     }
 
@@ -147,30 +175,106 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void updatePhotos() {
-        int dbc = getDataBasePhotosCount(), mdc = getMediastorePhotosCount();
-        if (dbc != mdc) {
-            if (dbc < mdc) { //added Photo
-                try {
-                    loadPhotosFrom(getDataBasePhotosCount());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+        try {
+            int dbc = getDataBasePhotosCount(), mdc = getMediastorePhotosCount();
+            Log.i("asd_dasa", dbc + " - " + mdc);
+            if (dbc != mdc) {
+                if (dbc < mdc) { //added Photo
+                    try {
+                        loadPhotosFrom(dbc);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else
+                    checkDeletedPhotos();
             } else {
-                checkDeletedPhotos();
+                // checkDeletedPhotos();
+                //checkMovedPhotos();
+                //checkDeletedPhotos();
+            }
+            Log();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void checkMovedPhotos() {
+        String[] projection = new String[]{
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA,
+        };
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Cursor cur = context.getContentResolver().query(images, projection, null, null, null);
+        ArrayList<String> dbPhotoPaths = getAllPhotosPaths();
+
+        if (cur.moveToFirst()) {
+            int pathColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+            int DateColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN);
+            do {
+
+                if (!checkPhoto(string.quoteReverse(cur.getString(pathColumn))))
+                    addPhoto(new Photo(
+                            string.quoteReverse(cur.getString(pathColumn)),
+                            cur.getString(DateColumn)));
+                else
+                    dbPhotoPaths.remove(string.quoteReverse(cur.getString(pathColumn)));
+
+                checkalbum(string.getBucketPathbyImagePath(string.quoteReverse(cur.getString(pathColumn))));
+            } while (cur.moveToNext());
+
+            for (String dbPhotoPath : dbPhotoPaths) {
+                deletePhotoByPath(dbPhotoPath);
+                String path = string.getBucketPathbyImagePath(dbPhotoPath);
+
+                if (getDBPhotosCountByAlbum(path) == 0)
+                    deleteAlbum(path);
             }
         }
-        Log();
+    }
+
+    public void loadPhotosFrom(int i) {
+        String[] projection = new String[]{
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DISPLAY_NAME,
+        };
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Cursor cur = context.getContentResolver().query(images, projection, null, null, null);
+
+
+        if (cur.moveToPosition(i)) {
+            int pathColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+            int DateColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN);
+            do {
+                Photo f = new Photo(
+                        string.quoteReverse(cur.getString(pathColumn)),
+                        cur.getString(DateColumn));
+                addPhoto(f);
+                checkalbum(f.FolderPath);
+            } while (cur.moveToNext());
+        }
     }
 
     public ArrayList<String> getAllPhotosPaths() {
         ArrayList<String> contactList = new ArrayList<String>();
-        String selectQuery = "SELECT " + PHOTO_PATH + " FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_HIDDEN + "='false'";
+        String selectQuery = "SELECT " + PHOTO_FOLDER_PATH + ", " + PHOTO_NAME + " FROM " + TABLE_PHOTOS + " WHERE " +
+                PHOTO_HIDDEN +
+                "='false'";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst())
-            do contactList.add(string.quoteReverse(cursor.getString(0)));
+            do contactList.add(string.getPhotoPathByFolderPathAndName(cursor.getString(0), cursor.getString(1)));
             while (cursor.moveToNext());
 
         return contactList;
@@ -180,20 +284,14 @@ class DatabaseHandler extends SQLiteOpenHelper {
         String[] projection = new String[]{MediaStore.Images.Media.DATA};
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Cursor cur = context.getContentResolver().query(images, projection, null, null, null);
-        ArrayList<String> photoPaths = new ArrayList<String>();
+        ArrayList<String> dbPhotoPaths = getAllPhotosPaths();
 
         if (cur.moveToFirst()) {
             int pathColumn = cur.getColumnIndex(
                     MediaStore.Images.Media.DATA);
-            do {
-                photoPaths.add(cur.getString(pathColumn));
-            } while (cur.moveToNext());
+            do dbPhotoPaths.remove(string.quoteReplace(cur.getString(pathColumn)));
+            while (cur.moveToNext());
         }
-
-        ArrayList<String> dbPhotoPaths = getAllPhotosPaths();
-        for (String photoPath : photoPaths)
-            dbPhotoPaths.remove(photoPath);
-
 
         for (String dbPhotoPath : dbPhotoPaths) {
             deletePhotoByPath(dbPhotoPath);
@@ -215,29 +313,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
         return count;
     }
 
-    public void loadPhotosFrom(int i) {
-        String[] projection = new String[]{
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.DATA,
-        };
 
-        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Cursor cur = context.getContentResolver().query(images, projection, null, null, null);
-
-        if (cur.moveToPosition(i)) {
-            int pathColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATA);
-            int DateColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATE_TAKEN);
-            do {
-                Photo f = new Photo(
-                        string.quoteReverse(cur.getString(pathColumn)),
-                        cur.getString(DateColumn));
-                addPhoto(f);
-                checkalbum(f.FolderPath);
-            } while (cur.moveToNext());
-        }
-    }
 
     public void loadPhots() throws Exception {
         loadPhotosFrom(0);
@@ -256,13 +332,29 @@ class DatabaseHandler extends SQLiteOpenHelper {
     /***
      * Hidden Albums
      ***/
+    boolean checkPhoto(String path) {
+
+        String nameAndPath[] = string.getPhotoFolderPathAndNameByPath(path);
+        boolean b = true;
+        String selectQuery = "SELECT  " + PHOTO_FOLDER_PATH + ", " + PHOTO_NAME + " FROM " + TABLE_PHOTOS + " WHERE " +
+                PHOTO_NAME + "='" + string.quoteReplace(nameAndPath[1]) + "' AND " + PHOTO_FOLDER_PATH + " ='" + string
+                .quoteReplace(nameAndPath[0]) + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() == 0)
+            b = false;
+        //addHiddenAlbum(Path);
+        cursor.close();
+        return b;
+    }
 
     void addPhoto(Photo contact) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
+        Log.i("asdasd", contact.Path);
         values.put(PHOTO_FOLDER_PATH, string.quoteReplace(contact.FolderPath));
-        values.put(PHOTO_PATH, string.quoteReplace(contact.Path));
+        values.put(PHOTO_NAME, string.quoteReplace(contact.name));
         values.put(PHOTO_DATE_TAKEN, contact.DateTaken);
         values.put(PHOTO_HIDDEN, "false");
         values.put(PHOTO_EXCULDED, "false");
@@ -285,7 +377,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PHOTO_FOLDER_PATH, string.quoteReplace(contact.FolderPath));
-        values.put(PHOTO_PATH, string.quoteReplace(contact.Path));
+        values.put(PHOTO_NAME, string.quoteReplace(contact.name));
         values.put(PHOTO_HIDDEN, "true");
         values.put(PHOTO_EXCULDED, "false");
         db.insert(TABLE_PHOTOS, null, values);
@@ -313,8 +405,11 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void getHiddenAlbums(File dir) {
-        if (dir.isDirectory() && !dir.getAbsolutePath().equals("/storage/emulated/0/Android")) {
-            Log.i("storiage", dir.getAbsolutePath());
+        if (dir.isDirectory() &&
+                !dir.getAbsolutePath().equals("/storage/emulated/0/Android") &&
+                !dir.getAbsolutePath().contains("Voice") &&
+                !dir.getAbsolutePath().contains("Audio")) {
+
             String[] children = dir.list();
             for (int i = 0; i < children.length; i++) {
                 File temp = new File(dir, children[i]);
@@ -333,19 +428,21 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     private ArrayList<String> gethiddenImagesFromFolder(File dir) {
-        boolean matchFoltder = false;
         ArrayList<String> paths = new ArrayList<String>();
         String[] children = dir.list();
+        File nomediafile = new File(dir, ".nomedia");
+        if (!nomediafile.exists())
+            return paths;
+
+        Log.i("storiage", dir.getAbsolutePath());
         for (int i = 0; i < children.length; i++) {
             File temp = new File(dir, children[i]);
             String mime = string.getMimeType(temp.getAbsolutePath());
             if (mime != null && mime.contains("image"))
                 paths.add(temp.getAbsolutePath());
-            if (temp.getAbsolutePath().contains(".nomedia"))
-                matchFoltder = true;
+
         }
-        if (!matchFoltder)
-            paths = new ArrayList<String>();
+
         return paths;
     }
 
@@ -398,8 +495,9 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public Photo getPhoto(String path) {
-        String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
-                PHOTO_PATH + "='" + path + "'";
+        String selectQuery = "SELECT  " + PHOTO_NAME + ", " + PHOTO_FOLDER_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " +
+                TABLE_PHOTOS + " WHERE " +
+                PHOTO_NAME + "='" + path + "'";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -407,7 +505,8 @@ class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             a = new Photo(
                     string.quoteReverse(cursor.getString(0)),
-                    cursor.getString(1));
+                    string.quoteReverse(cursor.getString(1)),
+                    cursor.getString(2));
 
 
         }
@@ -415,7 +514,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
     public ArrayList<Photo> getPhotosByAlbum(String path) {
         ArrayList<Photo> contactList = new ArrayList<Photo>();
-        String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
+        String selectQuery = "SELECT  " + PHOTO_NAME + ", " + PHOTO_FOLDER_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
                 PHOTO_FOLDER_PATH +
                 "='" +
                 string
@@ -429,7 +528,8 @@ class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 contactList.add(new Photo(
                         string.quoteReverse(cursor.getString(0)),
-                        cursor.getString(1)));
+                        string.quoteReverse(cursor.getString(1)),
+                        cursor.getString(2)));
             } while (cursor.moveToNext());
         }
         return contactList;
