@@ -259,6 +259,34 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 checkalbum(f.FolderPath);
             } while (cur.moveToNext());
         }
+        cur.close();
+    }
+
+    public void LogPhotosMediaStoreByFolderPath() {
+        String[] projection = new String[]{
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DISPLAY_NAME,
+        };
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Cursor cur = context.getContentResolver().query(
+                images,
+                projection,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?",
+                new String[]{"Slide"}, null);
+
+
+        if (cur.moveToFirst()) {
+            int pathColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+            int DateColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN);
+            do {
+                Log.i("folder_image", cur.getString(pathColumn));
+            } while (cur.moveToNext());
+        }
+        cur.close();
     }
 
     public ArrayList<String> getAllPhotosPaths() {

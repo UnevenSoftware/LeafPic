@@ -53,6 +53,7 @@ public class AlbumsActivity extends AppCompatActivity {
 
         initUiTweaks();
         checkPermissions();
+        db.LogPhotosMediaStoreByFolderPath();
 
         /* observer = new MediaStoreObserver(null);
 

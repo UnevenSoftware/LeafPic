@@ -25,6 +25,7 @@ class HandlingPhotos implements Parcelable {
             return new HandlingPhotos[size];
         }
     };
+
     public String FolderPath;
     public ArrayList<Photo> photos;
     public ArrayList<Photo> selectedPhotos;

@@ -44,7 +44,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/divider">
                 <TextView
-                    android:id="@+id/picturetext"
+
+                        android:id="@+id/picturetext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
