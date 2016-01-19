@@ -11,6 +11,8 @@
         <item>500px</item>
         <item>DropBox</item>
         <item>Reddit</item>
+
+        <item>Setting</item>
     </string-array>
 
     <string-array name="planets_array">
@@ -36,4 +38,16 @@
     <string name="exclude_album_message">Are you sure you want to exclude the album?</string>
     <string name="rename_album_action">Rename</string>
 
+    <!--TEST PREFERENCE SCREEEN-->
+    <string-array name="listArray">
+        <item>Headings</item>
+        <item>Headings and Details</item>
+        <item>All Data</item>
+    </string-array>
+
+    <string-array name="listValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

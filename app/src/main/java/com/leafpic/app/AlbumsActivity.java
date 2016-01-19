@@ -274,6 +274,7 @@ public class AlbumsActivity extends AppCompatActivity {
         MenuItem option = m.findItem(R.id.hideAlbumButton);
         option.setEnabled(val).setVisible(val);
 
+
         option = m.findItem(R.id.deleteAlbumButton);
         option.setEnabled(val).setVisible(val);
 
@@ -377,6 +378,10 @@ public class AlbumsActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
 
+            case  R.id.settinglayout:
+                Intent intent = new Intent(this, Preferences_Activity.class);
+                startActivity(intent);
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

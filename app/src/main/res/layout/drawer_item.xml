@@ -5,7 +5,7 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="#009688"
     android:orientation="horizontal"
     >
 
@@ -24,7 +24,7 @@
         android:paddingTop="4dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:textColor="#000"
+        android:textColor="#fff"
         android:id="@+id/rowText"
         />
 </LinearLayout>

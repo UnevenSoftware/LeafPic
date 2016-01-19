@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:layout_gravity="start"
     android:elevation="10dp">
-
     <include layout="@layout/sidebar_header"/>
 
     <android.support.v7.widget.RecyclerView
@@ -14,7 +13,7 @@
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#ffffff"
+        android:background="#009688"
         android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
