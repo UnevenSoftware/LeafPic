@@ -44,7 +44,8 @@
                 android:layout_alignParentStart="true">
 
                 <TextView
-                    android:id="@+id/picturetext"
+
+                        android:id="@+id/picturetext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -67,15 +68,15 @@
                     />
 
             </LinearLayout>
-            <ImageView android:id="@+id/image_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_more_vert_white_24dp"
-                android:layout_below="@id/divider"
-                android:layout_alignBottom="@+id/linear_card_text"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                />
+            <!-- <ImageView android:id="@+id/image_menu"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@mipmap/ic_more_vert_white_24dp"
+                 android:layout_below="@id/divider"
+                 android:layout_alignBottom="@+id/linear_card_text"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="5dp"
+                 />-->
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

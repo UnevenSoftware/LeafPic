@@ -8,10 +8,10 @@
     <!-- general Stuff -->
     <!-- Albums Stuff -->
     <item
-        android:id="@+id/deleteAlbumButton"
-        android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/delete_album_action"
-        app:showAsAction="never"
+            android:id="@+id/deleteAction"
+            android:icon="@mipmap/ic_delete_white_24dp"
+            android:title="@string/delete_album_action"
+            app:showAsAction="never"
         />
     <item
         android:id="@+id/endEditAlbumMode"
@@ -35,7 +35,12 @@
             android:title="Refresh"
             app:showAsAction="never"
     />
-
+    <item
+            android:id="@+id/sharePhotos"
+            android:icon="@mipmap/ic_share_white_24dp"
+            android:title="Share"
+            app:showAsAction="ifRoom"
+    />
 
     <item android:id="@+id/sortPhotos"
           android:title="Sort"
@@ -47,6 +52,12 @@
     <item
             android:id="@+id/renameAlbum"
             android:title="@string/rename_album_action"
+            app:showAsAction="never"
+    />
+
+    <item
+            android:id="@+id/setAsAlbumPreview"
+            android:title="Set as Preview"
             app:showAsAction="never"
     />
 
