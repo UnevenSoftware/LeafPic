@@ -21,10 +21,10 @@
         />
 
     <item
-        android:id="@+id/deleteAlbumButton"
-        android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/delete_album_action"
-        app:showAsAction="never"
+            android:id="@+id/deleteAction"
+            android:icon="@mipmap/ic_delete_white_24dp"
+            android:title="@string/delete_album_action"
+            app:showAsAction="never"
         />
     <item
         android:id="@+id/endEditAlbumMode"

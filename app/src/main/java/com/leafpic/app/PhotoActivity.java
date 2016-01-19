@@ -10,6 +10,7 @@ import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
+import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.utils.string;
 
 /**
@@ -24,6 +25,8 @@ public class PhotoActivity extends AppCompatActivity {
     Toolbar toolbar;
     PhotosPagerAdapter mCustomPagerAdapter;
     ViewPager mViewPager;
+    View decorView;//= getActivity().getWindow().getDecorView();
+    boolean fullscreenmode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,27 @@ public class PhotoActivity extends AppCompatActivity {
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
+            mViewPager.setPageTransformer(true, new DepthPageTransformer());
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    photos.setCurrentPhotoIndex(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
+
+            decorView = getWindow().getDecorView();
+            fullScreen(true);
 
             /*mViewPager.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -81,6 +105,34 @@ public class PhotoActivity extends AppCompatActivity {
         return true;
     }
 
+    public void toggleFullscreenMode() {
+        fullScreen(!fullscreenmode);
+    }
+
+    private void fullScreen(boolean status) {
+
+        if (status) {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+            getSupportActionBar().hide();
+            fullscreenmode = true;
+        } else {
+            getSupportActionBar().show();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+            fullscreenmode = false;
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -99,8 +151,8 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             case R.id.deletePhoto:
-                photos.deletePhoto(photos.photos.get(mViewPager.getCurrentItem()).Path);
-                mCustomPagerAdapter.notifyDataSetChanged();
+                /*photos.deletePhoto(photos.photos.get(mViewPager.getCurrentItem()).Path);
+                mCustomPagerAdapter.notifyDataSetChanged();*/
                 return true;
             case R.id.rotatePhoto:
                 return true;

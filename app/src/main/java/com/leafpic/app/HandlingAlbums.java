@@ -65,6 +65,7 @@ public class HandlingAlbums {
             e.printStackTrace();
         }
 
+
     }
 
     public void loadAlbums() {

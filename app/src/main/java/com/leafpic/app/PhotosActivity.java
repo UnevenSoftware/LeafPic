@@ -39,8 +39,8 @@ public class PhotosActivity extends AppCompatActivity {
 
 
     boolean hideToolBar = false;
-    Toolbar toolbar;
     boolean editmode = false, hidden = false;
+
     PhotosAdapter adapter;
 
     @Override
@@ -76,41 +76,47 @@ public class PhotosActivity extends AppCompatActivity {
         ImageLoader.getInstance().destroy();
         ImageLoader.getInstance().init(config);
 
-        //image = (ImageView) findViewById(R.id.image);
-        //image.setImageResource(R.drawable.pic);
-
-
-        //setPalette();
-
-
-
-
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album.Path, album.isHidden());
 
-            //setTitle(photos.DisplayName);
-
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
-
-            //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
             adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
+
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageView is = (ImageView) v.findViewById(R.id.pic);
+                    Photo f = photos.getPhoto(is.getTag().toString());
+                    int pos;
+                    if (editmode) {
+                        if (f.isSelected()) pos = photos.selectPhoto(f.Path, false);
+                        else pos = photos.selectPhoto(f.Path, true);
+                        adapter.notifyItemChanged(pos);
+                        invalidateOptionsMenu();
+                    } else {
 
-                    photos.setCurrentPhoto(is.getTag().toString());
-
-                    Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
-                    Bundle b = new Bundle();
-                    b.putParcelable("album", photos);
-                    intent.putExtras(b);
-                    startActivity(intent);
+                        photos.setCurrentPhoto(f.Path);
+                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
+                        Bundle b = new Bundle();
+                        b.putParcelable("album", photos);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    }
                 }
             });
+            adapter.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ImageView is = (ImageView) v.findViewById(R.id.pic);
+                    adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
+                    editmode = true;
+                    invalidateOptionsMenu();
+                    return false;
+                }
+            });
+
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -166,15 +172,16 @@ public class PhotosActivity extends AppCompatActivity {
         if (editmode) {
             opt = menu.findItem(R.id.endEditAlbumMode);
             opt.setEnabled(true).setVisible(true);
+
             setOptionsAlbmuMenusItemsVisible(menu, false);
         } else {
             opt = menu.findItem(R.id.endEditAlbumMode);
             opt.setEnabled(false).setVisible(false);
+
             setOptionsAlbmuMenusItemsVisible(menu, true);
         }
 
         if (hidden) {
-
             opt = menu.findItem(R.id.hideAlbumButton);
             opt.setTitle(getString(R.string.unhide_album_action));
         } else {
@@ -182,25 +189,57 @@ public class PhotosActivity extends AppCompatActivity {
             opt.setTitle(getString(R.string.hide_album_action));
         }
 
-        /*if (albums.getSelectedCount() == 0) {
+        if (photos.getSelectedCount() == 0) {
             editmode = false;
             opt = menu.findItem(R.id.endEditAlbumMode);
-            setOptionsAlbmuMenusItemsVisible(menu,false);
+            setOptionsAlbmuMenusItemsVisible(menu, true);
             opt.setEnabled(false).setVisible(false);
-        }*/
-
+            opt = menu.findItem(R.id.setAsAlbumPreview);
+            opt.setEnabled(false).setVisible(false);
+        } else if (photos.getSelectedCount() == 1) {
+            opt = menu.findItem(R.id.setAsAlbumPreview);
+            opt.setEnabled(true).setVisible(true);
+        } else {
+            opt = menu.findItem(R.id.setAsAlbumPreview);
+            opt.setEnabled(false).setVisible(false);
+        }
+        togglePrimaryToolbarOptions(menu);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void togglePrimaryToolbarOptions(final Menu menu) {
+        MenuItem opt;
+        if (editmode) {
+            opt = menu.findItem(R.id.sortPhotos);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            opt = menu.findItem(R.id.deleteAction);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            opt = menu.findItem(R.id.sharePhotos);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        } else {
+            opt = menu.findItem(R.id.sortPhotos);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            opt = menu.findItem(R.id.deleteAction);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            opt = menu.findItem(R.id.sharePhotos);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+        }
+
     }
 
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
         MenuItem option = m.findItem(R.id.hideAlbumButton);
         option.setEnabled(val).setVisible(val);
 
-        option = m.findItem(R.id.deleteAlbumButton);
-        option.setEnabled(val).setVisible(val);
-
         option = m.findItem(R.id.excludeAlbumButton);
         option.setEnabled(val).setVisible(val);
+
+        option = m.findItem(R.id.renameAlbum);
+        option.setEnabled(val).setVisible(val);
+
+        option = m.findItem(R.id.sharePhotos);
+        option.setEnabled(!val).setVisible(!val);
     }
 
     @Override
@@ -208,10 +247,10 @@ public class PhotosActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.endEditAlbumMode:
-                /*editmode = false;
+                editmode = false;
                 invalidateOptionsMenu();
                 photos.clearSelectedPhotos();
-                adapter.notifyDataSetChanged();*/
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.renameAlbum:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -258,16 +297,25 @@ public class PhotosActivity extends AppCompatActivity {
                 dasdf.show();
                 break;
 
-            case R.id.deleteAlbumButton:
+            case R.id.deleteAction:
                 AlertDialog.Builder dlg = new AlertDialog.Builder(
                         new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-                dlg.setMessage(getString(R.string.delete_album_action));
+
+                if (editmode) dlg.setMessage(getString(R.string.delete_photos_message));
+                else dlg.setMessage(getString(R.string.delete_album_message));
+
                 dlg.setCancelable(true);
                 dlg.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        albums.deleteAlbum(photos.FolderPath);
-                        finish();
+                        if (editmode) {
+                            photos.deleteSelectedPhotos();
+                            adapter.notifyDataSetChanged();
+
+                        } else {
+                            albums.deleteAlbum(photos.FolderPath);
+                            finish();
+                        }
                     }
                 });
                 dlg.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -352,13 +400,15 @@ public class PhotosActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(photos.DisplayName);
-        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
         textView.setText(photos.photos.size() + " Photos");
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(photos.DisplayName);
+        collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
+        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
 
     }

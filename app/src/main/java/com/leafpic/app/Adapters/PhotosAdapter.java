@@ -21,6 +21,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     ArrayList<Photo> photos;
     private int layout_ID;
     private View.OnClickListener mOnClickListener;
+    private View.OnLongClickListener mOnLongClickListener;
 
     public PhotosAdapter(ArrayList<Photo> ph, int id) {
         photos = ph;
@@ -31,6 +32,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
         v.setOnClickListener(mOnClickListener);
+        v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(v);
     }
 
@@ -43,16 +45,24 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                 .cacheInMemory(true)
 
                 .build();
+        Photo f = photos.get(position);
 
-        ImageLoader.getInstance().displayImage("file://" + photos.get(position).Path,
+        ImageLoader.getInstance().displayImage("file://" + f.Path,
                 holder.imageView, defaultOptions);
-        holder.imageView.setTag(photos.get(position).Path);
+        holder.imageView.setTag(f.Path);
+        if (f.isSelected())
+            holder.selectHolder.setVisibility(View.VISIBLE);
+        else holder.selectHolder.setVisibility(View.INVISIBLE);
+
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
         mOnClickListener = lis;
     }
 
+    public void setOnLongClickListener(View.OnLongClickListener lis) {
+        mOnLongClickListener = lis;
+    }
 
     @Override
     public int getItemCount() {
@@ -62,10 +72,12 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ImageView selectHolder;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.pic);
+            selectHolder = (ImageView) itemView.findViewById(R.id.selectedPicIcon);
         }
     }
 }

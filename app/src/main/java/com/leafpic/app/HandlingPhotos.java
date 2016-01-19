@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 
 class HandlingPhotos implements Parcelable {
+
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HandlingPhotos> CREATOR = new Parcelable.Creator<HandlingPhotos>() {
         @Override
@@ -25,7 +26,6 @@ class HandlingPhotos implements Parcelable {
             return new HandlingPhotos[size];
         }
     };
-
     public String FolderPath;
     public ArrayList<Photo> photos;
     public ArrayList<Photo> selectedPhotos;
@@ -33,6 +33,9 @@ class HandlingPhotos implements Parcelable {
     Context context;
     boolean hidden;
     private int current;
+    private int last_position_selecte = -1;
+
+
 
     public HandlingPhotos(Context ctx, String folderPath, boolean hide) {
         context = ctx;
@@ -44,6 +47,10 @@ class HandlingPhotos implements Parcelable {
         DisplayName = string.getBucketNamebyBucketPath(folderPath);
         db.close();
     }
+
+    /***
+     * parcellable
+     **/
 
     protected HandlingPhotos(Parcel in) {
         FolderPath = in.readString();
@@ -61,7 +68,6 @@ class HandlingPhotos implements Parcelable {
         }
         DisplayName = in.readString();
         current = in.readInt();
-        //context = (Context) in.readValue(Context.class.getClassLoader());
         hidden = in.readByte() != 0x00;
     }
 
@@ -89,18 +95,32 @@ class HandlingPhotos implements Parcelable {
     }
 
     public Photo getPhoto(String path) {
-        for (Photo photo : photos) {
-            if (photo.Path.equals(path))
-                return photo;
+        for (int i = 0; i < photos.size(); i++) {
+            if (photos.get(i).Path.equals(path)) {
+                last_position_selecte = i;
+                return photos.get(i);
+            }
         }
+
         return null;
     }
 
-    public void selectPhoto(Photo a, boolean val) {
+    public int selectPhoto(String path, boolean val) {
+        Photo x = getPhoto(path);
+        if (x != null) {
+            x.setSelected(val);
+            if (val) selectedPhotos.add(x);
+            else selectedPhotos.remove(x);
+        }
+        return last_position_selecte;
+    }
+
+    public int selectPhoto(Photo a, boolean val) {
         Photo x = photos.get(photos.indexOf(a));
         x.setSelected(val);
         if (val) selectedPhotos.add(x);
         else selectedPhotos.remove(x);
+        return last_position_selecte;
     }
 
     public void deleteSelectedPhotos() {
@@ -125,7 +145,7 @@ class HandlingPhotos implements Parcelable {
         DatabaseHandler db = new DatabaseHandler(context);
         File file = new File(a.Path);
         h.deleteFolderRecursive(file);
-        db.deletePhotoByPath(a.Path);
+        db.deletePhoto(a);
         db.close();
         photos.remove(a);
     }
@@ -135,6 +155,10 @@ class HandlingPhotos implements Parcelable {
             photo.setSelected(false);
         }
         selectedPhotos.clear();
+    }
+
+    public int getSelectedCount() {
+        return selectedPhotos.size();
     }
 
     @Override

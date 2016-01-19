@@ -43,15 +43,14 @@
                         android:maxLines="1"
                         android:textColor="@android:color/white"
                         android:textSize="30sp"
-                        android:text="Slide"
                 />
                 <View
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="@android:color/white"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginEnd="60dp"
 
                 />
                 <TextView
@@ -64,7 +63,6 @@
                         android:maxLines="1"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
-                        android:text="13 Photos"
                 />
 
 

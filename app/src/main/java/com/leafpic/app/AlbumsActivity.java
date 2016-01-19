@@ -35,7 +35,7 @@ public class AlbumsActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-    MediaStoreObserver observer;
+    // MediaStoreObserver observer;
     Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -53,7 +53,7 @@ public class AlbumsActivity extends AppCompatActivity {
 
         initUiTweaks();
         checkPermissions();
-        db.LogPhotosMediaStoreByFolderPath();
+        //db.LogPhotosMediaStoreByFolderPath();
 
         /* observer = new MediaStoreObserver(null);
 
@@ -276,7 +276,7 @@ public class AlbumsActivity extends AppCompatActivity {
         MenuItem option = m.findItem(R.id.hideAlbumButton);
         option.setEnabled(val).setVisible(val);
 
-        option = m.findItem(R.id.deleteAlbumButton);
+        option = m.findItem(R.id.deleteAction);
         option.setEnabled(val).setVisible(val);
 
         option = m.findItem(R.id.excludeAlbumButton);
@@ -341,7 +341,7 @@ public class AlbumsActivity extends AppCompatActivity {
                 dasdf.show();
                 break;
 
-            case R.id.deleteAlbumButton:
+            case R.id.deleteAction:
                 AlertDialog.Builder dlg = new AlertDialog.Builder(
                         new ContextThemeWrapper(this, R.style.AlertDialogCustom));
                 dlg.setMessage(getString(R.string.delete_album_message));

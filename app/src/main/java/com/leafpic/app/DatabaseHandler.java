@@ -103,13 +103,24 @@ class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     void deletePhotoByPath(String path) {
+        String s[] = string.getPhotoFolderPathAndNameByPath(path);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_PHOTOS, PHOTO_NAME + " = ?",
-                new String[]{string.quoteReplace(path)});
+        String sql = "DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + string.quoteReplace(s[0]) +
+                "' AND " + PHOTO_NAME + "='" + string.quoteReplace(s[1]) + "'";
+        db.execSQL(sql);
+        db.close();
+    }
+
+    void deletePhoto(Photo f) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + string.quoteReplace(f.FolderPath) +
+                "' AND " + PHOTO_NAME + "='" + string.quoteReplace(f.name) + "'";
+        db.execSQL(sql);
         db.close();
     }
 
     void deletePhotoaByFolderPath(String path) {
+        string.getPhotoFolderPathAndNameByPath(path);
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PHOTOS, PHOTO_FOLDER_PATH + " = ?",
                 new String[]{string.quoteReplace(path)});
