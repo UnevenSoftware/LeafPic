@@ -35,7 +35,6 @@ public class Photo implements Parcelable {
     }
 
     public Photo(String path, String dateTaken) {
-
         Path = path;
         FolderPath = string.getBucketPathbyImagePath(path);
         name = string.getPhotoNamebyPath(path);

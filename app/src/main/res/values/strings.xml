@@ -33,7 +33,9 @@
         available also from other apps! use EXCLUDE option instead)
     </string>
     <string name="delete_album_message">Are you sure you want to delete the entire album folder?</string>
+    <string name="delete_photos_message">Are you sure you want to delete selected photos?</string>
     <string name="exclude_album_message">Are you sure you want to exclude the album?</string>
     <string name="rename_album_action">Rename</string>
+    <string name="asd">13 Photos</string>
 
 </resources>

@@ -14,10 +14,10 @@
         app:showAsAction="ifRoom"
         />
     <item
-        android:id="@+id/shareButton"
-        android:icon="@mipmap/ic_share_white_24dp"
-        android:title="Share"
-        app:showAsAction="ifRoom"
+            android:id="@+id/shareButton"
+            android:icon="@mipmap/ic_share_white_24dp"
+            android:title="Share"
+            app:showAsAction="never"
         />
     <item
         android:id="@+id/setWallpaper"

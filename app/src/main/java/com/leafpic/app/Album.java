@@ -27,24 +27,25 @@ public class Album implements Parcelable {
     public String Path = "";
     public String DisplayName;
     ArrayList<Photo> photos;
+    private int imagesCount = 0;
     private boolean hidden = false;
     private boolean selected = false;
 
     public Album() {
         photos = new ArrayList<Photo>();
     }
-
     public Album(String path){
         photos = new ArrayList<Photo>();
         DisplayName = string.getBucketNamebyBucketPath(path);
         Path = path;
     }
+
+
     public Album(String path, String displayName) {
         photos = new ArrayList<Photo>();
         DisplayName = displayName;
         Path = path;
     }
-
 
     public Album(String path, String displayName, boolean hidden) {
         photos = new ArrayList<Photo>();
@@ -52,6 +53,19 @@ public class Album implements Parcelable {
         Path = path;
         setHidden(hidden);
     }
+
+
+    public Album(String path, String displayName, boolean hidden, int count) {
+        photos = new ArrayList<Photo>();
+        DisplayName = displayName;
+        Path = path;
+        setHidden(hidden);
+        imagesCount = count;
+    }
+
+    /****
+     * parcelable
+     */
 
     protected Album(Parcel in) {
         Path = in.readString();
@@ -99,10 +113,8 @@ public class Album implements Parcelable {
     }
 
     public String getPathCoverAlbum() {
-        if (photos.size() > 0)
-            return "file://" + photos.get(0).Path;
-        else
-            return "drawable://" + R.drawable.ic_empty;
+        if (photos.size() > 0) return "file://" + photos.get(0).Path;
+        else return "drawable://" + R.drawable.ic_empty;
     }
 
     public int getColorAlbum() {
@@ -112,11 +124,12 @@ public class Album implements Parcelable {
             return Color.DKGRAY;
     }
 
-
-
     public int getImagesCount() {
-        return photos.size();
+        return imagesCount;
     }
+
+    public void setImagesCount(int n) {
+        imagesCount = n; }
 
     @Override
     public int describeContents() {
