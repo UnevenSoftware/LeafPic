@@ -48,6 +48,10 @@ class HandlingPhotos implements Parcelable {
         db.close();
     }
 
+    public String getPreviewAlbumImg(){
+        return photos.get(0).Path;
+    }
+
     /***
      * parcellable
      **/
