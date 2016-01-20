@@ -18,14 +18,10 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
+import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Adapters.SideDrawerAdapter;
 import com.leafpic.app.utils.string;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-
 
 public class AlbumsActivity extends AppCompatActivity {
     DatabaseHandler db = new DatabaseHandler(AlbumsActivity.this);
@@ -44,12 +40,12 @@ public class AlbumsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+       /* ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .memoryCacheExtraOptions(200, 200)
                 .diskCacheExtraOptions(200, 200, null)
                 .tasksProcessingOrder(QueueProcessingType.FIFO)
                 .build();
-        ImageLoader.getInstance().init(config);
+        ImageLoader.getInstance().init(config);*/
 
         initUiTweaks();
         checkPermissions();
@@ -136,15 +132,13 @@ public class AlbumsActivity extends AppCompatActivity {
         drawerAdapter.setAdapter(mAdapter);
 
         try{
-            final ImageView current_picture = (ImageView) findViewById(R.id.current_picture);
-            DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .build();
-
-            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.storage_icon,
-                    current_picture,
-                    defaultOptions);
+            ImageView current_picture = (ImageView) findViewById(R.id.current_picture);
+            Glide.with(this)
+                    .load(R.drawable.storage_icon)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_empty)
+                    .crossFade()
+                    .into(current_picture);
 
         } catch (Exception e) {
             e.printStackTrace();
