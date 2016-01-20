@@ -41,10 +41,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         Photo f = photos.get(position);
         Glide.with(holder.imageView.getContext())
                 .load(f.Path)
-                //.asBitmap()
+                .asBitmap()/* TODO gif previews */
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
-                .crossFade()
+                //.crossFade()
                 .into(holder.imageView);
 
         String mime = string.getMimeType(f.Path);/* TODO mime type form media storage */
