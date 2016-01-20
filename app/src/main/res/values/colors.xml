@@ -14,4 +14,5 @@
     <color name="grey_2">#424242</color>
     <!--GREEN-->
     <color name="green_1">#727272</color>
+    <color name="fabOrange">#FF9800</color>
 </resources>

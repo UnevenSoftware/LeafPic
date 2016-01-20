@@ -90,9 +90,6 @@ public class PhotosActivity extends AppCompatActivity {
         ImageLoader.getInstance().destroy();
         ImageLoader.getInstance().init(config);
 
-
-
-
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
@@ -395,6 +392,11 @@ public class PhotosActivity extends AppCompatActivity {
         return true;
     }
 
+    //FABCLICK
+    public void fabClicked(View v){
+        Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+        startActivity(i);
+    }
 
     public void initUiTweaks() {
 
@@ -424,6 +426,9 @@ public class PhotosActivity extends AppCompatActivity {
 
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);
+        //SpannableString content = new SpannableString(photos.DisplayName);
+        //content.setSpan(new UnderlineSpan(), 10, content.length(), 0);
+        //textView.setText(content);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
         textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size()+ "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
