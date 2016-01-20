@@ -11,6 +11,12 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
+        <activity android:name=".Preferences_Activity"
+            android:label="Setting"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            >
+        </activity>
+
         <activity android:name=".AlbumsActivity"
                   android:label="@string/app_name"
                   android:theme="@style/Theme.AppCompat.Light.NoActionBar"
@@ -48,10 +54,5 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
-
     </application>
-
-
-
 </manifest>

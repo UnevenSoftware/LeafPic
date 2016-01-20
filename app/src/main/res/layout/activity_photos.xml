@@ -1,39 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:background="@color/background_material_dark">
-
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
+    android:background="@color/background_material_dark">
     <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:fitsSystemWindows="true">
-
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true"
+        >
         <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            android:fitsSystemWindows="true"
+            >
+            <!--COL WRAP CONTENT(SU HEIGHT) NON FUNGE DIO CANE-->
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleMarginStart="48dp"
-                app:expandedTitleMarginEnd="64dp"
-                android:fitsSystemWindows="true">
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"
+                >
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="centerCrop"
+                    />
+                    <!--COL WRAP CONTENT(SU HEIGHT) NON FUNGE DIO CANE-->
 
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                          android:orientation="vertical"
-                          android:layout_width="match_parent"
-                          android:layout_height="match_parent"
-                          android:background="@color/toolbar">
+                    <!--
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/pic2"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax"
+                    -->
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
 
-                <TextView
+                    <TextView
                         android:id="@+id/AlbumName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -43,17 +66,16 @@
                         android:maxLines="1"
                         android:textColor="@android:color/white"
                         android:textSize="30sp"
-                />
-                <View
+                        />
+                    <View
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="@android:color/white"
                         android:layout_marginStart="60dp"
                         android:layout_marginEnd="60dp"
-
-                />
-                <TextView
+                        />
+                    <TextView
                         android:id="@+id/AlbumNPhotos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -63,50 +85,37 @@
                         android:maxLines="1"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
-                />
+                        />
 
-
-            </LinearLayout>
-            <!-- <ImageView
-                     android:id="@+id/image"
-                     android:src="@drawable/pic"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:scaleType="centerCrop"
-                     android:fitsSystemWindows="true"
-                     app:layout_collapseMode="parallax"/>-->
-
+                </LinearLayout>
+            </RelativeLayout>
             <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/toolbar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_collapseMode="pin"
-            />
-
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"
+                />
+                <!--android:background="@color/trasparent_toolbar"-->
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v7.widget.RecyclerView
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/gridPhotos"
-            android:numColumns="3"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:clipToPadding="false"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridPhotos"
+        android:numColumns="3"
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="2dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
     />
-
     <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            app:layout_anchor="@id/app_bar_layout"
-            style="@style/fab"
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_anchorGravity="bottom|right|end"
+        android:id="@+id/fab"
+        android:onClick="fabClicked"
+        app:layout_anchor="@id/app_bar_layout"
+        style="@style/fab"
+        app:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_anchorGravity="bottom|right|end"
     />
-
 </android.support.design.widget.CoordinatorLayout>

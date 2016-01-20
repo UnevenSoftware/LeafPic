@@ -8,9 +8,11 @@
     <color name="toolbar">#009688</color>
     <color name="album_info">#000</color>
     <color name="trasparent_toolbar">#33009688</color>
+    <color name="trasparent">#00000000</color>
     <!--GREY-->
     <color name="grey_1">#727272</color>
     <color name="grey_2">#424242</color>
     <!--GREEN-->
     <color name="green_1">#727272</color>
+    <color name="fabOrange">#FF9800</color>
 </resources>

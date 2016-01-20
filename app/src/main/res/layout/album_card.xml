@@ -24,12 +24,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:scaleType="centerCrop"
+
                 />
 
             <!--VIEW divider DIVIDE IMMAGINE DALL TESTO SOTTO-->
             <View
-                    android:id="@+id/divider"
-                    android:layout_width="match_parent"
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_below="@id/picture"
                 android:background="@android:color/darker_gray"
@@ -42,10 +43,11 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/divider">
-                <TextView
+                android:layout_below="@id/divider"
+                >
 
-                        android:id="@+id/picturetext"
+                <TextView
+                    android:id="@+id/picturetext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"

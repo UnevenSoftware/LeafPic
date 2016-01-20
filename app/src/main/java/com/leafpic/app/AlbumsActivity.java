@@ -277,6 +277,7 @@ public class AlbumsActivity extends AppCompatActivity {
         option.setEnabled(val).setVisible(val);
 
         option = m.findItem(R.id.deleteAction);
+
         option.setEnabled(val).setVisible(val);
 
         option = m.findItem(R.id.excludeAlbumButton);
@@ -402,6 +403,10 @@ public class AlbumsActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
 
+            case  R.id.settinglayout:
+                Intent intent = new Intent(this, Preferences_Activity.class);
+                startActivity(intent);
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

@@ -2,6 +2,10 @@ package com.leafpic.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -9,16 +13,25 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.*;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -35,7 +48,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     HandlingPhotos photos;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    //ImageView image;
+    ImageView image;
 
 
     boolean hideToolBar = false;
@@ -50,7 +63,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     }
 
-    /*  private void setPalette() {
+    private void setPalette() {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
@@ -58,10 +71,11 @@ public class PhotosActivity extends AppCompatActivity {
                 int primaryDark = getColor(R.color.trasparent_toolbar);
                 int primary = getColor(R.color.toolbar);
                 collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-                collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
+                collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
+                //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
             }
         });
-    }*/
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +84,7 @@ public class PhotosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photos);
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(30, 60)
+                .memoryCacheExtraOptions(100, 100)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getInstance().destroy();
@@ -378,6 +392,11 @@ public class PhotosActivity extends AppCompatActivity {
         return true;
     }
 
+    //FABCLICK
+    public void fabClicked(View v){
+        Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+        startActivity(i);
+    }
 
     public void initUiTweaks() {
 
@@ -391,26 +410,35 @@ public class PhotosActivity extends AppCompatActivity {
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getColor(R.color.status_bar));
+        setStatusBarTranslucent(true);
+        //window.setStatusBarColor(getColor(R.color.status_bar));
 
 
         /**** ToolBar*/
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        image = (ImageView) findViewById(R.id.image);
+        image.setImageURI(Uri.parse(photos.getPreviewAlbumImg()));
+        //OSCURA LIMMAGINE
+        image.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);
+        //SpannableString content = new SpannableString(photos.DisplayName);
+        //content.setSpan(new UnderlineSpan(), 10, content.length(), 0);
+        //textView.setText(content);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
-        textView.setText(photos.photos.size() + " Photos");
+        textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size()+ "</font></b>" + "<font " +
+                "color='#FFFFFF'> Photos</font>"));
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
-
+        setPalette();
     }
 
     private void initActivityTransitions() {
@@ -419,6 +447,14 @@ public class PhotosActivity extends AppCompatActivity {
             transition.excludeTarget(android.R.id.statusBarBackground, true);
             getWindow().setEnterTransition(transition);
             getWindow().setReturnTransition(transition);
+        }
+    }
+
+    protected void setStatusBarTranslucent(boolean makeTranslucent) {
+        if (makeTranslucent) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 }
