@@ -411,11 +411,10 @@ public class PhotosActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_empty)
                 .crossFade()
                 .into(image);
-        //image.setImageURI(Uri.parse(photos.getPreviewAlbumImg()));*/
+
 
         //OSCURA LIMMAGINE
         image.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-        // image.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);

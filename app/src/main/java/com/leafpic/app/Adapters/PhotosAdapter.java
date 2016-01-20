@@ -1,5 +1,6 @@
 package com.leafpic.app.Adapters;
 
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,9 +57,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         if (f.isSelected()) {
             holder.selectHolder.setVisibility(View.VISIBLE);
             holder.imageView.setPadding(15, 15, 15, 15);
+            holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
         } else {
             holder.selectHolder.setVisibility(View.INVISIBLE);
             holder.imageView.setPadding(0, 0, 0, 0);
+            holder.imageView.clearColorFilter();
         }
 
     }
