@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,30 +20,18 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 /**
  * Created by dnld on 12/12/15.
  */
 public class PhotosActivity extends AppCompatActivity {
-
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
-
-    DatabaseHandler db = new DatabaseHandler(PhotosActivity.this);
 
     HandlingPhotos photos;
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -52,8 +39,7 @@ public class PhotosActivity extends AppCompatActivity {
 
 
     boolean hideToolBar = false;
-    boolean editmode = false, hidden = false;
-
+    boolean editmode = false;
     PhotosAdapter adapter;
 
     @Override
@@ -63,18 +49,24 @@ public class PhotosActivity extends AppCompatActivity {
 
     }
 
-    private void setPalette() {
-        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-            @Override
-            public void onGenerated(Palette palette) {
-                int primaryDark = getColor(R.color.trasparent_toolbar);
-                int primary = getColor(R.color.toolbar);
-                collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-                collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
-                //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
-            }
-        });
+
+    private void setPalette() { //TODO remaake doesn't work wiht image loaded by Glide
+        try {
+            Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    int primaryDark = getColor(R.color.trasparent_toolbar);
+                    int primary = getColor(R.color.toolbar);
+                    collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
+                    collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
+                    //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
+                }
+            });
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -83,12 +75,12 @@ public class PhotosActivity extends AppCompatActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_photos);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+       /* ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .memoryCacheExtraOptions(100, 100)
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getInstance().destroy();
-        ImageLoader.getInstance().init(config);
+        ImageLoader.getInstance().init(config);*/
 
         try {
             Bundle data = getIntent().getExtras();
@@ -101,7 +93,7 @@ public class PhotosActivity extends AppCompatActivity {
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageView is = (ImageView) v.findViewById(R.id.pic);
+                    TextView is = (TextView) v.findViewById(R.id.path);
                     Photo f = photos.getPhoto(is.getTag().toString());
                     int pos;
                     if (editmode) {
@@ -110,7 +102,6 @@ public class PhotosActivity extends AppCompatActivity {
                         adapter.notifyItemChanged(pos);
                         invalidateOptionsMenu();
                     } else {
-
                         photos.setCurrentPhoto(f.Path);
                         Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                         Bundle b = new Bundle();
@@ -123,7 +114,7 @@ public class PhotosActivity extends AppCompatActivity {
             adapter.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    ImageView is = (ImageView) v.findViewById(R.id.pic);
+                    TextView is = (TextView) v.findViewById(R.id.path);
                     adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
                     editmode = true;
                     invalidateOptionsMenu();
@@ -164,7 +155,6 @@ public class PhotosActivity extends AppCompatActivity {
             mRecyclerView.setNestedScrollingEnabled(true);
 
 
-            hidden = photos.hidden;
             initUiTweaks();
         }
         catch (Exception e){ e.printStackTrace(); }
@@ -186,16 +176,14 @@ public class PhotosActivity extends AppCompatActivity {
         if (editmode) {
             opt = menu.findItem(R.id.endEditAlbumMode);
             opt.setEnabled(true).setVisible(true);
-
             setOptionsAlbmuMenusItemsVisible(menu, false);
         } else {
             opt = menu.findItem(R.id.endEditAlbumMode);
             opt.setEnabled(false).setVisible(false);
-
             setOptionsAlbmuMenusItemsVisible(menu, true);
         }
 
-        if (hidden) {
+        if (photos.hidden) {
             opt = menu.findItem(R.id.hideAlbumButton);
             opt.setTitle(getString(R.string.unhide_album_action));
         } else {
@@ -237,7 +225,6 @@ public class PhotosActivity extends AppCompatActivity {
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             opt = menu.findItem(R.id.sharePhotos);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
         }
 
     }
@@ -278,7 +265,6 @@ public class PhotosActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         albums.renameAlbum(photos.FolderPath, input.getText().toString());
                         finish();
-                        //adapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -325,7 +311,6 @@ public class PhotosActivity extends AppCompatActivity {
                         if (editmode) {
                             photos.deleteSelectedPhotos();
                             adapter.notifyDataSetChanged();
-
                         } else {
                             albums.deleteAlbum(photos.FolderPath);
                             finish();
@@ -341,7 +326,7 @@ public class PhotosActivity extends AppCompatActivity {
                 break;
 
             case R.id.hideAlbumButton:
-                if (hidden) {
+                if (photos.hidden) {
                     albums.unHideAlbum(photos.FolderPath);
                     finish();
                 } else {
@@ -420,9 +405,16 @@ public class PhotosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         image = (ImageView) findViewById(R.id.image);
-        image.setImageURI(Uri.parse(photos.getPreviewAlbumImg()));
+        Glide.with(this)
+                .load(photos.getPreviewAlbumImg())
+                .centerCrop()
+                .placeholder(R.drawable.ic_empty)
+                .crossFade()
+                .into(image);
+
+
         //OSCURA LIMMAGINE
-        image.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+        image.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);

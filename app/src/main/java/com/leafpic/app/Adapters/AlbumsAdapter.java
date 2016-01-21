@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.leafpic.app.Album;
 import com.leafpic.app.R;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 
@@ -44,14 +42,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
-        holder.picture.setTag(a.getPathCoverAlbum());
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_empty)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-                .cacheInMemory(true)
-                .build();
+        //holder.picture.setTag(a.getPathCoverAlbum());
 
-        ImageLoader.getInstance().displayImage(a.getPathCoverAlbum(), holder.picture, defaultOptions);
+
+        //ImageLoader.getInstance().displayImage(a.getPathCoverAlbum(), holder.picture, defaultOptions);
+        Glide.with(holder.picture.getContext())
+                .load(a.getPathCoverAlbum())
+                .centerCrop()
+                .placeholder(R.drawable.ic_empty)
+                .crossFade()
+                .into(holder.picture);
+
         holder.name.setText(a.DisplayName);
         holder.nPhotos.setText(Html.fromHtml("<b><font color='#FBC02D'>" + a.getImagesCount() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));

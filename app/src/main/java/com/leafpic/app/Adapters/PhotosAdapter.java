@@ -1,15 +1,16 @@
 package com.leafpic.app.Adapters;
 
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.leafpic.app.Photo;
 import com.leafpic.app.R;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.leafpic.app.utils.string;
 
 import java.util.ArrayList;
 
@@ -38,21 +39,30 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(PhotosAdapter.ViewHolder holder, int position) {
-
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_empty)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-                .cacheInMemory(true)
-
-                .build();
         Photo f = photos.get(position);
+        Glide.with(holder.imageView.getContext())
+                .load(f.Path)
+                .asBitmap()/* TODO gif previews */
+                .centerCrop()
+                .placeholder(R.drawable.ic_empty)
+                //.crossFade()
+                .into(holder.imageView);
 
-        ImageLoader.getInstance().displayImage("file://" + f.Path,
-                holder.imageView, defaultOptions);
-        holder.imageView.setTag(f.Path);
-        if (f.isSelected())
+        String mime = string.getMimeType(f.Path);/* TODO mime type form media storage */
+        if (mime != null && mime.equals("image/gif"))
+            holder.gifIcon.setVisibility(View.VISIBLE);
+        else holder.gifIcon.setVisibility(View.INVISIBLE);
+
+        holder.path.setTag(f.Path);
+        if (f.isSelected()) {
             holder.selectHolder.setVisibility(View.VISIBLE);
-        else holder.selectHolder.setVisibility(View.INVISIBLE);
+            holder.imageView.setPadding(15, 15, 15, 15);
+            holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
+        } else {
+            holder.selectHolder.setVisibility(View.INVISIBLE);
+            holder.imageView.setPadding(0, 0, 0, 0);
+            holder.imageView.clearColorFilter();
+        }
 
     }
 
@@ -71,13 +81,15 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        ImageView selectHolder;
+        ImageView imageView, selectHolder, gifIcon;
+        TextView path;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.pic);
             selectHolder = (ImageView) itemView.findViewById(R.id.selectedPicIcon);
+            gifIcon = (ImageView) itemView.findViewById(R.id.gifIcon);
+            path = (TextView) itemView.findViewById(R.id.path);
         }
     }
 }
