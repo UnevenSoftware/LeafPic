@@ -358,6 +358,7 @@ public class AlbumsActivity extends AppCompatActivity {
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
                 return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
