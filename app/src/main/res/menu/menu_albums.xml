@@ -38,6 +38,12 @@
         android:title="Setting"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/trySetting"
+        android:title="Try Setting"
+        app:showAsAction="never">
+    </item>
+
 
     <item
         android:id="@+id/excludeAlbumButton"
