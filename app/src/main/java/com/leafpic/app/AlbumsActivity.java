@@ -405,6 +405,7 @@ public class AlbumsActivity extends AppCompatActivity {
                 return true;
             // PER USARE I SHARED PREFERENCES GUARDA STA ROBA STRONZO BELLO
             case  R.id.trySetting:
+
                 SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String strUserName = SP.getString("username", "NA");
                 boolean bAppUpdates = SP.getBoolean("applicationUpdates", false);
