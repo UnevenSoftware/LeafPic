@@ -3,9 +3,11 @@ package com.leafpic.app;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -400,6 +402,15 @@ public class AlbumsActivity extends AppCompatActivity {
             case  R.id.settinglayout:
                 Intent intent = new Intent(this, Preferences_Activity.class);
                 startActivity(intent);
+                return true;
+            // PER USARE I SHARED PREFERENCES GUARDA STA ROBA STRONZO BELLO
+            case  R.id.trySetting:
+                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String strUserName = SP.getString("username", "NA");
+                boolean bAppUpdates = SP.getBoolean("applicationUpdates", false);
+                String downloadType = SP.getString("downloadType", "1");
+
+                string.showToast(AlbumsActivity.this," UserName: " + strUserName + " DownloadType: " + downloadType +" Updates: " + bAppUpdates);
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

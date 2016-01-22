@@ -40,16 +40,4 @@
     <string name="rename_album_action">Rename</string>
     <string name="asd">13 Photos</string>
 
-    <!--TEST PREFERENCE SCREEEN-->
-    <string-array name="listArray">
-        <item>Headings</item>
-        <item>Headings and Details</item>
-        <item>All Data</item>
-    </string-array>
-
-    <string-array name="listValues">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 </resources>
