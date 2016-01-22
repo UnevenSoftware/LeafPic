@@ -48,9 +48,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         //ImageLoader.getInstance().displayImage(a.getPathCoverAlbum(), holder.picture, defaultOptions);
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
+                .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
-                .crossFade()
                 .into(holder.picture);
 
         holder.name.setText(a.DisplayName);
@@ -66,13 +66,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
             //holder.card_layout.setBackgroundColor(albums.get(position).getColorAlbum());
         }
-
-    }
-
-    public void setDataset(ArrayList<Album> dataset) {
-        albums = dataset;
-        // This isn't working
-        notifyItemRangeInserted(0, dataset.size());
 
     }
 

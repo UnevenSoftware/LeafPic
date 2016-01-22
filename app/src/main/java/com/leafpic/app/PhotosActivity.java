@@ -20,17 +20,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 
@@ -414,9 +407,9 @@ public class PhotosActivity extends AppCompatActivity {
         image = (ImageView) findViewById(R.id.image);
         Glide.with(this)
                 .load(photos.getPreviewAlbumImg())
+                .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
-                .crossFade()
                 .into(image);
 
 
