@@ -32,18 +32,6 @@
         android:title="DONE"
         app:showAsAction="ifRoom"
         />
-    <!--SETTING-->
-    <item
-        android:id="@+id/settinglayout"
-        android:title="Setting"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/trySetting"
-        android:title="Try Setting"
-        app:showAsAction="never">
-    </item>
-
 
     <item
         android:id="@+id/excludeAlbumButton"
