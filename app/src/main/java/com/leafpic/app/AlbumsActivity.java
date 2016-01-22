@@ -5,25 +5,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.Toolbar;
 import android.view.*;
-import android.widget.*;
-import com.bumptech.glide.Glide;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.leafpic.app.Adapters.AlbumsAdapter;
-import com.leafpic.app.Adapters.SideDrawerAdapter;
 import com.leafpic.app.utils.string;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class AlbumsActivity extends AppCompatActivity {
     DatabaseHandler db = new DatabaseHandler(AlbumsActivity.this);
@@ -35,13 +39,14 @@ public class AlbumsActivity extends AppCompatActivity {
     AlbumsAdapter adapt;
     // MediaStoreObserver observer;
     Toolbar toolbar;
+    SharedPreferences SP;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
        /* ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .memoryCacheExtraOptions(200, 200)
                 .diskCacheExtraOptions(200, 200, null)
@@ -100,104 +105,59 @@ public class AlbumsActivity extends AppCompatActivity {
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(R.mipmap.ic_landscape_black_24dp);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(R.mipmap.ic_visibility_off_black_24dp);
+        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(R.mipmap.ic_settings_black_24dp);
+        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("Donate").withIcon(R.mipmap.ic_card_giftcard_black_24dp);
+        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Leave FeedBack").withIcon(R.mipmap.ic_feedback_black_24dp);
 
-        /**** Drawer*/
-        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.side_wall)
+                .withSelectionListEnabledForSingleProfile(false)
+                .addProfiles(
+                        new ProfileDrawerItem().withName(SP.getString("username", "NA")).withIcon(getDrawable(R.drawable.default_profile))
+                )
+                .build();
 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                toolbar,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
-        ) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                //toolbar.setTitle("asd");
-            }
 
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
+        final Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        item1,
+                        item2,
+                        new DividerDrawerItem(),
+                        item3,
+                        item4,
+                        item5
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch (position) {
+                            case 1://deafult
+                                hidden = false;
+                                checkPermissions();
+                                break;
+                            case 2://hidden
+                                hidden = true;
+                                checkPermissions();
+                                break;
+                            case 4://settings
+                                Intent intent = new Intent(AlbumsActivity.this, Preferences_Activity.class);
+                                startActivity(intent);
+                                break;
+                            default:
+                                break;
+                        }
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        String drawerArrayItems[] = getResources().getStringArray(R.array.drawer_items);
-        int ICONS[] = new int[1];
-
-        RecyclerView drawerAdapter = (RecyclerView) findViewById(R.id.RecyclerView);
-
-        mAdapter = new SideDrawerAdapter(drawerArrayItems, ICONS);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        drawerAdapter.setLayoutManager(mLayoutManager);
-        drawerAdapter.setAdapter(mAdapter);
-
-        try{
-            ImageView current_picture = (ImageView) findViewById(R.id.current_picture);
-            Glide.with(this)
-                    .load(R.drawable.storage_icon)
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_empty)
-                    .crossFade()
-                    .into(current_picture);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Spinner spinner = (Spinner) findViewById(R.id.planets_spinner);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                switch (position){
-                    case 0:
-                        hidden = false;
-                        checkPermissions();
-                        /*albums.loadAlbums();
-                        adapt.setDataset(albums.dispAlbums);
-                        adapt.notifyDataSetChanged();*/
-
-                        break;
-                    case 1:
-                        hidden = true;
-                        checkPermissions();
-                        /*albums.loadHiddenAlbums();
-                        adapt.setDataset(albums.dispAlbums);
-                        adapt.notifyDataSetChanged();*/
-
-                        break;
-
-                    default:break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-
-            }
-
-        });
+                        return false;
+                    }
+                })
+                .build();
     }
-
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
 
     public  void checkPermissions(){
 
@@ -398,20 +358,6 @@ public class AlbumsActivity extends AppCompatActivity {
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
                 return true;
-
-            case  R.id.settinglayout:
-                Intent intent = new Intent(this, Preferences_Activity.class);
-                startActivity(intent);
-                return true;
-            // PER USARE I SHARED PREFERENCES GUARDA STA ROBA STRONZO BELLO
-            case  R.id.trySetting:
-                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String strUserName = SP.getString("username", "NA");
-                boolean bAppUpdates = SP.getBoolean("applicationUpdates", false);
-                String downloadType = SP.getString("downloadType", "1");
-
-                string.showToast(AlbumsActivity.this," UserName: " + strUserName + " DownloadType: " + downloadType +" Updates: " + bAppUpdates);
-                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -440,14 +386,12 @@ public class AlbumsActivity extends AppCompatActivity {
 
     private void loadAlbums() {
 
-
         if (hidden)
             albums.loadPreviewHiddenAlbums();
         else {
             db.updatePhotos();
             albums.loadPreviewAlbums();
         }
-
 
         mRecyclerView = (RecyclerView) findViewById(R.id.gridAlbums);
         adapt = new AlbumsAdapter(albums.dispAlbums, R.layout.album_card);

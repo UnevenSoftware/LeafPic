@@ -46,4 +46,7 @@ dependencies {
     compile 'com.android.support:palette-v7:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.android.support:support-v4:+'
+    compile('com.mikepenz:materialdrawer:4.6.4@aar') {
+        transitive = true
+    }
 }
