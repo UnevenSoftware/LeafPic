@@ -1,9 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">#009688</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="colorPrimaryDark">#00796b</item>
     </style>
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Dialog">
 
