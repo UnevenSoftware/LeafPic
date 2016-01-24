@@ -5,30 +5,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.support.v7.widget.*;
+import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.utils.string;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -47,39 +39,19 @@ public class AlbumsActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-    // MediaStoreObserver observer;
+    // MediaStoreObserver
+    // observer;
     Toolbar toolbar;
     SharedPreferences SP;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-       /* ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(200, 200)
-                .diskCacheExtraOptions(200, 200, null)
-                .tasksProcessingOrder(QueueProcessingType.FIFO)
-                .build();
-        ImageLoader.getInstance().init(config);*/
 
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
-        //db.LogPhotosMediaStoreByFolderPath();
-
-        /* observer = new MediaStoreObserver(null);
-
-        Log.d("INSTANT", "registered content observer");
-
-        this.getApplicationContext()
-                .getContentResolver()
-                .registerContentObserver(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false,
-                        observer);
-
-        Log.d("INSTANT", "registered content observer");
-*/
     }
 
     @Override
@@ -112,11 +84,16 @@ public class AlbumsActivity extends AppCompatActivity {
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(R.mipmap.ic_landscape_black_24dp);
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(R.mipmap.ic_visibility_off_black_24dp);
-        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(R.mipmap.ic_settings_black_24dp);
-        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("Donate").withIcon(R.mipmap.ic_card_giftcard_black_24dp);
-        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Leave FeedBack").withIcon(R.mipmap.ic_feedback_black_24dp);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(FontAwesome.Icon.faw_picture_o);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(FontAwesome.Icon.faw_eye_slash);
+        PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
+        PrimaryDrawerItem item22 = new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_calendar_o);
+
+
+        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
+        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
+        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
+
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -132,9 +109,13 @@ public class AlbumsActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
+                .withTranslucentStatusBar(false)
+
                 .addDrawerItems(
                         item1,
                         item2,
+                        item21,
+                        item22,
                         new DividerDrawerItem(),
                         item3,
                         item4,
@@ -152,9 +133,13 @@ public class AlbumsActivity extends AppCompatActivity {
                                 hidden = true;
                                 checkPermissions();
                                 break;
-                            case 4://settings
+                            case 6://settings
                                 Intent intent = new Intent(AlbumsActivity.this, Preferences_Activity.class);
                                 startActivity(intent);
+                                break;
+                            case 7://github
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DNLDsht/LeafPic/"));
+                                startActivity(browserIntent);
                                 break;
                             default:
                                 break;
@@ -231,18 +216,22 @@ public class AlbumsActivity extends AppCompatActivity {
             setOptionsAlbmuMenusItemsVisible(menu,false);
             opt.setEnabled(false).setVisible(false);
         }
-
+        updateSelectedStuff();
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    void updateSelectedStuff() {
+        int c;// = albums.getSelectedCount();
+        if ((c = albums.getSelectedCount()) != 0)
+            setTitle("  " + c + "/" + albums.dispAlbums.size());
+        else setTitle("LeafPic");
     }
 
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
         MenuItem option = m.findItem(R.id.hideAlbumButton);
         option.setEnabled(val).setVisible(val);
-
         option = m.findItem(R.id.deleteAction);
-
         option.setEnabled(val).setVisible(val);
-
         option = m.findItem(R.id.excludeAlbumButton);
         option.setEnabled(val).setVisible(val);
     }
@@ -250,6 +239,10 @@ public class AlbumsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                string.showToast(getApplicationContext(), "asdasd");//NavUtils.navigateUpFromSameTask(this);
+                return true;
+
             case R.id.sort_action:
                 View sort_btn = findViewById(R.id.sort_action);
                 PopupMenu popup = new PopupMenu(AlbumsActivity.this, sort_btn);

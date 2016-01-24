@@ -44,7 +44,7 @@
         <activity android:name=".PhotoActivity"
                   android:label="Album"
                   android:parentActivityName=".PhotosActivity"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"
         >
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,6 +29,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by dnld on 12/12/15.
@@ -77,13 +81,6 @@ public class PhotosActivity extends AppCompatActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_photos);
 
-       /* ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .memoryCacheExtraOptions(100, 100)
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .build();
-        ImageLoader.getInstance().destroy();
-        ImageLoader.getInstance().init(config);*/
-
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
@@ -103,6 +100,7 @@ public class PhotosActivity extends AppCompatActivity {
                         else pos = photos.selectPhoto(f.Path, true);
                         adapter.notifyItemChanged(pos);
                         invalidateOptionsMenu();
+                        updateSelectedPhotsCount();
                     } else {
                         photos.setCurrentPhoto(f.Path);
                         Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
@@ -120,48 +118,25 @@ public class PhotosActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
                     editmode = true;
                     invalidateOptionsMenu();
+                    updateSelectedPhotsCount();
                     return false;
                 }
             });
 
-
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-
-                    if (hideToolBar) {
-                        //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                        // AccelerateInterpolator()).start();
-                        //getSupportActionBar().hide();
-                    } else {
-                        //toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                        //getSupportActionBar().show();
-                    }
-                    hideToolBar=!hideToolBar;
-                }
-
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if (dy > 20) hideToolBar = true;
-                    else if (dy < -5) hideToolBar = false;
-
-                }
-            });
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setNestedScrollingEnabled(true);
-
+            mRecyclerView.setFitsSystemWindows(true);
 
             initUiTweaks();
         }
         catch (Exception e){ e.printStackTrace(); }
+    }
 
-
+    private void updateSelectedPhotsCount() {
+        getSupportActionBar().setTitle(photos.getSelectedCount() + "");
     }
 
     @Override
@@ -358,6 +333,24 @@ public class PhotosActivity extends AppCompatActivity {
                     dlg1.show();
                 }
 
+                break;
+
+            case R.id.sharePhotos:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Here are some files.");
+                intent.setType("image/jpeg"); /* This example is sharing jpeg images. */
+
+                ArrayList<Uri> files = new ArrayList<Uri>();
+
+                for (Photo f : photos.selectedPhotos /* List of the files you want to send */) {
+                    File file = new File(f.Path);
+                    Uri uri = Uri.fromFile(file);
+                    files.add(uri);
+                }
+
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                startActivity(intent);
                 break;
 
             case android.R.id.home:

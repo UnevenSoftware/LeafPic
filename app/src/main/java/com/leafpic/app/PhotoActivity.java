@@ -21,16 +21,15 @@ public class PhotoActivity extends AppCompatActivity {
 
     HandlingPhotos photos;
 
-    boolean toolbar_hidden = false;
     Toolbar toolbar;
     PhotosPagerAdapter mCustomPagerAdapter;
     ViewPager mViewPager;
     View decorView;//= getActivity().getWindow().getDecorView();
     boolean fullscreenmode;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
@@ -46,21 +45,21 @@ public class PhotoActivity extends AppCompatActivity {
             photos.setContext(PhotoActivity.this);
             final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
-                public boolean onSingleTapConfirmed(MotionEvent e) {
-                    //if (picture.isReady()) {
-                    string.showToast(getApplicationContext(), "click");
-                    if (!toolbar_hidden) {
-                        toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                    } else {
-                        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                    }
-                    toolbar_hidden = !toolbar_hidden;
-
+                public boolean onSingleTapUp(MotionEvent e) {
+                    toggleSystemUI();
                     return true;
                 }
             });
 
             mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
+
+            mCustomPagerAdapter.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return gestureDetector.onTouchEvent(event);
+                }
+            });
+
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
@@ -82,16 +81,8 @@ public class PhotoActivity extends AppCompatActivity {
                 }
             });
 
-
             decorView = getWindow().getDecorView();
-            fullScreen(true);
 
-            /*mViewPager.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return gestureDetector.onTouchEvent(event);
-                }
-            });*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,32 +96,7 @@ public class PhotoActivity extends AppCompatActivity {
         return true;
     }
 
-    public void toggleFullscreenMode() {
-        fullScreen(!fullscreenmode);
-    }
 
-    private void fullScreen(boolean status) {
-
-        if (status) {
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-            getSupportActionBar().hide();
-            fullscreenmode = true;
-        } else {
-            getSupportActionBar().show();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-            fullscreenmode = false;
-        }
-    }
 
 
     @Override
@@ -156,7 +122,8 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
             case R.id.rotatePhoto:
                 return true;
-            case R.id.setWallpaper:
+
+            case R.id.useAsIntent:
 
                 return true;
             default:
@@ -167,24 +134,64 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
-        /**** Navigation Bar*/
-        /*
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
-        }
-        */
-        /**** Status Bar */
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getColor(R.color.toolbar));
 
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setShowHideAnimationEnabled(true);
-        toolbar.setBackgroundColor(getColor(R.color.trasparent_toolbar));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        toolbar.setBackgroundColor(getColor(android.R.color.transparent));
+        hideSystemUI();// TODO hide navigation bar [PORCODIO]
+        //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new  AccelerateInterpolator()).start();
+        // getSupportActionBar().hide();
+
     }
 
+    private void toggleSystemUI() {
+        if (fullscreenmode)
+            showSystemUI();
+        else hideSystemUI();
+
+    }
+
+    private void hideSystemUI() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+
+        //getSupportActionBar().hide();
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+
+        fullscreenmode = true;
+    }
+
+    // This snippet shows the system bars. It does this by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator()).start();
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        //getSupportActionBar().show();
+        //getWindow().getst
+        fullscreenmode = false;
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 }

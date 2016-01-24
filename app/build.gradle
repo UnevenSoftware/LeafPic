@@ -49,4 +49,7 @@ dependencies {
     compile('com.mikepenz:materialdrawer:4.6.4@aar') {
         transitive = true
     }
+    compile 'com.mikepenz:iconics-core:2.5.5@aar'
+    compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
 }
