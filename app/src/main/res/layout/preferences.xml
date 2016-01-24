@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <include layout="@layout/toolbar"
-        android:id="@+id/my_awesome_toolbar"
-        android:background="@color/toolbar"
-        />
--->
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 >
 
-    <EditTextPreference android:title="Your Name"
-                        android:key="username"
-                        android:summary="Please provide your username"></EditTextPreference>
-    <CheckBoxPreference android:title="Application Updates"
-                        android:defaultValue="false"
-                        android:summary="This option if selected will allow the application to check for latest versions."
-                        android:key="applicationUpdates"
-    />
-    <ListPreference
+    <PreferenceCategory
+        android:title="@string/general_setting">
+        <EditTextPreference
+            android:title="Your Name"
+            android:key="username"
+            android:summary="Please provide your username"></EditTextPreference
+            >
+        <CheckBoxPreference
+            android:title="Application Updates"
+            android:defaultValue="false"
+            android:summary="This option if selected will allow the application to check for latest versions."
+            android:key="applicationUpdates"
+            />
+        <ListPreference
             android:title="Download Details"
-            android:summary="Select the kind of data that you would like to download"
+            android:summary="Select the kind of data that you would like to download."
             android:key="downloadType"
             android:defaultValue="1"
             android:entries="@array/listArray"
             android:entryValues="@array/listValues"
-    />
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/security_setting">
+        <EditTextPreference android:title="Password Hidden"
+            android:key="password"
+            android:summary="Password For Access to hidden folders."
+            >
+        </EditTextPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/theme_setting"
+        >
+        <CheckBoxPreference
+            android:title="Night Theme"
+            android:defaultValue="false"
+            android:summary="Apply the DarkTheme to LeafPic."
+            android:key="set_theme"
+            />
+        <CheckBoxPreference
+            android:title="Colored Navigation Bar"
+            android:defaultValue="false"
+            android:summary="Apply the Theme color to the Navigation Bar."
+            android:key="nav_bar"
+            android:onClick="initUiTweaks"
+            />
+    </PreferenceCategory>
+
 </PreferenceScreen>
-        <!--
-        </LinearLayout>
-        -->

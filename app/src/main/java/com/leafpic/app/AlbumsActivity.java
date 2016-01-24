@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -13,10 +14,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
-import android.view.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.utils.string;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -90,10 +100,14 @@ public class AlbumsActivity extends AppCompatActivity {
 
     public void initUiTweaks(){
 
-        /*if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getColor(R.color.toolbar));
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getColor(R.color.toolbar));
-        }*/
+            SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            boolean NavBar = SP.getBoolean("nav_bar", false);
+            //boolean NightTheme = SP.getBoolean("set_theme", false);
+            if(NavBar==true)
+                getWindow().setNavigationBarColor(getColor(R.color.toolbar));
+        }
 
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
