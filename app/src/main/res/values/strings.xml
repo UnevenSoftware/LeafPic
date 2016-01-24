@@ -40,4 +40,10 @@
     <string name="rename_album_action">Rename</string>
     <string name="asd">13 Photos</string>
 
+    <!--SETTINGS PREFERENCES-->
+    <string name="general_setting">General Setting</string>
+    <string name="theme_setting">Theme</string>
+    <string name="security_setting">Security</string>
+    <string name="folder_setting">Folder</string>
+
 </resources>

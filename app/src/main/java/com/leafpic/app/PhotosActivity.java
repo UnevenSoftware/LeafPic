@@ -2,11 +2,13 @@ package com.leafpic.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
@@ -36,7 +38,7 @@ public class PhotosActivity extends AppCompatActivity {
     HandlingPhotos photos;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ImageView image;
-
+    SharedPreferences SP;
 
     boolean hideToolBar = false;
     boolean editmode = false;
@@ -386,23 +388,25 @@ public class PhotosActivity extends AppCompatActivity {
     public void initUiTweaks() {
 
         /**** Navigation Bar*/
-        /*
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        boolean NavBar = SP.getBoolean("nav_bar", false);
+        if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)&&(NavBar==true)) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
         }
-        */
+
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         setStatusBarTranslucent(true);
-        //window.setStatusBarColor(getColor(R.color.status_bar));
+        window.setStatusBarColor(getColor(R.color.status_bar));
 
 
         /**** ToolBar*/
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         image = (ImageView) findViewById(R.id.image);
         Glide.with(this)
