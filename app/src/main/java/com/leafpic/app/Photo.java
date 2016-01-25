@@ -8,6 +8,7 @@ import com.leafpic.app.utils.string;
 
 public class Photo implements Parcelable {
 
+
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Photo> CREATOR = new Parcelable.Creator<Photo>() {
         @Override
@@ -20,7 +21,6 @@ public class Photo implements Parcelable {
             return new Photo[size];
         }
     };
-
     public String Path;
     String ID;
     String FolderPath;
@@ -41,6 +41,7 @@ public class Photo implements Parcelable {
         DateTaken = dateTaken;
     }
 
+
     public Photo(String nome, String folderPath, String dateTaken) {
 
         Path = string.getPhotoPathByFolderPathAndName(folderPath, nome);
@@ -54,6 +55,8 @@ public class Photo implements Parcelable {
         ID = in.readString();
         FolderPath = in.readString();
         DateTaken = in.readString();
+        name = in.readString();
+        selected = in.readByte() != 0x00;
     }
 
     public static int calculateInSampleSize(
@@ -108,5 +111,7 @@ public class Photo implements Parcelable {
         dest.writeString(ID);
         dest.writeString(FolderPath);
         dest.writeString(DateTaken);
+        dest.writeString(name);
+        dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
 }

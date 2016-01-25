@@ -48,10 +48,6 @@ class HandlingPhotos implements Parcelable {
         db.close();
     }
 
-    public String getPreviewAlbumImg(){
-        return photos.get(0).Path;
-    }
-
     /***
      * parcellable
      **/
@@ -75,6 +71,10 @@ class HandlingPhotos implements Parcelable {
         hidden = in.readByte() != 0x00;
     }
 
+    public String getPreviewAlbumImg(){
+        return photos.get(0).Path;
+    }
+
     public void setContext(Context ctx) {
         context = ctx;
     }
@@ -84,10 +84,6 @@ class HandlingPhotos implements Parcelable {
             if (photos.get(i).Path.equals(path)) return i;
         }
         return -1;
-    }
-
-    public void setCurrentPhoto(String path) {
-        setCurrentPhotoIndex(getPhotoIndex(path));
     }
 
     public int getCurrentPhotoIndex() {
@@ -134,23 +130,25 @@ class HandlingPhotos implements Parcelable {
         clearSelectedPhotos();
     }
 
-    public void deletePhoto(String path) {
-        HandlingAlbums h = new HandlingAlbums(context);
-        DatabaseHandler db = new DatabaseHandler(context);
-        File file = new File(path);
-        h.deleteFolderRecursive(file);
-        db.deletePhotoByPath(path);
-        db.close();
-        photos.remove(getPhoto(path));
+    public Photo getCurrentPhoto() {
+        return photos.get(getCurrentPhotoIndex());
+    }
+
+    public void setCurrentPhoto(String path) {
+        setCurrentPhotoIndex(getPhotoIndex(path));
+    }
+
+    public void deleteCurrentPhoto() {
+        deletePhoto(getCurrentPhoto());
     }
 
     public void deletePhoto(Photo a) {
         HandlingAlbums h = new HandlingAlbums(context);
         DatabaseHandler db = new DatabaseHandler(context);
-        File file = new File(a.Path);
-        h.deleteFolderRecursive(file);
         db.deletePhoto(a);
         db.close();
+        File file = new File(a.Path);
+        h.deleteFolderRecursive(file);
         photos.remove(a);
     }
 
