@@ -4,8 +4,7 @@
     <string name="action_sort">Sort</string>
     <string name="action_camera">Camera</string>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+
     <string name="action_websearch">Web search</string>
     <string name="exclude_album_option">Exclude</string>
     <string name="delete_album_action">Delete</string>

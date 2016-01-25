@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="settings">Settings</string>
+
+    <string name="header">Header</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel nisl vel eros
+        accumsan lacinia. Pellentesque vel tellus vitae purus interdum sagittis. Pellentesque vehicula odio ac nibh
+        bibendum suscipit.
+    </string>
+    <string name="checkbox">Checkbox</string>
+    <string name="switchView">Switch</string>
+    <string name="radiobutton">Ratio Button</string>
+    <string name="edit_text">Input field</string>
+
+    <string name="primary_color">Primary Color</string>
+    <string name="primary_color_summary">Change the primary theme color</string>
+
+    <string name="accent_color">Accent Color</string>
+    <string name="accent_color_summary">Change the accent theme color</string>
+
+    <string name="primary_text_color">Primary Text Color</string>
+    <string name="primary_text_color_summary">Change the primary text color</string>
+
+    <string name="secondary_text_color">Secondary Text Color</string>
+    <string name="secondary_text_color_summary">Change the secondary text color</string>
+
+    <string name="colored_status_bar">Colored Status Bar</string>
+    <string name="colored_status_bar_summary">Toggle status bar coloring</string>
+
+    <string name="colored_nav_bar">Colored Navigation Bar</string>
+    <string name="colored_nav_bar_summary">Toggle navigation bar coloring</string>
+    <string name="drawer_about">About</string>
+    <string name="drawer_home">Home</string>
+    <string name="drawer_close">Close nav drawer</string>
+    <string name="drawer_open">Open nav drawer</string>
+
+    <string name="about">About</string>
+    <string name="about_body"><![CDATA[
+        <b>App Theme Engine</b>, a library  designed by <b>Aidan Follestad</b> (along with various contributors on GitHub).<br/>
+        <a href=\'http://aidanfollestad.com\'>Website</a>&nbsp;&nbsp;
+        <a href=\'https://twitter.com/afollestad\'>Twitter</a>&nbsp;&nbsp;
+        <a href=\'https://google.com/+AidanFollestad\'>Google+</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/afollestad\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/in/afollestad\'>LinkedIn</a>
+    ]]></string>
+    <string name="dismiss">Dismiss</string>
+    <string name="radiobutton_clickme">Radio button (click me)</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="dark_theme_summary">Apply a dark theme throughout the app</string>
+    <string name="light_status_bar_mode">Light Status Bar Mode</string>
+    <string name="light_toolbar_mode">Light Toolbar Mode</string>
+    <string name="not_available_below_m">Not available below 6.0 Marshmallow.</string>
+    <string name="not_available_below_lollipop">Not available below 5.0 Lollipop.</string>
+    <string name="rv_sample">RV Sample</string>
+    <string name="tabs_sample">Tabs Sample</string>
+    <string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed magna et dolor
+        luctus mollis. Sed suscipit quam enim, in iaculis turpis finibus quis. Morbi fermentum ante quis magna tempus
+        suscipit. Sed rhoncus sed felis non elementum. Morbi porttitor molestie mauris, eget maximus ante sagittis eget.
+        Donec id congue mauris, quis pulvinar erat. Sed cursus est eu erat malesuada vehicula. Fusce est dui, tempus a
+        leo a, finibus accumsan tellus. Duis vitae sem ullamcorper, hendrerit odio ac, vestibulum orci. Nunc et dui nec
+        ligula semper congue eget in sapien. Vestibulum consectetur vel lacus sed hendrerit. Interdum et malesuada fames
+        ac ante ipsum primis in faucibus. In justo mi, mollis eu leo non, malesuada consequat nisi. Vestibulum euismod
+        mauris dui, in volutpat est placerat et. In hac habitasse platea dictumst. Cras vitae suscipit quam. Ut orci
+        enim, laoreet non mi in, convallis pretium quam. Donec lobortis nisi ut malesuada auctor. Aenean vel porttitor
+        velit. Cras tincidunt, purus ut volutpat mattis, magna lectus sodales arcu, eget pretium nisi ex et nisi.
+        Vivamus vel euismod nulla. Vivamus eget metus sit amet lacus tempor faucibus. Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit. Fusce sed magna et dolor luctus mollis. Sed suscipit quam enim, in iaculis turpis
+        finibus quis. Morbi fermentum ante quis magna tempus suscipit. Sed rhoncus sed felis non elementum. Morbi
+        porttitor molestie mauris, eget maximus ante sagittis eget. Donec id congue mauris, quis pulvinar erat. Sed
+        cursus est eu erat malesuada vehicula. Fusce est dui, tempus a leo a, finibus accumsan tellus. Duis vitae sem
+        ullamcorper, hendrerit odio ac, vestibulum orci. Nunc et dui nec ligula semper congue eget in sapien. Vestibulum
+        consectetur vel lacus sed hendrerit. Interdum et malesuada fames ac ante ipsum primis in faucibus. In justo mi,
+        mollis eu leo non, malesuada consequat nisi. Vestibulum euismod mauris dui, in volutpat est placerat et. In hac
+        habitasse platea dictumst. Cras vitae suscipit quam. Ut orci enim, laoreet non mi in, convallis pretium quam.
+        Donec lobortis nisi ut malesuada auctor. Aenean vel porttitor velit. Cras tincidunt, purus ut volutpat mattis,
+        magna lectus sodales arcu, eget pretium nisi ex et nisi. Vivamus vel euismod nulla. Vivamus eget metus sit amet
+        lacus tempor faucibus.
+    </string>
+    <string name="collapsing_toolbar">Collapsing Toolbar</string>
+    <string name="drawer_tablayout">Tab Layout</string>
+    <string name="drawer_recyclerview">RecyclerView</string>
+    <string name="button">Button</string>
+    <string name="drawer_collapsingtoolbar">Collapsing Toolbar</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="search_view_example">SearchView example…</string>
+    <string name="light_ui_modes">Light UI Modes</string>
+    <string name="system_ui_colors">System UI Colors</string>
+    <string name="base_theme">Base Theme</string>
+    <string name="ate_colors">ATE Colors</string>
+
+    <string name="other_textsizes_note">Note: there are other text size configurations not included here for simplicity
+        reasons.
+    </string>
+    <string name="headline_textsize">Headline Text Size</string>
+    <string name="title_textsize">Title Text Size</string>
+    <string name="subheading_textsize">Subheading Text Size</string>
+    <string name="body_textsize">Body Text Size</string>
+    <string name="headline_textsize_desc">Apply a text size to all headline text views, %ddp</string>
+    <string name="title_textsize_desc">Apply a text size to all title text views, %ddp</string>
+    <string name="subheading_textsize_desc">Apply a text size to all subheading text views, %ddp</string>
+    <string name="body_textsize_desc">Apply a text size to all body text views, %ddp</string>
+    <string name="text_sizes">Text Sizes</string>
+    <string name="defaultValue">Default</string>
+
+    <string-array name="light_status_mode_entries">
+        <item>Off, status bar icons will be white</item>
+        <item>On, status bar icons will be black</item>
+        <item>Auto, status bar icons will be black if primary color is light</item>
+    </string-array>
+
+    <string-array name="light_toolbar_mode_entries">
+        <item>Off, toolbar text/icons will be white</item>
+        <item>On, toolbar text/icons will be black</item>
+        <item>Auto, toolbar text/icons will be black if primary color is light</item>
+    </string-array>
+
+    <string-array name="light_status_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+</resources>

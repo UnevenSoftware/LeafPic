@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
+            android:title="@string/base_theme"
+            app:ateKey_prefCategory_textColor="?ate_key">
+
+        <com.afollestad.appthemeengine.prefs.ATESwitchPreference
+                android:defaultValue="false"
+                android:key="dark_theme"
+                android:persistent="true"
+                android:summary="@string/dark_theme_summary"
+                android:title="@string/dark_theme"
+                android:widgetLayout="@layout/ate_preference_checkbox"
+                app:ateKey_pref_switch="?ate_key"/>
+
+    </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
+
+    <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
+            android:title="@string/ate_colors"
+            app:ateKey_prefCategory_textColor="?ate_key">
+
+        <com.afollestad.appthemeengine.prefs.ATEColorPreference
+                android:key="primary_color"
+                android:persistent="false"
+                android:summary="@string/primary_color_summary"
+                android:title="@string/primary_color"
+                app:ateKey_pref_color="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEColorPreference
+                android:key="accent_color"
+                android:persistent="false"
+                android:summary="@string/accent_color_summary"
+                android:title="@string/accent_color"
+                app:ateKey_pref_color="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEColorPreference
+                android:key="text_primary"
+                android:persistent="false"
+                android:summary="@string/primary_text_color_summary"
+                android:title="@string/primary_text_color"
+                app:ateKey_pref_color="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEColorPreference
+                android:key="text_secondary"
+                android:persistent="false"
+                android:summary="@string/secondary_text_color_summary"
+                android:title="@string/secondary_text_color"
+                app:ateKey_pref_color="?ate_key"/>
+
+    </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
+
+    <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
+            android:title="@string/system_ui_colors"
+            app:ateKey_prefCategory_textColor="?ate_key">
+
+        <com.afollestad.appthemeengine.prefs.ATESwitchPreference
+                android:defaultValue="true"
+                android:key="colored_status_bar"
+                android:persistent="false"
+                android:summary="@string/colored_status_bar_summary"
+                android:title="@string/colored_status_bar"
+                app:ateKey_pref_switch="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATESwitchPreference
+                android:defaultValue="true"
+                android:key="colored_nav_bar"
+                android:persistent="false"
+                android:summary="@string/colored_nav_bar_summary"
+                android:title="@string/colored_nav_bar"
+                app:ateKey_pref_switch="?ate_key"/>
+
+    </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
+
+    <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
+            android:title="@string/light_ui_modes"
+            app:ateKey_prefCategory_textColor="?ate_key">
+
+        <com.afollestad.appthemeengine.prefs.ATEListPreference
+                android:defaultValue="2"
+                android:entries="@array/light_status_mode_entries"
+                android:entryValues="@array/light_status_mode_values"
+                android:key="light_status_bar_mode"
+                android:persistent="true"
+                android:title="@string/light_status_bar_mode"
+                app:ateKey_pref_list="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEListPreference
+                android:defaultValue="2"
+                android:entries="@array/light_toolbar_mode_entries"
+                android:entryValues="@array/light_status_mode_values"
+                android:key="light_toolbar_mode"
+                android:persistent="true"
+                android:title="@string/light_toolbar_mode"
+                app:ateKey_pref_list="?ate_key"/>
+
+    </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
+
+    <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
+            android:title="@string/text_sizes"
+            app:ateKey_prefCategory_textColor="?ate_key">
+
+        <com.afollestad.appthemeengine.prefs.ATEPreference
+                android:key="textsize_headline"
+                android:persistent="false"
+                android:summary="@string/headline_textsize_desc"
+                android:title="@string/headline_textsize"
+                app:ateKey_pref="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEPreference
+                android:key="textsize_title"
+                android:persistent="false"
+                android:summary="@string/title_textsize_desc"
+                android:title="@string/title_textsize"
+                app:ateKey_pref="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEPreference
+                android:key="textsize_subheading"
+                android:persistent="false"
+                android:summary="@string/subheading_textsize_desc"
+                android:title="@string/subheading_textsize"
+                app:ateKey_pref="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEPreference
+                android:key="textsize_body"
+                android:persistent="false"
+                android:summary="@string/body_textsize_desc"
+                android:title="@string/body_textsize"
+                app:ateKey_pref="?ate_key"/>
+
+        <com.afollestad.appthemeengine.prefs.ATEPreference
+                android:enabled="false"
+                android:summary="@string/other_textsizes_note"/>
+
+    </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
+
+</PreferenceScreen>

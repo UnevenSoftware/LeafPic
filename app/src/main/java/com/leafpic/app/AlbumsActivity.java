@@ -3,22 +3,22 @@ package com.leafpic.app;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.afollestad.appthemeengine.customizers.ATEActivityThemeCustomizer;
 import com.leafpic.app.Adapters.AlbumsAdapter;
+import com.leafpic.app.base.BaseThemedActivity;
 import com.leafpic.app.utils.string;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -31,7 +31,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class AlbumsActivity extends AppCompatActivity {
+public class AlbumsActivity extends BaseThemedActivity implements ATEActivityThemeCustomizer {
     DatabaseHandler db = new DatabaseHandler(AlbumsActivity.this);
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
 
@@ -39,14 +39,22 @@ public class AlbumsActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
     Toolbar toolbar;
-    SharedPreferences SP;
+
+    //SharedPreferences SP;
+    @StyleRes
+    @Override
+    public int getActivityTheme() {
+        // Make sure we don't use the one set to the Config, since we want a non-toolbar-actionbar for this activity
+        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_theme", false) ?
+                R.style.AppThemeDark : R.style.AppTheme;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
 
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        //SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
     }
@@ -68,14 +76,14 @@ public class AlbumsActivity extends AppCompatActivity {
 
     public void initUiTweaks(){
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getColor(R.color.toolbar));
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
             //boolean NightTheme = SP.getBoolean("set_theme", false);
             if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
-        }
+        }*/
 
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
@@ -96,7 +104,9 @@ public class AlbumsActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.side_wall)
                 .withSelectionListEnabledForSingleProfile(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(SP.getString("username", "NA")).withIcon(getDrawable(R.drawable.default_profile))
+                        new ProfileDrawerItem().withName("dnld").withIcon(getDrawable(R.drawable.default_profile))
+                        // new ProfileDrawerItem().withName(SP.getString("username", "NA")).withIcon(getDrawable(R
+
                 )
                 .build();
 
@@ -130,7 +140,7 @@ public class AlbumsActivity extends AppCompatActivity {
                                 checkPermissions();
                                 break;
                             case 6: //settings
-                                Intent intent = new Intent(AlbumsActivity.this, Preferences_Activity.class);
+                                Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
                                 startActivity(intent);
                                 break;
                             case 7: //github

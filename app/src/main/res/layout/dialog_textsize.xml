@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+>
+
+    <TextView
+            android:id="@+id/preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:minHeight="196dp"
+            android:tag="text_primary"
+            android:text="ATE"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:background="#CC0000"
+            tools:ignore="HardcodedText,UnusedAttribute"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    >
+
+        <SeekBar
+                android:id="@+id/seeker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/value"
+                android:layout_toStartOf="@+id/value"
+                android:tag="tint_accent_color"/>
+
+        <TextView
+                android:id="@+id/value"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:tag="text_secondary"
+                android:textSize="14sp"
+                tools:background="#0099cc"
+                tools:text="112dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
