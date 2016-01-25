@@ -24,6 +24,8 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
     LayoutInflater mLayoutInflater;
     ArrayList<Photo> mResources;
 
+    private View.OnTouchListener onTouchListener;
+
     public PhotosPagerAdapter(Context context, ArrayList<Photo> ph) {
         mContext = context;
         mResources = ph;
@@ -33,6 +35,10 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
     @Override
     public int getCount() {
         return mResources.size();
+    }
+
+    public void setOnTouchListener(View.OnTouchListener ls) {
+        onTouchListener = ls;
     }
 
     @Override
@@ -53,7 +59,7 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
                         picture.setImage(ImageSource.bitmap(bitmap));
                     }
                 });
-
+        picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
 
         container.addView(itemView);

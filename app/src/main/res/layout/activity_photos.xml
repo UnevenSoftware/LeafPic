@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
+
         android:background="@color/background_material_dark">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
