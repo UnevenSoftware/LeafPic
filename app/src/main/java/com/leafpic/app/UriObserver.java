@@ -24,17 +24,14 @@ public class UriObserver {
     public static UriObserver getInstance(ContentResolver contentResolver, Uri uri, OnChangeListener listener) {
         Cursor c = contentResolver.query(uri, new String[]{"*"}, null, null, null);
 
-        if ((c = Dao.moveToFirst(c)) == null) {
-            log.e("Cannot start observer for uri: " + uri);
-            return null;
-        }
+
 
         return new UriObserver(c, listener);
     }
 
     public void stop() {
         mCursor.unregisterContentObserver(mObserver);
-        Dao.closeCursor(mCursor);
+        //Dao.closeCursor(mCursor);
         mRunning = false;
     }
 
