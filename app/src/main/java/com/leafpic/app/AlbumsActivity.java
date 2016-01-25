@@ -40,6 +40,7 @@ public class AlbumsActivity extends AppCompatActivity {
     AlbumsAdapter adapt;
     Toolbar toolbar;
     SharedPreferences SP;
+    DatabaseHandlerNew asd = new DatabaseHandlerNew(AlbumsActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,11 @@ public class AlbumsActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
+
+        //asd.loadPhotos();
+        //asd.logPhotos();
+        //asd.logAlbums();
+        asd.logDeletedPhotos();
     }
 
     @Override
