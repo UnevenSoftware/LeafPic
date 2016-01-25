@@ -15,4 +15,10 @@
     <!--GREEN-->
     <color name="green_1">#727272</color>
     <color name="fabOrange">#FF9800</color>
+
+    <color name="colorPrimaryLightDefault">#FAFAFA</color>
+    <color name="colorAccentLightDefault">#E91E63</color>
+
+    <color name="colorPrimaryDarkDefault">#37474F</color>
+    <color name="colorAccentDarkDefault">#2196F3</color>
 </resources>
