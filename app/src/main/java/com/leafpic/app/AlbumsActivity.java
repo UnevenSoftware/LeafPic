@@ -36,11 +36,8 @@ public class AlbumsActivity extends AppCompatActivity {
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
 
     boolean editmode = false, hidden = false;
-    RecyclerView.Adapter mAdapter;
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-    // MediaStoreObserver
-    // observer;
     Toolbar toolbar;
     SharedPreferences SP;
 
@@ -56,17 +53,16 @@ public class AlbumsActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        //getContentResolver().unregisterContentObserver(observer);
         super.onDestroy();
     }
 
     @Override
     public void onResume() {
-        /*db.updatePhotos();
-        albums.loadAlbums();
-        adapt.notifyDataSetChanged();*/
         checkPermissions();
-        //    adapt.notifyDataSetChanged();
+
+        albums.clearSelectedAlbums();
+        updateSelectedStuff();
+        invalidateOptionsMenu();
         super.onResume();
     }
 
@@ -77,7 +73,7 @@ public class AlbumsActivity extends AppCompatActivity {
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
             //boolean NightTheme = SP.getBoolean("set_theme", false);
-            if(NavBar==true)
+            if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
 
@@ -125,19 +121,19 @@ public class AlbumsActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position) {
-                            case 1://deafult
+                            case 1: //deafult
                                 hidden = false;
                                 checkPermissions();
                                 break;
-                            case 2://hidden
+                            case 2: //hidden
                                 hidden = true;
                                 checkPermissions();
                                 break;
-                            case 6://settings
+                            case 6: //settings
                                 Intent intent = new Intent(AlbumsActivity.this, Preferences_Activity.class);
                                 startActivity(intent);
                                 break;
-                            case 7://github
+                            case 7: //github
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DNLDsht/LeafPic/"));
                                 startActivity(browserIntent);
                                 break;
@@ -172,7 +168,6 @@ public class AlbumsActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         } else
-            //got the power
             loadAlbums();
 
     }
@@ -221,10 +216,10 @@ public class AlbumsActivity extends AppCompatActivity {
     }
 
     void updateSelectedStuff() {
-        int c;// = albums.getSelectedCount();
+        int c;
         if ((c = albums.getSelectedCount()) != 0)
-            setTitle("  " + c + "/" + albums.dispAlbums.size());
-        else setTitle("LeafPic");
+            setTitle(c + "/" + albums.dispAlbums.size());
+        else setTitle(getString(R.string.app_name));
     }
 
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
@@ -240,7 +235,7 @@ public class AlbumsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                string.showToast(getApplicationContext(), "asdasd");//NavUtils.navigateUpFromSameTask(this);
+                string.showToast(getApplicationContext(), "asdasd");
                 return true;
 
             case R.id.sort_action:
@@ -251,7 +246,6 @@ public class AlbumsActivity extends AppCompatActivity {
                 popup.getMenuInflater()
                         .inflate(R.menu.sort, popup.getMenu());
 
-                //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         Toast.makeText(

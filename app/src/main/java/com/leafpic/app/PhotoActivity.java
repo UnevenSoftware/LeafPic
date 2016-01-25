@@ -24,7 +24,6 @@ public class PhotoActivity extends AppCompatActivity {
     Toolbar toolbar;
     PhotosPagerAdapter mCustomPagerAdapter;
     ViewPager mViewPager;
-    View decorView;//= getActivity().getWindow().getDecorView();
     boolean fullscreenmode;
 
 
@@ -36,16 +35,14 @@ public class PhotoActivity extends AppCompatActivity {
 
         initUiTweaks();
 
-
-
         try {
-            Bundle data = getIntent().getExtras();
 
+            Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
             final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
-                public boolean onSingleTapUp(MotionEvent e) {
+                public boolean onSingleTapConfirmed(MotionEvent e) {
                     toggleSystemUI();
                     return true;
                 }
@@ -81,9 +78,6 @@ public class PhotoActivity extends AppCompatActivity {
                 }
             });
 
-            decorView = getWindow().getDecorView();
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,7 +100,6 @@ public class PhotoActivity extends AppCompatActivity {
 
             case android.R.id.home:
                 finish();
-                //NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.shareButton:
                 String file_path = photos.photos.get(mViewPager.getCurrentItem()).Path;
@@ -117,10 +110,18 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             case R.id.deletePhoto:
-                /*photos.deletePhoto(photos.photos.get(mViewPager.getCurrentItem()).Path);
-                mCustomPagerAdapter.notifyDataSetChanged();*/
+
+
+                mCustomPagerAdapter.destroyItem(mViewPager,
+                        photos.getCurrentPhotoIndex(),
+                        mViewPager.getFocusedChild());
+                mViewPager.removeView(mViewPager.getFocusedChild());
+
+                photos.deleteCurrentPhoto();
+                mCustomPagerAdapter.notifyDataSetChanged();
                 return true;
             case R.id.rotatePhoto:
+
                 return true;
 
             case R.id.useAsIntent:
