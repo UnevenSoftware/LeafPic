@@ -54,7 +54,7 @@ public class AlbumsActivity extends AppCompatActivity {
         //asd.loadPhotos();
         //asd.logPhotos();
         //asd.logAlbums();
-        asd.logDeletedPhotos();
+        //asd.logDeletedPhotos();
     }
 
     @Override
