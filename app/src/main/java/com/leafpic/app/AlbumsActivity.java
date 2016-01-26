@@ -12,10 +12,19 @@ import android.support.annotation.StyleRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.*;
-import android.view.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.appthemeengine.customizers.ATEActivityThemeCustomizer;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.base.BaseThemedActivity;
@@ -440,6 +449,5 @@ public class AlbumsActivity extends BaseThemedActivity implements ATEActivityThe
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
     }
 }

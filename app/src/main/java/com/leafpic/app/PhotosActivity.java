@@ -8,11 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.StyleRes;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,12 +22,20 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.*;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.afollestad.appthemeengine.customizers.ATEActivityThemeCustomizer;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
+import com.leafpic.app.base.BaseThemedActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +43,7 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 12/12/15.
  */
-public class PhotosActivity extends AppCompatActivity {
+public class PhotosActivity  extends BaseThemedActivity implements ATEActivityThemeCustomizer {
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
 
     HandlingPhotos photos;
@@ -53,6 +62,14 @@ public class PhotosActivity extends AppCompatActivity {
 
     }
 
+    @StyleRes
+    @Override
+    public int getActivityTheme() {
+        // Make sure we don't use the one set to the Config, since we want a non-toolbar-actionbar for this activity
+        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_theme", false) ?
+                R.style.AppThemeDark : R.style.AppTheme;
+
+    }
 
     private void setPalette() { //TODO remaake doesn't work wiht image loaded by Glide
         try {

@@ -2,6 +2,67 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory
+        android:title="@string/general_setting">
+        <EditTextPreference
+            android:title="Your Name"
+            android:key="username"
+            android:summary="Please provide your username"></EditTextPreference
+            >
+        <CheckBoxPreference
+            android:title="Application Updates"
+            android:defaultValue="false"
+            android:summary="This option if selected will allow the application to check for latest versions."
+            android:key="applicationUpdates"
+            />
+        <ListPreference
+            android:title="Download Details"
+            android:summary="Select the kind of data that you would like to download."
+            android:key="downloadType"
+            android:defaultValue="1"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/security_setting">
+        <EditTextPreference android:title="Password Hidden"
+            android:key="password"
+            android:summary="Password For Access to hidden folders."
+            >
+        </EditTextPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/theme_setting"
+        >
+        <CheckBoxPreference
+            android:title="Night Theme"
+            android:defaultValue="false"
+            android:summary="Apply the DarkTheme to LeafPic."
+            android:key="set_theme"
+            />
+        <CheckBoxPreference
+            android:title="Colored Navigation Bar"
+            android:defaultValue="false"
+            android:summary="Apply the Theme color to the Navigation Bar."
+            android:key="nav_bar"
+            android:onClick="initUiTweaks"
+            />
+    </PreferenceCategory>
+
+
+
+
+
+    <!---->
+
+
+
+
+
+
     <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
             android:title="@string/base_theme"
             app:ateKey_prefCategory_textColor="?ate_key">
@@ -35,6 +96,9 @@
                 android:title="@string/accent_color"
                 app:ateKey_pref_color="?ate_key"/>
 
+
+
+        <!--
         <com.afollestad.appthemeengine.prefs.ATEColorPreference
                 android:key="text_primary"
                 android:persistent="false"
@@ -48,6 +112,8 @@
                 android:summary="@string/secondary_text_color_summary"
                 android:title="@string/secondary_text_color"
                 app:ateKey_pref_color="?ate_key"/>
+        -->
+
 
     </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
 
@@ -73,6 +139,7 @@
 
     </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
 
+    <!--
     <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
             android:title="@string/light_ui_modes"
             app:ateKey_prefCategory_textColor="?ate_key">
@@ -96,43 +163,6 @@
                 app:ateKey_pref_list="?ate_key"/>
 
     </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
-
-    <com.afollestad.appthemeengine.prefs.ATEPreferenceCategory
-            android:title="@string/text_sizes"
-            app:ateKey_prefCategory_textColor="?ate_key">
-
-        <com.afollestad.appthemeengine.prefs.ATEPreference
-                android:key="textsize_headline"
-                android:persistent="false"
-                android:summary="@string/headline_textsize_desc"
-                android:title="@string/headline_textsize"
-                app:ateKey_pref="?ate_key"/>
-
-        <com.afollestad.appthemeengine.prefs.ATEPreference
-                android:key="textsize_title"
-                android:persistent="false"
-                android:summary="@string/title_textsize_desc"
-                android:title="@string/title_textsize"
-                app:ateKey_pref="?ate_key"/>
-
-        <com.afollestad.appthemeengine.prefs.ATEPreference
-                android:key="textsize_subheading"
-                android:persistent="false"
-                android:summary="@string/subheading_textsize_desc"
-                android:title="@string/subheading_textsize"
-                app:ateKey_pref="?ate_key"/>
-
-        <com.afollestad.appthemeengine.prefs.ATEPreference
-                android:key="textsize_body"
-                android:persistent="false"
-                android:summary="@string/body_textsize_desc"
-                android:title="@string/body_textsize"
-                app:ateKey_pref="?ate_key"/>
-
-        <com.afollestad.appthemeengine.prefs.ATEPreference
-                android:enabled="false"
-                android:summary="@string/other_textsizes_note"/>
-
-    </com.afollestad.appthemeengine.prefs.ATEPreferenceCategory>
+-->
 
 </PreferenceScreen>

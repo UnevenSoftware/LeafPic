@@ -13,13 +13,13 @@ import android.support.annotation.StyleRes;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.afollestad.appthemeengine.ATE;
 import com.afollestad.appthemeengine.Config;
 import com.afollestad.appthemeengine.customizers.ATEActivityThemeCustomizer;
 import com.afollestad.appthemeengine.prefs.ATEColorPreference;
 import com.afollestad.appthemeengine.prefs.ATESwitchPreference;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
-import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 import com.leafpic.app.base.BaseThemedActivity;
 
 
@@ -51,12 +51,15 @@ public class SettingsActivity extends BaseThemedActivity
                 config.navigationViewSelectedIcon(selectedColor);
                 config.navigationViewSelectedText(selectedColor);
                 break;
+
+            /*
             case R.string.primary_text_color:
                 config.textColorPrimary(selectedColor);
                 break;
             case R.string.secondary_text_color:
                 config.textColorSecondary(selectedColor);
                 break;
+                */
         }
         config.commit();
         recreate(); // recreation needed to reach the checkboxes in the preferences layout
@@ -138,6 +141,8 @@ public class SettingsActivity extends BaseThemedActivity
                 }
             });
 
+
+            /*
             ATEColorPreference textColorPrimaryPref = (ATEColorPreference) findPreference("text_primary");
             textColorPrimaryPref.setColor(Config.textColorPrimary(getActivity(), mAteKey), Color.BLACK);
             textColorPrimaryPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -161,7 +166,7 @@ public class SettingsActivity extends BaseThemedActivity
                     return true;
                 }
             });
-
+            */
             findPreference("dark_theme").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -175,9 +180,11 @@ public class SettingsActivity extends BaseThemedActivity
                 }
             });
 
-            final MaterialListPreference lightStatusMode = (MaterialListPreference) findPreference("light_status_bar_mode");
-            final MaterialListPreference lightToolbarMode = (MaterialListPreference) findPreference("light_toolbar_mode");
-
+            //setto la status bar e la toolbar a colore bianco
+            //final MaterialListPreference lightStatusMode = (MaterialListPreference) findPreference("light_status_bar_mode");
+            //final MaterialListPreference lightToolbarMode = (MaterialListPreference) findPreference("light_toolbar_mode");
+//
+            /*
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 lightStatusMode.setEnabled(true);
                 lightStatusMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -207,7 +214,8 @@ public class SettingsActivity extends BaseThemedActivity
                     return true;
                 }
             });
-
+            */
+//
             final ATESwitchPreference statusBarPref = (ATESwitchPreference) findPreference("colored_status_bar");
             final ATESwitchPreference navBarPref = (ATESwitchPreference) findPreference("colored_nav_bar");
 
@@ -249,26 +257,6 @@ public class SettingsActivity extends BaseThemedActivity
                     return false;
                 }
             };
-
-            final Preference textsizeHeadline = findPreference("textsize_headline");
-            textsizeHeadline.setOnPreferenceClickListener(textsizeClickListener);
-            textsizeHeadline.setSummary(getString(R.string.headline_textsize_desc,
-                    TextSizeDialog.pxToSp(this, Config.textSizeForMode(getActivity(), mAteKey, Config.TEXTSIZE_HEADLINE))));
-
-            final Preference textsizeTitle = findPreference("textsize_title");
-            textsizeTitle.setOnPreferenceClickListener(textsizeClickListener);
-            textsizeTitle.setSummary(getString(R.string.title_textsize_desc,
-                    TextSizeDialog.pxToSp(this, Config.textSizeForMode(getActivity(), mAteKey, Config.TEXTSIZE_TITLE))));
-
-            final Preference textsizeSubheading = findPreference("textsize_subheading");
-            textsizeSubheading.setOnPreferenceClickListener(textsizeClickListener);
-            textsizeSubheading.setSummary(getString(R.string.subheading_textsize_desc,
-                    TextSizeDialog.pxToSp(this, Config.textSizeForMode(getActivity(), mAteKey, Config.TEXTSIZE_SUBHEADING))));
-
-            final Preference textsizeBody = findPreference("textsize_body");
-            textsizeBody.setOnPreferenceClickListener(textsizeClickListener);
-            textsizeBody.setSummary(getString(R.string.body_textsize_desc,
-                    TextSizeDialog.pxToSp(this, Config.textSizeForMode(getActivity(), mAteKey, Config.TEXTSIZE_BODY))));
         }
     }
 }
