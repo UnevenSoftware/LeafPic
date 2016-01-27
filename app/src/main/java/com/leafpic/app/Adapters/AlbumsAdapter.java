@@ -42,6 +42,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
+        a.setPath();
         //holder.picture.setTag(a.getPathCoverAlbum());
 
 

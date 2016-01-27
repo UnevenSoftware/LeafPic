@@ -3,7 +3,6 @@ package com.leafpic.app;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.leafpic.app.utils.string;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,25 +26,25 @@ class HandlingPhotos implements Parcelable {
         }
     };
     public String FolderPath;
+    public String DisplayName;
     public ArrayList<Photo> photos;
     public ArrayList<Photo> selectedPhotos;
-    public String DisplayName;
     Context context;
+    MadiaStoreHandler as;
     boolean hidden;
     private int current;
     private int last_position_selecte = -1;
 
 
-
-    public HandlingPhotos(Context ctx, String folderPath, boolean hide) {
+    public HandlingPhotos(Context ctx, Album album) {
         context = ctx;
-        DatabaseHandler db = new DatabaseHandler(context);
-        FolderPath = folderPath;
-        hidden = hide;
-        photos = db.getPhotosByAlbum(FolderPath);
+        as = new MadiaStoreHandler(context);
+        FolderPath = album.Path;
+        hidden = album.isHidden();
+        photos = as.getAlbumPhotos(album);
         selectedPhotos = new ArrayList<Photo>();
-        DisplayName = string.getBucketNamebyBucketPath(folderPath);
-        db.close();
+        DisplayName = album.DisplayName;
+
     }
 
     /***
@@ -69,6 +68,25 @@ class HandlingPhotos implements Parcelable {
         DisplayName = in.readString();
         current = in.readInt();
         hidden = in.readByte() != 0x00;
+    }
+
+    public void clearSelectedPhotos() {
+        for (Photo photo : photos) {
+            photo.setSelected(false);
+        }
+        selectedPhotos.clear();
+    }
+
+    public int getSelectedCount() {
+        return selectedPhotos.size();
+    }
+
+    public Photo getCurrentPhoto() {
+        return photos.get(getCurrentPhotoIndex());
+    }
+
+    public void setCurrentPhoto(String path) {
+        setCurrentPhotoIndex(getPhotoIndex(path));
     }
 
     public String getPreviewAlbumImg(){
@@ -130,37 +148,15 @@ class HandlingPhotos implements Parcelable {
         clearSelectedPhotos();
     }
 
-    public Photo getCurrentPhoto() {
-        return photos.get(getCurrentPhotoIndex());
-    }
-
-    public void setCurrentPhoto(String path) {
-        setCurrentPhotoIndex(getPhotoIndex(path));
-    }
-
     public void deleteCurrentPhoto() {
         deletePhoto(getCurrentPhoto());
     }
 
     public void deletePhoto(Photo a) {
         HandlingAlbums h = new HandlingAlbums(context);
-        DatabaseHandler db = new DatabaseHandler(context);
-        db.deletePhoto(a);
-        db.close();
         File file = new File(a.Path);
         h.deleteFolderRecursive(file);
         photos.remove(a);
-    }
-
-    public void clearSelectedPhotos() {
-        for (Photo photo : photos) {
-            photo.setSelected(false);
-        }
-        selectedPhotos.clear();
-    }
-
-    public int getSelectedCount() {
-        return selectedPhotos.size();
     }
 
     @Override

@@ -44,21 +44,36 @@ public class PhotosActivity extends AppCompatActivity {
     ImageView image;
     SharedPreferences SP;
 
-    boolean hideToolBar = false;
     boolean editmode = false;
     PhotosAdapter adapter;
+
+    Bitmap bit;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initActivityTransitions();
+        setContentView(R.layout.activity_photos);
+
+        LoadPhotos();
+        initUiTweaks();
+    }
 
     @Override
     public void onResume() {
         //string.showToast(this, album.Path);
+        LoadPhotos();
         super.onResume();
 
     }
 
 
     private void setPalette() { //TODO remaake doesn't work wiht image loaded by Glide
-        try {
+
             Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
+        //}.decode//.decodeFile(photos.getPreviewAlbumImg());
             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
@@ -69,22 +84,15 @@ public class PhotosActivity extends AppCompatActivity {
                     //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
                 }
             });
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initActivityTransitions();
-        setContentView(R.layout.activity_photos);
-
+    public void LoadPhotos() {
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
-            photos = new HandlingPhotos(PhotosActivity.this, album.Path, album.isHidden());
+            photos = new HandlingPhotos(PhotosActivity.this, album);
 
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
             adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
@@ -100,7 +108,7 @@ public class PhotosActivity extends AppCompatActivity {
                         else pos = photos.selectPhoto(f.Path, true);
                         adapter.notifyItemChanged(pos);
                         invalidateOptionsMenu();
-                        updateSelectedPhotsCount();
+                        //updateSelectedPhotsCount();
                     } else {
                         photos.setCurrentPhoto(f.Path);
                         Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
@@ -118,7 +126,7 @@ public class PhotosActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
                     editmode = true;
                     invalidateOptionsMenu();
-                    updateSelectedPhotsCount();
+                    //intebdupdateSelectedPhotsCount();
                     return false;
                 }
             });
@@ -130,14 +138,14 @@ public class PhotosActivity extends AppCompatActivity {
             mRecyclerView.setNestedScrollingEnabled(true);
             mRecyclerView.setFitsSystemWindows(true);
 
-            initUiTweaks();
+
         }
         catch (Exception e){ e.printStackTrace(); }
     }
 
-    private void updateSelectedPhotsCount() {
+    /*private void updateSelectedPhotsCount() {
         getSupportActionBar().setTitle(photos.getSelectedCount() + "");
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -231,6 +239,17 @@ public class PhotosActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.renameAlbum:
+               /* new MaterialDialog.Builder(this)
+                        .title(R.string.input)
+                        .content(R.string.input_content)
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                        .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // Do something
+                            }
+                        }).show();
+*/
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Rename Album");
                 final EditText input = new EditText(this);
@@ -427,7 +446,7 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
-        setPalette();
+        //setPalette();
     }
 
     private void initActivityTransitions() {
