@@ -5,8 +5,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -56,13 +54,5 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
-        <receiver
-                android:name=".PhotosReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"/>
-            </intent-filter>
-        </receiver>
-
     </application>
 </manifest>
