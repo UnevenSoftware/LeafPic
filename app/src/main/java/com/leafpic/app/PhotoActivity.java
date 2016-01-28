@@ -111,7 +111,6 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
             case R.id.deletePhoto:
 
-
                 mCustomPagerAdapter.destroyItem(mViewPager,
                         photos.getCurrentPhotoIndex(),
                         mViewPager.getFocusedChild());

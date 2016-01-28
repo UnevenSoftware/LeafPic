@@ -1,6 +1,5 @@
 package com.leafpic.app;
 
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.leafpic.app.utils.string;
@@ -24,34 +23,19 @@ public class Album implements Parcelable {
             return new Album[size];
         }
     };
-    public String Path = "";
+    public String ID;
     public String DisplayName;
+    public String Path = "";
+
     ArrayList<Photo> photos;
     private int imagesCount = 0;
     private boolean hidden = false;
     private boolean selected = false;
 
-    public Album() {
-        photos = new ArrayList<Photo>();
-    }
-    public Album(String path){
-        photos = new ArrayList<Photo>();
-        DisplayName = string.getBucketNamebyBucketPath(path);
-        Path = path;
-    }
-
-
-    public Album(String path, String displayName) {
-        photos = new ArrayList<Photo>();
-        DisplayName = displayName;
-        Path = path;
-    }
-
-    public Album(String path, String displayName, boolean hidden) {
-        photos = new ArrayList<Photo>();
-        DisplayName = displayName;
-        Path = path;
-        setHidden(hidden);
+    public Album(String id, String name, int count) {
+        ID = id;
+        DisplayName = name;
+        imagesCount = count;
     }
 
 
@@ -63,13 +47,11 @@ public class Album implements Parcelable {
         imagesCount = count;
     }
 
-    /****
-     * parcelable
-     */
-
     protected Album(Parcel in) {
-        Path = in.readString();
+        ID = in.readString();
         DisplayName = in.readString();
+        imagesCount = in.readInt();
+        Path = in.readString();
         if (in.readByte() == 0x01) {
             photos = new ArrayList<Photo>();
             in.readList(photos, Photo.class.getClassLoader());
@@ -78,14 +60,6 @@ public class Album implements Parcelable {
         }
         hidden = in.readByte() != 0x00;
         selected = in.readByte() != 0x00;
-    }
-
-    public int getPhotoIndex(String path) {
-        for (int i = 0; i < photos.size(); i++) {
-            if (photos.get(i).Path.equals(path))
-                return i;
-        }
-        return 0;
     }
 
     public void setPath() {
@@ -117,19 +91,9 @@ public class Album implements Parcelable {
         else return "drawable://" + R.drawable.ic_empty;
     }
 
-    public int getColorAlbum() {
-        if (photos.size() > 0)
-            return photos.get(0).getDominantColor();
-        else
-            return Color.DKGRAY;
-    }
-
     public int getImagesCount() {
         return imagesCount;
     }
-
-    public void setImagesCount(int n) {
-        imagesCount = n; }
 
     @Override
     public int describeContents() {
@@ -138,8 +102,10 @@ public class Album implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Path);
+        dest.writeString(ID);
         dest.writeString(DisplayName);
+        dest.writeInt(imagesCount);
+        dest.writeString(Path);
         if (photos == null) {
             dest.writeByte((byte) (0x00));
         } else {

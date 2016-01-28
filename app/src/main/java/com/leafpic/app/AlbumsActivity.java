@@ -32,7 +32,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class AlbumsActivity extends AppCompatActivity {
-    DatabaseHandler db = new DatabaseHandler(AlbumsActivity.this);
+
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
 
     boolean editmode = false, hidden = false;
@@ -40,6 +40,7 @@ public class AlbumsActivity extends AppCompatActivity {
     AlbumsAdapter adapt;
     Toolbar toolbar;
     SharedPreferences SP;
+    MadiaStoreHandler asd = new MadiaStoreHandler(AlbumsActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,11 @@ public class AlbumsActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
+        //asd.LogStuff();
+        //asd.loadPhotos();
+        //asd.logPhotos();
+        //asd.logAlbums();
+        //asd.logDeletedPhotos();
     }
 
     @Override
@@ -384,7 +390,7 @@ public class AlbumsActivity extends AppCompatActivity {
         if (hidden)
             albums.loadPreviewHiddenAlbums();
         else {
-            db.updatePhotos();
+            // db.updatePhotos();
             albums.loadPreviewAlbums();
         }
 
@@ -413,7 +419,7 @@ public class AlbumsActivity extends AppCompatActivity {
                 int pos;
                 if (editmode) {
                     if (album.isSelected()) pos = albums.selectAlbum(s, false);
-                    else pos = albums.selectAlbum(s, true);
+                    else pos = albums.selectAlbum(album, true);
                     adapt.notifyItemChanged(pos);
                     invalidateOptionsMenu();
                 } else {
