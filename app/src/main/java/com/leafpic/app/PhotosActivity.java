@@ -62,8 +62,8 @@ public class PhotosActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        //string.showToast(this, album.Path);
         LoadPhotos();
+        updateHeaderContent();
         super.onResume();
 
     }
@@ -247,7 +247,7 @@ public class PhotosActivity extends AppCompatActivity {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 albums.renameAlbum(photos.FolderPath, input.toString());
-                                finish();
+                                finish();//TODO make this better
                             }
                         }).show();
                 break;
@@ -279,6 +279,7 @@ public class PhotosActivity extends AppCompatActivity {
                                 if (editmode) {
                                     photos.deleteSelectedPhotos();
                                     adapter.notifyDataSetChanged();
+                                    updateHeaderContent();
                                 } else {
                                     albums.deleteAlbum(photos.FolderPath);
                                     finish();
@@ -394,14 +395,7 @@ public class PhotosActivity extends AppCompatActivity {
         //OSCURA LIMMAGINE
         image.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
-        TextView textView = (TextView) findViewById(R.id.AlbumName);
-        textView.setText(photos.DisplayName);
-        //SpannableString content = new SpannableString(photos.DisplayName);
-        //content.setSpan(new UnderlineSpan(), 10, content.length(), 0);
-        //textView.setText(content);
-        textView = (TextView) findViewById(R.id.AlbumNPhotos);
-        textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size()+ "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
+        updateHeaderContent();
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(photos.DisplayName);
@@ -409,6 +403,14 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
         //setPalette();
+    }
+
+    private void updateHeaderContent() {
+        TextView textView = (TextView) findViewById(R.id.AlbumName);
+        textView.setText(photos.DisplayName);
+        textView = (TextView) findViewById(R.id.AlbumNPhotos);
+        textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size() + "</font></b>" + "<font " +
+                "color='#FFFFFF'> Photos</font>"));
     }
 
     private void initActivityTransitions() {

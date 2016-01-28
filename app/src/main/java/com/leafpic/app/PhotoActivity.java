@@ -3,12 +3,16 @@ package com.leafpic.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.utils.string;
@@ -103,28 +107,46 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
             case R.id.shareButton:
                 String file_path = photos.photos.get(mViewPager.getCurrentItem()).Path;
-                string.showToast(this, file_path);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(string.getMimeType(file_path));
                 share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
             case R.id.deletePhoto:
+                new MaterialDialog.Builder(this)
+                        .content(R.string.delete_photo_message)
+                        .positiveText("DELETE")
+                        .negativeText("CANCEL")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                int index = mViewPager.getCurrentItem();
+                                Log.d("asdasdasdasd", index + "");
+                                mViewPager.removeView(mViewPager.getFocusedChild());
+                                // mViewPager.removeViewAt(index);
+                                mViewPager.setCurrentItem(index + 1);
 
-                mCustomPagerAdapter.destroyItem(mViewPager,
-                        photos.getCurrentPhotoIndex(),
-                        mViewPager.getFocusedChild());
-                mViewPager.removeView(mViewPager.getFocusedChild());
+                                //mViewPager.removeViewAt(index);
 
-                photos.deleteCurrentPhoto();
-                mCustomPagerAdapter.notifyDataSetChanged();
+                                photos.deleteCurrentPhoto();
+                                mCustomPagerAdapter.notifyDataSetChanged();
+                                //mViewPager.setCurrentItem(++index);
+                            }
+                        })
+                        .show();
+
+
                 return true;
             case R.id.rotatePhoto:
 
                 return true;
 
             case R.id.useAsIntent:
-
+                String file_path_use_as = photos.photos.get(mViewPager.getCurrentItem()).Path;
+                Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
+                intent.setDataAndType(Uri.parse("file://" + file_path_use_as), "image/*");
+                intent.putExtra("jpg", string.getMimeType(file_path_use_as));
+                startActivity(Intent.createChooser(intent, "Use As"));
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -141,8 +163,8 @@ public class PhotoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        toolbar.setBackgroundColor(getColor(android.R.color.transparent));
-        hideSystemUI();// TODO hide navigation bar [PORCODIO]
+        toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
+        //hideSystemUI();// TODO hide navigation bar [PORCODIO]
         //toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new  AccelerateInterpolator()).start();
         // getSupportActionBar().hide();
 
