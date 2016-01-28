@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,17 +36,17 @@ import java.util.ArrayList;
  * Created by dnld on 12/12/15.
  */
 public class PhotosActivity extends AppCompatActivity {
-    HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
 
+    HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     HandlingPhotos photos;
+
     CollapsingToolbarLayout collapsingToolbarLayout;
-    ImageView image;
+    ImageView headerImage;
     SharedPreferences SP;
 
     boolean editmode = false;
     PhotosAdapter adapter;
 
-    Bitmap bit;
 
 
     @Override
@@ -65,13 +64,12 @@ public class PhotosActivity extends AppCompatActivity {
         LoadPhotos();
         updateHeaderContent();
         super.onResume();
-
     }
 
 
-    private void setPalette() { //TODO remaake doesn't work wiht image loaded by Glide
+    private void setPalette(Bitmap bitmap) { //TODO remaake doesn't work wiht image loaded by Glide
 
-            Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
         //}.decode//.decodeFile(photos.getPreviewAlbumImg());
             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
@@ -89,6 +87,7 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     public void LoadPhotos() {
+
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
@@ -238,6 +237,7 @@ public class PhotosActivity extends AppCompatActivity {
                 photos.clearSelectedPhotos();
                 adapter.notifyDataSetChanged();
                 break;
+
             case R.id.renameAlbum:
                 new MaterialDialog.Builder(this)
                         .title("Rename Album")
@@ -247,11 +247,10 @@ public class PhotosActivity extends AppCompatActivity {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 albums.renameAlbum(photos.FolderPath, input.toString());
-                                finish();//TODO make this better
+                                finish();// TODO make this better
                             }
                         }).show();
                 break;
-
 
             case R.id.excludeAlbumButton:
                 new MaterialDialog.Builder(this)
@@ -315,7 +314,6 @@ public class PhotosActivity extends AppCompatActivity {
                             })
                             .show();
                 }
-
                 break;
 
             case R.id.sharePhotos:
@@ -344,12 +342,10 @@ public class PhotosActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
 
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
         return true;
     }
@@ -366,7 +362,7 @@ public class PhotosActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean NavBar = SP.getBoolean("nav_bar", false);
         if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)&&(NavBar==true)) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
+            getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
 
         /**** Status Bar */
@@ -383,17 +379,17 @@ public class PhotosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        image = (ImageView) findViewById(R.id.image);
+        headerImage = (ImageView) findViewById(R.id.image);
         Glide.with(this)
                 .load(photos.getPreviewAlbumImg())
                 .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
-                .into(image);
+                .into(headerImage);
 
 
         //OSCURA LIMMAGINE
-        image.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+        headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
         updateHeaderContent();
 
@@ -406,6 +402,16 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     private void updateHeaderContent() {
+        headerImage = (ImageView) findViewById(R.id.image);
+        Glide.with(this)
+                .load(photos.getPreviewAlbumImg())
+                .asBitmap()
+                .centerCrop()
+                .placeholder(R.drawable.ic_empty)
+                .into(headerImage);
+
+        headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
