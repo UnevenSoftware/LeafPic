@@ -42,9 +42,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
 
         if (f.MIME.equals("image/gif")) {
+
+            //TODO gif preview with ION
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
-                    .asGif()
+                    .asBitmap()
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
                     //.crossFade()
