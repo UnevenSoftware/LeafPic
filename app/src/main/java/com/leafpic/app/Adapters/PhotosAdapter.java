@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Photo;
 import com.leafpic.app.R;
 
@@ -42,15 +43,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
 
         if (f.MIME.equals("image/gif")) {
-
-            //TODO gif preview with ION
-            Glide.with(holder.imageView.getContext())
+            Ion.with(holder.imageView.getContext())
                     .load(f.Path)
-                    .asBitmap()
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_empty)
-                    //.crossFade()
-                    .into(holder.imageView);
+                    .intoImageView(holder.imageView);
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
@@ -59,11 +54,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .asBitmap()
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
-                    //.crossFade()
                     .into(holder.imageView);
         }
 
         holder.path.setTag(f.Path);
+
         if (f.isSelected()) {
             holder.selectHolder.setVisibility(View.VISIBLE);
             holder.imageView.setPadding(15, 15, 15, 15);
