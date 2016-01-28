@@ -58,11 +58,11 @@ public class AlbumsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-        if (!isMyServiceRunning(PhotoRecordingService.class)) {
+        /*if (!isMyServiceRunning(PhotoRecordingService.class)) {
             string.showToast(getApplicationContext(), "service startde");
             Intent myIntent = new Intent(AlbumsActivity.this, PhotoRecordingService.class);
             startService(myIntent);
-        }
+        }*/
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();

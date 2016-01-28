@@ -13,8 +13,8 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         string.showToast(context, "service startde");
-        Intent myIntent = new Intent(context, PhotoRecordingService.class);
-        context.startService(myIntent);
+        // Intent myIntent = new Intent(context, PhotoRecordingService.class);
+        //context.startService(myIntent);
 
     }
 }
