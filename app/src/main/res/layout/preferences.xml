@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:useStockLayout="true">
     <PreferenceCategory
-        android:title="@string/general_setting">
-        <EditTextPreference
-            android:title="Your Name"
+        android:title="@string/general_setting"
+        >
+        <!-- YOUR NAME-->
+        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+            android:defaultValue="Android"
+            android:dialogMessage="Write your name"
+            android:dialogTitle="Name"
+            android:inputType="textPersonName"
             android:key="username"
-            android:summary="Please provide your username"></EditTextPreference
-            >
-        <!--
+            android:persistent="true"
+            android:summary="Pleas Provide Your Name"
+            android:title="Your Name" />
+
         <ListPreference
-            android:title="Download Details"
-            android:summary="Select the kind of data that you would like to download."
-            android:key="downloadType"
+            android:title="Test Color Pref"
+            android:summary="Select a Color."
+            android:key="PrefColor"
             android:defaultValue="1"
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues"
+            android:entries="@array/prefListColor"
+            android:entryValues="@array/ColorsPref"
             />
-        -->
+
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/security_setting">
-        <EditTextPreference android:title="Password Hidden"
+        <!--SECURITY - PSWORD FOR HIDDEN FOLDER-->
+        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+            android:defaultValue="Android"
+            android:dialogMessage="Set A password for access to Hidden Folder"
+            android:dialogTitle="Hidden Folder Password"
+            android:inputType="textPersonName"
             android:key="password"
-            android:summary="Password For Access to hidden folders."
-            >
-        </EditTextPreference>
+            android:persistent="true"
+            android:summary="Pleas Provide a Password for access to hidden folders."
+            android:title="User Password" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -41,6 +53,19 @@
             android:summary="Apply the DarkTheme to LeafPic."
             android:key="set_theme"
             />
+        <Preference
+            android:selectable="true"
+            android:enabled="true"
+            android:key="primaryColor"
+            android:title="Primary Color"
+            android:summary="Selecet the Primary Color"
+            />
+        <Preference
+            android:selectable="true"
+            android:enabled="true"
+            android:key="Ancent Color"
+            android:title="Primary Color"
+            android:summary="Selecet the Ancent Color" />
 
         <CheckBoxPreference
             android:title="Colored Navigation Bar"

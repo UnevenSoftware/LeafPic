@@ -29,10 +29,7 @@ public class Preferences_Activity extends PreferenceActivity {
                 finish();
             }
         });
-
-
     }
-
 
     /**********
 

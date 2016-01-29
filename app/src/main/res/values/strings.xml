@@ -30,5 +30,6 @@
     <string name="theme_setting">Theme</string>
     <string name="security_setting">Security</string>
     <string name="folder_setting">Folder</string>
+    <string name="primaryColor">Primary Color</string>
 
 </resources>

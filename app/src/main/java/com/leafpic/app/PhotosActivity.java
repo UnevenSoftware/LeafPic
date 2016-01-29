@@ -2,7 +2,9 @@ package com.leafpic.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -21,9 +24,15 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.*;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -75,7 +84,7 @@ public class PhotosActivity extends AppCompatActivity {
             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
-                    int primaryDark = getColor(R.color.trasparent_toolbar);
+                    int primaryDark = getColor(R.color.toolbar);
                     int primary = getColor(R.color.toolbar);
                     collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
                     collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
@@ -370,13 +379,15 @@ public class PhotosActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         setStatusBarTranslucent(true);
-        window.setStatusBarColor(getColor(R.color.status_bar));
-
+        window.setStatusBarColor(getColor(R.color.toolbar));
 
         /**** ToolBar*/
-
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
 
 
         headerImage = (ImageView) findViewById(R.id.image);
@@ -415,8 +426,20 @@ public class PhotosActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
+
+
+        SharedPreferences SP;
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String SColor = SP.getString("PrefColor","1");
+        textView.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
+                "color='#FFFFFF'> Photos</font>"));
+        int color = Color.parseColor(SColor);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setBackgroundTintList(ColorStateList.valueOf(color));
+        /*
         textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
+        */
     }
 
     private void initActivityTransitions() {
