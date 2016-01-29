@@ -5,6 +5,7 @@
         <item>Green</item>
         <item>Orange</item>
     </string-array>
+
     <string-array name="ColorsPref">
         <item>#03A9F4</item>
         <item>#009688</item>

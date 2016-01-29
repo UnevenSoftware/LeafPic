@@ -3,20 +3,21 @@ package com.leafpic.app;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class Preferences_Activity extends PreferenceActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences SP;
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.preferences);
         initUiTweaks();
 
         //FOR ADDING TOOLBAR
@@ -29,27 +30,15 @@ public class Preferences_Activity extends PreferenceActivity {
                 finish();
             }
         });
-    }
 
-    /**********
-
-    public static class MyPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(final Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.layout.preferences);
-        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
-        //getActionBar().setTitle("Setting");
-        //setTitle("Setting");
-        //initUiTweaks();
     }
-     *********/
+
     public void initUiTweaks() {
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -57,18 +46,29 @@ public class Preferences_Activity extends PreferenceActivity {
 
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
-            //boolean NightTheme = SP.getBoolean("set_theme", false);
-            if (NavBar==true)
+
+            if (NavBar)
                 getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
         }
-        /*
-         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-         setSupportActionBar(toolbar);
-         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-         getSupportActionBar().setShowHideAnimationEnabled(true);
-         toolbar.setBackgroundColor(getColor(R.color.trasparent_toolbar));
-        */
-     }
+    }
 
+    public static class MyPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(final Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.preferences);
+
+            Preference p = findPreference("accent_color");
+            p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    return false;
+                }
+            });
+        }
+
+
+    }
 
 }

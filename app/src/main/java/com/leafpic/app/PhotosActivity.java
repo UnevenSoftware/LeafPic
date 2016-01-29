@@ -24,19 +24,19 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -409,7 +409,49 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
+        /*******
+         * DRAWER
+         * ******/
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.side_wall)
+                .withSelectionListEnabledForSingleProfile(false)
+                .withCompactStyle(true)
+                .build();
+
+        final Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(headerResult)
+
+                .withDrawerGravity(Gravity.END)
+
+                .addDrawerItems(
+
+                        new DividerDrawerItem()
+
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch (position) {
+
+                            default:
+                                break;
+                        }
+
+                        return false;
+                    }
+                })
+                .build();
+
         //setPalette();
+
+
+       /* File image = new File(photos.getPreviewAlbumImg());
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+        setPalette(bitmap);*/
     }
 
     private void updateHeaderContent() {
@@ -430,16 +472,12 @@ public class PhotosActivity extends AppCompatActivity {
 
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String SColor = SP.getString("PrefColor","1");
+        String SColor = SP.getString("PrefColor", "#03A9F4");
         textView.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
         int color = Color.parseColor(SColor);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
-        /*
-        textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
-        */
     }
 
     private void initActivityTransitions() {

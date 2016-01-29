@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:useStockLayout="true">
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  app:useStockLayout="true">
     <PreferenceCategory
         android:title="@string/general_setting"
         >
@@ -54,18 +54,18 @@
             android:key="set_theme"
             />
         <Preference
-            android:selectable="true"
-            android:enabled="true"
-            android:key="primaryColor"
-            android:title="Primary Color"
-            android:summary="Selecet the Primary Color"
+                android:selectable="true"
+                android:enabled="true"
+                android:key="primary_color"
+                android:title="Primary Color"
+                android:summary="Selecet the Primary Color"
             />
         <Preference
-            android:selectable="true"
-            android:enabled="true"
-            android:key="Ancent Color"
-            android:title="Primary Color"
-            android:summary="Selecet the Ancent Color" />
+                android:selectable="true"
+                android:enabled="true"
+                android:key="accent_color"
+                android:title="Accent Color"
+                android:summary="Selecet the Accent Color"/>
 
         <CheckBoxPreference
             android:title="Colored Navigation Bar"

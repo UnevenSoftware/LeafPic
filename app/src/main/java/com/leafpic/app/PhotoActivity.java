@@ -83,7 +83,10 @@ public class PhotoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         //DA FIXXARE
+        hideSystemUI();
+        showSystemUI();
         hideSystemUI();
     }
 
