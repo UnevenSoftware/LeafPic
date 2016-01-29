@@ -13,6 +13,7 @@ repositories {
     maven {
         url "http://dl.bintray.com/dasar/maven"
     }
+    mavenCentral()
 }
 
 android {
@@ -40,6 +41,7 @@ android {
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:cardview-v7:+'
@@ -65,4 +67,5 @@ dependencies {
          transitive = true
      }
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
+    compile 'com.github.paolorotolo:appintro:+'
 }
