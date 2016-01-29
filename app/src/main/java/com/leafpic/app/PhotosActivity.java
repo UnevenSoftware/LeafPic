@@ -385,11 +385,6 @@ public class PhotosActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-
-
-
         headerImage = (ImageView) findViewById(R.id.image);
         Glide.with(this)
                 .load(photos.getPreviewAlbumImg())
