@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/setting_toolbar"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"

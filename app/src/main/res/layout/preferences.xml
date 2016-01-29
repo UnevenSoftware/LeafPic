@@ -4,7 +4,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 >
-
     <PreferenceCategory
         android:title="@string/general_setting">
         <EditTextPreference
@@ -12,12 +11,7 @@
             android:key="username"
             android:summary="Please provide your username"></EditTextPreference
             >
-        <CheckBoxPreference
-            android:title="Application Updates"
-            android:defaultValue="false"
-            android:summary="This option if selected will allow the application to check for latest versions."
-            android:key="applicationUpdates"
-            />
+        <!--
         <ListPreference
             android:title="Download Details"
             android:summary="Select the kind of data that you would like to download."
@@ -26,6 +20,7 @@
             android:entries="@array/listArray"
             android:entryValues="@array/listValues"
             />
+        -->
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -46,6 +41,7 @@
             android:summary="Apply the DarkTheme to LeafPic."
             android:key="set_theme"
             />
+
         <CheckBoxPreference
             android:title="Colored Navigation Bar"
             android:defaultValue="false"
