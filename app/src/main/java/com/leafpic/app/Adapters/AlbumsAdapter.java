@@ -1,5 +1,7 @@
 package com.leafpic.app.Adapters;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Album;
 import com.leafpic.app.R;
@@ -20,7 +23,6 @@ import java.util.ArrayList;
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
     ArrayList<Album> albums;
-
     private int layout_ID;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
@@ -55,10 +57,19 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .into(holder.picture);
 
         holder.name.setText(a.DisplayName);
+
+        SharedPreferences SP;
+        SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
+        String SColor = SP.getString("PrefColor","1");
+        //string.showToast(holder.picture.getContext(),SColor);
+        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+                "color='#FFFFFF'> Photos</font>"));
+        holder.name.setTag(a.Path);
+        /*
         holder.nPhotos.setText(Html.fromHtml("<b><font color='#FBC02D'>" + a.getImagesCount() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
         holder.name.setTag(a.Path);
-
+        */
 
         if (a.isSelected()) {
             //name.setBackgroundColor(localContext.getColor(R.color.selected_album));

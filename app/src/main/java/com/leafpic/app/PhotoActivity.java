@@ -83,6 +83,8 @@ public class PhotoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //DA FIXXARE
+        hideSystemUI();
     }
 
     @Override
@@ -147,13 +149,16 @@ public class PhotoActivity extends AppCompatActivity {
 
     public void initUiTweaks() {
 
-        /**** ToolBar*/
+        /**** ToolBar ********/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        /**** Status Bar *****/
+        getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
+        /**** Navigation Bar */
+        getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
 
         // TODO start immersiveMode [PORCODIO]
 

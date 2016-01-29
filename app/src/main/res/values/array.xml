@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="listArray">
-        <item>Headings</item>
-        <item>Headings and Details</item>
-        <item>All Data</item>
+    <string-array name="prefListColor">
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Orange</item>
     </string-array>
-    <string-array name="listValues">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <string-array name="ColorsPref">
+        <item>#03A9F4</item>
+        <item>#009688</item>
+        <item>#FBC02D</item>
     </string-array>
+
+    <!--PREFERENCES ACTIVITY ITEMS-->
+    <string-array name="PreferenceTheme">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
 </resources>

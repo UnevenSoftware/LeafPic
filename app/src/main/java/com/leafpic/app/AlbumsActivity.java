@@ -43,7 +43,9 @@ public class AlbumsActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
     Toolbar toolbar;
+
     SharedPreferences SP;
+
     MadiaStoreHandler asd = new MadiaStoreHandler(AlbumsActivity.this);
 
 
@@ -91,16 +93,15 @@ public class AlbumsActivity extends AppCompatActivity {
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
+
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(FontAwesome.Icon.faw_picture_o);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(FontAwesome.Icon.faw_eye_slash);
         PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
         PrimaryDrawerItem item22 = new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_calendar_o);
 
-
         SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
         SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
-
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
