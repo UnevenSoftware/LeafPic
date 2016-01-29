@@ -10,6 +10,9 @@ apply plugin: 'com.android.application'
 
 repositories {
     jcenter()
+    maven {
+        url "http://dl.bintray.com/dasar/maven"
+    }
 }
 
 android {
@@ -61,4 +64,5 @@ dependencies {
      compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') {
          transitive = true
      }
+    compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
 }

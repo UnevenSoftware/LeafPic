@@ -142,7 +142,10 @@ public class AlbumsActivity extends AppCompatActivity {
                                 checkPermissions();
                                 break;
                             case 6: //settings
-                                Intent intent = new Intent(AlbumsActivity.this, Preferences_Activity.class);
+                                //MyPreferenceFragment f = new MyPreferenceFragment();
+
+                                // FragmentManager fragment = getFragmentManager();
+                                Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
                                 startActivity(intent);
                                 break;
                             case 7: //github

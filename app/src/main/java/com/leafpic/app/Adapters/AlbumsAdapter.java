@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Album;
 import com.leafpic.app.R;
@@ -60,23 +59,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
-        String SColor = SP.getString("PrefColor","1");
-        //string.showToast(holder.picture.getContext(),SColor);
+        String SColor = SP.getString("PrefColor", "#03A9F4");
+
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
         holder.name.setTag(a.Path);
-        /*
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='#FBC02D'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
-        holder.name.setTag(a.Path);
-        */
 
         if (a.isSelected()) {
-            //name.setBackgroundColor(localContext.getColor(R.color.selected_album));
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
         } else {
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
-            //holder.card_layout.setBackgroundColor(albums.get(position).getColorAlbum());
         }
 
     }

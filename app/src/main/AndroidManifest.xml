@@ -11,9 +11,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <activity android:name=".Preferences_Activity"
-            android:label="Setting"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        <activity android:name=".SettingsActivity"
+                  android:label="Setting"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             >
         </activity>
 
