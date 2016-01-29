@@ -1,7 +1,6 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,14 +9,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
-import android.view.*;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.utils.string;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -32,7 +36,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class AlbumsActivity extends AppCompatActivity {
-    DatabaseHandler db = new DatabaseHandler(AlbumsActivity.this);
+
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
 
     boolean editmode = false, hidden = false;
@@ -40,15 +44,22 @@ public class AlbumsActivity extends AppCompatActivity {
     AlbumsAdapter adapt;
     Toolbar toolbar;
     SharedPreferences SP;
+    MadiaStoreHandler asd = new MadiaStoreHandler(AlbumsActivity.this);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
+        //asd.LogStuff();
+        //asd.loadPhotos();
+        //asd.logPhotos();
+        //asd.logAlbums();
+        //asd.logDeletedPhotos();
     }
 
     @Override
@@ -272,46 +283,35 @@ public class AlbumsActivity extends AppCompatActivity {
                 break;
 
             case R.id.excludeAlbumButton:
-                AlertDialog.Builder dasdf = new AlertDialog.Builder(
-                        new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-                dasdf.setMessage(getString(R.string.exclude_album_message));
-                dasdf.setCancelable(true);
-                dasdf.setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        albums.excludeSelectedAlbums();
-                        adapt.notifyDataSetChanged();
-                        invalidateOptionsMenu();
-                    }
-                });
-                dasdf.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                dasdf.show();
+                new MaterialDialog.Builder(this)
+                        .content(R.string.exclude_album_message)
+                        .positiveText("EXCLUDE")
+                        .negativeText("CANCEL")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                albums.excludeSelectedAlbums();
+                                adapt.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            }
+                        })
+                        .show();
                 break;
 
             case R.id.deleteAction:
-                AlertDialog.Builder dlg = new AlertDialog.Builder(
-                        new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-                dlg.setMessage(getString(R.string.delete_album_message));
-                dlg.setCancelable(true);
-                dlg.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        albums.deleteSelectedAlbums();
-                        adapt.notifyDataSetChanged();
-                        invalidateOptionsMenu();
-
-                    }
-                });
-                dlg.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                dlg.show();
+                new MaterialDialog.Builder(this)
+                        .content(R.string.delete_album_message)
+                        .positiveText("DELETE")
+                        .negativeText("CANCEL")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                albums.deleteSelectedAlbums();
+                                adapt.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            }
+                        })
+                        .show();
                 break;
 
             case R.id.hideAlbumButton:
@@ -320,31 +320,28 @@ public class AlbumsActivity extends AppCompatActivity {
                     adapt.notifyDataSetChanged();
                     invalidateOptionsMenu();
                 } else {
-                    AlertDialog.Builder dlg1 = new AlertDialog.Builder(
-                            new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-                    dlg1.setMessage(getString(R.string.hide_album_message));
-                    dlg1.setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int j) {
-                            albums.hideSelectedAlbums();
-                            adapt.notifyDataSetChanged();
-                            invalidateOptionsMenu();
-                        }
-                    });
-                    dlg1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    dlg1.setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            albums.excludeSelectedAlbums();
-                            adapt.notifyDataSetChanged();
-                            invalidateOptionsMenu();
-                        }
-                    });
-                    dlg1.show();
+                    new MaterialDialog.Builder(this)
+                            .content(R.string.hide_album_message)
+                            .positiveText("HIDE")
+                            .negativeText("CANCEL")
+                            .neutralText("EXCLUDE")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    albums.hideSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                }
+                            })
+                            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    albums.excludeSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                }
+                            })
+                            .show();
                 }
                 break;
 
@@ -381,10 +378,11 @@ public class AlbumsActivity extends AppCompatActivity {
 
     private void loadAlbums() {
 
-        if (hidden)
-            albums.loadPreviewHiddenAlbums();
+        if (hidden) {
+        }
+        //albums.loadPreviewHiddenAlbums();
         else {
-            db.updatePhotos();
+            // db.updatePhotos();
             albums.loadPreviewAlbums();
         }
 
@@ -413,7 +411,7 @@ public class AlbumsActivity extends AppCompatActivity {
                 int pos;
                 if (editmode) {
                     if (album.isSelected()) pos = albums.selectAlbum(s, false);
-                    else pos = albums.selectAlbum(s, true);
+                    else pos = albums.selectAlbum(album, true);
                     adapt.notifyItemChanged(pos);
                     invalidateOptionsMenu();
                 } else {

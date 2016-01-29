@@ -12,6 +12,7 @@
     <!--GREY-->
     <color name="grey_1">#727272</color>
     <color name="grey_2">#424242</color>
+    <color name="transparent_gray">#96100e11</color>
     <!--GREEN-->
     <color name="green_1">#727272</color>
     <color name="fabOrange">#FF9800</color>

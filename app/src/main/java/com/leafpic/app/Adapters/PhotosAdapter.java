@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Photo;
 import com.leafpic.app.R;
-import com.leafpic.app.utils.string;
 
 import java.util.ArrayList;
 
@@ -40,20 +40,25 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(PhotosAdapter.ViewHolder holder, int position) {
         Photo f = photos.get(position);
-        Glide.with(holder.imageView.getContext())
-                .load(f.Path)
-                .asBitmap()/* TODO gif previews */
-                .centerCrop()
-                .placeholder(R.drawable.ic_empty)
-                //.crossFade()
-                .into(holder.imageView);
 
-        String mime = string.getMimeType(f.Path);/* TODO mime type form media storage */
-        if (mime != null && mime.equals("image/gif"))
+
+        if (f.MIME.equals("image/gif")) {
+            Ion.with(holder.imageView.getContext())
+                    .load(f.Path)
+                    .intoImageView(holder.imageView);
             holder.gifIcon.setVisibility(View.VISIBLE);
-        else holder.gifIcon.setVisibility(View.INVISIBLE);
+        } else {
+            holder.gifIcon.setVisibility(View.INVISIBLE);
+            Glide.with(holder.imageView.getContext())
+                    .load(f.Path)
+                    .asBitmap()
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_empty)
+                    .into(holder.imageView);
+        }
 
         holder.path.setTag(f.Path);
+
         if (f.isSelected()) {
             holder.selectHolder.setVisibility(View.VISIBLE);
             holder.imageView.setPadding(15, 15, 15, 15);

@@ -11,9 +11,10 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-//asd
+
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }

@@ -1,19 +1,17 @@
 package com.leafpic.app;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,9 +22,10 @@ import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
 import android.view.*;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 
@@ -37,28 +36,42 @@ import java.util.ArrayList;
  * Created by dnld on 12/12/15.
  */
 public class PhotosActivity extends AppCompatActivity {
-    HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
 
+    HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     HandlingPhotos photos;
+
     CollapsingToolbarLayout collapsingToolbarLayout;
-    ImageView image;
+    ImageView headerImage;
     SharedPreferences SP;
 
-    boolean hideToolBar = false;
     boolean editmode = false;
     PhotosAdapter adapter;
 
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initActivityTransitions();
+        setContentView(R.layout.activity_photos);
+
+        LoadPhotos();
+        initUiTweaks();
+    }
+
     @Override
     public void onResume() {
-        //string.showToast(this, album.Path);
+        LoadPhotos();
+        updateHeaderContent();
         super.onResume();
-
     }
 
 
-    private void setPalette() { //TODO remaake doesn't work wiht image loaded by Glide
-        try {
-            Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+    private void setPalette(Bitmap bitmap) { //TODO remaake doesn't work wiht image loaded by Glide
+
+        //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
+        //}.decode//.decodeFile(photos.getPreviewAlbumImg());
             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
@@ -69,22 +82,16 @@ public class PhotosActivity extends AppCompatActivity {
                     //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
                 }
             });
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initActivityTransitions();
-        setContentView(R.layout.activity_photos);
+    public void LoadPhotos() {
 
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
-            photos = new HandlingPhotos(PhotosActivity.this, album.Path, album.isHidden());
+            photos = new HandlingPhotos(PhotosActivity.this, album);
 
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
             adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
@@ -100,7 +107,7 @@ public class PhotosActivity extends AppCompatActivity {
                         else pos = photos.selectPhoto(f.Path, true);
                         adapter.notifyItemChanged(pos);
                         invalidateOptionsMenu();
-                        updateSelectedPhotsCount();
+                        //updateSelectedPhotsCount();
                     } else {
                         photos.setCurrentPhoto(f.Path);
                         Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
@@ -118,7 +125,7 @@ public class PhotosActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
                     editmode = true;
                     invalidateOptionsMenu();
-                    updateSelectedPhotsCount();
+                    //intebdupdateSelectedPhotsCount();
                     return false;
                 }
             });
@@ -130,14 +137,14 @@ public class PhotosActivity extends AppCompatActivity {
             mRecyclerView.setNestedScrollingEnabled(true);
             mRecyclerView.setFitsSystemWindows(true);
 
-            initUiTweaks();
+
         }
         catch (Exception e){ e.printStackTrace(); }
     }
 
-    private void updateSelectedPhotsCount() {
+    /*private void updateSelectedPhotsCount() {
         getSupportActionBar().setTitle(photos.getSelectedCount() + "");
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -230,76 +237,55 @@ public class PhotosActivity extends AppCompatActivity {
                 photos.clearSelectedPhotos();
                 adapter.notifyDataSetChanged();
                 break;
+
             case R.id.renameAlbum:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Rename Album");
-                final EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                builder.setView(input);
-
-                builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        albums.renameAlbum(photos.FolderPath, input.getText().toString());
-                        finish();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-
-                builder.show();
+                new MaterialDialog.Builder(this)
+                        .title("Rename Album")
+                        .content("insert a fucking NAME")
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(null, photos.DisplayName, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                albums.renameAlbum(photos.FolderPath, input.toString());
+                                finish();// TODO make this better
+                            }
+                        }).show();
                 break;
 
-
             case R.id.excludeAlbumButton:
-                AlertDialog.Builder dasdf = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style
-                        .AlertDialogCustom));
-                dasdf.setMessage(getString(R.string.exclude_album_message));
-                dasdf.setCancelable(true);
-                dasdf.setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        albums.excludeAlbum(photos.FolderPath);
-                        finish();
-                    }
-                });
-                dasdf.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                dasdf.show();
+                new MaterialDialog.Builder(this)
+                        .content(R.string.exclude_album_message)
+                        .positiveText("EXCLUDE")
+                        .negativeText("CANCEL")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                albums.excludeAlbum(photos.FolderPath);
+                                finish();
+                            }
+                        })
+                        .show();
                 break;
 
             case R.id.deleteAction:
-                AlertDialog.Builder dlg = new AlertDialog.Builder(
-                        new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-
-                if (editmode) dlg.setMessage(getString(R.string.delete_photos_message));
-                else dlg.setMessage(getString(R.string.delete_album_message));
-
-                dlg.setCancelable(true);
-                dlg.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (editmode) {
-                            photos.deleteSelectedPhotos();
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            albums.deleteAlbum(photos.FolderPath);
-                            finish();
-                        }
-                    }
-                });
-                dlg.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                dlg.show();
+                new MaterialDialog.Builder(this)
+                        .content(R.string.delete_album_message)
+                        .positiveText("DELETE")
+                        .negativeText("CANCEL")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                if (editmode) {
+                                    photos.deleteSelectedPhotos();
+                                    adapter.notifyDataSetChanged();
+                                    updateHeaderContent();
+                                } else {
+                                    albums.deleteAlbum(photos.FolderPath);
+                                    finish();
+                                }
+                            }
+                        })
+                        .show();
                 break;
 
             case R.id.hideAlbumButton:
@@ -307,46 +293,40 @@ public class PhotosActivity extends AppCompatActivity {
                     albums.unHideAlbum(photos.FolderPath);
                     finish();
                 } else {
-                    AlertDialog.Builder dlg1 = new AlertDialog.Builder(
-                            new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-                    dlg1.setMessage(getString(R.string.hide_album_message));
-                    dlg1.setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int j) {
-                            albums.hideAlbum(photos.FolderPath);
-                            finish();
-                        }
-                    });
-                    dlg1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    dlg1.setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            albums.excludeAlbum(photos.FolderPath);
-                            finish();
-
-                        }
-                    });
-                    dlg1.show();
+                    new MaterialDialog.Builder(this)
+                            .content(R.string.hide_album_message)
+                            .positiveText("HIDE")
+                            .negativeText("CANCEL")
+                            .neutralText("EXCLUDE")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    albums.hideAlbum(photos.FolderPath);
+                                    finish();
+                                }
+                            })
+                            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    albums.excludeAlbum(photos.FolderPath);
+                                    finish();
+                                }
+                            })
+                            .show();
                 }
-
                 break;
 
             case R.id.sharePhotos:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Here are some files.");
-                intent.setType("image/jpeg"); /* This example is sharing jpeg images. */
+                intent.setType("image/*"); /* This example is sharing jpeg images. */
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
                 for (Photo f : photos.selectedPhotos /* List of the files you want to send */) {
                     File file = new File(f.Path);
-                    Uri uri = Uri.fromFile(file);
-                    files.add(uri);
+                    files.add(Uri.fromFile(file));
                 }
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
@@ -362,12 +342,10 @@ public class PhotosActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
 
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
         return true;
     }
@@ -384,7 +362,7 @@ public class PhotosActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean NavBar = SP.getBoolean("nav_bar", false);
         if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)&&(NavBar==true)) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.toolbar));
+            getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
 
         /**** Status Bar */
@@ -401,33 +379,44 @@ public class PhotosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        image = (ImageView) findViewById(R.id.image);
+        headerImage = (ImageView) findViewById(R.id.image);
         Glide.with(this)
                 .load(photos.getPreviewAlbumImg())
                 .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
-                .into(image);
+                .into(headerImage);
 
 
         //OSCURA LIMMAGINE
-        image.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+        headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
-        TextView textView = (TextView) findViewById(R.id.AlbumName);
-        textView.setText(photos.DisplayName);
-        //SpannableString content = new SpannableString(photos.DisplayName);
-        //content.setSpan(new UnderlineSpan(), 10, content.length(), 0);
-        //textView.setText(content);
-        textView = (TextView) findViewById(R.id.AlbumNPhotos);
-        textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size()+ "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
+        updateHeaderContent();
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
-        setPalette();
+        //setPalette();
+    }
+
+    private void updateHeaderContent() {
+        headerImage = (ImageView) findViewById(R.id.image);
+        Glide.with(this)
+                .load(photos.getPreviewAlbumImg())
+                .asBitmap()
+                .centerCrop()
+                .placeholder(R.drawable.ic_empty)
+                .into(headerImage);
+
+        headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+
+        TextView textView = (TextView) findViewById(R.id.AlbumName);
+        textView.setText(photos.DisplayName);
+        textView = (TextView) findViewById(R.id.AlbumNPhotos);
+        textView.setText(Html.fromHtml("<b><font color='#FBC02D'>" + photos.photos.size() + "</font></b>" + "<font " +
+                "color='#FFFFFF'> Photos</font>"));
     }
 
     private void initActivityTransitions() {
