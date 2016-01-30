@@ -1,4 +1,4 @@
-package com.leafpic.app;
+package com.leafpic.app.Base;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by dnld on 1/4/16.
  */
 
-class HandlingPhotos implements Parcelable {
+public class HandlingPhotos implements Parcelable {
 
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HandlingPhotos> CREATOR = new Parcelable.Creator<HandlingPhotos>() {
@@ -29,9 +29,9 @@ class HandlingPhotos implements Parcelable {
     public String DisplayName;
     public ArrayList<Photo> photos;
     public ArrayList<Photo> selectedPhotos;
+    public boolean hidden;
     Context context;
     MadiaStoreHandler as;
-    boolean hidden;
     private int current;
     private int last_position_selecte = -1;
 
@@ -41,9 +41,14 @@ class HandlingPhotos implements Parcelable {
         as = new MadiaStoreHandler(context);
         FolderPath = album.Path;
         hidden = album.isHidden();
-        photos = as.getAlbumPhotos(album);
+
         selectedPhotos = new ArrayList<Photo>();
         DisplayName = album.DisplayName;
+        if (!hidden) photos = as.getAlbumPhotos(album);
+        else {
+            HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+            photos = db.getPhotosByAlbum(album.Path);
+        }
 
     }
 

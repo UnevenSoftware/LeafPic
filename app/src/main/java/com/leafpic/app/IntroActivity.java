@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Toast;
-
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
@@ -15,6 +14,7 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
  */
 public class IntroActivity extends AppIntro {
     int slide=1;
+
     @Override
     public void init(Bundle savedInstanceState) {
 

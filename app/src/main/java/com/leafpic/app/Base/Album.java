@@ -1,7 +1,8 @@
-package com.leafpic.app;
+package com.leafpic.app.Base;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.leafpic.app.R;
 import com.leafpic.app.utils.string;
 
 import java.util.ArrayList;

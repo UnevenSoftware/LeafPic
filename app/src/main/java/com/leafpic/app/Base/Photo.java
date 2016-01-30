@@ -1,4 +1,4 @@
-package com.leafpic.app;
+package com.leafpic.app.Base;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,11 +17,11 @@ public class Photo implements Parcelable {
             return new Photo[size];
         }
     };
+
     public String Path;
     public String MIME;
-    String DateTaken;
-    String FolderPath;
-    String name;
+    public String DateTaken;
+    public String FolderPath;
     boolean selected = false;
 
     public Photo(String path) {
@@ -33,20 +33,17 @@ public class Photo implements Parcelable {
         DateTaken = dateTaken;
     }
 
-
-    //hidden util
-    /*public Photo(String nome, String folderPath, String dateTaken) {
-
-        Path = string.getPhotoPathByFolderPathAndName(folderPath, nome);
-        FolderPath = folderPath;
-        DateTaken = dateTaken;
-        name = nome;
-    }*/
-
     public Photo(String path, String dateTaken, String mime) {
         Path = path;
         DateTaken = dateTaken;
         MIME = mime;
+    }
+
+    public Photo(String path, String dateTaken, String mime, String folderPath) {
+        Path = path;
+        DateTaken = dateTaken;
+        MIME = mime;
+        FolderPath = folderPath;
     }
 
     protected Photo(Parcel in) {
@@ -54,7 +51,6 @@ public class Photo implements Parcelable {
         DateTaken = in.readString();
         MIME = in.readString();
         FolderPath = in.readString();
-        name = in.readString();
         selected = in.readByte() != 0x00;
     }
 
@@ -77,7 +73,6 @@ public class Photo implements Parcelable {
         dest.writeString(DateTaken);
         dest.writeString(MIME);
         dest.writeString(FolderPath);
-        dest.writeString(name);
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
 }

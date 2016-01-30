@@ -12,7 +12,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.koushikdutta.ion.Ion;
-import com.leafpic.app.Photo;
+import com.leafpic.app.Base.Photo;
 import com.leafpic.app.R;
 
 import java.util.ArrayList;

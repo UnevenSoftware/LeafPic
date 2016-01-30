@@ -13,21 +13,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.*;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
+import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.utils.string;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -165,6 +163,8 @@ public class AlbumsActivity extends AppCompatActivity {
                                 break;
                             case 2: //hidden
                                 hidden = true;
+                                //albums.loadPreviewHiddenAlbums();
+                                //adapt.notifyDataSetChanged();
                                 checkPermissions();
                                 break;
                             case 6: //settings
@@ -409,8 +409,8 @@ public class AlbumsActivity extends AppCompatActivity {
     private void loadAlbums() {
 
         if (hidden) {
+            albums.loadPreviewHiddenAlbums();
         }
-        //albums.loadPreviewHiddenAlbums();
         else {
             // db.updatePhotos();
             albums.loadPreviewAlbums();
