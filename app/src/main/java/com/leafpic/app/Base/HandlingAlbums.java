@@ -122,16 +122,23 @@ public class HandlingAlbums {
         clearSelectedAlbums();
     }
 
-    public void hideAlbum(Album a) {
+    public void hideAlbum(final Album a) {
         hideAlbum(a.Path);
 
-        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-        MadiaStoreHandler mediaStoreHandler = new MadiaStoreHandler(context);
-        for (Photo photo : mediaStoreHandler.getAlbumPhotos(a)) {
-            photo.FolderPath = a.Path;
-            db.addPhoto(photo);
-        }
-        db.close();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+                MadiaStoreHandler mediaStoreHandler = new MadiaStoreHandler(context);
+                for (Photo photo : mediaStoreHandler.getAlbumPhotos(a)) {
+                    photo.FolderPath = a.Path;
+                    db.addPhoto(photo);
+                }
+                db.close();
+            }
+        });
+        t.start();
+
         dispAlbums.remove(a);
     }
 
@@ -150,8 +157,8 @@ public class HandlingAlbums {
         }
     }
 
-    public void hideAlbum(String path, ArrayList<Photo> ph) {
-        File dirName = new File(path);
+    public void hideAlbum(String path, final ArrayList<Photo> ph) {
+        final File dirName = new File(path);
         File file = new File(dirName, ".nomedia");
         if (!file.exists()) {
             try {
@@ -159,13 +166,21 @@ public class HandlingAlbums {
                 out.flush();
                 out.close();
                 scanFile(new String[]{file.getAbsolutePath()});
-                HiddenPhotosHandler db = new HiddenPhotosHandler(context);
 
-                for (Photo photo : ph) {
-                    photo.FolderPath = dirName.getAbsolutePath();
-                    db.addPhoto(photo);
-                }
-                db.close();
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+
+                        for (Photo photo : ph) {
+                            photo.FolderPath = dirName.getAbsolutePath();
+                            db.addPhoto(photo);
+                        }
+                        db.close();
+                    }
+                });
+                t.start();
+
 
             } catch (Exception e) {
                 e.printStackTrace();
