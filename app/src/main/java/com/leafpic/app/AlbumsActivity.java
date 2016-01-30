@@ -95,11 +95,11 @@ public class AlbumsActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        checkPermissions();
-
         albums.clearSelectedAlbums();
         updateSelectedStuff();
         invalidateOptionsMenu();
+        checkPermissions();
+        adapt.notifyDataSetChanged();
         super.onResume();
     }
 
@@ -163,8 +163,6 @@ public class AlbumsActivity extends AppCompatActivity {
                                 break;
                             case 2: //hidden
                                 hidden = true;
-                                //albums.loadPreviewHiddenAlbums();
-                                //adapt.notifyDataSetChanged();
                                 checkPermissions();
                                 break;
                             case 6: //settings
@@ -410,6 +408,7 @@ public class AlbumsActivity extends AppCompatActivity {
 
         if (hidden) {
             albums.loadPreviewHiddenAlbums();
+            //albums.LogAlbums();
         }
         else {
             // db.updatePhotos();

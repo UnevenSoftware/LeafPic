@@ -121,7 +121,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do contactList.add(new Album(
                     string.quoteReverse(cursor.getString(0)),
-                    string.getBucketNamebyImagePath(string.quoteReverse(cursor.getString(0))),
+                    string.getBucketNamebyBucketPath(string.quoteReverse(cursor.getString(0))),
                     true, getHiddenPhotosCountByAlbum(cursor.getString(0))));
             while (cursor.moveToNext());
         }

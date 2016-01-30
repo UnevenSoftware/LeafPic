@@ -138,14 +138,6 @@ public class HandlingPhotos implements Parcelable {
         return last_position_selecte;
     }
 
-    public int selectPhoto(Photo a, boolean val) {
-        Photo x = photos.get(photos.indexOf(a));
-        x.setSelected(val);
-        if (val) selectedPhotos.add(x);
-        else selectedPhotos.remove(x);
-        return last_position_selecte;
-    }
-
     public void deleteSelectedPhotos() {
         for (Photo photo : selectedPhotos)
             deletePhoto(photo);
