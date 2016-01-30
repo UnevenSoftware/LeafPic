@@ -3,6 +3,8 @@ package com.leafpic.app;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import com.leafpic.app.Base.HiddenPhotosHandler;
+import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.utils.string;
 
 import java.io.File;
@@ -152,22 +154,39 @@ public class HandlingAlbums {
         }
     }
 
+    public void loadPreviewHiddenAlbums() {
+        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+        if (db.getPhotosCount() == 0)
+            db.loadHiddenALbums();
+
+        dispAlbums = db.getAlbums();
+        for (Album dispAlbum : dispAlbums) {
+            dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
+        }
+        db.close();
+    }
+
+    public void unHideAlbum(String path) {
+
+        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+        File dirName = new File(path);
+        File file = new File(dirName, ".nomedia");
+        if (file.exists()) {
+            try {
+                file.delete();
+                scanFile(new String[]{file.getAbsolutePath()});
+                db.deleteAlbum(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        dispAlbums.remove(getAlbum(path));
+    }
+
     /*************
      * This Metods doesnt work for the moment
      **************/
 
-    public void loadPreviewHiddenAlbums() {
-      /*  DatabaseHandler db = new DatabaseHandler(context);
-        if (db.getDataBaseHiddenPhotosCount() == 0)
-            db.loadHiddenALbums();
-        dispAlbums = db.getHiddenAlbums();
-        for (Album dispAlbum : dispAlbums) {
-            dispAlbum.setHidden(true);
-            dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
-        }
-        db.close();
-        */
-    }
 
     public void unHideSelectedAlbums() {
         /*for (Album selectedAlbum : selectedAlbums)
@@ -181,19 +200,7 @@ public class HandlingAlbums {
         dispAlbums.remove(a);
     }
 
-    public void unHideAlbum(String path) {
-        File dirName = new File(path);
-        File file = new File(dirName, ".nomedia");
-        if (file.exists()) {
-            try {
-                file.delete();
-                scanFile(new String[]{file.getAbsolutePath()});
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
-    }
 
 
     public void excludeSelectedAlbums() {
@@ -209,8 +216,6 @@ public class HandlingAlbums {
     }
 
     public void excludeAlbum(String path) {
-        DatabaseHandler db = new DatabaseHandler(context);
-        db.excludeAlbum(path);
-        db.close();
+
     }
 }

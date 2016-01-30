@@ -1,16 +1,18 @@
-package com.leafpic.app;
+package com.leafpic.app.Base;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import com.leafpic.app.Album;
+import com.leafpic.app.Photo;
 
 import java.util.ArrayList;
 
 /**
  * Created by dnld on 12/31/15.
  */
-class MadiaStoreHandler {
+public class MadiaStoreHandler {
 
     Context context;
 

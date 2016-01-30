@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
+import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.utils.string;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -165,6 +166,8 @@ public class AlbumsActivity extends AppCompatActivity {
                                 break;
                             case 2: //hidden
                                 hidden = true;
+                                //albums.loadPreviewHiddenAlbums();
+                                //adapt.notifyDataSetChanged();
                                 checkPermissions();
                                 break;
                             case 6: //settings
@@ -409,8 +412,8 @@ public class AlbumsActivity extends AppCompatActivity {
     private void loadAlbums() {
 
         if (hidden) {
+            albums.loadPreviewHiddenAlbums();
         }
-        //albums.loadPreviewHiddenAlbums();
         else {
             // db.updatePhotos();
             albums.loadPreviewAlbums();

@@ -3,6 +3,8 @@ package com.leafpic.app;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.leafpic.app.Base.HiddenPhotosHandler;
+import com.leafpic.app.Base.MadiaStoreHandler;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,9 +43,14 @@ class HandlingPhotos implements Parcelable {
         as = new MadiaStoreHandler(context);
         FolderPath = album.Path;
         hidden = album.isHidden();
-        photos = as.getAlbumPhotos(album);
+
         selectedPhotos = new ArrayList<Photo>();
         DisplayName = album.DisplayName;
+        if (!hidden) photos = as.getAlbumPhotos(album);
+        else {
+            HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+            photos = db.getPhotosByAlbum(album.Path);
+        }
 
     }
 

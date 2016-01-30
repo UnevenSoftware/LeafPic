@@ -31,12 +31,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -329,11 +323,11 @@ public class PhotosActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Here are some files.");
-                intent.setType("image/*"); /* This example is sharing jpeg images. */
+                intent.setType("image/*");
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
-                for (Photo f : photos.selectedPhotos /* List of the files you want to send */) {
+                for (Photo f : photos.selectedPhotos) {
                     File file = new File(f.Path);
                     files.add(Uri.fromFile(file));
                 }
@@ -370,20 +364,26 @@ public class PhotosActivity extends AppCompatActivity {
         /**** Navigation Bar*/
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean NavBar = SP.getBoolean("nav_bar", false);
-        if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)&&(NavBar==true)) {
+        if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) && (NavBar)) {
             getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
 
         /**** Status Bar */
-        Window window = getWindow();
+        /*Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         setStatusBarTranslucent(true);
-        window.setStatusBarColor(getColor(R.color.toolbar));
+        window.setStatusBarColor(getColor(R.color.toolbar));*/
+
 
         /**** ToolBar*/
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
 
         headerImage = (ImageView) findViewById(R.id.image);
         Glide.with(this)
@@ -408,37 +408,7 @@ public class PhotosActivity extends AppCompatActivity {
          * DRAWER
          * ******/
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.side_wall)
-                .withSelectionListEnabledForSingleProfile(false)
-                .withCompactStyle(true)
-                .build();
 
-        final Drawer result = new DrawerBuilder()
-                .withActivity(this)
-                .withAccountHeader(headerResult)
-
-                .withDrawerGravity(Gravity.END)
-
-                .addDrawerItems(
-
-                        new DividerDrawerItem()
-
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        switch (position) {
-
-                            default:
-                                break;
-                        }
-
-                        return false;
-                    }
-                })
-                .build();
 
         //setPalette();
 
