@@ -31,6 +31,10 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
+import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Base.HandlingPhotos;
+import com.leafpic.app.Base.Photo;
 
 import java.io.File;
 import java.util.ArrayList;

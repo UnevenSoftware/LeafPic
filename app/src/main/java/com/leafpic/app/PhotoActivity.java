@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
+import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.utils.string;
 
 /**

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.koushikdutta.ion.Ion;
-import com.leafpic.app.Photo;
+import com.leafpic.app.Base.Photo;
 import com.leafpic.app.R;
 
 import java.util.ArrayList;

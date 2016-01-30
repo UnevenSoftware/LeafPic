@@ -1,4 +1,4 @@
-package com.leafpic.app;
+package com.leafpic.app.Base;
 
 import android.os.Parcel;
 import android.os.Parcelable;

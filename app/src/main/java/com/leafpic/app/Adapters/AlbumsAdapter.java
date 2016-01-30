@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.leafpic.app.Album;
+import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
 
 import java.util.ArrayList;

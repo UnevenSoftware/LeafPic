@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import com.leafpic.app.Album;
-import com.leafpic.app.Photo;
 import com.leafpic.app.utils.string;
 
 import java.io.File;

@@ -1,10 +1,8 @@
-package com.leafpic.app;
+package com.leafpic.app.Base;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import com.leafpic.app.Base.HiddenPhotosHandler;
-import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.utils.string;
 
 import java.io.File;
