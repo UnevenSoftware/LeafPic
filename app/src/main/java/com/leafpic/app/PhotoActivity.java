@@ -7,7 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.afollestad.materialdialogs.DialogAction;
@@ -43,24 +45,12 @@ public class PhotoActivity extends AppCompatActivity {
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
-            final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapConfirmed(MotionEvent e) {
-                    toggleSystemUI();
-                    return true;
-                }
-            });
+
 
             mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
 
-            mCustomPagerAdapter.setOnPictureTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return gestureDetector.onTouchEvent(event);
-                }
-            });
 
-            mCustomPagerAdapter.setOnGifClickListener(new View.OnClickListener() {
+            mCustomPagerAdapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     toggleSystemUI();

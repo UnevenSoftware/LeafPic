@@ -26,7 +26,6 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
     LayoutInflater mLayoutInflater;
     ArrayList<Photo> mResources;
 
-    private View.OnTouchListener onTouchListener;
     private View.OnClickListener onClickListener;
 
     public PhotosPagerAdapter(Context context, ArrayList<Photo> ph) {
@@ -35,7 +34,7 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setOnGifClickListener(View.OnClickListener ls) {
+    public void setOnClickListener(View.OnClickListener ls) {
         onClickListener = ls;
     }
 
@@ -44,9 +43,6 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
         return mResources.size();
     }
 
-    public void setOnPictureTouchListener(View.OnTouchListener ls) {
-        onTouchListener = ls;
-    }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
@@ -79,7 +75,7 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
                             picture.setImage(ImageSource.bitmap(bitmap));
                         }
                     });
-            picture.setOnTouchListener(onTouchListener);
+            picture.setOnClickListener(onClickListener);
             picture.setMaxScale(10);
         }
 
