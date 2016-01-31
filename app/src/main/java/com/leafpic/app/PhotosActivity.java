@@ -24,9 +24,15 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.*;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -79,7 +85,7 @@ public class PhotosActivity extends AppCompatActivity {
         //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
         //}.decode//.decodeFile(photos.getPreviewAlbumImg());
-            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
                     int primaryDark = getColor(R.color.toolbar);
@@ -87,10 +93,8 @@ public class PhotosActivity extends AppCompatActivity {
                     collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
                     collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
                     //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
-                }
-            });
-
-
+            }
+        });
     }
 
     public void LoadPhotos() {
@@ -373,21 +377,20 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         /**** Status Bar */
-        /*Window window = getWindow();
+        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
+
+        Window window = getWindow();
+        //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         setStatusBarTranslucent(true);
-        window.setStatusBarColor(getColor(R.color.toolbar));*/
+        window.setStatusBarColor(getColor(R.color.toolbar));
 
 
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-
 
         headerImage = (ImageView) findViewById(R.id.image);
         Glide.with(this)
@@ -400,7 +403,6 @@ public class PhotosActivity extends AppCompatActivity {
 
         //OSCURA LIMMAGINE
         headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-
         updateHeaderContent();
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -408,19 +410,22 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
+        collapsingToolbarLayout.setContentScrimColor(getColor(R.color.toolbar));
+        collapsingToolbarLayout.setStatusBarScrimColor(getColor(R.color.toolbar));
+
+        //setPalette();
+        /*  RALLENTA TROPPO IL CARICAMENTO DIO PORCO
+        File image = new File(photos.getPreviewAlbumImg());
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+        setPalette(bitmap);
+        */
+
+
         /*******
          * DRAWER
          * ******/
 
-
-
-        //setPalette();
-
-
-       /* File image = new File(photos.getPreviewAlbumImg());
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-        setPalette(bitmap);*/
     }
 
     private void updateHeaderContent() {
@@ -431,13 +436,11 @@ public class PhotosActivity extends AppCompatActivity {
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
                 .into(headerImage);
-
         headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
         TextView textView = (TextView) findViewById(R.id.AlbumName);
         textView.setText(photos.DisplayName);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
-
 
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

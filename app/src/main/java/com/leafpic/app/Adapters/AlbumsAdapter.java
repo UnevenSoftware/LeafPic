@@ -55,8 +55,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .placeholder(R.drawable.ic_empty)
                 .into(holder.picture);
 
-        holder.name.setText(a.DisplayName);
-
+        holder.name.setText(Html.fromHtml("<i><font>" + a.DisplayName + "</font></i>"));
+        // color='"+R.color.toolbar+"'
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
         String SColor = SP.getString("PrefColor", "#03A9F4");

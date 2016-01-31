@@ -13,13 +13,18 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
@@ -40,10 +45,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class AlbumsActivity extends AppCompatActivity {
 
-
-
-
-
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
 
     boolean editmode = false, hidden = false;
@@ -60,8 +61,6 @@ public class AlbumsActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
-
-
 
         //APP INTRO STATS HEARE DIO CANE
         Thread t = new Thread(new Runnable() {
@@ -106,15 +105,14 @@ public class AlbumsActivity extends AppCompatActivity {
     public void initUiTweaks(){
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getColor(R.color.toolbar));
+            getWindow().setStatusBarColor(getColor(R.color.status_bar));
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
             //boolean NightTheme = SP.getBoolean("set_theme", false);
             if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
-
-        /**** ToolBar*/
+        /**** ToolBar */
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
@@ -389,8 +387,6 @@ public class AlbumsActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -404,7 +400,6 @@ public class AlbumsActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
     private void loadAlbums() {
 
@@ -458,6 +453,5 @@ public class AlbumsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
     }
 }
