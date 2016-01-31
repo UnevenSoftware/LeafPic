@@ -24,17 +24,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-<<<<<<< HEAD
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-=======
 import android.util.Log;
 import android.view.*;
->>>>>>> refs/remotes/DNLDsht/master
 import android.widget.ImageView;
 import android.widget.TextView;
 
