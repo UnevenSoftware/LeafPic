@@ -63,6 +63,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
     }
 
     void getAlbums(File dir) {
+
         if (dir.isDirectory() &&
                 !dir.getAbsolutePath().equals("/storage/emulated/0/Android") &&
                 !dir.getAbsolutePath().contains("Voice") &&
@@ -72,33 +73,35 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
             for (String child : children) {
                 File temp = new File(dir, child);
                 if (temp.isDirectory()) {
-                    ArrayList<Photo> paths = getImagesFromFolder(temp);
-                    for (Photo path : paths)
-                        addPhoto(path);
+                    addHiddeNImagesFromFolder(temp);
                     getAlbums(temp);
                 }
             }
         }
     }
 
-    private ArrayList<Photo> getImagesFromFolder(File dir) {
-        ArrayList<Photo> paths = new ArrayList<Photo>();
-        String[] children = dir.list();
+    public void addHiddeNImagesFromFolder(File dir) {
         File nomediafile = new File(dir, ".nomedia");
         if (!nomediafile.exists())
-            return paths;
+            return;
+
+        addImagesFromFolder(dir);
+    }
+
+    public void addImagesFromFolder(File dir) {
+
+        String[] children = dir.list();
 
         for (String child : children) {
             File temp = new File(dir, child);
 
             String mime = string.getMimeType(temp.getAbsolutePath());
             if (mime != null && mime.contains("image"))
-                paths.add(new Photo(
+                addPhoto(new Photo(
                         temp.getAbsolutePath(),
                         String.valueOf(temp.lastModified()),
                         mime, dir.getAbsolutePath()));
         }
-        return paths;
     }
 
     void addPhoto(Photo contact) {
