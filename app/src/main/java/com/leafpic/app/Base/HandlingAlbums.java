@@ -3,6 +3,7 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.util.Log;
 import com.leafpic.app.utils.string;
 
 import java.io.File;
@@ -121,8 +122,23 @@ public class HandlingAlbums {
         clearSelectedAlbums();
     }
 
-    public void hideAlbum(Album a) {
+    public void hideAlbum(final Album a) {
         hideAlbum(a.Path);
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+                MadiaStoreHandler mediaStoreHandler = new MadiaStoreHandler(context);
+                for (Photo photo : mediaStoreHandler.getAlbumPhotos(a)) {
+                    photo.FolderPath = a.Path;
+                    db.addPhoto(photo);
+                }
+                db.close();
+            }
+        });
+        t.start();
+
         dispAlbums.remove(a);
     }
 
@@ -135,6 +151,37 @@ public class HandlingAlbums {
                 out.flush();
                 out.close();
                 scanFile(new String[]{file.getAbsolutePath()});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void hideAlbum(String path, final ArrayList<Photo> ph) {
+        final File dirName = new File(path);
+        File file = new File(dirName, ".nomedia");
+        if (!file.exists()) {
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                out.flush();
+                out.close();
+                scanFile(new String[]{file.getAbsolutePath()});
+
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+
+                        for (Photo photo : ph) {
+                            photo.FolderPath = dirName.getAbsolutePath();
+                            db.addPhoto(photo);
+                        }
+                        db.close();
+                    }
+                });
+                t.start();
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,6 +211,18 @@ public class HandlingAlbums {
         db.close();
     }
 
+    public void unHideSelectedAlbums() {
+        for (Album selectedAlbum : selectedAlbums)
+            unHideAlbum(selectedAlbum);
+
+        clearSelectedAlbums();
+    }
+
+    public void unHideAlbum(Album a) {
+        unHideAlbum(a.Path);
+        dispAlbums.remove(a);
+    }
+
     public void unHideAlbum(String path) {
 
         HiddenPhotosHandler db = new HiddenPhotosHandler(context);
@@ -179,24 +238,21 @@ public class HandlingAlbums {
             }
         }
         dispAlbums.remove(getAlbum(path));
+        db.close();
+    }
+
+    public void LogAlbums() {
+        for (Album dispAlbum : dispAlbums) {
+            Log.wtf("asdasd", dispAlbum.Path);
+            for (Photo photo : dispAlbum.photos) {
+                Log.d("asdasdasdasd", photo.Path);
+            }
+        }
     }
 
     /*************
      * This Metods doesnt work for the moment
      **************/
-
-
-    public void unHideSelectedAlbums() {
-        /*for (Album selectedAlbum : selectedAlbums)
-            unHideAlbum(selectedAlbum);
-
-        clearSelectedAlbums();*/
-    }
-
-    public void unHideAlbum(Album a) {
-        unHideAlbum(a.Path);
-        dispAlbums.remove(a);
-    }
 
 
 

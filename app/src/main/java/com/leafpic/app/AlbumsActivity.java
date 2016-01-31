@@ -30,7 +30,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.utils.string;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -46,13 +45,12 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 public class AlbumsActivity extends AppCompatActivity {
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
-
-    boolean editmode = false, hidden = false;
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
+
     Toolbar toolbar;
     SharedPreferences SP;
-    MadiaStoreHandler asd = new MadiaStoreHandler(AlbumsActivity.this);
+    boolean editmode = false, hidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +60,7 @@ public class AlbumsActivity extends AppCompatActivity {
         initUiTweaks();
         checkPermissions();
 
+<<<<<<< HEAD
         //APP INTRO STATS HEARE DIO CANE
         Thread t = new Thread(new Runnable() {
             @Override
@@ -85,6 +84,10 @@ public class AlbumsActivity extends AppCompatActivity {
         //asd.logPhotos();
         //asd.logAlbums();
         //asd.logDeletedPhotos();
+=======
+
+
+>>>>>>> refs/remotes/DNLDsht/master
     }
 
     @Override
@@ -94,11 +97,10 @@ public class AlbumsActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        checkPermissions();
-
         albums.clearSelectedAlbums();
         updateSelectedStuff();
         invalidateOptionsMenu();
+        checkPermissions();
         super.onResume();
     }
 
@@ -161,8 +163,6 @@ public class AlbumsActivity extends AppCompatActivity {
                                 break;
                             case 2: //hidden
                                 hidden = true;
-                                //albums.loadPreviewHiddenAlbums();
-                                //adapt.notifyDataSetChanged();
                                 checkPermissions();
                                 break;
                             case 6: //settings
@@ -403,8 +403,28 @@ public class AlbumsActivity extends AppCompatActivity {
 
     private void loadAlbums() {
 
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+                if (isFirstStart) {
+                    //albums.loadPreviewHiddenAlbums();
+                    Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
+                    startActivity(i);
+                    SharedPreferences.Editor e = getPrefs.edit();
+                    e.putBoolean("firstStart", false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
+
         if (hidden) {
             albums.loadPreviewHiddenAlbums();
+            //albums.LogAlbums();
         }
         else {
             // db.updatePhotos();
@@ -453,5 +473,10 @@ public class AlbumsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+<<<<<<< HEAD
+=======
+        adapt.notifyDataSetChanged();
+
+>>>>>>> refs/remotes/DNLDsht/master
     }
 }

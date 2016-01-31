@@ -24,12 +24,17 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
+<<<<<<< HEAD
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+=======
+import android.util.Log;
+import android.view.*;
+>>>>>>> refs/remotes/DNLDsht/master
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -312,7 +317,8 @@ public class PhotosActivity extends AppCompatActivity {
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    albums.hideAlbum(photos.FolderPath);
+                                    Log.wtf("asdasdasdas", photos.FolderPath);
+                                    albums.hideAlbum(photos.FolderPath, photos.photos);
                                     finish();
                                 }
                             })
