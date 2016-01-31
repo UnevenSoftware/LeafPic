@@ -54,9 +54,6 @@ public class AlbumsActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
-
-
-
     }
 
     @Override
@@ -76,15 +73,14 @@ public class AlbumsActivity extends AppCompatActivity {
     public void initUiTweaks(){
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getColor(R.color.toolbar));
+            getWindow().setStatusBarColor(getColor(R.color.status_bar));
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
             //boolean NightTheme = SP.getBoolean("set_theme", false);
             if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
-
-        /**** ToolBar*/
+        /**** ToolBar */
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
 
@@ -357,8 +353,6 @@ public class AlbumsActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -372,7 +366,6 @@ public class AlbumsActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
     private void loadAlbums() {
 
