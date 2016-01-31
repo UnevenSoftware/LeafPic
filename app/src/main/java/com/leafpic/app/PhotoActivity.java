@@ -53,10 +53,17 @@ public class PhotoActivity extends AppCompatActivity {
 
             mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
 
-            mCustomPagerAdapter.setOnTouchListener(new View.OnTouchListener() {
+            mCustomPagerAdapter.setOnPictureTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return gestureDetector.onTouchEvent(event);
+                }
+            });
+
+            mCustomPagerAdapter.setOnGifClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleSystemUI();
                 }
             });
 
@@ -170,14 +177,9 @@ public class PhotoActivity extends AppCompatActivity {
         if (fullscreenmode)
             showSystemUI();
         else hideSystemUI();
-
     }
 
     private void hideSystemUI() {
-
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
         runOnUiThread(new Runnable() {
             public void run() {
                 getWindow().getDecorView().setSystemUiVisibility(
@@ -189,7 +191,6 @@ public class PhotoActivity extends AppCompatActivity {
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
                         .start();
-                //getSupportActionBar().hide();
                 fullscreenmode = true;
             }
         });
@@ -197,10 +198,8 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void showSystemUI() {
-
         runOnUiThread(new Runnable() {
             public void run() {
-                //getSupportActionBar().show();
                 toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
                         .start();
                 getWindow().getDecorView().setSystemUiVisibility(

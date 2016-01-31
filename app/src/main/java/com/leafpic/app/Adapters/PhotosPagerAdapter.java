@@ -27,6 +27,7 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
     ArrayList<Photo> mResources;
 
     private View.OnTouchListener onTouchListener;
+    private View.OnClickListener onClickListener;
 
     public PhotosPagerAdapter(Context context, ArrayList<Photo> ph) {
         mContext = context;
@@ -34,12 +35,16 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void setOnGifClickListener(View.OnClickListener ls) {
+        onClickListener = ls;
+    }
+
     @Override
     public int getCount() {
         return mResources.size();
     }
 
-    public void setOnTouchListener(View.OnTouchListener ls) {
+    public void setOnPictureTouchListener(View.OnTouchListener ls) {
         onTouchListener = ls;
     }
 
@@ -57,6 +62,7 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
             itemView = mLayoutInflater.inflate(R.layout.gif_pager_layout, container, false);
 
             ImageView picture = (ImageView) itemView.findViewById(R.id.imageView);
+            picture.setOnClickListener(onClickListener);
             Ion.with(container.getContext())
                     .load(f.Path)
                     .intoImageView(picture);
@@ -86,6 +92,5 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
-        // container.removeViewAt(position);
     }
 }
