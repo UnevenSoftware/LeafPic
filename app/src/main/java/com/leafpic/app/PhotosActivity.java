@@ -359,7 +359,6 @@ public class PhotosActivity extends AppCompatActivity {
         return true;
     }
 
-    //FABCLICK
     public void fabClicked(View v){
         Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
         startActivity(i);
