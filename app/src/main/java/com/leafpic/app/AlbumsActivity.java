@@ -60,7 +60,6 @@ public class AlbumsActivity extends AppCompatActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
-<<<<<<< HEAD
 
         //APPINTRO TREAD
         Thread t = new Thread(new Runnable() {
@@ -80,8 +79,6 @@ public class AlbumsActivity extends AppCompatActivity {
             }
         });
         t.start();
-=======
->>>>>>> refs/remotes/DNLDsht/master
     }
 
     @Override
@@ -200,9 +197,8 @@ public class AlbumsActivity extends AppCompatActivity {
             else
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-        } else
+            } else
             loadAlbums();
-
     }
 
     @Override
@@ -395,11 +391,6 @@ public class AlbumsActivity extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
-    private Handler handler;
-
-=======
->>>>>>> refs/remotes/DNLDsht/master
     private void loadAlbums() {
         if (hidden) {
             //LOAD

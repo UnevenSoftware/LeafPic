@@ -30,10 +30,8 @@ public class PhotoActivity extends AppCompatActivity {
     PhotosPagerAdapter mCustomPagerAdapter;
     ViewPager mViewPager;
     HandlingPhotos photos;
-
     Toolbar toolbar;
     boolean fullscreenmode;
-    boolean showToolBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,10 +89,8 @@ public class PhotoActivity extends AppCompatActivity {
         }
 
         //DA FIXXARE
-
         hideSystemUI();
-        getSupportActionBar().hide();
-        showToolBar = true;
+
 
     }
 
@@ -186,7 +182,6 @@ public class PhotoActivity extends AppCompatActivity {
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
         // doesn't resize when the system bars hide and show.
-
         //getSupportActionBar().hide();
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -200,11 +195,6 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void showSystemUI() {
-        if(showToolBar==true) {
-            getSupportActionBar().show();
-            showToolBar=false;
-        }
-
         toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator()).start();
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE

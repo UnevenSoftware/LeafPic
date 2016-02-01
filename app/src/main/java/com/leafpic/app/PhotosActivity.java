@@ -88,13 +88,9 @@ public class PhotosActivity extends AppCompatActivity {
                     collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
                     collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
                     //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
-<<<<<<< HEAD
-            }
-=======
                 }
->>>>>>> refs/remotes/DNLDsht/master
-        });
-    }
+            });
+        }
 
     public void LoadPhotos() {
 
