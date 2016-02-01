@@ -206,12 +206,14 @@ public class HandlingAlbums {
     }
 
     public boolean loadPreviewHiddenAlbums() {
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         HiddenPhotosHandler db = new HiddenPhotosHandler(context);
         if (db.getPhotosCount() == 0)
             db.loadHiddenALbums();
 
         dispAlbums = db.getAlbums();
         for (Album dispAlbum : dispAlbums) {
+            dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.Path));
             dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
         }
         db.close();
