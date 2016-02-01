@@ -1,16 +1,24 @@
 package com.leafpic.app;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.os.Handler;
+=======
+import android.os.Environment;
+>>>>>>> refs/remotes/DNLDsht/master
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,11 +36,14 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Base.HiddenPhotosHandler;
 import com.leafpic.app.utils.string;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -43,7 +54,9 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class AlbumsActivity extends AppCompatActivity {
+import java.io.File;
+
+public class AlbumsActivity extends AppCompatActivity implements FolderChooserDialog.FolderCallback {
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
@@ -56,6 +69,7 @@ public class AlbumsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_albums);
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
@@ -94,6 +108,7 @@ public class AlbumsActivity extends AppCompatActivity {
         checkPermissions();
         super.onResume();
     }
+
 
     public void initUiTweaks(){
 
@@ -175,6 +190,46 @@ public class AlbumsActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+
+        addHiddenFolder_FABEvent();
+
+
+    }
+
+    public void addHiddenFolder_FABEvent() {
+        FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fabAddFolder);
+
+        if (hidden) {
+            btnAddFolder.setVisibility(View.VISIBLE);
+            int color = Color.parseColor(SP.getString("PrefColor", "#03A9F4"));
+
+            btnAddFolder.setBackgroundTintList(ColorStateList.valueOf(color));
+            btnAddFolder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new FolderChooserDialog.Builder(AlbumsActivity.this)
+                            .chooseButton(R.string.md_choose_label)
+                            .initialPath(Environment.getExternalStorageDirectory().getPath())
+                            .show();
+                }
+            });
+        } else
+            btnAddFolder.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onFolderSelection(@NonNull File folder) {
+        HiddenPhotosHandler h = new HiddenPhotosHandler(getApplicationContext());
+        string.showToast(getApplicationContext(), folder.getAbsolutePath());
+        h.addImagesFromFolder(folder);
+
+        albums.loadPreviewHiddenAlbums();
+        adapt.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 
     public  void checkPermissions(){
@@ -392,6 +447,7 @@ public class AlbumsActivity extends AppCompatActivity {
     }
 
     private void loadAlbums() {
+<<<<<<< HEAD
         if (hidden) {
             //LOAD
             /*
@@ -413,6 +469,53 @@ public class AlbumsActivity extends AppCompatActivity {
             //string.showToast(AlbumsActivity.this, "1:ALBUM LETTI");
             //dialog.dismiss();
 
+=======
+        runOnUiThread(new Runnable() {
+            public void run() {
+                albums.loadPreviewHiddenAlbums();
+            }
+        });
+
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+                if (isFirstStart) {
+
+                    Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
+                    startActivity(i);
+                    SharedPreferences.Editor e = getPrefs.edit();
+                    e.putBoolean("firstStart", false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
+
+        addHiddenFolder_FABEvent();
+
+        if (hidden) {
+            final MaterialDialog dialog = new MaterialDialog.Builder(AlbumsActivity.this)
+                    .title("Loading")
+                    .progress(true, 0)
+                    .progressIndeterminateStyle(true)
+                    .build();
+            dialog.show();
+            runOnUiThread(new Runnable() {
+                public void run() {
+
+
+                    albums.loadPreviewHiddenAlbums();
+                    //dialog.dismiss();
+                }
+            });
+
+            //albums.LogAlbums();
+>>>>>>> refs/remotes/DNLDsht/master
         }
         else {
             // db.updatePhotos();

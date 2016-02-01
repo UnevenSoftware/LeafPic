@@ -7,10 +7,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+<<<<<<< HEAD
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+=======
+import android.view.Menu;
+import android.view.MenuItem;
+>>>>>>> refs/remotes/DNLDsht/master
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -46,20 +51,15 @@ public class PhotoActivity extends AppCompatActivity {
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
-            final GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapConfirmed(MotionEvent e) {
-                    toggleSystemUI();
-                    return true;
-                }
-            });
+
 
             mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
 
-            mCustomPagerAdapter.setOnTouchListener(new View.OnTouchListener() {
+
+            mCustomPagerAdapter.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return gestureDetector.onTouchEvent(event);
+                public void onClick(View v) {
+                    toggleSystemUI();
                 }
             });
 
@@ -87,11 +87,14 @@ public class PhotoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
 
         //DA FIXXARE
         hideSystemUI();
 
 
+=======
+>>>>>>> refs/remotes/DNLDsht/master
     }
 
     @Override
@@ -167,18 +170,21 @@ public class PhotoActivity extends AppCompatActivity {
         /**** Navigation Bar */
         getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
 
-        // TODO start immersiveMode [PORCODIO]
-
+        new Thread(new Runnable() {
+            public void run() {
+                hideSystemUI();
+            }
+        }).start();
     }
 
     private void toggleSystemUI() {
         if (fullscreenmode)
             showSystemUI();
         else hideSystemUI();
-
     }
 
     private void hideSystemUI() {
+<<<<<<< HEAD
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
         // doesn't resize when the system bars hide and show.
@@ -192,15 +198,38 @@ public class PhotoActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
         toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
         fullscreenmode = true;
+=======
+        runOnUiThread(new Runnable() {
+            public void run() {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+                        .start();
+                fullscreenmode = true;
+            }
+        });
+
+>>>>>>> refs/remotes/DNLDsht/master
     }
 
     private void showSystemUI() {
-        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator()).start();
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        fullscreenmode = false;
+        runOnUiThread(new Runnable() {
+            public void run() {
+                toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+                        .start();
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                fullscreenmode = false;
+            }
+        });
+
     }
 
     public int getStatusBarHeight() {

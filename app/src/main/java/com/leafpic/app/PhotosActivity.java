@@ -3,7 +3,6 @@ package com.leafpic.app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +34,7 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
+import com.leafpic.app.utils.string;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,8 +74,8 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
 
-    private void setPalette(Bitmap bitmap) { //TODO remaake doesn't work wiht image loaded by Glide
 
+<<<<<<< HEAD
         //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
         //}.decode//.decodeFile(photos.getPreviewAlbumImg());
@@ -91,6 +90,8 @@ public class PhotosActivity extends AppCompatActivity {
                 }
             });
         }
+=======
+>>>>>>> refs/remotes/DNLDsht/master
 
     public void LoadPhotos() {
 
@@ -252,8 +253,9 @@ public class PhotosActivity extends AppCompatActivity {
                         .input(null, photos.DisplayName, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                albums.renameAlbum(photos.FolderPath, input.toString());
-                                finish();// TODO make this better
+                               /* albums.renameAlbum(photos.FolderPath, input.toString());
+                                finish();// TODO make this better*/
+                                string.showToast(getApplicationContext(), "I have to fix this!");
                             }
                         }).show();
                 break;
@@ -266,8 +268,9 @@ public class PhotosActivity extends AppCompatActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                albums.excludeAlbum(photos.FolderPath);
-                                finish();
+                                string.showToast(getApplicationContext(), "Not implemented yet!");
+                                //albums.excludeAlbum(photos.FolderPath);
+                                //finish();
                             }
                         })
                         .show();
@@ -307,16 +310,15 @@ public class PhotosActivity extends AppCompatActivity {
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    //Log.wtf("asdasdasdas", photos.FolderPath);
                                     albums.hideAlbum(photos.FolderPath, photos.photos);
-                                    finish();
                                 }
                             })
                             .onNeutral(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    albums.excludeAlbum(photos.FolderPath);
-                                    finish();
+                                    string.showToast(getApplicationContext(), "Not implemented yet!");
+                                    //albums.excludeAlbum(photos.FolderPath);
+                                    // finish();
                                 }
                             })
                             .show();

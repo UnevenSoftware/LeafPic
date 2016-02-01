@@ -7,6 +7,8 @@
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/imageView"
-            android:layout_width="match_parent" android:layout_height="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="match_parent"/>
 
 </LinearLayout>

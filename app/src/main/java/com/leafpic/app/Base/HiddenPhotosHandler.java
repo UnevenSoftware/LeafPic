@@ -33,7 +33,6 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL("CREATE TABLE " +
                 TABLE_PHOTOS + "(" +
                 PHOTO_PATH + " TEXT," +
@@ -59,46 +58,44 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + string.quoteReplace(path) + "'");
         db.close();
-
     }
 
     void getAlbums(File dir) {
+
         if (dir.isDirectory() &&
                 !dir.getAbsolutePath().equals("/storage/emulated/0/Android") &&
                 !dir.getAbsolutePath().contains("Voice") &&
                 !dir.getAbsolutePath().contains("Audio")) {
 
-            String[] children = dir.list();
-            for (String child : children) {
-                File temp = new File(dir, child);
+            for (File temp : dir.listFiles()) {
                 if (temp.isDirectory()) {
-                    ArrayList<Photo> paths = getImagesFromFolder(temp);
-                    for (Photo path : paths)
-                        addPhoto(path);
+                    addHiddeNImagesFromFolder(temp);
                     getAlbums(temp);
                 }
             }
         }
     }
 
-    private ArrayList<Photo> getImagesFromFolder(File dir) {
-        ArrayList<Photo> paths = new ArrayList<Photo>();
-        String[] children = dir.list();
+    public void addHiddeNImagesFromFolder(File dir) {
         File nomediafile = new File(dir, ".nomedia");
         if (!nomediafile.exists())
-            return paths;
+            return;
 
-        for (String child : children) {
+        addImagesFromFolder(dir);
+    }
+
+    public void addImagesFromFolder(File dir) {
+
+        for (String child : dir.list()) {
             File temp = new File(dir, child);
 
             String mime = string.getMimeType(temp.getAbsolutePath());
             if (mime != null && mime.contains("image"))
-                paths.add(new Photo(
+                addPhoto(new Photo(
                         temp.getAbsolutePath(),
                         String.valueOf(temp.lastModified()),
                         mime, dir.getAbsolutePath()));
         }
-        return paths;
     }
 
     void addPhoto(Photo contact) {
