@@ -22,9 +22,15 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.*;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -53,8 +59,6 @@ public class PhotosActivity extends AppCompatActivity {
     boolean editmode = false;
     PhotosAdapter adapter;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +76,22 @@ public class PhotosActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
-
+    //PALETTE
+    //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+    // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
+    //}.decode//.decodeFile(photos.getPreviewAlbumImg());
+    /*
+    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+        @Override
+        public void onGenerated(Palette palette) {
+            int primaryDark = getColor(R.color.toolbar);
+            int primary = getColor(R.color.toolbar);
+            collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
+            collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
+            //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
+        }
+    });
+    */
 
     public void LoadPhotos() {
 
@@ -319,7 +337,6 @@ public class PhotosActivity extends AppCompatActivity {
                     File file = new File(f.Path);
                     files.add(Uri.fromFile(file));
                 }
-
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                 startActivity(intent);
                 break;
@@ -356,15 +373,13 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         /**** Status Bar */
-        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
-
         Window window = getWindow();
         //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        setStatusBarTranslucent(true);
-        window.setStatusBarColor(getColor(R.color.toolbar));
-
+        setStatusBarTranslucent(false);//true
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
 
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -379,8 +394,7 @@ public class PhotosActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_empty)
                 .into(headerImage);
 
-
-        //OSCURA LIMMAGINE
+        //OSCURA IMMAGINE COOLAPSIONG
         headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
         updateHeaderContent();
 
@@ -388,7 +402,6 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-
         collapsingToolbarLayout.setContentScrimColor(getColor(R.color.toolbar));
         collapsingToolbarLayout.setStatusBarScrimColor(getColor(R.color.toolbar));
 
@@ -399,12 +412,6 @@ public class PhotosActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
         setPalette(bitmap);
         */
-
-
-        /*******
-         * DRAWER
-         * ******/
-
     }
 
     private void updateHeaderContent() {
@@ -445,6 +452,7 @@ public class PhotosActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setStatusBarColor(getColor(R.color.status_bar));
         }
     }
 }

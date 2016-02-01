@@ -27,60 +27,46 @@ public class PhotoActivity extends AppCompatActivity {
     PhotosPagerAdapter mCustomPagerAdapter;
     ViewPager mViewPager;
     HandlingPhotos photos;
-
     Toolbar toolbar;
     boolean fullscreenmode;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
         initUiTweaks();
-
         try {
-
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
-
-
             mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
-
-
             mCustomPagerAdapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     toggleSystemUI();
                 }
             });
-
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                 @Override
-                public void onPageSelected(int position) {
-                    photos.setCurrentPhotoIndex(position);
-                }
+                public void onPageSelected(int position) {photos.setCurrentPhotoIndex(position);}
 
                 @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
+                public void onPageScrollStateChanged(int state) {}
             });
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //DA FIXXARE
+        hideSystemUI();
     }
 
     @Override
@@ -144,7 +130,6 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
-
         /**** ToolBar ********/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
@@ -155,7 +140,6 @@ public class PhotoActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
         /**** Navigation Bar */
         getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
-
         new Thread(new Runnable() {
             public void run() {
                 hideSystemUI();
@@ -184,7 +168,6 @@ public class PhotoActivity extends AppCompatActivity {
                 fullscreenmode = true;
             }
         });
-
     }
 
     private void showSystemUI() {
@@ -199,7 +182,6 @@ public class PhotoActivity extends AppCompatActivity {
                 fullscreenmode = false;
             }
         });
-
     }
 
     public int getStatusBarHeight() {

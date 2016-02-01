@@ -18,7 +18,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +69,24 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
+        //APPINTRO TREAD
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+                if (isFirstStart) {
+                    //albums.loadPreviewHiddenAlbums();
+                    Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
+                    startActivity(i);
+                    SharedPreferences.Editor e = getPrefs.edit();
+                    e.putBoolean("firstStart", false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
     }
 
     @Override
@@ -114,7 +136,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 )
                 .build();
 
-
         final Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -162,10 +183,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                     }
                 })
                 .build();
-
         addHiddenFolder_FABEvent();
-
-
     }
 
     public void addHiddenFolder_FABEvent() {
@@ -224,9 +242,8 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
             else
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-        } else
+            } else
             loadAlbums();
-
     }
 
     @Override
@@ -420,54 +437,33 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     }
 
     private void loadAlbums() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                albums.loadPreviewHiddenAlbums();
-            }
-        });
-
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                SharedPreferences getPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getBaseContext());
-                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-                if (isFirstStart) {
-
-                    Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
-                    startActivity(i);
-                    SharedPreferences.Editor e = getPrefs.edit();
-                    e.putBoolean("firstStart", false);
-                    e.apply();
-                }
-            }
-        });
-        t.start();
-
         addHiddenFolder_FABEvent();
 
         if (hidden) {
-            final MaterialDialog dialog = new MaterialDialog.Builder(AlbumsActivity.this)
-                    .title("Loading")
+            //LOAD
+            /*
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                    .title("Hidden Albums")
+                    .content("Scaning for hidden media...")
                     .progress(true, 0)
-                    .progressIndeterminateStyle(true)
-                    .build();
-            dialog.show();
+                    .progressIndeterminateStyle(true);
+
+            final MaterialDialog dialog = builder.build();
             runOnUiThread(new Runnable() {
+                @Override
                 public void run() {
-
-
-                    albums.loadPreviewHiddenAlbums();
-                    //dialog.dismiss();
+                    dialog.show();
                 }
             });
-
-            //albums.LogAlbums();
+            */
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    albums.loadPreviewHiddenAlbums();
+                }
+            });
+            //dialog.dismiss();
         }
         else {
-            // db.updatePhotos();
             albums.loadPreviewAlbums();
         }
 

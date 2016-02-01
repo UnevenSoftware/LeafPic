@@ -118,7 +118,6 @@ public class HandlingAlbums {
     public void hideSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)
             hideAlbum(selectedAlbum);
-
         clearSelectedAlbums();
     }
 
@@ -199,7 +198,7 @@ public class HandlingAlbums {
         }
     }
 
-    public void loadPreviewHiddenAlbums() {
+    public boolean loadPreviewHiddenAlbums() {
         HiddenPhotosHandler db = new HiddenPhotosHandler(context);
         if (db.getPhotosCount() == 0)
             db.loadHiddenALbums();
@@ -209,6 +208,7 @@ public class HandlingAlbums {
             dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
         }
         db.close();
+        return true;
     }
 
     public void unHideSelectedAlbums() {
