@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -60,8 +61,7 @@ public class AlbumsActivity extends AppCompatActivity {
         initUiTweaks();
         checkPermissions();
 
-<<<<<<< HEAD
-        //APP INTRO STATS HEARE DIO CANE
+        //APPINTRO TREAD
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,6 +69,7 @@ public class AlbumsActivity extends AppCompatActivity {
                         .getDefaultSharedPreferences(getBaseContext());
                 boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
                 if (isFirstStart) {
+                    //albums.loadPreviewHiddenAlbums();
                     Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
                     startActivity(i);
                     SharedPreferences.Editor e = getPrefs.edit();
@@ -78,16 +79,6 @@ public class AlbumsActivity extends AppCompatActivity {
             }
         });
         t.start();
-
-        //asd.LogStuff();
-        //asd.loadPhotos();
-        //asd.logPhotos();
-        //asd.logAlbums();
-        //asd.logDeletedPhotos();
-=======
-
-
->>>>>>> refs/remotes/DNLDsht/master
     }
 
     @Override
@@ -401,30 +392,30 @@ public class AlbumsActivity extends AppCompatActivity {
         }
     }
 
+    private Handler handler;
+
     private void loadAlbums() {
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                SharedPreferences getPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getBaseContext());
-                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-                if (isFirstStart) {
-                    //albums.loadPreviewHiddenAlbums();
-                    Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
-                    startActivity(i);
-                    SharedPreferences.Editor e = getPrefs.edit();
-                    e.putBoolean("firstStart", false);
-                    e.apply();
-                }
-            }
-        });
-        t.start();
-
         if (hidden) {
+            //LOAD
+            /*
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                    .title("Hidden Albums")
+                    .content("Scaning for hidden media...")
+                    .progress(true, 0)
+                    .progressIndeterminateStyle(true);
+
+            final MaterialDialog dialog = builder.build();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.show();
+                }
+            });
+            */
             albums.loadPreviewHiddenAlbums();
-            //albums.LogAlbums();
+            //string.showToast(AlbumsActivity.this, "1:ALBUM LETTI");
+            //dialog.dismiss();
+
         }
         else {
             // db.updatePhotos();
@@ -473,10 +464,7 @@ public class AlbumsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-<<<<<<< HEAD
-=======
         adapt.notifyDataSetChanged();
 
->>>>>>> refs/remotes/DNLDsht/master
     }
 }
