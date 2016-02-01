@@ -256,9 +256,10 @@ public class PhotosActivity extends AppCompatActivity {
                         .input(null, photos.DisplayName, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-
-                               /* albums.renameAlbum(photos.FolderPath, input.toString());
-                                finish();// TODO make this better*/
+                               /* TODO make this better
+                                    albums.renameAlbum(photos.FolderPath, input.toString());
+                                    finish();
+                                */
                                 string.showToast(getApplicationContext(), "I have to fix this!");
                             }
                         }).show();
@@ -273,10 +274,7 @@ public class PhotosActivity extends AppCompatActivity {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 customAlbumsHandler.excludeAlbum(photos.ID);
-                                customAlbumsHandler.LogEXCLUDEALBUMS();
-                                //string.showToast(getApplicationContext(), "Not implemented yet!");
-                                //albums.excludeAlbum(photos.FolderPath);
-                                //finish();
+                                finish();
                             }
                         })
                         .show();
