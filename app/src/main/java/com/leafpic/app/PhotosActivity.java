@@ -373,13 +373,13 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         /**** Status Bar */
-        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
         Window window = getWindow();
         //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        setStatusBarTranslucent(true);
-        window.setStatusBarColor(getColor(R.color.toolbar));
+        setStatusBarTranslucent(false);//true
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
 
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -394,8 +394,7 @@ public class PhotosActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_empty)
                 .into(headerImage);
 
-
-        //OSCURA LIMMAGINE
+        //OSCURA IMMAGINE COOLAPSIONG
         headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
         updateHeaderContent();
 
@@ -413,12 +412,6 @@ public class PhotosActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
         setPalette(bitmap);
         */
-
-
-        /*******
-         * DRAWER
-         * ******/
-
     }
 
     private void updateHeaderContent() {
@@ -459,6 +452,7 @@ public class PhotosActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setStatusBarColor(getColor(R.color.status_bar));
         }
     }
 }
