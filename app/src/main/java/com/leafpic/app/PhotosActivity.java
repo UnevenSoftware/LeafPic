@@ -24,7 +24,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -89,7 +88,11 @@ public class PhotosActivity extends AppCompatActivity {
                     collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
                     collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
                     //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
+<<<<<<< HEAD
             }
+=======
+                }
+>>>>>>> refs/remotes/DNLDsht/master
         });
     }
 
@@ -308,7 +311,7 @@ public class PhotosActivity extends AppCompatActivity {
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    Log.wtf("asdasdasdas", photos.FolderPath);
+                                    //Log.wtf("asdasdasdas", photos.FolderPath);
                                     albums.hideAlbum(photos.FolderPath, photos.photos);
                                     finish();
                                 }
@@ -358,7 +361,6 @@ public class PhotosActivity extends AppCompatActivity {
         return true;
     }
 
-    //FABCLICK
     public void fabClicked(View v){
         Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
         startActivity(i);
