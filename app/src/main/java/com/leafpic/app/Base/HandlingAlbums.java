@@ -25,9 +25,14 @@ public class HandlingAlbums {
 
     public void loadPreviewAlbums() {
         MadiaStoreHandler as = new MadiaStoreHandler(context);
-        dispAlbums = as.getMediaStoreAlbums();//db.getAllAlbums();
-        for (Album dispAlbum : dispAlbums)
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        dispAlbums = as.getMediaStoreAlbums();
+
+        for (Album dispAlbum : dispAlbums) {
+            dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
             dispAlbum.photos = as.getFirstAlbumPhoto(dispAlbum);
+        }
+
     }
 
     public int selectAlbum(String a, boolean val) {
@@ -187,15 +192,17 @@ public class HandlingAlbums {
         }
     }
 
-    public void renameAlbum(String olderPath, String name) {
-        try {
-            File from = new File(olderPath);
-            File to = new File(string.getAlbumPathRenamed(olderPath, name));
-            from.renameTo(to);
-            scanFile(new String[]{from.getAbsolutePath(), to.getAbsolutePath()});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void excludeSelectedAlbums() {
+        for (Album selectedAlbum : selectedAlbums)
+            excludeAlbum(selectedAlbum);
+
+        clearSelectedAlbums();
+    }
+
+    public void excludeAlbum(Album a) {
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        h.excludeAlbum(a.ID);
+        dispAlbums.remove(a);
     }
 
     public boolean loadPreviewHiddenAlbums() {
@@ -254,22 +261,14 @@ public class HandlingAlbums {
      * This Metods doesnt work for the moment
      **************/
 
-
-
-
-    public void excludeSelectedAlbums() {
-        /*for (Album selectedAlbum : selectedAlbums)
-            excludeAlbum(selectedAlbum);
-
-        clearSelectedAlbums();*/
-    }
-
-    public void excludeAlbum(Album a) {
-        excludeAlbum(a.Path);
-        dispAlbums.remove(a);
-    }
-
-    public void excludeAlbum(String path) {
-
+    public void renameAlbum(String olderPath, String name) {
+        try {
+            File from = new File(olderPath);
+            File to = new File(string.getAlbumPathRenamed(olderPath, name));
+            from.renameTo(to);
+            scanFile(new String[]{from.getAbsolutePath(), to.getAbsolutePath()});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -26,6 +26,7 @@ public class HandlingPhotos implements Parcelable {
         }
     };
     public String FolderPath;
+    public String ID;
     public String DisplayName;
     public ArrayList<Photo> photos;
     public ArrayList<Photo> selectedPhotos;
@@ -44,8 +45,11 @@ public class HandlingPhotos implements Parcelable {
 
         selectedPhotos = new ArrayList<Photo>();
         DisplayName = album.DisplayName;
-        if (!hidden) photos = as.getAlbumPhotos(album);
-        else {
+        if (!hidden) {
+            ID = album.ID;
+            photos = as.getAlbumPhotos(album);
+        } else {
+            ID = album.Path;
             HiddenPhotosHandler db = new HiddenPhotosHandler(context);
             photos = db.getPhotosByAlbum(album.Path);
         }
@@ -75,6 +79,13 @@ public class HandlingPhotos implements Parcelable {
         hidden = in.readByte() != 0x00;
     }
 
+    public void setSelectedPhotoAsPreview() {
+        if (selectedPhotos.size() > 0) {
+            CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+            h.setAlbumPhotPreview(ID, selectedPhotos.get(0).Path);
+        }
+    }
+
     public void clearSelectedPhotos() {
         for (Photo photo : photos) {
             photo.setSelected(false);
@@ -95,6 +106,9 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public String getPreviewAlbumImg(){
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        String s = h.getPhotPrevieAlbum(ID);
+        if (s != null) return s;
         return photos.get(0).Path;
     }
 

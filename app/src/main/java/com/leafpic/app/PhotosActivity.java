@@ -22,23 +22,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
-import com.leafpic.app.Base.Album;
-import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.HandlingPhotos;
-import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Base.*;
 import com.leafpic.app.utils.string;
 
 import java.io.File;
@@ -50,7 +41,9 @@ import java.util.ArrayList;
 public class PhotosActivity extends AppCompatActivity {
 
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
+    CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
+
 
     CollapsingToolbarLayout collapsingToolbarLayout;
     ImageView headerImage;
@@ -234,15 +227,25 @@ public class PhotosActivity extends AppCompatActivity {
         option.setEnabled(!val).setVisible(!val);
     }
 
+    private void finishEditMode() {
+        editmode = false;
+        invalidateOptionsMenu();
+        photos.clearSelectedPhotos();
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case R.id.endEditAlbumMode:
-                editmode = false;
-                invalidateOptionsMenu();
-                photos.clearSelectedPhotos();
-                adapter.notifyDataSetChanged();
+                finishEditMode();
+                break;
+
+            case R.id.setAsAlbumPreview:
+                photos.setSelectedPhotoAsPreview();
+                finishEditMode();
+                updateHeaderContent();
                 break;
 
             case R.id.renameAlbum:
@@ -253,6 +256,7 @@ public class PhotosActivity extends AppCompatActivity {
                         .input(null, photos.DisplayName, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
+
                                /* albums.renameAlbum(photos.FolderPath, input.toString());
                                 finish();// TODO make this better*/
                                 string.showToast(getApplicationContext(), "I have to fix this!");
@@ -268,7 +272,9 @@ public class PhotosActivity extends AppCompatActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                string.showToast(getApplicationContext(), "Not implemented yet!");
+                                customAlbumsHandler.excludeAlbum(photos.ID);
+                                customAlbumsHandler.LogEXCLUDEALBUMS();
+                                //string.showToast(getApplicationContext(), "Not implemented yet!");
                                 //albums.excludeAlbum(photos.FolderPath);
                                 //finish();
                             }

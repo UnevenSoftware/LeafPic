@@ -32,6 +32,7 @@ public class Album implements Parcelable {
     private int imagesCount = 0;
     private boolean hidden = false;
     private boolean selected = false;
+    private String coverPath = null;
 
     public Album(String id, String name, int count) {
         ID = id;
@@ -88,8 +89,13 @@ public class Album implements Parcelable {
     }
 
     public String getPathCoverAlbum() {
+        if (coverPath != null) return coverPath;
         if (photos.size() > 0) return "file://" + photos.get(0).Path;
         else return "drawable://" + R.drawable.ic_empty;
+    }
+
+    public void setCoverPath(String path) {
+        coverPath = path;
     }
 
     public int getImagesCount() {

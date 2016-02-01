@@ -24,6 +24,10 @@ public class MadiaStoreHandler {
     public ArrayList<Album> getMediaStoreAlbums() {
         ArrayList<Album> list = new ArrayList<Album>();
 
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        ArrayList<String> excludedAlbums = h.getExcludedALbumsIDs();
+
+
         String[] projection = new String[]{
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.BUCKET_ID,
@@ -41,14 +45,14 @@ public class MadiaStoreHandler {
         if (cur.moveToFirst()) {
             int idColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
             int pathColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            do
-
+            do if (!excludedAlbums.contains(cur.getString(idColumn)))
                 list.add(new Album(cur.getString(idColumn),
                         cur.getString(pathColumn),
                         getAlbumPhotosCount(cur.getString(idColumn))));
             while (cur.moveToNext());
         }
         cur.close();
+
 
         return list;
     }
