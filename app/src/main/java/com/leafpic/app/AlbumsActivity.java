@@ -106,17 +106,20 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
 
     public void initUiTweaks(){
 
+        /**** Nav Bar ****/
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getColor(R.color.status_bar));
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
             //boolean NightTheme = SP.getBoolean("set_theme", false);
             if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
-        /**** ToolBar */
+        /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
+        /**** Status Bar */
+        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
+        getWindow().setStatusBarColor(getColor(R.color.toolbar));
 
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(FontAwesome.Icon.faw_picture_o);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(FontAwesome.Icon.faw_eye_slash);
@@ -456,11 +459,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 }
             });
             */
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    albums.loadPreviewHiddenAlbums();
-                }
-            });
+            albums.loadPreviewHiddenAlbums();
             //dialog.dismiss();
         }
         else {
