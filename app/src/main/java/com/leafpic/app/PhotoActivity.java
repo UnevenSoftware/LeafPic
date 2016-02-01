@@ -7,19 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-<<<<<<< HEAD
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-=======
-import android.view.Menu;
-import android.view.MenuItem;
->>>>>>> refs/remotes/DNLDsht/master
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
@@ -40,61 +32,41 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
         initUiTweaks();
-
         try {
-
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
-
-
             mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
-
-
             mCustomPagerAdapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     toggleSystemUI();
                 }
             });
-
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                 @Override
-                public void onPageSelected(int position) {
-                    photos.setCurrentPhotoIndex(position);
-                }
+                public void onPageSelected(int position) {photos.setCurrentPhotoIndex(position);}
 
                 @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
+                public void onPageScrollStateChanged(int state) {}
             });
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
 
         //DA FIXXARE
         hideSystemUI();
-
-
-=======
->>>>>>> refs/remotes/DNLDsht/master
     }
 
     @Override
@@ -158,7 +130,6 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
-
         /**** ToolBar ********/
         toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
@@ -169,7 +140,6 @@ public class PhotoActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
         /**** Navigation Bar */
         getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
-
         new Thread(new Runnable() {
             public void run() {
                 hideSystemUI();
@@ -184,21 +154,6 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void hideSystemUI() {
-<<<<<<< HEAD
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
-        //getSupportActionBar().hide();
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-        fullscreenmode = true;
-=======
         runOnUiThread(new Runnable() {
             public void run() {
                 getWindow().getDecorView().setSystemUiVisibility(
@@ -213,8 +168,6 @@ public class PhotoActivity extends AppCompatActivity {
                 fullscreenmode = true;
             }
         });
-
->>>>>>> refs/remotes/DNLDsht/master
     }
 
     private void showSystemUI() {
@@ -229,7 +182,6 @@ public class PhotoActivity extends AppCompatActivity {
                 fullscreenmode = false;
             }
         });
-
     }
 
     public int getStatusBarHeight() {

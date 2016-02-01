@@ -2,8 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
->
+    tools:context=".MainActivity">
     <item
             android:id="@+id/endEditAlbumMode"
             android:icon="@mipmap/ic_done_white_24dp"
@@ -16,7 +15,6 @@
         android:title="Camera"
         app:showAsAction="ifRoom"
         />
-
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/sort_action"
           android:title="Sort"
@@ -24,15 +22,12 @@
           android:icon="@mipmap/ic_sort_white_24dp"
           app:showAsAction="ifRoom"
         />
-
     <item
             android:id="@+id/deleteAction"
             android:icon="@mipmap/ic_delete_white_24dp"
             android:title="@string/delete_album_action"
             app:showAsAction="never"
         />
-
-
     <item
         android:id="@+id/excludeAlbumButton"
         android:title="@string/exclude_album_action"
@@ -43,11 +38,9 @@
         android:title="@string/hide_album_action"
         app:showAsAction="never"
         />
-
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
         android:title="@string/refresh_hidde_folders_action"
         app:showAsAction="never"
         />
-
 </menu>

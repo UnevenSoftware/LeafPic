@@ -10,11 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-<<<<<<< HEAD
-import android.os.Handler;
-=======
 import android.os.Environment;
->>>>>>> refs/remotes/DNLDsht/master
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -33,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
@@ -74,7 +69,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
-
         //APPINTRO TREAD
         Thread t = new Thread(new Runnable() {
             @Override
@@ -142,7 +136,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 )
                 .build();
 
-
         final Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -190,10 +183,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                     }
                 })
                 .build();
-
         addHiddenFolder_FABEvent();
-
-
     }
 
     public void addHiddenFolder_FABEvent() {
@@ -447,7 +437,8 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     }
 
     private void loadAlbums() {
-<<<<<<< HEAD
+        addHiddenFolder_FABEvent();
+
         if (hidden) {
             //LOAD
             /*
@@ -465,60 +456,14 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 }
             });
             */
-            albums.loadPreviewHiddenAlbums();
-            //string.showToast(AlbumsActivity.this, "1:ALBUM LETTI");
-            //dialog.dismiss();
-
-=======
-        runOnUiThread(new Runnable() {
-            public void run() {
-                albums.loadPreviewHiddenAlbums();
-            }
-        });
-
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                SharedPreferences getPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getBaseContext());
-                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-                if (isFirstStart) {
-
-                    Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
-                    startActivity(i);
-                    SharedPreferences.Editor e = getPrefs.edit();
-                    e.putBoolean("firstStart", false);
-                    e.apply();
-                }
-            }
-        });
-        t.start();
-
-        addHiddenFolder_FABEvent();
-
-        if (hidden) {
-            final MaterialDialog dialog = new MaterialDialog.Builder(AlbumsActivity.this)
-                    .title("Loading")
-                    .progress(true, 0)
-                    .progressIndeterminateStyle(true)
-                    .build();
-            dialog.show();
             runOnUiThread(new Runnable() {
                 public void run() {
-
-
                     albums.loadPreviewHiddenAlbums();
-                    //dialog.dismiss();
                 }
             });
-
-            //albums.LogAlbums();
->>>>>>> refs/remotes/DNLDsht/master
+            //dialog.dismiss();
         }
         else {
-            // db.updatePhotos();
             albums.loadPreviewAlbums();
         }
 
