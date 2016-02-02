@@ -62,7 +62,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         String SColor = SP.getString("PrefColor", "#03A9F4");
 
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
+                "color='#FFFFFF'> Photos</font>"));//FFFFFF
         holder.name.setTag(a.Path);
 
         if (a.isSelected()) {

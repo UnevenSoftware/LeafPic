@@ -144,7 +144,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
                 .withTranslucentStatusBar(false)
-
                 .addDrawerItems(
                         item1,
                         item2,
@@ -509,6 +508,5 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         adapt.notifyDataSetChanged();
-
     }
 }

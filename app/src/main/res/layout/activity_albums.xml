@@ -8,6 +8,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity"
     android:background="@color/background_material_dark">
+    <!--
+    android:background="@color/background_material_dark">
+    -->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
