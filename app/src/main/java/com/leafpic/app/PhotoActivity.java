@@ -3,6 +3,7 @@ package com.leafpic.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -140,11 +141,12 @@ public class PhotoActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
         /**** Navigation Bar */
         getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
-        new Thread(new Runnable() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
-        }).start();
+        }, 150);
     }
 
     private void toggleSystemUI() {
@@ -156,6 +158,8 @@ public class PhotoActivity extends AppCompatActivity {
     private void hideSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
+                toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+                        .start();
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -163,8 +167,7 @@ public class PhotoActivity extends AppCompatActivity {
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
-                        .start();
+
                 fullscreenmode = true;
             }
         });
