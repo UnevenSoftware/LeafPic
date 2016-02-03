@@ -2,7 +2,7 @@
 <resources>
     <!--BASE COLOR-->
     <color name="status_bar">#00796b</color>
-    <color name="selected_album">#4db6ac</color>
+    <color name="selected_album">#009688</color>
     <color name="unselected_album">#424242</color>
     <color name="navigation_bar">#009688</color>
     <color name="toolbar">#009688</color>
