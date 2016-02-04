@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
 
     public void deleteAlbum(String path) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + string.quoteReplace(path) + "'");
+        db.execSQL("DELETE FROM " + TABLE_PHOTOS + " WHERE " + PHOTO_FOLDER_PATH + "='" + StringUtils.quoteReplace(path) + "'");
         db.close();
     }
 
@@ -89,7 +89,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         for (String child : dir.list()) {
             File temp = new File(dir, child);
 
-            String mime = string.getMimeType(temp.getAbsolutePath());
+            String mime = StringUtils.getMimeType(temp.getAbsolutePath());
             if (mime != null && mime.contains("image"))
                 addPhoto(new Photo(
                         temp.getAbsolutePath(),
@@ -101,8 +101,8 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
     void addPhoto(Photo contact) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(PHOTO_FOLDER_PATH, string.quoteReplace(contact.FolderPath));
-        values.put(PHOTO_PATH, string.quoteReplace(contact.Path));
+        values.put(PHOTO_FOLDER_PATH, StringUtils.quoteReplace(contact.FolderPath));
+        values.put(PHOTO_PATH, StringUtils.quoteReplace(contact.Path));
         values.put(PHOTO_MIME, contact.MIME);
         db.insert(TABLE_PHOTOS, null, values);
         db.close();
@@ -117,8 +117,8 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
                 null);
         if (cursor.moveToFirst()) {
             do contactList.add(new Album(
-                    string.quoteReverse(cursor.getString(0)),
-                    string.getBucketNamebyBucketPath(string.quoteReverse(cursor.getString(0))),
+                    StringUtils.quoteReverse(cursor.getString(0)),
+                    StringUtils.getBucketNamebyBucketPath(StringUtils.quoteReverse(cursor.getString(0))),
                     true, getHiddenPhotosCountByAlbum(cursor.getString(0))));
             while (cursor.moveToNext());
         }
@@ -132,7 +132,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
                 PHOTO_MIME + ", " + PHOTO_DATE_TAKEN +
                 " FROM " + TABLE_PHOTOS + " WHERE " +
                 PHOTO_FOLDER_PATH + "='" +
-                string.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
+                StringUtils.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -141,7 +141,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 contactList.add(new Photo(
-                        string.quoteReverse(cursor.getString(0)),
+                        StringUtils.quoteReverse(cursor.getString(0)),
                         cursor.getString(3),
                         cursor.getString(2),
                         cursor.getString(1)));
@@ -154,7 +154,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
     public ArrayList<Photo> getFirstPhotosByAlbum(String path) {
         ArrayList<Photo> contactList = new ArrayList<Photo>();
         String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
-                PHOTO_FOLDER_PATH + "='" + string.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
+                PHOTO_FOLDER_PATH + "='" + StringUtils.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -162,7 +162,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst())
             contactList.add(new Photo(
-                    string.quoteReverse(cursor.getString(0)),
+                    StringUtils.quoteReverse(cursor.getString(0)),
                     cursor.getString(1)));
 
         cursor.close();

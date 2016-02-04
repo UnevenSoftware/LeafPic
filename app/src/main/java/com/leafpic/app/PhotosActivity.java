@@ -27,7 +27,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.*;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -285,7 +285,7 @@ public class PhotosActivity extends AppCompatActivity {
                     });
 
                     popup.show();
-                } else string.showToast(getApplicationContext(), " In progress");
+                } else StringUtils.showToast(getApplicationContext(), " In progress");
                 break;
 
             case R.id.renameAlbum:
@@ -299,8 +299,9 @@ public class PhotosActivity extends AppCompatActivity {
                                /* TODO make this better
                                     albums.renameAlbum(photos.FolderPath, input.toString());
                                     finish();
-                                */
-                                string.showToast(getApplicationContext(), "I have to fix this!");
+
+                                StringUtils.showToast(getApplicationContext(), "I have to fix this!");
+                            */
                             }
                         }).show();
                 break;
@@ -360,7 +361,7 @@ public class PhotosActivity extends AppCompatActivity {
                             .onNeutral(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    string.showToast(getApplicationContext(), "Not implemented yet!");
+                                    StringUtils.showToast(getApplicationContext(), "Not implemented yet!");
                                     //albums.excludeAlbum(photos.FolderPath);
                                     // finish();
                                 }

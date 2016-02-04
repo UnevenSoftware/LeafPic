@@ -3,8 +3,7 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.util.Log;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -248,15 +247,6 @@ public class HandlingAlbums {
         db.close();
     }
 
-    public void LogAlbums() {
-        for (Album dispAlbum : dispAlbums) {
-            Log.wtf("asdasd", dispAlbum.Path);
-            for (Photo photo : dispAlbum.photos) {
-                Log.d("asdasdasdasd", photo.Path);
-            }
-        }
-    }
-
     /*************
      * This Metods doesnt work for the moment
      **************/
@@ -264,9 +254,18 @@ public class HandlingAlbums {
     public void renameAlbum(String olderPath, String name) {
         try {
             File from = new File(olderPath);
-            File to = new File(string.getAlbumPathRenamed(olderPath, name));
+            File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
             from.renameTo(to);
-            scanFile(new String[]{from.getAbsolutePath(), to.getAbsolutePath()});
+            //from.list();
+            //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(from)));
+            //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(to)));
+
+            //Log.wtf("asdasdasdasd - from",from.getAbsolutePath());
+            //Log.wtf("asdasdasdasd - to",to.getAbsolutePath());
+            //
+            //scanFile(from.list());
+            scanFile(to.list());
+            // scanFile(new String[]{from.list(), to.getAbsolutePath()});
         } catch (Exception e) {
             e.printStackTrace();
         }

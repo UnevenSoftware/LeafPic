@@ -3,7 +3,7 @@ package com.leafpic.app.Base;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.leafpic.app.R;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -69,7 +69,7 @@ public class Album implements Parcelable {
 
     public void setPath() {
         try {
-            Path = string.getBucketPathbyImagePath(photos.get(0).Path);
+            Path = StringUtils.getBucketPathbyImagePath(photos.get(0).Path);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

@@ -18,11 +18,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.*;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +32,7 @@ import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HiddenPhotosHandler;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -213,7 +209,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     @Override
     public void onFolderSelection(@NonNull File folder) {
         HiddenPhotosHandler h = new HiddenPhotosHandler(getApplicationContext());
-        string.showToast(getApplicationContext(), folder.getAbsolutePath());
+        StringUtils.showToast(getApplicationContext(), folder.getAbsolutePath());
         h.addImagesFromFolder(folder);
 
         albums.loadPreviewHiddenAlbums();
@@ -231,7 +227,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(AlbumsActivity.this,
                     Manifest.permission.INTERNET))
-                string.showToast(AlbumsActivity.this, "eddai dammi internet");
+                StringUtils.showToast(AlbumsActivity.this, "eddai dammi internet");
             else
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.INTERNET}, 1);
@@ -241,7 +237,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(AlbumsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-                string.showToast(AlbumsActivity.this, "no storage permission");
+                StringUtils.showToast(AlbumsActivity.this, "no storage permission");
             else
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
@@ -312,7 +308,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                string.showToast(getApplicationContext(), "asdasd");
+                StringUtils.showToast(getApplicationContext(), "asdasd");
                 return true;
 
             case R.id.sort_action:
@@ -434,7 +430,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 break;
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    string.showToast(AlbumsActivity.this, "i got NET");
+                    StringUtils.showToast(AlbumsActivity.this, "i got NET");
                 break;
         }
     }
