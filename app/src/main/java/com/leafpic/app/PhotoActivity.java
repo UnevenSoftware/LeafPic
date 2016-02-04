@@ -102,10 +102,11 @@ public class PhotoActivity extends AppCompatActivity {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 int index = mViewPager.getCurrentItem();
-
-                                mViewPager.removeViewAt(index);
+                                mViewPager.removeView(mViewPager.getChildAt(index));
+                                //TODO improve delete single photo
                                 photos.deleteCurrentPhoto();
                                 mCustomPagerAdapter.notifyDataSetChanged();
+                                mViewPager.destroyDrawingCache();
                                 mViewPager.setCurrentItem(index + 1);
                             }
                         })

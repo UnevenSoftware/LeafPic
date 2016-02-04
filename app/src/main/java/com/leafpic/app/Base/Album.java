@@ -40,6 +40,9 @@ public class Album implements Parcelable {
         imagesCount = count;
     }
 
+    public Album() {
+    }
+
 
     public Album(String path, String displayName, boolean hidden, int count) {
         photos = new ArrayList<Photo>();

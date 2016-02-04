@@ -184,8 +184,6 @@ public class HandlingAlbums {
                     }
                 });
                 t.start();
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
