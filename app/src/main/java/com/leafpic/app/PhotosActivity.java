@@ -298,10 +298,11 @@ public class PhotosActivity extends AppCompatActivity {
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                /* TODO make this better
                                     albums.renameAlbum(photos.FolderPath, input.toString());
-                                    finish();
+                                //onBackPressed();
+                                    //finish();*/
 
                                 StringUtils.showToast(getApplicationContext(), "I have to fix this!");
-                            */
+
                             }
                         }).show();
                 break;

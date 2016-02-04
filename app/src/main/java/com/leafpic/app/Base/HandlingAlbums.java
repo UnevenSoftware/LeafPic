@@ -255,17 +255,14 @@ public class HandlingAlbums {
         try {
             File from = new File(olderPath);
             File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
-            from.renameTo(to);
-            //from.list();
-            //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(from)));
-            //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(to)));
+            String s[] = from.list(), dirPath = from.getAbsolutePath();
+            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
 
-            //Log.wtf("asdasdasdasd - from",from.getAbsolutePath());
-            //Log.wtf("asdasdasdasd - to",to.getAbsolutePath());
-            //
-            //scanFile(from.list());
-            scanFile(to.list());
-            // scanFile(new String[]{from.list(), to.getAbsolutePath()});
+            from.renameTo(to);
+            s = to.list();
+            dirPath = to.getAbsolutePath();
+            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
+
         } catch (Exception e) {
             e.printStackTrace();
         }
