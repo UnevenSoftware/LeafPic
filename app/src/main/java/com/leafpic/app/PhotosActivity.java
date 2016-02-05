@@ -15,10 +15,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.*;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
@@ -30,7 +27,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.*;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -247,6 +244,49 @@ public class PhotosActivity extends AppCompatActivity {
                 finishEditMode();
                 updateHeaderContent();
                 break;
+            case R.id.sortPhotos:
+                if (!photos.hidden) {
+                    final PopupMenu popup = new PopupMenu(PhotosActivity.this, findViewById(R.id.sortPhotos));
+                    popup.setGravity(Gravity.AXIS_PULL_BEFORE);
+                    popup.getMenuInflater().inflate(R.menu.sort, popup.getMenu());
+                    popup.getMenu().findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
+
+                    if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+                        popup.getMenu().findItem(R.id.date_taken_sort_action).setChecked(true);
+                    else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+                        popup.getMenu().findItem(R.id.name_sort_action).setChecked(true);
+                    else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+                        popup.getMenu().findItem(R.id.size_sort_action).setChecked(true);
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            switch (item.getItemId()) {
+                                case R.id.name_sort_action:
+                                    photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
+                                    break;
+                                case R.id.size_sort_action:
+                                    photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
+                                    break;
+                                case R.id.date_taken_sort_action:
+                                    photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                                    break;
+                                case R.id.ascending_sort_action:
+                                    photos.setDefaultSortingAscending(!photos.settings.ascending);
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            photos.sort();
+                            LoadPhotos();
+                            return true;
+                        }
+                    });
+
+                    popup.show();
+                } else StringUtils.showToast(getApplicationContext(), " In progress");
+                break;
 
             case R.id.renameAlbum:
                 new MaterialDialog.Builder(this)
@@ -258,9 +298,11 @@ public class PhotosActivity extends AppCompatActivity {
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                /* TODO make this better
                                     albums.renameAlbum(photos.FolderPath, input.toString());
-                                    finish();
-                                */
-                                string.showToast(getApplicationContext(), "I have to fix this!");
+                                //onBackPressed();
+                                    //finish();*/
+
+                                StringUtils.showToast(getApplicationContext(), "I have to fix this!");
+
                             }
                         }).show();
                 break;
@@ -320,7 +362,7 @@ public class PhotosActivity extends AppCompatActivity {
                             .onNeutral(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    string.showToast(getApplicationContext(), "Not implemented yet!");
+                                    StringUtils.showToast(getApplicationContext(), "Not implemented yet!");
                                     //albums.excludeAlbum(photos.FolderPath);
                                     // finish();
                                 }

@@ -3,6 +3,8 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,11 +33,11 @@ public class HandlingPhotos implements Parcelable {
     public ArrayList<Photo> photos;
     public ArrayList<Photo> selectedPhotos;
     public boolean hidden;
+    public AlbumSettings settings;
     Context context;
     MadiaStoreHandler as;
     private int current;
     private int last_position_selecte = -1;
-
 
     public HandlingPhotos(Context ctx, Album album) {
         context = ctx;
@@ -45,20 +47,19 @@ public class HandlingPhotos implements Parcelable {
 
         selectedPhotos = new ArrayList<Photo>();
         DisplayName = album.DisplayName;
+
         if (!hidden) {
             ID = album.ID;
-            photos = as.getAlbumPhotos(album);
+            setSettings();
+            photos = as.getAlbumPhotos(album, getSortingMode());
         } else {
             ID = album.Path;
+            setSettings();
             HiddenPhotosHandler db = new HiddenPhotosHandler(context);
             photos = db.getPhotosByAlbum(album.Path);
         }
 
     }
-
-    /***
-     * parcellable
-     **/
 
     protected HandlingPhotos(Parcel in) {
         FolderPath = in.readString();
@@ -79,11 +80,56 @@ public class HandlingPhotos implements Parcelable {
         hidden = in.readByte() != 0x00;
     }
 
+    public void sort() {
+
+        if (!hidden) {
+            Album a = new Album();
+            a.ID = ID;
+            photos = as.getAlbumPhotos(a, getSortingMode());
+        } else {
+            HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+            photos = db.getPhotosByAlbum(ID);
+        }
+    }
+
+    public void setDefaultSortingMode(String column) {
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        h.setAlbumSortingMode(ID, column);
+        settings.columnSortingMode = column;
+    }
+
+    public void setDefaultSortingAscending(Boolean ascending) {
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        h.setAlbumSortingAscending(ID, ascending);
+        settings.ascending = ascending;
+    }
+
+    public String getSortingMode() {
+        if (settings.columnSortingMode != null) return settings.getSQLSortingMode();
+        else return MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
+    }
+
+    public String getPreviewAlbumImg() {
+        Log.wtf("asdfsfd", settings.coverPath);
+        if (settings.coverPath != null) return settings.coverPath;
+        return photos.get(0).Path;
+    }
+
     public void setSelectedPhotoAsPreview() {
         if (selectedPhotos.size() > 0) {
             CustomAlbumsHandler h = new CustomAlbumsHandler(context);
             h.setAlbumPhotPreview(ID, selectedPhotos.get(0).Path);
+            settings.coverPath = selectedPhotos.get(0).Path;
         }
+    }
+
+    public void setSettings() {
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        settings = h.getSettings(ID);
+    }
+
+    public void setContext(Context ctx) {
+        context = ctx;
     }
 
     public void clearSelectedPhotos() {
@@ -103,17 +149,6 @@ public class HandlingPhotos implements Parcelable {
 
     public void setCurrentPhoto(String path) {
         setCurrentPhotoIndex(getPhotoIndex(path));
-    }
-
-    public String getPreviewAlbumImg(){
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        String s = h.getPhotPrevieAlbum(ID);
-        if (s != null) return s;
-        return photos.get(0).Path;
-    }
-
-    public void setContext(Context ctx) {
-        context = ctx;
     }
 
     int getPhotoIndex(String path) {
@@ -195,4 +230,5 @@ public class HandlingPhotos implements Parcelable {
         // dest.writeValue(context);
         dest.writeByte((byte) (hidden ? 0x01 : 0x00));
     }
+
 }

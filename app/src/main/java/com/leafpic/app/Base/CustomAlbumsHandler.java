@@ -6,13 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.util.ArrayList;
 
 /**
  * Created by dnld on 2/1/16.
  */
+
+
 public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
@@ -23,6 +25,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     private static final String ALBUM_EXCLUDED = "excluded";
     private static final String ALBUM_COVER = "cover_path";
     private static final String ALBUM_DEAFAULT_SORTMODE = "sort_mode";
+    private static final String ALBUM_DEAFAULT_SORT_ASCENDING = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "column_count";
 
     Context context;
@@ -39,7 +42,20 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
                 ALBUM_EXCLUDED + " BOOLEAN," +
                 ALBUM_COVER + " TEXT, " +
                 ALBUM_DEAFAULT_SORTMODE + " TEXT, " +
+                ALBUM_DEAFAULT_SORT_ASCENDING + " BOOLEAN, " +
                 ALBUM_COLUMN_COUNT + " TEXT)");
+    }
+
+    public AlbumSettings getSettings(String id) {
+        checkAndCreateAlbum(id);
+        AlbumSettings s = new AlbumSettings();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + ALBUM_COVER + ", " + ALBUM_DEAFAULT_SORTMODE + ", " + ALBUM_DEAFAULT_SORT_ASCENDING + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'", null);
+        if (cursor.moveToFirst())
+            s = new AlbumSettings(cursor.getString(0), cursor.getString(1), Boolean.valueOf(cursor.getString(2)));
+        cursor.close();
+        db.close();
+        return s;
     }
 
     @Override
@@ -50,10 +66,10 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
     public void checkAndCreateAlbum(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + ALBUM_ID + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_ID + "='" + string.quoteReplace(id) + "'", null);
+        Cursor cursor = db.rawQuery("SELECT " + ALBUM_ID + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'", null);
         if (cursor.getCount() == 0) {
             ContentValues values = new ContentValues();
-            values.put(ALBUM_ID, string.quoteReplace(id));
+            values.put(ALBUM_ID, StringUtils.quoteReplace(id));
             db.insert(TABLE_ALBUMS, null, values);
         }
         cursor.close();
@@ -63,14 +79,14 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     public void excludeAlbum(String id) {
         checkAndCreateAlbum(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "='true' WHERE " + ALBUM_ID + "='" + string.quoteReplace(id) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "='true' WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
         db.close();
     }
 
     public String getPhotPrevieAlbum(String id) {
         String s = null;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + ALBUM_COVER + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_ID + "='" + string.quoteReplace(id)
+        Cursor cursor = db.rawQuery("SELECT " + ALBUM_COVER + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id)
                 + "'", null);
         if (cursor.moveToFirst())
             s = cursor.getString(0);
@@ -83,7 +99,23 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     public void setAlbumPhotPreview(String id, String path) {
         checkAndCreateAlbum(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_COVER + "='" + path + "' WHERE " + ALBUM_ID + "='" + string.quoteReplace(id) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_COVER + "='" + path + "' WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
+        db.close();
+    }
+
+    public void setAlbumSortingMode(String id, String column) {
+        checkAndCreateAlbum(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_DEAFAULT_SORTMODE + "='" + column +
+                "' WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
+        db.close();
+    }
+
+    public void setAlbumSortingAscending(String id, Boolean asc) {
+        checkAndCreateAlbum(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_DEAFAULT_SORT_ASCENDING + "='" + String.valueOf(asc) +
+                "' WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
         db.close();
     }
 

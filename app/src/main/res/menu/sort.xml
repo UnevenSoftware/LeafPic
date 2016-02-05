@@ -1,17 +1,33 @@
 <menu
         xmlns:android="http://schemas.android.com/apk/res/android"
->
-    <!-- "Mark Favorite", should appear as action button if possible -->
-    <item
-            android:id="@+id/name_sort_action"
-            android:title="Name"
-    />
-    <item
-            android:id="@+id/date_sort_action"
-            android:title="Date"
-    />
-    <item
-            android:id="@+id/size_sort_action"
-            android:title="Size"
-    />
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:enabled="true" android:checkableBehavior="single">
+        <item
+                android:id="@+id/name_sort_action"
+                android:checked="false"
+                android:title="by Name"
+                app:showAsAction="ifRoom"
+        />
+
+        <item
+                android:id="@+id/date_taken_sort_action"
+                android:title="by Date Taken"
+                app:showAsAction="ifRoom"
+        />
+        <item
+                android:id="@+id/size_sort_action"
+                android:title="by Size"
+                android:checked="false"
+                app:showAsAction="ifRoom"
+        />
+    </group>
+    <group android:checkableBehavior="all">
+        <item
+                android:id="@+id/ascending_sort_action"
+                android:title="Ascending"
+                android:checked="false"
+                app:showAsAction="ifRoom"
+        />
+    </group>
 </menu>

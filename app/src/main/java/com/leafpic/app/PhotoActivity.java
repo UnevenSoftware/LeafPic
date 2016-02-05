@@ -18,7 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 /**
  * Created by dnld on 12/12/15.
@@ -88,7 +88,7 @@ public class PhotoActivity extends AppCompatActivity {
             case R.id.shareButton:
                 String file_path = photos.photos.get(mViewPager.getCurrentItem()).Path;
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(string.getMimeType(file_path));
+                share.setType(StringUtils.getMimeType(file_path));
                 share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
                 startActivity(Intent.createChooser(share, "Share Image"));
                 return true;
@@ -102,10 +102,11 @@ public class PhotoActivity extends AppCompatActivity {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 int index = mViewPager.getCurrentItem();
-
-                                mViewPager.removeViewAt(index);
+                                mViewPager.removeView(mViewPager.getChildAt(index));
+                                //TODO improve delete single photo
                                 photos.deleteCurrentPhoto();
                                 mCustomPagerAdapter.notifyDataSetChanged();
+                                mViewPager.destroyDrawingCache();
                                 mViewPager.setCurrentItem(index + 1);
                             }
                         })
@@ -119,7 +120,7 @@ public class PhotoActivity extends AppCompatActivity {
                 String file_path_use_as = photos.photos.get(mViewPager.getCurrentItem()).Path;
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
                 intent.setDataAndType(Uri.parse("file://" + file_path_use_as), "image/*");
-                intent.putExtra("jpg", string.getMimeType(file_path_use_as));
+                intent.putExtra("jpg", StringUtils.getMimeType(file_path_use_as));
                 startActivity(Intent.createChooser(intent, "Use As"));
                 return true;
 

@@ -3,8 +3,7 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.util.Log;
-import com.leafpic.app.utils.string;
+import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -184,8 +183,6 @@ public class HandlingAlbums {
                     }
                 });
                 t.start();
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -250,15 +247,6 @@ public class HandlingAlbums {
         db.close();
     }
 
-    public void LogAlbums() {
-        for (Album dispAlbum : dispAlbums) {
-            Log.wtf("asdasd", dispAlbum.Path);
-            for (Photo photo : dispAlbum.photos) {
-                Log.d("asdasdasdasd", photo.Path);
-            }
-        }
-    }
-
     /*************
      * This Metods doesnt work for the moment
      **************/
@@ -266,9 +254,15 @@ public class HandlingAlbums {
     public void renameAlbum(String olderPath, String name) {
         try {
             File from = new File(olderPath);
-            File to = new File(string.getAlbumPathRenamed(olderPath, name));
+            File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
+            String s[] = from.list(), dirPath = from.getAbsolutePath();
+            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
+
             from.renameTo(to);
-            scanFile(new String[]{from.getAbsolutePath(), to.getAbsolutePath()});
+            s = to.list();
+            dirPath = to.getAbsolutePath();
+            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
+
         } catch (Exception e) {
             e.printStackTrace();
         }
