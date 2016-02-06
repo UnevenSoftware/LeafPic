@@ -18,20 +18,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/toolbar">
+        <RelativeLayout
+            android:id="@+id/img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/picture"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:scaleType="centerCrop"
+                    android:id="@+id/selectedPicIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
 
-                />
-
+                    android:elevation="10dp"
+                    android:src="@mipmap/ic_done_white_48dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    />
+                <ImageView
+                    android:id="@+id/picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:scaleType="centerCrop"
+                    />
+            </RelativeLayout>
             <!--VIEW divider DIVIDE IMMAGINE DALL TESTO SOTTO-->
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_below="@id/picture"
+                android:layout_below="@id/img"
                 android:background="@android:color/darker_gray"
                 />
 

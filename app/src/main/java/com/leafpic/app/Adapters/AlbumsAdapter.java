@@ -1,6 +1,7 @@
 package com.leafpic.app.Adapters;
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -67,8 +68,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
+            holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+
+            holder.selectHolder.setVisibility(View.VISIBLE);
+
         } else {
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
+            //holder.picture.setColorFilter(0x00000000, PorterDuff.Mode.SRC_ATOP);
+            holder.picture.clearColorFilter();
+            holder.selectHolder.setVisibility(View.INVISIBLE);
+
         }
 
     }
@@ -90,12 +99,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout card_layout;
         ImageView picture;
+        ImageView selectHolder;
         TextView name;
         TextView nPhotos;
 
         public ViewHolder(View itemView) {
             super(itemView);
             picture = (ImageView) itemView.findViewById(R.id.picture);
+            selectHolder = (ImageView) itemView.findViewById(R.id.selectedPicIcon);
             card_layout = (RelativeLayout) itemView.findViewById(R.id.layout_card_id);
             name = (TextView) itemView.findViewById(R.id.picturetext);
             nPhotos = (TextView) itemView.findViewById(R.id.image_number_text);
