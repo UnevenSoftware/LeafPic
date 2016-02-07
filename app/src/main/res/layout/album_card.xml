@@ -17,22 +17,36 @@
             android:id="@+id/layout_card_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/unselected_album">
-
+            android:background="@color/toolbar">
+        <RelativeLayout
+            android:id="@+id/img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/picture"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:scaleType="centerCrop"
+                    android:id="@+id/selectedPicIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
 
-                />
-
+                    android:elevation="10dp"
+                    android:src="@mipmap/ic_done_white_48dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    />
+                <ImageView
+                    android:id="@+id/picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:scaleType="centerCrop"
+                    />
+            </RelativeLayout>
             <!--VIEW divider DIVIDE IMMAGINE DALL TESTO SOTTO-->
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_below="@id/picture"
+                android:layout_below="@id/img"
                 android:background="@android:color/darker_gray"
                 />
 
@@ -57,7 +71,6 @@
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     />
-
                 <TextView
                     android:id="@+id/image_number_text"
                     android:layout_width="match_parent"
@@ -68,7 +81,6 @@
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     />
-
             </LinearLayout>
             <!-- <ImageView android:id="@+id/image_menu"
                  android:layout_width="wrap_content"
@@ -79,7 +91,6 @@
                  android:layout_alignParentRight="true"
                  android:layout_marginRight="5dp"
                  />-->
-
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>
