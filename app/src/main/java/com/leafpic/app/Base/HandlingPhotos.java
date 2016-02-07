@@ -1,9 +1,13 @@
 package com.leafpic.app.Base;
 
 import android.content.Context;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+
+import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -229,6 +233,33 @@ public class HandlingPhotos implements Parcelable {
         dest.writeInt(current);
         // dest.writeValue(context);
         dest.writeByte((byte) (hidden ? 0x01 : 0x00));
+    }
+
+    public void renamePhoto(String olderPath, String name){
+        try {
+            File from = new File(olderPath);
+            File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
+            String s[] = from.list(), dirPath = from.getAbsolutePath();
+            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
+
+            from.renameTo(to);
+            s = to.list();
+            dirPath = to.getAbsolutePath();
+            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void scanFile(String[] path) {
+        MediaScannerConnection.scanFile(context, path, null, new MediaScannerConnection.OnScanCompletedListener() {
+
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                System.out.println("SCAN COMPLETED: " + path);
+            }
+        });
     }
 
 }
