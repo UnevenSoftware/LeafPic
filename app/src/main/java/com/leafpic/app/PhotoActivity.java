@@ -1,13 +1,16 @@
 package com.leafpic.app;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
+import com.leafpic.app.Base.Photo;
 import com.leafpic.app.utils.StringUtils;
 
 /**
@@ -50,6 +54,28 @@ public class PhotoActivity extends AppCompatActivity {
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
+
+            Photo f = photos.getCurrentPhoto();
+
+            String[] projection = new String[]{
+                    MediaStore.Images.Media.DATE_TAKEN,
+                    MediaStore.Images.Media.DATA,
+                    MediaStore.Images.Media.MIME_TYPE
+            };
+
+            Log.wtf("asdasdasd", f.Path);
+            Cursor cursor = getContentResolver().query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    MediaStore.Images.Media.DATA + " = ?",
+                    new String[]{f.Path}, "");
+
+            if (cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE);
+                StringUtils.showToast(getApplicationContext(), cursor.getString(columnIndex));
+            }
+            cursor.close();
+
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class HandlingPhotos implements Parcelable {
             return new HandlingPhotos[size];
         }
     };
+
     public String FolderPath;
     public String ID;
     public String DisplayName;
@@ -110,7 +110,7 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public String getPreviewAlbumImg() {
-        Log.wtf("asdfsfd", settings.coverPath);
+        //Log.wtf("asdfsfd", settings.coverPath);
         if (settings.coverPath != null) return settings.coverPath;
         return photos.get(0).Path;
     }

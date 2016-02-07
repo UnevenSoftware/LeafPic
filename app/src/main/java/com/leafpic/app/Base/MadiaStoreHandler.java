@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -67,7 +68,7 @@ public class MadiaStoreHandler {
                 MediaStore.Images.Media.MIME_TYPE
         };
 
-        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri images = MediaStore.Images.Media.INTERNAL_CONTENT_URI;
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,
@@ -120,6 +121,7 @@ public class MadiaStoreHandler {
             int mimeColumn = cur.getColumnIndex(
                     MediaStore.Images.Media.MIME_TYPE);
             do {
+                Log.wtf("asdasdasd", cur.getString(pathColumn) + "");
                 list.add(new Photo(
                         cur.getString(pathColumn),
                         cur.getString(dateColumn),

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 1/7/16.
  */
+
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
     ArrayList<Photo> photos;
