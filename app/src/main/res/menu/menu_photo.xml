@@ -8,29 +8,60 @@
 
     <!-- Albums Stuff -->
     <item
-            android:id="@+id/shareButton"
-            android:icon="@mipmap/ic_share_white_24dp"
-            android:title="Share"
-            app:showAsAction="always"
+        android:id="@+id/shareButton"
+        android:icon="@mipmap/ic_share_white_24dp"
+        android:title="Share"
+        app:showAsAction="always"
     />
     <item
-            android:id="@+id/deletePhoto"
-            android:icon="@mipmap/ic_delete_white_24dp"
-            android:title="@string/delete_album_action"
-            app:showAsAction="always"
+        android:id="@+id/deletePhoto"
+        android:icon="@mipmap/ic_delete_white_24dp"
+        android:title="@string/delete_album_action"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/rotatePhoto"
+        android:icon="@mipmap/ic_rotate_right_white_24dp"
+        android:title="Rotate"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/rotateDX"
+                android:title="Rotate DX" />
+            <item
+                android:id="@+id/rotateSX"
+                android:title="Rotate SX" />
+            <item
+                android:id="@+id/rotate180"
+                android:title="Rotate 180" />
+        </menu>
+        </item>
+    <item
+        android:id="@+id/useAsIntent"
+        android:title="Use as"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/Modify"
+        android:title="Modify"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/renamePhoto"
+        android:title="Rename"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/details"
+        android:title="Details"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/setting"
+        android:title="Setting"
+        app:showAsAction="never"
         />
 
-    <item
-            android:id="@+id/useAsIntent"
-            android:title="Use as"
-            app:showAsAction="never"
-        />
 
-    <item
-            android:id="@+id/rotatePhoto"
-            android:icon="@mipmap/ic_rotate_right_white_24dp"
-            android:title="Rotate 90"
-            app:showAsAction="ifRoom"
-        />
     <!-- End Albums Stuff -->
 </menu>

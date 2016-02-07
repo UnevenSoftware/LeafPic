@@ -13,12 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.utils.StringUtils;
+
+import java.util.Calendar;
 
 /**
  * Created by dnld on 12/12/15.
@@ -37,6 +40,8 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo);
         initUiTweaks();
         try {
+
+
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
@@ -113,9 +118,6 @@ public class PhotoActivity extends AppCompatActivity {
                         .show();
                 return true;
 
-            case R.id.rotatePhoto:
-                return true;
-
             case R.id.useAsIntent:
                 String file_path_use_as = photos.photos.get(mViewPager.getCurrentItem()).Path;
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
@@ -124,11 +126,74 @@ public class PhotoActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(intent, "Use As"));
                 return true;
 
+            case R.id.rotateSX:
+                return true;
+
+            case R.id.rotateDX:
+                return true;
+
+            case R.id.rotate180:
+                return true;
+
+            case R.id.renamePhoto:
+                /*
+                new MaterialDialog.Builder(this)
+                        .title("Rename Photo")
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(null, StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                    albums.renameAlbum(photos.FolderPath, input.toString());
+                                //onBackPressed();
+                                    //finish();
+
+                                StringUtils.showToast(getApplicationContext(), "I have to fix this!");
+                            }
+                        }).show();
+                */
+                break;
+            case R.id.Modify:
+                break;
+            case R.id.details:
+                /****DATA****/
+                Calendar cl = Calendar.getInstance();
+                cl.setTimeInMillis(Long.parseLong(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().DateTaken)));  //here your time in miliseconds
+                String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "/" + cl.get(Calendar.MONTH) + "/" + cl.get(Calendar.YEAR);
+                String time = "" + cl.get(Calendar.HOUR_OF_DAY) + ":" + cl.get(Calendar.MINUTE) + ":" + cl.get(Calendar.SECOND);
+
+                /**GET COLOR**/
+                /*
+                SharedPreferences SP;
+                SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String SColor = SP.getString("PrefColor", "#03A9F4");
+                int color = Color.parseColor(SColor);
+                //Html.fromHtml("<b><font color='" + SColor + "'>" + "Dimensionedddd: " + "</font></b>" + "Ddddda Implementare");
+                */
+                /**DIALOG**/
+                new MaterialDialog.Builder(this)
+                        .title("Photo Details")
+                    //.titleColor(color)
+                        .content("Album: " + StringUtils.getPhotoNamebyPath(photos.FolderPath)
+                                + "\nName: " + StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path)
+                                + "\nDimensione: " + "DA Implementare"
+                                + "\nRisoluzione: " + "DA Implementare"
+                                + "\nFormato: " + photos.getCurrentPhoto().MIME
+                                + "\nData: " + date + " " + time)
+                        .positiveText("OK")
+                        .show();
+                break;
+
+            case R.id.setting:
+                Intent intent2= new Intent(PhotoActivity.this, SettingsActivity.class);
+                startActivity(intent2);
+                break;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
+                //return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public void initUiTweaks() {
