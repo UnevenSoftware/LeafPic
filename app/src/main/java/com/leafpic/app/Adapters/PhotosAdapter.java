@@ -40,8 +40,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(PhotosAdapter.ViewHolder holder, int position) {
-        Photo f = photos.get(position);
 
+        Photo f = photos.get(position);
 
         if (f.MIME.equals("image/gif")) {
             Ion.with(holder.imageView.getContext())
@@ -50,26 +50,26 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
+
+
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
                     .into(holder.imageView);
+
         }
 
         holder.path.setTag(f.Path);
 
         if (f.isSelected()) {
             holder.selectHolder.setVisibility(View.VISIBLE);
-            holder.imageView.setPadding(15, 15, 15, 15);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
         } else {
             holder.selectHolder.setVisibility(View.INVISIBLE);
-            holder.imageView.setPadding(0, 0, 0, 0);
             holder.imageView.clearColorFilter();
         }
-
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -89,6 +89,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView, selectHolder, gifIcon;
         TextView path;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

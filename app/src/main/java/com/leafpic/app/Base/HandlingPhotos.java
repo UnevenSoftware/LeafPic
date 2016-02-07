@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
@@ -239,13 +238,9 @@ public class HandlingPhotos implements Parcelable {
         try {
             File from = new File(olderPath);
             File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
-            String s[] = from.list(), dirPath = from.getAbsolutePath();
-            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
-
+            scanFile(new String[]{from.getAbsolutePath()});
             from.renameTo(to);
-            s = to.list();
-            dirPath = to.getAbsolutePath();
-            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
+            scanFile(new String[]{to.getAbsolutePath()});
 
         } catch (Exception e) {
             e.printStackTrace();

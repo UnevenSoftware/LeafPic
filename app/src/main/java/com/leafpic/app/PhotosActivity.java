@@ -1,10 +1,8 @@
 package com.leafpic.app;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -84,21 +82,6 @@ public class PhotosActivity extends AppCompatActivity {
     });
     */
 
-    private long getVideoIdFromFilePath(String filePath,
-                                        ContentResolver contentResolver) {
-        long videoId;
-        Uri videosUri = MediaStore.Video.Media.getContentUri("internal");
-
-        String[] projection = {MediaStore.Images.ImageColumns._ID};
-
-        // TODO This will break if we have no matching item in the MediaStore.
-        Cursor cursor = contentResolver.query(videosUri, projection, MediaStore.Images.ImageColumns.DATA + " LIKE ?", new String[]{filePath}, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(projection[0]);
-        videoId = cursor.getLong(columnIndex);
-        cursor.close();
-        return videoId;
-    }
 
     public void LoadPhotos() {
 

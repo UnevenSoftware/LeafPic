@@ -26,14 +26,18 @@
         app:showAsAction="ifRoom">
         <menu>
             <item
-                android:id="@+id/rotateDX"
-                android:title="Rotate DX" />
+                    android:id="@+id/rotateDX"
+                    android:title="Rotate right 90°"
+                    android:icon="@mipmap/ic_rotate_right_white_24dp"/>
+
             <item
-                android:id="@+id/rotateSX"
-                android:title="Rotate SX" />
+                    android:id="@+id/rotateSX"
+                    android:title="Rotate left 90°"
+                    android:icon="@mipmap/ic_rotate_left_white_24dp"/>
             <item
-                android:id="@+id/rotate180"
-                android:title="Rotate 180" />
+                    android:id="@+id/rotate180"
+                    android:title="Rotate 180°"
+                    android:icon="@mipmap/ic_replay_white_24dp"/>
         </menu>
         </item>
     <item
@@ -57,9 +61,9 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/setting"
-        android:title="Setting"
-        app:showAsAction="never"
+            android:id="@+id/setting"
+            android:title="Settings"
+            app:showAsAction="never"
         />
 
 
