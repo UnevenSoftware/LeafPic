@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
@@ -189,9 +190,7 @@ public class PhotoActivity extends AppCompatActivity {
 
                 SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");// //new DateFormat();
                 date = s.format(new Time(Long.valueOf(photos.getCurrentPhoto().DateTaken)));
-
                 Photo f = photos.getCurrentPhoto();
-
                 String[] projection = new String[]{
                         MediaStore.Images.Media.SIZE,
                         MediaStore.Images.Media.HEIGHT,
@@ -210,10 +209,8 @@ public class PhotoActivity extends AppCompatActivity {
                     resolution += "x" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.HEIGHT));
                 }
                 cursor.close();
-
                 /**GET COLOR**/
                 /*
-
                 SharedPreferences SP;
                 SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String SColor = SP.getString("PrefColor", "#03A9F4");
@@ -226,10 +223,10 @@ public class PhotoActivity extends AppCompatActivity {
                     //.titleColor(color)
                         .content("Album: " + StringUtils.getPhotoNamebyPath(photos.FolderPath)
                                 + "\nName: " + StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path)
-                                + "\nDimensione: " + size
-                                + "\nRisoluzione: " + resolution
+                                + "\nImageSize: " + size
+                                + "\nResolution: " + resolution
                                 + "\nFormato: " + photos.getCurrentPhoto().MIME
-                                + "\nData: " + date)
+                                + "\nDate: " + date)
                         .positiveText("OK")
                         .show();
                 break;

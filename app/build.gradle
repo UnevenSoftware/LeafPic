@@ -68,4 +68,5 @@ dependencies {
      }
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
     compile 'com.github.paolorotolo:appintro:+'
+    compile 'com.github.LarsWerkman:Lobsterpicker:+'
 }
