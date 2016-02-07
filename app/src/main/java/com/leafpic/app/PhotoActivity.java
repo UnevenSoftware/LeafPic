@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
@@ -25,6 +24,8 @@ import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.utils.StringUtils;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -184,11 +185,35 @@ public class PhotoActivity extends AppCompatActivity {
                 /****DATA****/
                 Calendar cl = Calendar.getInstance();
                 cl.setTimeInMillis(Long.parseLong(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().DateTaken)));  //here your time in miliseconds
-                String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "/" + cl.get(Calendar.MONTH) + "/" + cl.get(Calendar.YEAR);
-                String time = "" + cl.get(Calendar.HOUR_OF_DAY) + ":" + cl.get(Calendar.MINUTE) + ":" + cl.get(Calendar.SECOND);
+                String date = "", size = "", resolution = "";
+
+                SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");// //new DateFormat();
+                date = s.format(new Time(Long.valueOf(photos.getCurrentPhoto().DateTaken)));
+
+                Photo f = photos.getCurrentPhoto();
+
+                String[] projection = new String[]{
+                        MediaStore.Images.Media.SIZE,
+                        MediaStore.Images.Media.HEIGHT,
+                        MediaStore.Images.Media.WIDTH
+                };
+
+                Cursor cursor = getContentResolver().query(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        projection,
+                        MediaStore.Images.Media.DATA + " = ?",
+                        new String[]{f.Path}, "");
+
+                if (cursor.moveToFirst()) {
+                    size = StringUtils.humanReadableByteCount(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)), true);
+                    resolution = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.WIDTH));
+                    resolution += "x" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.HEIGHT));
+                }
+                cursor.close();
 
                 /**GET COLOR**/
                 /*
+
                 SharedPreferences SP;
                 SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String SColor = SP.getString("PrefColor", "#03A9F4");
@@ -201,10 +226,10 @@ public class PhotoActivity extends AppCompatActivity {
                     //.titleColor(color)
                         .content("Album: " + StringUtils.getPhotoNamebyPath(photos.FolderPath)
                                 + "\nName: " + StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path)
-                                + "\nDimensione: " + "DA Implementare"
-                                + "\nRisoluzione: " + "DA Implementare"
+                                + "\nDimensione: " + size
+                                + "\nRisoluzione: " + resolution
                                 + "\nFormato: " + photos.getCurrentPhoto().MIME
-                                + "\nData: " + date + " " + time)
+                                + "\nData: " + date)
                         .positiveText("OK")
                         .show();
                 break;
