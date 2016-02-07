@@ -4,8 +4,9 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
+        android:layout_height="match_parent"
+        android:layout_columnSpan="2"
+        android:id="@+id/card_photo"
 >
     <ImageView
             android:id="@+id/selectedPicIcon"
@@ -37,8 +38,8 @@
     <ImageView
             android:id="@+id/pic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:minHeight="120dp"
-            android:scaleType="center"
+            android:scaleType="fitXY"
     />
 </FrameLayout>

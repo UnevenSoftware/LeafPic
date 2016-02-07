@@ -113,9 +113,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/gridPhotos"
-                android:numColumns="3"
-                android:verticalSpacing="0dp"
-                android:horizontalSpacing="0dp"
                 android:clipToPadding="false"
                 android:background="@color/md_dark_background"
             />

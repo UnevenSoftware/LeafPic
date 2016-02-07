@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -164,25 +165,22 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
 
             case R.id.renamePhoto:
-                /*
                 new MaterialDialog.Builder(this)
                         .title("Rename Photo")
                         .inputType(InputType.TYPE_CLASS_TEXT)
                         .input(null, StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                    albums.renameAlbum(photos.FolderPath, input.toString());
-                                //onBackPressed();
-                                    //finish();
-
-                                StringUtils.showToast(getApplicationContext(), "I have to fix this!");
+                                photos.renamePhoto(photos.getCurrentPhoto().Path, String.valueOf(input));
+                                // StringUtils.showToast(getApplicationContext(), "I have to fix this!");
                             }
                         }).show();
-                */
+
                 break;
             case R.id.Modify:
                 break;
             case R.id.details:
+
                 /****DATA****/
                 Calendar cl = Calendar.getInstance();
                 cl.setTimeInMillis(Long.parseLong(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().DateTaken)));  //here your time in miliseconds
