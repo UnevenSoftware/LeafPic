@@ -223,7 +223,7 @@ public class PhotoActivity extends AppCompatActivity {
                                 + "\nName: " + StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path)
                                 + "\nImageSize: " + size
                                 + "\nResolution: " + resolution
-                                + "\nFormato: " + photos.getCurrentPhoto().MIME
+                                + "\nFormat: " + photos.getCurrentPhoto().MIME
                                 + "\nDate: " + date)
                         .positiveText("OK")
                         .show();
