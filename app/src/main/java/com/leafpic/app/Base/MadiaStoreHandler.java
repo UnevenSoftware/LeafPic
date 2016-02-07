@@ -67,7 +67,7 @@ public class MadiaStoreHandler {
                 MediaStore.Images.Media.MIME_TYPE
         };
 
-        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri images = MediaStore.Images.Media.INTERNAL_CONTENT_URI;
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,

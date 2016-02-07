@@ -1,8 +1,10 @@
 package com.leafpic.app;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -13,7 +15,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 import android.text.Html;
@@ -82,6 +83,22 @@ public class PhotosActivity extends AppCompatActivity {
         }
     });
     */
+
+    private long getVideoIdFromFilePath(String filePath,
+                                        ContentResolver contentResolver) {
+        long videoId;
+        Uri videosUri = MediaStore.Video.Media.getContentUri("internal");
+
+        String[] projection = {MediaStore.Images.ImageColumns._ID};
+
+        // TODO This will break if we have no matching item in the MediaStore.
+        Cursor cursor = contentResolver.query(videosUri, projection, MediaStore.Images.ImageColumns.DATA + " LIKE ?", new String[]{filePath}, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(projection[0]);
+        videoId = cursor.getLong(columnIndex);
+        cursor.close();
+        return videoId;
+    }
 
     public void LoadPhotos() {
 
@@ -362,9 +379,8 @@ public class PhotosActivity extends AppCompatActivity {
                             .onNeutral(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    StringUtils.showToast(getApplicationContext(), "Not implemented yet!");
-                                    //albums.excludeAlbum(photos.FolderPath);
-                                    // finish();
+                                    customAlbumsHandler.excludeAlbum(photos.ID);
+                                    finish();
                                 }
                             })
                             .show();
@@ -379,16 +395,16 @@ public class PhotosActivity extends AppCompatActivity {
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
-                for (Photo f : photos.selectedPhotos) {
-                    File file = new File(f.Path);
-                    files.add(Uri.fromFile(file));
-                }
+                for (Photo f : photos.selectedPhotos)
+                    files.add(Uri.fromFile(new File(f.Path)));
+
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                 startActivity(intent);
                 break;
 
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
+                //NavUtils.navigateUpFromSameTask(this);
                 return true;
 
             case R.id.action_camera:

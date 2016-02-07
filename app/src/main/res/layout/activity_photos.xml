@@ -110,14 +110,14 @@
         >
 
         <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/gridPhotos"
-            android:numColumns="3"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:clipToPadding="false"
-            android:background="@color/md_dark_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/gridPhotos"
+                android:numColumns="3"
+                android:verticalSpacing="0dp"
+                android:horizontalSpacing="0dp"
+                android:clipToPadding="false"
+                android:background="@color/md_dark_background"
             />
         <!--app:layout_behavior="@StringUtils/appbar_scrolling_view_behavior"-->
     </android.support.v7.widget.CardView>
