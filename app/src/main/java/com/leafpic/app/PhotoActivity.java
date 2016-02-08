@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,6 @@ import com.leafpic.app.utils.StringUtils;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * Created by dnld on 12/12/15.
@@ -46,8 +44,6 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo);
         initUiTweaks();
         try {
-
-
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             photos.setContext(PhotoActivity.this);
@@ -61,27 +57,6 @@ public class PhotoActivity extends AppCompatActivity {
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
-
-            Photo f = photos.getCurrentPhoto();
-
-            String[] projection = new String[]{
-                    MediaStore.Images.Media.DATE_TAKEN,
-                    MediaStore.Images.Media.DATA,
-                    MediaStore.Images.Media.MIME_TYPE
-            };
-
-            Log.wtf("asdasdasd", f.Path);
-            Cursor cursor = getContentResolver().query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection,
-                    MediaStore.Images.Media.DATA + " = ?",
-                    new String[]{f.Path}, "");
-
-            if (cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE);
-                StringUtils.showToast(getApplicationContext(), cursor.getString(columnIndex));
-            }
-            cursor.close();
 
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -164,14 +139,16 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
 
             case R.id.renamePhoto:
+
                 new MaterialDialog.Builder(this)
                         .title("Rename Photo")
                         .inputType(InputType.TYPE_CLASS_TEXT)
                         .input(null, StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                photos.renamePhoto(photos.getCurrentPhoto().Path, String.valueOf(input));
-                                // StringUtils.showToast(getApplicationContext(), "I have to fix this!");
+                                photos.renamePhoto(
+                                        photos.getCurrentPhoto().Path,
+                                        input + StringUtils.getPhotoExtensionbyPath(photos.getCurrentPhoto().Path));
                             }
                         }).show();
 
@@ -179,16 +156,10 @@ public class PhotoActivity extends AppCompatActivity {
             case R.id.Modify:
                 break;
             case R.id.details:
-
-                /****DATA****/
-                Calendar cl = Calendar.getInstance();
-                cl.setTimeInMillis(Long.parseLong(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().DateTaken)));  //here your time in miliseconds
-                String date = "", size = "", resolution = "";
-
-                SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");// //new DateFormat();
-                date = s.format(new Time(Long.valueOf(photos.getCurrentPhoto().DateTaken)));
-
                 Photo f = photos.getCurrentPhoto();
+                String date = "", size = "", resolution = "";
+                SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");
+                date = s.format(new Time(Long.valueOf(f.DateTaken)));
 
                 String[] projection = new String[]{
                         MediaStore.Images.Media.SIZE,
@@ -209,26 +180,14 @@ public class PhotoActivity extends AppCompatActivity {
                 }
                 cursor.close();
 
-                /**GET COLOR**/
-                /*
-
-                SharedPreferences SP;
-                SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String SColor = SP.getString("PrefColor", "#03A9F4");
-                int color = Color.parseColor(SColor);
-                //Html.fromHtml("<b><font color='" + SColor + "'>" + "Dimensionedddd: " + "</font></b>" + "Ddddda Implementare");
-                */
-                /**DIALOG**/
                 new MaterialDialog.Builder(this)
                         .title("Photo Details")
-                    //.titleColor(color)
-                        .content("Album: " + StringUtils.getPhotoNamebyPath(photos.FolderPath)
-                                + "\nName: " + StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path)
-                                + "\nDimensione: " + size
-                                + "\nRisoluzione: " + resolution
-                                + "\nFormato: " + photos.getCurrentPhoto().MIME
-                                + "\nData: " + date)
-                        .positiveText("OK")
+                        .content("Path: \t" + photos.getCurrentPhoto().Path
+                                + "\nSize: \t" + size
+                                + "\nResolution: \t" + resolution
+                                + "\nType: \t" + photos.getCurrentPhoto().MIME
+                                + "\nDate: \t" + date)
+                        .positiveText("DONE")
                         .show();
                 break;
 
