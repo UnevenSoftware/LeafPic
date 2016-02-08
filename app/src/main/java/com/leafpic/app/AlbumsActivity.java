@@ -456,20 +456,17 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
             */
             albums.loadPreviewHiddenAlbums();
             //dialog.dismiss();
-        }
-        else {
+        } else
             albums.loadPreviewAlbums();
-        }
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.gridAlbums);
         adapt = new AlbumsAdapter(albums.dispAlbums, R.layout.album_card);
-
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 TextView a = (TextView) v.findViewById(R.id.picturetext);
-                String s = a.getTag().toString();
-                adapt.notifyItemChanged(albums.selectAlbum(s, true));
+                adapt.notifyItemChanged(albums.selectAlbum(a.getTag().toString(), true));
                 editmode = true;
                 invalidateOptionsMenu();
                 return true;
@@ -480,16 +477,11 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
             @Override
             public void onClick(View v) {
                 TextView a = (TextView) v.findViewById(R.id.picturetext);
-                String s = a.getTag().toString();
-                Album album = albums.getAlbum(s);
-
-                int pos;
                 if (editmode) {
-                    if (album.isSelected()) pos = albums.selectAlbum(s, false);
-                    else pos = albums.selectAlbum(album, true);
-                    adapt.notifyItemChanged(pos);
+                    adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
                     invalidateOptionsMenu();
                 } else {
+                    Album album = albums.getAlbum(a.getTag().toString());
                     Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
@@ -498,7 +490,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 }
             }
         });
-
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));

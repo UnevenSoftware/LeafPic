@@ -30,6 +30,16 @@
             app:showAsAction="never"
         />
     <item
+            android:id="@+id/copyAction"
+            android:title="Copy to"
+            app:showAsAction="never"
+    />
+    <item
+            android:id="@+id/moveAction"
+            android:title="Move to"
+            app:showAsAction="never"
+    />
+    <item
         android:id="@+id/excludeAlbumButton"
         android:title="@string/exclude_album_action"
         app:showAsAction="never"
@@ -39,11 +49,7 @@
         android:title="@string/hide_album_action"
         app:showAsAction="never"
         />
-    <item
-            android:id="@+id/refreshAlbum"
-            android:title="Refresh"
-            app:showAsAction="never"
-    />
+
     <item
             android:id="@+id/renameAlbum"
             android:title="@string/rename_album_action"

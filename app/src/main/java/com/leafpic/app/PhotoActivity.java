@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by dnld on 12/12/15.
  */
+
 public class PhotoActivity extends AppCompatActivity {
 
     PhotosPagerAdapter mCustomPagerAdapter;
@@ -119,6 +120,7 @@ public class PhotoActivity extends AppCompatActivity {
                             }
                         })
                         .show();
+
                 return true;
 
             case R.id.useAsIntent:
