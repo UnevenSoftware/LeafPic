@@ -30,7 +30,14 @@ public class StringUtils {
 
     public static String getPhotoNamebyPath(String path) {
         String b[] = path.split("/");
-        return b[b.length - 1];
+        String fi = b[b.length - 1];
+        return fi.substring(0, fi.indexOf('.'));
+    }
+
+    public static String getPhotoExtensionbyPath(String path) {
+        String b[] = path.split("/");
+        String fi = b[b.length - 1];
+        return fi.substring(fi.indexOf('.'), fi.length());
     }
 
     public static String getPhotoPathByFolderPathAndName(String folderPath, String name) {
