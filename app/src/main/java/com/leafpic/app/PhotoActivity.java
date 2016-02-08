@@ -157,23 +157,12 @@ public class PhotoActivity extends AppCompatActivity {
             case R.id.Modify:
                 break;
             case R.id.details:
-<<<<<<< HEAD
-
                 /****DATA****/
-                Calendar cl = Calendar.getInstance();
-                cl.setTimeInMillis(Long.parseLong(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().DateTaken)));  //here your time in miliseconds
-                String date = "", size = "", resolution = "";
-
-                SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");// //new DateFormat();
-                date = s.format(new Time(Long.valueOf(photos.getCurrentPhoto().DateTaken)));
-                Photo f = photos.getCurrentPhoto();
-=======
                 Photo f = photos.getCurrentPhoto();
                 String date = "", size = "", resolution = "";
                 SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");
                 date = s.format(new Time(Long.valueOf(f.DateTaken)));
 
->>>>>>> refs/remotes/DNLDsht/master
                 String[] projection = new String[]{
                         MediaStore.Images.Media.SIZE,
                         MediaStore.Images.Media.HEIGHT,
@@ -192,28 +181,8 @@ public class PhotoActivity extends AppCompatActivity {
                     resolution += "x" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.HEIGHT));
                 }
                 cursor.close();
-<<<<<<< HEAD
-                /**GET COLOR**/
-                /*
-                SharedPreferences SP;
-                SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String SColor = SP.getString("PrefColor", "#03A9F4");
-                int color = Color.parseColor(SColor);
-                //Html.fromHtml("<b><font color='" + SColor + "'>" + "Dimensionedddd: " + "</font></b>" + "Ddddda Implementare");
-                */
-                /**DIALOG**/
-                new MaterialDialog.Builder(this)
-                        .title("Photo Details")
-                    //.titleColor(color)
-                        .content("Album: " + StringUtils.getPhotoNamebyPath(photos.FolderPath)
-                                + "\nName: " + StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path)
-                                + "\nImageSize: " + size
-                                + "\nResolution: " + resolution
-                                + "\nFormat: " + photos.getCurrentPhoto().MIME
-                                + "\nDate: " + date)
-                        .positiveText("OK")
-=======
 
+                /**DIALOG**/
                 new MaterialDialog.Builder(this)
                         .title("Photo Details")
                         .content("Path: \t" + photos.getCurrentPhoto().Path
@@ -222,7 +191,6 @@ public class PhotoActivity extends AppCompatActivity {
                                 + "\nType: \t" + photos.getCurrentPhoto().MIME
                                 + "\nDate: \t" + date)
                         .positiveText("DONE")
->>>>>>> refs/remotes/DNLDsht/master
                         .show();
                 break;
 
