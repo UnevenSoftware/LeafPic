@@ -15,6 +15,10 @@
             android:label="Intro Activity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             />
+        <activity android:name=".SelectAlbumActivity"
+                  android:label="Select Album"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"
+        />
 
         <activity android:name=".SettingsActivity"
                   android:label="Setting"

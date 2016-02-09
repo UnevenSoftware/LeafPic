@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Log;
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
@@ -81,6 +82,17 @@ public class HandlingPhotos implements Parcelable {
         DisplayName = in.readString();
         current = in.readInt();
         hidden = in.readByte() != 0x00;
+    }
+
+    public String getSelectedPhotosSerilized() {
+        String s = "";
+        if (selectedPhotos.size() > 0) {
+            for (Photo photo : selectedPhotos)
+                s += photo.Path + "^|/";
+
+            return s.substring(0, s.length() - 3);
+        }
+        return s;
     }
 
     public void sort() {
@@ -180,11 +192,27 @@ public class HandlingPhotos implements Parcelable {
         return null;
     }
 
+    public void LogSELECTED() {
+        for (Photo photo : selectedPhotos) {
+            Log.wtf("asdasdas", photo.Path);
+        }
+    }
+
     public int selectPhoto(String path, boolean val) {
         Photo x = getPhoto(path);
         if (x != null) {
             x.setSelected(val);
             if (val) selectedPhotos.add(x);
+            else selectedPhotos.remove(x);
+        }
+        return last_position_selecte;
+    }
+
+    public int toggleSelectPhoto(String path) {
+        Photo x = getPhoto(path);
+        if (x != null) {
+            x.setSelected(!x.isSelected());
+            if (x.isSelected()) selectedPhotos.add(x);
             else selectedPhotos.remove(x);
         }
         return last_position_selecte;

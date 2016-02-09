@@ -22,6 +22,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     ArrayList<Photo> photos;
     private int layout_ID;
+
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
@@ -73,6 +74,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
     }
 
+    @Override
+    public int getItemCount() {
+        return photos.size();
+    }
+
     public void setOnClickListener(View.OnClickListener lis) {
         mOnClickListener = lis;
     }
@@ -81,10 +87,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    @Override
-    public int getItemCount() {
-        return photos.size();
-    }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -18,6 +18,7 @@ import android.support.v7.widget.*;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -97,16 +98,11 @@ public class PhotosActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     TextView is = (TextView) v.findViewById(R.id.path);
-                    Photo f = photos.getPhoto(is.getTag().toString());
-                    int pos;
                     if (editmode) {
-                        if (f.isSelected()) pos = photos.selectPhoto(f.Path, false);
-                        else pos = photos.selectPhoto(f.Path, true);
-                        adapter.notifyItemChanged(pos);
+                        adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
                         invalidateOptionsMenu();
-                        //updateSelectedPhotsCount();
                     } else {
-                        photos.setCurrentPhoto(f.Path);
+                        photos.setCurrentPhoto(is.getTag().toString());
                         Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
                         Bundle b = new Bundle();
                         b.putParcelable("album", photos);
@@ -122,10 +118,10 @@ public class PhotosActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
                     editmode = true;
                     invalidateOptionsMenu();
-                    //intebdupdateSelectedPhotsCount();
-                    return false;
+                    return true;
                 }
             });
+
 
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
@@ -232,9 +228,47 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+
+        switch (requestCode) {
+            case SelectAlbumActivity.COPY_TO_ACTION:
+                if (resultCode == RESULT_OK) {
+                    Bundle b = data.getExtras();
+                    StringUtils.showToast(getApplicationContext(), b.getString("album_path"));
+                }
+                break;
+            case SelectAlbumActivity.MOVE_TO_ACTION:
+                if (resultCode == RESULT_OK) {
+                    Bundle b = data.getExtras();
+                    String newAlbumPath = b.getString("album_path");
+                    String paths[] = b.getString("selected_photos").split("^|/");
+                    for (String path : paths) {
+                        Log.wtf("asdasd", path);
+                    }
+
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+
+            case R.id.moveAction:
+
+                Intent int1 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
+                int1.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
+                startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
+                break;
+            case R.id.copyAction:
+                Intent int2 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
+                startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
+                break;
             case R.id.endEditAlbumMode:
                 finishEditMode();
                 break;

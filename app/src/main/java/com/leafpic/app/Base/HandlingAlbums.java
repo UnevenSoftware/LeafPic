@@ -34,21 +34,22 @@ public class HandlingAlbums {
 
     }
 
-    public int selectAlbum(String a, boolean val) {
-        Album x = getAlbum(a);
-        if (x != null) {
-            x.setSelcted(val);
-            if (val) selectedAlbums.add(x);
-            else selectedAlbums.remove(x);
+    public int toggleSelectAlbum(String path) {
+        Album s = getAlbum(path);
+        if (s != null) {
+            s.setSelcted(!s.isSelected());
+            if (s.isSelected()) selectedAlbums.add(s);
+            else selectedAlbums.remove(s);
         }
         return last_position_selecte;
     }
 
-    public int selectAlbum(Album x, boolean val) {
+    public int selectAlbum(String path, boolean val) {
+        Album x = getAlbum(path);
         if (x != null) {
-            x.setSelcted(val);
             if (val) selectedAlbums.add(x);
             else selectedAlbums.remove(x);
+            x.setSelcted(val);
         }
         return last_position_selecte;
     }
@@ -58,9 +59,9 @@ public class HandlingAlbums {
     }
 
     public void clearSelectedAlbums() {
-        for (Album dispAlbum : dispAlbums) {
+        for (Album dispAlbum : dispAlbums)
             dispAlbum.setSelcted(false);
-        }
+
         selectedAlbums.clear();
     }
 
@@ -114,7 +115,6 @@ public class HandlingAlbums {
             @Override
             public void onScanCompleted(String path, Uri uri) {
                 System.out.println("SCAN COMPLETED: " + path);
-
             }
         });
     }
