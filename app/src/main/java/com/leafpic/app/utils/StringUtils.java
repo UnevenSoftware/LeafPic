@@ -65,6 +65,14 @@ public class StringUtils {
         return olderPath.substring(0, olderPath.lastIndexOf('/')) + "/" + newName;
     }
 
+    public static String getPhotoPathMoved(String olderPath, String folderPath) {
+        String b[] = olderPath.split("/");
+        String fi = b[b.length - 1];
+        String path = folderPath + "/";
+        path += fi;
+        return path;
+    }
+
     public static String getPhotoPathRenamed(String olderPath, String newName) {
         String c = "", b[] = olderPath.split("/");
         for (int x = 0; x < b.length - 2; x++) c += b[x] + "/";

@@ -18,7 +18,6 @@ import android.support.v7.widget.*;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,6 +47,23 @@ public class PhotosActivity extends AppCompatActivity {
 
     boolean editmode = false;
     PhotosAdapter adapter;
+    //PALETTE
+    //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+    // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
+    //}.decode//.decodeFile(photos.getPreviewAlbumImg());
+    /*
+    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+        @Override
+        public void onGenerated(Palette palette) {
+            int primaryDark = getColor(R.color.toolbar);
+            int primary = getColor(R.color.toolbar);
+            collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
+            collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
+            //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
+        }
+    });
+    */
+    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,24 +82,6 @@ public class PhotosActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    //PALETTE
-    //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
-    // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
-    //}.decode//.decodeFile(photos.getPreviewAlbumImg());
-    /*
-    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-        @Override
-        public void onGenerated(Palette palette) {
-            int primaryDark = getColor(R.color.toolbar);
-            int primary = getColor(R.color.toolbar);
-            collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-            collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
-            //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
-        }
-    });
-    */
-
-
     public void LoadPhotos() {
 
         try {
@@ -91,7 +89,7 @@ public class PhotosActivity extends AppCompatActivity {
             final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
-            RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
+            mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
             adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
 
             adapter.setOnClickListener(new View.OnClickListener() {
@@ -170,11 +168,8 @@ public class PhotosActivity extends AppCompatActivity {
 
         if (photos.getSelectedCount() == 0) {
             editmode = false;
-            opt = menu.findItem(R.id.endEditAlbumMode);
             setOptionsAlbmuMenusItemsVisible(menu, true);
-            opt.setEnabled(false).setVisible(false);
-            opt = menu.findItem(R.id.setAsAlbumPreview);
-            opt.setEnabled(false).setVisible(false);
+
         } else if (photos.getSelectedCount() == 1) {
             opt = menu.findItem(R.id.setAsAlbumPreview);
             opt.setEnabled(true).setVisible(true);
@@ -209,14 +204,20 @@ public class PhotosActivity extends AppCompatActivity {
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
         MenuItem option = m.findItem(R.id.hideAlbumButton);
         option.setEnabled(val).setVisible(val);
-
         option = m.findItem(R.id.excludeAlbumButton);
         option.setEnabled(val).setVisible(val);
-
         option = m.findItem(R.id.renameAlbum);
         option.setEnabled(val).setVisible(val);
 
         option = m.findItem(R.id.sharePhotos);
+        option.setEnabled(!val).setVisible(!val);
+        option = m.findItem(R.id.moveAction);
+        option.setEnabled(!val).setVisible(!val);
+        option = m.findItem(R.id.copyAction);
+        option.setEnabled(!val).setVisible(!val);
+        option = m.findItem(R.id.endEditAlbumMode);
+        option.setEnabled(!val).setVisible(!val);
+        option = m.findItem(R.id.setAsAlbumPreview);
         option.setEnabled(!val).setVisible(!val);
     }
 
@@ -230,22 +231,45 @@ public class PhotosActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
+        // Bundle b = data.getExtras();
+
 
         switch (requestCode) {
             case SelectAlbumActivity.COPY_TO_ACTION:
                 if (resultCode == RESULT_OK) {
-                    Bundle b = data.getExtras();
-                    StringUtils.showToast(getApplicationContext(), b.getString("album_path"));
+                    // StringUtils.showToast(getApplicationContext(), b.getString("album_path"));
                 }
                 break;
             case SelectAlbumActivity.MOVE_TO_ACTION:
+                onResume();
+                //LoadPhotos();
+                StringUtils.showToast(getApplicationContext(), "album_path");
                 if (resultCode == RESULT_OK) {
-                    Bundle b = data.getExtras();
-                    String newAlbumPath = b.getString("album_path");
-                    String paths[] = b.getString("selected_photos").split("^|/");
-                    for (String path : paths) {
-                        Log.wtf("asdasd", path);
-                    }
+                    //LoadPhotos();
+                    //StringUtils.showToast(getApplicationContext(),"album_path");
+
+                    /*String newAlbumPath = b.getString("album_path");
+                    String selected_photos_paths = b.getString("selected_photos");
+                    if(selected_photos_paths != null) {
+                         String paths[] = selected_photos_paths.split("ç");
+                        Log.wtf("asdasd", selected_photos_paths);
+                        for (String path : paths) {
+                            int pos = photos.movePhoto(path,newAlbumPath);
+                            //adapter.notifyDataSetChanged();
+                            //mRecyclerView.removeViewAt(pos);
+                            //recyc
+                           Log.wtf("asdfdas",pos+"");
+                            //adapter.notifyItemChanged(pos
+                             //       );
+
+
+                        }
+                        //adapter.notifyDataSetChanged();
+                        photos.clearSelectedPhotos();
+                        onResume();
+                        invalidateOptionsMenu();
+
+                    }*/
 
                 }
                 break;
@@ -263,6 +287,7 @@ public class PhotosActivity extends AppCompatActivity {
 
                 Intent int1 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
+                int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
                 startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
