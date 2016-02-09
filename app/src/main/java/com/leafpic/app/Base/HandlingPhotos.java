@@ -65,6 +65,12 @@ public class HandlingPhotos implements Parcelable {
 
     }
 
+    public HandlingPhotos(Context ctx) {
+        context = ctx;
+        as = new MadiaStoreHandler(context);
+        selectedPhotos = new ArrayList<Photo>();
+    }
+
     protected HandlingPhotos(Parcel in) {
         FolderPath = in.readString();
         if (in.readByte() == 0x01) {
@@ -88,9 +94,9 @@ public class HandlingPhotos implements Parcelable {
         String s = "";
         if (selectedPhotos.size() > 0) {
             for (Photo photo : selectedPhotos)
-                s += photo.Path + "^|/";
+                s += photo.Path + "ç";
 
-            return s.substring(0, s.length() - 3);
+            return s.substring(0, s.length() - 1);
         }
         return s;
     }
@@ -125,7 +131,6 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public String getPreviewAlbumImg() {
-        //Log.wtf("asdfsfd", settings.coverPath);
         if (settings.coverPath != null) return settings.coverPath;
         return photos.get(0).Path;
     }
@@ -270,6 +275,28 @@ public class HandlingPhotos implements Parcelable {
             from.renameTo(to);
             scanFile(new String[]{to.getAbsolutePath()});
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int removePhoto(String path) {
+        for (int i = 0; i < photos.size(); i++)
+            if (photos.get(i).Path.equals(path)) {
+                photos.remove(i);
+                return i;
+            }
+        return -1;
+    }
+
+
+    public void movePhoto(String olderPath, String folderPath) {
+        try {
+            File from = new File(olderPath);
+            File to = new File(StringUtils.getPhotoPathMoved(olderPath, folderPath));
+            scanFile(new String[]{from.getAbsolutePath()});
+            from.renameTo(to);
+            scanFile(new String[]{to.getAbsolutePath()});
         } catch (Exception e) {
             e.printStackTrace();
         }
