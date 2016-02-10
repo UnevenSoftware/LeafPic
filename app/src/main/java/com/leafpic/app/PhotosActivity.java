@@ -94,13 +94,13 @@ public class PhotosActivity extends AppCompatActivity {
             final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
-            mRecyclerView = (RecyclerView) findViewById(R.id.gridPhotos);
+            mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
             adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
 
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TextView is = (TextView) v.findViewById(R.id.path);
+                    TextView is = (TextView) v.findViewById(R.id.photo_path);
                     if (editmode) {
                         adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
                         invalidateOptionsMenu();
@@ -117,7 +117,7 @@ public class PhotosActivity extends AppCompatActivity {
             adapter.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    TextView is = (TextView) v.findViewById(R.id.path);
+                    TextView is = (TextView) v.findViewById(R.id.photo_path);
                     adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
                     editmode = true;
                     invalidateOptionsMenu();
@@ -475,7 +475,7 @@ public class PhotosActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        headerImage = (ImageView) findViewById(R.id.image);
+        headerImage = (ImageView) findViewById(R.id.header_image);
         Glide.with(this)
                 .load(photos.getPreviewAlbumImg())
                 .asBitmap()
@@ -493,7 +493,7 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setContentScrimColor(getColor(R.color.toolbar));
         collapsingToolbarLayout.setStatusBarScrimColor(getColor(R.color.toolbar));
 
-        FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fabCamera);
+        FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(SP.getString("PrefColor", "#03A9F4"))));
 
         fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -507,7 +507,7 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     private void updateHeaderContent() {
-        headerImage = (ImageView) findViewById(R.id.image);
+        headerImage = (ImageView) findViewById(R.id.header_image);
         Glide.with(this)
                 .load(photos.getPreviewAlbumImg())
                 .asBitmap()
@@ -516,9 +516,9 @@ public class PhotosActivity extends AppCompatActivity {
                 .into(headerImage);
         headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
-        TextView textView = (TextView) findViewById(R.id.AlbumName);
+        TextView textView = (TextView) findViewById(R.id.album_name);
         textView.setText(photos.DisplayName);
-        textView = (TextView) findViewById(R.id.AlbumNPhotos);
+        textView = (TextView) findViewById(R.id.album_photos_count);
 
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String SColor = SP.getString("PrefColor", "#03A9F4");

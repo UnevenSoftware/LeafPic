@@ -57,14 +57,14 @@ public class PhotosPagerAdapter extends android.support.v4.view.PagerAdapter {
         if (f.MIME.equals("image/gif")) {
             itemView = mLayoutInflater.inflate(R.layout.gif_pager_layout, container, false);
 
-            ImageView picture = (ImageView) itemView.findViewById(R.id.imageView);
+            ImageView picture = (ImageView) itemView.findViewById(R.id.media_view);
             picture.setOnClickListener(onClickListener);
             Ion.with(container.getContext())
                     .load(f.Path)
                     .intoImageView(picture);
         } else {
             itemView = mLayoutInflater.inflate(R.layout.image_pager_item, container, false);
-            final SubsamplingScaleImageView picture = (SubsamplingScaleImageView) itemView.findViewById(R.id.imageView);
+            final SubsamplingScaleImageView picture = (SubsamplingScaleImageView) itemView.findViewById(R.id.media_view);
 
             Glide.with(container.getContext())
                     .load(mResources.get(position).Path)

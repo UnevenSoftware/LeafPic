@@ -61,7 +61,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
 
         albums.loadPreviewAlbums();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.gridAlbums);
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
 
         adapt = new SelectAlbumAdapter(albums.dispAlbums, R.layout.select_album_card);
 
