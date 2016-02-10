@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
@@ -158,6 +159,7 @@ public class PhotoActivity extends AppCompatActivity {
             case R.id.Modify:
                 break;
             case R.id.details:
+                /****DATA****/
                 Photo f = photos.getCurrentPhoto();
                 String date = "", size = "", resolution = "";
                 SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");
@@ -182,6 +184,7 @@ public class PhotoActivity extends AppCompatActivity {
                 }
                 cursor.close();
 
+                /**DIALOG**/
                 new MaterialDialog.Builder(this)
                         .title("Photo Details")
                         .content("Path: \t" + photos.getCurrentPhoto().Path

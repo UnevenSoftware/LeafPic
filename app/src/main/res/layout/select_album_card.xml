@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
->
+        >
     <android.support.v7.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_margin="8dp"
-            android:orientation="vertical"
-            tools:ignore="MissingPrefix">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+
+        android:orientation="vertical"
+        tools:ignore="MissingPrefix"
+        >
 
         <ImageView
                 android:id="@+id/item_image_img"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="false"
                 android:scaleType="centerCrop"/>
 
