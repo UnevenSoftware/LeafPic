@@ -87,6 +87,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
+    public void removeItemAt(int pos) {
+        //Log.wtf("asdasd",getItemCount()+"");
+        photos.remove(pos);
+        //notifyItemRemoved(pos);
+        //Log.wtf("asdasd",getItemCount()+"");
+        // notifyDataSetChanged();
+    }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

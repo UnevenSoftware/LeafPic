@@ -82,8 +82,13 @@ public class PhotosActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public void LoadPhotos() {
+    public void UpdatePhotos() {
+        photos.updatePhotos();
+        adapter.notifyDataSetChanged();
 
+    }
+
+    public void LoadPhotos() {
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
@@ -128,14 +133,9 @@ public class PhotosActivity extends AppCompatActivity {
             mRecyclerView.setNestedScrollingEnabled(true);
             mRecyclerView.setFitsSystemWindows(true);
 
-
         }
         catch (Exception e){ e.printStackTrace(); }
     }
-
-    /*private void updateSelectedPhotsCount() {
-        getSupportActionBar().setTitle(photos.getSelectedCount() + "");
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,6 +155,7 @@ public class PhotosActivity extends AppCompatActivity {
         } else {
             opt = menu.findItem(R.id.endEditAlbumMode);
             opt.setEnabled(false).setVisible(false);
+
             setOptionsAlbmuMenusItemsVisible(menu, true);
         }
 
@@ -169,7 +170,6 @@ public class PhotosActivity extends AppCompatActivity {
         if (photos.getSelectedCount() == 0) {
             editmode = false;
             setOptionsAlbmuMenusItemsVisible(menu, true);
-
         } else if (photos.getSelectedCount() == 1) {
             opt = menu.findItem(R.id.setAsAlbumPreview);
             opt.setEnabled(true).setVisible(true);
@@ -177,7 +177,9 @@ public class PhotosActivity extends AppCompatActivity {
             opt = menu.findItem(R.id.setAsAlbumPreview);
             opt.setEnabled(false).setVisible(false);
         }
+
         togglePrimaryToolbarOptions(menu);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -230,68 +232,57 @@ public class PhotosActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        // Bundle b = data.getExtras();
+
+        if (data != null) {
+            final Bundle b = data.getExtras();
 
 
-        switch (requestCode) {
-            case SelectAlbumActivity.COPY_TO_ACTION:
-                if (resultCode == RESULT_OK) {
-                    // StringUtils.showToast(getApplicationContext(), b.getString("album_path"));
-                }
-                break;
-            case SelectAlbumActivity.MOVE_TO_ACTION:
-                onResume();
-                //LoadPhotos();
-                StringUtils.showToast(getApplicationContext(), "album_path");
-                if (resultCode == RESULT_OK) {
-                    //LoadPhotos();
-                    //StringUtils.showToast(getApplicationContext(),"album_path");
-
-                    /*String newAlbumPath = b.getString("album_path");
-                    String selected_photos_paths = b.getString("selected_photos");
-                    if(selected_photos_paths != null) {
-                         String paths[] = selected_photos_paths.split("ç");
-                        Log.wtf("asdasd", selected_photos_paths);
-                        for (String path : paths) {
-                            int pos = photos.movePhoto(path,newAlbumPath);
-                            //adapter.notifyDataSetChanged();
-                            //mRecyclerView.removeViewAt(pos);
-                            //recyc
-                           Log.wtf("asdfdas",pos+"");
-                            //adapter.notifyItemChanged(pos
-                             //       );
-
-
+            switch (requestCode) {
+                case SelectAlbumActivity.COPY_TO_ACTION:
+                    if (resultCode == RESULT_OK) {
+                        StringUtils.showToast(getApplicationContext(), "copied ok");
+                    }
+                    break;
+                case SelectAlbumActivity.MOVE_TO_ACTION:
+                    if (resultCode == RESULT_OK) {
+                        String ind = b.getString("photos_indexes");
+                        if (ind != null) {
+                            for (String asd : ind.split("ç")) {
+                                // TODO remove photo moved from older album
+                                // Log.wtf("asdasdasdas",asd);
+                                //adapter.removeItemAt(Integer.valueOf(asd));
+                                //photos.photos.remove(Integer.parseInt(asd));
+                                //mRecyclerView.removeViewAt(Integer.valueOf(asd));
+                                //adapter.notifyDataSetChanged();
+                                //adapter.notifyItemRemoved(Integer.parseInt(asd));
+                            }
                         }
-                        //adapter.notifyDataSetChanged();
-                        photos.clearSelectedPhotos();
-                        onResume();
-                        invalidateOptionsMenu();
-
-                    }*/
-
-                }
-                break;
-            default:
-                break;
+                        StringUtils.showToast(getApplicationContext(), "moved ok");
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+        finishEditMode();
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-
             case R.id.moveAction:
-
                 Intent int1 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
                 int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
+                int1.putExtra("photos_indexes", photos.getSelectedPhotosIndexSerilized());
                 startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
                 Intent int2 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
+                int2.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
+                int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
                 startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
                 break;
             case R.id.endEditAlbumMode:
@@ -393,6 +384,7 @@ public class PhotosActivity extends AppCompatActivity {
                                     photos.deleteSelectedPhotos();
                                     adapter.notifyDataSetChanged();
                                     updateHeaderContent();
+                                    finishEditMode();
                                 } else {
                                     albums.deleteAlbum(photos.FolderPath);
                                     finish();
@@ -441,12 +433,12 @@ public class PhotosActivity extends AppCompatActivity {
                     files.add(Uri.fromFile(new File(f.Path)));
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                finishEditMode();
                 startActivity(intent);
                 break;
 
             case android.R.id.home:
                 onBackPressed();
-                //NavUtils.navigateUpFromSameTask(this);
                 return true;
 
             case R.id.action_camera:
@@ -462,11 +454,6 @@ public class PhotosActivity extends AppCompatActivity {
         return true;
     }
 
-    public void fabClick(View v){
-        Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        startActivity(i);
-    }
-
     public void initUiTweaks() {
 
         /**** Navigation Bar*/
@@ -478,12 +465,10 @@ public class PhotosActivity extends AppCompatActivity {
 
         /**** Status Bar */
         Window window = getWindow();
-        //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         setStatusBarTranslucent(false);//true
         getWindow().setStatusBarColor(Color.TRANSPARENT);
-        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
 
         /**** ToolBar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -498,7 +483,6 @@ public class PhotosActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_empty)
                 .into(headerImage);
 
-        //OSCURA IMMAGINE COOLAPSIONG
         headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
         updateHeaderContent();
 
@@ -509,13 +493,17 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setContentScrimColor(getColor(R.color.toolbar));
         collapsingToolbarLayout.setStatusBarScrimColor(getColor(R.color.toolbar));
 
-        //setPalette();
-        /*  RALLENTA TROPPO IL CARICAMENTO DIO PORCO
-        File image = new File(photos.getPreviewAlbumImg());
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-        setPalette(bitmap);
-        */
+        FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fabCamera);
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(SP.getString("PrefColor", "#03A9F4"))));
+
+        fabCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                startActivity(i);
+
+            }
+        });
     }
 
     private void updateHeaderContent() {
@@ -532,14 +520,10 @@ public class PhotosActivity extends AppCompatActivity {
         textView.setText(photos.DisplayName);
         textView = (TextView) findViewById(R.id.AlbumNPhotos);
 
-        SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String SColor = SP.getString("PrefColor", "#03A9F4");
         textView.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
-        int color = Color.parseColor(SColor);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
     private void initActivityTransitions() {

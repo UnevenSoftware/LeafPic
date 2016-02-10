@@ -100,8 +100,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:onClick="fabClick"
+            android:id="@+id/fabCamera"
             style="@style/fab"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
@@ -109,5 +108,5 @@
             android:layout_margin="16dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom|right"/>
+            android:layout_gravity="bottom|end"/>
 </android.support.design.widget.CoordinatorLayout>

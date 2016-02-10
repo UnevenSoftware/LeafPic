@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import com.leafpic.app.utils.StringUtils;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -40,8 +40,10 @@ public class HandlingPhotos implements Parcelable {
     public AlbumSettings settings;
     Context context;
     MadiaStoreHandler as;
+    private ArrayList<Integer> selectedPhotosIndexs;
     private int current;
-    private int last_position_selecte = -1;
+
+    private Integer last_position_selecte = -1;
 
     public HandlingPhotos(Context ctx, Album album) {
         context = ctx;
@@ -50,6 +52,8 @@ public class HandlingPhotos implements Parcelable {
         hidden = album.isHidden();
 
         selectedPhotos = new ArrayList<Photo>();
+        selectedPhotosIndexs = new ArrayList<Integer>();
+
         DisplayName = album.DisplayName;
 
         if (!hidden) {
@@ -90,11 +94,31 @@ public class HandlingPhotos implements Parcelable {
         hidden = in.readByte() != 0x00;
     }
 
+    public void updatePhotos() {
+        if (!hidden) {
+            photos = as.getAlbumPhotos(ID, getSortingMode());
+        } else {
+            HiddenPhotosHandler db = new HiddenPhotosHandler(context);
+            photos = db.getPhotosByAlbum(ID);
+        }
+    }
+
     public String getSelectedPhotosSerilized() {
         String s = "";
         if (selectedPhotos.size() > 0) {
             for (Photo photo : selectedPhotos)
                 s += photo.Path + "ç";
+
+            return s.substring(0, s.length() - 1);
+        }
+        return s;
+    }
+
+    public String getSelectedPhotosIndexSerilized() {
+        String s = "";
+        if (selectedPhotosIndexs.size() > 0) {
+            for (Integer photo : selectedPhotosIndexs)
+                s += photo + "ç";
 
             return s.substring(0, s.length() - 1);
         }
@@ -157,6 +181,7 @@ public class HandlingPhotos implements Parcelable {
             photo.setSelected(false);
         }
         selectedPhotos.clear();
+        selectedPhotosIndexs.clear();
     }
 
     public int getSelectedCount() {
@@ -193,7 +218,6 @@ public class HandlingPhotos implements Parcelable {
                 return photos.get(i);
             }
         }
-
         return null;
     }
 
@@ -203,12 +227,21 @@ public class HandlingPhotos implements Parcelable {
         }
     }
 
+    public Integer getLastSelectedPhotoIndex() {
+        return selectedPhotosIndexs.get(selectedPhotosIndexs.size() - 1);
+    }
+
     public int selectPhoto(String path, boolean val) {
         Photo x = getPhoto(path);
         if (x != null) {
             x.setSelected(val);
-            if (val) selectedPhotos.add(x);
-            else selectedPhotos.remove(x);
+            if (val) {
+                selectedPhotos.add(x);
+                selectedPhotosIndexs.add(last_position_selecte);
+            } else {
+                selectedPhotos.remove(x);
+                selectedPhotosIndexs.remove(last_position_selecte);
+            }
         }
         return last_position_selecte;
     }
@@ -217,9 +250,15 @@ public class HandlingPhotos implements Parcelable {
         Photo x = getPhoto(path);
         if (x != null) {
             x.setSelected(!x.isSelected());
-            if (x.isSelected()) selectedPhotos.add(x);
-            else selectedPhotos.remove(x);
+            if (x.isSelected()) {
+                selectedPhotos.add(x);
+                selectedPhotosIndexs.add(last_position_selecte);
+            } else {
+                selectedPhotos.remove(x);
+                selectedPhotosIndexs.remove(last_position_selecte);
+            }
         }
+
         return last_position_selecte;
     }
 
@@ -296,6 +335,38 @@ public class HandlingPhotos implements Parcelable {
             File to = new File(StringUtils.getPhotoPathMoved(olderPath, folderPath));
             scanFile(new String[]{from.getAbsolutePath()});
             from.renameTo(to);
+            scanFile(new String[]{to.getAbsolutePath()});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void copySelectedPhotos(String paths, String folderPath) {
+        for (String path : paths.split("ç"))
+            copyPhoto(path, folderPath);
+    }
+
+    public void moveSelectedPhotos(String paths, String folderPath) {
+        for (String path : paths.split("ç"))
+            movePhoto(path, folderPath);
+    }
+
+    public void copyPhoto(String olderPath, String folderPath) {
+        try {
+            File from = new File(olderPath);
+            File to = new File(StringUtils.getPhotoPathMoved(olderPath, folderPath));
+
+            InputStream in = new FileInputStream(from);
+            OutputStream out = new FileOutputStream(to);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0)
+                out.write(buf, 0, len);
+
+            in.close();
+            out.close();
+
             scanFile(new String[]{to.getAbsolutePath()});
         } catch (Exception e) {
             e.printStackTrace();

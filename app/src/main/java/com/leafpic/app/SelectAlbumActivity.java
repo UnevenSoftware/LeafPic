@@ -1,13 +1,13 @@
 package com.leafpic.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.leafpic.app.Adapters.SelectAlbumAdapter;
@@ -27,6 +27,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     SelectAlbumAdapter adapt;
     String photoPaths;
+    String photosIndexes;
     int code;
     HandlingPhotos p;//= new HandlingPhotos(SelectAlbumActivity.this);
 
@@ -37,13 +38,19 @@ public class SelectAlbumActivity extends AppCompatActivity {
 
         photoPaths = getIntent().getStringExtra("selected_photos");
         code = getIntent().getIntExtra("request_code", -1);
-        p = new HandlingPhotos(SelectAlbumActivity.this);
+        photosIndexes = getIntent().getStringExtra("photos_indexes");
 
+        p = new HandlingPhotos(SelectAlbumActivity.this);
+        if (code == 69) setTitle("Move to");
+        else if (code == 23) setTitle("Copy to");
+
+        setResult(Activity.RESULT_CANCELED);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
             }
         });
@@ -63,19 +70,19 @@ public class SelectAlbumActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 String newAlbumPath = a.getTag().toString();
-                //  Album album = albums.getAlbum(s);
-                // Intent result = new Intent();
-                //result.putExtra("album_path", album.Path);
-                //result.putExtra("selected_photos", photoPaths);
 
-                if (code == 69) {
 
-                    String paths[] = photoPaths.split("ç");
-                    Log.wtf("asdasd", photoPaths);
-                    for (String path : paths) {
-                        p.movePhoto(path, newAlbumPath);
-                    }
-                    setResult(Activity.RESULT_OK);
+                if (code == MOVE_TO_ACTION) {
+                    Intent result = new Intent();
+                    result.putExtra("photos_indexes", photosIndexes);
+                    p.moveSelectedPhotos(photoPaths, newAlbumPath);
+                    setResult(Activity.RESULT_OK, result);
+                }
+
+                if (code == COPY_TO_ACTION) {
+                    Intent result = new Intent();
+                    p.copySelectedPhotos(photoPaths, newAlbumPath);
+                    setResult(Activity.RESULT_OK, result);
                 }
 
                 finish();
