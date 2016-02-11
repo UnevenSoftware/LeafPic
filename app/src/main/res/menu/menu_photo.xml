@@ -5,7 +5,6 @@
     tools:context=".MainActivity"
 >
     <!-- general Stuff -->
-
     <!-- Albums Stuff -->
     <item
         android:id="@+id/shareButton"
@@ -29,7 +28,6 @@
                     android:id="@+id/rotateDX"
                     android:title="Rotate right 90°"
                     android:icon="@mipmap/ic_rotate_right_white_24dp"/>
-
             <item
                     android:id="@+id/rotateSX"
                     android:title="Rotate left 90°"
@@ -56,16 +54,24 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/copyAction"
+        android:title="Copy to"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/moveAction"
+        android:title="Move to"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/details"
         android:title="Details"
         app:showAsAction="never"
         />
     <item
-            android:id="@+id/setting"
-            android:title="Settings"
-            app:showAsAction="never"
+        android:id="@+id/setting"
+        android:title="Settings"
+        app:showAsAction="never"
         />
-
-
     <!-- End Albums Stuff -->
 </menu>

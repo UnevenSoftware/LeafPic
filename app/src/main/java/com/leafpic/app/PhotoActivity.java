@@ -94,6 +94,20 @@ public class PhotoActivity extends AppCompatActivity {
                 finish();
                 return true;
 
+            case R.id.moveAction:
+                Intent int1 = new Intent(PhotoActivity.this, SelectAlbumActivity.class);
+                int1.putExtra("selected_photos", photos.getCurrentPhoto());
+                int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
+                int1.putExtra("photos_indexes", photos.getSelectedPhotosIndexSerilized());
+                startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
+                break;
+            case R.id.copyAction:
+                Intent int2 = new Intent(PhotoActivity.this, SelectAlbumActivity.class);
+                int2.putExtra("selected_photos", photos.getCurrentPhoto());
+                int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
+                startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
+                break;
+
             case R.id.shareButton:
                 String file_path = photos.photos.get(mViewPager.getCurrentItem()).Path;
                 Intent share = new Intent(Intent.ACTION_SEND);
