@@ -14,7 +14,6 @@
             android:orientation="vertical"
             tools:ignore="MissingPrefix"
         >
-
         <ImageView
                 android:id="@+id/album_preview"
                 android:layout_width="match_parent"

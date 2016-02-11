@@ -455,9 +455,9 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         /**** Navigation Bar*/
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean NavBar = SP.getBoolean("nav_bar", false);
         if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) && (NavBar)) {
             getWindow().setNavigationBarColor(getColor(R.color.toolbar));
