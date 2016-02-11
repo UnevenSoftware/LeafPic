@@ -111,7 +111,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
         /**** ToolBar *****/
-        toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         /**** Status Bar */
         //getWindow().setStatusBarColor(getColor(R.color.status_bar));
@@ -185,7 +185,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     }
 
     public void addHiddenFolder_FABEvent() {
-        FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fabAddFolder);
+        FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
 
         if (hidden) {
             btnAddFolder.setVisibility(View.VISIBLE);
@@ -460,12 +460,12 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
             albums.loadPreviewAlbums();
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.gridAlbums);
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         adapt = new AlbumsAdapter(albums.dispAlbums, R.layout.album_card);
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                TextView a = (TextView) v.findViewById(R.id.picturetext);
+                TextView a = (TextView) v.findViewById(R.id.album_name);
                 adapt.notifyItemChanged(albums.selectAlbum(a.getTag().toString(), true));
                 editmode = true;
                 invalidateOptionsMenu();
@@ -476,7 +476,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         adapt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView a = (TextView) v.findViewById(R.id.picturetext);
+                TextView a = (TextView) v.findViewById(R.id.album_name);
                 if (editmode) {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
                     invalidateOptionsMenu();

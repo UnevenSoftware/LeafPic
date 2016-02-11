@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
@@ -56,7 +55,7 @@ public class PhotoActivity extends AppCompatActivity {
                     toggleSystemUI();
                 }
             });
-            mViewPager = (ViewPager) findViewById(R.id.pager);
+            mViewPager = (ViewPager) findViewById(R.id.photos_pager);
             mViewPager.setAdapter(mCustomPagerAdapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
 
@@ -211,7 +210,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     public void initUiTweaks() {
         /**** ToolBar ********/
-        toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

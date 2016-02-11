@@ -15,16 +15,16 @@
         >
 
         <RelativeLayout
-            android:id="@+id/layout_card_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/toolbar">
+                android:id="@+id/album_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/toolbar">
         <RelativeLayout
-            android:id="@+id/img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                android:id="@+id/header_album_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
             <ImageView
-                    android:id="@+id/selectedPicIcon"
+                    android:id="@+id/selected_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"
@@ -35,32 +35,32 @@
                     android:layout_centerVertical="true"
                     />
                 <ImageView
-                    android:id="@+id/picture"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:scaleType="centerCrop"
+                        android:id="@+id/album_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:scaleType="centerCrop"
                     />
             </RelativeLayout>
             <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_below="@id/img"
-                android:background="@android:color/darker_gray"
+                    android:id="@+id/album_card_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/header_album_card"
+                    android:background="@android:color/darker_gray"
                 />
 
             <LinearLayout
-                android:id="@+id/linear_card_text"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/divider"
+                    android:id="@+id/linear_card_text"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/album_card_divider"
                 >
 
                 <TextView
-                        android:id="@+id/picturetext"
+                        android:id="@+id/album_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
@@ -71,7 +71,7 @@
                         android:textSize="16sp"
                     />
                 <TextView
-                        android:id="@+id/image_number_text"
+                        android:id="@+id/album_photos_count"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"

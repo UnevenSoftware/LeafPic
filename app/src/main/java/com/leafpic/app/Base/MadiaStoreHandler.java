@@ -131,6 +131,43 @@ public class MadiaStoreHandler {
         return list;
     }
 
+    public ArrayList<Photo> getAlbumPhotos(String id, String sort) {
+
+        ArrayList<Photo> list = new ArrayList<Photo>();
+
+        String[] projection = new String[]{
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.MIME_TYPE
+        };
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Cursor cur = context.getContentResolver().query(
+                images,
+                projection,
+                MediaStore.Images.Media.BUCKET_ID + " = ?",
+                new String[]{id}, " " + sort);
+
+
+        if (cur.moveToFirst()) {
+            int pathColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+            int dateColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN);
+            int mimeColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.MIME_TYPE);
+            do {
+                list.add(new Photo(
+                        cur.getString(pathColumn),
+                        cur.getString(dateColumn),
+                        cur.getString(mimeColumn)
+                ));
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return list;
+    }
+
     public int getAlbumPhotosCount(String id) {
         int c;
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;

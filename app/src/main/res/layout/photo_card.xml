@@ -6,7 +6,7 @@
         android:layout_margin="2dp"
 >
     <ImageView
-            android:id="@+id/selectedPicIcon"
+            android:id="@+id/selected_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
@@ -16,7 +16,7 @@
             android:layout_margin="10dp"
     />
     <ImageView
-            android:id="@+id/gifIcon"
+            android:id="@+id/type_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
@@ -29,11 +29,11 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/path"
+            android:id="@+id/photo_path"
             android:visibility="invisible"
     />
     <ImageView
-            android:id="@+id/pic"
+            android:id="@+id/photo_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"

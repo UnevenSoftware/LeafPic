@@ -101,11 +101,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            picture = (ImageView) itemView.findViewById(R.id.picture);
-            selectHolder = (ImageView) itemView.findViewById(R.id.selectedPicIcon);
-            card_layout = (RelativeLayout) itemView.findViewById(R.id.layout_card_id);
-            name = (TextView) itemView.findViewById(R.id.picturetext);
-            nPhotos = (TextView) itemView.findViewById(R.id.image_number_text);
+            picture = (ImageView) itemView.findViewById(R.id.album_preview);
+            selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);
+            card_layout = (RelativeLayout) itemView.findViewById(R.id.album_card);
+            name = (TextView) itemView.findViewById(R.id.album_name);
+            nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
         }
     }
 

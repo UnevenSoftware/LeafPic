@@ -8,28 +8,27 @@
     android:orientation="vertical"
     tools:context=".MainActivity"
     android:background="@color/background_material_dark">
-    <!--
-    android:background="@color/background_material_dark">
-    -->
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:elevation="5dp">
-                <include layout="@layout/toolbar"
-                    android:id="@+id/my_awesome_toolbar"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/gridAlbums"
-                    android:layout_gravity="center_horizontal"
-                    android:numColumns="auto_fit"
-                />
-            </LinearLayout>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:elevation="5dp">
+
+        <include layout="@layout/toolbar"
+                 android:id="@+id/toolbar"/>
+
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/grid_albums"
+                android:layout_gravity="center_horizontal"
+                android:numColumns="auto_fit"
+        />
+    </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAddFolder"
-            android:onClick="addFolder"
+            android:id="@+id/fab_add_folder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:borderWidth="0dp"

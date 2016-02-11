@@ -75,9 +75,9 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
 
         public ViewHolder(View itemView) {
             super(itemView);
-            picture = (ImageView) itemView.findViewById(R.id.item_image_img);
+            picture = (ImageView) itemView.findViewById(R.id.album_preview);
             name = (TextView) itemView.findViewById(R.id.album_name);
-            nPhotos = (TextView) itemView.findViewById(R.id.photoCount);
+            nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
         }
     }
 }

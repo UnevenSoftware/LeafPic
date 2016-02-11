@@ -87,6 +87,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
+    public void removeItemAt(int pos) {
+        //Log.wtf("asdasd",getItemCount()+"");
+        photos.remove(pos);
+        //notifyItemRemoved(pos);
+        //Log.wtf("asdasd",getItemCount()+"");
+        // notifyDataSetChanged();
+    }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,10 +103,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.pic);
-            selectHolder = (ImageView) itemView.findViewById(R.id.selectedPicIcon);
-            gifIcon = (ImageView) itemView.findViewById(R.id.gifIcon);
-            path = (TextView) itemView.findViewById(R.id.path);
+            imageView = (ImageView) itemView.findViewById(R.id.photo_preview);
+            selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);
+            gifIcon = (ImageView) itemView.findViewById(R.id.type_icon);
+            path = (TextView) itemView.findViewById(R.id.photo_path);
         }
     }
 }
