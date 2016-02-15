@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences SP;
@@ -23,6 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
         //FOR ADDING TOOLBAR
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.setting_toolbar, root, false);
+
         root.addView(bar, 0); // insert at top
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,7 +33,6 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     @Override
@@ -57,18 +59,29 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
-
             Preference p = findPreference("accent_color");
             p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 
+                    new MaterialDialog.Builder(getContext())
+                            .title(R.string.setting_accent_color_title)
+                            .items(R.array.preference_accent_Color)
+                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                                @Override
+                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                    return true;
+                                }
+                            })
+                            .positiveText("OK")
+                            .show();
+
                     return false;
                 }
             });
         }
-
-
     }
+
 
 }

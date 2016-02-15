@@ -32,6 +32,7 @@
     <string name="folder_setting">Folder</string>
     <string name="primaryColor">Primary Color</string>
     <string name="color_palette">Color Palette</string>
-
+    <string name="setting_accent_color_title">Accent Color</string>
+    <string name="setting_primary_color_title">Primary Color</string>
     <string name="skip">Why You Skip This Beautyfull Intro? Maledetto!!!</string>
 </resources>
