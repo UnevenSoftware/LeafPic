@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Added For Theme-->
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796b</color>
+    <color name="colorPrimaryLight">#009688</color>
+    <color name="colorAccent">#FF9800</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecondary">#9E9E9E</color>
+
+    <color name="textColorPrimaryInverse">#DE000000</color>
+    <color name="textColorSecondaryInverse">#9E9E9E</color>
+
+
+    <color name="colorPrimaryInverse">#03A9F4</color>
+    <color name="colorPrimaryDarkInverse">#03A9A8</color>
+    <color name="colorAccentInverse">#FF9899</color>
+
+
     <!--BASE COLOR-->
     <color name="status_bar">#00796b</color>
     <color name="selected_album">#009688</color>
@@ -9,6 +27,7 @@
     <color name="album_info">#000</color>
     <color name="trasparent_toolbar">#33009688</color>
     <color name="trasparent">#00000000</color>
+    <color name="white">#FAFAFA</color>
     <!--GREY-->
     <color name="grey_1">#727272</color>
     <color name="grey_2">#424242</color>

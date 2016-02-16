@@ -41,7 +41,7 @@
             android:title="Dark Theme"
             android:defaultValue="false"
             android:summary="Apply the DarkTheme to LeafPic."
-            android:key="set_theme"
+            android:key="set_dark_theme"
             />
 
         <Preference

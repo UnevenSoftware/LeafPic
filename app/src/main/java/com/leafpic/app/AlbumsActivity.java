@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
@@ -44,6 +45,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialize.color.Material;
 
 import java.io.File;
 
@@ -56,6 +58,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     Toolbar toolbar;
     SharedPreferences SP;
     boolean editmode = false, hidden = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
             }
         });
         t.start();
+
     }
 
     @Override
@@ -96,35 +100,49 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         updateSelectedStuff();
         invalidateOptionsMenu();
         checkPermissions();
+
+        initUiTweaks();
+
         super.onResume();
     }
 
 
     public void initUiTweaks(){
-
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         /**** Nav Bar ****/
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
-            //boolean NightTheme = SP.getBoolean("set_theme", false);
             if (NavBar)
-                getWindow().setNavigationBarColor(getColor(R.color.toolbar));
+                getWindow().setNavigationBarColor(getColor(R.color.primary));
         }
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         /**** Status Bar */
-        //getWindow().setStatusBarColor(getColor(R.color.status_bar));
-        getWindow().setStatusBarColor(getColor(R.color.toolbar));
+        getWindow().setStatusBarColor(getColor(R.color.primary));
+        //getWindow().setStatusBarColor(getColor(R.color.toolbar));
+
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
+        boolean darkTheme = SP.getBoolean("set_dark_theme", false);
+        if (darkTheme==true){
+            //setTheme(R.style.AppTheme_Dark);
+            rl.setBackgroundColor(getColor(R.color.background_material_dark));
+        }else {
+            //setTheme(R.style.AppTheme);
+            rl.setBackgroundColor(getColor(R.color.background_material_light));
+        }
 
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(FontAwesome.Icon.faw_picture_o);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(FontAwesome.Icon.faw_eye_slash);
         PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
         PrimaryDrawerItem item22 = new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_calendar_o);
 
-        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
-        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
-        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
+        PrimaryDrawerItem item5 = new PrimaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
+        //SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
+        //SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
+        //SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -164,7 +182,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                                 break;
                             case 6: //settings
                                 //MyPreferenceFragment f = new MyPreferenceFragment();
-
                                 // FragmentManager fragment = getFragmentManager();
                                 Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
                                 startActivity(intent);
@@ -176,7 +193,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                             default:
                                 break;
                         }
-
                         return false;
                     }
                 })
@@ -322,7 +338,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                     public boolean onMenuItemClick(MenuItem item) {
                         Toast.makeText(
                                 AlbumsActivity.this,
-                                "You Clicked : " + item.getTitle(),
+                                "You Clicked: " + item.getTitle(),
                                 Toast.LENGTH_SHORT
                         ).show();
                         return true;
