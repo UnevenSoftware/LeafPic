@@ -1,5 +1,6 @@
 package com.leafpic.app.Adapters;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -54,10 +56,22 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .placeholder(R.drawable.ic_empty)
                 .into(holder.picture);
 
-        holder.name.setText(Html.fromHtml("<i><font>" + a.DisplayName + "</font></i>"));
-
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
+        String titcolor;
+
+        boolean darkTheme = SP.getBoolean("set_dark_theme", false);
+        if (darkTheme==true){
+            titcolor="#FAFAFA";
+            holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.background_material_dark));
+        }else {
+            titcolor="4#24242";
+            holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.background_material_light));
+        }
+
+        holder.name.setText(Html.fromHtml("<i><font color='" + titcolor + "'>" + a.DisplayName + "</font></i>"));
+
+
         String SColor = SP.getString("PrefColor", "#03A9F4");
 
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +

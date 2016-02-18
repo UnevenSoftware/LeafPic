@@ -471,7 +471,10 @@ public class PhotosActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //String SColor = SP.getString("PrimaryPrefColor", "#009688");
+        //toolbar.setBackgroundColor(Color.parseColor(SColor));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

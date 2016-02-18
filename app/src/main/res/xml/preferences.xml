@@ -17,16 +17,6 @@
             android:persistent="true"
             android:summary="Pleas Provide Your Name"
             android:title="Your Name" />
-
-        <ListPreference
-            android:title="Test Color Pref"
-            android:summary="Select a Color."
-            android:key="PrefColor"
-            android:defaultValue="1"
-            android:entries="@array/prefListColor"
-            android:entryValues="@array/ColorsPref"
-            />
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -47,33 +37,53 @@
     <PreferenceCategory
         android:title="@string/theme_setting"
         >
-        <CheckBoxPreference
-            android:title="Night Theme"
+        <SwitchPreference
+            android:title="Dark Theme"
             android:defaultValue="false"
             android:summary="Apply the DarkTheme to LeafPic."
-            android:key="set_theme"
+            android:key="set_dark_theme"
             />
-        <Preference
-                android:selectable="true"
-                android:enabled="true"
-                android:key="primary_color"
-                android:title="Primary Color"
-                android:summary="Selecet the Primary Color"
-            />
-        <Preference
-                android:selectable="true"
-                android:enabled="true"
-                android:key="accent_color"
-                android:title="Accent Color"
-                android:summary="Selecet the Accent Color"/>
 
-        <CheckBoxPreference
+        <Preference
+            android:selectable="true"
+            android:enabled="true"
+            android:key="primary_color"
+            android:title="@string/setting_primary_color_title"
+            android:summary="Selecet the Primary Color"
+            />
+        <Preference
+            android:selectable="true"
+            android:enabled="true"
+            android:key="accent_color"
+            android:title="@string/setting_accent_color_title"
+            android:summary="Selecet the Accent Color"/>
+
+        <SwitchPreference
             android:title="Colored Navigation Bar"
             android:defaultValue="false"
             android:summary="Apply the Theme color to the Navigation Bar."
             android:key="nav_bar"
             android:onClick="initUiTweaks"
             />
+
+        <ListPreference
+            android:title="Anncent Color Test"
+            android:summary="Select the accent Color"
+            android:key="PrefColor"
+            android:defaultValue="1"
+            android:entries="@array/prefListColor"
+            android:entryValues="@array/ColorsPref"
+            />
+
+        <ListPreference
+            android:title="Primary Color Test"
+            android:summary="Select the Primary Color"
+            android:key="PrimaryPrefColor"
+            android:defaultValue="1"
+            android:entries="@array/PrimaryprefListColor"
+            android:entryValues="@array/PrimaryColorsPref"
+            />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
