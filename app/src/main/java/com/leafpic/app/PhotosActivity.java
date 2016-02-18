@@ -106,7 +106,7 @@ public class PhotosActivity extends AppCompatActivity {
                         invalidateOptionsMenu();
                     } else {
                         photos.setCurrentPhoto(is.getTag().toString());
-                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
+                        Intent intent = new Intent(PhotosActivity.this, MainActivity.class);
                         Bundle b = new Bundle();
                         b.putParcelable("album", photos);
                         intent.putExtras(b);

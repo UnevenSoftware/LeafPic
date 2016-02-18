@@ -58,6 +58,18 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"
+            android:label="Album"
+            android:parentActivityName=".PhotosActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PhotosActivity"/>
+            <intent-filter>
+                <action android:name="android.intent.action.albumPhoto"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
     </application>
 </manifest>
