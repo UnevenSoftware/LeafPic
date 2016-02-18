@@ -11,34 +11,34 @@
     android:background="@color/background_material_dark">
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:elevation="5dp">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="5dp">
 
         <include layout="@layout/toolbar"
-                 android:id="@+id/toolbar"/>
+            android:id="@+id/toolbar"/>
 
         <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/grid_albums"
-                android:layout_gravity="center_horizontal"
-                android:numColumns="auto_fit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/grid_albums"
+            android:layout_gravity="center_horizontal"
+            android:numColumns="auto_fit"
         />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_add_folder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:borderWidth="0dp"
-            app:elevation="40dp"
-            app:ico_color="@color/md_white_1000"
-            app:ico_icon="gmd-add"
-            app:ico_size="16dp"
-            android:layout_margin="16dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom|end"/>
+        android:id="@+id/fab_add_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:borderWidth="0dp"
+        app:elevation="40dp"
+        app:ico_color="@color/md_white_1000"
+        app:ico_icon="gmd-add"
+        app:ico_size="16dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"/>
 </RelativeLayout>

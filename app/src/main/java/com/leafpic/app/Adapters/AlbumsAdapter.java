@@ -1,24 +1,20 @@
 package com.leafpic.app.Adapters;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
-import com.leafpic.app.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -29,7 +25,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     ArrayList<Album> albums;
     private int layout_ID;
-
+    boolean selected=false;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
@@ -61,29 +57,38 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         holder.name.setTag(a.Path);
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
+        String textColor;
+
+        if (SP.getBoolean("set_dark_theme", false))
+            textColor="#FAFAFA";
+        else
+            textColor="#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
+            //White Text On White Theme
+            if (SP.getBoolean("set_dark_theme", false)==false){
+                selected=true;
+                holder.name.setText(Html.fromHtml("<i><font color='#FAFAFA'>" + a.DisplayName + "</font></i>"));
+                holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SP.getString("PrefColor", "#03A9F4") + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+                        "color='#FAFAFA'> Photos</font>"));
+            }
         } else {
+            selected=false;
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
             if (SP.getBoolean("set_dark_theme", false))
-                holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.background_material_dark));
-             else
+                holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
+            else
                 holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.background_material_light));
         }
-        String textColor;
-
-        if (SP.getBoolean("set_dark_theme", false)) textColor="#FAFAFA";
-         else textColor="#2b2b2b";
-
-        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SP.getString("PrefColor", "#03A9F4") + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> Photos</font>"));
-
+        if (selected==false) {
+            holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
+            holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SP.getString("PrefColor", "#03A9F4") + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+                    "color='" + textColor + "'> Photos</font>"));
+        }
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
