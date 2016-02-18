@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 import android.text.Html;
@@ -21,8 +23,6 @@ import android.transition.Slide;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.*;
@@ -179,6 +179,7 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         togglePrimaryToolbarOptions(menu);
+       updateSort(menu);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -268,6 +269,17 @@ public class PhotosActivity extends AppCompatActivity {
 
     }
 
+    public void updateSort(final Menu menu){
+        menu.findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
+
+        if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+            menu.findItem(R.id.date_taken_sort_action).setChecked(true);
+        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+            menu.findItem(R.id.name_sort_action).setChecked(true);
+        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+            menu.findItem(R.id.size_sort_action).setChecked(true);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -299,99 +311,85 @@ public class PhotosActivity extends AppCompatActivity {
                     final PopupMenu popup = new PopupMenu(PhotosActivity.this, findViewById(R.id.sortPhotos));
                     popup.setGravity(Gravity.AXIS_PULL_BEFORE);
                     popup.getMenuInflater().inflate(R.menu.sort, popup.getMenu());
-                    popup.getMenu().findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
 
-                    if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
-                        popup.getMenu().findItem(R.id.date_taken_sort_action).setChecked(true);
-                    else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
-                        popup.getMenu().findItem(R.id.name_sort_action).setChecked(true);
-                    else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
-                        popup.getMenu().findItem(R.id.size_sort_action).setChecked(true);
 
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        public boolean onMenuItemClick(MenuItem item) {
-
-                            switch (item.getItemId()) {
-                                case R.id.name_sort_action:
-                                    photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
-                                    break;
-                                case R.id.size_sort_action:
-                                    photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
-                                    break;
-                                case R.id.date_taken_sort_action:
-                                    photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
-                                    break;
-                                case R.id.ascending_sort_action:
-                                    photos.setDefaultSortingAscending(!photos.settings.ascending);
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            photos.sort();
-                            LoadPhotos();
-                            return true;
-                        }
-                    });
-
-                    popup.show();
                 } else StringUtils.showToast(getApplicationContext(), " In progress");
                 break;
 
+            case R.id.name_sort_action:
+                photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
+                photos.sort();
+                LoadPhotos();
+                break;
+            case R.id.size_sort_action:
+                photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
+                photos.sort();
+                LoadPhotos();
+                break;
+            case R.id.date_taken_sort_action:
+                photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                photos.sort();
+                LoadPhotos();
+                break;
+            case R.id.ascending_sort_action:
+                photos.setDefaultSortingAscending(!photos.settings.ascending);
+                photos.sort();
+                LoadPhotos();
+                break;
+
             case R.id.renameAlbum:
-                new MaterialDialog.Builder(this)
+                /*new MaterialDialog.Builder(this)
                         .title("Rename Album")
                         .content("insert a fucking NAME")
                         .inputType(InputType.TYPE_CLASS_TEXT)
                         .input(null, photos.DisplayName, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                               /* TODO make this better
+                               // TODO make this better
                                     albums.renameAlbum(photos.FolderPath, input.toString());
                                 //onBackPressed();
-                                    //finish();*/
+                                    //finish();
 
                                 StringUtils.showToast(getApplicationContext(), "I have to fix this!");
 
                             }
-                        }).show();
+                        }).show();*/
                 break;
 
             case R.id.excludeAlbumButton:
-                new MaterialDialog.Builder(this)
-                        .content(R.string.exclude_album_message)
-                        .positiveText("EXCLUDE")
-                        .negativeText("CANCEL")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PhotosActivity.this);
+                builder.setMessage(R.string.exclude_album_message)
+                        .setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 customAlbumsHandler.excludeAlbum(photos.ID);
                                 finish();
                             }
                         })
-                        .show();
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {}});
+                builder.show();
                 break;
 
             case R.id.deleteAction:
-                new MaterialDialog.Builder(this)
-                        .content(R.string.delete_album_message)
-                        .positiveText("DELETE")
-                        .negativeText("CANCEL")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (editmode) {
-                                    photos.deleteSelectedPhotos();
-                                    adapter.notifyDataSetChanged();
-                                    updateHeaderContent();
-                                    finishEditMode();
-                                } else {
-                                    albums.deleteAlbum(photos.FolderPath);
-                                    finish();
-                                }
-                            }
-                        })
-                        .show();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotosActivity.this);
+                if(editmode) builder1.setMessage(R.string.delete_photos_message);
+                else builder1.setMessage(R.string.delete_album_message);
+                builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (editmode) {
+                            photos.deleteSelectedPhotos();
+                            adapter.notifyDataSetChanged();
+                            updateHeaderContent();
+                            finishEditMode();
+                        } else {
+                            albums.deleteAlbum(photos.FolderPath);
+                            finish();
+                        }
+                    }
+                })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {}});
+                builder1.show();
                 break;
 
             case R.id.hideAlbumButton:
@@ -399,25 +397,24 @@ public class PhotosActivity extends AppCompatActivity {
                     albums.unHideAlbum(photos.FolderPath);
                     finish();
                 } else {
-                    new MaterialDialog.Builder(this)
-                            .content(R.string.hide_album_message)
-                            .positiveText("HIDE")
-                            .negativeText("CANCEL")
-                            .neutralText("EXCLUDE")
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder(PhotosActivity.this);
+                    builder2.setMessage(R.string.delete_album_message)
+                            .setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                                     albums.hideAlbum(photos.FolderPath, photos.photos);
                                 }
                             })
-                            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                            .setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                public void onClick(DialogInterface dialog, int which) {
                                     customAlbumsHandler.excludeAlbum(photos.ID);
                                     finish();
                                 }
                             })
-                            .show();
+                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {}});
+                    builder2.show();
                 }
                 break;
 

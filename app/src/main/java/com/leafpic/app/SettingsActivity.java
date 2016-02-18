@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -80,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 
-                    new MaterialDialog.Builder(getContext())
+                   /* new MaterialDialog.Builder(getContext())
                             .title(R.string.setting_accent_color_title)
                             .items(R.array.preference_accent_Color)
                             .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
@@ -91,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
                             })
                             .positiveText("OK")
-                            .show();
+                            .show();*/
 
                     return false;
                 }

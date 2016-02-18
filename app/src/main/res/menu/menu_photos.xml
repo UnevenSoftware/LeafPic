@@ -15,7 +15,40 @@
         android:orderInCategory="1"
         android:icon="@mipmap/ic_sort_white_24dp"
         app:showAsAction="ifRoom"
-    />
+    >
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <group android:enabled="true" android:checkableBehavior="single">
+                <item
+                    android:id="@+id/name_sort_action"
+                    android:checked="false"
+                    android:title="by Name"
+                    app:showAsAction="ifRoom"
+                    />
+
+                <item
+                    android:id="@+id/date_taken_sort_action"
+                    android:title="by Date Taken"
+                    app:showAsAction="ifRoom"
+                    />
+                <item
+                    android:id="@+id/size_sort_action"
+                    android:title="by Size"
+                    android:checked="false"
+                    app:showAsAction="ifRoom"
+                    />
+            </group>
+            <group android:checkableBehavior="all">
+                <item
+                    android:id="@+id/ascending_sort_action"
+                    android:title="Ascending"
+                    android:checked="false"
+                    app:showAsAction="ifRoom"
+                    />
+            </group>
+        </menu>
+    </item>
     <item
         android:id="@+id/sharePhotos"
         android:icon="@mipmap/ic_share_white_24dp"
