@@ -11,16 +11,18 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -29,10 +31,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.HiddenPhotosHandler;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
@@ -42,19 +44,14 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialize.color.Material;
-
-import java.io.File;
 
 public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-
+    Drawer drawer;
     Toolbar toolbar;
     SharedPreferences SP;
     boolean editmode = false, hidden = false;
@@ -114,6 +111,8 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
             boolean NavBar = SP.getBoolean("nav_bar", false);
             if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.primary));
+            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+
         }
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -131,6 +130,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
             rl.setBackgroundColor(getColor(R.color.background_material_light));
         }
 
+
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(FontAwesome.Icon.faw_picture_o);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(FontAwesome.Icon.faw_eye_slash);
         PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
@@ -139,9 +139,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
-        //SecondaryDrawerItem item3 = new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
-        //SecondaryDrawerItem item4 = new SecondaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
-        //SecondaryDrawerItem item5 = new SecondaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
+
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -150,7 +148,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                 .build();
 
 
-        result = new DrawerBuilder()
+        drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
@@ -192,9 +190,10 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                     }
                 })
                 .build();
+
         addHiddenFolder_FABEvent();
     }
-    Drawer result;
+
 
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);

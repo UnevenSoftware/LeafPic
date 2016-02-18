@@ -68,9 +68,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         if (f.isSelected()) {
             holder.selectHolder.setVisibility(View.VISIBLE);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
+            holder.imageView.setPadding(15,15,15,15);
         } else {
             holder.selectHolder.setVisibility(View.INVISIBLE);
             holder.imageView.clearColorFilter();
+            holder.imageView.setPadding(0,0,0,0);
         }
     }
 
