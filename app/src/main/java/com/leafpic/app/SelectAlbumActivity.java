@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leafpic.app.Adapters.SelectAlbumAdapter;
@@ -75,6 +76,16 @@ public class SelectAlbumActivity extends AppCompatActivity {
             }
         });
         loadAlbumPreview();
+
+        //Base Theme
+        LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
+        if (SP.getBoolean("set_dark_theme", false)){
+            //setTheme(R.style.AppTheme_Dark);
+            ll.setBackgroundColor(getColor(R.color.background_material_dark));
+        }else {
+            //setTheme(R.style.AppTheme);
+            ll.setBackgroundColor(getColor(R.color.background_material_light));
+        }
     }
 
     private void loadAlbumPreview(){

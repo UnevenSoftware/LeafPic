@@ -56,7 +56,8 @@
             android:enabled="true"
             android:key="accent_color"
             android:title="@string/setting_accent_color_title"
-            android:summary="Selecet the Accent Color"/>
+            android:summary="Selecet the Accent Color"
+            />
 
         <SwitchPreference
             android:title="Colored Navigation Bar"

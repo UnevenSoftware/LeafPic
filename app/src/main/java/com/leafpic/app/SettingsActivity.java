@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -68,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         };
         */
+
     }
 
     @Override
@@ -82,10 +86,13 @@ public class SettingsActivity extends AppCompatActivity {
 
             SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean NavBar = SP.getBoolean("nav_bar", false);
-
+            /**** Nav Bar ****/
             if (NavBar)
                 getWindow().setNavigationBarColor(getColor(R.color.toolbar));
             else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+
+            /**** Status Bar */
+            getWindow().setStatusBarColor(getColor(R.color.primary));
             /*
             if (SP.getBoolean("set_dark_theme", false)){
                 setTheme(R.style.PreferencesThemeLight);
@@ -101,24 +108,30 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
-            Preference p = findPreference("accent_color");
+            Preference p = findPreference("primary_color");
             p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    // custom dialog
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.custom_color_piker_primary);
+                    dialog.setTitle("Primary Color");
 
-                   /* new MaterialDialog.Builder(getContext())
-                            .title(R.string.setting_accent_color_title)
-                            .items(R.array.preference_accent_Color)
-                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    // set the custom dialog components - text, image and button
+                    TextView grey = (TextView) dialog.findViewById(R.id.grey);
+                    TextView green = (TextView) dialog.findViewById(R.id.green);
+                    TextView amber = (TextView) dialog.findViewById(R.id.amber);
+                    TextView orange = (TextView) dialog.findViewById(R.id.orange);
 
-                                    return true;
-                                }
-                            })
-                            .positiveText("OK")
-                            .show();*/
-
+                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                     return false;
                 }
             });
