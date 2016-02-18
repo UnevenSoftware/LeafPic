@@ -2,6 +2,7 @@ package com.leafpic.app;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,8 +18,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +29,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
@@ -49,7 +49,7 @@ import com.mikepenz.materialize.color.Material;
 
 import java.io.File;
 
-public class AlbumsActivity extends AppCompatActivity implements FolderChooserDialog.FolderCallback {
+public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
@@ -123,8 +123,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         //getWindow().setStatusBarColor(getColor(R.color.toolbar));
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
-        boolean darkTheme = SP.getBoolean("set_dark_theme", false);
-        if (darkTheme==true){
+        if (SP.getBoolean("set_dark_theme", false)){
             //setTheme(R.style.AppTheme_Dark);
             rl.setBackgroundColor(getColor(R.color.background_material_dark));
         }else {
@@ -148,12 +147,10 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.side_wall)
                 .withSelectionListEnabledForSingleProfile(false)
-                .addProfiles(
-                        new ProfileDrawerItem().withName(SP.getString("username", "NA")).withIcon(getDrawable(R.drawable.default_profile))
-                )
                 .build();
 
-        final Drawer result = new DrawerBuilder()
+
+        result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
@@ -181,8 +178,6 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                                 checkPermissions();
                                 break;
                             case 6: //settings
-                                //MyPreferenceFragment f = new MyPreferenceFragment();
-                                // FragmentManager fragment = getFragmentManager();
                                 Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
                                 startActivity(intent);
                                 break;
@@ -199,6 +194,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 .build();
         addHiddenFolder_FABEvent();
     }
+    Drawer result;
 
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
@@ -211,17 +207,17 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
             btnAddFolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new FolderChooserDialog.Builder(AlbumsActivity.this)
+                    /*new FolderChooserDialog.Builder(AlbumsActivity.this)
                             .chooseButton(R.string.md_choose_label)
                             .initialPath(Environment.getExternalStorageDirectory().getPath())
-                            .show();
+                            .show();*/
                 }
             });
         } else
             btnAddFolder.setVisibility(View.INVISIBLE);
     }
 
-    @Override
+    /*@Override
     public void onFolderSelection(@NonNull File folder) {
         HiddenPhotosHandler h = new HiddenPhotosHandler(getApplicationContext());
         StringUtils.showToast(getApplicationContext(), folder.getAbsolutePath());
@@ -230,7 +226,7 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
         albums.loadPreviewHiddenAlbums();
         adapt.notifyDataSetChanged();
     }
-
+*/
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
@@ -305,9 +301,12 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
 
     void updateSelectedStuff() {
         int c;
-        if ((c = albums.getSelectedCount()) != 0)
-            setTitle(c + "/" + albums.dispAlbums.size());
-        else setTitle(getString(R.string.app_name));
+        try {
+            if ((c = albums.getSelectedCount()) != 0)
+                setTitle(c + "/" + albums.dispAlbums.size());
+            else setTitle(getString(R.string.app_name));
+        } catch (NullPointerException ex){ex.printStackTrace();}
+        Log.wtf("sadas",albums.getSelectedCount()+"");
     }
 
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
@@ -360,35 +359,35 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                 break;
 
             case R.id.excludeAlbumButton:
-                new MaterialDialog.Builder(this)
-                        .content(R.string.exclude_album_message)
-                        .positiveText("EXCLUDE")
-                        .negativeText("CANCEL")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
+                builder.setMessage(R.string.exclude_album_message)
+                        .setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 albums.excludeSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .show();
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {}});
+               builder.show();
                 break;
 
             case R.id.deleteAction:
-                new MaterialDialog.Builder(this)
-                        .content(R.string.delete_album_message)
-                        .positiveText("DELETE")
-                        .negativeText("CANCEL")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(AlbumsActivity.this);
+                builder1.setMessage(R.string.delete_album_message)
+                        .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 albums.deleteSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .show();
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
                 break;
 
             case R.id.hideAlbumButton:
@@ -397,28 +396,27 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
                     adapt.notifyDataSetChanged();
                     invalidateOptionsMenu();
                 } else {
-                    new MaterialDialog.Builder(this)
-                            .content(R.string.hide_album_message)
-                            .positiveText("HIDE")
-                            .negativeText("CANCEL")
-                            .neutralText("EXCLUDE")
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    albums.hideSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                }
+
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
+                    builder2.setMessage(R.string.delete_album_message)
+                            .setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        albums.hideSelectedAlbums();
+                                        adapt.notifyDataSetChanged();
+                                        invalidateOptionsMenu();
+                                    }
                             })
-                            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                            .setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                public void onClick(DialogInterface dialog, int which) {
                                     albums.excludeSelectedAlbums();
                                     adapt.notifyDataSetChanged();
                                     invalidateOptionsMenu();
                                 }
                             })
-                            .show();
+                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {}});
+                    builder2.show();
                 }
                 break;
 
@@ -451,27 +449,13 @@ public class AlbumsActivity extends AppCompatActivity implements FolderChooserDi
     }
 
     private void loadAlbums() {
-        addHiddenFolder_FABEvent();
 
+        addHiddenFolder_FABEvent();
         if (hidden) {
             //LOAD
-            /*
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
-                    .title("Hidden Albums")
-                    .content("Scaning for hidden media...")
-                    .progress(true, 0)
-                    .progressIndeterminateStyle(true);
-
-            final MaterialDialog dialog = builder.build();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dialog.show();
-                }
-            });
-            */
+            //result.closeDrawer();
             albums.loadPreviewHiddenAlbums();
-            //dialog.dismiss();
+
         } else
             albums.loadPreviewAlbums();
 

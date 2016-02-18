@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -16,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.leafpic.app.Adapters.PhotosPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
@@ -117,23 +117,22 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
 
             case R.id.deletePhoto:
-                new MaterialDialog.Builder(this)
-                        .content(R.string.delete_photo_message)
-                        .positiveText("DELETE")
-                        .negativeText("CANCEL")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                int index = mViewPager.getCurrentItem();
-                                mViewPager.removeView(mViewPager.getChildAt(index));
-                                //TODO improve delete single photo
-                                photos.deleteCurrentPhoto();
-                                mCustomPagerAdapter.notifyDataSetChanged();
-                                mViewPager.destroyDrawingCache();
-                                mViewPager.setCurrentItem(index + 1);
-                            }
-                        })
-                        .show();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotoActivity.this);
+                builder1.setMessage(R.string.delete_album_message);
+                builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        int index = mViewPager.getCurrentItem();
+                        mViewPager.removeView(mViewPager.getChildAt(index));
+                        //TODO improve delete single photo
+                        photos.deleteCurrentPhoto();
+                        mCustomPagerAdapter.notifyDataSetChanged();
+                        mViewPager.destroyDrawingCache();
+                        mViewPager.setCurrentItem(index + 1);
+                    }
+                })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {}});
+                builder1.show();
 
                 return true;
 
@@ -156,7 +155,7 @@ public class PhotoActivity extends AppCompatActivity {
 
             case R.id.renamePhoto:
 
-                new MaterialDialog.Builder(this)
+               /* new MaterialDialog.Builder(this)
                         .title("Rename Photo")
                         .inputType(InputType.TYPE_CLASS_TEXT)
                         .input(null, StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
@@ -166,7 +165,7 @@ public class PhotoActivity extends AppCompatActivity {
                                         photos.getCurrentPhoto().Path,
                                         input + StringUtils.getPhotoExtensionbyPath(photos.getCurrentPhoto().Path));
                             }
-                        }).show();
+                        }).show();*/
 
                 break;
             case R.id.Modify:
@@ -198,7 +197,7 @@ public class PhotoActivity extends AppCompatActivity {
                 cursor.close();
 
                 /**DIALOG**/
-                new MaterialDialog.Builder(this)
+               /* new MaterialDialog.Builder(this)
                         .title("Photo Details")
                         .content("Path: \t" + photos.getCurrentPhoto().Path
                                 + "\nSize: \t" + size
@@ -206,7 +205,7 @@ public class PhotoActivity extends AppCompatActivity {
                                 + "\nType: \t" + photos.getCurrentPhoto().MIME
                                 + "\nDate: \t" + date)
                         .positiveText("DONE")
-                        .show();
+                        .show();*/
                 break;
 
             case R.id.setting:
