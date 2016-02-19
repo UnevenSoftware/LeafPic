@@ -23,18 +23,24 @@ import java.util.ArrayList;
  * Created by dnld on 18/02/16.
  */
 
-public class MyPagerAdapter extends FragmentPagerAdapter {
+public class MediaPagerAdapter extends FragmentPagerAdapter {
 
     ArrayList<Photo> photos;
+    View.OnTouchListener listener;
+    public void  setOnTouchListener(View.OnTouchListener l){ listener = l; }
 
-    public MyPagerAdapter(FragmentManager fm, ArrayList<Photo> photos) {
+    public MediaPagerAdapter(FragmentManager fm, ArrayList<Photo> photos) {
         super(fm);
         this.photos=photos;
     }
 
     @Override
     public Fragment getItem(int pos) {
-        return ImageFragment.newInstance(photos.get(pos).Path,0,0);
+        Photo p = photos.get(pos);
+
+        ImageFragment fragment = ImageFragment.newInstance(p.Path,300,300);
+        fragment.setOnTouchListener(listener);
+        return fragment;
     }
 
     @Override

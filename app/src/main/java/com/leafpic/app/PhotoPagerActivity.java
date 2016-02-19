@@ -7,15 +7,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,8 +19,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.leafpic.app.Adapters.MyPagerAdapter;
-import com.leafpic.app.Adapters.PhotosPagerAdapter;
+import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
@@ -37,11 +31,11 @@ import java.text.SimpleDateFormat;
 /**
  * Created by dnld on 18/02/16.
  */
-public class MainActivity extends AppCompatActivity {
+public class PhotoPagerActivity extends AppCompatActivity {
 
     ViewPager mViewPager;
     HandlingPhotos photos;
-    MyPagerAdapter adapter;
+    MediaPagerAdapter adapter;
 
     Toolbar toolbar;
     boolean fullscreenmode;
@@ -55,16 +49,12 @@ public class MainActivity extends AppCompatActivity {
         final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-
-
                 toggleSystemUI();
-
                 return true;
             }
         });
 
         try {
-
 
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
@@ -72,24 +62,19 @@ public class MainActivity extends AppCompatActivity {
                 photos.setContext(getApplicationContext());
 
             mViewPager = (ViewPager) findViewById(R.id.photos_pager);
-            adapter = new MyPagerAdapter(getSupportFragmentManager(),photos.photos);
-            mViewPager.setAdapter(adapter);
-
-            mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
-            mViewPager.setPageTransformer(true, new DepthPageTransformer());
-            mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            adapter = new MediaPagerAdapter(getSupportFragmentManager(),photos.photos);
+            adapter.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return gestureDetector.onTouchEvent(event);
                 }
             });
-
-
-
+            mViewPager.setAdapter(adapter);
+            mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
+            mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                }
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                 @Override
                 public void onPageSelected(int position) {
@@ -100,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onPageScrollStateChanged(int state) {
                 }
             });
+
         }catch (Exception e){e.printStackTrace();}
 
     }
@@ -252,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
         /**** ToolBar ********/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
-        //setActionBar(toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -260,12 +245,15 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
         /**** Navigation Bar */
         getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
+
         final Handler handler = new Handler();
-        /*handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
-        }, 150);*/
+        }, 150);
+
+
     }
 
     public void toggleSystemUI() {

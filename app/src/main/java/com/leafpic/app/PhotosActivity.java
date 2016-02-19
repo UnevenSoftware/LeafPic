@@ -11,14 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 import android.text.Html;
-import android.text.InputType;
 import android.transition.Slide;
 import android.view.*;
 import android.widget.ImageView;
@@ -106,7 +104,7 @@ public class PhotosActivity extends AppCompatActivity {
                         invalidateOptionsMenu();
                     } else {
                         photos.setCurrentPhoto(is.getTag().toString());
-                        Intent intent = new Intent(PhotosActivity.this, MainActivity.class);
+                        Intent intent = new Intent(PhotosActivity.this, PhotoPagerActivity.class);
                         Bundle b = new Bundle();
                         b.putParcelable("album", photos);
                         intent.putExtras(b);
