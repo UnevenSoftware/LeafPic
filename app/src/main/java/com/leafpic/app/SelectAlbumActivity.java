@@ -34,7 +34,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
     SelectAlbumAdapter adapt;
     String photoPaths;
     String photosIndexes;
-    boolean hidden=true;
+    boolean hidden=false;
     int code;
     HandlingPhotos p;//= new HandlingPhotos(SelectAlbumActivity.this);
 
@@ -89,9 +89,9 @@ public class SelectAlbumActivity extends AppCompatActivity {
     }
 
     private void loadAlbumPreview(){
-        if (hidden == false)
-            albums.loadPreviewHiddenAlbums();
+        if (hidden)  albums.loadPreviewHiddenAlbums();
         else albums.loadPreviewAlbums();
+
         hidden=!hidden;
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);

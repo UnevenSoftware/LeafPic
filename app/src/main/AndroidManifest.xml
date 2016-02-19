@@ -45,13 +45,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PhotoActivity"
-                  android:label="Album"
-                  android:parentActivityName=".PhotosActivity"
-                  android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".PhotoPagerActivity"
+            android:label="Album"
+            android:parentActivityName=".PhotosActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".PhotosActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PhotosActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.albumPhoto"/>
                 <category android:name="android.intent.category.DEFAULT"/>

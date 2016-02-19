@@ -11,7 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -122,7 +124,7 @@ public class PhotosActivity extends AppCompatActivity {
                         invalidateOptionsMenu();
                     } else {
                         photos.setCurrentPhoto(is.getTag().toString());
-                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
+                        Intent intent = new Intent(PhotosActivity.this, PhotoPagerActivity.class);
                         Bundle b = new Bundle();
                         b.putParcelable("album", photos);
                         intent.putExtras(b);
@@ -238,7 +240,6 @@ public class PhotosActivity extends AppCompatActivity {
         int c;
         try {
             if ((c = photos.getSelectedCount()) != 0) {
-                toolbar.setCollapsible(false);
 
                 collapsingToolbarLayout.setTitle(c + "/" + photos.photos.size());
                 toolbar.setNavigationIcon(new IconicsDrawable(this)

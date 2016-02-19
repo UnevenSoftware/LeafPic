@@ -47,7 +47,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Album a = albums.get(position);
         a.setPath();
 
-        Glide.clear(holder.picture);
+        //Glide.clear(holder.picture);
+
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
                 .asBitmap()
