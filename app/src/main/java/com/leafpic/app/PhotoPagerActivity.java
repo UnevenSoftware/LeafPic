@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -98,6 +99,47 @@ public class PhotoPagerActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (data != null) {
+            final Bundle b = data.getExtras();
+
+
+            switch (requestCode) {
+                case SelectAlbumActivity.COPY_TO_ACTION:
+                    if (resultCode == RESULT_OK) {
+                        StringUtils.showToast(getApplicationContext(), "copied ok");
+                    }
+                    break;
+                case SelectAlbumActivity.MOVE_TO_ACTION:
+                    if (resultCode == RESULT_OK) {
+                        String asd = b.getString("photos_indexes");
+                        if (asd != null) {
+                            StringUtils.showToast(getApplicationContext(), "moved ok");
+                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                                //photos.removePhoto(Integer.valueOf(asd));
+                                // TODO remove photo moved from older album [porco dio]
+                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                                //adapter.removeItemAt(Integer.valueOf(asd));
+                                //mRecyclerView.removeViewAt(Integer.parseInt(asd));
+                                //photos.photos.remove(Integer.parseInt(asd));
+                                //mRecyclerView.removeViewAt(Integer.valueOf(asd));
+
+                                //adapter.notifyItemRemoved(Integer.parseInt(asd));
+
+                        }
+                        //adapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
@@ -107,14 +149,14 @@ public class PhotoPagerActivity extends AppCompatActivity {
 
             case R.id.moveAction:
                 Intent int1 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
-                int1.putExtra("selected_photos", photos.getCurrentPhoto());
+                int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
-                int1.putExtra("photos_indexes", photos.getSelectedPhotosIndexSerilized());
+                int1.putExtra("photos_indexes", photos.getCurrentPhotoIndex());
                 startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
                 Intent int2 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
-                int2.putExtra("selected_photos", photos.getCurrentPhoto());
+                int2.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
                 startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
                 break;
@@ -128,16 +170,16 @@ public class PhotoPagerActivity extends AppCompatActivity {
                 return true;
 
             case R.id.deletePhoto:
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
-
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        StringUtils.showToast(getApplicationContext(),"doesn't work properly");
                         //int index = mViewPager.getCurrentItem();
                         //mViewPager.removeView(mViewPager.getChildAt(index));
                         //TODO improve delete single photo
-                        // photos.deleteCurrentPhoto();
-                        //mCustomPagerAdapter.notifyDataSetChanged();
+                        //photos.deleteCurrentPhoto();
+                        //adapter.notifyDataSetChanged();
                         //mViewPager.destroyDrawingCache();
                         //mViewPager.setCurrentItem(index + 1);
                     }

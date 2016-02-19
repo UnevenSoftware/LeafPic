@@ -41,7 +41,10 @@
         <item name="windowActionBar">false</item>
     </style>
     -->
-    <style name="AlertDialogCustom" parent="Theme.AppCompat.Dialog">
+    <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog">
+
+    </style>
+    <style name="AlertDialogLight" parent="Theme.AppCompat.Light.Dialog">
 
     </style>
 

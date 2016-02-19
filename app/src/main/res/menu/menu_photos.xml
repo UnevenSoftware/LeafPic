@@ -3,26 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PhotosActivity"
->
-    <item
-        android:id="@+id/endEditAlbumMode"
-        android:icon="@mipmap/ic_done_white_24dp"
-        android:title="DONE"
-        app:showAsAction="ifRoom"
-    />
+    >
+
     <item android:id="@+id/sortPhotos"
         android:title="Sort"
         android:orderInCategory="1"
         android:icon="@mipmap/ic_sort_white_24dp"
         app:showAsAction="ifRoom"
-    >
+        >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context=".PhotosActivity">
 
-            <group android:enabled="true" android:checkableBehavior="single">
+            <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/name_sort_action"
-                    android:checked="false"
                     android:title="by Name"
                     app:showAsAction="ifRoom"
                     />
@@ -31,11 +26,11 @@
                     android:id="@+id/date_taken_sort_action"
                     android:title="by Date Taken"
                     app:showAsAction="ifRoom"
+
                     />
                 <item
                     android:id="@+id/size_sort_action"
                     android:title="by Size"
-                    android:checked="false"
                     app:showAsAction="ifRoom"
                     />
             </group>
@@ -43,7 +38,6 @@
                 <item
                     android:id="@+id/ascending_sort_action"
                     android:title="Ascending"
-                    android:checked="false"
                     app:showAsAction="ifRoom"
                     />
             </group>
@@ -54,7 +48,7 @@
         android:icon="@mipmap/ic_share_white_24dp"
         android:title="Share"
         app:showAsAction="ifRoom"
-    />
+        />
     <item
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
@@ -65,12 +59,12 @@
         android:id="@+id/copyAction"
         android:title="Copy to"
         app:showAsAction="never"
-    />
+        />
     <item
         android:id="@+id/moveAction"
         android:title="Move to"
         app:showAsAction="never"
-    />
+        />
     <item
         android:id="@+id/excludeAlbumButton"
         android:title="@string/exclude_album_action"
@@ -85,10 +79,14 @@
         android:id="@+id/renameAlbum"
         android:title="@string/rename_album_action"
         app:showAsAction="never"
-    />
+        />
     <item
         android:id="@+id/setAsAlbumPreview"
         android:title="Set as Preview"
         app:showAsAction="never"
-    />
+        />
+    <item android:id="@+id/select_all_albums_action"
+        android:title="Select all"
+        app:showAsAction="never"
+        />
 </menu>
