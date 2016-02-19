@@ -22,26 +22,29 @@
             <group android:enabled="true" android:checkableBehavior="single">
                 <item
                     android:id="@+id/name_sort_action"
+                    android:checked="false"
                     android:title="by Name"
-                    app:showAsAction="never"
+                    app:showAsAction="ifRoom"
                     />
 
                 <item
                     android:id="@+id/date_taken_sort_action"
                     android:title="by Date Taken"
-                    app:showAsAction="never"
+                    app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/size_sort_action"
                     android:title="by Size"
-                    app:showAsAction="never"
+                    android:checked="false"
+                    app:showAsAction="ifRoom"
                     />
             </group>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@+id/ascending_sort_action"
                     android:title="Ascending"
-                    app:showAsAction="never"
+                    android:checked="false"
+                    app:showAsAction="ifRoom"
                     />
             </group>
         </menu>

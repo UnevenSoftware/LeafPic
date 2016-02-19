@@ -37,6 +37,9 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.Iconics;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -266,14 +269,33 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         MenuItem opt;
 
         if (editmode) {
-            opt = menu.findItem(R.id.endEditAlbumMode);
-            opt.setEnabled(true).setVisible(true);
+
             setOptionsAlbmuMenusItemsVisible(menu,true);
+
+            opt = menu.findItem(R.id.action_camera);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            opt = menu.findItem(R.id.sort_action);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+            opt = menu.findItem(R.id.deleteAction);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            opt = menu.findItem(R.id.hideAlbumButton);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         } else {
-            opt = menu.findItem(R.id.endEditAlbumMode);
-            opt.setEnabled(false).setVisible(false);
+
             setOptionsAlbmuMenusItemsVisible(menu,false);
+
+            opt = menu.findItem(R.id.action_camera);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            opt = menu.findItem(R.id.sort_action);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            opt = menu.findItem(R.id.deleteAction);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            opt = menu.findItem(R.id.hideAlbumButton);
+            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
+
 
         if (hidden) {
             opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
@@ -287,42 +309,76 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
             opt.setTitle(getString(R.string.hide_album_action));
         }
 
-
         if (albums.getSelectedCount()==0) {
             editmode = false;
-            opt = menu.findItem(R.id.endEditAlbumMode);
-            setOptionsAlbmuMenusItemsVisible(menu,false);
-            opt.setEnabled(false).setVisible(false);
+            invalidateOptionsMenu();
         }
+
         updateSelectedStuff();
         return super.onPrepareOptionsMenu(menu);
     }
 
     void updateSelectedStuff() {
+
         int c;
         try {
-            if ((c = albums.getSelectedCount()) != 0)
-                setTitle(c + "/" + albums.dispAlbums.size());
-            else setTitle(getString(R.string.app_name));
-        } catch (NullPointerException ex){ex.printStackTrace();}
-        Log.wtf("sadas",albums.getSelectedCount()+"");
+
+            if ((c = albums.getSelectedCount()) != 0) {
+                getSupportActionBar().setTitle(c + "/" + albums.dispAlbums.size());
+                toolbar.setNavigationIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_check)
+                        .color(Color.WHITE)
+                        .sizeDp(20));
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editmode = false;
+                        invalidateOptionsMenu();
+                        albums.clearSelectedAlbums();
+                        adapt.notifyDataSetChanged();
+                    }
+                });
+                toolbar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        albums.selectAllAlbums();
+                        adapt.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    }
+                });
+
+            } else {
+                getSupportActionBar().setTitle(getString(R.string.app_name));
+                toolbar.setNavigationIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_menu)
+                        .color(Color.WHITE)
+                        .sizeDp(20));
+                toolbar.setOnClickListener(null);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {drawer.openDrawer();
+                    }
+                });
+            }
+}catch (NullPointerException e){e.printStackTrace();}
+
     }
 
-    private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
-        MenuItem option = m.findItem(R.id.hideAlbumButton);
-        option.setEnabled(val).setVisible(val);
-        option = m.findItem(R.id.deleteAction);
-        option.setEnabled(val).setVisible(val);
-        option = m.findItem(R.id.excludeAlbumButton);
-        option.setEnabled(val).setVisible(val);
-    }
+    private void setOptionsAlbmuMenusItemsVisible(final Menu menu, boolean val) {
+        MenuItem opt = menu.findItem(R.id.hideAlbumButton);
+        opt.setEnabled(val).setVisible(val);
+        opt = menu.findItem(R.id.deleteAction);
+        opt.setEnabled(val).setVisible(val);
+        opt = menu.findItem(R.id.excludeAlbumButton);
+        opt.setEnabled(val).setVisible(val);
+
+        opt = menu.findItem(R.id.select_all_albums_action);
+        opt.setEnabled(val).setVisible(val);
+            }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                StringUtils.showToast(getApplicationContext(), "asdasd");
-                return true;
 
             case R.id.sort_action:
                 View sort_btn = findViewById(R.id.sort_action);
@@ -350,11 +406,11 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                 albums.loadPreviewHiddenAlbums();
                 adapt.notifyDataSetChanged();
                 break;
-            case R.id.endEditAlbumMode:
-                editmode = false;
-                invalidateOptionsMenu();
-                albums.clearSelectedAlbums();
+
+            case R.id.select_all_albums_action:
+                albums.selectAllAlbums();
                 adapt.notifyDataSetChanged();
+                invalidateOptionsMenu();
                 break;
 
             case R.id.excludeAlbumButton:
