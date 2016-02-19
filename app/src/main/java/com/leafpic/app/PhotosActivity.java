@@ -15,15 +15,29 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.transition.Slide;
-import android.view.*;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
-import com.leafpic.app.Base.*;
+import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.CustomAlbumsHandler;
+import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Base.HandlingPhotos;
+import com.leafpic.app.Base.Photo;
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
@@ -472,6 +486,17 @@ public class PhotosActivity extends AppCompatActivity {
         //toolbar.setBackgroundColor(Color.parseColor(SColor));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        /****SET THEME***/
+        RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
+        if (SP.getBoolean("set_dark_theme", false)){
+            //setTheme(R.style.AppTheme_Dark);
+            rw.setBackgroundColor(getColor(R.color.background_material_dark));
+        }else {
+            //setTheme(R.style.AppTheme);
+            rw.setBackgroundColor(getColor(R.color.background_material_light));
+        }
+
 
         headerImage = (ImageView) findViewById(R.id.header_image);
         Glide.with(this)
