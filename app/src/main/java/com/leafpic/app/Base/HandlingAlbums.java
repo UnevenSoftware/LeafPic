@@ -54,6 +54,15 @@ public class HandlingAlbums {
         return last_position_selecte;
     }
 
+    public void selectAllAlbums(){
+        for (Album dispAlbum : dispAlbums) {
+            if(!dispAlbum.isSelected()) {
+                dispAlbum.setSelcted(true);
+                selectedAlbums.add(dispAlbum);
+            }
+        }
+    }
+
     public int getSelectedCount() {
         return selectedAlbums.size();
     }

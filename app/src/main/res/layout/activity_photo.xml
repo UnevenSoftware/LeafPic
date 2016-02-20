@@ -2,7 +2,7 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:theme="@style/ThemeOverlay.AppCompat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"

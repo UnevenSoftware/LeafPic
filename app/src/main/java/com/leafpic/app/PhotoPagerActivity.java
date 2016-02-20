@@ -7,18 +7,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.leafpic.app.Adapters.PhotosPagerAdapter;
+
+import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
@@ -28,55 +30,65 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 
 /**
- * Created by dnld on 12/12/15.
+ * Created by dnld on 18/02/16.
  */
+public class PhotoPagerActivity extends AppCompatActivity {
 
-public class PhotoActivity extends AppCompatActivity {
-
-    PhotosPagerAdapter mCustomPagerAdapter;
     ViewPager mViewPager;
     HandlingPhotos photos;
+    MediaPagerAdapter adapter;
+
     Toolbar toolbar;
     boolean fullscreenmode;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         initUiTweaks();
+
+        final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                toggleSystemUI();
+                return true;
+            }
+        });
+
         try {
+
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
-            photos.setContext(PhotoActivity.this);
-            mCustomPagerAdapter = new PhotosPagerAdapter(this, photos.photos);
-            mCustomPagerAdapter.setOnClickListener(new View.OnClickListener() {
+            if(photos!=null)
+                photos.setContext(getApplicationContext());
+
+            mViewPager = (ViewPager) findViewById(R.id.photos_pager);
+            adapter = new MediaPagerAdapter(getSupportFragmentManager(),photos.photos);
+            adapter.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    toggleSystemUI();
+                public boolean onTouch(View v, MotionEvent event) {
+                    return gestureDetector.onTouchEvent(event);
                 }
             });
-            mViewPager = (ViewPager) findViewById(R.id.photos_pager);
-            mViewPager.setAdapter(mCustomPagerAdapter);
+            mViewPager.setAdapter(adapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
-
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                 @Override
-                public void onPageSelected(int position) {photos.setCurrentPhotoIndex(position);}
+                public void onPageSelected(int position) {
+                    photos.setCurrentPhotoIndex(position);
+                }
 
                 @Override
-                public void onPageScrollStateChanged(int state) {}
+                public void onPageScrollStateChanged(int state) {
+                }
             });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        }catch (Exception e){e.printStackTrace();}
 
-        //DA FIXXARE
-        hideSystemUI();
     }
 
     @Override
@@ -84,6 +96,47 @@ public class PhotoActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_photo, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (data != null) {
+            final Bundle b = data.getExtras();
+
+
+            switch (requestCode) {
+                case SelectAlbumActivity.COPY_TO_ACTION:
+                    if (resultCode == RESULT_OK) {
+                        StringUtils.showToast(getApplicationContext(), "copied ok");
+                    }
+                    break;
+                case SelectAlbumActivity.MOVE_TO_ACTION:
+                    if (resultCode == RESULT_OK) {
+                        String asd = b.getString("photos_indexes");
+                        if (asd != null) {
+                            StringUtils.showToast(getApplicationContext(), "moved ok");
+                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                                //photos.removePhoto(Integer.valueOf(asd));
+                                // TODO remove photo moved from older album [porco dio]
+                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                                //adapter.removeItemAt(Integer.valueOf(asd));
+                                //mRecyclerView.removeViewAt(Integer.parseInt(asd));
+                                //photos.photos.remove(Integer.parseInt(asd));
+                                //mRecyclerView.removeViewAt(Integer.valueOf(asd));
+
+                                //adapter.notifyItemRemoved(Integer.parseInt(asd));
+
+                        }
+                        //adapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
     @Override
@@ -95,15 +148,15 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
 
             case R.id.moveAction:
-                Intent int1 = new Intent(PhotoActivity.this, SelectAlbumActivity.class);
-                int1.putExtra("selected_photos", photos.getCurrentPhoto());
+                Intent int1 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
+                int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
-                int1.putExtra("photos_indexes", photos.getSelectedPhotosIndexSerilized());
+                int1.putExtra("photos_indexes", photos.getCurrentPhotoIndex());
                 startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
-                Intent int2 = new Intent(PhotoActivity.this, SelectAlbumActivity.class);
-                int2.putExtra("selected_photos", photos.getCurrentPhoto());
+                Intent int2 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
+                int2.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
                 startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
                 break;
@@ -117,21 +170,22 @@ public class PhotoActivity extends AppCompatActivity {
                 return true;
 
             case R.id.deletePhoto:
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotoActivity.this);
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        int index = mViewPager.getCurrentItem();
-                        mViewPager.removeView(mViewPager.getChildAt(index));
+                        StringUtils.showToast(getApplicationContext(),"doesn't work properly");
+                        //int index = mViewPager.getCurrentItem();
+                        //mViewPager.removeView(mViewPager.getChildAt(index));
                         //TODO improve delete single photo
-                        photos.deleteCurrentPhoto();
-                        mCustomPagerAdapter.notifyDataSetChanged();
-                        mViewPager.destroyDrawingCache();
-                        mViewPager.setCurrentItem(index + 1);
+                        //photos.deleteCurrentPhoto();
+                        //adapter.notifyDataSetChanged();
+                        //mViewPager.destroyDrawingCache();
+                        //mViewPager.setCurrentItem(index + 1);
                     }
-                })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {}});
+                });
+                builder1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int id) {}});
                 builder1.show();
 
                 return true;
@@ -209,7 +263,7 @@ public class PhotoActivity extends AppCompatActivity {
                 break;
 
             case R.id.setting:
-                Intent intent2= new Intent(PhotoActivity.this, SettingsActivity.class);
+                Intent intent2= new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent2);
                 break;
 
@@ -222,6 +276,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
+
         /**** ToolBar ********/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
@@ -232,15 +287,18 @@ public class PhotoActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
         /**** Navigation Bar */
         getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
         }, 150);
+
+
     }
 
-    private void toggleSystemUI() {
+    public void toggleSystemUI() {
         if (fullscreenmode)
             showSystemUI();
         else hideSystemUI();
@@ -287,3 +345,4 @@ public class PhotoActivity extends AppCompatActivity {
         return result;
     }
 }
+

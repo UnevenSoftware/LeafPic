@@ -246,6 +246,17 @@ public class HandlingPhotos implements Parcelable {
         return last_position_selecte;
     }
 
+    public void selectAllPhotos(){
+
+        for (int i = 0; i < photos.size(); i++) {
+            if(!photos.get(i).isSelected()) {
+                photos.get(i).setSelected(true);
+                selectedPhotos.add(photos.get(i));
+                selectedPhotosIndexs.add(i);
+            }
+        }
+    }
+
     public int toggleSelectPhoto(String path) {
         Photo x = getPhoto(path);
         if (x != null) {
@@ -317,6 +328,10 @@ public class HandlingPhotos implements Parcelable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void removePhoto(int index) {
+        if (index > -1 && index < photos.size())
+        photos.remove(index);
     }
 
     private int removePhoto(String path) {

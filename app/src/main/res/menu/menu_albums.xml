@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
-    <item
-            android:id="@+id/endEditAlbumMode"
-            android:icon="@mipmap/ic_done_white_24dp"
-            android:title="DONE"
-            app:showAsAction="ifRoom"
-    />
+
+    <item android:id="@+id/sort_action"
+        android:title="Sort"
+        android:icon="@mipmap/ic_sort_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+
     <item
         android:id="@+id/action_camera"
         android:icon="@mipmap/ic_photo_camera_white_24dp"
@@ -16,28 +17,35 @@
         app:showAsAction="ifRoom"
         />
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/sort_action"
-          android:title="Sort"
-          android:orderInCategory="1"
-          android:icon="@mipmap/ic_sort_white_24dp"
-          app:showAsAction="ifRoom"
+    <item android:id="@+id/select_all_albums_action"
+        android:title="Select all"
+        app:showAsAction="never"
+        />
+
+    <item android:id="@+id/filter_albums_action"
+        android:title="Filter"
+        app:showAsAction="never"
         />
     <item
             android:id="@+id/deleteAction"
             android:icon="@mipmap/ic_delete_white_24dp"
             android:title="@string/delete_album_action"
-            app:showAsAction="never"
+            app:showAsAction="ifRoom"
         />
+
     <item
         android:id="@+id/excludeAlbumButton"
         android:title="@string/exclude_album_action"
         app:showAsAction="never"
         />
+
     <item
         android:id="@+id/hideAlbumButton"
         android:title="@string/hide_album_action"
-        app:showAsAction="never"
+        android:icon="@mipmap/ic_visibility_off_white_24dp"
+        app:showAsAction="ifRoom"
         />
+
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
         android:title="@string/refresh_hidde_folders_action"

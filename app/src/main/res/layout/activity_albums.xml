@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:theme="@style/Theme.AppCompat.NoActionBar"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context=".PhotoPagerActivity"
     android:background="@color/background_material_dark">
 
     <LinearLayout

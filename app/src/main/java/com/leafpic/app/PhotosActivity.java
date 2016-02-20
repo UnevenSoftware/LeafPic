@@ -11,7 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +42,8 @@ import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.utils.StringUtils;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +59,7 @@ public class PhotosActivity extends AppCompatActivity {
 
 
     CollapsingToolbarLayout collapsingToolbarLayout;
+    Toolbar toolbar;
     ImageView headerImage;
     SharedPreferences SP;
 
@@ -118,7 +124,7 @@ public class PhotosActivity extends AppCompatActivity {
                         invalidateOptionsMenu();
                     } else {
                         photos.setCurrentPhoto(is.getTag().toString());
-                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
+                        Intent intent = new Intent(PhotosActivity.this, PhotoPagerActivity.class);
                         Bundle b = new Bundle();
                         b.putParcelable("album", photos);
                         intent.putExtras(b);
@@ -160,24 +166,16 @@ public class PhotosActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(final Menu menu) {
         MenuItem opt;
 
-        if (editmode) {
-            opt = menu.findItem(R.id.endEditAlbumMode);
-            opt.setEnabled(true).setVisible(true);
+        if (editmode)
             setOptionsAlbmuMenusItemsVisible(menu, false);
-        } else {
-            opt = menu.findItem(R.id.endEditAlbumMode);
-            opt.setEnabled(false).setVisible(false);
-
+         else
             setOptionsAlbmuMenusItemsVisible(menu, true);
-        }
 
-        if (photos.hidden) {
-            opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.unhide_album_action));
-        } else {
-            opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.hide_album_action));
-        }
+        if (photos.hidden)
+            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.unhide_album_action));
+         else
+            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.hide_album_action));
+
 
         if (photos.getSelectedCount() == 0) {
             editmode = false;
@@ -191,7 +189,8 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         togglePrimaryToolbarOptions(menu);
-       updateSort(menu);
+        updateSort(menu);
+        updateSelectedStuff();
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -223,6 +222,8 @@ public class PhotosActivity extends AppCompatActivity {
         option.setEnabled(val).setVisible(val);
         option = m.findItem(R.id.renameAlbum);
         option.setEnabled(val).setVisible(val);
+        option = m.findItem(R.id.select_all_albums_action);
+        option.setEnabled(!val).setVisible(!val);
 
         option = m.findItem(R.id.sharePhotos);
         option.setEnabled(!val).setVisible(!val);
@@ -230,10 +231,49 @@ public class PhotosActivity extends AppCompatActivity {
         option.setEnabled(!val).setVisible(!val);
         option = m.findItem(R.id.copyAction);
         option.setEnabled(!val).setVisible(!val);
-        option = m.findItem(R.id.endEditAlbumMode);
-        option.setEnabled(!val).setVisible(!val);
         option = m.findItem(R.id.setAsAlbumPreview);
         option.setEnabled(!val).setVisible(!val);
+    }
+
+    void updateSelectedStuff() {
+
+        int c;
+        try {
+            if ((c = photos.getSelectedCount()) != 0) {
+
+                collapsingToolbarLayout.setTitle(c + "/" + photos.photos.size());
+                toolbar.setNavigationIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_check)
+                        .color(Color.WHITE)
+                        .sizeDp(20));
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) { finishEditMode(); }});
+                toolbar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        photos.selectAllPhotos();
+                        adapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    }
+                });
+
+            } else {
+
+                collapsingToolbarLayout.setTitle(photos.DisplayName);
+                toolbar.setNavigationIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                        .color(Color.WHITE)
+                        .sizeDp(20));
+
+                toolbar.setOnClickListener(null);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {onBackPressed();}
+                });
+            }
+        }catch (NullPointerException e){e.printStackTrace();}
+
     }
 
     private void finishEditMode() {
@@ -261,16 +301,20 @@ public class PhotosActivity extends AppCompatActivity {
                         String ind = b.getString("photos_indexes");
                         if (ind != null) {
                             for (String asd : ind.split("ç")) {
-                                // TODO remove photo moved from older album
-                                // Log.wtf("asdasdasdas",asd);
+                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                                //photos.removePhoto(Integer.valueOf(asd));
+                                // TODO remove photo moved from older album [porco dio]
+                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
                                 //adapter.removeItemAt(Integer.valueOf(asd));
+                                //mRecyclerView.removeViewAt(Integer.parseInt(asd));
                                 //photos.photos.remove(Integer.parseInt(asd));
                                 //mRecyclerView.removeViewAt(Integer.valueOf(asd));
-                                //adapter.notifyDataSetChanged();
+
                                 //adapter.notifyItemRemoved(Integer.parseInt(asd));
                             }
                         }
-                        StringUtils.showToast(getApplicationContext(), "moved ok");
+                        //adapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
                     }
                     break;
                 default:
@@ -282,6 +326,7 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     public void updateSort(final Menu menu){
+
         menu.findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
 
         if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
@@ -309,9 +354,13 @@ public class PhotosActivity extends AppCompatActivity {
                 int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
                 startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
                 break;
-            case R.id.endEditAlbumMode:
-                finishEditMode();
+
+            case R.id.select_all_albums_action:
+                photos.selectAllPhotos();
+                adapter.notifyDataSetChanged();
+                invalidateOptionsMenu();
                 break;
+
 
             case R.id.setAsAlbumPreview:
                 photos.setSelectedPhotoAsPreview();
@@ -481,7 +530,7 @@ public class PhotosActivity extends AppCompatActivity {
 
         /**** ToolBar*/
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         //String SColor = SP.getString("PrimaryPrefColor", "#009688");
         //toolbar.setBackgroundColor(Color.parseColor(SColor));
         setSupportActionBar(toolbar);
