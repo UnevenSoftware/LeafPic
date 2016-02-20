@@ -136,7 +136,7 @@ public class PhotosActivity extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(View v) {
                     TextView is = (TextView) v.findViewById(R.id.photo_path);
-                    adapter.notifyItemChanged(photos.selectPhoto(is.getTag().toString(), true));
+                    adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
                     editmode = true;
                     invalidateOptionsMenu();
                     return true;
