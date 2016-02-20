@@ -1,6 +1,7 @@
 package com.leafpic.app.Fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,8 @@ public class ImageFragment extends Fragment {
     private String path;
     private int width;
     private int height;
+
+    SubsamplingScaleImageView picture;
     private View.OnTouchListener onTouchListener;
 
     // newInstance constructor for creating fragment with arguments
@@ -55,94 +58,63 @@ public class ImageFragment extends Fragment {
         height = getArguments().getInt("height", 300);
         path = getArguments().getString("path");
     }
-    int times=0;
+    @Override
+    public void onDestroy(){
+        picture.recycle();
+        super.onDestroy();
+    }
+   // int times=0;
     // Inflate the view for the fragment based on layout XML
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.image_pager_item, container, false);
-        final SubsamplingScaleImageView picture = (SubsamplingScaleImageView) view.findViewById(R.id.media_view);
-       // if (picture!=null)
-         //   Glide.clear(picture);
-
+        picture = (SubsamplingScaleImageView) view.findViewById(R.id.media_view);
 
         Glide.with(container.getContext())
                 .load(path)
                 .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.IMMEDIATE)
                 .dontAnimate()
                 .override(width, height)
-                .listener(new RequestListener<String, Bitmap>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        if (!isFromMemoryCache) {
-                            Log.e("ViewerPager", "Image not from cache:" + model + " " + target.toString());
-                        } else {
-                            Log.e("ViewerPager", "Image from cache:" + model + " " + target.toString());
-                        }
-                        return false;
-                    }
-                })
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
                         picture.setImage(ImageSource.bitmap(bitmap));
                     }
                 });
-        times++;
+       // times++;
+        //picture.setImage(ImageSource.bitmap(BitmapFactory.decodeFile(path)));
 
-        //TODO load full image size when starting zooming
-        picture.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
+
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public void onReady() {
+            public void run() {
+                //final BitmapFactory.Options options = new BitmapFactory.Options();
+                //options.inJustDecodeBounds = true;
 
-            }
-
-            @Override
-            public void onImageLoaded() {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (times == 1)
-                        Glide.with(getContext())
-                                .load(path)
-                                .asBitmap()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .priority(Priority.IMMEDIATE)
+              //Log.wtf("asdasdasdasdas","fulllllllll");
+               // Glide.get(getActivity()).clearDiskCache();
+                Glide.get(getActivity()).clearMemory();
+                Glide.with(getContext())
+                        .load(path)
+                        .asBitmap()
+                                .skipMemoryCache(true)
+                        //.skipMemoryCache(true)
+                        .priority(Priority.IMMEDIATE)
+                                //.diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .dontAnimate()
-                                .into(new SimpleTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                                        picture.setImage(ImageSource.bitmap(bitmap));
-                                    }
-                                });
-                        times++;
-                    }
-                }, 250);
-            }
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                                picture.setImage(ImageSource.bitmap(bitmap));
 
-            @Override
-            public void onPreviewLoadError(Exception e) {
-
-            }
-
-            @Override
-            public void onImageLoadError(Exception e) {
-
-            }
-
-            @Override
-            public void onTileLoadError(Exception e) {
-
+                            }
+                        });
             }
         });
+
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
         return view;

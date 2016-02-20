@@ -45,15 +45,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         Photo f = photos.get(position);
         Glide.clear(holder.imageView);//fix corruption
 
-        if (f.MIME.equals("image/gif")) {
+        if (f.isGif()) {
             Ion.with(holder.imageView.getContext())
                     .load(f.Path)
                     .intoImageView(holder.imageView);
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
-
-
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
@@ -91,7 +89,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public void removeItemAt(int pos) {
         //Log.wtf("asdasd",getItemCount()+"");
-        photos.remove(pos);
+       // photos.remove(pos);
         //notifyItemRemoved(pos);
         //Log.wtf("asdasd",getItemCount()+"");
         // notifyDataSetChanged();

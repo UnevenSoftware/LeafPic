@@ -521,7 +521,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
             @Override
             public boolean onLongClick(View v) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
-                adapt.notifyItemChanged(albums.selectAlbum(a.getTag().toString(), true));
+                adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
                 editmode = true;
                 invalidateOptionsMenu();
                 return true;
