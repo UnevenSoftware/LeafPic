@@ -89,7 +89,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public void removeItemAt(int pos) {
         //Log.wtf("asdasd",getItemCount()+"");
-       // photos.remove(pos);
+        //photos.remove(pos);
         //notifyItemRemoved(pos);
         //Log.wtf("asdasd",getItemCount()+"");
         // notifyDataSetChanged();

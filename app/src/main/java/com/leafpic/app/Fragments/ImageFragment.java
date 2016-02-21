@@ -74,7 +74,7 @@ public class ImageFragment extends Fragment {
         Glide.with(container.getContext())
                 .load(path)
                 .asBitmap()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.IMMEDIATE)
                 .dontAnimate()
                 .override(width, height)
@@ -96,11 +96,13 @@ public class ImageFragment extends Fragment {
 
               //Log.wtf("asdasdasdasdas","fulllllllll");
                // Glide.get(getActivity()).clearDiskCache();
-                Glide.get(getActivity()).clearMemory();
+               // Glide.get(getActivity()).trimMemory(3);
                 Glide.with(getContext())
                         .load(path)
                         .asBitmap()
-                                .skipMemoryCache(true)
+                      //  .thumbnail(0.1f)
+                        .skipMemoryCache(true)
+
                         //.skipMemoryCache(true)
                         .priority(Priority.IMMEDIATE)
                                 //.diskCacheStrategy(DiskCacheStrategy.NONE)
