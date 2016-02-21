@@ -1,6 +1,7 @@
 package com.leafpic.app;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,6 +47,9 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
+import uz.shift.colorpicker.LineColorPicker;
+import uz.shift.colorpicker.OnColorChangedListener;
 
 public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
 
@@ -476,7 +480,38 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
                 return true;
+            case R.id.filter_albums_action:
 
+                int[] j = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
+
+                //SHIFT COLOR PIKLER
+                final Dialog dialog = new Dialog(getBaseContext());
+                dialog.setContentView(R.layout.colorpiker);
+                dialog.setTitle("Primary Color");
+                LineColorPicker colorPicker;
+                colorPicker = (LineColorPicker) findViewById(R.id.picker);
+
+                // set color palette
+                colorPicker.setColors(new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW});
+
+                // set selected color [optional]
+                colorPicker.setSelectedColor(Color.RED);
+
+                // set on change listener
+                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+                    @Override
+                    public void onColorChanged(int c) {
+                        //Log.d(TAG, "Selected color " + Integer.toHexString(c));
+                        Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // get selected color
+                int color = colorPicker.getColor();
+                dialog.show();
+
+                break;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

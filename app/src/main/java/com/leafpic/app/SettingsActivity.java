@@ -2,6 +2,7 @@ package com.leafpic.app;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -11,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import uz.shift.colorpicker.LineColorPicker;
+import uz.shift.colorpicker.OnColorChangedListener;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -103,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment {
+    public class MyPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -112,6 +115,80 @@ public class SettingsActivity extends AppCompatActivity {
             p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    int[] j =  {Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW};
+                    /**/
+                    //SHIFT COLOR PIKLER
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.colorpiker);
+                    dialog.setTitle("Primary Color");
+                    LineColorPicker colorPicker;
+                    colorPicker = (LineColorPicker) findViewById(R.id.picker);
+
+                    // set color palette
+                    colorPicker.setColors(j);
+
+                    // set selected color [optional]
+                    colorPicker.setSelectedColor(Color.RED);
+
+                    // set on change listener
+                    colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+                        @Override
+                        public void onColorChanged(int c) {
+                            //Log.d(TAG, "Selected color " + Integer.toHexString(c));
+                            Toast.makeText(getActivity(), "Selected color " + Integer.toHexString(c),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    // get selected color
+                    int color = colorPicker.getColor();
+                    dialog.show();
+
+
+
+
+
+
+
+
+
+
+
+
+                    /*
+                    //LOBSTER
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.colorpiker);
+                    dialog.setTitle("Primary Color");
+
+                    // set the custom dialog components - text, image and button
+
+                    LobsterPicker lobsterPicker = (LobsterPicker) findViewById(R.id.lobsterpicker);
+                    LobsterShadeSlider shadeSlider = (LobsterShadeSlider) findViewById(R.id.shadeslider);
+                    //To retrieve the selected color use
+                    lobsterPicker.getColor();
+
+                    //You'r also able to add a listener
+                    lobsterPicker.addOnColorListener(new OnColorListener() {
+                        @Override
+                        public void onColorChanged(@ColorInt int color) {
+
+                        }
+
+                        @Override
+                        public void onColorSelected(@ColorInt int color) {
+
+                        }
+                    });
+                    dialog.show();
+                    */
+
+
+
+
+
+                    /*
+                    //NORMAL
                     // custom dialog
                     final Dialog dialog = new Dialog(getContext());
                     dialog.setContentView(R.layout.custom_color_piker_primary);
@@ -132,6 +209,7 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     });
                     dialog.show();
+                    */
                     return false;
                 }
             });

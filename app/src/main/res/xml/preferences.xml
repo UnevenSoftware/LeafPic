@@ -75,15 +75,11 @@
             android:entries="@array/prefListColor"
             android:entryValues="@array/ColorsPref"
             />
-
-        <ListPreference
-            android:title="Primary Color Test"
-            android:summary="Select the Primary Color"
-            android:key="PrimaryPrefColor"
-            android:defaultValue="1"
-            android:entries="@array/PrimaryprefListColor"
-            android:entryValues="@array/PrimaryColorsPref"
-            />
-
+        <!--
+        <Preference
+            android:title="Lobster"
+            android:key="yes"
+            android:layout="@layout/colorpiker" />
+        -->
     </PreferenceCategory>
 </PreferenceScreen>

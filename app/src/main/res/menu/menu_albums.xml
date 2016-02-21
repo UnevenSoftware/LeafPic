@@ -9,7 +9,6 @@
         android:icon="@mipmap/ic_sort_white_24dp"
         app:showAsAction="ifRoom"
         />
-
     <item
         android:id="@+id/action_camera"
         android:icon="@mipmap/ic_photo_camera_white_24dp"
@@ -27,25 +26,22 @@
         app:showAsAction="never"
         />
     <item
-            android:id="@+id/deleteAction"
-            android:icon="@mipmap/ic_delete_white_24dp"
-            android:title="@string/delete_album_action"
-            app:showAsAction="ifRoom"
-        />
-
-    <item
-        android:id="@+id/excludeAlbumButton"
-        android:title="@string/exclude_album_action"
-        app:showAsAction="never"
-        />
-
-    <item
         android:id="@+id/hideAlbumButton"
         android:title="@string/hide_album_action"
         android:icon="@mipmap/ic_visibility_off_white_24dp"
         app:showAsAction="ifRoom"
         />
-
+    <item
+            android:id="@+id/deleteAction"
+            android:icon="@mipmap/ic_delete_white_24dp"
+            android:title="@string/delete_album_action"
+            app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/excludeAlbumButton"
+        android:title="@string/exclude_album_action"
+        app:showAsAction="never"
+        />
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
         android:title="@string/refresh_hidde_folders_action"
