@@ -24,6 +24,11 @@ public class Photo implements Parcelable {
     public String FolderPath;
     boolean selected = false;
 
+
+    public boolean isGif(){
+        if(MIME.equals("image/gif")) return true;
+        return false;
+    }
     public Photo(String path) {
         Path = path;
     }

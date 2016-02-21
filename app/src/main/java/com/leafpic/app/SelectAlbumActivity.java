@@ -36,7 +36,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
     String photosIndexes;
     boolean hidden=false;
     int code;
-    HandlingPhotos p;//= new HandlingPhotos(SelectAlbumActivity.this);
+    HandlingPhotos p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,8 @@ public class SelectAlbumActivity extends AppCompatActivity {
         photosIndexes = getIntent().getStringExtra("photos_indexes");
 
         p = new HandlingPhotos(SelectAlbumActivity.this);
-        if (code == 69) setTitle("Move to");
-        else if (code == 23) setTitle("Copy to");
+        if (code == MOVE_TO_ACTION) setTitle("Move to");
+        else if (code == COPY_TO_ACTION) setTitle("Copy to");
 
         setResult(Activity.RESULT_CANCELED);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,7 +89,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
     }
 
     private void loadAlbumPreview(){
-        if (hidden)  albums.loadPreviewHiddenAlbums();
+        if (hidden) albums.loadPreviewHiddenAlbums();
         else albums.loadPreviewAlbums();
 
         hidden=!hidden;
@@ -101,16 +101,20 @@ public class SelectAlbumActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 String newAlbumPath = a.getTag().toString();
-                if (code == MOVE_TO_ACTION) {
-                    Intent result = new Intent();
-                    result.putExtra("photos_indexes", photosIndexes);
-                    p.moveSelectedPhotos(photoPaths, newAlbumPath);
-                    setResult(Activity.RESULT_OK, result);
-                }
-                if (code == COPY_TO_ACTION) {
-                    Intent result = new Intent();
-                    p.copySelectedPhotos(photoPaths, newAlbumPath);
-                    setResult(Activity.RESULT_OK, result);
+                Intent result;
+                switch (code){
+                    case MOVE_TO_ACTION:
+                        result = new Intent();
+                        result.putExtra("photos_indexes", photosIndexes);
+                        p.moveSelectedPhotos(photoPaths, newAlbumPath);
+                        setResult(Activity.RESULT_OK, result);
+                        break;
+                    case COPY_TO_ACTION:
+                        result = new Intent();
+                        p.copySelectedPhotos(photoPaths, newAlbumPath);
+                        setResult(Activity.RESULT_OK, result);
+                        break;
+                    default: break;
                 }
                 finish();
             }

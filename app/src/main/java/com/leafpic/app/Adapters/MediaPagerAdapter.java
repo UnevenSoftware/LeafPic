@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Fragments.GifFragment;
 import com.leafpic.app.Fragments.ImageFragment;
 import com.leafpic.app.R;
 
@@ -27,6 +28,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
 
     ArrayList<Photo> photos;
     View.OnTouchListener listener;
+
     public void  setOnTouchListener(View.OnTouchListener l){ listener = l; }
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Photo> photos) {
@@ -38,9 +40,15 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int pos) {
         Photo p = photos.get(pos);
 
-        ImageFragment fragment = ImageFragment.newInstance(p.Path,300,300);
-        fragment.setOnTouchListener(listener);
-        return fragment;
+        if (p.isGif()){
+            GifFragment fragment = GifFragment.newInstance(p.Path);
+            fragment.setOnTouchListener(listener);
+            return fragment;
+        } else {
+            ImageFragment fragment = ImageFragment.newInstance(p.Path, 300, 300);
+            fragment.setOnTouchListener(listener);
+            return fragment;
+        }
     }
 
     @Override
