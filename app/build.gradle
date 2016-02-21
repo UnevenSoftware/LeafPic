@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+
     }
 }
 apply plugin: 'com.android.application'
@@ -12,6 +13,7 @@ repositories {
     jcenter()
     maven  { url "http://repo1.maven.org/maven2" }
     maven { url "http://jitpack.io" }
+
 }
 
 android {
@@ -65,4 +67,8 @@ dependencies {
          transitive = true
      }*/
     compile 'com.github.paolorotolo:appintro:3.4.0'
+    //colorPiker >lobsterpicker
+    compile 'com.larswerkman:lobsterpicker:1.0.1'
+    //colorPiker >Shift
+    compile 'com.github.DASAR:ShiftColorPicker:v0.5'
 }

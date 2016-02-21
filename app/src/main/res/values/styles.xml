@@ -14,7 +14,7 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
-        <!-- some other theme configurations for actionbar, overflow menu etc. -->
+
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat">
@@ -29,7 +29,7 @@
         <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
         <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
-        ...
+
     </style>
 
     <!--
@@ -41,6 +41,7 @@
         <item name="windowActionBar">false</item>
     </style>
     -->
+
     <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog">
 
     </style>
