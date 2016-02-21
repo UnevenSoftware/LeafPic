@@ -1,6 +1,7 @@
 package com.leafpic.app;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +24,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +38,6 @@ import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.Iconics;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -49,6 +48,9 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import uz.shift.colorpicker.LineColorPicker;
+import uz.shift.colorpicker.OnColorChangedListener;
+
 public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
@@ -58,7 +60,6 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
     Toolbar toolbar;
     SharedPreferences SP;
     boolean editmode = false, hidden = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -479,7 +480,37 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
                 return true;
+            case R.id.filter_albums_action:
 
+               // int[] j = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
+
+                View dialoglayout = getLayoutInflater().inflate(R.layout.choosecolor, null);
+
+                AlertDialog.Builder builder12 = new AlertDialog.Builder(AlbumsActivity.this);
+                LineColorPicker colorPicker = (LineColorPicker) dialoglayout.findViewById(R.id.picker3);
+
+                // set color palette
+                colorPicker.setColors(new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW});
+
+                // set selected color [optional]
+                colorPicker.setSelectedColor(Color.RED);
+
+                // set on change listener
+                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+                    @Override
+                    public void onColorChanged(int c) {
+                        //Log.d(TAG, "Selected color " + Integer.toHexString(c));
+                        Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder12.setView(dialoglayout);
+                builder12.show();
+
+                int color = colorPicker.getColor();
+              //  dialog.show();
+
+                break;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

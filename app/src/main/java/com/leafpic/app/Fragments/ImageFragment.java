@@ -97,7 +97,7 @@ public class ImageFragment extends Fragment {
               //Log.wtf("asdasdasdasdas","fulllllllll");
                // Glide.get(getActivity()).clearDiskCache();
                // Glide.get(getActivity()).trimMemory(3);
-                Glide.with(getContext())
+              /*  Glide.with(getContext())
                         .load(path)
                         .asBitmap()
                       //  .thumbnail(0.1f)
@@ -113,7 +113,7 @@ public class ImageFragment extends Fragment {
                                 picture.setImage(ImageSource.bitmap(bitmap));
 
                             }
-                        });
+                        });*/
             }
         });
 

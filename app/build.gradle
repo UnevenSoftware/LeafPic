@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+
     }
 }
 apply plugin: 'com.android.application'
@@ -11,6 +12,7 @@ apply plugin: 'com.android.application'
 repositories {
     jcenter()
     maven  { url "http://repo1.maven.org/maven2" }
+    maven {  url  "http://dl.bintray.com/dasar/maven" }
 }
 
 android {
@@ -54,4 +56,8 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
     compile 'com.github.paolorotolo:appintro:3.4.0'
+    //colorPiker >lobsterpicker
+    //compile 'com.larswerkman:lobsterpicker:1.0.1'
+    //colorPiker >Shift
+    compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
 }

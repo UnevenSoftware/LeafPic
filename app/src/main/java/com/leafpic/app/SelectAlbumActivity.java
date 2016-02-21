@@ -80,7 +80,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
         //Base Theme
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
         if (SP.getBoolean("set_dark_theme", false)){
-            //setTheme(R.style.AppTheme_Dark);
+            //setTheme(R.style.AppTheme_Dark
             ll.setBackgroundColor(getColor(R.color.background_material_dark));
         }else {
             //setTheme(R.style.AppTheme);
