@@ -85,7 +85,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             else
                 holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.background_material_light));
         }
-        if (selected==false) {
+        if (!selected) {
             holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
             holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SP.getString("PrefColor", "#03A9F4") + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
                     "color='" + textColor + "'> Photos</font>"));
