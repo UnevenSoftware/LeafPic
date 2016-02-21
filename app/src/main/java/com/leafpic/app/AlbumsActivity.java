@@ -17,13 +17,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +36,6 @@ import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.Iconics;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -49,7 +46,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
+public class AlbumsActivity extends ThemeActivity /*implements FolderChooserDialog.FolderCallback */{
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
@@ -58,7 +55,17 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
     Toolbar toolbar;
     SharedPreferences SP;
     boolean editmode = false, hidden = false;
+//
+    @Override
+    protected int darkTheme() {
+        return R.style.AppTheme_Viewer_Dark;
+    }
 
+    @Override
+    protected int lightTheme() {
+        return R.style.AppTheme_Viewer;
+    }
+//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -36,4 +36,24 @@
     <!--GREEN-->
     <color name="green_1">#727272</color>
     <color name="fabOrange">#FF9800</color>
+
+
+    <!--APP THEME -->
+    <color name="material_indigo_100">#C5CAE9</color>
+    <color name="material_indigo_500">#3F51B5</color>
+    <color name="material_pink_500">#FF4081</color>
+
+    <color name="grid_overlay">#BF000000</color>
+    <color name="video_play_overlay">#64000000</color>
+    <color name="picture_activated_overlay">#80000000</color>
+
+    <color name="dark_vanilla_gray">#262626</color>
+    <color name="viewer_lightmode_icons">#222222</color>
+    <color name="editor_option_background">#E5E5E5</color>
+
+    <color name="dark_theme_gray">#1F1F1F</color>>
+
+    <color name="crumb_active">#fff</color>
+    <color name="crumb_inactive">#73ffffff</color>
+
 </resources>
