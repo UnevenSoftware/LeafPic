@@ -1,18 +1,19 @@
 package com.leafpic.app;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import uz.shift.colorpicker.LineColorPicker;
@@ -111,105 +112,76 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
-            Preference p = findPreference("primary_color");
-            p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            Preference accent_preference = findPreference("accent_color");
+            accent_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    int[] j =  {Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW};
-                    /**/
-                    //SHIFT COLOR PIKLER
-                    final Dialog dialog = new Dialog(getContext());
-                    dialog.setContentView(R.layout.colorpiker);
-                    dialog.setTitle("Primary Color");
-                    LineColorPicker colorPicker;
-                    colorPicker = (LineColorPicker) findViewById(R.id.picker);
+                    Toast.makeText(SettingsActivity.this, SP.getInt("Primary_color",0),Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
+            Preference primary_preference = findPreference("primary_color");
+            primary_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    int[] cpColors = {
+                            getColor(R.color.accent_red),
+                            getColor(R.color.accent_pink),
+                            getColor(R.color.accent_purple),
+                            getColor(R.color.accent_deep_purple),
+                            getColor(R.color.accent_indago),
+                            getColor(R.color.accent_blue),
+                            getColor(R.color.accent_cyan),
+                            getColor(R.color.accent_teal),
+                            getColor(R.color.accent_green),
+                            getColor(R.color.accent_yellow),
+                            getColor(R.color.accent_amber),
+                    };
+
+                    final View dialoglayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
+                    final AlertDialog.Builder builder12 = new AlertDialog.Builder(SettingsActivity.this);
+                    final LineColorPicker colorPicker = (LineColorPicker) dialoglayout.findViewById(R.id.picker3);
 
                     // set color palette
-                    colorPicker.setColors(j);
+                    colorPicker.setColors(cpColors);
+                    colorPicker.setSelectedColor(R.color.accent_teal);
+                    //Object
+                    TextView Ok = (TextView) dialoglayout.findViewById(R.id.cp_primary_ok);
+                    CardView cv=(CardView) dialoglayout.findViewById(R.id.cp_primary_card);
 
-                    // set selected color [optional]
-                    colorPicker.setSelectedColor(Color.RED);
+                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+                    if (SP.getBoolean("set_dark_theme", false)==false){
+                        cv.setBackgroundColor(getColor(R.color.cardview_light_background));
+                    }else{
+                        cv.setBackgroundColor(getColor(R.color.cardview_dark_background));
+                    }
 
                     // set on change listener
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override
                         public void onColorChanged(int c) {
-                            //Log.d(TAG, "Selected color " + Integer.toHexString(c));
-                            Toast.makeText(getActivity(), "Selected color " + Integer.toHexString(c),
-                                    Toast.LENGTH_SHORT).show();
+                            TextView Title = (TextView) dialoglayout.findViewById(R.id.cp_p_title);
+                            TextView Ok = (TextView) dialoglayout.findViewById(R.id.cp_primary_ok);
+                            Title.setBackgroundColor(c);
+                            Ok.setTextColor(c);
+                            //Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
+                            //        Toast.LENGTH_SHORT).show();
                         }
                     });
-
-                    // get selected color
-                    int color = colorPicker.getColor();
-                    dialog.show();
-
-
-
-
-
-
-
-
-
-
-
-
-                    /*
-                    //LOBSTER
-                    final Dialog dialog = new Dialog(getContext());
-                    dialog.setContentView(R.layout.colorpiker);
-                    dialog.setTitle("Primary Color");
-
-                    // set the custom dialog components - text, image and button
-
-                    LobsterPicker lobsterPicker = (LobsterPicker) findViewById(R.id.lobsterpicker);
-                    LobsterShadeSlider shadeSlider = (LobsterShadeSlider) findViewById(R.id.shadeslider);
-                    //To retrieve the selected color use
-                    lobsterPicker.getColor();
-
-                    //You'r also able to add a listener
-                    lobsterPicker.addOnColorListener(new OnColorListener() {
-                        @Override
-                        public void onColorChanged(@ColorInt int color) {
-
-                        }
-
-                        @Override
-                        public void onColorSelected(@ColorInt int color) {
-
-                        }
-                    });
-                    dialog.show();
-                    */
-
-
-
-
-
-                    /*
-                    //NORMAL
-                    // custom dialog
-                    final Dialog dialog = new Dialog(getContext());
-                    dialog.setContentView(R.layout.custom_color_piker_primary);
-                    dialog.setTitle("Primary Color");
-
-                    // set the custom dialog components - text, image and button
-                    TextView grey = (TextView) dialog.findViewById(R.id.grey);
-                    TextView green = (TextView) dialog.findViewById(R.id.green);
-                    TextView amber = (TextView) dialog.findViewById(R.id.amber);
-                    TextView orange = (TextView) dialog.findViewById(R.id.orange);
-
-                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                    // if button is clicked, close the custom dialog
-                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                    Ok.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            SharedPreferences.Editor editor = SP.edit();
+                            editor.putInt("Primary_Color", colorPicker.getColor());
+                            editor.commit();
+                            //finish();chiude l'activity
                         }
                     });
-                    dialog.show();
-                    */
+                    builder12.setView(dialoglayout);
+                    builder12.show();
+                    //int color = colorPicker.getColor();
                     return false;
                 }
             });

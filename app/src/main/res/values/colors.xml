@@ -37,5 +37,23 @@
     <color name="green_1">#727272</color>
     <color name="fabOrange">#FF9800</color>
 
+    <!--Accent Color Collection-->
+    <color name="accent_red">#f44336</color>
+    <color name="accent_pink">#e91e63</color>
+    <color name="accent_purple">#9c27b0</color>
+    <color name="accent_deep_purple">#673ab7</color>
+    <color name="accent_indago">#3f51b5</color>
+    <color name="accent_blue">#2196f3</color>
+    <color name="accent_cyan">#00bcd4</color>
+    <color name="accent_teal">#009688</color>
+    <color name="accent_green">#4caf50</color>
+    <color name="accent_yellow">#ffeb3b</color>
+    <color name="accent_amber">#ffc107</color>
+    <color name="accent_orange">#ff9800</color>
+    <color name="accent_brown">#795548</color>
+    <color name="accent_white">#FFFFFF</color>
+    <color name="accent_grey">#9e9e9e</color>
+    <color name="accent_black">#000000</color>
+
 
 </resources>

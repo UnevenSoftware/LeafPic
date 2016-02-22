@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -8,8 +9,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="2dp">
-
+            app:cardCornerRadius="2dp"
+            android:id="@+id/cp_primary_card"
+            >
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -20,48 +22,43 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/title"
+                        android:id="@+id/cp_p_title"
                         android:layout_width="match_parent"
                         android:textColor="#fff"
-
                         android:layout_height="wrap_content"
                         android:background="@color/md_light_green_500"
                         android:padding="24dp"
-                        android:text="fuck"
+                        android:text="Primary Color"
                         android:textSize="18sp"
                         android:textStyle="bold" />
-
 
                     <RelativeLayout
                         android:id="@+id/body3"
                         android:layout_width="match_parent"
-
                         android:layout_height="match_parent"
-
                         android:orientation="vertical"
                         android:padding="24dp">
 
-                        <uz.shift.colorpicker.LineColorPicker xmlns:app="http://schemas.android.com/apk/res-auto"
+                        <uz.shift.colorpicker.LineColorPicker
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/picker3"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             app:orientation="horizontal"
-
                             app:selectedColorIndex="0" />
 
-
                     </RelativeLayout>
-
                     <TextView
-                        android:id="@+id/ok"
+                        android:id="@+id/cp_primary_ok"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right|bottom"
 
-                        android:padding="16dp"
-                        android:text="ok"
+                        android:padding="20dp"
+                        android:text="OK"
                         android:textSize="14sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
             </ScrollView>
         </android.support.v7.widget.CardView>

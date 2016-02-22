@@ -1,7 +1,6 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,9 +46,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
-import uz.shift.colorpicker.LineColorPicker;
-import uz.shift.colorpicker.OnColorChangedListener;
 
 public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
 
@@ -110,11 +106,13 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
 
     public void initUiTweaks(){
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        //int pc = SP.getInt("primary_color", Color.BLUE);
+
         /**** Nav Bar ****/
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             boolean NavBar = SP.getBoolean("nav_bar", false);
             if (NavBar)
-                getWindow().setNavigationBarColor(getColor(R.color.primary));
+                getWindow().setNavigationBarColor(getColor(R.color.primary));//R.color.primary
             else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
 
         }
@@ -122,7 +120,8 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         /**** Status Bar */
-        getWindow().setStatusBarColor(getColor(R.color.primary));
+
+        getWindow().setStatusBarColor(getColor(R.color.primary));//R.color.primary
         //getWindow().setStatusBarColor(getColor(R.color.toolbar));
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
@@ -481,35 +480,6 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                 startActivity(i);
                 return true;
             case R.id.filter_albums_action:
-
-               // int[] j = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
-
-                View dialoglayout = getLayoutInflater().inflate(R.layout.choosecolor, null);
-
-                AlertDialog.Builder builder12 = new AlertDialog.Builder(AlbumsActivity.this);
-                LineColorPicker colorPicker = (LineColorPicker) dialoglayout.findViewById(R.id.picker3);
-
-                // set color palette
-                colorPicker.setColors(new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW});
-
-                // set selected color [optional]
-                colorPicker.setSelectedColor(Color.RED);
-
-                // set on change listener
-                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int c) {
-                        //Log.d(TAG, "Selected color " + Integer.toHexString(c));
-                        Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder12.setView(dialoglayout);
-                builder12.show();
-
-                int color = colorPicker.getColor();
-              //  dialog.show();
-
                 break;
             default:
                 // If we got here, the user's action was not recognized.
