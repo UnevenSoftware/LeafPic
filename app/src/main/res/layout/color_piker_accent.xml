@@ -22,7 +22,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/ac_cp_title"
+                    android:id="@+id/cp_accent_title"
                     android:layout_width="match_parent"
                     android:textColor="#fff"
                     android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
 
                     <uz.shift.colorpicker.LineColorPicker
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/picker3"
+                        android:id="@+id/pickerAccent"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         app:orientation="horizontal"

@@ -22,7 +22,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/cp_p_title"
+                        android:id="@+id/cp_primary_title"
                         android:layout_width="match_parent"
                         android:textColor="#fff"
                         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
 
                         <uz.shift.colorpicker.LineColorPicker
                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/picker3"
+                            android:id="@+id/pickerPrimary"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             app:orientation="horizontal"
@@ -62,5 +62,4 @@
                 </LinearLayout>
             </ScrollView>
         </android.support.v7.widget.CardView>
-
 </LinearLayout>
