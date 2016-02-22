@@ -24,9 +24,9 @@
                 <TextView
                     android:id="@+id/cp_accent_title"
                     android:layout_width="match_parent"
-                    android:textColor="#fff"
+                    android:textColor="@color/cp_AccentDark"
                     android:layout_height="wrap_content"
-                    android:background="@color/md_light_green_500"
+                    android:background="@color/md_red_500"
                     android:padding="24dp"
                     android:text="Accent Color"
                     android:textSize="18sp"
@@ -48,16 +48,7 @@
                         app:selectedColorIndex="0" />
 
                 </RelativeLayout>
-                <TextView
-                    android:id="@+id/cp_accent_ok"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right|bottom"
 
-                    android:padding="20dp"
-                    android:text="OK"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

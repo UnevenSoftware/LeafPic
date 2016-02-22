@@ -112,7 +112,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             boolean NavBar = SP.getBoolean("nav_bar", false);
             if (NavBar)
-                getWindow().setNavigationBarColor(getColor(R.color.primary));//R.color.primary
+                getWindow().setNavigationBarColor(getColor(R.color.toolbar));//R.color.primary
             else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
 
         }
@@ -121,7 +121,9 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         setSupportActionBar(toolbar);
         /**** Status Bar */
 
-        getWindow().setStatusBarColor(getColor(R.color.primary));//R.color.primary
+        int primaryColor = SP.getInt("primary_color", 8);///////////////////////////////////////////////////////////////
+
+        getWindow().setStatusBarColor(getColor(R.color.toolbar));//R.color.primary
         //getWindow().setStatusBarColor(getColor(R.color.toolbar));
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);

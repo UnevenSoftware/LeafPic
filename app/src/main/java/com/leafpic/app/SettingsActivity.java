@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -112,87 +114,13 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
+            //ACCENT COLOR PIKER********************************************************************
 
-
-            //ACCENT COLOR PIKER
             Preference accent_preference = findPreference("accent_color");
             accent_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    int[] cpColors = {
-                            getColor(R.color.accent_red),
-                            getColor(R.color.accent_pink),
-                            getColor(R.color.accent_purple),
-                            getColor(R.color.accent_deep_purple),
-                            getColor(R.color.accent_indago),
-                            getColor(R.color.accent_blue),
-                            getColor(R.color.accent_cyan),
-                            getColor(R.color.accent_teal),
-                            getColor(R.color.accent_green),
-                    };
-
-                    final View dialoglayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
-                    final AlertDialog.Builder builder12 = new AlertDialog.Builder(SettingsActivity.this);
-                    final LineColorPicker colorPicker = (LineColorPicker) dialoglayout.findViewById(R.id.pickerAccent);
-
-                    // set color palette
-                    colorPicker.setColors(cpColors);
-                    colorPicker.setSelectedColor(R.color.accent_red);
-                    //Object
-                    TextView Ok = (TextView) dialoglayout.findViewById(R.id.cp_accent_ok);
-                    CardView cv=(CardView) dialoglayout.findViewById(R.id.cp_accent_card);
-
-                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
-                    if (SP.getBoolean("set_dark_theme", false)==false){
-                        cv.setBackgroundColor(getColor(R.color.cardview_light_background));
-                        Ok.setTextColor(getColor(R.color.md_black_1000));
-                    }else{
-                        cv.setBackgroundColor(getColor(R.color.cardview_dark_background));
-                        Ok.setTextColor(getColor(R.color.md_white_1000));
-                    }
-
-                    // set on change listener
-                    colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
-                        @Override
-                        public void onColorChanged(int c) {
-                            TextView Title = (TextView) dialoglayout.findViewById(R.id.cp_accent_title);
-                            TextView Ok = (TextView) dialoglayout.findViewById(R.id.cp_accent_ok);
-                            Title.setBackgroundColor(c);
-                            Ok.setTextColor(c);
-                            //Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
-                            //        Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    Ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            SharedPreferences.Editor editor = SP.edit();
-                            editor.putInt("accent_color", colorPicker.getColor());
-                            editor.commit();
-                            //finish();chiude l'activity
-                        }
-                    });
-                    builder12.setView(dialoglayout);
-                    builder12.show();
-                    //int color = colorPicker.getColor();
-                    return false;
-                }
-            });
-
-
-
-
-
-
-
-
-
-            //PRIMARY COLOR PIKER
-            Preference primary_preference = findPreference("primary_color");
-            primary_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    int[] cpColors = {
+                    int[] accentColors = {
                             getColor(R.color.accent_red),
                             getColor(R.color.accent_pink),
                             getColor(R.color.accent_purple),
@@ -204,55 +132,124 @@ public class SettingsActivity extends AppCompatActivity {
                             getColor(R.color.accent_green),
                             getColor(R.color.accent_yellow),
                             getColor(R.color.accent_amber),
+                            getColor(R.color.accent_orange),
+                            getColor(R.color.accent_brown)
                     };
-
-                    final View dialoglayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
-                    final AlertDialog.Builder builder12 = new AlertDialog.Builder(SettingsActivity.this);
-                    final LineColorPicker colorPicker = (LineColorPicker) dialoglayout.findViewById(R.id.pickerPrimary);
-
-                    // set color palette
-                    colorPicker.setColors(cpColors);
-                    colorPicker.setSelectedColor(R.color.accent_red);
-                    //Object
-                    TextView Ok = (TextView) dialoglayout.findViewById(R.id.cp_primary_ok);
-                    CardView cv=(CardView) dialoglayout.findViewById(R.id.cp_primary_card);
-
+                    final AlertDialog.Builder AccentPikerDialog;
                     SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
-                    if (SP.getBoolean("set_dark_theme", false)==false){
-                        cv.setBackgroundColor(getColor(R.color.cardview_light_background));
-                        Ok.setTextColor(getColor(R.color.md_black_1000));
-                    }else{
-                        cv.setBackgroundColor(getColor(R.color.cardview_dark_background));
-                        Ok.setTextColor(getColor(R.color.md_white_1000));
+                    if (SP.getBoolean("set_dark_theme", false) == true) {
+                        AccentPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Dark);
+                    } else {
+                        AccentPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Light);
                     }
+                    final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
+                    final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerAccent);
 
-                    // set on change listener
+                    colorPicker.setColors(accentColors);
+                    colorPicker.setSelectedColor(R.color.md_red_500);
+                    CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_accent_card);
+
+                    if (SP.getBoolean("set_dark_theme", false) == false) {
+                        cv.setBackgroundColor(getColor(R.color.cp_PrimaryLight));
+                    } else {cv.setBackgroundColor(getColor(R.color.cp_PrimaryDark));}
+
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override
                         public void onColorChanged(int c) {
-                            TextView Title = (TextView) dialoglayout.findViewById(R.id.cp_primary_title);
-                            TextView Ok = (TextView) dialoglayout.findViewById(R.id.cp_primary_ok);
+                            TextView Title = (TextView) Accent_dialogLayout.findViewById(R.id.cp_accent_title);
                             Title.setBackgroundColor(c);
-                            Ok.setTextColor(c);
-                            //Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
-                            //        Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Ok.setOnClickListener(new View.OnClickListener() {
+                    AccentPikerDialog.setView(Accent_dialogLayout);//IMPOSTO IL LAYOUT
+                    AccentPikerDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            SharedPreferences.Editor editor = SP.edit();
-                            editor.putInt("Primary_Color", colorPicker.getColor());
-                            editor.commit();
-                            //finish();chiude l'activity
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
                         }
                     });
-                    builder12.setView(dialoglayout);
-                    builder12.show();
+                    AccentPikerDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = SP.edit();
+                            editor.putInt("accent_color", colorPicker.getColor());
+                            editor.commit();
+                            Toast.makeText(getBaseContext(), "Selected color " + colorPicker.getColor(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    AccentPikerDialog.show();
                     //int color = colorPicker.getColor();
                     return false;
                 }
             });
+
+            //PRIMARY COLOR PIKER*******************************************************************
+
+            Preference primary_preference = findPreference("primary_color");
+            primary_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    int[] accentColors = {
+                            getColor(R.color.accent_red),
+                            getColor(R.color.accent_pink),
+                            getColor(R.color.accent_purple),
+                            getColor(R.color.accent_deep_purple),
+                            getColor(R.color.accent_indago),
+                            getColor(R.color.accent_blue),
+                            getColor(R.color.accent_cyan),
+                            getColor(R.color.accent_teal),
+                            getColor(R.color.accent_green),
+                            getColor(R.color.accent_yellow),
+                            getColor(R.color.accent_amber),
+                            getColor(R.color.accent_orange),
+                            getColor(R.color.accent_brown)
+                    };
+                    final AlertDialog.Builder PrimaryPikerDialog;
+                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+                    if (SP.getBoolean("set_dark_theme", false) == true) {
+                        PrimaryPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Dark);
+                    } else {
+                        PrimaryPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Light);
+                    }
+                    final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
+                    final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerPrimary);
+
+                    colorPicker.setColors(accentColors);
+                    colorPicker.setSelectedColor(R.color.md_red_500);
+                    CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_primary_card);
+
+                    if (SP.getBoolean("set_dark_theme", false) == false) {
+                        cv.setBackgroundColor(getColor(R.color.cp_PrimaryLight));
+                    } else {cv.setBackgroundColor(getColor(R.color.cp_PrimaryDark));}
+
+                    colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+                        @Override
+                        public void onColorChanged(int c) {
+                            TextView Title = (TextView) Accent_dialogLayout.findViewById(R.id.cp_primary_title);
+                            Title.setBackgroundColor(c);
+                        }
+                    });
+                    PrimaryPikerDialog.setView(Accent_dialogLayout);//IMPOSTO IL LAYOUT
+                    PrimaryPikerDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    PrimaryPikerDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = SP.edit();
+                            editor.putInt("primary_color", colorPicker.getColor());
+                            editor.commit();
+                            Toast.makeText(getBaseContext(), "Selected color " + colorPicker.getColor(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    PrimaryPikerDialog.show();
+                    //int color = colorPicker.getColor();
+                    return false;
+                }
+            });
+
         }
     }
 }

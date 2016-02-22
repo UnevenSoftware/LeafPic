@@ -104,6 +104,21 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!--DIALOG THEME-->
+
+    <style name="AlertDialog_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/cp_AccentLight</item><!--BOTTONI-->
+        <item name="android:textColorPrimary">@color/cp_TextLight</item><!--TESTO-->
+        <item name="android:background">@color/cp_PrimaryLight</item><!--SFONDO-->
+    </style>
+
+    <style name="AlertDialog_Dark" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/cp_AccentDark</item><!--BOTTONI-->
+        <item name="android:textColorPrimary">@color/cp_TextDark</item><!--TESTO-->
+        <item name="android:background">@color/cp_PrimaryDark</item><!--SFONDO-->
+    </style>
+
+
     <!--PREFERENCE SCREEN-->
     <style name="PreferencesThemeDark">
         <item name="android:background">#2b2b2b</item>
