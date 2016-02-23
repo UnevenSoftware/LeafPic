@@ -66,6 +66,7 @@ public class SelectAlbumActivity extends AppCompatActivity {
                 finish();
             }
         });
+        toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
         setSupportActionBar(toolbar);
         getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
 
