@@ -1,7 +1,6 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,9 +46,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
-import uz.shift.colorpicker.LineColorPicker;
-import uz.shift.colorpicker.OnColorChangedListener;
 
 public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
 
@@ -101,37 +97,40 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         updateSelectedStuff();
         invalidateOptionsMenu();
         checkPermissions();
-
         initUiTweaks();
-
         super.onResume();
     }
 
 
     public void initUiTweaks(){
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));///////////////
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
+
         /**** Nav Bar ****/
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             boolean NavBar = SP.getBoolean("nav_bar", false);
             if (NavBar)
-                getWindow().setNavigationBarColor(getColor(R.color.primary));
+                getWindow().setNavigationBarColor(Color.parseColor(hexPrimaryColor));
             else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
-
         }
+
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+
         /**** Status Bar */
-        getWindow().setStatusBarColor(getColor(R.color.primary));
+        getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
         //getWindow().setStatusBarColor(getColor(R.color.toolbar));
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
         if (SP.getBoolean("set_dark_theme", false)){
             //setTheme(R.style.AppTheme_Dark);
-            rl.setBackgroundColor(getColor(R.color.background_material_dark));
+            rl.setBackgroundColor(getColor(R.color.act_bg_dark));
         }else {
             //setTheme(R.style.AppTheme);
-            rl.setBackgroundColor(getColor(R.color.background_material_light));
+            rl.setBackgroundColor(getColor(R.color.act_bg_light));
         }
 
 
@@ -143,7 +142,6 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
-
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -198,13 +196,13 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         addHiddenFolder_FABEvent();
     }
 
-
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
-
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
         if (hidden) {
             btnAddFolder.setVisibility(View.VISIBLE);
-            int color = Color.parseColor(SP.getString("PrefColor", "#03A9F4"));
+            int color = Color.parseColor(hexAccentColor);
 
             btnAddFolder.setBackgroundTintList(ColorStateList.valueOf(color));
             btnAddFolder.setOnClickListener(new View.OnClickListener() {
@@ -427,7 +425,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                         })
                         .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
-               builder.show();
+                builder.show();
                 break;
 
             case R.id.deleteAction:
@@ -481,35 +479,6 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                 startActivity(i);
                 return true;
             case R.id.filter_albums_action:
-
-               // int[] j = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
-
-                View dialoglayout = getLayoutInflater().inflate(R.layout.choosecolor, null);
-
-                AlertDialog.Builder builder12 = new AlertDialog.Builder(AlbumsActivity.this);
-                LineColorPicker colorPicker = (LineColorPicker) dialoglayout.findViewById(R.id.picker3);
-
-                // set color palette
-                colorPicker.setColors(new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW});
-
-                // set selected color [optional]
-                colorPicker.setSelectedColor(Color.RED);
-
-                // set on change listener
-                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int c) {
-                        //Log.d(TAG, "Selected color " + Integer.toHexString(c));
-                        Toast.makeText(getBaseContext(), "Selected color " + Integer.toHexString(c),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder12.setView(dialoglayout);
-                builder12.show();
-
-                int color = colorPicker.getColor();
-              //  dialog.show();
-
                 break;
             default:
                 // If we got here, the user's action was not recognized.
@@ -539,9 +508,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         addHiddenFolder_FABEvent();
         if (hidden) {
             //LOAD
-            //result.closeDrawer();
             albums.loadPreviewHiddenAlbums();
-
         } else
             albums.loadPreviewAlbums();
 

@@ -1,6 +1,7 @@
 package com.leafpic.app.Adapters;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,20 +61,26 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
         String textColor;
 
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
+
         if (SP.getBoolean("set_dark_theme", false))
             textColor="#FAFAFA";
         else
             textColor="#2b2b2b";
 
         if (a.isSelected()) {
-            holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
+            holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+            //holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
             //White Text On White Theme
             if (SP.getBoolean("set_dark_theme", false)==false){
                 selected=true;
                 holder.name.setText(Html.fromHtml("<i><font color='#FAFAFA'>" + a.DisplayName + "</font></i>"));
-                holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SP.getString("PrefColor", "#03A9F4") + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+                holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
                         "color='#FAFAFA'> Photos</font>"));
             }
         } else {
@@ -87,7 +94,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         }
         if (!selected) {
             holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-            holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SP.getString("PrefColor", "#03A9F4") + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+            //SP.getString("PrefColor", "#03A9F4")
+            holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
                     "color='" + textColor + "'> Photos</font>"));
         }
     }

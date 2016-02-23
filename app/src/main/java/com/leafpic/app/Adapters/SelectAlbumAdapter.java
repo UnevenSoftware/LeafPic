@@ -1,6 +1,7 @@
 package com.leafpic.app.Adapters;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -52,8 +53,11 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
 
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
-        String SColor = SP.getString("PrefColor", "#03A9F4");
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+
+        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
 
         holder.name.setTag(a.Path);
