@@ -1,11 +1,13 @@
 package com.leafpic.app;
 
+import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -48,7 +51,7 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 12/12/15.
  */
-public class PhotosActivity extends AppCompatActivity {
+public class PhotosActivity extends ThemedActivity {
 
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
@@ -57,26 +60,10 @@ public class PhotosActivity extends AppCompatActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
-    SharedPreferences SP;
 
     boolean editmode = false;
     PhotosAdapter adapter;
-    //PALETTE
-    //Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
-    // Drawable b = new Drawable.createFromPath(photos.getPreviewAlbumImg());
-    //}.decode//.decodeFile(photos.getPreviewAlbumImg());
-    /*
-    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-        @Override
-        public void onGenerated(Palette palette) {
-            int primaryDark = getColor(R.color.toolbar);
-            int primary = getColor(R.color.toolbar);
-            collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-            collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
-            //collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkVibrantColor(primaryDark));
-        }
-    });
-    */
+
     RecyclerView mRecyclerView;
 
     @Override
@@ -245,6 +232,7 @@ public class PhotosActivity extends AppCompatActivity {
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) { finishEditMode(); }});
+
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -509,18 +497,17 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
-        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
-        /**** Navigation Bar*/
-        boolean NavBar = SP.getBoolean("nav_bar", false);
-        if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) && (NavBar)) {
-            getWindow().setNavigationBarColor(Color.parseColor(hexPrimaryColor));
-            //getWindow().setNavigationBarColor(getColor(R.color.toolbar));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription(photos.DisplayName, drawable.getBitmap(), getPrimaryColor()));
+
+            if (isNavigationBarColored())
+                getWindow().setNavigationBarColor(getPrimaryColor());
+            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
         }
+
 
         /**** Status Bar */
         Window window = getWindow();
@@ -538,7 +525,7 @@ public class PhotosActivity extends AppCompatActivity {
 
         /****SET THEME***/
         RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
-        if (SP.getBoolean("set_dark_theme", false)){
+        if (isDarkTheme()){
             rw.setBackgroundColor(getColor(R.color.act_bg_dark));
         }else {
             rw.setBackgroundColor(getColor(R.color.act_bg_light));
@@ -560,11 +547,11 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(hexPrimaryColor));//getColor(R.color.toolbar)
-        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(hexPrimaryColor));//getColor(R.color.toolbar)
+        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());//getColor(R.color.toolbar)
+        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());//getColor(R.color.toolbar)
 
         FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(hexAccentColor)));
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
 
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -590,9 +577,7 @@ public class PhotosActivity extends AppCompatActivity {
         textView.setText(photos.DisplayName);
         textView = (TextView) findViewById(R.id.album_photos_count);
 
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
         textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));

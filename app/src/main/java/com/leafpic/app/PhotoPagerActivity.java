@@ -2,16 +2,23 @@ package com.leafpic.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,20 +26,28 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by dnld on 18/02/16.
  */
-public class PhotoPagerActivity extends AppCompatActivity {
+public class PhotoPagerActivity extends ThemedActivity{
 
     ViewPager mViewPager;
     HandlingPhotos photos;
@@ -42,7 +57,7 @@ public class PhotoPagerActivity extends AppCompatActivity {
     boolean fullscreenmode;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         initUiTweaks();
@@ -101,43 +116,64 @@ public class PhotoPagerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (data != null) {
+        if (data != null && resultCode == RESULT_OK) {
             final Bundle b = data.getExtras();
-
-
             switch (requestCode) {
                 case SelectAlbumActivity.COPY_TO_ACTION:
-                    if (resultCode == RESULT_OK) {
-                        StringUtils.showToast(getApplicationContext(), "copied ok");
-                    }
-                    break;
+                    StringUtils.showToast(getApplicationContext(), "copied ok");
+                break;
                 case SelectAlbumActivity.MOVE_TO_ACTION:
-                    if (resultCode == RESULT_OK) {
-                        String asd = b.getString("photos_indexes");
-                        if (asd != null) {
-                            StringUtils.showToast(getApplicationContext(), "moved ok");
-                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
-                                //photos.removePhoto(Integer.valueOf(asd));
-                                // TODO remove photo moved from older album [porco dio]
-                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
-                                //adapter.removeItemAt(Integer.valueOf(asd));
-                                //mRecyclerView.removeViewAt(Integer.parseInt(asd));
-                                //photos.photos.remove(Integer.parseInt(asd));
-                                //mRecyclerView.removeViewAt(Integer.valueOf(asd));
-
-                                //adapter.notifyItemRemoved(Integer.parseInt(asd));
-
-                        }
+                    String asd = b.getString("photos_indexes");
+                    if (asd != null) {
+                        StringUtils.showToast(getApplicationContext(), "moved ok");
+                        //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                        //photos.removePhoto(Integer.valueOf(asd));
+                        // TODO remove photo moved from older album [porco dio]
+                        //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                        //adapter.removeItemAt(Integer.valueOf(asd));
+                        //mRecyclerView.removeViewAt(Integer.parseInt(asd));
+                        //photos.photos.remove(Integer.parseInt(asd));
+                        //mRecyclerView.removeViewAt(Integer.valueOf(asd));
+                        //adapter.notifyItemRemoved(Integer.parseInt(asd));
                         //adapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
+                break;
+                case UCrop.REQUEST_CROP:
+                    final Uri imageUri = UCrop.getOutput(data);
+                    if (imageUri != null && imageUri.getScheme().equals("file")) {
+                        try {
+                            copyFileToDownloads(getIntent().getData());
+                            adapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                           // Toast.makeText(ResultActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("asdasd", imageUri.toString(), e);
+                        }
+                    } else {
+                        StringUtils.showToast(getApplicationContext(),"errori random");
+                        //Toast.makeText(ResultActivity.this, getString(R.string.toast_unexpected_error), Toast.LENGTH_SHORT).show();
+                    }
                     break;
+
                 default:
                     break;
             }
         }
+    }
+
+    private void copyFileToDownloads(Uri croppedFileUri) throws Exception {
+
+        FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
+        FileOutputStream outStream = new FileOutputStream(new File(photos.getCurrentPhoto().Path));
+        FileChannel inChannel = inStream.getChannel();
+        FileChannel outChannel = outStream.getChannel();
+        inChannel.transferTo(0, inChannel.size(), outChannel);
+        inStream.close();
+        outStream.close();
+        StringUtils.showToast(getApplicationContext(), "ok");
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -189,6 +225,23 @@ public class PhotoPagerActivity extends AppCompatActivity {
                 builder1.show();
 
                 return true;
+            case R.id.edit_photo:
+                Uri mDestinationUri = Uri.fromFile(new File(getFilesDir(), "croped_image.png"));
+                Uri uri = Uri.fromFile(new File(photos.getCurrentPhoto().Path));
+                UCrop uCrop = UCrop.of(uri, mDestinationUri);
+                uCrop = uCrop.useSourceImageAspectRatio();
+                uCrop.withOptions(getUcropOptions());
+
+                //options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+                //uCrop = basisConfig(uCrop);
+                //uCrop = advancedConfig(uCrop);
+
+
+                uCrop.start(PhotoPagerActivity.this);
+
+               /* UCrop.of(Uri.parse("file/" + curPath), Uri.parse("file/" + curPath))
+                        .start(PhotoPagerActivity.this);*/
+                break;
 
             case R.id.useAsIntent:
                 String file_path_use_as = photos.photos.get(mViewPager.getCurrentItem()).Path;
@@ -221,8 +274,6 @@ public class PhotoPagerActivity extends AppCompatActivity {
                             }
                         }).show();*/
 
-                break;
-            case R.id.Modify:
                 break;
             case R.id.details:
                 /****DATA****/
@@ -296,6 +347,39 @@ public class PhotoPagerActivity extends AppCompatActivity {
         }, 150);
 
 
+    }
+
+    public UCrop.Options getUcropOptions(){
+
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        //options.set
+        options.setCompressionQuality(90);
+        options.setActiveWidgetColor(getAccentColor());
+        options.setToolbarColor(getPrimaryColor());
+        options.setStatusBarColor(getPrimaryColor());
+    //options.se
+
+
+       /*
+        Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+        options.setMaxScaleMultiplier(5);
+        options.setImageToCropBoundsAnimDuration(666);
+        options.setDimmedLayerColor(Color.CYAN);
+        options.setOvalDimmedLayer(true);
+        options.setShowCropFrame(false);
+        options.setCropGridStrokeWidth(20);
+        options.setCropGridColor(Color.GREEN);
+        options.setCropGridColumnCount(2);
+        options.setCropGridRowCount(1);
+        // Color palette
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.your_color_res));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.your_color_res));
+        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
+		options.setToolbarTitleTextColor(ContextCompat.getColor(this, R.color.your_color_res));
+       */
+
+        return options;
     }
 
     public void toggleSystemUI() {

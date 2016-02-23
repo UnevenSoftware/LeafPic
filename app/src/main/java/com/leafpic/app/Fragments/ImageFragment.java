@@ -1,7 +1,9 @@
 package com.leafpic.app.Fragments;
 
+import android.content.ComponentCallbacks2;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -21,6 +24,9 @@ import com.bumptech.glide.request.target.Target;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
+
+import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by dnld on 18/02/16.
@@ -87,35 +93,60 @@ public class ImageFragment extends Fragment {
        // times++;
         //picture.setImage(ImageSource.bitmap(BitmapFactory.decodeFile(path)));
 
+        FutureTarget<File> future = Glide.with(getContext())
+                .load(path)
+                .downloadOnly(500, 500);
+
+        /*try {
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }*/
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //final BitmapFactory.Options options = new BitmapFactory.Options();
                 //options.inJustDecodeBounds = true;
+                Log.wtf("asdasd", path);
+                // picture.setImage(ImageSource.uri(Uri.fromFile(new File(path)).toString()).tilingEnabled());
+                //Log.wtf("asdasdasdasdas","fulllllllll");
+                // Glide.get(getActivity()).clearDiskCache();
 
-              //Log.wtf("asdasdasdasdas","fulllllllll");
-               // Glide.get(getActivity()).clearDiskCache();
-               // Glide.get(getActivity()).trimMemory(3);
-              /*  Glide.with(getContext())
+/*try {
+    FutureTarget<File> future = Glide.with(getContext())
+            .load(path)
+            .downloadOnly(500, 500);
+
+    picture.setImage(ImageSource.uri(Uri.fromFile(future.get())));
+    //future.get()
+
+}catch (InterruptedException e){e.printStackTrace();}
+catch (ExecutionException e){e.printStackTrace();}*/
+
+                //File cacheFile = future.get();
+              /*Glide.with(getContext())
                         .load(path)
                         .asBitmap()
-                      //  .thumbnail(0.1f)
-                        .skipMemoryCache(true)
-
-                        //.skipMemoryCache(true)
-                        .priority(Priority.IMMEDIATE)
-                                //.diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .dontAnimate()
+                        .fitCenter()
+                        .dontAnimate()
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                                picture.setImage(ImageSource.bitmap(bitmap));
+                                picture.setImage(ImageSource.bitmap(bitmap).tilingEnabled());
 
                             }
                         });*/
+                Glide.get(getContext()).trimMemory(ComponentCallbacks2.TRIM_MEMORY_MODERATE);
+                //picture.setImage(ImageSource.uri("file://"+path));
+                System.gc();
+
+                //Glide.get(getActivity()).trimMemory(40);
             }
         });
+
 
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
