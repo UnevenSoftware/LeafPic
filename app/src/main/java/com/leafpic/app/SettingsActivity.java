@@ -2,6 +2,7 @@ package com.leafpic.app;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -24,6 +25,7 @@ import uz.shift.colorpicker.OnColorChangedListener;
 public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences SP;
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -32,8 +34,14 @@ public class SettingsActivity extends AppCompatActivity {
         //FOR ADDING TOOLBAR
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.setting_toolbar, root, false);
-
         root.addView(bar, 0); // insert at top
+
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
+        bar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+
+
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,26 +94,39 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void initUiTweaks() {
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+        //int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        //String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
+
+        /**** Status Bar */
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getColor(R.color.status_bar));
-
-            SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            boolean NavBar = SP.getBoolean("nav_bar", false);
-            /**** Nav Bar ****/
-            if (NavBar)
-                getWindow().setNavigationBarColor(getColor(R.color.toolbar));
-            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
-
-            /**** Status Bar */
-            getWindow().setStatusBarColor(getColor(R.color.primary));
-            /*
-            if (SP.getBoolean("set_dark_theme", false)){
-                setTheme(R.style.PreferencesThemeLight);
-            }else {
-                setTheme(R.style.PreferencesThemeDark);
-            }
-            */
+            getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
         }
+        boolean NavBar = SP.getBoolean("nav_bar", false);
+        /**** Nav Bar ****/
+        if (NavBar)
+            getWindow().setNavigationBarColor(Color.parseColor(hexPrimaryColor));
+        else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+
+
+
+
+        // Tool Bar
+        //bar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+
+
+
+
+        /*
+        if (SP.getBoolean("set_dark_theme", false)){
+            setTheme(R.style.PreferencesThemeLight);
+        }else {
+            setTheme(R.style.PreferencesThemeDark);
+        }
+        */
     }
 
     public class MyPreferenceFragment extends PreferenceFragment {
@@ -201,7 +222,9 @@ public class SettingsActivity extends AppCompatActivity {
                             getColor(R.color.accent_yellow),
                             getColor(R.color.accent_amber),
                             getColor(R.color.accent_orange),
-                            getColor(R.color.accent_brown)
+                            getColor(R.color.accent_brown),
+                            getColor(R.color.accent_grey),
+                            getColor(R.color.accent_black)
                     };
                     final AlertDialog.Builder PrimaryPikerDialog;
                     SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);

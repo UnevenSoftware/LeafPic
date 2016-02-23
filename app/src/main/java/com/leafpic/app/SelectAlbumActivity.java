@@ -67,7 +67,11 @@ public class SelectAlbumActivity extends AppCompatActivity {
         SharedPreferences SP;
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final FloatingActionButton fabhidden = (FloatingActionButton) findViewById(R.id.fab_hidden);
-        fabhidden.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(SP.getString("PrefColor", "#03A9F4"))));
+
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+        
+        fabhidden.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(hexAccentColor)));
         fabhidden.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,10 +85,10 @@ public class SelectAlbumActivity extends AppCompatActivity {
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
         if (SP.getBoolean("set_dark_theme", false)){
             //setTheme(R.style.AppTheme_Dark
-            ll.setBackgroundColor(getColor(R.color.background_material_dark));
+            ll.setBackgroundColor(getColor(R.color.act_bg_dark));
         }else {
             //setTheme(R.style.AppTheme);
-            ll.setBackgroundColor(getColor(R.color.background_material_light));
+            ll.setBackgroundColor(getColor(R.color.act_bg_light));
         }
     }
 
