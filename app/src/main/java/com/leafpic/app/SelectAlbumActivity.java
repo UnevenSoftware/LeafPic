@@ -42,6 +42,12 @@ public class SelectAlbumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_album_activity);
+        SharedPreferences SP;
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
 
         photoPaths = getIntent().getStringExtra("selected_photos");
         code = getIntent().getIntExtra("request_code", -1);
@@ -61,16 +67,12 @@ public class SelectAlbumActivity extends AppCompatActivity {
             }
         });
         setSupportActionBar(toolbar);
-        getWindow().setStatusBarColor(getColor(R.color.toolbar));
+        getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
 
         /*FAB*/
-        SharedPreferences SP;
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final FloatingActionButton fabhidden = (FloatingActionButton) findViewById(R.id.fab_hidden);
 
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
-        
+
         fabhidden.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(hexAccentColor)));
         fabhidden.setOnClickListener(new View.OnClickListener() {
             @Override
