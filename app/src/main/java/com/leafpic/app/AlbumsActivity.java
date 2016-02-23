@@ -198,10 +198,11 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
 
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
-
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
         if (hidden) {
             btnAddFolder.setVisibility(View.VISIBLE);
-            int color = Color.parseColor(SP.getString("PrefColor", "#03A9F4"));
+            int color = Color.parseColor(hexAccentColor);
 
             btnAddFolder.setBackgroundTintList(ColorStateList.valueOf(color));
             btnAddFolder.setOnClickListener(new View.OnClickListener() {
@@ -507,9 +508,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         addHiddenFolder_FABEvent();
         if (hidden) {
             //LOAD
-            //result.closeDrawer();
             albums.loadPreviewHiddenAlbums();
-
         } else
             albums.loadPreviewAlbums();
 
