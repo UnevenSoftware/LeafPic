@@ -59,5 +59,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 </manifest>

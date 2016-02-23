@@ -1,6 +1,7 @@
 package com.leafpic.app;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -47,22 +50,20 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class AlbumsActivity extends AppCompatActivity /*implements FolderChooserDialog.FolderCallback */{
+public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */{
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
     Drawer drawer;
     Toolbar toolbar;
-    SharedPreferences SP;
     boolean editmode = false, hidden = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_albums);
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         initUiTweaks();
         checkPermissions();
         //APPINTRO TREAD
@@ -87,57 +88,49 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onResume() {
+        super.onResume();
         albums.clearSelectedAlbums();
         updateSelectedStuff();
         invalidateOptionsMenu();
         checkPermissions();
         initUiTweaks();
-        super.onResume();
+
     }
 
 
     public void initUiTweaks(){
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));///////////////
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
 
-        /**** Nav Bar ****/
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            boolean NavBar = SP.getBoolean("nav_bar", false);
-            if (NavBar)
-                getWindow().setNavigationBarColor(Color.parseColor(hexPrimaryColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
+
+            if (isNavigationBarColored())
+            getWindow().setNavigationBarColor(getPrimaryColor());
             else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
         }
-
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+        toolbar.setBackgroundColor(getPrimaryColor());
 
         /**** Status Bar */
-        getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
-        //getWindow().setStatusBarColor(getColor(R.color.toolbar));
+        getWindow().setStatusBarColor(getPrimaryColor());
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
-        if (SP.getBoolean("set_dark_theme", false)){
-            //setTheme(R.style.AppTheme_Dark);
+        if (isDarkTheme())
             rl.setBackgroundColor(getColor(R.color.act_bg_dark));
-        }else {
-            //setTheme(R.style.AppTheme);
+        else
             rl.setBackgroundColor(getColor(R.color.act_bg_light));
-        }
 
 
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Default").withIcon(FontAwesome.Icon.faw_picture_o);
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Hidden").withIcon(FontAwesome.Icon.faw_eye_slash);
-        PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
-        PrimaryDrawerItem item22 = new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_calendar_o);
+
+
+
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Albums").withIcon(FontAwesome.Icon.faw_picture_o);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Secretes").withIcon(FontAwesome.Icon.faw_eye_slash);
+        PrimaryDrawerItem item22 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
+        PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Timeline").withIcon(FontAwesome.Icon.faw_calendar_o);
 
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
@@ -198,13 +191,11 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
 
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+
         if (hidden) {
             btnAddFolder.setVisibility(View.VISIBLE);
-            int color = Color.parseColor(hexAccentColor);
 
-            btnAddFolder.setBackgroundTintList(ColorStateList.valueOf(color));
+            btnAddFolder.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
             btnAddFolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -253,7 +244,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
             else
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-            } else
+        } else
             loadAlbums();
     }
 
@@ -359,7 +350,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                     }
                 });
             }
-}catch (NullPointerException e){e.printStackTrace();}
+        }catch (NullPointerException e){e.printStackTrace();}
 
     }
 
@@ -373,7 +364,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
 
         opt = menu.findItem(R.id.select_all_albums_action);
         opt.setEnabled(val).setVisible(val);
-            }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -454,11 +445,11 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
                     builder2.setMessage(R.string.delete_album_message)
                             .setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        albums.hideSelectedAlbums();
-                                        adapt.notifyDataSetChanged();
-                                        invalidateOptionsMenu();
-                                    }
+                                public void onClick(DialogInterface dialog, int id) {
+                                    albums.hideSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                }
                             })
                             .setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
                                 @Override

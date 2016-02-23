@@ -44,8 +44,8 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/Modify"
-        android:title="Modify"
+        android:id="@+id/edit_photo"
+        android:title="Edit"
         app:showAsAction="never"
         />
     <item

@@ -1,10 +1,13 @@
 package com.leafpic.app;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -20,14 +23,18 @@ import android.widget.TextView;
 import com.leafpic.app.Adapters.SelectAlbumAdapter;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
+import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.StringUtils;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 /**
  * Created by dnld on 2/8/16.
  */
-public class SelectAlbumActivity extends AppCompatActivity {
+public class SelectAlbumActivity extends ThemedActivity{
 
     public static final int COPY_TO_ACTION = 23;
-    public static final int MOVE_TO_ACTION = 69;
+    public static final int MOVE_TO_ACTION = 911;
 
     HandlingAlbums albums = new HandlingAlbums(SelectAlbumActivity.this);
     RecyclerView mRecyclerView;
@@ -39,15 +46,9 @@ public class SelectAlbumActivity extends AppCompatActivity {
     HandlingPhotos p;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_album_activity);
-        SharedPreferences SP;
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
 
         photoPaths = getIntent().getStringExtra("selected_photos");
         code = getIntent().getIntExtra("request_code", -1);
@@ -59,40 +60,49 @@ public class SelectAlbumActivity extends AppCompatActivity {
 
         setResult(Activity.RESULT_CANCELED);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        toolbar.setBackgroundColor(getPrimaryColor());
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(
+                new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                .color(Color.WHITE)
+                        .sizeDp(19));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
-        toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
-        setSupportActionBar(toolbar);
-        getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
+        getWindow().setStatusBarColor(getPrimaryColor());
 
         /*FAB*/
         final FloatingActionButton fabhidden = (FloatingActionButton) findViewById(R.id.fab_hidden);
 
 
-        fabhidden.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(hexAccentColor)));
+        fabhidden.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         fabhidden.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadAlbumPreview();
-                //fabhidden.setImageIcon();
             }
         });
         loadAlbumPreview();
 
         //Base Theme
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
-        if (SP.getBoolean("set_dark_theme", false)){
-            //setTheme(R.style.AppTheme_Dark
+        if (isDarkTheme())
             ll.setBackgroundColor(getColor(R.color.act_bg_dark));
-        }else {
-            //setTheme(R.style.AppTheme);
-            ll.setBackgroundColor(getColor(R.color.act_bg_light));
+        else ll.setBackgroundColor(getColor(R.color.act_bg_light));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
+
+            if (isNavigationBarColored())
+                getWindow().setNavigationBarColor(getPrimaryColor());
+            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
         }
+
     }
 
     private void loadAlbumPreview(){
