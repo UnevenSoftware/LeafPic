@@ -97,42 +97,40 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         updateSelectedStuff();
         invalidateOptionsMenu();
         checkPermissions();
-
         initUiTweaks();
-
         super.onResume();
     }
 
 
     public void initUiTweaks(){
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        //int pc = SP.getInt("primary_color", Color.BLUE);
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));///////////////
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
 
         /**** Nav Bar ****/
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             boolean NavBar = SP.getBoolean("nav_bar", false);
             if (NavBar)
-                getWindow().setNavigationBarColor(getColor(R.color.toolbar));//R.color.primary
+                getWindow().setNavigationBarColor(Color.parseColor(hexPrimaryColor));
             else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
-
         }
+
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+
         /**** Status Bar */
-
-        int primaryColor = SP.getInt("primary_color", 8);///////////////////////////////////////////////////////////////
-
-        getWindow().setStatusBarColor(getColor(R.color.toolbar));//R.color.primary
+        getWindow().setStatusBarColor(Color.parseColor(hexPrimaryColor));
         //getWindow().setStatusBarColor(getColor(R.color.toolbar));
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
         if (SP.getBoolean("set_dark_theme", false)){
             //setTheme(R.style.AppTheme_Dark);
-            rl.setBackgroundColor(getColor(R.color.background_material_dark));
+            rl.setBackgroundColor(getColor(R.color.act_bg_dark));
         }else {
             //setTheme(R.style.AppTheme);
-            rl.setBackgroundColor(getColor(R.color.background_material_light));
+            rl.setBackgroundColor(getColor(R.color.act_bg_light));
         }
 
 
@@ -144,7 +142,6 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
-
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -198,7 +195,6 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
 
         addHiddenFolder_FABEvent();
     }
-
 
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
@@ -428,7 +424,7 @@ public class AlbumsActivity extends AppCompatActivity /*implements FolderChooser
                         })
                         .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
-               builder.show();
+                builder.show();
                 break;
 
             case R.id.deleteAction:

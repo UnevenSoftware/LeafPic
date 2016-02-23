@@ -11,9 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +22,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,7 +53,6 @@ public class PhotosActivity extends AppCompatActivity {
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
-
 
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
@@ -515,10 +511,15 @@ public class PhotosActivity extends AppCompatActivity {
     public void initUiTweaks() {
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
         /**** Navigation Bar*/
         boolean NavBar = SP.getBoolean("nav_bar", false);
         if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) && (NavBar)) {
-            getWindow().setNavigationBarColor(getColor(R.color.toolbar));
+            getWindow().setNavigationBarColor(Color.parseColor(hexPrimaryColor));
+            //getWindow().setNavigationBarColor(getColor(R.color.toolbar));
         }
 
         /**** Status Bar */
@@ -531,19 +532,16 @@ public class PhotosActivity extends AppCompatActivity {
         /**** ToolBar*/
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //String SColor = SP.getString("PrimaryPrefColor", "#009688");
-        //toolbar.setBackgroundColor(Color.parseColor(SColor));
         setSupportActionBar(toolbar);
+        //toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /****SET THEME***/
         RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
         if (SP.getBoolean("set_dark_theme", false)){
-            //setTheme(R.style.AppTheme_Dark);
-            rw.setBackgroundColor(getColor(R.color.background_material_dark));
+            rw.setBackgroundColor(getColor(R.color.act_bg_dark));
         }else {
-            //setTheme(R.style.AppTheme);
-            rw.setBackgroundColor(getColor(R.color.background_material_light));
+            rw.setBackgroundColor(getColor(R.color.act_bg_light));
         }
 
 
@@ -562,11 +560,11 @@ public class PhotosActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-        collapsingToolbarLayout.setContentScrimColor(getColor(R.color.toolbar));
-        collapsingToolbarLayout.setStatusBarScrimColor(getColor(R.color.toolbar));
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(hexPrimaryColor));//getColor(R.color.toolbar)
+        collapsingToolbarLayout.setStatusBarScrimColor(Color.parseColor(hexPrimaryColor));//getColor(R.color.toolbar)
 
         FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(SP.getString("PrefColor", "#03A9F4"))));
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(hexAccentColor)));
 
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -593,9 +591,13 @@ public class PhotosActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.album_photos_count);
 
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String SColor = SP.getString("PrefColor", "#03A9F4");
-        textView.setText(Html.fromHtml("<b><font color='" + SColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
+        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
+
+        textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
+
+
     }
 
     private void initActivityTransitions() {

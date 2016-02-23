@@ -56,6 +56,14 @@
     <color name="accent_white">#FFFFFF</color>
     <color name="accent_grey">#9e9e9e</color>
     <color name="accent_black">#000000</color>
+    <!--ACTIVITY BACKGROUND-->
+    <color name="act_bg_light">#E0E0E0</color>
+    <color name="act_bg_light2">#EEEEEE</color>
+    <color name="act_bg_dark">#212121</color>
+
+    <!--ALBUM CARD-->
+    <color name="ac_bg_light">#FAFAFA</color>
+    <color name="ac_bg_dark">#424242</color>
 
     <!--SHIFT COLOR PIKER-->
     <!--SFONDO-->
