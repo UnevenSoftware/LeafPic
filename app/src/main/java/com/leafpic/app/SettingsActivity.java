@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -93,9 +94,9 @@ public class SettingsActivity extends ThemedActivity{
 
             if (isNavigationBarColored())
                 getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
         }
-        bar.setBackgroundColor(getPrimaryColor());
+        //bar.setBackgroundColor(getPrimaryColor());
 
 
         if (isDarkTheme()){
@@ -136,9 +137,10 @@ public class SettingsActivity extends ThemedActivity{
                     colorPicker.setSelectedColor(R.color.md_red_500);
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_accent_card);
 
+
                     if (!isDarkTheme())
-                        cv.setBackgroundColor(getColor(R.color.cp_PrimaryLight));
-                    else cv.setBackgroundColor(getColor(R.color.cp_PrimaryDark));
+                        cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
+                    else cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
 
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override
@@ -189,8 +191,8 @@ public class SettingsActivity extends ThemedActivity{
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_primary_card);
 
                     if (!isDarkTheme())
-                        cv.setBackgroundColor(getColor(R.color.cp_PrimaryLight));
-                     else cv.setBackgroundColor(getColor(R.color.cp_PrimaryDark));
+                        cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryLight));
+                     else cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
 
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override

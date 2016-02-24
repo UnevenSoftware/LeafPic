@@ -332,15 +332,15 @@ public class PhotoPagerActivity extends ThemedActivity{
 
         /**** ToolBar ********/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getColor(R.color.transparent_gray));
+        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         /**** Status Bar *****/
-        getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
         /**** Navigation Bar */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.transparent_gray));
             BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
         }

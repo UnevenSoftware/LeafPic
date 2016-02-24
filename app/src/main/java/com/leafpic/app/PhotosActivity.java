@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -507,7 +508,7 @@ public class PhotosActivity extends ThemedActivity {
 
             if (isNavigationBarColored())
                 getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
         }
 
 
@@ -542,9 +543,9 @@ public class PhotosActivity extends ThemedActivity {
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
-        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());//getColor(R.color.toolbar)
-        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());//getColor(R.color.toolbar)
+        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(),android.R.color.transparent));
+        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
+        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
@@ -591,11 +592,9 @@ public class PhotosActivity extends ThemedActivity {
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent) {
+        if (makeTranslucent)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else {
+         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //getWindow().setStatusBarColor(getColor(R.color.status_bar));
-        }
     }
 }
