@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.utils.StringUtils;
 
 /**
@@ -37,11 +38,15 @@ public class ThemedActivity extends AppCompatActivity {
     public boolean isDarkTheme() {
         return darkTheme;
     }
+
+    public int getBackgroundColor(){
+        if(darkTheme) return ColorPalette.getDarkBackgroundColor(getApplicationContext());
+        else return ColorPalette.getLightBackgroundColor(getApplicationContext());
+    }
     @Override
     public void onResume(){
         super.onResume();
         updateTheme();
-        Log.d("sadasd","resumed");
     }
 
     @Override

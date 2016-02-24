@@ -36,6 +36,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
@@ -78,15 +79,16 @@ public class PhotosActivity extends ThemedActivity {
 
     @Override
     public void onResume() {
+        super.onResume();
         LoadPhotos();
         updateHeaderContent();
-        super.onResume();
+        updateSelectedStuff();
+        initUiTweaks();
     }
 
     public void UpdatePhotos() {
         photos.updatePhotos();
         adapter.notifyDataSetChanged();
-
     }
 
     public void LoadPhotos() {
@@ -248,7 +250,7 @@ public class PhotosActivity extends ThemedActivity {
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_arrow_back)
                         .color(Color.WHITE)
-                        .sizeDp(20));
+                        .sizeDp(18));
 
                 toolbar.setOnClickListener(null);
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -520,17 +522,11 @@ public class PhotosActivity extends ThemedActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /****SET THEME***/
         RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
-        if (isDarkTheme()){
-            rw.setBackgroundColor(getColor(R.color.act_bg_dark));
-        }else {
-            rw.setBackgroundColor(getColor(R.color.act_bg_light));
-        }
-
+        rw.setBackgroundColor(getBackgroundColor());
 
         headerImage = (ImageView) findViewById(R.id.header_image);
         Glide.with(this)

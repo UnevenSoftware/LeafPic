@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
@@ -118,14 +119,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         getWindow().setStatusBarColor(getPrimaryColor());
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
-        if (isDarkTheme())
-            rl.setBackgroundColor(getColor(R.color.act_bg_dark));
-        else
-            rl.setBackgroundColor(getColor(R.color.act_bg_light));
-
-
-
-
+        rl.setBackgroundColor(getBackgroundColor());
 
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Albums").withIcon(FontAwesome.Icon.faw_picture_o);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Secretes").withIcon(FontAwesome.Icon.faw_eye_slash);

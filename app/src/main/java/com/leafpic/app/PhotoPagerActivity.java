@@ -1,12 +1,15 @@
 package com.leafpic.app;
 
+import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
+import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.Views.ThemedActivity;
@@ -143,16 +147,13 @@ public class PhotoPagerActivity extends ThemedActivity{
                     final Uri imageUri = UCrop.getOutput(data);
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
-                            copyFileToDownloads(getIntent().getData());
-                            adapter.notifyDataSetChanged();
+                            copyFileToDownloads(imageUri);
+                            mViewPager.getFocusedChild().invalidate();
                         } catch (Exception e) {
-                           // Toast.makeText(ResultActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("asdasd", imageUri.toString(), e);
+                            Log.e("ERROS - uCrop", imageUri.toString(), e);
                         }
-                    } else {
+                    } else
                         StringUtils.showToast(getApplicationContext(),"errori random");
-                        //Toast.makeText(ResultActivity.this, getString(R.string.toast_unexpected_error), Toast.LENGTH_SHORT).show();
-                    }
                     break;
 
                 default:
@@ -162,7 +163,7 @@ public class PhotoPagerActivity extends ThemedActivity{
     }
 
     private void copyFileToDownloads(Uri croppedFileUri) throws Exception {
-
+        StringUtils.showToast(getApplicationContext(), croppedFileUri.getPath());
         FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
         FileOutputStream outStream = new FileOutputStream(new File(photos.getCurrentPhoto().Path));
         FileChannel inChannel = inStream.getChannel();
@@ -170,6 +171,7 @@ public class PhotoPagerActivity extends ThemedActivity{
         inChannel.transferTo(0, inChannel.size(), outChannel);
         inStream.close();
         outStream.close();
+        photos.scanFile(new String[]{photos.getCurrentPhoto().Path});
         StringUtils.showToast(getApplicationContext(), "ok");
 
     }
@@ -226,10 +228,10 @@ public class PhotoPagerActivity extends ThemedActivity{
 
                 return true;
             case R.id.edit_photo:
-                Uri mDestinationUri = Uri.fromFile(new File(getFilesDir(), "croped_image.png"));
+                Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
                 Uri uri = Uri.fromFile(new File(photos.getCurrentPhoto().Path));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
-                uCrop = uCrop.useSourceImageAspectRatio();
+                //uCrop = uCrop.useSourceImageAspectRatio();
                 uCrop.withOptions(getUcropOptions());
 
                 //options.setCompressionFormat(Bitmap.CompressFormat.PNG);
@@ -337,14 +339,18 @@ public class PhotoPagerActivity extends ThemedActivity{
         /**** Status Bar *****/
         getWindow().setStatusBarColor(getColor(R.color.transparent_gray));
         /**** Navigation Bar */
-        getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getColor(R.color.transparent_gray));
+            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
+        }
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
-        }, 150);
+        }, 1000);
 
 
     }
@@ -360,7 +366,7 @@ public class PhotoPagerActivity extends ThemedActivity{
         options.setStatusBarColor(getPrimaryColor());
     //options.se
 
-
+       // options.setDimmedLayerColor(Color.CYAN);
        /*
         Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
         options.setMaxScaleMultiplier(5);
