@@ -499,7 +499,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
-        adapt = new AlbumsAdapter(albums.dispAlbums, R.layout.album_card);
+        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

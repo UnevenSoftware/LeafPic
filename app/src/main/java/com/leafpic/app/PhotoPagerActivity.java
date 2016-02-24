@@ -330,27 +330,26 @@ public class PhotoPagerActivity extends ThemedActivity{
 
     public void initUiTweaks() {
 
-        /**** ToolBar ********/
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        /**** Status Bar *****/
+
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-        /**** Navigation Bar */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.transparent_gray));
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
-        }
+
+        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.transparent_gray));
+
+        setRecentApp(getString(R.string.app_name));
 
         final Handler handler = new Handler();
+
         handler.postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
-        }, 1000);
+        }, 1500);
 
 
     }

@@ -99,7 +99,7 @@ public class PhotosActivity extends ThemedActivity {
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
             mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
-            adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
+            adapter = new PhotosAdapter(photos.photos);
 
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -501,22 +501,16 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(photos.DisplayName, drawable.getBitmap(), getPrimaryColor()));
-
-            if (isNavigationBarColored())
-                getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-        }
+        if (isNavigationBarColored())
+            getWindow().setNavigationBarColor(getPrimaryColor());
+        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
 
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        setStatusBarTranslucent(false);//true
+        setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/
@@ -558,6 +552,8 @@ public class PhotosActivity extends ThemedActivity {
 
             }
         });
+
+        setRecentApp(photos.DisplayName);
     }
 
     private void updateHeaderContent() {
@@ -583,12 +579,10 @@ public class PhotosActivity extends ThemedActivity {
     }
 
     private void initActivityTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide transition = new Slide();
-            transition.excludeTarget(android.R.id.statusBarBackground, true);
-            getWindow().setEnterTransition(transition);
-            getWindow().setReturnTransition(transition);
-        }
+        Slide transition = new Slide();
+        transition.excludeTarget(android.R.id.statusBarBackground, true);
+        getWindow().setEnterTransition(transition);
+        getWindow().setReturnTransition(transition);
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {

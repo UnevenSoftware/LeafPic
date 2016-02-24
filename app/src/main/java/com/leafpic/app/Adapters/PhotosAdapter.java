@@ -21,19 +21,17 @@ import java.util.ArrayList;
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
     ArrayList<Photo> photos;
-    private int layout_ID;
 
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<Photo> ph, int id) {
+    public PhotosAdapter(ArrayList<Photo> ph) {
         photos = ph;
-        layout_ID = id;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_card, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(v);

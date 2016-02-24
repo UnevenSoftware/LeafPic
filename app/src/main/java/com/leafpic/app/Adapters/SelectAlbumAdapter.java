@@ -1,5 +1,6 @@
 package com.leafpic.app.Adapters;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -19,20 +20,19 @@ import java.util.ArrayList;
 public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.ViewHolder> {
 
     ArrayList<Album> albums;
-    private int layout_ID;
+    SharedPreferences SP;
 
     private View.OnClickListener mOnClickListener;
 
-    public SelectAlbumAdapter(ArrayList<Album> ph, int id) {
+    public SelectAlbumAdapter(ArrayList<Album> ph ,Context ctx) {
         albums = ph;
-        layout_ID = id;
+        SP = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_album_card, parent, false);
         v.setOnClickListener(mOnClickListener);
-
         return new ViewHolder(v);
     }
 
@@ -50,16 +50,9 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
                 .into(holder.picture);
 
         holder.name.setText(Html.fromHtml("<i><font>" + a.DisplayName + "</font></i>"));
-
-        SharedPreferences SP;
-        SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
-
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
-
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", Color.rgb(0, 77, 64))));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
                 "color='#FFFFFF'> Photos</font>"));
-
         holder.name.setTag(a.Path);
     }
 

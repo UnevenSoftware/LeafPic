@@ -96,14 +96,11 @@ public class SelectAlbumActivity extends ThemedActivity{
             ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.act_bg_dark));
         else ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.act_bg_light));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
+        if (isNavigationBarColored())
+            getWindow().setNavigationBarColor(getPrimaryColor());
+        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
-            if (isNavigationBarColored())
-                getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-        }
+        setRecentApp(getString(R.string.app_name));
 
     }
 
@@ -114,7 +111,7 @@ public class SelectAlbumActivity extends ThemedActivity{
         hidden=!hidden;
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
-        adapt = new SelectAlbumAdapter(albums.dispAlbums, R.layout.select_album_card);
+        adapt = new SelectAlbumAdapter(albums.dispAlbums,getApplicationContext());
         adapt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
