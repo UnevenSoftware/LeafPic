@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -88,9 +89,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
             if (SP.getBoolean("set_dark_theme", false))
-                holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
+                holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(),R.color.unselected_album));
+                //holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
             else
-                holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.background_material_light));
+                holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
         }
         if (!selected) {
             holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -20,7 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Views.ThemedActivity;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -30,18 +34,24 @@ public class SettingsActivity extends ThemedActivity{
 
     SharedPreferences SP;
     Toolbar bar;
-    LinearLayout root;
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        //FOR ADDING TOOLBAR
-        root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
-        bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.setting_toolbar, root, false);
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+        bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
         root.addView(bar, 0); // insert at top
+        //FOR ADDING TOOLBAR
+        /*root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+        bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
+        root.addView(bar, 0); // insert at top*/
 
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
+        bar.setTitle("Settings");
+        bar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                .color(Color.WHITE)
+                .sizeDp(18));
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,39 +67,20 @@ public class SettingsActivity extends ThemedActivity{
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
 
         SP = PreferenceManager.getDefaultSharedPreferences(this);
-        SP.registerOnSharedPreferenceChangeListener(
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    public void onSharedPreferenceChanged(
-                            SharedPreferences prefs, String key) {
-
-                        //System.out.println(key);
-                    }
-                });
-        /*
-        mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-                if (!key.equals("nav_bar")) {
-                    return;
-                }
-
-                getActivity().finish();
-                final Intent intent = getActivity().getIntent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
-
+        SP.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(
+                    SharedPreferences prefs, String key) {
+            updateTheme();
+            initUiTweaks();
             }
-        };
-        */
+        });
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initUiTweaks();
-
+        //initUiTweaks();
     }
 
     public void initUiTweaks() {
@@ -104,7 +95,7 @@ public class SettingsActivity extends ThemedActivity{
 
             if (isNavigationBarColored())
                 getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
         }
         bar.setBackgroundColor(getPrimaryColor());
 
@@ -126,44 +117,31 @@ public class SettingsActivity extends ThemedActivity{
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
+
             //ACCENT COLOR PIKER********************************************************************
 
             Preference accent_preference = findPreference("accent_color");
             accent_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    int[] accentColors = {
-                            getColor(R.color.accent_red),
-                            getColor(R.color.accent_pink),
-                            getColor(R.color.accent_purple),
-                            getColor(R.color.accent_deep_purple),
-                            getColor(R.color.accent_indago),
-                            getColor(R.color.accent_blue),
-                            getColor(R.color.accent_cyan),
-                            getColor(R.color.accent_teal),
-                            getColor(R.color.accent_green),
-                            getColor(R.color.accent_yellow),
-                            getColor(R.color.accent_amber),
-                            getColor(R.color.accent_orange),
-                            getColor(R.color.accent_brown)
-                    };
                     final AlertDialog.Builder AccentPikerDialog;
                     SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
-                    if (isDarkTheme()) {
+                    if (isDarkTheme())
                         AccentPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Dark);
-                    } else {
+                    else
                         AccentPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Light);
-                    }
+
                     final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
                     final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerAccent);
 
-                    colorPicker.setColors(accentColors);
+                    colorPicker.setColors(ColorPalette.getDominantColors(getApplicationContext()));
                     colorPicker.setSelectedColor(R.color.md_red_500);
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_accent_card);
 
-                    if (!isDarkTheme()) {
-                        cv.setBackgroundColor(getColor(R.color.cp_PrimaryLight));
-                    } else {cv.setBackgroundColor(getColor(R.color.cp_PrimaryDark));}
+
+                    if (!isDarkTheme())
+                        cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
+                    else cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
 
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override
@@ -185,11 +163,10 @@ public class SettingsActivity extends ThemedActivity{
                             SharedPreferences.Editor editor = SP.edit();
                             editor.putInt("accent_color", colorPicker.getColor());
                             editor.apply();
-                           //TODO change accent color stuff in settings act
+                            //TODO change accent color stuff in settings act
                         }
                     });
                     AccentPikerDialog.show();
-                    //int color = colorPicker.getColor();
                     return false;
                 }
             });
@@ -200,23 +177,6 @@ public class SettingsActivity extends ThemedActivity{
             primary_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    int[] accentColors = {
-                            getColor(R.color.accent_red),
-                            getColor(R.color.accent_pink),
-                            getColor(R.color.accent_purple),
-                            getColor(R.color.accent_deep_purple),
-                            getColor(R.color.accent_indago),
-                            getColor(R.color.accent_blue),
-                            getColor(R.color.accent_cyan),
-                            getColor(R.color.accent_teal),
-                            getColor(R.color.accent_green),
-                            getColor(R.color.accent_yellow),
-                            getColor(R.color.accent_amber),
-                            getColor(R.color.accent_orange),
-                            getColor(R.color.accent_brown),
-                            getColor(R.color.accent_grey),
-                            getColor(R.color.accent_black)
-                    };
                     final AlertDialog.Builder PrimaryPikerDialog;
                     SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
                     if (isDarkTheme())
@@ -227,13 +187,13 @@ public class SettingsActivity extends ThemedActivity{
                     final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
                     final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerPrimary);
 
-                    colorPicker.setColors(accentColors);
+                    colorPicker.setColors(ColorPalette.getDominantColors(getApplicationContext()));
                     colorPicker.setSelectedColor(R.color.md_red_500);
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_primary_card);
 
                     if (!isDarkTheme())
-                        cv.setBackgroundColor(getColor(R.color.cp_PrimaryLight));
-                     else cv.setBackgroundColor(getColor(R.color.cp_PrimaryDark));
+                        cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryLight));
+                     else cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
 
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override
@@ -261,13 +221,11 @@ public class SettingsActivity extends ThemedActivity{
                             SharedPreferences.Editor editor = SP.edit();
                             editor.putInt("primary_color", colorPicker.getColor());
                             editor.apply();
-
                             updateTheme();
                             initUiTweaks();
                         }
                     });
                     PrimaryPikerDialog.show();
-                    //int color = colorPicker.getColor();
                     return false;
                 }
             });

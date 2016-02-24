@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
@@ -78,15 +80,16 @@ public class PhotosActivity extends ThemedActivity {
 
     @Override
     public void onResume() {
+        super.onResume();
         LoadPhotos();
         updateHeaderContent();
-        super.onResume();
+        updateSelectedStuff();
+        initUiTweaks();
     }
 
     public void UpdatePhotos() {
         photos.updatePhotos();
         adapter.notifyDataSetChanged();
-
     }
 
     public void LoadPhotos() {
@@ -248,7 +251,7 @@ public class PhotosActivity extends ThemedActivity {
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_arrow_back)
                         .color(Color.WHITE)
-                        .sizeDp(20));
+                        .sizeDp(18));
 
                 toolbar.setOnClickListener(null);
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -505,7 +508,7 @@ public class PhotosActivity extends ThemedActivity {
 
             if (isNavigationBarColored())
                 getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
         }
 
 
@@ -520,17 +523,11 @@ public class PhotosActivity extends ThemedActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //toolbar.setBackgroundColor(Color.parseColor(hexPrimaryColor));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /****SET THEME***/
         RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
-        if (isDarkTheme()){
-            rw.setBackgroundColor(getColor(R.color.act_bg_dark));
-        }else {
-            rw.setBackgroundColor(getColor(R.color.act_bg_light));
-        }
-
+        rw.setBackgroundColor(getBackgroundColor());
 
         headerImage = (ImageView) findViewById(R.id.header_image);
         Glide.with(this)
@@ -546,9 +543,9 @@ public class PhotosActivity extends ThemedActivity {
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
-        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());//getColor(R.color.toolbar)
-        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());//getColor(R.color.toolbar)
+        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(),android.R.color.transparent));
+        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
+        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
@@ -595,11 +592,9 @@ public class PhotosActivity extends ThemedActivity {
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent) {
+        if (makeTranslucent)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else {
+         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //getWindow().setStatusBarColor(getColor(R.color.status_bar));
-        }
     }
 }

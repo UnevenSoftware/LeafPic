@@ -2,6 +2,7 @@ package com.leafpic.app;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -91,8 +93,8 @@ public class SelectAlbumActivity extends ThemedActivity{
         //Base Theme
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
         if (isDarkTheme())
-            ll.setBackgroundColor(getColor(R.color.act_bg_dark));
-        else ll.setBackgroundColor(getColor(R.color.act_bg_light));
+            ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.act_bg_dark));
+        else ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.act_bg_light));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
@@ -100,7 +102,7 @@ public class SelectAlbumActivity extends ThemedActivity{
 
             if (isNavigationBarColored())
                 getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(getColor(R.color.md_black_1000));
+            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
         }
 
     }
