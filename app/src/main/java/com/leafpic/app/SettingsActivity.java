@@ -76,6 +76,7 @@ public class SettingsActivity extends ThemedActivity{
 
     }
 
+
     @Override
     public void onPostResume() {
         super.onPostResume();
@@ -188,7 +189,7 @@ public class SettingsActivity extends ThemedActivity{
                             bar.setBackgroundColor(c);
                         }
                     });
-                    PrimaryPikerDialog.setView(Accent_dialogLayout);//IMPOSTO IL LAYOUT
+                    PrimaryPikerDialog.setView(Accent_dialogLayout);
                     PrimaryPikerDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

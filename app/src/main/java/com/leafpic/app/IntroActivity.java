@@ -1,7 +1,9 @@
 package com.leafpic.app;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -17,6 +19,8 @@ public class IntroActivity extends AppIntro {
 
     @Override
     public void init(Bundle savedInstanceState) {
+        addSlide(AppIntroFragment.newInstance("LeafPic", "metti qualcosa in sta app intro va Jibo :)",
+                R.mipmap.ic_launcher, Color.parseColor("#009688")));
 
         addSlide(AppIntroFragment.newInstance("LeafPic", "The Faster Gallery for Your Android :)",
                 R.mipmap.ic_launcher, Color.parseColor("#009688")));
@@ -27,6 +31,10 @@ public class IntroActivity extends AppIntro {
         setBarColor(Color.parseColor("#00796B"));
         setSeparatorColor(Color.parseColor("#009688"));
         showSkipButton(true);
+
+        BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+        setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), Color.parseColor("#00796B")));
+
     }
 
     private void loadMainActivity() {
@@ -36,8 +44,8 @@ public class IntroActivity extends AppIntro {
 
     @Override
     public void onSkipPressed() {
+        System.exit(1);
         loadMainActivity();
-        Toast.makeText(getApplicationContext(), getString(R.string.skip), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -47,6 +55,7 @@ public class IntroActivity extends AppIntro {
 
     @Override
     public void onDonePressed() {
+        System.exit(1);
         loadMainActivity();
     }
 

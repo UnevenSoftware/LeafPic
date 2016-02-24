@@ -56,7 +56,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
                     .into(holder.imageView);
-
         }
 
         holder.path.setTag(f.Path);

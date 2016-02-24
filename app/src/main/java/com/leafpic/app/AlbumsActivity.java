@@ -183,6 +183,14 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         addHiddenFolder_FABEvent();
     }
 
+    @Override
+    public void onBackPressed(){
+        if(drawer!= null && drawer.isDrawerOpen())
+            drawer.closeDrawer();
+        else
+            finish();
+    }
+
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
 

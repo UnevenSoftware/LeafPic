@@ -32,7 +32,6 @@ import java.util.concurrent.ExecutionException;
  * Created by dnld on 18/02/16.
  */
 public class ImageFragment extends Fragment {
-    // Store instance variables
 
     private String path;
     private int width;
@@ -41,7 +40,6 @@ public class ImageFragment extends Fragment {
     SubsamplingScaleImageView picture;
     private View.OnTouchListener onTouchListener;
 
-    // newInstance constructor for creating fragment with arguments
     public static ImageFragment newInstance(String path,int width,int height) {
         ImageFragment fragmentFirst = new ImageFragment();
 
@@ -64,13 +62,18 @@ public class ImageFragment extends Fragment {
         height = getArguments().getInt("height", 300);
         path = getArguments().getString("path");
     }
+
     @Override
-    public void onDestroy(){
-        picture.recycle();
+    public void onDestroy() {
         super.onDestroy();
+        if(picture!=null) {
+            picture.recycle();
+            picture.setOnTouchListener(null);
+        }
     }
    // int times=0;
-    // Inflate the view for the fragment based on layout XML
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

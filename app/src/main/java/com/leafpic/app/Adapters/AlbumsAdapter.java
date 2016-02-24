@@ -28,7 +28,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     ArrayList<Album> albums;
     SharedPreferences SP;
-    boolean selected=false;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
@@ -58,33 +57,27 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .into(holder.picture);
         holder.name.setTag(a.Path);
 
-
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", Color.rgb(0, 77, 64))));
         String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", Color.rgb(0, 150, 136))));
+        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            if (!SP.getBoolean("set_dark_theme", false)){
-                holder.name.setText(Html.fromHtml("<i><font color='#FAFAFA'>" + a.DisplayName + "</font></i>"));
-                holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                        "color='#FAFAFA'> Photos</font>"));
-            }
+            if (!SP.getBoolean("set_dark_theme", false)) textColor ="#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
+
             if (SP.getBoolean("set_dark_theme", false))
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(),R.color.unselected_album));
-            else
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
+            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
         }
-        if (!selected) {
-            String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
-            holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-            holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                    "color='" + textColor + "'> Photos</font>"));
-        }
+        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
+        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? "Photo" : "Photos") + "</font>"));
+
     }
 
     public void setOnClickListener(View.OnClickListener lis) {

@@ -573,7 +573,7 @@ public class PhotosActivity extends ThemedActivity {
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
         textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
+                "color='#FFFFFF'> "+ (photos.photos.size() == 1 ? "Photo" : "Photos") +"</font>"));
 
 
     }
