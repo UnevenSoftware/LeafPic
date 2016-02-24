@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,6 +28,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -36,7 +39,7 @@ public class ImageFragment extends Fragment {
     private String path;
     private int width;
     private int height;
-
+    private Bitmap mThumbnailBitmap;
     SubsamplingScaleImageView picture;
     private View.OnTouchListener onTouchListener;
 
@@ -71,8 +74,6 @@ public class ImageFragment extends Fragment {
             picture.setOnTouchListener(null);
         }
     }
-   // int times=0;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,69 +91,25 @@ public class ImageFragment extends Fragment {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                        mThumbnailBitmap = bitmap;
+                        //loadFullImage();
                         picture.setImage(ImageSource.bitmap(bitmap));
                     }
                 });
-       // times++;
-        //picture.setImage(ImageSource.bitmap(BitmapFactory.decodeFile(path)));
-
-        FutureTarget<File> future = Glide.with(getContext())
-                .load(path)
-                .downloadOnly(500, 500);
-
-        /*try {
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //final BitmapFactory.Options options = new BitmapFactory.Options();
-                //options.inJustDecodeBounds = true;
-                Log.wtf("asdasd", path);
-                // picture.setImage(ImageSource.uri(Uri.fromFile(new File(path)).toString()).tilingEnabled());
-                //Log.wtf("asdasdasdasdas","fulllllllll");
-                // Glide.get(getActivity()).clearDiskCache();
-
-/*try {
-    FutureTarget<File> future = Glide.with(getContext())
-            .load(path)
-            .downloadOnly(500, 500);
-
-    picture.setImage(ImageSource.uri(Uri.fromFile(future.get())));
-    //future.get()
-
-}catch (InterruptedException e){e.printStackTrace();}
-catch (ExecutionException e){e.printStackTrace();}*/
-
-                //File cacheFile = future.get();
-              /*Glide.with(getContext())
-                        .load(path)
-                        .asBitmap()
-                        .fitCenter()
-                        .dontAnimate()
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                                picture.setImage(ImageSource.bitmap(bitmap).tilingEnabled());
-
-                            }
-                        });*/
-                Glide.get(getContext()).trimMemory(ComponentCallbacks2.TRIM_MEMORY_MODERATE);
-                //picture.setImage(ImageSource.uri("file://"+path));
-                System.gc();
-
-                //Glide.get(getActivity()).trimMemory(40);
-            }
-        });
 
 
+        picture.setDebug(true);
+        //picture.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
         return view;
+    }
+    public void loadFullImage(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                  picture.setImage(ImageSource.uri(path).dimensions(500, 500), ImageSource.cachedBitmap(mThumbnailBitmap));
+              }
+          });
     }
 }

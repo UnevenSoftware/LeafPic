@@ -19,7 +19,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
-import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
