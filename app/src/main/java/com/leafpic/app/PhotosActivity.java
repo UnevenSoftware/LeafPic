@@ -239,7 +239,9 @@ public class PhotosActivity extends ThemedActivity {
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        photos.selectAllPhotos();
+                        if (photos.getSelectedCount() == photos.photos.size())
+                            photos.clearSelectedPhotos();
+                        else photos.selectAllPhotos();
                         adapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }

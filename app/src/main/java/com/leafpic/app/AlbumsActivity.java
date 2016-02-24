@@ -271,8 +271,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
             opt = menu.findItem(R.id.deleteAction);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         } else {
 
             setOptionsAlbmuMenusItemsVisible(menu,false);
@@ -283,8 +281,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             opt = menu.findItem(R.id.deleteAction);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            opt = menu.findItem(R.id.hideAlbumButton);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
 
@@ -333,7 +329,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        albums.selectAllAlbums();
+                        if (albums.getSelectedCount() == albums.dispAlbums.size())
+                            albums.clearSelectedAlbums();
+                        else albums.selectAllAlbums();
                         adapt.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
