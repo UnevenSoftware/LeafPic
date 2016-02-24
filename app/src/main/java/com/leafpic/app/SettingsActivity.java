@@ -34,15 +34,17 @@ public class SettingsActivity extends ThemedActivity{
 
     SharedPreferences SP;
     Toolbar bar;
-    LinearLayout root;
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        //FOR ADDING TOOLBAR
-        root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
         bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
         root.addView(bar, 0); // insert at top
+        //FOR ADDING TOOLBAR
+        /*root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+        bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
+        root.addView(bar, 0); // insert at top*/
 
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         bar.setTitle("Settings");
@@ -78,8 +80,7 @@ public class SettingsActivity extends ThemedActivity{
     @Override
     public void onResume() {
         super.onResume();
-        initUiTweaks();
-
+        //initUiTweaks();
     }
 
     public void initUiTweaks() {
@@ -96,7 +97,7 @@ public class SettingsActivity extends ThemedActivity{
                 getWindow().setNavigationBarColor(getPrimaryColor());
             else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
         }
-        //bar.setBackgroundColor(getPrimaryColor());
+        bar.setBackgroundColor(getPrimaryColor());
 
 
         if (isDarkTheme()){
