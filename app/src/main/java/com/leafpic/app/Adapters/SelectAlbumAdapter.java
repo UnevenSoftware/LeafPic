@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -41,7 +44,6 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
         Album a = albums.get(position);
         a.setPath();
 
-        Glide.clear(holder.picture);
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
                 .asBitmap()

@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -55,10 +58,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
                 .into(holder.picture);
+      //  ImageLoader.getInstance().displayImage("file://"+a.getPathCoverAlbum(),holder.picture,        ImageLoaderUtils.fullSizeOptions);
+
         holder.name.setTag(a.Path);
 
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", Color.rgb(0, 77, 64))));
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", Color.rgb(0, 150, 136))));
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.accent_blue))));
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.accent_green))));
         String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {

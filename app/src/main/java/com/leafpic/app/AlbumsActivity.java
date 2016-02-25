@@ -36,6 +36,7 @@ import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ImageLoaderUtils;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -63,9 +64,11 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_albums);
+        ImageLoaderUtils.initImageLoader(getApplicationContext());
+
         initUiTweaks();
         checkPermissions();
-        //APPINTRO TREAD
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {

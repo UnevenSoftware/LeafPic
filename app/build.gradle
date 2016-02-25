@@ -58,4 +58,5 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.yalantis:ucrop:1.2.4'
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }

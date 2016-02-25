@@ -1,35 +1,23 @@
 package com.leafpic.app.Fragments;
 
-import android.content.ComponentCallbacks2;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.FutureTarget;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import com.leafpic.app.utils.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 /**
  * Created by dnld on 18/02/16.
@@ -39,8 +27,8 @@ public class ImageFragment extends Fragment {
     private String path;
     private int width;
     private int height;
-    private Bitmap mThumbnailBitmap;
     SubsamplingScaleImageView picture;
+    ImageView preview_picture;
     private View.OnTouchListener onTouchListener;
 
     public static ImageFragment newInstance(String path,int width,int height) {
@@ -57,7 +45,6 @@ public class ImageFragment extends Fragment {
 
     public void setOnTouchListener(View.OnTouchListener l){onTouchListener = l;}
 
-    // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,36 +67,51 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.image_pager_item, container, false);
         picture = (SubsamplingScaleImageView) view.findViewById(R.id.media_view);
+        preview_picture = (ImageView) view.findViewById(R.id.media_preview_view);
+        final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
 
-        Glide.with(container.getContext())
-                .load(path)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .priority(Priority.IMMEDIATE)
-                .dontAnimate()
-                .override(width, height)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                        mThumbnailBitmap = bitmap;
-                        //loadFullImage();
-                        picture.setImage(ImageSource.bitmap(bitmap));
-                    }
-                });
+        ImageLoader.getInstance().displayImage("file://"+path, new ImageViewAware(preview_picture), ImageLoaderUtils.fullSizeOptions, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                spinner.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                String message = null;
+                switch (failReason.getType()) {
+                    case IO_ERROR:
+                        message = "Input/Output error";
+                        break;
+                    case DECODING_ERROR:
+                        message = "Image can't be decoded";
+                        break;
+                    case NETWORK_DENIED:
+                        message = "Downloads are denied";
+                        break;
+                    case OUT_OF_MEMORY:
+                        message = "Out Of Memory error";
+                        break;
+                    case UNKNOWN:
+                        message = "Unknown error";
+                        break;
+                }
+                Toast.makeText(view.getContext(), message, Toast.LENGTH_SHORT).show();
 
-        picture.setDebug(true);
-        //picture.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
+                spinner.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                picture.setImage(ImageSource.bitmap(loadedImage));
+                picture.setVisibility(View.VISIBLE);
+                preview_picture.setVisibility(View.GONE);
+                spinner.setVisibility(View.GONE);
+            }
+        });
+
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
         return view;
-    }
-    public void loadFullImage(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                  picture.setImage(ImageSource.uri(path).dimensions(500, 500), ImageSource.cachedBitmap(mThumbnailBitmap));
-              }
-          });
     }
 }

@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide;
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
+
+           // ImageLoader.getInstance().displayImage("file://" + f.Path, holder.imageView, ImageLoaderUtils.fullSizeOptions);
+
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
