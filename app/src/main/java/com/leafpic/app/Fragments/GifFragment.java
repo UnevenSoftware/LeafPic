@@ -27,19 +27,17 @@ import com.leafpic.app.R;
  */
 public class GifFragment extends Fragment {
     // Store instance variables
-    ImageView picture;
 
     private String path;
     private View.OnTouchListener onTouchListener;
+    ImageView picture;
 
     // newInstance constructor for creating fragment with arguments
     public static GifFragment newInstance(String path) {
         GifFragment fragmentFirst = new GifFragment();
-
         Bundle args = new Bundle();
         args.putString("path", path);
         fragmentFirst.setArguments(args);
-
         return fragmentFirst;
     }
 
@@ -50,6 +48,12 @@ public class GifFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         path = getArguments().getString("path");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        picture.setOnTouchListener(null);
     }
 
     // Inflate the view for the fragment based on layout XML
@@ -63,7 +67,6 @@ public class GifFragment extends Fragment {
                 .intoImageView(picture);
 
         picture.setOnTouchListener(onTouchListener);
-
         return view;
     }
 }

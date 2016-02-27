@@ -1,5 +1,6 @@
 package com.leafpic.app.Adapters;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -7,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -26,19 +30,18 @@ import java.util.ArrayList;
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
     ArrayList<Album> albums;
-    private int layout_ID;
-    boolean selected=false;
+    SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public AlbumsAdapter(ArrayList<Album> ph, int id) {
+    public AlbumsAdapter(ArrayList<Album> ph, Context ctx) {
         albums = ph;
-        layout_ID = id;
+        SP = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.album_card, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(v);
@@ -49,57 +52,37 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Album a = albums.get(position);
         a.setPath();
 
-        //Glide.clear(holder.picture);
-
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
                 .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
                 .into(holder.picture);
+      //  ImageLoader.getInstance().displayImage("file://"+a.getPathCoverAlbum(),holder.picture,        ImageLoaderUtils.fullSizeOptions);
+
         holder.name.setTag(a.Path);
 
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(holder.picture.getContext());
-        String textColor;
-
-        int accentColor = SP.getInt("accent_color", Color.rgb(0, 77, 64));//TEAL COLOR DEFAULT
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & accentColor));
-        int primaryColor = SP.getInt("primary_color", Color.rgb(0, 150, 136));//TEAL CARD BG DEFAULT
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & primaryColor));
-
-        if (SP.getBoolean("set_dark_theme", false))
-            textColor="#FAFAFA";
-        else
-            textColor="#2b2b2b";
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.accent_blue))));
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.accent_green))));
+        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
-            //holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.selected_album));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            //White Text On White Theme
-            if (SP.getBoolean("set_dark_theme", false)==false){
-                selected=true;
-                holder.name.setText(Html.fromHtml("<i><font color='#FAFAFA'>" + a.DisplayName + "</font></i>"));
-                holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                        "color='#FAFAFA'> Photos</font>"));
-            }
+            if (!SP.getBoolean("set_dark_theme", false)) textColor ="#FAFAFA";
         } else {
-            selected=false;
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
+
             if (SP.getBoolean("set_dark_theme", false))
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(),R.color.unselected_album));
-                //holder.card_layout.setBackgroundColor(holder.card_layout.getContext().getColor(R.color.unselected_album));
-            else
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
+            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
         }
-        if (!selected) {
-            holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-            //SP.getString("PrefColor", "#03A9F4")
-            holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                    "color='" + textColor + "'> Photos</font>"));
-        }
+        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
+        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? "Photo" : "Photos") + "</font>"));
+
     }
 
     public void setOnClickListener(View.OnClickListener lis) {

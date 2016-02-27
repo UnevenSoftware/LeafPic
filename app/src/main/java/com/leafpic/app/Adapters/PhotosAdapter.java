@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide;
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -21,19 +23,17 @@ import java.util.ArrayList;
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
     ArrayList<Photo> photos;
-    private int layout_ID;
 
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<Photo> ph, int id) {
+    public PhotosAdapter(ArrayList<Photo> ph) {
         photos = ph;
-        layout_ID = id;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(layout_ID, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_card, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(v);
@@ -52,13 +52,15 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
+
+           // ImageLoader.getInstance().displayImage("file://" + f.Path, holder.imageView, ImageLoaderUtils.fullSizeOptions);
+
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
                     .into(holder.imageView);
-
         }
 
         holder.path.setTag(f.Path);

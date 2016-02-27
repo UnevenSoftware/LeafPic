@@ -37,7 +37,9 @@ import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ImageLoaderUtils;
 import com.leafpic.app.utils.StringUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -108,6 +110,12 @@ public class PhotoPagerActivity extends ThemedActivity{
 
         }catch (Exception e){e.printStackTrace();}
 
+    }
+
+    @Override
+    public void  onLowMemory(){
+        super.onLowMemory();
+        ImageLoader.getInstance().clearMemoryCache();
     }
 
     @Override
@@ -234,7 +242,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 //uCrop = uCrop.useSourceImageAspectRatio();
                 uCrop.withOptions(getUcropOptions());
 
-                //options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+                //fullSizeOptions.setCompressionFormat(Bitmap.CompressFormat.PNG);
                 //uCrop = basisConfig(uCrop);
                 //uCrop = advancedConfig(uCrop);
 
@@ -330,27 +338,26 @@ public class PhotoPagerActivity extends ThemedActivity{
 
     public void initUiTweaks() {
 
-        /**** ToolBar ********/
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        /**** Status Bar *****/
+
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-        /**** Navigation Bar */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.transparent_gray));
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
-        }
+
+        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.transparent_gray));
+
+        setRecentApp(getString(R.string.app_name));
 
         final Handler handler = new Handler();
+
         handler.postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
-        }, 1000);
+        }, 1500);
 
 
     }
@@ -359,30 +366,30 @@ public class PhotoPagerActivity extends ThemedActivity{
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-        //options.set
+        //fullSizeOptions.set
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
         options.setStatusBarColor(getPrimaryColor());
-    //options.se
+    //fullSizeOptions.se
 
-       // options.setDimmedLayerColor(Color.CYAN);
+       // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
        /*
         Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
-        options.setMaxScaleMultiplier(5);
-        options.setImageToCropBoundsAnimDuration(666);
-        options.setDimmedLayerColor(Color.CYAN);
-        options.setOvalDimmedLayer(true);
-        options.setShowCropFrame(false);
-        options.setCropGridStrokeWidth(20);
-        options.setCropGridColor(Color.GREEN);
-        options.setCropGridColumnCount(2);
-        options.setCropGridRowCount(1);
+        fullSizeOptions.setMaxScaleMultiplier(5);
+        fullSizeOptions.setImageToCropBoundsAnimDuration(666);
+        fullSizeOptions.setDimmedLayerColor(Color.CYAN);
+        fullSizeOptions.setOvalDimmedLayer(true);
+        fullSizeOptions.setShowCropFrame(false);
+        fullSizeOptions.setCropGridStrokeWidth(20);
+        fullSizeOptions.setCropGridColor(Color.GREEN);
+        fullSizeOptions.setCropGridColumnCount(2);
+        fullSizeOptions.setCropGridRowCount(1);
         // Color palette
-        options.setToolbarColor(ContextCompat.getColor(this, R.color.your_color_res));
-        options.setStatusBarColor(ContextCompat.getColor(this, R.color.your_color_res));
-        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
-		options.setToolbarTitleTextColor(ContextCompat.getColor(this, R.color.your_color_res));
+        fullSizeOptions.setToolbarColor(ContextCompat.getColor(this, R.color.your_color_res));
+        fullSizeOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.your_color_res));
+        fullSizeOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
+		fullSizeOptions.setToolbarTitleTextColor(ContextCompat.getColor(this, R.color.your_color_res));
        */
 
         return options;

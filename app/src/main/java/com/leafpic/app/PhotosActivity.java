@@ -1,23 +1,17 @@
 package com.leafpic.app;
 
-import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -37,7 +31,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
-import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
@@ -99,7 +92,7 @@ public class PhotosActivity extends ThemedActivity {
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
             mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
-            adapter = new PhotosAdapter(photos.photos, R.layout.photo_card);
+            adapter = new PhotosAdapter(photos.photos);
 
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -239,7 +232,9 @@ public class PhotosActivity extends ThemedActivity {
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        photos.selectAllPhotos();
+                        if (photos.getSelectedCount() == photos.photos.size())
+                            photos.clearSelectedPhotos();
+                        else photos.selectAllPhotos();
                         adapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
@@ -501,22 +496,16 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(photos.DisplayName, drawable.getBitmap(), getPrimaryColor()));
-
-            if (isNavigationBarColored())
-                getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-        }
+        if (isNavigationBarColored())
+            getWindow().setNavigationBarColor(getPrimaryColor());
+        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
 
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        setStatusBarTranslucent(false);//true
+        setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/
@@ -558,6 +547,8 @@ public class PhotosActivity extends ThemedActivity {
 
             }
         });
+
+        setRecentApp(photos.DisplayName);
     }
 
     private void updateHeaderContent() {
@@ -577,18 +568,16 @@ public class PhotosActivity extends ThemedActivity {
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
         textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
+                "color='#FFFFFF'> "+ (photos.photos.size() == 1 ? "Photo" : "Photos") +"</font>"));
 
 
     }
 
     private void initActivityTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide transition = new Slide();
-            transition.excludeTarget(android.R.id.statusBarBackground, true);
-            getWindow().setEnterTransition(transition);
-            getWindow().setReturnTransition(transition);
-        }
+        Slide transition = new Slide();
+        transition.excludeTarget(android.R.id.statusBarBackground, true);
+        getWindow().setEnterTransition(transition);
+        getWindow().setReturnTransition(transition);
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {

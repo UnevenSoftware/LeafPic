@@ -1,4 +1,4 @@
-package com.leafpic.app.Base;
+package com.leafpic.app.utils;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

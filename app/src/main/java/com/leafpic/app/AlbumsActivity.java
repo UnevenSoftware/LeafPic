@@ -19,7 +19,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -35,9 +34,9 @@ import android.widget.Toast;
 
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
-import com.leafpic.app.Base.ColorPalette;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ImageLoaderUtils;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -65,9 +64,11 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_albums);
+        ImageLoaderUtils.initImageLoader(getApplicationContext());
+
         initUiTweaks();
         checkPermissions();
-        //APPINTRO TREAD
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -183,6 +184,14 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         addHiddenFolder_FABEvent();
     }
 
+    @Override
+    public void onBackPressed(){
+        if(drawer!= null && drawer.isDrawerOpen())
+            drawer.closeDrawer();
+        else
+            finish();
+    }
+
     public void addHiddenFolder_FABEvent() {
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
 
@@ -263,8 +272,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
             opt = menu.findItem(R.id.deleteAction);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         } else {
 
             setOptionsAlbmuMenusItemsVisible(menu,false);
@@ -275,8 +282,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             opt = menu.findItem(R.id.deleteAction);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            opt = menu.findItem(R.id.hideAlbumButton);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
 
@@ -325,7 +330,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        albums.selectAllAlbums();
+                        if (albums.getSelectedCount() == albums.dispAlbums.size())
+                            albums.clearSelectedAlbums();
+                        else albums.selectAllAlbums();
                         adapt.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
@@ -499,7 +506,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
-        adapt = new AlbumsAdapter(albums.dispAlbums, R.layout.album_card);
+        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
