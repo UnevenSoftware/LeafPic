@@ -124,7 +124,6 @@
         <item name="android:background">#2b2b2b</item>
     </style>
     <style name="PreferencesThemeLight">
-
         <item name="android:background">#FAFAFA</item>
         <!--<item name="android:background">#424242</item>-->
     </style>

@@ -2,21 +2,20 @@ package com.leafpic.app.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
-import com.leafpic.app.utils.ImageLoaderUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -51,11 +50,17 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
                 .placeholder(R.drawable.ic_empty)
                 .into(holder.picture);
 
-        holder.name.setText(Html.fromHtml("<i><font>" + a.DisplayName + "</font></i>"));
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", Color.rgb(0, 77, 64))));
+        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.accent_green))));
+
+        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Photos</font>"));
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? "Photo" : "Photos") + "</font>"));
         holder.name.setTag(a.Path);
+
+        if (SP.getBoolean("set_dark_theme", false))
+            holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.unselected_album));
+        else holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -69,6 +74,7 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout card_layout;
         ImageView picture;
         TextView name, nPhotos;
 
@@ -77,6 +83,7 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
             picture = (ImageView) itemView.findViewById(R.id.album_preview);
             name = (TextView) itemView.findViewById(R.id.album_name);
             nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
+            card_layout = (LinearLayout) itemView.findViewById(R.id.s_linear_card_Text);
         }
     }
 }
