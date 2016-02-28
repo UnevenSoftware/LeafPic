@@ -371,7 +371,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
-                DetailsDialog.setNeutralButton("MODIFY", new DialogInterface.OnClickListener() {
+                DetailsDialog.setNeutralButton("EDIT", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
@@ -382,6 +382,10 @@ public class PhotoPagerActivity extends ThemedActivity{
 
             case R.id.setting:
                 Intent intent2= new Intent(getApplicationContext(), SettingsActivity.class);
+
+                intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
                 startActivity(intent2);
                 break;
 

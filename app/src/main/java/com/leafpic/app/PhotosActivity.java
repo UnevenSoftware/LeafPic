@@ -586,4 +586,12 @@ public class PhotosActivity extends ThemedActivity {
          else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
+
+    /*
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(R.anim.comming_in, R.anim.comming_out);
+    }
+    */
 }
