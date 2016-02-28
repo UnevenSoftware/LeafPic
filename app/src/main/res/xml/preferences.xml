@@ -19,6 +19,12 @@
             android:persistent="true"
             android:summary="Pleas Provide Your Name"
             android:title="Your Name" />
+        <SwitchPreference
+            android:title="Coolpasing Toolbar"
+            android:defaultValue="true"
+            android:summary="Coolapsing Toolbar When Open Album"
+            android:key="set_colaps_toolbar"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory

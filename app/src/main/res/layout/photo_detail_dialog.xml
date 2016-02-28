@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp"
+        android:id="@+id/photo_details_card"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/rl_photo_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/header_photo_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/photo_details_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:scaleType="centerCrop"
+                        />
+
+                    <TextView
+                        android:id="@+id/ph_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:text="Photo Details"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/md_white_1000"
+                        />
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/photo_details_card_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/header_photo_details"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="vertical"
+                    android:layout_below="@id/header_photo_details"
+                    >
+
+                    <!--PATH-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/LL_PATH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:id="@+id/Path"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="Path"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/Photo_Path"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+
+                    <!--TYPE-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        >
+                        <TextView
+                            android:id="@+id/Type"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="Type"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/Photo_Type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <!--Resolution-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_Resolution"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        >
+                        <TextView
+                            android:id="@+id/Resolution"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="Resolution"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/Photo_Resolution"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <!--Size-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_Size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        >
+                        <TextView
+                            android:id="@+id/Size"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="Size"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/Photo_Size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <!--DATE TAKEN-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_Date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        >
+                        <TextView
+                            android:id="@+id/Date"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="Date Taken"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/Photo_Date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

@@ -1,25 +1,20 @@
 package com.leafpic.app;
 
-import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -29,15 +24,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
-import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Photo;
 import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.ImageLoaderUtils;
 import com.leafpic.app.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yalantis.ucrop.UCrop;
@@ -48,7 +43,6 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * Created by dnld on 18/02/16.
@@ -58,6 +52,7 @@ public class PhotoPagerActivity extends ThemedActivity{
     ViewPager mViewPager;
     HandlingPhotos photos;
     MediaPagerAdapter adapter;
+    SharedPreferences SP;
 
     Toolbar toolbar;
     boolean fullscreenmode;
@@ -311,16 +306,78 @@ public class PhotoPagerActivity extends ThemedActivity{
                 }
                 cursor.close();
 
-                /**DIALOG**/
-               /* new MaterialDialog.Builder(this)
-                        .title("Photo Details")
-                        .content("Path: \t" + photos.getCurrentPhoto().Path
-                                + "\nSize: \t" + size
-                                + "\nResolution: \t" + resolution
-                                + "\nType: \t" + photos.getCurrentPhoto().MIME
-                                + "\nDate: \t" + date)
-                        .positiveText("DONE")
-                        .show();*/
+                /****** BEAUTIFUL DIALOG ****/
+                final AlertDialog.Builder DetailsDialog;
+                SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
+                if (isDarkTheme())
+                    DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
+                else
+                    DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Light);
+
+
+                final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
+                //OBJECT INSIDE
+                //WRITE
+                final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Size);
+                final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Type);
+                final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
+                final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Date);
+                final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
+                final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
+                CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
+                //READ
+                final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
+                final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
+                final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
+                final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
+                final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
+
+                //b PhotoDetailsPreview.setImageURI(photos.getCurrentPhotoIndex());
+                Glide.with(this)
+                        .load(photos.getCurrentPhoto().Path)
+                        .asBitmap()
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_empty)
+                        .into(PhotoDetailsPreview);
+
+                Size.setText(size);
+                Resolution.setText(resolution);
+                Data.setText(date);
+                Type.setText(photos.getCurrentPhoto().MIME);
+
+                Path.setText(photos.getCurrentPhoto().Path);
+
+                if (!isDarkTheme()) {
+                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
+                    //READ
+                    txtData.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txtPath.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txtResolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txtType.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txtSize.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    //WRITE
+                    Data.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    Path.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    Resolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    Type.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    Size.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                }
+                else {
+                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
+                }
+
+                DetailsDialog.setView(Details_DialogLayout);
+                DetailsDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                DetailsDialog.setNeutralButton("MODIFY", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                DetailsDialog.show();
+
                 break;
 
             case R.id.setting:
@@ -347,7 +404,7 @@ public class PhotoPagerActivity extends ThemedActivity{
 
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
 
-        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.transparent_gray));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
 
         setRecentApp(getString(R.string.app_name));
 
