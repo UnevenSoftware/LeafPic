@@ -35,6 +35,7 @@ import com.leafpic.app.Base.Photo;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -61,7 +62,7 @@ public class PhotoPagerActivity extends ThemedActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-        startSystemUI();
+        //startSystemUI();
 
         initUiTweaks();
 
@@ -153,7 +154,8 @@ public class PhotoPagerActivity extends ThemedActivity{
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             copyFileToDownloads(imageUri);
-                            mViewPager.getFocusedChild().invalidate();
+                            DiskCacheUtils.removeFromCache("file://"+photos.getCurrentPhoto().Path, ImageLoader.getInstance().getDiskCache());
+                            adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);
                         }
@@ -168,7 +170,6 @@ public class PhotoPagerActivity extends ThemedActivity{
     }
 
     private void copyFileToDownloads(Uri croppedFileUri) throws Exception {
-        StringUtils.showToast(getApplicationContext(), croppedFileUri.getPath());
         FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
         FileOutputStream outStream = new FileOutputStream(new File(photos.getCurrentPhoto().Path));
         FileChannel inChannel = inStream.getChannel();
@@ -177,8 +178,6 @@ public class PhotoPagerActivity extends ThemedActivity{
         inStream.close();
         outStream.close();
         photos.scanFile(new String[]{photos.getCurrentPhoto().Path});
-        StringUtils.showToast(getApplicationContext(), "ok");
-
     }
 
 
@@ -396,8 +395,7 @@ public class PhotoPagerActivity extends ThemedActivity{
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
-                .setDuration(0).start();
+        setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -462,7 +460,7 @@ public class PhotoPagerActivity extends ThemedActivity{
         runOnUiThread(new Runnable() {
             public void run() {
                 toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
-                        .start();
+                        .setDuration(200).start();
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -476,9 +474,11 @@ public class PhotoPagerActivity extends ThemedActivity{
         });
     }
 
-    private void startSystemUI(){
+    private void setupSystemUI(){
+        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+                .setDuration(0).start();
         getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
@@ -487,7 +487,7 @@ public class PhotoPagerActivity extends ThemedActivity{
         runOnUiThread(new Runnable() {
             public void run() {
                 toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
-                        .start();
+                        .setDuration(240).start();
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
