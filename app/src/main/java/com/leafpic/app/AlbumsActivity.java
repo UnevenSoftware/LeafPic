@@ -69,6 +69,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         initUiTweaks();
         checkPermissions();
 
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {

@@ -34,7 +34,7 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
-import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -92,7 +92,7 @@ public class PhotosActivity extends ThemedActivity {
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
             mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
-            adapter = new PhotosAdapter(photos.photos);
+            adapter = new PhotosAdapter(photos.medias,getApplicationContext());
 
             adapter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,6 +122,13 @@ public class PhotosActivity extends ThemedActivity {
                 }
             });
 
+            boolean pauseOnScroll = false; // or true
+            boolean pauseOnFling = true; // or false
+//            PauseOnScrollListener listener = new PauseOnScrollListener(ImageLoader.getInstance(), pauseOnScroll, pauseOnFling);
+
+            //mRecyclerView.addOnScrollListener(listener);
+            //mRecyclerView.setOnScrollChangeListener(listener);
+            //mRecyclerView.setOnScrollListener(listener);
 
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
@@ -220,7 +227,7 @@ public class PhotosActivity extends ThemedActivity {
         try {
             if ((c = photos.getSelectedCount()) != 0) {
 
-                collapsingToolbarLayout.setTitle(c + "/" + photos.photos.size());
+                collapsingToolbarLayout.setTitle(c + "/" + photos.medias.size());
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_check)
                         .color(Color.WHITE)
@@ -232,7 +239,7 @@ public class PhotosActivity extends ThemedActivity {
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (photos.getSelectedCount() == photos.photos.size())
+                        if (photos.getSelectedCount() == photos.medias.size())
                             photos.clearSelectedPhotos();
                         else photos.selectAllPhotos();
                         adapter.notifyDataSetChanged();
@@ -283,13 +290,13 @@ public class PhotosActivity extends ThemedActivity {
                         String ind = b.getString("photos_indexes");
                         if (ind != null) {
                             for (String asd : ind.split("ç")) {
-                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
-                                //photos.removePhoto(Integer.valueOf(asd));
+                                //Log.wtf("asdasdasdas", medias.medias.size() + "");
+                                //medias.removePhoto(Integer.valueOf(asd));
                                 // TODO remove photo moved from older album [porco dio]
-                                //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                                //Log.wtf("asdasdasdas", medias.medias.size() + "");
                                 //adapter.removeItemAt(Integer.valueOf(asd));
                                 //mRecyclerView.removeViewAt(Integer.parseInt(asd));
-                                //photos.photos.remove(Integer.parseInt(asd));
+                                //medias.medias.remove(Integer.parseInt(asd));
                                 //mRecyclerView.removeViewAt(Integer.valueOf(asd));
 
                                 //adapter.notifyItemRemoved(Integer.parseInt(asd));
@@ -385,11 +392,11 @@ public class PhotosActivity extends ThemedActivity {
                         .title("Rename Album")
                         .content("insert a fucking NAME")
                         .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(null, photos.DisplayName, new MaterialDialog.InputCallback() {
+                        .input(null, medias.DisplayName, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                // TODO make this better
-                                    albums.renameAlbum(photos.FolderPath, input.toString());
+                                    albums.renameAlbum(medias.FolderPath, input.toString());
                                 //onBackPressed();
                                     //finish();
 
@@ -445,7 +452,7 @@ public class PhotosActivity extends ThemedActivity {
                     builder2.setMessage(R.string.delete_album_message)
                             .setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    albums.hideAlbum(photos.FolderPath, photos.photos);
+                                    albums.hideAlbum(photos.FolderPath, photos.medias);
                                 }
                             })
                             .setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
@@ -469,7 +476,7 @@ public class PhotosActivity extends ThemedActivity {
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
-                for (Photo f : photos.selectedPhotos)
+                for (Media f : photos.selectedMedias)
                     files.add(Uri.fromFile(new File(f.Path)));
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
@@ -567,8 +574,8 @@ public class PhotosActivity extends ThemedActivity {
 
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
-        textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.photos.size() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> "+ (photos.photos.size() == 1 ? "Photo" : "Photos") +"</font>"));
+        textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
+                "color='#FFFFFF'> "+ (photos.medias.size() == 1 ? "Photo" : "Photos") +"</font>"));
 
 
     }

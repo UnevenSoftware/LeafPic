@@ -28,7 +28,7 @@ public class Album implements Parcelable {
     public String DisplayName;
     public String Path = "";
 
-    ArrayList<Photo> photos;
+    ArrayList<Media> medias;
     private int imagesCount = 0;
     private boolean hidden = false;
     private boolean selected = false;
@@ -45,7 +45,7 @@ public class Album implements Parcelable {
 
 
     public Album(String path, String displayName, boolean hidden, int count) {
-        photos = new ArrayList<Photo>();
+        medias = new ArrayList<Media>();
         DisplayName = displayName;
         Path = path;
         setHidden(hidden);
@@ -58,10 +58,10 @@ public class Album implements Parcelable {
         imagesCount = in.readInt();
         Path = in.readString();
         if (in.readByte() == 0x01) {
-            photos = new ArrayList<Photo>();
-            in.readList(photos, Photo.class.getClassLoader());
+            medias = new ArrayList<Media>();
+            in.readList(medias, Media.class.getClassLoader());
         } else {
-            photos = null;
+            medias = null;
         }
         hidden = in.readByte() != 0x00;
         selected = in.readByte() != 0x00;
@@ -69,7 +69,7 @@ public class Album implements Parcelable {
 
     public void setPath() {
         try {
-            Path = StringUtils.getBucketPathbyImagePath(photos.get(0).Path);
+            Path = StringUtils.getBucketPathbyImagePath(medias.get(0).Path);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class Album implements Parcelable {
 
     public String getPathCoverAlbum() {
         if (coverPath != null) return coverPath;
-        if (photos.size() > 0) return "file://" + photos.get(0).Path;
+        if (medias.size() > 0) return "file://" + medias.get(0).Path;
         else return "drawable://" + R.drawable.ic_empty;
     }
 
@@ -116,11 +116,11 @@ public class Album implements Parcelable {
         dest.writeString(DisplayName);
         dest.writeInt(imagesCount);
         dest.writeString(Path);
-        if (photos == null) {
+        if (medias == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(photos);
+            dest.writeList(medias);
         }
         dest.writeByte((byte) (hidden ? 0x01 : 0x00));
         dest.writeByte((byte) (selected ? 0x01 : 0x00));

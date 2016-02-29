@@ -3,6 +3,7 @@ package com.leafpic.app.Fragments;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,5 +114,9 @@ public class ImageFragment extends Fragment {
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
         return view;
+    }
+
+    public void rotatePicture(int rotation) {
+        Log.wtf("asdf" , picture.getOrientation()+"");
     }
 }

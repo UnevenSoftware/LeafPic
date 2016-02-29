@@ -29,7 +29,7 @@ public class HandlingAlbums {
 
         for (Album dispAlbum : dispAlbums) {
             dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
-            dispAlbum.photos = as.getFirstAlbumPhoto(dispAlbum);
+            dispAlbum.medias = as.getFirstAlbumPhoto(dispAlbum);
         }
 
     }
@@ -142,7 +142,7 @@ public class HandlingAlbums {
             public void run() {
                 HiddenPhotosHandler db = new HiddenPhotosHandler(context);
                 MadiaStoreHandler mediaStoreHandler = new MadiaStoreHandler(context);
-                for (Photo photo : mediaStoreHandler.getAlbumPhotos(a)) {
+                for (Media photo : mediaStoreHandler.getAlbumPhotos(a)) {
                     photo.FolderPath = a.Path;
                     db.addPhoto(photo);
                 }
@@ -169,7 +169,7 @@ public class HandlingAlbums {
         }
     }
 
-    public void hideAlbum(String path, final ArrayList<Photo> ph) {
+    public void hideAlbum(String path, final ArrayList<Media> ph) {
         final File dirName = new File(path);
         File file = new File(dirName, ".nomedia");
         if (!file.exists()) {
@@ -184,7 +184,7 @@ public class HandlingAlbums {
                     public void run() {
                         HiddenPhotosHandler db = new HiddenPhotosHandler(context);
 
-                        for (Photo photo : ph) {
+                        for (Media photo : ph) {
                             photo.FolderPath = dirName.getAbsolutePath();
                             db.addPhoto(photo);
                         }
@@ -220,7 +220,7 @@ public class HandlingAlbums {
         dispAlbums = db.getAlbums();
         for (Album dispAlbum : dispAlbums) {
             dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.Path));
-            dispAlbum.photos = db.getFirstPhotosByAlbum(dispAlbum.Path);
+            dispAlbum.medias = db.getFirstPhotosByAlbum(dispAlbum.Path);
         }
         db.close();
         return true;

@@ -34,8 +34,8 @@ public class HandlingPhotos implements Parcelable {
     public String FolderPath;
     public String ID;
     public String DisplayName;
-    public ArrayList<Photo> photos;
-    public ArrayList<Photo> selectedPhotos;
+    public ArrayList<Media> medias;
+    public ArrayList<Media> selectedMedias;
     public boolean hidden;
     public AlbumSettings settings;
     Context context;
@@ -51,7 +51,7 @@ public class HandlingPhotos implements Parcelable {
         FolderPath = album.Path;
         hidden = album.isHidden();
 
-        selectedPhotos = new ArrayList<Photo>();
+        selectedMedias = new ArrayList<Media>();
         selectedPhotosIndexs = new ArrayList<Integer>();
 
         DisplayName = album.DisplayName;
@@ -59,12 +59,12 @@ public class HandlingPhotos implements Parcelable {
         if (!hidden) {
             ID = album.ID;
             setSettings();
-            photos = as.getAlbumPhotos(album, getSortingMode());
+            medias = as.getAlbumPhotos(album, getSortingMode());
         } else {
             ID = album.Path;
             setSettings();
             HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-            photos = db.getPhotosByAlbum(album.Path);
+            medias = db.getPhotosByAlbum(album.Path);
         }
 
     }
@@ -72,22 +72,22 @@ public class HandlingPhotos implements Parcelable {
     public HandlingPhotos(Context ctx) {
         context = ctx;
         as = new MadiaStoreHandler(context);
-        selectedPhotos = new ArrayList<Photo>();
+        selectedMedias = new ArrayList<Media>();
     }
 
     protected HandlingPhotos(Parcel in) {
         FolderPath = in.readString();
         if (in.readByte() == 0x01) {
-            photos = new ArrayList<Photo>();
-            in.readList(photos, Photo.class.getClassLoader());
+            medias = new ArrayList<Media>();
+            in.readList(medias, Media.class.getClassLoader());
         } else {
-            photos = null;
+            medias = null;
         }
         if (in.readByte() == 0x01) {
-            selectedPhotos = new ArrayList<Photo>();
-            in.readList(selectedPhotos, Photo.class.getClassLoader());
+            selectedMedias = new ArrayList<Media>();
+            in.readList(selectedMedias, Media.class.getClassLoader());
         } else {
-            selectedPhotos = null;
+            selectedMedias = null;
         }
         DisplayName = in.readString();
         current = in.readInt();
@@ -96,18 +96,18 @@ public class HandlingPhotos implements Parcelable {
 
     public void updatePhotos() {
         if (!hidden) {
-            photos = as.getAlbumPhotos(ID, getSortingMode());
+            medias = as.getAlbumPhotos(ID, getSortingMode());
         } else {
             HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-            photos = db.getPhotosByAlbum(ID);
+            medias = db.getPhotosByAlbum(ID);
         }
     }
 
     public String getSelectedPhotosSerilized() {
         String s = "";
-        if (selectedPhotos.size() > 0) {
-            for (Photo photo : selectedPhotos)
-                s += photo.Path + "ç";
+        if (selectedMedias.size() > 0) {
+            for (Media media : selectedMedias)
+                s += media.Path + "ç";
 
             return s.substring(0, s.length() - 1);
         }
@@ -130,10 +130,10 @@ public class HandlingPhotos implements Parcelable {
         if (!hidden) {
             Album a = new Album();
             a.ID = ID;
-            photos = as.getAlbumPhotos(a, getSortingMode());
+            medias = as.getAlbumPhotos(a, getSortingMode());
         } else {
             HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-            photos = db.getPhotosByAlbum(ID);
+            medias = db.getPhotosByAlbum(ID);
         }
     }
 
@@ -156,14 +156,14 @@ public class HandlingPhotos implements Parcelable {
 
     public String getPreviewAlbumImg() {
         if (settings.coverPath != null) return settings.coverPath;
-        return photos.get(0).Path;
+        return medias.get(0).Path;
     }
 
     public void setSelectedPhotoAsPreview() {
-        if (selectedPhotos.size() > 0) {
+        if (selectedMedias.size() > 0) {
             CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-            h.setAlbumPhotPreview(ID, selectedPhotos.get(0).Path);
-            settings.coverPath = selectedPhotos.get(0).Path;
+            h.setAlbumPhotPreview(ID, selectedMedias.get(0).Path);
+            settings.coverPath = selectedMedias.get(0).Path;
         }
     }
 
@@ -177,19 +177,19 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public void clearSelectedPhotos() {
-        for (Photo photo : photos) {
-            photo.setSelected(false);
+        for (Media media : medias) {
+            media.setSelected(false);
         }
-        selectedPhotos.clear();
+        selectedMedias.clear();
         selectedPhotosIndexs.clear();
     }
 
     public int getSelectedCount() {
-        return selectedPhotos.size();
+        return selectedMedias.size();
     }
 
-    public Photo getCurrentPhoto() {
-        return photos.get(getCurrentPhotoIndex());
+    public Media getCurrentPhoto() {
+        return medias.get(getCurrentPhotoIndex());
     }
 
     public void setCurrentPhoto(String path) {
@@ -197,8 +197,8 @@ public class HandlingPhotos implements Parcelable {
     }
 
     int getPhotoIndex(String path) {
-        for (int i = 0; i < photos.size(); i++) {
-            if (photos.get(i).Path.equals(path)) return i;
+        for (int i = 0; i < medias.size(); i++) {
+            if (medias.get(i).Path.equals(path)) return i;
         }
         return -1;
     }
@@ -211,19 +211,19 @@ public class HandlingPhotos implements Parcelable {
         current = n;
     }
 
-    public Photo getPhoto(String path) {
-        for (int i = 0; i < photos.size(); i++) {
-            if (photos.get(i).Path.equals(path)) {
+    public Media getPhoto(String path) {
+        for (int i = 0; i < medias.size(); i++) {
+            if (medias.get(i).Path.equals(path)) {
                 last_position_selecte = i;
-                return photos.get(i);
+                return medias.get(i);
             }
         }
         return null;
     }
 
     public void LogSELECTED() {
-        for (Photo photo : selectedPhotos) {
-            Log.wtf("asdasdas", photo.Path);
+        for (Media media : selectedMedias) {
+            Log.wtf("asdasdas", media.Path);
         }
     }
 
@@ -232,14 +232,14 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public int selectPhoto(String path, boolean val) {
-        Photo x = getPhoto(path);
+        Media x = getPhoto(path);
         if (x != null) {
             x.setSelected(val);
             if (val) {
-                selectedPhotos.add(x);
+                selectedMedias.add(x);
                 selectedPhotosIndexs.add(last_position_selecte);
             } else {
-                selectedPhotos.remove(x);
+                selectedMedias.remove(x);
                 selectedPhotosIndexs.remove(last_position_selecte);
             }
         }
@@ -248,24 +248,24 @@ public class HandlingPhotos implements Parcelable {
 
     public void selectAllPhotos(){
 
-        for (int i = 0; i < photos.size(); i++) {
-            if(!photos.get(i).isSelected()) {
-                photos.get(i).setSelected(true);
-                selectedPhotos.add(photos.get(i));
+        for (int i = 0; i < medias.size(); i++) {
+            if(!medias.get(i).isSelected()) {
+                medias.get(i).setSelected(true);
+                selectedMedias.add(medias.get(i));
                 selectedPhotosIndexs.add(i);
             }
         }
     }
 
     public int toggleSelectPhoto(String path) {
-        Photo x = getPhoto(path);
+        Media x = getPhoto(path);
         if (x != null) {
             x.setSelected(!x.isSelected());
             if (x.isSelected()) {
-                selectedPhotos.add(x);
+                selectedMedias.add(x);
                 selectedPhotosIndexs.add(last_position_selecte);
             } else {
-                selectedPhotos.remove(x);
+                selectedMedias.remove(x);
                 selectedPhotosIndexs.remove(last_position_selecte);
             }
         }
@@ -274,8 +274,8 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public void deleteSelectedPhotos() {
-        for (Photo photo : selectedPhotos)
-            deletePhoto(photo);
+        for (Media media : selectedMedias)
+            deletePhoto(media);
 
         clearSelectedPhotos();
     }
@@ -284,11 +284,11 @@ public class HandlingPhotos implements Parcelable {
         deletePhoto(getCurrentPhoto());
     }
 
-    public void deletePhoto(Photo a) {
+    public void deletePhoto(Media a) {
         HandlingAlbums h = new HandlingAlbums(context);
         File file = new File(a.Path);
         h.deleteFolderRecursive(file);
-        photos.remove(a);
+        medias.remove(a);
     }
 
     @Override
@@ -299,17 +299,17 @@ public class HandlingPhotos implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(FolderPath);
-        if (photos == null) {
+        if (medias == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(photos);
+            dest.writeList(medias);
         }
-        if (selectedPhotos == null) {
+        if (selectedMedias == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(selectedPhotos);
+            dest.writeList(selectedMedias);
         }
         dest.writeString(DisplayName);
         dest.writeInt(current);
@@ -330,14 +330,14 @@ public class HandlingPhotos implements Parcelable {
         }
     }
     public void removePhoto(int index) {
-        if (index > -1 && index < photos.size())
-        photos.remove(index);
+        if (index > -1 && index < medias.size())
+        medias.remove(index);
     }
 
     private int removePhoto(String path) {
-        for (int i = 0; i < photos.size(); i++)
-            if (photos.get(i).Path.equals(path)) {
-                photos.remove(i);
+        for (int i = 0; i < medias.size(); i++)
+            if (medias.get(i).Path.equals(path)) {
+                medias.remove(i);
                 return i;
             }
         return -1;
