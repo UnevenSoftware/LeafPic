@@ -122,14 +122,6 @@ public class PhotosActivity extends ThemedActivity {
                 }
             });
 
-            boolean pauseOnScroll = false; // or true
-            boolean pauseOnFling = true; // or false
-//            PauseOnScrollListener listener = new PauseOnScrollListener(ImageLoader.getInstance(), pauseOnScroll, pauseOnFling);
-
-            //mRecyclerView.addOnScrollListener(listener);
-            //mRecyclerView.setOnScrollChangeListener(listener);
-            //mRecyclerView.setOnScrollListener(listener);
-
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -522,8 +514,9 @@ public class PhotosActivity extends ThemedActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /****SET THEME***/
-        RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
-        rw.setBackgroundColor(getBackgroundColor());
+       // RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
+
 
         headerImage = (ImageView) findViewById(R.id.header_image);
         Glide.with(this)

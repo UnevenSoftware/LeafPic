@@ -71,17 +71,21 @@ public class MadiaStoreHandler {
                 MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.MIME_TYPE,
                 MediaStore.Images.Media.WIDTH,
+                MediaStore.Images.Media.DATE_MODIFIED,
                 MediaStore.Images.Media.HEIGHT,
-                MediaStore.Files.FileColumns.PARENT,
-                MediaStore.Files.FileColumns.MEDIA_TYPE
+                MediaStore.Images.Media.SIZE
         };
 
-        Uri images = MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+        Uri images = MediaStore.Files.getContentUri("external");
+
+        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+a.ID+"'";
+
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,
-                MediaStore.Images.Media.BUCKET_ID + " = ?",
-                new String[]{a.ID}, " " + MediaStore.Images.Media.DATE_TAKEN + " DESC");
+                selectionImages,
+                null, " " + MediaStore.Images.Media.DATE_TAKEN + " DESC");
 
 
         if(cur != null) {
@@ -134,11 +138,14 @@ public class MadiaStoreHandler {
 
         Uri images = MediaStore.Files.getContentUri("external");
 
+        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+a.ID+"'";
+
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,
-                MediaStore.Files.FileColumns.PARENT + " = ?",
-                new String[]{a.ID}, " " + sort);
+                selectionImages,
+                null, " " + sort);
 
         if(cur != null) {
             if (cur.moveToFirst()) {
@@ -189,11 +196,15 @@ public class MadiaStoreHandler {
         };
 
         Uri images = MediaStore.Files.getContentUri("external");
+
+        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+id+"'";
+
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,
-                MediaStore.Files.FileColumns.PARENT + " = ?",
-                new String[]{id}, " " + sort);
+              selectionImages,
+                null, " " + sort);
 
         if(cur != null) {
             if (cur.moveToFirst()) {
@@ -233,10 +244,14 @@ public class MadiaStoreHandler {
         int c = 0;
         Uri images = MediaStore.Files.getContentUri("external");
         String[] projection = new String[]{ MediaStore.Files.FileColumns.PARENT };
+
+        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+id+"'";
+
         Cursor cur = context.getContentResolver().query(
                 images, projection,
-                MediaStore.Files.FileColumns.PARENT + " = ?",
-                new String[]{id}, null);
+                selectionImages,
+                null, null);
         if (cur != null) {
             c = cur.getCount();
             cur.close();
@@ -250,11 +265,15 @@ public class MadiaStoreHandler {
         String[] projection = new String[]{MediaStore.Images.Media.DATA};
 
         Uri images = MediaStore.Files.getContentUri("external");
+
+        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+a.ID+"'";
+
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,
-                MediaStore.Files.FileColumns.PARENT + " = ?",
-                new String[]{a.ID}, " " + MediaStore.Images.Media.DATE_TAKEN + " DESC LIMIT 1");
+                selectionImages,
+                null, " " + MediaStore.Images.Media.DATE_TAKEN + " DESC LIMIT 1");
 
         if(cur != null) {
             if (cur.moveToFirst()) {
