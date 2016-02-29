@@ -115,7 +115,7 @@ public class SettingsActivity extends ThemedActivity{
                     final TextView title = (TextView) Accent_dialogLayout.findViewById(R.id.cp_accent_title);
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_accent_card);
 
-                    colorPicker.setColors(ColorPalette.getDominantColors(getApplicationContext()));
+                    colorPicker.setColors(ColorPalette.getAccentColors(getApplicationContext()));
                     colorPicker.setSelectedColor(getAccentColor());
                     title.setBackgroundColor(getAccentColor());
 
@@ -164,17 +164,20 @@ public class SettingsActivity extends ThemedActivity{
 
                     final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
                     final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerPrimary);
+                    final LineColorPicker colorPicker2 = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerPrimary2);
                     final TextView title = (TextView) Accent_dialogLayout.findViewById(R.id.cp_primary_title);
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_primary_card);
 
-                    colorPicker.setColors(ColorPalette.getDominantColors(getApplicationContext()));
+                    colorPicker.setColors(ColorPalette.getBaseColors(getApplicationContext()));
                     colorPicker.setSelectedColor(getPrimaryColor());
 
-                    title.setBackgroundColor(getPrimaryColor());
+                    colorPicker2.setColors(ColorPalette.getColors(getApplicationContext(), colorPicker.getColor()));
+                    colorPicker2.setSelectedColor(colorPicker.getColor());
 
+                    title.setBackgroundColor(getPrimaryColor());
                     if (!isDarkTheme())
                         cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryLight));
-                     else cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
+                    else cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
 
                     colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
                         @Override
@@ -182,8 +185,21 @@ public class SettingsActivity extends ThemedActivity{
                             title.setBackgroundColor(c);
                             getWindow().setStatusBarColor(c);
                             bar.setBackgroundColor(c);
+
+                            //
+                            colorPicker2.setColors(ColorPalette.getColors(getApplicationContext(), colorPicker.getColor()));
+                            colorPicker2.setSelectedColor(colorPicker.getColor());
                         }
                     });
+                    colorPicker2.setOnColorChangedListener(new OnColorChangedListener() {
+                        @Override
+                        public void onColorChanged(int c) {
+                            title.setBackgroundColor(c);
+                            getWindow().setStatusBarColor(c);
+                            bar.setBackgroundColor(c);
+                        }
+                    });
+
                     PrimaryPikerDialog.setView(Accent_dialogLayout);
                     PrimaryPikerDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -196,7 +212,7 @@ public class SettingsActivity extends ThemedActivity{
                     PrimaryPikerDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             SharedPreferences.Editor editor = SP.edit();
-                            editor.putInt("primary_color", colorPicker.getColor());
+                            editor.putInt("primary_color", colorPicker2.getColor());
                             editor.apply();
                             updateTheme();
                             initUiTweaks();
@@ -204,6 +220,7 @@ public class SettingsActivity extends ThemedActivity{
                     });
                     PrimaryPikerDialog.show();
                     return false;
+
                 }
             });
 
