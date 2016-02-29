@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -257,7 +259,32 @@ public class PhotoPagerActivity extends ThemedActivity{
 
 
             case R.id.renamePhoto:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Rename Photo");
 
+                final EditText input = new EditText(this);
+                input.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
+
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                input.setPadding(40,40,40,40);
+
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String Type = photos.getCurrentPhoto().MIME;
+                        Type = Type.replace("image/","");
+                        photos.renamePhoto(photos.getCurrentPhoto().Path, input.getText().toString() +"."+ Type);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
                /* new MaterialDialog.Builder(this)
                         .title("Rename Media")
                         .inputType(InputType.TYPE_CLASS_TEXT)

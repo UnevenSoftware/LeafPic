@@ -18,6 +18,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputType;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -380,6 +382,29 @@ public class PhotosActivity extends ThemedActivity {
                 break;
 
             case R.id.renameAlbum:
+                AlertDialog.Builder dialogRenameAL = new AlertDialog.Builder(this);
+                dialogRenameAL.setTitle("Rename Album");
+                final EditText input = new EditText(this);
+
+                input.setHint(photos.FolderPath);
+
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                input.setPadding(40,40,40,40);
+                dialogRenameAL.setView(input);
+                dialogRenameAL.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        albums.renameAlbum(photos.FolderPath, input.getText().toString());
+                    }
+                });
+                dialogRenameAL.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                dialogRenameAL.show();
                 /*new MaterialDialog.Builder(this)
                         .title("Rename Album")
                         .content("insert a fucking NAME")
