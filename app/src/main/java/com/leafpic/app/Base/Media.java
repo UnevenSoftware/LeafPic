@@ -19,7 +19,9 @@ public class Media implements Parcelable {
 
 
     public boolean isGif(){
-        return MIME.equals("image/gif");
+        if ( MIME!=null && MIME.equals("image/gif")) return true;
+        else return false;
+        //return MIME.equals("image/gif");
     }
 
     public Media(String path) {

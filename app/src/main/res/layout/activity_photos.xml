@@ -84,7 +84,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/grid_photos"
         android:clipToPadding="false"
         android:background="@color/md_dark_background"

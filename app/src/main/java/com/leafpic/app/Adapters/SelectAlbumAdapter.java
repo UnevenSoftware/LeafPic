@@ -72,7 +72,6 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
         return albums.size();
     }
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout card_layout;
         ImageView picture;

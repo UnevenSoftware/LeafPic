@@ -406,7 +406,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 break;
 
             case R.id.excludeAlbumButton:
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
                         .setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
@@ -435,6 +434,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
+                builder1.show();
                 break;
 
             case R.id.hideAlbumButton:
