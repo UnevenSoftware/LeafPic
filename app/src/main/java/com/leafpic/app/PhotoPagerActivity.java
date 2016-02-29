@@ -3,13 +3,11 @@ package com.leafpic.app;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -31,7 +29,7 @@ import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
-import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -82,7 +80,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 photos.setContext(getApplicationContext());
 
             mViewPager = (ViewPager) findViewById(R.id.photos_pager);
-            adapter = new MediaPagerAdapter(getSupportFragmentManager(),photos.photos);
+            adapter = new MediaPagerAdapter(getSupportFragmentManager(),photos.medias);
             adapter.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -136,13 +134,13 @@ public class PhotoPagerActivity extends ThemedActivity{
                     String asd = b.getString("photos_indexes");
                     if (asd != null) {
                         StringUtils.showToast(getApplicationContext(), "moved ok");
-                        //Log.wtf("asdasdasdas", photos.photos.size() + "");
-                        //photos.removePhoto(Integer.valueOf(asd));
+                        //Log.wtf("asdasdasdas", medias.medias.size() + "");
+                        //medias.removePhoto(Integer.valueOf(asd));
                         // TODO remove photo moved from older album [porco dio]
-                        //Log.wtf("asdasdasdas", photos.photos.size() + "");
+                        //Log.wtf("asdasdasdas", medias.medias.size() + "");
                         //adapter.removeItemAt(Integer.valueOf(asd));
                         //mRecyclerView.removeViewAt(Integer.parseInt(asd));
-                        //photos.photos.remove(Integer.parseInt(asd));
+                        //medias.medias.remove(Integer.parseInt(asd));
                         //mRecyclerView.removeViewAt(Integer.valueOf(asd));
                         //adapter.notifyItemRemoved(Integer.parseInt(asd));
                         //adapter.notifyDataSetChanged();
@@ -204,7 +202,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 break;
 
             case R.id.shareButton:
-                String file_path = photos.photos.get(mViewPager.getCurrentItem()).Path;
+                String file_path = photos.medias.get(mViewPager.getCurrentItem()).Path;
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(StringUtils.getMimeType(file_path));
                 share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
@@ -220,7 +218,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                         //int index = mViewPager.getCurrentItem();
                         //mViewPager.removeView(mViewPager.getChildAt(index));
                         //TODO improve delete single photo
-                        //photos.deleteCurrentPhoto();
+                        //medias.deleteCurrentPhoto();
                         //adapter.notifyDataSetChanged();
                         //mViewPager.destroyDrawingCache();
                         //mViewPager.setCurrentItem(index + 1);
@@ -250,7 +248,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 break;
 
             case R.id.useAsIntent:
-                String file_path_use_as = photos.photos.get(mViewPager.getCurrentItem()).Path;
+                String file_path_use_as = photos.medias.get(mViewPager.getCurrentItem()).Path;
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
                 intent.setDataAndType(Uri.parse("file://" + file_path_use_as), "image/*");
                 intent.putExtra("jpg", StringUtils.getMimeType(file_path_use_as));
@@ -261,43 +259,26 @@ public class PhotoPagerActivity extends ThemedActivity{
             case R.id.renamePhoto:
 
                /* new MaterialDialog.Builder(this)
-                        .title("Rename Photo")
+                        .title("Rename Media")
                         .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(null, StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
+                        .input(null, StringUtils.getPhotoNamebyPath(medias.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                photos.renamePhoto(
-                                        photos.getCurrentPhoto().Path,
-                                        input + StringUtils.getPhotoExtensionbyPath(photos.getCurrentPhoto().Path));
+                                medias.renamePhoto(
+                                        medias.getCurrentPhoto().Path,
+                                        input + StringUtils.getPhotoExtensionbyPath(medias.getCurrentPhoto().Path));
                             }
                         }).show();*/
 
                 break;
             case R.id.details:
                 /****DATA****/
-                Photo f = photos.getCurrentPhoto();
-                String date = "", size = "", resolution = "";
+                Media f = photos.getCurrentPhoto();
+                String date = "";
                 SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");
                 date = s.format(new Time(Long.valueOf(f.DateTaken)));
 
-                String[] projection = new String[]{
-                        MediaStore.Images.Media.SIZE,
-                        MediaStore.Images.Media.HEIGHT,
-                        MediaStore.Images.Media.WIDTH
-                };
 
-                Cursor cursor = getContentResolver().query(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection,
-                        MediaStore.Images.Media.DATA + " = ?",
-                        new String[]{f.Path}, "");
-
-                if (cursor.moveToFirst()) {
-                    size = StringUtils.humanReadableByteCount(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)), true);
-                    resolution = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.WIDTH));
-                    resolution += "x" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.HEIGHT));
-                }
-                cursor.close();
 
                 /****** BEAUTIFUL DIALOG ****/
                 final AlertDialog.Builder DetailsDialog;
@@ -325,7 +306,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
                 final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
 
-                //b PhotoDetailsPreview.setImageURI(photos.getCurrentPhotoIndex());
+                //b PhotoDetailsPreview.setImageURI(medias.getCurrentPhotoIndex());
                 Glide.with(this)
                         .load(photos.getCurrentPhoto().Path)
                         .asBitmap()
@@ -333,8 +314,8 @@ public class PhotoPagerActivity extends ThemedActivity{
                         .placeholder(R.drawable.ic_empty)
                         .into(PhotoDetailsPreview);
 
-                Size.setText(size);
-                Resolution.setText(resolution);
+                Size.setText(f.getHumanReadableSize());
+                Resolution.setText(f.getResolution());
                 Data.setText(date);
                 Type.setText(photos.getCurrentPhoto().MIME);
 

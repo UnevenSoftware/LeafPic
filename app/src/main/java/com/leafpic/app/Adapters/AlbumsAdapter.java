@@ -2,6 +2,7 @@ package com.leafpic.app.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
@@ -17,10 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.MediaStoreSignature;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ImageLoaderUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 
@@ -48,17 +53,33 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(AlbumsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
         a.setPath();
 
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
+                //.signature(new MediaStoreSignature())
                 .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_empty)
                 .into(holder.picture);
-      //  ImageLoader.getInstance().displayImage("file://"+a.getPathCoverAlbum(),holder.picture,        ImageLoaderUtils.fullSizeOptions);
+
+        /*ImageSize targetSize = new ImageSize(80, 50); // result Bitmap will be fit to this size
+        ImageLoader.getInstance().loadImage(a.getPathCoverAlbum(), targetSize, ImageLoaderUtils.fullSizeOptions, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                holder.picture.setImageBitmap(loadedImage);
+            }
+        });*/
+        /*ImageSize targetSize = new ImageSize(200, 300); // result Bitmap will be fit to this size
+        ImageLoader.getInstance().loadImage(a.getPathCoverAlbum(), targetSize, ImageLoaderUtils.cropedOptions, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                holder.picture.setImageBitmap(loadedImage);
+            }
+        });*/
+        //ImageLoader.getInstance().displayImage(, (ImageAware) targetSize,ImageLoaderUtils.fullSizeOptions);
 
         holder.name.setTag(a.Path);
 

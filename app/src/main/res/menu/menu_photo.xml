@@ -25,15 +25,15 @@
         app:showAsAction="ifRoom">
         <menu>
             <item
-                    android:id="@+id/rotateDX"
+                    android:id="@+id/rotate_right_90"
                     android:title="Rotate right 90°"
                     android:icon="@mipmap/ic_rotate_right_white_24dp"/>
             <item
-                    android:id="@+id/rotateSX"
+                    android:id="@+id/rotate_left_90"
                     android:title="Rotate left 90°"
                     android:icon="@mipmap/ic_rotate_left_white_24dp"/>
             <item
-                    android:id="@+id/rotate180"
+                    android:id="@+id/rotate_180"
                     android:title="Rotate 180°"
                     android:icon="@mipmap/ic_replay_white_24dp"/>
         </menu>

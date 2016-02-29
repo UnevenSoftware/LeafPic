@@ -1,6 +1,9 @@
 package com.leafpic.app.Adapters;
 
+import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.MediaStoreSignature;
 import com.koushikdutta.ion.Ion;
-import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Base.Media;
 import com.leafpic.app.R;
-import com.leafpic.app.utils.ImageLoaderUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -22,13 +24,15 @@ import java.util.ArrayList;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
-    ArrayList<Photo> photos;
+    ArrayList<Media> medias;
 
+    BitmapDrawable drawable;// = ((BitmapDrawable) ContextCompat.getDrawable(holder.path.getContext(), R.drawable.ic_empty));
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<Photo> ph) {
-        photos = ph;
+    public PhotosAdapter(ArrayList<Media> ph ,Context context) {
+        medias = ph;
+        drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
     }
 
     @Override
@@ -40,9 +44,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(PhotosAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
-        Photo f = photos.get(position);
+        Media f = medias.get(position);
         Glide.clear(holder.imageView);//fix corruption
 
         if (f.isGif()) {
@@ -53,15 +57,16 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
 
-           // ImageLoader.getInstance().displayImage("file://" + f.Path, holder.imageView, ImageLoaderUtils.fullSizeOptions);
-
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
+                    .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), 0))
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
                     .into(holder.imageView);
         }
+
+
 
         holder.path.setTag(f.Path);
 
@@ -78,7 +83,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return photos.size();
+        return medias.size();
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -91,7 +96,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public void removeItemAt(int pos) {
         //Log.wtf("asdasd",getItemCount()+"");
-        //photos.remove(pos);
+        //medias.remove(pos);
         //notifyItemRemoved(pos);
         //Log.wtf("asdasd",getItemCount()+"");
         // notifyDataSetChanged();

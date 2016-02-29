@@ -1,27 +1,14 @@
 package com.leafpic.app.Adapters;
 
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.leafpic.app.Base.Photo;
+import com.leafpic.app.Base.Media;
 import com.leafpic.app.Fragments.GifFragment;
 import com.leafpic.app.Fragments.ImageFragment;
-import com.leafpic.app.R;
-import com.leafpic.app.utils.ImageLoaderUtils;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 
@@ -31,19 +18,19 @@ import java.util.ArrayList;
 
 public class MediaPagerAdapter extends FragmentPagerAdapter {
 
-    ArrayList<Photo> photos;
+    ArrayList<Media> medias;
     View.OnTouchListener listener;
 
     public void  setOnTouchListener(View.OnTouchListener l){ listener = l; }
 
-    public MediaPagerAdapter(FragmentManager fm, ArrayList<Photo> photos) {
+    public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> medias) {
         super(fm);
-        this.photos = photos;
+        this.medias = medias;
     }
 
     @Override
     public Fragment getItem(int pos) {
-        Photo p = photos.get(pos);
+        Media p = medias.get(pos);
 
         if (p.isGif()){
             GifFragment fragment = GifFragment.newInstance(p.Path);
@@ -56,8 +43,29 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+    public void removeFragmentat(int index){
+        medias.remove(index);
+        //getItem(index).onDestroy();
+
+        notifyDataSetChanged();
+        //medias.remove(index)
+    }
+
+    public void rotatepictureAt(int index){
+        ImageFragment asd = (ImageFragment) getItem(index);
+        asd.rotatePicture(0);
+        //getItem(index).re
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        // refresh all fragments when data set changed
+        return PagerAdapter.POSITION_NONE;
+    }
+
+
     @Override
     public int getCount() {
-        return photos.size();
+        return medias.size();
     }
 }

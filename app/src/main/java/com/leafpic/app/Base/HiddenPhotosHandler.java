@@ -91,14 +91,14 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
 
             String mime = StringUtils.getMimeType(temp.getAbsolutePath());
             if (mime != null && mime.contains("image"))
-                addPhoto(new Photo(
+                addPhoto(new Media(
                         temp.getAbsolutePath(),
                         String.valueOf(temp.lastModified()),
                         mime, dir.getAbsolutePath()));
         }
     }
 
-    void addPhoto(Photo contact) {
+    void addPhoto(Media contact) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PHOTO_FOLDER_PATH, StringUtils.quoteReplace(contact.FolderPath));
@@ -126,8 +126,8 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         return contactList;
     }
 
-    public ArrayList<Photo> getPhotosByAlbum(String path) {
-        ArrayList<Photo> contactList = new ArrayList<Photo>();
+    public ArrayList<Media> getPhotosByAlbum(String path) {
+        ArrayList<Media> contactList = new ArrayList<Media>();
         String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_FOLDER_PATH + ", " +
                 PHOTO_MIME + ", " + PHOTO_DATE_TAKEN +
                 " FROM " + TABLE_PHOTOS + " WHERE " +
@@ -140,7 +140,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                contactList.add(new Photo(
+                contactList.add(new Media(
                         StringUtils.quoteReverse(cursor.getString(0)),
                         cursor.getString(3),
                         cursor.getString(2),
@@ -151,8 +151,8 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         return contactList;
     }
 
-    public ArrayList<Photo> getFirstPhotosByAlbum(String path) {
-        ArrayList<Photo> contactList = new ArrayList<Photo>();
+    public ArrayList<Media> getFirstPhotosByAlbum(String path) {
+        ArrayList<Media> contactList = new ArrayList<Media>();
         String selectQuery = "SELECT  " + PHOTO_PATH + ", " + PHOTO_DATE_TAKEN + " FROM " + TABLE_PHOTOS + " WHERE " +
                 PHOTO_FOLDER_PATH + "='" + StringUtils.quoteReplace(path) + "' ORDER BY " + PHOTO_DATE_TAKEN + " DESC";
 
@@ -161,7 +161,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst())
-            contactList.add(new Photo(
+            contactList.add(new Media(
                     StringUtils.quoteReverse(cursor.getString(0)),
                     cursor.getString(1)));
 
