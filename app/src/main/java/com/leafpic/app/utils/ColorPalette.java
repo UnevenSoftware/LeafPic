@@ -12,6 +12,9 @@ import com.leafpic.app.R;
 public class ColorPalette {
     private final Context context;
 
+    public ColorPalette(Context context) {
+        this.context = context;
+    }
     public static int[] getAccentColors(Context context){
         return new int[]{
                 ContextCompat.getColor(context, R.color.md_red_500),
@@ -44,13 +47,6 @@ public class ColorPalette {
         return ContextCompat.getColor(context, R.color.act_bg_light);
     }
 
-
-
-
-
-
-    //ADDED
-
     public static int[] getBaseColors(Context context) {
         return new int[]{
                 ContextCompat.getColor(context, R.color.md_red_500),
@@ -75,10 +71,6 @@ public class ColorPalette {
         };
     }
 
-
-    public ColorPalette(Context context) {
-        this.context = context;
-    }
 
     public static int[] getColors(Context context, int c) {
         if (c == ContextCompat.getColor(context, R.color.md_red_500)) {
@@ -312,5 +304,4 @@ public class ColorPalette {
             };
         }
     }
-
 }
