@@ -399,7 +399,8 @@ public class PhotosActivity extends ThemedActivity {
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Album");
-                txt_edit.setHint(photos.FolderPath);
+                txt_edit.setHint(photos.FolderPath);//da fixxare
+
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
                 //txt_edit.getBackground().mutate().setColorFilter(getAccentColor(), PorterDuff.Mode.SRC_ATOP);//CAHNGE THE LINE COLOR
 
