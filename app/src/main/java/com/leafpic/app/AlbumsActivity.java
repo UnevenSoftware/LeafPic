@@ -104,14 +104,11 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
     public void initUiTweaks(){
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), getPrimaryColor()));
 
             if (isNavigationBarColored())
             getWindow().setNavigationBarColor(getPrimaryColor());
             else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
-        }
+
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -181,6 +178,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                     }
                 })
                 .build();
+        setRecentApp(getString(R.string.app_name));
 
         addHiddenFolder_FABEvent();
     }
