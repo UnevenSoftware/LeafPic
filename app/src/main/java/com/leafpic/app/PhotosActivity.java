@@ -2,22 +2,26 @@ package com.leafpic.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputType;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.Menu;
@@ -25,8 +29,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.PhotosAdapter;
@@ -51,7 +57,7 @@ public class PhotosActivity extends ThemedActivity {
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
-
+    SharedPreferences SP;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
@@ -380,22 +386,49 @@ public class PhotosActivity extends ThemedActivity {
                 break;
 
             case R.id.renameAlbum:
-                /*new MaterialDialog.Builder(this)
-                        .title("Rename Album")
-                        .content("insert a fucking NAME")
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(null, medias.DisplayName, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                               // TODO make this better
-                                    albums.renameAlbum(medias.FolderPath, input.toString());
-                                //onBackPressed();
-                                    //finish();
+                final AlertDialog.Builder RenameDialog;
+                if (isDarkTheme())
+                    RenameDialog = new AlertDialog.Builder(PhotosActivity.this, R.style.AlertDialog_Dark);
+                else
+                    RenameDialog = new AlertDialog.Builder(PhotosActivity.this, R.style.AlertDialog_Light);
 
-                                StringUtils.showToast(getApplicationContext(), "I have to fix this!");
+                final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
+                final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
+                final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
+                CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
-                            }
-                        }).show();*/
+                title.setBackgroundColor(getPrimaryColor());
+                title.setText("Rename Album");
+                txt_edit.setHint(photos.FolderPath);
+                txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
+                //txt_edit.getBackground().mutate().setColorFilter(getAccentColor(), PorterDuff.Mode.SRC_ATOP);//CAHNGE THE LINE COLOR
+
+                if (!isDarkTheme()){
+                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
+                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.cp_TextLight), PorterDuff.Mode.SRC_ATOP);
+                } else{
+                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
+                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark), PorterDuff.Mode.SRC_ATOP);
+                }
+                RenameDialog.setView(Rename_dialogLayout);
+                RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (txt_edit.length()!=0)
+                            albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
+                        else Toast.makeText(PhotosActivity.this, "You Must Write Something!", Toast.LENGTH_SHORT);
+                    }
+                });
+                RenameDialog.show();
                 break;
 
             case R.id.excludeAlbumButton:
@@ -530,9 +563,9 @@ public class PhotosActivity extends ThemedActivity {
         updateHeaderContent();
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(photos.DisplayName);
+        collapsingToolbarLayout.setTitle(photos.DisplayName);//photos.DisplayName
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
-        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(),android.R.color.transparent));
+        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
         collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
@@ -549,6 +582,11 @@ public class PhotosActivity extends ThemedActivity {
         });
 
         setRecentApp(photos.DisplayName);
+
+        SP = PreferenceManager.getDefaultSharedPreferences(PhotosActivity.this);
+        if(SP.getBoolean("set_colaps_toolbar", true)==false){
+            //mRecyclerView.setNestedScrollingEnabled(false);
+        }
     }
 
     private void updateHeaderContent() {

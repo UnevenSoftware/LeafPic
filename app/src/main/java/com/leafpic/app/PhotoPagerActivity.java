@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -22,8 +24,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
@@ -257,19 +261,51 @@ public class PhotoPagerActivity extends ThemedActivity{
 
 
             case R.id.renamePhoto:
+                final AlertDialog.Builder RenameDialog;
+                if (isDarkTheme())
+                    RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
+                else
+                    RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Light);
 
-               /* new MaterialDialog.Builder(this)
-                        .title("Rename Media")
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(null, StringUtils.getPhotoNamebyPath(medias.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                medias.renamePhoto(
-                                        medias.getCurrentPhoto().Path,
-                                        input + StringUtils.getPhotoExtensionbyPath(medias.getCurrentPhoto().Path));
-                            }
-                        }).show();*/
+                final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
+                final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
+                final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
+                CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
+                title.setBackgroundColor(getPrimaryColor());
+                title.setText("Rename Photo");
+                txt_edit.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
+                txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                if (!isDarkTheme()) {
+                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
+                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight), PorterDuff.Mode.SRC_ATOP);
+                } else {
+                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
+                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark), PorterDuff.Mode.SRC_ATOP);
+                }
+
+                RenameDialog.setView(Rename_dialogLayout);
+                RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String Type = photos.getCurrentPhoto().MIME;
+                        Type = Type.replace("image/","");
+                        if (txt_edit.length()!=0)
+                            photos.renamePhoto(photos.getCurrentPhoto().Path, txt_edit.getText().toString() +"."+ Type);
+                        else Toast.makeText(PhotoPagerActivity.this, "You Must Write Something!", Toast.LENGTH_SHORT);
+                    }
+                });
+                RenameDialog.show();
                 break;
             case R.id.details:
                 /****DATA****/
