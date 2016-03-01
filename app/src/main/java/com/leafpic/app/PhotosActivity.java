@@ -399,15 +399,19 @@ public class PhotosActivity extends ThemedActivity {
                 title.setText("Rename Album");
                 txt_edit.setHint(photos.FolderPath);
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
+                //txt_edit.getBackground().mutate().setColorFilter(getAccentColor(), PorterDuff.Mode.SRC_ATOP);//CAHNGE THE LINE COLOR
+
 
                 if (!isDarkTheme()){
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
                     txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
                     txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.cp_TextLight), PorterDuff.Mode.SRC_ATOP);
                 } else{
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
                     txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
                     txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark), PorterDuff.Mode.SRC_ATOP);
                 }
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
