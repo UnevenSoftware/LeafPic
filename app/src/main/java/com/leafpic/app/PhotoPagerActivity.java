@@ -26,6 +26,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
@@ -260,8 +261,6 @@ public class PhotoPagerActivity extends ThemedActivity{
 
             case R.id.renamePhoto:
                 final AlertDialog.Builder RenameDialog;
-
-                //SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
                 if (isDarkTheme())
                     RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
                 else
@@ -277,9 +276,15 @@ public class PhotoPagerActivity extends ThemedActivity{
                 txt_edit.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
 
-                if (!isDarkTheme())
+                if (!isDarkTheme()) {
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
-                else cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
+                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
+                } else {
+                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
+                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
+                }
 
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -292,7 +297,9 @@ public class PhotoPagerActivity extends ThemedActivity{
                     public void onClick(DialogInterface dialog, int which) {
                         String Type = photos.getCurrentPhoto().MIME;
                         Type = Type.replace("image/","");
-                        photos.renamePhoto(photos.getCurrentPhoto().Path, txt_edit.getText().toString() +"."+ Type);
+                        if (txt_edit.length()!=0)
+                            photos.renamePhoto(photos.getCurrentPhoto().Path, txt_edit.getText().toString() +"."+ Type);
+                        else Toast.makeText(PhotoPagerActivity.this, "You Must Write Something!", Toast.LENGTH_SHORT);
                     }
                 });
                 RenameDialog.show();
