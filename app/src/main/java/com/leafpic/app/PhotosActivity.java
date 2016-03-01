@@ -585,7 +585,7 @@ public class PhotosActivity extends ThemedActivity {
 
         SP = PreferenceManager.getDefaultSharedPreferences(PhotosActivity.this);
         if(SP.getBoolean("set_colaps_toolbar", true)==false){
-            mRecyclerView.setNestedScrollingEnabled(false);
+            //mRecyclerView.setNestedScrollingEnabled(false);
         }
     }
 
