@@ -297,7 +297,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             opt.setTitle(getString(R.string.hide_album_action));
         }
 
-        if (albums.getSelectedCount()==0) {
+        if (albums.getSelectedCount() == 0) {
             editmode = false;
             invalidateOptionsMenu();
         }

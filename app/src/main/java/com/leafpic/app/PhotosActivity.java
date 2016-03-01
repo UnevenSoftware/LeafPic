@@ -399,6 +399,7 @@ public class PhotosActivity extends ThemedActivity {
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Album");
+                title.setSelected(true);
                 txt_edit.setText(photos.DisplayName);//da fixxare
 
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
