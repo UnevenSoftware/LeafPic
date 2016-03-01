@@ -33,7 +33,6 @@ import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
@@ -45,9 +44,6 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-
-import uz.shift.colorpicker.LineColorPicker;
-import uz.shift.colorpicker.OnColorChangedListener;
 
 /**
  * Created by dnld on 18/02/16.
@@ -285,12 +281,6 @@ public class PhotoPagerActivity extends ThemedActivity{
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
                 else cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
 
-                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int c) {
-                        title.setBackgroundColor(c);
-                    }
-                });
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override

@@ -7,12 +7,12 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -45,8 +45,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import uz.shift.colorpicker.OnColorChangedListener;
 
 /**
  * Created by dnld on 12/12/15.
@@ -406,12 +404,6 @@ public class PhotosActivity extends ThemedActivity {
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
                 else cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
 
-                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int c) {
-                        title.setBackgroundColor(c);
-                    }
-                });
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
