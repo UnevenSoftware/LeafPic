@@ -272,7 +272,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
                 CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
-                title.setBackgroundColor(getAccentColor());
+                title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Photo");
                 txt_edit.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -306,35 +306,6 @@ public class PhotoPagerActivity extends ThemedActivity{
                     }
                 });
                 RenameDialog.show();
-
-                /*
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Rename Photo");
-
-                final EditText input = new EditText(this);
-                input.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
-
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                input.setPadding(40,40,40,40);
-
-                builder.setView(input);
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String Type = photos.getCurrentPhoto().MIME;
-                        Type = Type.replace("image/","");
-                        photos.renamePhoto(photos.getCurrentPhoto().Path, input.getText().toString() +"."+ Type);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-                */
                 break;
             case R.id.details:
                 /****DATA****/

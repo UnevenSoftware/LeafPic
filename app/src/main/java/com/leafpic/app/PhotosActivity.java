@@ -2,11 +2,13 @@ package com.leafpic.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -55,7 +57,7 @@ public class PhotosActivity extends ThemedActivity {
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
-
+    SharedPreferences SP;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
@@ -401,7 +403,6 @@ public class PhotosActivity extends ThemedActivity {
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
                 //txt_edit.getBackground().mutate().setColorFilter(getAccentColor(), PorterDuff.Mode.SRC_ATOP);//CAHNGE THE LINE COLOR
 
-
                 if (!isDarkTheme()){
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
                     txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
@@ -428,31 +429,6 @@ public class PhotosActivity extends ThemedActivity {
                     }
                 });
                 RenameDialog.show();
-                /*
-                AlertDialog.Builder dialogRenameAL = new AlertDialog.Builder(this);
-                dialogRenameAL.setTitle("Rename Album");
-                final EditText input = new EditText(this);
-
-                input.setHint(photos.FolderPath);
-
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                input.setPadding(40,40,40,40);
-                dialogRenameAL.setView(input);
-                dialogRenameAL.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        albums.renameAlbum(photos.FolderPath, input.getText().toString());
-                    }
-                });
-                dialogRenameAL.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                dialogRenameAL.show();
-                */
                 break;
 
             case R.id.excludeAlbumButton:
@@ -587,7 +563,7 @@ public class PhotosActivity extends ThemedActivity {
         updateHeaderContent();
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(photos.DisplayName);
+        collapsingToolbarLayout.setTitle(photos.DisplayName);//photos.DisplayName
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
         collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
@@ -606,6 +582,11 @@ public class PhotosActivity extends ThemedActivity {
         });
 
         setRecentApp(photos.DisplayName);
+
+        SP = PreferenceManager.getDefaultSharedPreferences(PhotosActivity.this);
+        if(SP.getBoolean("set_colaps_toolbar", true)==false){
+            mRecyclerView.setNestedScrollingEnabled(false);
+        }
     }
 
     private void updateHeaderContent() {
