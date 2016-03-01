@@ -274,7 +274,7 @@ public class PhotoPagerActivity extends ThemedActivity{
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Photo");
-                txt_edit.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));//da fixxare
+                txt_edit.setText(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
 
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
 
@@ -300,11 +300,12 @@ public class PhotoPagerActivity extends ThemedActivity{
                 RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String Type = photos.getCurrentPhoto().MIME;
+                        StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString());
                         Type = Type.replace("image/", "");
                         if (txt_edit.length() != 0)
-                            photos.renamePhoto(photos.getCurrentPhoto().Path, txt_edit.getText().toString() + "." + Type);
+                            photos.renamePhoto(photos.getCurrentPhoto().Path,StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString()));
                         else
-                            Toast.makeText(PhotoPagerActivity.this, "You Must Write Something!", Toast.LENGTH_SHORT);
+                            StringUtils.showToast(getApplicationContext(),"Insert Something!");
                     }
                 });
                 RenameDialog.show();

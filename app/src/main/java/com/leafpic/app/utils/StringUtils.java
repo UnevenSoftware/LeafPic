@@ -71,6 +71,15 @@ public class StringUtils {
         return fi.substring(fi.indexOf('.'), fi.length());
     }
 
+    public static String getPhotoRenamed(String path,String newName){
+        String res = null, fi;
+        String b[] = path.split("/");
+        fi = b[b.length - 1];
+        for (int i = 0; i < b.length-1; i++) res+=b[i]+"/";
+        res+=newName + fi.substring(fi.indexOf('.'), fi.length());
+        return res;
+    }
+
     public static String getPhotoPathByFolderPathAndName(String folderPath, String name) {
         return folderPath + "/" + name;
     }

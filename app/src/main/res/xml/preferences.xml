@@ -7,40 +7,6 @@
     android:layout_height="match_parent"
     >
     <PreferenceCategory
-        android:title="@string/general_setting"
-        >
-        <!-- YOUR NAME-->
-        <EditTextPreference
-            android:defaultValue="Android"
-            android:dialogMessage="Write your name"
-            android:dialogTitle="Name"
-            android:inputType="textPersonName"
-            android:key="username"
-            android:persistent="true"
-            android:summary="Pleas Provide Your Name"
-            android:title="Your Name" />
-        <SwitchPreference
-            android:title="Coolpasing Toolbar"
-            android:defaultValue="true"
-            android:summary="Coolapsing Toolbar When Open Album"
-            android:key="set_colaps_toolbar"
-            />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/security_setting">
-        <!--SECURITY - PSWORD FOR HIDDEN FOLDER-->
-        <EditTextPreference
-            android:defaultValue="Android"
-            android:dialogMessage="Set A password for access to Hidden Folder"
-            android:dialogTitle="Hidden Folder Password"
-            android:inputType="textPersonName"
-            android:key="password"
-            android:persistent="true"
-            android:summary="Pleas Provide a Password for access to hidden folders."
-            android:title="User Password" />
-    </PreferenceCategory>
-    <PreferenceCategory
         android:title="@string/theme_setting"
         >
         <SwitchPreference
@@ -72,5 +38,40 @@
             android:key="nav_bar"
             android:onClick="initUiTweaks"
             />
+        <SwitchPreference
+            android:title="Collapsing Toolbar"
+            android:defaultValue="true"
+            android:summary="Show Collapsing Toolbar when Album opened"
+            android:key="set_colaps_toolbar"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/general_setting"
+        >
+        <!-- YOUR NAME-->
+        <EditTextPreference
+            android:defaultValue="Android"
+            android:dialogMessage="Write your name"
+            android:dialogTitle="Name"
+            android:inputType="textPersonName"
+            android:key="username"
+            android:persistent="true"
+            android:summary="Pleas Provide Your Name"
+            android:title="Your Name" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/security_setting">
+        <!--SECURITY - PSWORD FOR HIDDEN FOLDER-->
+        <EditTextPreference
+            android:defaultValue="Android"
+            android:dialogMessage="Set A password for access to Hidden Folder"
+            android:dialogTitle="Hidden Folder Password"
+            android:inputType="textPersonName"
+            android:key="password"
+            android:persistent="true"
+            android:summary="Pleas Provide a Password for access to hidden folders."
+            android:title="User Password" />
     </PreferenceCategory>
 </PreferenceScreen>
