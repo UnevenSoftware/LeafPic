@@ -12,6 +12,7 @@
         app:cardCornerRadius="2dp"
         android:id="@+id/rename_card"
         >
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
