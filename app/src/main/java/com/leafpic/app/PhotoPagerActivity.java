@@ -33,6 +33,7 @@ import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
@@ -44,6 +45,9 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+
+import uz.shift.colorpicker.LineColorPicker;
+import uz.shift.colorpicker.OnColorChangedListener;
 
 /**
  * Created by dnld on 18/02/16.
@@ -259,6 +263,51 @@ public class PhotoPagerActivity extends ThemedActivity{
 
 
             case R.id.renamePhoto:
+                final AlertDialog.Builder RenameDialog;
+
+                //SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
+                if (isDarkTheme())
+                    RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
+                else
+                    RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Light);
+
+                final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
+                final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
+                final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
+                CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
+
+                title.setBackgroundColor(getAccentColor());
+                title.setText("Rename Photo");
+                txt_edit.setHint(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
+                txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                if (!isDarkTheme())
+                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
+                else cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
+
+                colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+                    @Override
+                    public void onColorChanged(int c) {
+                        title.setBackgroundColor(c);
+                    }
+                });
+                RenameDialog.setView(Rename_dialogLayout);
+                RenameDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String Type = photos.getCurrentPhoto().MIME;
+                        Type = Type.replace("image/","");
+                        photos.renamePhoto(photos.getCurrentPhoto().Path, txt_edit.getText().toString() +"."+ Type);
+                    }
+                });
+                RenameDialog.show();
+
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Rename Photo");
 
@@ -285,18 +334,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                     }
                 });
                 builder.show();
-               /* new MaterialDialog.Builder(this)
-                        .title("Rename Media")
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(null, StringUtils.getPhotoNamebyPath(medias.getCurrentPhoto().Path), new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                medias.renamePhoto(
-                                        medias.getCurrentPhoto().Path,
-                                        input + StringUtils.getPhotoExtensionbyPath(medias.getCurrentPhoto().Path));
-                            }
-                        }).show();*/
-
+                */
                 break;
             case R.id.details:
                 /****DATA****/
