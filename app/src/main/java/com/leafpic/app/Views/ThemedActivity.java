@@ -22,6 +22,7 @@ public class ThemedActivity extends AppCompatActivity {
     private int accentColor;
     private boolean darkTheme;
     private boolean coloredNavigationBar;
+    private boolean collapsing;
 
     public int getAccentColor() {
         return accentColor;
@@ -37,6 +38,10 @@ public class ThemedActivity extends AppCompatActivity {
 
     public boolean isDarkTheme() {
         return darkTheme;
+    }
+
+    public boolean thereIsCollapsing() {
+        return collapsing;
     }
 
     public int getBackgroundColor(){
@@ -61,6 +66,7 @@ public class ThemedActivity extends AppCompatActivity {
         this.accentColor = SP.getInt("accent_color",ContextCompat.getColor(getApplicationContext(),R.color.accent_green));//TEAL COLOR DEFAULT
         darkTheme = SP.getBoolean("set_dark_theme", false);
         coloredNavigationBar =SP. getBoolean("nav_bar", false);
+        collapsing = SP.getBoolean("set_colaps_toolbar",true);
     }
     public void setRecentApp(String text){
         BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));

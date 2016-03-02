@@ -169,10 +169,22 @@ public class SettingsActivity extends ThemedActivity{
                     CardView cv = (CardView) Accent_dialogLayout.findViewById(R.id.cp_primary_card);
 
                     colorPicker.setColors(ColorPalette.getBaseColors(getApplicationContext()));
-                    colorPicker.setSelectedColor(getPrimaryColor());
+                    for (int i : colorPicker.getColors())
+                        for (int i2 : ColorPalette.getColors(getBaseContext(), i))
+                            if (i2 == getPrimaryColor()) {
+                                colorPicker.setSelectedColor(i);
+                                colorPicker2.setColors(ColorPalette.getColors(getBaseContext(), i));
+                                colorPicker2.setSelectedColor(i2);
+                                break;
+                            }
+
+
+
+                    /*colorPicker.setSelectedColor(getPrimaryColor());
 
                     colorPicker2.setColors(ColorPalette.getColors(getApplicationContext(), colorPicker.getColor()));
-                    colorPicker2.setSelectedColor(colorPicker.getColor());
+
+                    colorPicker2.setSelectedColor(colorPicker.getColor());*/
 
                     title.setBackgroundColor(getPrimaryColor());
                     if (!isDarkTheme())

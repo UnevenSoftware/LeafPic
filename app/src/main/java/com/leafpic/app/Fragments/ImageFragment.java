@@ -11,6 +11,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
@@ -62,7 +69,7 @@ public class ImageFragment extends Fragment {
             picture.setOnTouchListener(null);
         }
     }
-
+    Bitmap mThumbnailBitmap;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,8 +77,61 @@ public class ImageFragment extends Fragment {
         picture = (SubsamplingScaleImageView) view.findViewById(R.id.media_view);
         preview_picture = (ImageView) view.findViewById(R.id.media_preview_view);
         final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
+        preview_picture.setVisibility(View.GONE);
 
-        ImageLoader.getInstance().displayImage("file://"+path, new ImageViewAware(preview_picture), ImageLoaderUtils.fullSizeOptions, new SimpleImageLoadingListener() {
+        Glide.with(this)
+                .load(path)
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .priority(Priority.IMMEDIATE)
+                .dontAnimate()
+                .override(width, height)
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        if (!isFromMemoryCache) {
+                            Log.e("ViewerPager", "Image not from cache:" + model + " " + target.toString());
+                        } else {
+                            Log.e("ViewerPager", "Image from cache:" + model + " " + target.toString());
+                        }
+                        return false;
+                    }
+                })
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(final Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        // final ViewerActivity activity = (ViewerActivity) getActivity();
+
+                        //recycleFullImageShowThumbnail();
+
+                        //mThumbnailBitmap = resource;
+                        preview_picture.setVisibility(View.VISIBLE);
+
+                        preview_picture.setImageBitmap(resource);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                picture.setImage(ImageSource.uri(path).dimensions(width, height), ImageSource.cachedBitmap(resource));
+                                //picture.setImage(ImageSource.bitmap(resource));
+                                preview_picture.setVisibility(View.GONE);
+                                picture.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+
+
+
+                    }
+                });
+
+
+
+       /* ImageLoader.getInstance().displayImage("file://"+path, new ImageViewAware(preview_picture), ImageLoaderUtils.fullSizeOptions, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 spinner.setVisibility(View.VISIBLE);
@@ -109,12 +169,26 @@ public class ImageFragment extends Fragment {
                 preview_picture.setVisibility(View.GONE);
                 spinner.setVisibility(View.GONE);
             }
-        });
+        });*/
 
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
         return view;
     }
+
+    private void recycleFullImageShowThumbnail() {
+        if (picture != null) {
+            picture.setOnTouchListener(null);
+            picture.recycle();
+            picture.setVisibility(View.INVISIBLE);
+        }
+
+
+        if (preview_picture != null) {
+            preview_picture.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     public void rotatePicture(int rotation) {
         Log.wtf("asdf" , picture.getOrientation()+"");

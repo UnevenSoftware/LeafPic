@@ -317,10 +317,10 @@ public class HandlingPhotos implements Parcelable {
         dest.writeByte((byte) (hidden ? 0x01 : 0x00));
     }
 
-    public void renamePhoto(String olderPath, String name){
+    public void renamePhoto(String olderPath, String path){
         try {
             File from = new File(olderPath);
-            File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
+            File to = new File(path);
             scanFile(new String[]{from.getAbsolutePath()});
             from.renameTo(to);
             scanFile(new String[]{to.getAbsolutePath()});

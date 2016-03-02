@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -132,7 +133,6 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setAdapter(adapter);
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mRecyclerView.setNestedScrollingEnabled(true);
             mRecyclerView.setFitsSystemWindows(true);
 
         }
@@ -399,7 +399,8 @@ public class PhotosActivity extends ThemedActivity {
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Album");
-                txt_edit.setHint(photos.FolderPath);//da fixxare
+                title.setSelected(true);
+                txt_edit.setText(photos.DisplayName);//da fixxare
 
                 txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
                 //txt_edit.getBackground().mutate().setColorFilter(getAccentColor(), PorterDuff.Mode.SRC_ATOP);//CAHNGE THE LINE COLOR
@@ -424,9 +425,13 @@ public class PhotosActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (txt_edit.length()!=0)
+                        if (txt_edit.length()!=0) {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
-                        else Toast.makeText(PhotosActivity.this, "You Must Write Something!", Toast.LENGTH_SHORT);
+                            photos.DisplayName=txt_edit.getText().toString();
+                            updateHeaderContent();
+                            //UpdatePhotos();//TODO update photos
+                        }
+                        else StringUtils.showToast(getApplicationContext(), "Insert Something!");
                     }
                 });
                 RenameDialog.show();
@@ -533,7 +538,7 @@ public class PhotosActivity extends ThemedActivity {
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
-
+        SP = PreferenceManager.getDefaultSharedPreferences(PhotosActivity.this);
         /**** Status Bar */
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -548,27 +553,7 @@ public class PhotosActivity extends ThemedActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /****SET THEME***/
-       // RecyclerView rw = (RecyclerView) findViewById(R.id.grid_photos);
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-
-
-        headerImage = (ImageView) findViewById(R.id.header_image);
-        Glide.with(this)
-                .load(photos.getPreviewAlbumImg())
-                .asBitmap()
-                .centerCrop()
-                .placeholder(R.drawable.ic_empty)
-                .into(headerImage);
-
-        headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-        updateHeaderContent();
-
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(photos.DisplayName);//photos.DisplayName
-        collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
-        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
-        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
-        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
@@ -581,34 +566,48 @@ public class PhotosActivity extends ThemedActivity {
 
             }
         });
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+
+
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        if(thereIsCollapsing()){
+            appBarLayout.setExpanded(true, true);
+            collapsingToolbarLayout.setTitle(photos.DisplayName);
+            collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
+            collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
+            collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
+            mRecyclerView.setNestedScrollingEnabled(true);
+            updateHeaderContent();
+        } else {
+            appBarLayout.setExpanded(false, false);
+            findViewById(R.id.album_card_divider).setVisibility(View.GONE);
+            mRecyclerView.setNestedScrollingEnabled(false);
+        }
 
         setRecentApp(photos.DisplayName);
-
-        SP = PreferenceManager.getDefaultSharedPreferences(PhotosActivity.this);
-        if(SP.getBoolean("set_colaps_toolbar", true)==false){
-            //mRecyclerView.setNestedScrollingEnabled(false);
-        }
     }
 
     private void updateHeaderContent() {
-        headerImage = (ImageView) findViewById(R.id.header_image);
-        Glide.with(this)
-                .load(photos.getPreviewAlbumImg())
-                .asBitmap()
-                .centerCrop()
-                .placeholder(R.drawable.ic_empty)
-                .into(headerImage);
-        headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+        if(thereIsCollapsing()) {
+            headerImage = (ImageView) findViewById(R.id.header_image);
+            Glide.with(this)
+                    .load(photos.getPreviewAlbumImg())
+                    .asBitmap()
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_empty)
+                    .into(headerImage);
+            headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
-        TextView textView = (TextView) findViewById(R.id.album_name);
-        textView.setText(photos.DisplayName);
-        textView = (TextView) findViewById(R.id.album_photos_count);
+            TextView textView = (TextView) findViewById(R.id.album_name);
+            textView.setText(photos.DisplayName);
+            textView = (TextView) findViewById(R.id.album_photos_count);
 
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
+            String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
-        textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> "+ (photos.medias.size() == 1 ? "Photo" : "Photos") +"</font>"));
-
+            textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
+                    "color='#FFFFFF'> " + (photos.medias.size() == 1 ? "Photo" : "Photos") + "</font>"));
+        }
 
     }
 
