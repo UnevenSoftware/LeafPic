@@ -399,11 +399,10 @@ public class PhotosActivity extends ThemedActivity {
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Album");
-                title.setSelected(true);
                 txt_edit.setText(photos.DisplayName);//da fixxare
+                txt_edit.selectAll();
 
-                txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
-                //txt_edit.getBackground().mutate().setColorFilter(getAccentColor(), PorterDuff.Mode.SRC_ATOP);//CAHNGE THE LINE COLOR
+                txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
                 if (!isDarkTheme()){
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
@@ -550,6 +549,7 @@ public class PhotosActivity extends ThemedActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /****SET THEME***/
@@ -583,6 +583,7 @@ public class PhotosActivity extends ThemedActivity {
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
             mRecyclerView.setNestedScrollingEnabled(false);
+            toolbar.setBackgroundColor(getPrimaryColor());
         }
 
         setRecentApp(photos.DisplayName);

@@ -275,8 +275,8 @@ public class PhotoPagerActivity extends ThemedActivity{
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText("Rename Photo");
                 txt_edit.setText(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
-
-                txt_edit.setInputType(InputType.TYPE_CLASS_TEXT);
+                txt_edit.selectAll();
+                txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
                 if (!isDarkTheme()) {
                     cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
@@ -303,7 +303,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                         StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString());
                         Type = Type.replace("image/", "");
                         if (txt_edit.length() != 0)
-                            photos.renamePhoto(photos.getCurrentPhoto().Path,StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString()));
+                            photos.renamePhoto(photos.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString()));
                         else
                             StringUtils.showToast(getApplicationContext(),"Insert Something!");
                     }
