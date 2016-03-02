@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp"
+        android:layout_margin="10dp"
+        android:id="@+id/theme_setting_card"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/theme_setting_title"
+                android:text="Theme"
+                android:padding="5dp"
+                android:textColor="@color/md_dark_background"
+                android:textSize="16sp"
+                />
+            <!--PRIMARY COLOR-->
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ll_primaryColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/PrimaryColor_Icon"
+                    android:src="@mipmap/ic_color_lens_black_24dp"
+                    android:padding="10dp"
+                    />
+                <TextView
+                    android:id="@+id/PrimaryColor_Item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_dark_background"
+                    android:text="PrimaryColor"
+                    />
+            </LinearLayout>
+            <!--ACCENT COLOR-->
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ll_accentColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accentColor_Icon"
+                    android:src="@mipmap/ic_colorize_black_24dp"
+                    android:padding="10dp"
+                    />
+                <TextView
+                    android:id="@+id/accentColor_Item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_dark_background"
+                    android:text="PrimaryColor"
+                    />
+            </LinearLayout>
+            <!--ACCENT COLOR-->
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ll_switch_DarkTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/DarkTheme_Item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textColor="@color/md_dark_background"
+                    android:textSize="16sp"
+                    android:text="Dark Theme"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/single"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:background="?android:selectableItemBackground"
+                    android:button="@null"
+                    android:hapticFeedbackEnabled="true"
+
+                    android:backgroundTint="@color/accent_indago"
+                    android:buttonTint="@color/colorAccent"
+                    android:textColor="@color/accent_amber"
+                    android:textColorHint="@color/accent_blue" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

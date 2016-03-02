@@ -1,7 +1,6 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,9 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -62,8 +59,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_albums);
+
+
         ImageLoaderUtils.initImageLoader(getApplicationContext());
 
         initUiTweaks();
@@ -464,7 +462,10 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                     builder2.show();
                 }
                 break;
-
+            case R.id.settingsTry_albums_action:
+                Intent asd = new Intent(AlbumsActivity.this, SettingTry.class);
+                startActivity(asd);
+                break;
             case R.id.action_camera:
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
