@@ -178,9 +178,6 @@ public class SettingActivity extends ThemedActivity {
                 editor.putInt("primary_color", colorPicker2.getColor());
                 editor.apply();
                 updateTheme();
-
-
-                /****************************/
                 setTheme();
             }
         });
@@ -290,6 +287,7 @@ public class SettingActivity extends ThemedActivity {
         //Linear Layout
 
         if(isDarkTheme()) {
+
             cvGeneral.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
             cvTheme.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
             bg.setBackgroundColor(getBackgroundColor());
@@ -301,6 +299,7 @@ public class SettingActivity extends ThemedActivity {
             // SET COLOR
             txtC.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
             imgCI.setImageResource(R.mipmap.ic_gradient_white_24dp);
+
 
             // THEME
             // TEXT
