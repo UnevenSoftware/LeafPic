@@ -57,7 +57,7 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
     compile 'com.github.paolorotolo:appintro:3.4.0'
-    compile 'com.drewnoakes:metadata-extractor:2.8.1'
+    compile 'com.balysv.materialmenu:material-menu-toolbar:1.5.4'
     compile 'com.yalantis:ucrop:1.2.4'
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
