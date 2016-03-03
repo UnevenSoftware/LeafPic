@@ -107,6 +107,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             getWindow().setNavigationBarColor(getPrimaryColor());
             else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
 
+
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
