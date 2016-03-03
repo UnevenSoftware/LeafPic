@@ -20,7 +20,7 @@
                   android:label="Select Album"
                   android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".SettingsActivityOld"
                   android:label="Setting"
                   android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
@@ -60,7 +60,7 @@
         </activity>
 
         <!--JIBES TRY-->
-        <activity android:name=".SettingTry"
+        <activity android:name=".SettingActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SETTINGTRY"/>

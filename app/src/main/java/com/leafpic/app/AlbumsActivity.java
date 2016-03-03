@@ -162,7 +162,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                                 checkPermissions();
                                 break;
                             case 6: //settings
-                                Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
+                                Intent intent = new Intent(AlbumsActivity.this, SettingsActivityOld.class);
                                 startActivity(intent);
                                 break;
                             case 7: //github
@@ -463,7 +463,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 }
                 break;
             case R.id.settingsTry_albums_action:
-                Intent asd = new Intent(AlbumsActivity.this, SettingTry.class);
+                Intent asd = new Intent(AlbumsActivity.this, SettingActivity.class);
                 startActivity(asd);
                 break;
             case R.id.action_camera:
