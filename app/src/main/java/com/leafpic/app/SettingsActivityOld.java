@@ -25,7 +25,7 @@ import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
 
 
-public class SettingsActivity extends ThemedActivity{
+public class SettingsActivityOld extends ThemedActivity{
     /* TODO rewrite all settings activity  */
 
     SharedPreferences SP;
@@ -104,11 +104,11 @@ public class SettingsActivity extends ThemedActivity{
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     final AlertDialog.Builder AccentPikerDialog;
-                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivityOld.this);
                     if (isDarkTheme())
-                        AccentPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Dark);
+                        AccentPikerDialog = new AlertDialog.Builder(SettingsActivityOld.this, R.style.AlertDialog_Dark);
                     else
-                        AccentPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Light);
+                        AccentPikerDialog = new AlertDialog.Builder(SettingsActivityOld.this, R.style.AlertDialog_Light);
 
                     final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
                     final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerAccent);
@@ -157,10 +157,10 @@ public class SettingsActivity extends ThemedActivity{
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     final AlertDialog.Builder PrimaryPikerDialog;
-                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+                    SP = PreferenceManager.getDefaultSharedPreferences(SettingsActivityOld.this);
 
-                    if (isDarkTheme()) PrimaryPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Dark);
-                    else PrimaryPikerDialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AlertDialog_Light);
+                    if (isDarkTheme()) PrimaryPikerDialog = new AlertDialog.Builder(SettingsActivityOld.this, R.style.AlertDialog_Dark);
+                    else PrimaryPikerDialog = new AlertDialog.Builder(SettingsActivityOld.this, R.style.AlertDialog_Light);
 
                     final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
                     final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerPrimary);
