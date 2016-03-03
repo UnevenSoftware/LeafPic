@@ -17,12 +17,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.AppCompat.NoActionBar"
-    android:orientation="vertical"
-    tools:context=".PhotoPagerActivity">
+    android:orientation="vertical">
 
-        <include layout="@layout/toolbar"
-            android:id="@+id/toolbar"/>
 
+            <include layout="@layout/toolbar"
+                android:id="@+id/toolbar"/>
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,3 +38,5 @@
         android:id="@+id/drawer_items"
         />
 </android.support.v4.widget.DrawerLayout>
+
+

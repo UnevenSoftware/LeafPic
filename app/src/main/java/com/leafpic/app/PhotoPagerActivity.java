@@ -27,7 +27,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
@@ -394,7 +393,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 break;
 
             case R.id.setting:
-                Intent intent2= new Intent(getApplicationContext(), SettingsActivity.class);
+                Intent intent2= new Intent(getApplicationContext(), SettingsActivityOld.class);
 
                 intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

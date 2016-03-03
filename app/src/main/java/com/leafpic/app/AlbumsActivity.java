@@ -62,9 +62,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_albums);
-        //ImageLoaderUtils.initImageLoader(getApplicationContext());
 
         initUiTweaks();
         checkPermissions();
@@ -163,7 +161,12 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                                 checkPermissions();
                                 break;
                             case 6: //settings
+<<<<<<< HEAD
 
+=======
+                                Intent intent = new Intent(AlbumsActivity.this, SettingsActivityOld.class);
+                                startActivity(intent);
+>>>>>>> 6d39f1754e06d96da18161d171cb7070dae0c8aa
                                 break;
                             case 7: //github
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DNLDsht/LeafPic/"));
@@ -173,7 +176,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         findViewById(R.id.settings_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(AlbumsActivity.this, SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -476,7 +479,10 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                     builder2.show();
                 }
                 break;
-
+            case R.id.settingsTry_albums_action:
+                Intent asd = new Intent(AlbumsActivity.this, SettingActivity.class);
+                startActivity(asd);
+                break;
             case R.id.action_camera:
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
