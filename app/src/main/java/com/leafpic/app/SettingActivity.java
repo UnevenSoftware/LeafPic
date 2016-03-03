@@ -88,6 +88,7 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_dark_theme", !isDarkTheme());
                 editor.apply();
+
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
@@ -103,9 +104,11 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("nav_bar", !isNavigationBarColored());
                 editor.apply();
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                updateTheme();
+                if (isNavigationBarColored())
+                    getWindow().setNavigationBarColor(getPrimaryColor());
+                else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+
             }
         });
     }
