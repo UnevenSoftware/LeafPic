@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@color/white_opaque"
+    android:clickable="true"
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="140dp"
+        android:clickable="true"
+        >
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

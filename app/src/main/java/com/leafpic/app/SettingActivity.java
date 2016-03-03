@@ -162,6 +162,10 @@ public class SettingActivity extends ThemedActivity {
                 title.setBackgroundColor(c);
                 getWindow().setStatusBarColor(c);
                 toolbar.setBackgroundColor(c);
+                if (isNavigationBarColored())
+                    getWindow().setNavigationBarColor(c);
+                else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+
             }
         });
 
@@ -181,6 +185,18 @@ public class SettingActivity extends ThemedActivity {
                 editor.apply();
                 updateTheme();
                 setTheme();
+            }
+        });
+        PrimaryPikerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                title.setBackgroundColor(getPrimaryColor());
+                getWindow().setStatusBarColor(getPrimaryColor());
+                toolbar.setBackgroundColor(getPrimaryColor());
+                if (isNavigationBarColored())
+                    getWindow().setNavigationBarColor(getPrimaryColor());
+                else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+
             }
         });
         PrimaryPikerDialog.show();
@@ -232,6 +248,13 @@ public class SettingActivity extends ThemedActivity {
                 editor.putInt("accent_color", colorPicker.getColor());
                 editor.apply();
                 updateTheme();
+                txtGT.setTextColor(getAccentColor());
+                txtTT.setTextColor(getAccentColor());
+            }
+        });
+        AccentPikerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
             }
@@ -332,8 +355,4 @@ public class SettingActivity extends ThemedActivity {
             bg.setBackgroundColor(getBackgroundColor());
         }
     }
-
-
-
-
 }
