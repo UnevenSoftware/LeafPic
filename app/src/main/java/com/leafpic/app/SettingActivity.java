@@ -67,8 +67,7 @@ public class SettingActivity extends ThemedActivity {
         });
 
 
-        /**** Switch ****/
-
+        /**** Switches ****/
         /*********** SW COLLAPSING TOOLBAR ************/
         SwitchCompat swCollaps=(SwitchCompat) findViewById(R.id.SetCollapsingToolbar);
         swCollaps.setChecked(thereIsCollapsing());
