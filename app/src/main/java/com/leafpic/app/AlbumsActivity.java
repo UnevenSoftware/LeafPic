@@ -26,13 +26,12 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.balysv.materialmenu.MaterialMenuDrawable;
-import com.balysv.materialmenu.MaterialMenuIcon;
-import com.balysv.materialmenu.extras.toolbar.MaterialMenuIconToolbar;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,7 +39,6 @@ import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.ImageLoaderUtils;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -66,7 +64,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
         initUiTweaks();
         checkPermissions();
-
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -117,6 +114,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
+        /**** STATUS BAR ***/
         getWindow().setStatusBarColor(getPrimaryColor());
 
         /**** ToolBar *****/
@@ -127,6 +125,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         //new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
         //toolbar.setNavigationIcon(materialMenu.getDrawable());
+
+        setDrawerTheme();
 
 
 
@@ -146,12 +146,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             public void onDrawerOpened(View drawerView) {
                 //Put your code here
                 //materialMenu.animateIconState(MaterialMenuDrawable.IconState.ARROW);
-
             }
         });
-
-
-        /*
+                            /*
                             case 1: //deafult
                                 hidden = false;
                                 checkPermissions();
@@ -161,18 +158,17 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                                 checkPermissions();
                                 break;
                             case 6: //settings
-<<<<<<< HEAD
+                            <<<<<<< HEAD
 
-=======
+                            =======
                                 Intent intent = new Intent(AlbumsActivity.this, SettingsActivityOld.class);
                                 startActivity(intent);
->>>>>>> 6d39f1754e06d96da18161d171cb7070dae0c8aa
+                            >>>>>>> 6d39f1754e06d96da18161d171cb7070dae0c8aa
                                 break;
                             case 7: //github
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DNLDsht/LeafPic/"));
                                 startActivity(browserIntent);
-                                break;*/
-
+                                break;
         findViewById(R.id.settings_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,20 +176,121 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 startActivity(intent);
             }
         });
-
-
+        */
         setRecentApp(getString(R.string.app_name));
-
         addHiddenFolder_FABEvent();
     }
+
+    public void setDrawerTheme(){
+        /****DRAWER THEME */
+        TextView DrawerTitle=(TextView) findViewById(R.id.LeafPic);
+        DrawerTitle.setTextColor(getBackgroundColor());
+
+        RelativeLayout DrawerHeader = (RelativeLayout) findViewById(R.id.Drawer_Header);
+        DrawerHeader.setBackgroundColor(getPrimaryColor());
+
+        LinearLayout DrawerBody = (LinearLayout) findViewById(R.id.Drawer_Body);
+        DrawerBody.setBackgroundColor(getBackgroundColor());
+
+        View DrawerDivider = (View) findViewById(R.id.Drawer_Divider);
+        DrawerDivider.setBackgroundColor(getAccentColor());
+        View DrawerDivider2 = (View) findViewById(R.id.Drawer_Body_Divider);
+        DrawerDivider2.setBackgroundColor(getAccentColor());
+
+        if (isDarkTheme()){
+            /**** TEXTVIEW ****/
+            TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);
+            TextView txtDH = (TextView) findViewById(R.id.Drawer_Hidden_Item);
+            TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
+            TextView txtDMap = (TextView) findViewById(R.id.Drawer_Map_Item);
+            //DIVIDER
+            TextView txtDS = (TextView) findViewById(R.id.Drawer_Setting_Item);
+            TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
+
+            //SET COLOR
+            txtDD.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextDark));
+            txtDH.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextDark));
+            txtDMoments.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextDark));
+            txtDMap.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextDark));
+            //DIVIDER
+            txtDS.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextDark));
+            txtDDonate.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextDark));
+
+            /**** ICONS ****/
+            // ICON
+            ImageView imgDD = (ImageView) findViewById(R.id.Drawer_Default_Icon);
+            ImageView imgDH = (ImageView) findViewById(R.id.Drawer_Hidden_Icon);
+            ImageView imgDMoments = (ImageView) findViewById(R.id.Drawer_Moments_Icon);
+            ImageView imgDMap = (ImageView) findViewById(R.id.Drawer_Map_Icon);
+            //DIVIDER
+            ImageView imgDS = (ImageView) findViewById(R.id.Drawer_Setting_Icon);
+            ImageView imgDDonate = (ImageView) findViewById(R.id.Drawer_Donate_Icon);
+
+            // SET ICON
+            imgDD.setImageResource(R.mipmap.ic_image_white_24dp);
+            imgDH.setImageResource(R.mipmap.ic_visibility_off_white_24dp);
+            imgDMoments.setImageResource(R.mipmap.ic_event_available_white_24dp);
+            imgDMap.setImageResource(R.mipmap.ic_location_on_white_24dp);
+            //DIVIDER
+            imgDS.setImageResource(R.mipmap.ic_settings_white_24dp);
+            imgDDonate.setImageResource(R.mipmap.ic_card_giftcard_white_24dp);
+        } else {
+            /**** TEXTVIEW ****/
+            TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);
+            TextView txtDH = (TextView) findViewById(R.id.Drawer_Hidden_Item);
+            TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
+            TextView txtDMap = (TextView) findViewById(R.id.Drawer_Map_Item);
+            //DIVIDER
+            TextView txtDS = (TextView) findViewById(R.id.Drawer_Setting_Item);
+            TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
+
+            //SET COLOR
+            txtDD.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextLight));
+            txtDH.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextLight));
+            txtDMoments.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextLight));
+            txtDMap.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextLight));
+            //DIVIDER
+            txtDS.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextLight));
+            txtDDonate.setTextColor(ContextCompat.getColor(AlbumsActivity.this, R.color.cp_TextLight));
+
+            /**** ICONS ****/
+            // ICON
+            ImageView imgDD = (ImageView) findViewById(R.id.Drawer_Default_Icon);
+            ImageView imgDH = (ImageView) findViewById(R.id.Drawer_Hidden_Icon);
+            ImageView imgDMoments = (ImageView) findViewById(R.id.Drawer_Moments_Icon);
+            ImageView imgDMap = (ImageView) findViewById(R.id.Drawer_Map_Icon);
+            //DIVIDER
+            ImageView imgDS = (ImageView) findViewById(R.id.Drawer_Setting_Icon);
+            ImageView imgDDonate = (ImageView) findViewById(R.id.Drawer_Donate_Icon);
+
+            // SET ICON
+            imgDD.setImageResource(R.mipmap.ic_image_black_24dp);
+            imgDH.setImageResource(R.mipmap.ic_visibility_off_black_24dp);
+            imgDMoments.setImageResource(R.mipmap.ic_event_available_black_24dp);
+            imgDMap.setImageResource(R.mipmap.ic_location_on_black_24dp);
+            //DIVIDER
+            imgDS.setImageResource(R.mipmap.ic_settings_black_24dp);
+            imgDDonate.setImageResource(R.mipmap.ic_card_giftcard_black_24dp);
+        }
+
+        /****DRAWER CLICK LISTENER****/
+        LinearLayout ll_DS=(LinearLayout) findViewById(R.id.ll_drawer_Setting);
+        ll_DS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AlbumsActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
 
             mDrawerLayout.closeDrawer(GravityCompat.START);
-    }
-        else
+    } else
             finish();
     }
 
