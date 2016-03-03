@@ -1,23 +1,21 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,43 +26,45 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.balysv.materialmenu.MaterialMenuIcon;
+import com.balysv.materialmenu.extras.toolbar.MaterialMenuIconToolbar;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ImageLoaderUtils;
 import com.leafpic.app.utils.StringUtils;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */{
+public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-    Drawer drawer;
+
+    DrawerLayout mDrawerLayout;
+
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
+
+    private GoogleApiClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_albums);
-        ImageLoaderUtils.initImageLoader(getApplicationContext());
+        //ImageLoaderUtils.initImageLoader(getApplicationContext());
 
         initUiTweaks();
         checkPermissions();
@@ -88,8 +88,17 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         });
         t.start();
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+            super.onPostCreate(savedInstanceState);
+        //materialMenu.s
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -102,60 +111,49 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     }
 
 
-    public void initUiTweaks(){
 
+    public void initUiTweaks() {
 
-            if (isNavigationBarColored())
+        /**** System UI *****/
+        if (isNavigationBarColored())
             getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
+        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
+        getWindow().setStatusBarColor(getPrimaryColor());
 
         /**** ToolBar *****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getPrimaryColor());
-
-        /**** Status Bar */
-        getWindow().setStatusBarColor(getPrimaryColor());
-
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.Relative_Album_layout);
-        rl.setBackgroundColor(getBackgroundColor());
-
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Albums").withIcon(FontAwesome.Icon.faw_picture_o);
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("Secretes").withIcon(FontAwesome.Icon.faw_eye_slash);
-        PrimaryDrawerItem item22 = new PrimaryDrawerItem().withName("Map").withIcon(FontAwesome.Icon.faw_globe);
-        PrimaryDrawerItem item21 = new PrimaryDrawerItem().withName("Timeline").withIcon(FontAwesome.Icon.faw_calendar_o);
-
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog);
-        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("GitHub").withIcon(FontAwesome.Icon.faw_github);
-        PrimaryDrawerItem item5 = new PrimaryDrawerItem().withName("Donate").withIcon(FontAwesome.Icon.faw_gift);
-
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.side_wall)
-                .withSelectionListEnabledForSingleProfile(false)
-                .build();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        //new MaterialMenuIcon(this, Color.WHITE, MaterialMenuDrawable.Stroke.THIN);
+        //toolbar.setNavigationIcon(materialMenu.getDrawable());
 
 
-        drawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withAccountHeader(headerResult)
-                .withTranslucentStatusBar(false)
-                .addDrawerItems(
-                        item1,
-                        item2,
-                        item21,
-                        item22,
-                        new DividerDrawerItem(),
-                        item3,
-                        item4,
-                        item5
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        switch (position) {
+
+
+
+
+        mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
+                mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            /* Called when drawer is closed */
+            public void onDrawerClosed(View view) {
+                //Put your code here
+                // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+
+            }
+
+            /* Called when a drawer is opened */
+            public void onDrawerOpened(View drawerView) {
+                //Put your code here
+                //materialMenu.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+
+            }
+        });
+
+
+        /*
                             case 1: //deafult
                                 hidden = false;
                                 checkPermissions();
@@ -165,34 +163,39 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                                 checkPermissions();
                                 break;
                             case 6: //settings
-                                Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
-                                startActivity(intent);
+
                                 break;
                             case 7: //github
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DNLDsht/LeafPic/"));
                                 startActivity(browserIntent);
-                                break;
-                            default:
-                                break;
-                        }
-                        return false;
-                    }
-                })
-                .build();
+                                break;*/
+
+        findViewById(R.id.settings_action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AlbumsActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         setRecentApp(getString(R.string.app_name));
 
         addHiddenFolder_FABEvent();
     }
 
     @Override
-    public void onBackPressed(){
-        if(drawer!= null && drawer.isDrawerOpen())
-            drawer.closeDrawer();
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
         else
             finish();
     }
 
     public void addHiddenFolder_FABEvent() {
+        /*
         FloatingActionButton btnAddFolder = (FloatingActionButton) findViewById(R.id.fab_add_folder);
 
         if (hidden) {
@@ -202,14 +205,14 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             btnAddFolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*new FolderChooserDialog.Builder(AlbumsActivity.this)
+                    new FolderChooserDialog.Builder(AlbumsActivity.this)
                             .chooseButton(R.string.md_choose_label)
                             .initialPath(Environment.getExternalStorageDirectory().getPath())
-                            .show();*/
+                            .show();
                 }
             });
         } else
-            btnAddFolder.setVisibility(View.INVISIBLE);
+            btnAddFolder.setVisibility(View.INVISIBLE);*/
     }
 
     /*@Override
@@ -227,7 +230,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 
-    public  void checkPermissions(){
+    public void checkPermissions() {
 
         if (ContextCompat.checkSelfPermission(AlbumsActivity.this, Manifest.permission.INTERNET)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -257,13 +260,14 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         getMenuInflater().inflate(R.menu.menu_albums, menu);
         return true;
     }
+
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         MenuItem opt;
 
         if (editmode) {
 
-            setOptionsAlbmuMenusItemsVisible(menu,true);
+            setOptionsAlbmuMenusItemsVisible(menu, true);
 
             opt = menu.findItem(R.id.action_camera);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -274,7 +278,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         } else {
 
-            setOptionsAlbmuMenusItemsVisible(menu,false);
+            setOptionsAlbmuMenusItemsVisible(menu, false);
 
             opt = menu.findItem(R.id.action_camera);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -347,11 +351,14 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 toolbar.setOnClickListener(null);
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {drawer.openDrawer();
+                    public void onClick(View v) {
+                        mDrawerLayout.openDrawer(GravityCompat.START);
                     }
                 });
             }
-        }catch (NullPointerException e){e.printStackTrace();}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -415,7 +422,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                             }
                         })
                         .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {}});
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
                 builder.show();
                 break;
 
@@ -461,7 +470,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                                 }
                             })
                             .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {}});
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
                     builder2.show();
                 }
                 break;
@@ -499,7 +510,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
         addHiddenFolder_FABEvent();
         if (hidden) {
-            //LOAD
             albums.loadPreviewHiddenAlbums();
         } else
             albums.loadPreviewAlbums();
@@ -544,5 +554,45 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         adapt.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Albums Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.leafpic.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Albums Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.leafpic.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
