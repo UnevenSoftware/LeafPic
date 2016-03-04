@@ -36,6 +36,14 @@ public class ColorPalette {
         return ContextCompat.getColor(context, R.color.act_bg_light);
     }
 
+    public static int getDarkTextColor(Context context){
+        return ContextCompat.getColor(context, R.color.cp_TextDark);
+    }
+
+    public static int getLightTextColor(Context context){
+        return ContextCompat.getColor(context, R.color.cp_TextLight);
+    }
+
     public static int[] getBaseColors(Context context) {
         return new int[]{
                 ContextCompat.getColor(context, R.color.md_red_500),

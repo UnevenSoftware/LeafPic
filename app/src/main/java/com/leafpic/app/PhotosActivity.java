@@ -58,7 +58,7 @@ public class PhotosActivity extends ThemedActivity {
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
-    SharedPreferences SP;
+
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
@@ -533,20 +533,11 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        if (isNavigationBarColored())
-            getWindow().setNavigationBarColor(getPrimaryColor());
-        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-
-        SP = PreferenceManager.getDefaultSharedPreferences(PhotosActivity.this);
-        /**** Status Bar */
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        applyTheme();
         setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -563,12 +554,10 @@ public class PhotosActivity extends ThemedActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
-
             }
         });
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
-
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         if(thereIsCollapsing()){
@@ -618,19 +607,4 @@ public class PhotosActivity extends ThemedActivity {
         getWindow().setEnterTransition(transition);
         getWindow().setReturnTransition(transition);
     }
-
-    protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent)
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-         else
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    }
-
-    /*
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-        overridePendingTransition(R.anim.comming_in, R.anim.comming_out);
-    }
-    */
 }

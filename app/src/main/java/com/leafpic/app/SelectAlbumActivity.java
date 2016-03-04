@@ -75,9 +75,8 @@ public class SelectAlbumActivity extends ThemedActivity{
                 onBackPressed();
             }
         });
-        getWindow().setStatusBarColor(getPrimaryColor());
 
-        /*FAB*/
+
         final FloatingActionButton fabhidden = (FloatingActionButton) findViewById(R.id.fab_hidden);
 
 
@@ -90,16 +89,11 @@ public class SelectAlbumActivity extends ThemedActivity{
         });
         loadAlbumPreview();
 
-        //Base Theme
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
-        if (isDarkTheme())
-            ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.act_bg_dark));
-        else ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.act_bg_light));
+        ll.setBackgroundColor(getBackgroundColor());
 
-        if (isNavigationBarColored())
-            getWindow().setNavigationBarColor(getPrimaryColor());
-        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
+       applyTheme();
         setRecentApp(getString(R.string.app_name));
 
     }

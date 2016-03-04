@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.R;
@@ -48,6 +49,20 @@ public class ThemedActivity extends AppCompatActivity {
         if(darkTheme) return ColorPalette.getDarkBackgroundColor(getApplicationContext());
         else return ColorPalette.getLightBackgroundColor(getApplicationContext());
     }
+
+    public int getTextColor(){
+        if(darkTheme) return ColorPalette.getDarkTextColor(getApplicationContext());
+        else return ColorPalette.getLightTextColor(getApplicationContext());
+    }
+
+    public void applyTheme() {
+        if (isNavigationBarColored())
+            getWindow().setNavigationBarColor(getPrimaryColor());
+        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+
+        getWindow().setStatusBarColor(getPrimaryColor());
+    }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -59,6 +74,13 @@ public class ThemedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         updateTheme();
+    }
+
+    protected void setStatusBarTranslucent(boolean makeTranslucent) {
+        if (makeTranslucent)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        else
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
 
     public void updateTheme(){
