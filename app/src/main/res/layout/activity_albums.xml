@@ -16,7 +16,6 @@
         android:orientation="vertical"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
-
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
@@ -25,11 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-
+            android:scrollbars="vertical"
         />
-
-
-</LinearLayout>
+    </LinearLayout>
 
 
     <include

@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -142,10 +143,16 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         LinearLayout DrawerBody = (LinearLayout) findViewById(R.id.Drawer_Body);
         DrawerBody.setBackgroundColor(getBackgroundColor());
 
+        ScrollView DrawerScroll = (ScrollView) findViewById(R.id.Drawer_Body_Scroll);
+        DrawerScroll.setBackgroundColor(getBackgroundColor());
+
+
+
+
         View DrawerDivider = findViewById(R.id.Drawer_Divider);
         DrawerDivider.setBackgroundColor(getAccentColor());
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);
-        DrawerDivider2.setBackgroundColor(getAccentColor());
+        DrawerDivider2.setBackgroundColor(ContextCompat.getColor(AlbumsActivity.this, R.color.drawer_transparent_gray));
 
         /** drawer items **/
         TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);
