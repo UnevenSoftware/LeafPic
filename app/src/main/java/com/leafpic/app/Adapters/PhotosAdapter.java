@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.MediaStoreSignature;
+import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.R;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
  * Created by dnld on 1/7/16.
  */
 
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
+public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate {
 
     ArrayList<Media> medias;
 
@@ -40,7 +42,24 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_card, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
+        /*return new ViewHolder(
+                MaterialRippleLayout.on(v)
+                        .rippleOverlay(true)
+                        .rippleAlpha(0.2f)
+                        .rippleColor(0xFF585858)
+                        .rippleHover(true)
+                        .create()
+        );*/
+
         return new ViewHolder(v);
+    }
+
+    @Override
+    public double aspectRatioForIndex(int index) {
+        Media f = medias.get(index);
+        if (index > medias.size()) return 1.0;
+        return f.width / (double) f.height;
+        // Return the aspect ratio of your image at the given index
     }
 
     @Override
@@ -65,7 +84,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .placeholder(R.drawable.ic_empty)
                     .into(holder.imageView);
         }
-
 
 
         holder.path.setTag(f.Path);

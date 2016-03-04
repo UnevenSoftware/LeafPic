@@ -12,6 +12,7 @@
         android:layout_height="140dp"
         android:id="@+id/Drawer_Header"
         android:clickable="true"
+        android:elevation="4dp"
         >
         <TextView
             android:layout_width="match_parent"
@@ -21,7 +22,7 @@
             android:gravity="center"
             android:textStyle="bold|italic"
             android:textSize="50sp"
-            android:textColor="@color/md_dark_background"
+            android:textColor="@color/md_white_1000"
             />
         <!--
         <ImageView

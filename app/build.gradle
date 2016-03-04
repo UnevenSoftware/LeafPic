@@ -4,7 +4,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
-
     }
 }
 
@@ -14,7 +13,6 @@ repositories {
     jcenter()
     maven  { url "http://repo1.maven.org/maven2" }
     maven {  url  "http://dl.bintray.com/dasar/maven" }
-    maven { url 'https://github.com/500px/greedo-layout-for-android/raw/master/releases/' }
 }
 
 android {
@@ -27,6 +25,14 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    defaultConfig {
+        generatedDensities = []
+    }
+
+    // This is handled for you by the 2.0+ Gradle Plugin
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
@@ -36,8 +42,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    productFlavors {
     }
 }
 
@@ -62,6 +66,5 @@ dependencies {
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-
     compile 'com.balysv:material-ripple:1.0.2'
 }

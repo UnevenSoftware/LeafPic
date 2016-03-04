@@ -2,16 +2,15 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
->
+    android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="5dp"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
-        android:layout_marginLeft="2dp"
+        app:cardElevation="5dp"
         >
 
         <RelativeLayout
@@ -29,12 +28,12 @@
                 android:id="@+id/selected_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:elevation="10dp"
-                android:src="@mipmap/ic_done_white_48dp"
-                android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:elevation="10dp"
+                android:src="@mipmap/ic_done_white_48dp"
+                android:visibility="invisible"
                 />
 
             <ImageView
@@ -54,22 +53,22 @@
 
             <LinearLayout
                 android:id="@+id/linear_card_text"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/album_card_divider"
+                android:orientation="vertical"
                 >
 
                 <TextView
                     android:id="@+id/album_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="10dp"
                     android:maxLines="1"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     />
@@ -77,10 +76,10 @@
                     android:id="@+id/album_photos_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingBottom="10dp"
                     android:maxLines="1"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     />
