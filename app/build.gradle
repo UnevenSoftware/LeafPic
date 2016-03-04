@@ -13,7 +13,6 @@ repositories {
     jcenter()
     maven  { url "http://repo1.maven.org/maven2" }
     maven {  url  "http://dl.bintray.com/dasar/maven" }
-    maven { url 'https://github.com/500px/greedo-layout-for-android/raw/master/releases/' }
 }
 
 android {
@@ -67,7 +66,5 @@ dependencies {
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-
     compile 'com.balysv:material-ripple:1.0.2'
-    compile 'com.fivehundredpx:greedo-layout:1.0.0'
 }
