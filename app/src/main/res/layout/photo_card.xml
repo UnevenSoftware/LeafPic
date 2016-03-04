@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-    android:layout_marginStart="2dp"
-        android:layout_marginTop="2dp"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="120dp"
+      android:layout_marginStart="2dp"
+      android:layout_marginTop="2dp"
 >
     <ImageView
-            android:id="@+id/selected_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:id="@+id/selected_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="10dp"
-            android:elevation="10dp"
-            android:src="@mipmap/ic_check_circle_white_18dp"
+        android:elevation="10dp"
+        android:src="@mipmap/ic_check_circle_white_18dp"
         android:visibility="invisible"
     />
     <ImageView
             android:id="@+id/type_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
+            android:layout_gravity="bottom|start"
             android:layout_marginBottom="1dp"
-        android:layout_marginStart="5dp"
+            android:layout_marginStart="5dp"
             android:elevation="10dp"
             android:src="@mipmap/ic_gif_white_24dp"
-        android:visibility="invisible"
+            android:visibility="invisible"
     />
     <TextView
         android:id="@+id/photo_path"
