@@ -69,4 +69,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 
     compile 'com.balysv:material-ripple:1.0.2'
+    compile 'com.fivehundredpx:greedo-layout:1.0.0'
 }
