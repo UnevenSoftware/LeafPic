@@ -38,7 +38,11 @@
                 android:id="@+id/general_setting_title"
                 android:text="General"
                 android:textStyle="bold"
-                android:padding="15dp"
+
+                android:paddingTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingBottom="15dp"
+
                 android:textColor="@color/md_dark_background"
                 android:textSize="16sp"
                 />
@@ -56,24 +60,32 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/collapsing_toolbar_Icon"
                         android:src="@mipmap/ic_gradient_black_24dp"
-                        android:padding="15dp"/>
+                        android:paddingTop="15dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="15dp"
+                        />
                     <TextView
                         android:id="@+id/collapsing_toolbar_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:text="Collapsing Toolbar"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+
                         />
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/SetCollapsingToolbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="15dp"
                         android:background="?android:selectableItemBackground"
                         android:button="@null"
                         android:hapticFeedbackEnabled="true"
+                        android:paddingTop="15dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="15dp"
                         />
                 </LinearLayout>
 
@@ -105,9 +117,12 @@
                 android:id="@+id/theme_setting_title"
                 android:text="Theme"
                 android:textStyle="bold"
-                android:padding="15dp"
+
                 android:textColor="@color/md_dark_background"
                 android:textSize="16sp"
+                android:paddingTop="15dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="15dp"
                 />
             <!--PRIMARY COLOR-->
             <com.balysv.materialripple.MaterialRippleLayout
@@ -128,16 +143,20 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/PrimaryColor_Icon"
                         android:src="@mipmap/ic_color_lens_black_24dp"
-                        android:padding="15dp"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="15dp"
                         />
                     <TextView
                         android:id="@+id/PrimaryColor_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
                         android:textSize="16sp"
                         android:textColor="@color/md_dark_background"
                         android:text="Primary Color"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -160,16 +179,20 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/accentColor_Icon"
                     android:src="@mipmap/ic_colorize_black_24dp"
-                    android:padding="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
                     />
                 <TextView
                     android:id="@+id/accentColor_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
                     android:textSize="16sp"
                     android:textColor="@color/md_dark_background"
                     android:text="Accent Color"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     />
             </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -187,24 +210,31 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/DarkTheme_Icon"
                     android:src="@mipmap/ic_invert_colors_black_24dp"
-                    android:padding="15dp"/>
+                    android:paddingTop="15dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
+                    />
                 <TextView
                     android:id="@+id/DarkTheme_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
                     android:textColor="@color/md_dark_background"
                     android:textSize="16sp"
                     android:text="Dark Theme"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     />
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/SetDarkTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="15dp"
                     android:background="?android:selectableItemBackground"
                     android:button="@null"
                     android:hapticFeedbackEnabled="true"
+                    android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
                     />
             </LinearLayout>
             <!--COLORED NAV BAR-->
@@ -220,24 +250,32 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/NavBar_Icon"
                     android:src="@mipmap/ic_video_label_black_24dp"
-                    android:padding="15dp"/>
+                    android:paddingTop="15dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
+                    />
                 <TextView
                     android:id="@+id/NavBar_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
                     android:textColor="@color/md_dark_background"
                     android:textSize="16sp"
                     android:text="Colored Nav Bar"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     />
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/SetColoredNavBar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="15dp"
+
                     android:background="?android:selectableItemBackground"
                     android:button="@null"
                     android:hapticFeedbackEnabled="true"
+                    android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
                     />
             </LinearLayout>
         </LinearLayout>

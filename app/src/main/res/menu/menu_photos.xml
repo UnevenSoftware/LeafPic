@@ -4,12 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PhotosActivity"
     >
+    <!-- TODO:FIX THIS > LIST OR GRID
+    <item
+        android:id="@+id/action_mode_view"
+        android:icon="@mipmap/ic_view_list_white_24dp"
+        android:title="modeView"
+        app:showAsAction="ifRoom"
+        />
+    -->
+    <item android:id="@+id/filterPhotos"
+        android:title="Sort"
+        android:orderInCategory="1"
+        android:icon="@mipmap/ic_filter_list_white_24dp"
+        app:showAsAction="ifRoom"
+        >
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context=".PhotosActivity">
+            <group  android:checkableBehavior="single">
+                <item
+                    android:id="@+id/all_media_filter"
+                    android:title="All"
+                    app:showAsAction="ifRoom"
+                    />
+                <item
+                    android:id="@+id/video_media_filter"
+                    android:title="Videos"
+                    app:showAsAction="ifRoom"
+                    />
+                <item
+                    android:id="@+id/image_media_filter"
+                    android:title="Images"
+                    app:showAsAction="ifRoom"
+                    />
+                <item
+                    android:id="@+id/gifs_media_filter"
+                    android:title="Gifs"
+                    app:showAsAction="ifRoom"
+                    />
+            </group>
+        </menu>
+    </item>
 
     <item android:id="@+id/sortPhotos"
         android:title="Sort"
         android:orderInCategory="1"
         android:icon="@mipmap/ic_sort_white_24dp"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -66,8 +107,8 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/excludeAlbumButton"
-        android:title="@string/exclude_album_action"
+        android:id="@+id/renameAlbum"
+        android:title="@string/rename_album_action"
         app:showAsAction="never"
         />
     <item
@@ -76,8 +117,8 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/renameAlbum"
-        android:title="@string/rename_album_action"
+        android:id="@+id/excludeAlbumButton"
+        android:title="@string/exclude_album_action"
         app:showAsAction="never"
         />
     <item
@@ -87,6 +128,10 @@
         />
     <item android:id="@+id/select_all_albums_action"
         android:title="Select all"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/setting"
+        android:title="Setting"
         app:showAsAction="never"
         />
 </menu>

@@ -13,18 +13,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.R;
 
 import java.util.ArrayList;
 
+//import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
+
 /**
  * Created by dnld on 1/7/16.
  */
 
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate {
+public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {//implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate
 
     ArrayList<Media> medias;
 
@@ -48,13 +49,14 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                         .rippleAlpha(0.2f)
                         .rippleColor(0xFF585858)
                         .rippleHover(true)
-                        .create()
+                        .rippleDuration(1)
+                        .create();
         );*/
 
         return new ViewHolder(v);
     }
 
-    @Override
+    //@Override
     public double aspectRatioForIndex(int index) {
         Media f = medias.get(index);
         if (index > medias.size()) return 1.0;

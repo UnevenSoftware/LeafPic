@@ -35,6 +35,8 @@
     <color name="grey_2">#424242</color>
     <color name="grey_3">#2b2b2b</color>
     <color name="transparent_gray">#96100e11</color>
+    <color name="drawer_transparent_gray">#CC727272</color>
+
     <!--GREEN-->
     <color name="green_1">#727272</color>
     <color name="fabOrange">#FF9800</color>

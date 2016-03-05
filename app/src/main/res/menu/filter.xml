@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group  android:checkableBehavior="single">
+        <item
+            android:id="@+id/all_media_filter"
+            android:title="All"
+            app:showAsAction="ifRoom"
+            />
+        <item
+            android:id="@+id/video_media_filter"
+            android:title="Videos"
+            app:showAsAction="ifRoom"
+            />
+        <item
+            android:id="@+id/image_media_filter"
+            android:title="Images"
+            app:showAsAction="ifRoom"
+            />
+        <item
+            android:id="@+id/gifs_media_filter"
+            android:title="Gifs"
+            app:showAsAction="ifRoom"
+            />
+    </group>
+</menu>

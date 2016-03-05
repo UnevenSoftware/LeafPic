@@ -393,10 +393,10 @@ public class PhotoPagerActivity extends ThemedActivity{
                 break;
 
             case R.id.setting:
-                Intent intent2= new Intent(getApplicationContext(), SettingsActivityOld.class);
+                Intent intent2= new Intent(getApplicationContext(), SettingActivity.class);
 
-                intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 
                 startActivity(intent2);
                 break;

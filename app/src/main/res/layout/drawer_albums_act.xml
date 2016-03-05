@@ -5,32 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@color/white_opaque"
+    android:id="@+id/DrawerMain"
     android:clickable="true">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:id="@+id/Drawer_Header"
         android:clickable="true"
-        android:elevation="4dp"
+        android:elevation="8dp"
         >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/LeafPic"
-            android:text="LeafPic"
-            android:gravity="center"
-            android:textStyle="bold|italic"
-            android:textSize="50sp"
-            android:textColor="@color/md_white_1000"
-            />
         <!--
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/side_wall"
-            android:scaleType="centerCrop"/>
-        -->
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/LeafPic"
+             android:text="LeafPic"
+             android:gravity="center"
+             android:textStyle="bold|italic"
+             android:textSize="50sp"
+             android:textColor="@color/md_white_1000"
+             />
+         -->
+         <ImageView
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:src="@drawable/leafpic_big"
+             />
+            <!--android:scaleType="centerCrop"-->
+
     </RelativeLayout>
     <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
     <View
@@ -38,232 +40,226 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/Drawer_Body"
+        android:id="@+id/Drawer_Body_Scroll"
         >
-        <!-- DEFAULT ALBUMS -->
-        <com.balysv.materialripple.MaterialRippleLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mrl_rippleAlpha="0.05"
-            app:mrl_rippleDelayClick="false"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/Drawer_Body"
+            android:scrollbars="vertical"
             >
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_drawer_Default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/Drawer_Default_Icon"
-                    android:padding="15dp"
-                    android:src="@mipmap/ic_image_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Drawer_Default_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Default Albums"
-                    />
-            </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
 
-        <!-- SECRETS ALBUMS -->
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mrl_rippleAlpha="0.05"
-            app:mrl_rippleDelayClick="false">
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_drawer_Hidden"
+            <!-- DEFAULT ALBUMS -->
+            <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false"
                 >
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Default"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Drawer_Hidden_Icon"
-                    android:padding="15dp"
-                    android:src="@mipmap/ic_visibility_off_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Drawer_Hidden_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Hidden Albums"
-                    />
-            </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-        <!-- MOMENTS -->
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mrl_rippleAlpha="0.05"
-            app:mrl_rippleDelayClick="false">
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_drawer_Moments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/Drawer_Moments_Icon"
-                    android:padding="15dp"
-                    android:src="@mipmap/ic_event_available_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Drawer_Moments_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Moments"
-                    />
-            </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Drawer_Default_Icon"
+                        android:padding="15dp"
+                        android:src="@mipmap/ic_image_black_24dp"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Default_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/md_dark_background"
+                        android:text="Default Albums"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
 
-        <!-- MAP -->
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mrl_rippleAlpha="0.05"
-            app:mrl_rippleDelayClick="false">
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_drawer_Map"
+            <!-- SECRETS ALBUMS -->
+            <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Hidden"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Drawer_Map_Icon"
-                    android:padding="15dp"
-                    android:src="@mipmap/ic_location_on_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Drawer_Map_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Map"
-                    />
-            </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-
-        <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
-        <View
-            android:id="@+id/Drawer_Body_Divider"
-            android:layout_width="match_parent"
-            android:padding="5dp"
-            android:layout_height="0dp"
-            />
-
-        <!-- SETTING -->
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mrl_rippleAlpha="0.05"
-            app:mrl_rippleDelayClick="false">
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_drawer_Setting"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Drawer_Hidden_Icon"
+                        android:padding="15dp"
+                        android:src="@mipmap/ic_visibility_off_black_24dp"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Hidden_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/md_dark_background"
+                        android:text="Hidden Albums"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <!-- MOMENTS -->
+            <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Moments"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Drawer_Setting_Icon"
-                    android:padding="15dp"
-                    android:src="@mipmap/ic_settings_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Drawer_Setting_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Settings"
-                    />
-            </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Drawer_Moments_Icon"
+                        android:padding="15dp"
+                        android:src="@mipmap/ic_event_available_black_24dp"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Moments_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/md_dark_background"
+                        android:text="Moments"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
 
-        <!--DONATE-->
-        <com.balysv.materialripple.MaterialRippleLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mrl_rippleAlpha="0.05"
-            app:mrl_rippleDelayClick="false">
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_drawer_Donate"
+            <!-- MAP -->
+            <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Map"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Drawer_Donate_Icon"
-                    android:padding="15dp"
-                    android:src="@mipmap/ic_card_giftcard_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Drawer_Donate_Item"
-                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Drawer_Map_Icon"
+                        android:padding="15dp"
+                        android:src="@mipmap/ic_location_on_black_24dp"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Map_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/md_dark_background"
+                        android:text="Map"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
+            <View
+                android:id="@+id/Drawer_Body_Divider"
+                android:layout_width="match_parent"
+                android:padding="5dp"
+                android:layout_height="1dp"
+
+                />
+
+            <!-- SETTING -->
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Setting"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Donate"
-                    />
-            </LinearLayout>
-        </com.balysv.materialripple.MaterialRippleLayout>
-        <!--
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Default"/>
-        <Button
-            android:id="@+id/settings_action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Settings"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Secrets"/>
-            -->
-    </LinearLayout>
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Drawer_Setting_Icon"
+                        android:padding="15dp"
+                        android:src="@mipmap/ic_settings_black_24dp"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Setting_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/md_dark_background"
+                        android:text="Settings"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <!--DONATE-->
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Donate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Drawer_Donate_Icon"
+                        android:padding="15dp"
+                        android:src="@mipmap/ic_card_giftcard_black_24dp"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Donate_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/md_dark_background"
+                        android:text="Donate"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

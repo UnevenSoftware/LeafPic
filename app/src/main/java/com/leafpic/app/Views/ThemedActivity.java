@@ -85,7 +85,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     public void updateTheme(){
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.accent_blue));//TEAL CARD BG DEFAULT;
-        this.accentColor = SP.getInt("accent_color",ContextCompat.getColor(getApplicationContext(),R.color.accent_green));//TEAL COLOR DEFAULT
+        this.accentColor = SP.getInt("accent_color",ContextCompat.getColor(getApplicationContext(),R.color.md_blue_200));//TEAL COLOR DEFAULT
         darkTheme = SP.getBoolean("set_dark_theme", false);
         coloredNavigationBar =SP. getBoolean("nav_bar", false);
         collapsing = SP.getBoolean("set_collaps_toolbar",true);
