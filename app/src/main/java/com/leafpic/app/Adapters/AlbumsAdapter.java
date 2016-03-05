@@ -48,6 +48,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                         .rippleAlpha(0.2f)
                         .rippleColor(0xFF585858)
                         .rippleHover(true)
+                        .rippleDuration(1)
                         .create()
         );
     }

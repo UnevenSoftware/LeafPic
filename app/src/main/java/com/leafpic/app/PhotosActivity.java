@@ -26,6 +26,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,10 +55,12 @@ public class PhotosActivity extends ThemedActivity {
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
-
+    FloatingActionButton fabCamera;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
+
+    boolean listmode=false;
 
     boolean editmode = false;
     PhotosAdapter adapter;
@@ -350,6 +354,22 @@ public class PhotosActivity extends ThemedActivity {
                 finishEditMode();
                 updateHeaderContent();
                 break;
+
+            /*TODO:FIX THIS >LIST OR GRID
+            case R.id.action_mode_view:
+                if(listmode)
+                    item.setIcon(R.mipmap.ic_view_module_white_24dp);
+                else
+                    item.setIcon(R.mipmap.ic_view_list_white_24dp);
+
+            break;
+            */
+            case R.id.filterPhotos:
+                    final PopupMenu popupfilter = new PopupMenu(PhotosActivity.this, findViewById(R.id.filterPhotos));
+                    popupfilter.setGravity(Gravity.AXIS_PULL_BEFORE);
+                    popupfilter.getMenuInflater().inflate(R.menu.filter, popupfilter.getMenu());
+                break;
+
             case R.id.sortPhotos:
                 if (!photos.hidden) {
                     final PopupMenu popup = new PopupMenu(PhotosActivity.this, findViewById(R.id.sortPhotos));
@@ -514,9 +534,19 @@ public class PhotosActivity extends ThemedActivity {
                 onBackPressed();
                 return true;
 
+            /*
             case R.id.action_camera:
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
+                return true;
+            */
+            case R.id.setting:
+                Intent intent2= new Intent(getApplicationContext(), SettingActivity.class);
+
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+                startActivity(intent2);
                 return true;
 
             default:
@@ -542,7 +572,7 @@ public class PhotosActivity extends ThemedActivity {
         /****SET THEME***/
         mRecyclerView.setBackgroundColor(getBackgroundColor());
 
-        FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
+        fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
 
         fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -570,10 +600,35 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setNestedScrollingEnabled(false);
             toolbar.setBackgroundColor(getPrimaryColor());
         }
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                /* HIDE FROM PLACE
+                if (dy > 0 && fabCamera.isShown())
+                    fabCamera.hide();
+                else if (dy < 0 && !fabCamera.isShown())
+                    fabCamera.show();
+                */
+                /*HIDE FROM DOWN*/
+                if(dy > 0) //check for scroll down
+                {
+                    hideViews();
+                }else
+                    showViews();
+
+            }
+        });
         setRecentApp(photos.DisplayName);
     }
+    private void hideViews() {
+        fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
 
+    private void showViews() {
+        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
     private void updateHeaderContent() {
         if(thereIsCollapsing()) {
             headerImage = (ImageView) findViewById(R.id.header_image);

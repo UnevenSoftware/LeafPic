@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +28,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -50,7 +54,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-
+    FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
 
     Toolbar toolbar;
@@ -114,6 +118,19 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+        /**** FAB ***/
+        fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+
+        fabCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                startActivity(i);
+            }
+        });
+
         setDrawerTheme();
         mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
                 mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -256,8 +273,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
             setOptionsAlbmuMenusItemsVisible(menu, true);
 
-            opt = menu.findItem(R.id.action_camera);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            //opt = menu.findItem(R.id.action_camera);
+            //opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             opt = menu.findItem(R.id.sort_action);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
@@ -267,8 +284,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
             setOptionsAlbmuMenusItemsVisible(menu, false);
 
-            opt = menu.findItem(R.id.action_camera);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            //opt = menu.findItem(R.id.action_camera);
+            //opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             opt = menu.findItem(R.id.sort_action);
             opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
@@ -363,6 +380,12 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.filterPhotos:
+                final PopupMenu popupfilter = new PopupMenu(AlbumsActivity.this, findViewById(R.id.filterPhotos));
+                popupfilter.setGravity(Gravity.AXIS_PULL_BEFORE);
+                popupfilter.getMenuInflater().inflate(R.menu.filter, popupfilter.getMenu());
+                break;
 
             case R.id.sort_action:
                 View sort_btn = findViewById(R.id.sort_action);
@@ -466,12 +489,13 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 Intent asd = new Intent(AlbumsActivity.this, SettingActivity.class);
                 startActivity(asd);
                 break;
+            /*
             case R.id.action_camera:
                 Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                 startActivity(i);
                 return true;
-            case R.id.filter_albums_action:
-                break;
+            */
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -543,6 +567,36 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         adapt.notifyDataSetChanged();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                /* HIDE FROM PLACE
+                if (dy > 0 && fabCamera.isShown())
+                    fabCamera.hide();
+                else if (dy < 0 && !fabCamera.isShown())
+                    fabCamera.show();
+                */
+                /*HIDE FROM DOWN*/
+                if(dy > 0) //check for scroll down
+                {
+                    hideViews();
+                }else
+                    showViews();
+
+            }
+        });
+    }
+
+    private void hideViews() {
+
+        fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    private void showViews() {
+        //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     @Override
