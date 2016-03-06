@@ -9,34 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
-import com.leafpic.app.utils.ImageLoaderUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 /**
  * Created by dnld on 18/02/16.
  */
 public class ImageFragment extends Fragment {
 
+    SubsamplingScaleImageView picture;
+    ImageView preview_picture;
+    Bitmap mThumbnailBitmap;
     private String path;
     private int width;
     private int height;
-    SubsamplingScaleImageView picture;
-    ImageView preview_picture;
     private View.OnTouchListener onTouchListener;
 
     public static ImageFragment newInstance(String path,int width,int height) {
@@ -69,23 +57,31 @@ public class ImageFragment extends Fragment {
             picture.setOnTouchListener(null);
         }
     }
-    Bitmap mThumbnailBitmap;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.image_pager_item, container, false);
         picture = (SubsamplingScaleImageView) view.findViewById(R.id.media_view);
+        picture.recycle();
         preview_picture = (ImageView) view.findViewById(R.id.media_preview_view);
         final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
-        preview_picture.setVisibility(View.GONE);
+        spinner.setVisibility(View.VISIBLE);
+        picture.setVisibility(View.INVISIBLE);
+        preview_picture.setVisibility(View.INVISIBLE);
 
-        Glide.with(this)
+        picture.setImage(ImageSource.uri(path).dimensions(width, height).tilingEnabled());
+        picture.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.GONE);
+
+       /* Glide.with(this)
                 .load(path)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .skipMemoryCache(true)
                 .priority(Priority.IMMEDIATE)
                 .dontAnimate()
-                .override(width, height)
+                        //.override(width, height)
                 .listener(new RequestListener<String, Bitmap>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
@@ -110,16 +106,17 @@ public class ImageFragment extends Fragment {
                         //recycleFullImageShowThumbnail();
 
                         //mThumbnailBitmap = resource;
-                        preview_picture.setVisibility(View.VISIBLE);
+                        //preview_picture.setVisibility(View.VISIBLE);
 
-                        preview_picture.setImageBitmap(resource);
+                        //preview_picture.setImageBitmap(resource);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                picture.setImage(ImageSource.uri(path).dimensions(width, height), ImageSource.cachedBitmap(resource));
+                                //picture.setImage(ImageSource.uri(path).dimensions(width, height), ImageSource.cachedBitmap(resource));
                                 //picture.setImage(ImageSource.bitmap(resource));
-                                preview_picture.setVisibility(View.GONE);
+                                picture.setImage(ImageSource.bitmap(resource));
                                 picture.setVisibility(View.VISIBLE);
+                                spinner.setVisibility(View.GONE);
                             }
                         });
 
@@ -127,7 +124,7 @@ public class ImageFragment extends Fragment {
 
 
                     }
-                });
+                });*/
 
 
 

@@ -130,7 +130,7 @@ public class PhotosActivity extends ThemedActivity {
 
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
-
+            System.gc();
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setFitsSystemWindows(true);
@@ -583,7 +583,6 @@ public class PhotosActivity extends ThemedActivity {
             }
         });
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        
         if(isTraslucentStatusBar()) {
             float[] hsv = new float[3];
             int color = getPrimaryColor();
@@ -592,6 +591,7 @@ public class PhotosActivity extends ThemedActivity {
             color = Color.HSVToColor(hsv);
             collapsingToolbarLayout.setStatusBarScrimColor(color);
         } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+
 
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
@@ -610,6 +610,7 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setNestedScrollingEnabled(false);
             toolbar.setBackgroundColor(getPrimaryColor());
         }
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
