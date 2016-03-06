@@ -118,6 +118,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        //NOY WORK
+        //setStatusBarTranslucent(true);
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);

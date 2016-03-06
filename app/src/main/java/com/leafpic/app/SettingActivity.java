@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +36,10 @@ public class SettingActivity extends ThemedActivity {
 
     TextView txtGT;
     TextView txtTT;
+
+    SwitchCompat swCollaps;
+    SwitchCompat swDarkTheme;
+    SwitchCompat swNavBar;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class SettingActivity extends ThemedActivity {
 
         /**** Switches ****/
         /*********** SW COLLAPSING TOOLBAR ************/
-        SwitchCompat swCollaps=(SwitchCompat) findViewById(R.id.SetCollapsingToolbar);
+        swCollaps=(SwitchCompat) findViewById(R.id.SetCollapsingToolbar);
         swCollaps.setChecked(thereIsCollapsing());
         swCollaps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -77,10 +82,13 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_collaps_toolbar", !thereIsCollapsing());
                 editor.apply();
+                updateSwitchColor(swCollaps);
             }
         });
+        updateSwitchColor(swCollaps);
+
         /*********** SW DARK THEME ********************/
-        SwitchCompat swDarkTheme=(SwitchCompat) findViewById(R.id.SetDarkTheme);
+        swDarkTheme=(SwitchCompat) findViewById(R.id.SetDarkTheme);
         swDarkTheme.setChecked(isDarkTheme());
         swDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -88,15 +96,22 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_dark_theme", !isDarkTheme());
                 editor.apply();
+                updateSwitchColor(swDarkTheme);
+                /*
+                if (swDarkTheme.isChecked())
+                    setTheme(R.style.AppTheme);
+                else setTheme(R.style.AppTheme_Dark);
+                */
 
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
             }
         });
+        updateSwitchColor(swDarkTheme);
 
         /*********** SW COLORED NAV BAR ****************/
-        SwitchCompat swNavBar=(SwitchCompat) findViewById(R.id.SetColoredNavBar);
+        swNavBar=(SwitchCompat) findViewById(R.id.SetColoredNavBar);
         swNavBar.setChecked(isNavigationBarColored());
         swNavBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -105,12 +120,24 @@ public class SettingActivity extends ThemedActivity {
                 editor.putBoolean("nav_bar", !isNavigationBarColored());
                 editor.apply();
                 updateTheme();
+                updateSwitchColor(swNavBar);
                 if (isNavigationBarColored())
                     getWindow().setNavigationBarColor(getPrimaryColor());
-                else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+                else
+                    getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
             }
         });
+        updateSwitchColor(swNavBar);
+    }
+
+    public void updateSwitchColor(SwitchCompat sw){
+        if(sw.isChecked())
+            sw.getThumbDrawable().setColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY);
+        else
+            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
+        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+
     }
 
     public void PrimaryColorPikerDialogShow(){
@@ -229,6 +256,9 @@ public class SettingActivity extends ThemedActivity {
                 title.setBackgroundColor(c);
                 txtGT.setTextColor(colorPicker.getColor());
                 txtTT.setTextColor(colorPicker.getColor());
+                if(swCollaps.isChecked()) swCollaps.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
+                if(swDarkTheme.isChecked()) swDarkTheme.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
+                if(swNavBar.isChecked()) swNavBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
             }
         });
 
@@ -240,6 +270,9 @@ public class SettingActivity extends ThemedActivity {
                 dialog.cancel();
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
+                updateSwitchColor(swCollaps);
+                updateSwitchColor(swDarkTheme);
+                updateSwitchColor(swNavBar);
             }
         });
         AccentPikerDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -250,6 +283,10 @@ public class SettingActivity extends ThemedActivity {
                 updateTheme();
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
+                updateSwitchColor(swCollaps);
+                updateSwitchColor(swDarkTheme);
+                updateSwitchColor(swNavBar);
+
             }
         });
         AccentPikerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -257,6 +294,9 @@ public class SettingActivity extends ThemedActivity {
             public void onDismiss(DialogInterface dialog) {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
+                updateSwitchColor(swCollaps);
+                updateSwitchColor(swDarkTheme);
+                updateSwitchColor(swNavBar);
             }
         });
         AccentPikerDialog.show();

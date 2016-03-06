@@ -9,8 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
-import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ColorPalette;
 
 /**
  * Created by dnld on 23/02/16.
@@ -77,8 +77,11 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent)
+        if (makeTranslucent) {
+            //getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setStatusBarColor(getPrimaryColor());
+        }
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
