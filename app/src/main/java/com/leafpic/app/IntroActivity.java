@@ -7,7 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.Toast;
+
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
@@ -19,11 +19,9 @@ public class IntroActivity extends AppIntro {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        addSlide(AppIntroFragment.newInstance("LeafPic", "metti qualcosa in sta app intro va Jibo :)",
-                R.mipmap.ic_launcher, Color.parseColor("#009688")));
 
-        addSlide(AppIntroFragment.newInstance("LeafPic", "The Faster Gallery for Your Android :)",
-                R.mipmap.ic_launcher, Color.parseColor("#009688")));
+        addSlide(AppIntroFragment.newInstance("Welcome To LeafPic!", "ColourFull Material Design Gallery!",
+                R.drawable.leafpic_big, Color.parseColor("#009688")));
 
         addSlide(AppIntroFragment.newInstance("Leaf Pic", Html.fromHtml("<b>DONY GHEEEY </b><br><i>la descrizione itallica spifina!!!</i>"),
                 R.mipmap.ic_launcher, Color.parseColor("#607D8B")));

@@ -59,6 +59,7 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
+
     boolean listmode=false;
 
     boolean editmode = false;
@@ -582,6 +583,16 @@ public class PhotosActivity extends ThemedActivity {
             }
         });
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        
+        if(isTraslucentStatusBar()) {
+            float[] hsv = new float[3];
+            int color = getPrimaryColor();
+            Color.colorToHSV(color, hsv);
+            hsv[2] *= 0.85f; // value component
+            color = Color.HSVToColor(hsv);
+            collapsingToolbarLayout.setStatusBarScrimColor(color);
+        } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -610,21 +621,20 @@ public class PhotosActivity extends ThemedActivity {
                     fabCamera.show();
                 */
                 /*HIDE FROM DOWN*/
-                if (dy > 0) //check for scroll down
+                if(dy > 0) //check for scroll down
                 {
                     hideViews();
-                } else
+                }else
                     showViews();
 
             }
         });
         setRecentApp(photos.DisplayName);
         /*
-        if (isDarkTheme())
+        if (SP.getBoolean("set_dark_theme",false))
             setTheme(R.style.AppTheme_Dark);
-        else setTheme(R.style.AppTheme);
+        else setTheme(R.style.AppTheme_Dark);
         */
-
     }
     private void hideViews() {
         fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
