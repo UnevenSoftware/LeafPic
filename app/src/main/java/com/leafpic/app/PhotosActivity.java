@@ -59,7 +59,6 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
-
     boolean listmode=false;
 
     boolean editmode = false;
@@ -603,8 +602,7 @@ public class PhotosActivity extends ThemedActivity {
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 /* HIDE FROM PLACE
                 if (dy > 0 && fabCamera.isShown())
                     fabCamera.hide();
@@ -612,15 +610,21 @@ public class PhotosActivity extends ThemedActivity {
                     fabCamera.show();
                 */
                 /*HIDE FROM DOWN*/
-                if(dy > 0) //check for scroll down
+                if (dy > 0) //check for scroll down
                 {
                     hideViews();
-                }else
+                } else
                     showViews();
 
             }
         });
         setRecentApp(photos.DisplayName);
+        /*
+        if (isDarkTheme())
+            setTheme(R.style.AppTheme_Dark);
+        else setTheme(R.style.AppTheme);
+        */
+
     }
     private void hideViews() {
         fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();

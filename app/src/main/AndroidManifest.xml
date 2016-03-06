@@ -61,7 +61,7 @@
 
         <!--JIBES TRY-->
         <activity android:name=".SettingActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SETTINGTRY"/>
                 <category android:name="android.intent.category.DEFAULT"/>

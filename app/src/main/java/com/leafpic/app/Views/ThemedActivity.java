@@ -9,8 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
-import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.R;
+import com.leafpic.app.utils.ColorPalette;
 
 /**
  * Created by dnld on 23/02/16.
@@ -24,6 +24,7 @@ public class ThemedActivity extends AppCompatActivity {
     private boolean darkTheme;
     private boolean coloredNavigationBar;
     private boolean collapsing;
+    private boolean statusbar;
 
     public int getAccentColor() {
         return accentColor;
@@ -31,6 +32,10 @@ public class ThemedActivity extends AppCompatActivity {
 
     public boolean isNavigationBarColored() {
         return coloredNavigationBar;
+    }
+
+    public boolean isTraslucentStatusBar() {
+        return statusbar;
     }
 
     public int getPrimaryColor() {
@@ -60,6 +65,10 @@ public class ThemedActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
+        //if (isTraslucentStatusBar())
+        //    setStatusBarTranslucent(true);
+        //else
+        //    setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(getPrimaryColor());
     }
 
@@ -77,18 +86,22 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent)
+        if (makeTranslucent) {
+            //getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setStatusBarColor(getPrimaryColor());
+        }
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
 
     public void updateTheme(){
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.accent_blue));//TEAL CARD BG DEFAULT;
-        this.accentColor = SP.getInt("accent_color",ContextCompat.getColor(getApplicationContext(),R.color.md_blue_200));//TEAL COLOR DEFAULT
+        this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_blue_200));//TEAL COLOR DEFAULT
         darkTheme = SP.getBoolean("set_dark_theme", false);
         coloredNavigationBar =SP. getBoolean("nav_bar", false);
-        collapsing = SP.getBoolean("set_collaps_toolbar",true);
+        collapsing = SP.getBoolean("set_collaps_toolbar", true);
+        statusbar = SP.getBoolean("set_traslucent_statusbar",true);
     }
     public void setRecentApp(String text){
         BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
