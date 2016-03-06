@@ -26,8 +26,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -582,6 +580,7 @@ public class PhotosActivity extends ThemedActivity {
                 startActivity(i);
             }
         });
+<<<<<<< HEAD
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         if(isTraslucentStatusBar()) {
             float[] hsv = new float[3];
@@ -592,7 +591,10 @@ public class PhotosActivity extends ThemedActivity {
             collapsingToolbarLayout.setStatusBarScrimColor(color);
         } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
+=======
+>>>>>>> refs/remotes/DNLDsht/master
 
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -631,6 +633,7 @@ public class PhotosActivity extends ThemedActivity {
             }
         });
         setRecentApp(photos.DisplayName);
+<<<<<<< HEAD
         /*
         if (SP.getBoolean("set_dark_theme",false))
             setTheme(R.style.AppTheme_Dark);
@@ -639,11 +642,10 @@ public class PhotosActivity extends ThemedActivity {
     }
     private void hideViews() {
         fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
+=======
+>>>>>>> refs/remotes/DNLDsht/master
     }
 
-    private void showViews() {
-        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-    }
     private void updateHeaderContent() {
         if(thereIsCollapsing()) {
             headerImage = (ImageView) findViewById(R.id.header_image);
@@ -664,7 +666,6 @@ public class PhotosActivity extends ThemedActivity {
             textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
                     "color='#FFFFFF'> " + (photos.medias.size() == 1 ? "Photo" : "Photos") + "</font>"));
         }
-
     }
 
     private void initActivityTransitions() {
