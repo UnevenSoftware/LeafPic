@@ -115,6 +115,9 @@ public class PhotoPagerActivity extends ThemedActivity{
     public void  onLowMemory(){
         super.onLowMemory();
         ImageLoader.getInstance().clearMemoryCache();
+        Glide.get(getApplicationContext()).clearMemory();
+        Glide.get(getApplicationContext()).trimMemory(TRIM_MEMORY_COMPLETE);
+        System.gc();
     }
 
     @Override

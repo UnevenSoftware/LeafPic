@@ -7,33 +7,35 @@
 
     >
     <LinearLayout
+        android:id="@+id/select_album_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:id="@+id/select_album_layout"
         >
 
-        <include layout="@layout/toolbar"
-                 android:id="@+id/toolbar"
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
                  android:background="@color/toolbar"
         />
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/grid_albums"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/grid_albums"
         />
 
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton
     android:id="@+id/fab_hidden"
         style="@style/fab2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:borderWidth="0dp"
         app:elevation="4dp"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"/>
+        app:layout_behavior="com.leafpic.app.Views.FABScrollBehavior" />
 </RelativeLayout>

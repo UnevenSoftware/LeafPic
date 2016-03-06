@@ -65,10 +65,10 @@ public class ThemedActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
-        //if (isTraslucentStatusBar())
-        //    setStatusBarTranslucent(true);
-        //else
-        //    setStatusBarTranslucent(false);
+        if (isTraslucentStatusBar())
+            setStatusBarTranslucent(true);
+        else
+            setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(getPrimaryColor());
     }
 
@@ -103,6 +103,7 @@ public class ThemedActivity extends AppCompatActivity {
         collapsing = SP.getBoolean("set_collaps_toolbar", true);
         statusbar = SP.getBoolean("set_traslucent_statusbar",true);
     }
+
     public void setRecentApp(String text){
         BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
         setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));

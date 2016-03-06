@@ -112,9 +112,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
     public void initUiTweaks() {
 
-        applyTheme();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getPrimaryColor());
+        applyTheme();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
@@ -164,8 +164,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
         ScrollView DrawerScroll = (ScrollView) findViewById(R.id.Drawer_Body_Scroll);
         DrawerScroll.setBackgroundColor(getBackgroundColor());
-
-
 
 
         View DrawerDivider = findViewById(R.id.Drawer_Divider);
@@ -569,18 +567,12 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         adapt.notifyDataSetChanged();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
-                /* HIDE FROM PLACE
-                if (dy > 0 && fabCamera.isShown())
-                    fabCamera.hide();
-                else if (dy < 0 && !fabCamera.isShown())
-                    fabCamera.show();
-                */
-                /*HIDE FROM DOWN*/
+
                 if(dy > 0) //check for scroll down
                 {
                     hideViews();
@@ -588,11 +580,10 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                     showViews();
 
             }
-        });
+        });*/
     }
 
     private void hideViews() {
-
         fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 

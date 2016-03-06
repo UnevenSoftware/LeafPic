@@ -129,7 +129,7 @@ public class PhotosActivity extends ThemedActivity {
 
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
-
+            System.gc();
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setFitsSystemWindows(true);
@@ -582,6 +582,7 @@ public class PhotosActivity extends ThemedActivity {
             }
         });
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -599,25 +600,6 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setNestedScrollingEnabled(false);
             toolbar.setBackgroundColor(getPrimaryColor());
         }
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                /* HIDE FROM PLACE
-                if (dy > 0 && fabCamera.isShown())
-                    fabCamera.hide();
-                else if (dy < 0 && !fabCamera.isShown())
-                    fabCamera.show();
-                */
-                /*HIDE FROM DOWN*/
-                if (dy > 0) //check for scroll down
-                {
-                    hideViews();
-                } else
-                    showViews();
-
-            }
-        });
         setRecentApp(photos.DisplayName);
         /*
         if (isDarkTheme())
