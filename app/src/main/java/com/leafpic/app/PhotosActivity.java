@@ -26,6 +26,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -572,7 +574,6 @@ public class PhotosActivity extends ThemedActivity {
 
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -580,7 +581,8 @@ public class PhotosActivity extends ThemedActivity {
                 startActivity(i);
             }
         });
-<<<<<<< HEAD
+
+        /*
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         if(isTraslucentStatusBar()) {
             float[] hsv = new float[3];
@@ -590,10 +592,7 @@ public class PhotosActivity extends ThemedActivity {
             color = Color.HSVToColor(hsv);
             collapsingToolbarLayout.setStatusBarScrimColor(color);
         } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
-
-=======
->>>>>>> refs/remotes/DNLDsht/master
-
+        */
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
@@ -612,44 +611,31 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setNestedScrollingEnabled(false);
             toolbar.setBackgroundColor(getPrimaryColor());
         }
-
+        setRecentApp(photos.DisplayName);
+        /*
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                /* HIDE FROM PLACE
-                if (dy > 0 && fabCamera.isShown())
-                    fabCamera.hide();
-                else if (dy < 0 && !fabCamera.isShown())
-                    fabCamera.show();
-                */
-                /*HIDE FROM DOWN*/
-                if(dy > 0) //check for scroll down
-                {
-                    hideViews();
-                }else
-                    showViews();
-
+                if (dy > 0) hideViews();
+                else showViews();
             }
         });
-        setRecentApp(photos.DisplayName);
-<<<<<<< HEAD
-        /*
-        if (SP.getBoolean("set_dark_theme",false))
-            setTheme(R.style.AppTheme_Dark);
-        else setTheme(R.style.AppTheme_Dark);
         */
     }
+
     private void hideViews() {
         fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
-=======
->>>>>>> refs/remotes/DNLDsht/master
+    }
+
+    private void showViews() {
+        //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     private void updateHeaderContent() {
         if(thereIsCollapsing()) {
             headerImage = (ImageView) findViewById(R.id.header_image);
-            Glide.with(this)
+            Glide.with(PhotosActivity.this)
                     .load(photos.getPreviewAlbumImg())
                     .asBitmap()
                     .centerCrop()

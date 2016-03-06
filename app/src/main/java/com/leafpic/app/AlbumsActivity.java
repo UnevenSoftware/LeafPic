@@ -108,8 +108,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         initUiTweaks();
     }
 
-
-
     public void initUiTweaks() {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -140,9 +138,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             public void onDrawerClosed(View view) {
                 //Put your code here
                 // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
-
             }
-
             /* Called when a drawer is opened */
             public void onDrawerOpened(View drawerView) {
                 //Put your code here
@@ -151,7 +147,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         });
 
         setRecentApp(getString(R.string.app_name));
-
     }
 
     public void setDrawerTheme(){
@@ -550,13 +545,10 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 } else {
                     Album album = albums.getAlbum(a.getTag().toString());
                     Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
-                    //
+
                     //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    //
 
-
-                    /****/
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
                     intent.putExtras(b);
@@ -570,20 +562,15 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         adapt.notifyDataSetChanged();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
+        /*
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-
-                if(dy > 0) //check for scroll down
-                {
-                    hideViews();
-                }else
-                    showViews();
-
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) hideViews();
+                else showViews();
             }
-        });*/
+        });
+        */
     }
 
     private void hideViews() {
