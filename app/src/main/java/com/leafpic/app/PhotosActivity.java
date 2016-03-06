@@ -612,7 +612,7 @@ public class PhotosActivity extends ThemedActivity {
             toolbar.setBackgroundColor(getPrimaryColor());
         }
         setRecentApp(photos.DisplayName);
-        /*
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -620,7 +620,7 @@ public class PhotosActivity extends ThemedActivity {
                 else showViews();
             }
         });
-        */
+
     }
 
     private void hideViews() {
