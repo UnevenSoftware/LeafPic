@@ -26,8 +26,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -581,8 +579,8 @@ public class PhotosActivity extends ThemedActivity {
                 startActivity(i);
             }
         });
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -601,20 +599,8 @@ public class PhotosActivity extends ThemedActivity {
             toolbar.setBackgroundColor(getPrimaryColor());
         }
         setRecentApp(photos.DisplayName);
-        /*
-        if (isDarkTheme())
-            setTheme(R.style.AppTheme_Dark);
-        else setTheme(R.style.AppTheme);
-        */
-
-    }
-    private void hideViews() {
-        fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
-    private void showViews() {
-        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-    }
     private void updateHeaderContent() {
         if(thereIsCollapsing()) {
             headerImage = (ImageView) findViewById(R.id.header_image);
@@ -635,7 +621,6 @@ public class PhotosActivity extends ThemedActivity {
             textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
                     "color='#FFFFFF'> " + (photos.medias.size() == 1 ? "Photo" : "Photos") + "</font>"));
         }
-
     }
 
     private void initActivityTransitions() {
