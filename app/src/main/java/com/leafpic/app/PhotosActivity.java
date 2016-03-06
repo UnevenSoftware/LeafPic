@@ -57,6 +57,7 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
+
     boolean listmode=false;
 
     boolean editmode = false;
@@ -581,10 +582,22 @@ public class PhotosActivity extends ThemedActivity {
         });
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+        if (isTraslucentStatusBar()) {
+            float[] hsv = new float[3];
+            int color = getPrimaryColor();
+            Color.colorToHSV(color, hsv);
+            hsv[2] *= 0.85f; // value component
+            color = Color.HSVToColor(hsv);
+            collapsingToolbarLayout.setStatusBarScrimColor(color);
+        } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
+
+
+       /* collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+*/
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
-        if(thereIsCollapsing()){
+        if (thereIsCollapsing()) {
             appBarLayout.setExpanded(true, true);
             collapsingToolbarLayout.setTitle(photos.DisplayName);
             collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
@@ -598,6 +611,8 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setNestedScrollingEnabled(false);
             toolbar.setBackgroundColor(getPrimaryColor());
         }
+
+
         setRecentApp(photos.DisplayName);
     }
 

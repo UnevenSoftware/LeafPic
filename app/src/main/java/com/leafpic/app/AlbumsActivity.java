@@ -550,10 +550,13 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 } else {
                     Album album = albums.getAlbum(a.getTag().toString());
                     Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
-
+                    //
                     //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    //
 
+
+                    /****/
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
                     intent.putExtras(b);
@@ -567,20 +570,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         adapt.notifyDataSetChanged();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-
-                if(dy > 0) //check for scroll down
-                {
-                    hideViews();
-                }else
-                    showViews();
-
-            }
-        });*/
     }
 
     private void hideViews() {
