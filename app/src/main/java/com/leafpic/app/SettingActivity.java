@@ -40,6 +40,7 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swCollaps;
     SwitchCompat swDarkTheme;
     SwitchCompat swNavBar;
+    SwitchCompat swStatusBar;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -87,6 +88,22 @@ public class SettingActivity extends ThemedActivity {
         });
         updateSwitchColor(swCollaps);
 
+        /*********** SW TRASLUCENT STATUS BAR ****************/
+        swStatusBar=(SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
+        swStatusBar.setChecked(isTraslucentStatusBar());
+        swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_traslucent_statusbar", !isTraslucentStatusBar());
+                editor.apply();
+                //updateTheme();
+                updateSwitchColor(swStatusBar);
+            }
+        });
+        updateSwitchColor(swStatusBar);
+
         /*********** SW DARK THEME ********************/
         swDarkTheme=(SwitchCompat) findViewById(R.id.SetDarkTheme);
         swDarkTheme.setChecked(isDarkTheme());
@@ -129,6 +146,8 @@ public class SettingActivity extends ThemedActivity {
             }
         });
         updateSwitchColor(swNavBar);
+
+
     }
 
     public void updateSwitchColor(SwitchCompat sw){
@@ -361,9 +380,13 @@ public class SettingActivity extends ThemedActivity {
             // TEXT AND ICON
             TextView txtC = (TextView) findViewById(R.id.collapsing_toolbar_Item);
             ImageView imgCI = (ImageView) findViewById(R.id.collapsing_toolbar_Icon);
+            TextView txtTSB = (TextView) findViewById(R.id.Traslucent_StatusBar_Item);
+            ImageView imgTSB = (ImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
             // SET COLOR
             txtC.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
             imgCI.setImageResource(R.mipmap.ic_gradient_white_24dp);
+            txtTSB.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
+            imgTSB.setImageResource(R.mipmap.ic_status_bar_white_24dp);
 
 
             // THEME
