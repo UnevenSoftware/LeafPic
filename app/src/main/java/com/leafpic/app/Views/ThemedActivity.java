@@ -2,6 +2,7 @@ package com.leafpic.app.Views;
 
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -65,11 +66,26 @@ public class ThemedActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
+        if (isTraslucentStatusBar()) {
+            //setStatusBarTranslucent(true);
+            float[] hsv = new float[3];
+            int color = getPrimaryColor();
+            Color.colorToHSV(color, hsv);
+            hsv[2] *= 0.85f; // value component
+            color = Color.HSVToColor(hsv);
+
+            getWindow().setStatusBarColor(color);
+        } else {
+            //setStatusBarTranslucent(false);
+            getWindow().setStatusBarColor(getPrimaryColor());
+        }
+            /*
         if (isTraslucentStatusBar())
             setStatusBarTranslucent(true);
         else
             setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(getPrimaryColor());
+        */
     }
 
     @Override

@@ -26,6 +26,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,6 +59,7 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
+
     boolean listmode=false;
 
     boolean editmode = false;
@@ -571,7 +574,6 @@ public class PhotosActivity extends ThemedActivity {
 
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -580,6 +582,17 @@ public class PhotosActivity extends ThemedActivity {
             }
         });
 
+        /*
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        if(isTraslucentStatusBar()) {
+            float[] hsv = new float[3];
+            int color = getPrimaryColor();
+            Color.colorToHSV(color, hsv);
+            hsv[2] *= 0.85f; // value component
+            color = Color.HSVToColor(hsv);
+            collapsingToolbarLayout.setStatusBarScrimColor(color);
+        } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+        */
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
 
@@ -599,12 +612,30 @@ public class PhotosActivity extends ThemedActivity {
             toolbar.setBackgroundColor(getPrimaryColor());
         }
         setRecentApp(photos.DisplayName);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) hideViews();
+                else showViews();
+            }
+        });
+
+    }
+
+    private void hideViews() {
+        fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    private void showViews() {
+        //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     private void updateHeaderContent() {
         if(thereIsCollapsing()) {
             headerImage = (ImageView) findViewById(R.id.header_image);
-            Glide.with(this)
+            Glide.with(PhotosActivity.this)
                     .load(photos.getPreviewAlbumImg())
                     .asBitmap()
                     .centerCrop()
