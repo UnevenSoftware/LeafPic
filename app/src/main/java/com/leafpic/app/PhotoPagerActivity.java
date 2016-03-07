@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
@@ -29,6 +31,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
@@ -49,7 +54,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by dnld on 18/02/16.
  */
-public class PhotoPagerActivity extends ThemedActivity{
+public class PhotoPagerActivity extends ThemedActivity {
 
     ViewPager mViewPager;
     HandlingPhotos photos;
@@ -58,11 +63,17 @@ public class PhotoPagerActivity extends ThemedActivity{
 
     Toolbar toolbar;
     boolean fullscreenmode;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
         //startSystemUI();
 
         initUiTweaks();
@@ -79,11 +90,11 @@ public class PhotoPagerActivity extends ThemedActivity{
 
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
-            if(photos!=null)
+            if (photos != null)
                 photos.setContext(getApplicationContext());
 
             mViewPager = (ViewPager) findViewById(R.id.photos_pager);
-            adapter = new MediaPagerAdapter(getSupportFragmentManager(),photos.medias);
+            adapter = new MediaPagerAdapter(getSupportFragmentManager(), photos.medias);
             adapter.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -95,7 +106,8 @@ public class PhotoPagerActivity extends ThemedActivity{
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
 
                 @Override
                 public void onPageSelected(int position) {
@@ -107,12 +119,23 @@ public class PhotoPagerActivity extends ThemedActivity{
                 }
             });
 
-        }catch (Exception e){e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
-    public void  onLowMemory(){
+    public void onResume() {
+        super.onResume();
+        initUiTweaks();
+    }
+
+    @Override
+    public void onLowMemory() {
         super.onLowMemory();
         ImageLoader.getInstance().clearMemoryCache();
         Glide.get(getApplicationContext()).clearMemory();
@@ -135,7 +158,7 @@ public class PhotoPagerActivity extends ThemedActivity{
             switch (requestCode) {
                 case SelectAlbumActivity.COPY_TO_ACTION:
                     StringUtils.showToast(getApplicationContext(), "copied ok");
-                break;
+                    break;
                 case SelectAlbumActivity.MOVE_TO_ACTION:
                     String asd = b.getString("photos_indexes");
                     if (asd != null) {
@@ -152,19 +175,19 @@ public class PhotoPagerActivity extends ThemedActivity{
                         //adapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
-                break;
+                    break;
                 case UCrop.REQUEST_CROP:
                     final Uri imageUri = UCrop.getOutput(data);
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             copyFileToDownloads(imageUri);
-                            DiskCacheUtils.removeFromCache("file://"+photos.getCurrentPhoto().Path, ImageLoader.getInstance().getDiskCache());
+                            DiskCacheUtils.removeFromCache("file://" + photos.getCurrentPhoto().Path, ImageLoader.getInstance().getDiskCache());
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);
                         }
                     } else
-                        StringUtils.showToast(getApplicationContext(),"errori random");
+                        StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
 
                 default:
@@ -220,7 +243,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        StringUtils.showToast(getApplicationContext(),"doesn't work properly");
+                        StringUtils.showToast(getApplicationContext(), "doesn't work properly");
                         //int index = mViewPager.getCurrentItem();
                         //mViewPager.removeView(mViewPager.getChildAt(index));
                         //TODO improve delete single photo
@@ -231,7 +254,9 @@ public class PhotoPagerActivity extends ThemedActivity{
                     }
                 });
                 builder1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int id) {}});
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
                 builder1.show();
 
                 return true;
@@ -302,12 +327,11 @@ public class PhotoPagerActivity extends ThemedActivity{
                 RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String Type = photos.getCurrentPhoto().MIME;
-                        StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString());
-                        Type = Type.replace("image/", "");
+                        StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString());
                         if (txt_edit.length() != 0)
-                            photos.renamePhoto(photos.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path,txt_edit.getText().toString()));
+                            photos.renamePhoto(photos.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString()));
                         else
-                            StringUtils.showToast(getApplicationContext(),"Insert Something!");
+                            StringUtils.showToast(getApplicationContext(), "Insert Something!");
                     }
                 });
                 RenameDialog.show();
@@ -320,10 +344,8 @@ public class PhotoPagerActivity extends ThemedActivity{
                 date = s.format(new Time(Long.valueOf(f.DateTaken)));
 
 
-
                 /****** BEAUTIFUL DIALOG ****/
                 final AlertDialog.Builder DetailsDialog;
-                SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
                 if (isDarkTheme())
                     DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
                 else
@@ -376,9 +398,8 @@ public class PhotoPagerActivity extends ThemedActivity{
                     Resolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
                     Type.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
                     Size.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                }
-                else {
-                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
+                } else {
+                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
                 }
 
                 DetailsDialog.setView(Details_DialogLayout);
@@ -396,7 +417,7 @@ public class PhotoPagerActivity extends ThemedActivity{
                 break;
 
             case R.id.setting:
-                Intent intent2= new Intent(getApplicationContext(), SettingActivity.class);
+                Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
 
                 //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -414,6 +435,7 @@ public class PhotoPagerActivity extends ThemedActivity{
 
     public void initUiTweaks() {
 
+        SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
@@ -436,10 +458,66 @@ public class PhotoPagerActivity extends ThemedActivity{
             }
         }, 1500);
 
+        if (SP.getBoolean("set_max_luminosita", false))
+            updateBrightness(1.0F);
+        else try {
+            float asd = android.provider.Settings.System.getInt(
+                    getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
+            asd = asd == 1.0F ? 255.0F : asd;
+            updateBrightness(asd);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
 
+      /*  Settings.System.putInt(getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION,
+                SP.getBoolean("set_picture_orientation", false) ? 1 : 0);*/
+        /*if (SP.getBoolean("set_picture_orientation", false)){
+
+        }
+        sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        if(SP.getBoolean("set_picture_orientation", false))
+            sensorManager.registerListener(new SensorEventListener() {
+                int orientation = -1;
+
+                @Override
+                public void onSensorChanged(SensorEvent event) {
+                    if (event.values[1] < 6.5 && event.values[1] > -6.5) {
+                        if (orientation != 1) {
+                            Log.d("Sensor", "Landscape");
+                            WindowManager.LayoutParams lp = getWindow().getAttributes();
+                            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                            getWindow().setAttributes(lp);
+                        }
+                        orientation = 1;
+                    } else {
+                        if (orientation != 0) {
+                            Log.d("Sensor", "Portrait");
+                            WindowManager.LayoutParams lp = getWindow().getAttributes();
+                            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                            getWindow().setAttributes(lp);
+                        }
+                        orientation = 0;
+                    }
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                    // TODO Auto-generated method stub
+
+                }
+            }, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+    */
+    }
+    //SensorManager sensorManager;
+
+    private void updateBrightness(float level) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness = level;
+        getWindow().setAttributes(lp);
     }
 
-    public UCrop.Options getUcropOptions(){
+    public UCrop.Options getUcropOptions() {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
@@ -448,9 +526,9 @@ public class PhotoPagerActivity extends ThemedActivity{
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
         options.setStatusBarColor(getPrimaryColor());
-    //fullSizeOptions.se
+        //fullSizeOptions.se
 
-       // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
+        // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
        /*
         Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
         fullSizeOptions.setMaxScaleMultiplier(5);
@@ -496,11 +574,11 @@ public class PhotoPagerActivity extends ThemedActivity{
         });
     }
 
-    private void setupSystemUI(){
+    private void setupSystemUI() {
         toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
                 .setDuration(0).start();
         getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
@@ -526,6 +604,46 @@ public class PhotoPagerActivity extends ThemedActivity{
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "PhotoPager Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.leafpic.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "PhotoPager Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.leafpic.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
 

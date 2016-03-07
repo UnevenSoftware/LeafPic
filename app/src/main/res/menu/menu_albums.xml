@@ -16,6 +16,7 @@
             <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/all_media_filter"
+                    android:checked="true"
                     android:title="All"
                     app:showAsAction="ifRoom"
                     />

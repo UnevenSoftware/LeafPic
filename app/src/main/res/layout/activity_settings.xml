@@ -2,49 +2,171 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/setting_background"
+    android:orientation="vertical"
     >
     <!--
     TOOLBAR
     -->
-    <include layout="@layout/toolbar"
+    <include
         android:id="@+id/toolbar"
+        layout="@layout/toolbar"
         android:background="@color/toolbar"
         android:windowActionBarOverlay="true"
         />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--
+            GENERAL
+            -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/preview_picture_setting_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/picture_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="15dp"
+                        android:text="Picture Preview"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_max_luminosita"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/ll_switch_max_luminosita_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_brightness_high_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/max_luminosita_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="Max Brightness"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+
+                            />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/set_max_luminosita"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingBottom="15dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp" />
+                    </LinearLayout>
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_picture_orientation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/ll_switch_picture_orientation_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_screen_rotation_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/picture_orientation_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="Picture Orientation"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+
+                            />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/set_picture_orientation"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingBottom="15dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
     <!--
     GENERAL
     -->
     <android.support.v7.widget.CardView
+        android:id="@+id/general_setting_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:id="@+id/general_setting_card"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="2dp"
         >
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
+                android:id="@+id/general_setting_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/general_setting_title"
-                android:text="General"
-                android:textStyle="bold"
+                android:paddingBottom="15dp"
+                android:paddingLeft="15dp"
 
                 android:paddingTop="15dp"
-                android:paddingLeft="15dp"
-                android:paddingBottom="15dp"
-
+                android:text="General"
                 android:textColor="@color/md_dark_background"
+
                 android:textSize="16sp"
+                android:textStyle="bold"
                 />
 
                 <!--COLAPS TOOLBAR BAR-->
@@ -56,24 +178,24 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/collapsing_toolbar_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/collapsing_toolbar_Icon"
-                        android:src="@mipmap/ic_gradient_black_24dp"
-                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp"
+                        android:src="@mipmap/ic_gradient_black_24dp"
                         />
                     <TextView
                         android:id="@+id/collapsing_toolbar_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp"
+                        android:text="Collapsing Toolbar"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
-                        android:text="Collapsing Toolbar"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
 
                         />
                     <android.support.v7.widget.SwitchCompat
@@ -83,9 +205,9 @@
                         android:background="?android:selectableItemBackground"
                         android:button="@null"
                         android:hapticFeedbackEnabled="true"
-                        android:paddingTop="15dp"
-                        android:paddingRight="20dp"
                         android:paddingBottom="15dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="15dp"
                         />
                 </LinearLayout>
 
@@ -98,24 +220,24 @@
                 android:orientation="horizontal"
                 >
                 <ImageView
+                    android:id="@+id/Traslucent_StatusBar_Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Traslucent_StatusBar_Icon"
-                    android:src="@mipmap/ic_status_bar_black_24dp"
-                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:src="@mipmap/ic_status_bar_black_24dp"
                     />
                 <TextView
                     android:id="@+id/Traslucent_StatusBar_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="Traslucent Status Bar"
                     android:textColor="@color/md_dark_background"
                     android:textSize="16sp"
-                    android:text="Traslucent Status Bar"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
 
                     />
                 <android.support.v7.widget.SwitchCompat
@@ -125,9 +247,9 @@
                     android:background="?android:selectableItemBackground"
                     android:button="@null"
                     android:hapticFeedbackEnabled="true"
-                    android:paddingTop="15dp"
-                    android:paddingRight="20dp"
                     android:paddingBottom="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
                     />
             </LinearLayout>
 
@@ -141,30 +263,30 @@
     THEME
     -->
     <android.support.v7.widget.CardView
+        android:id="@+id/theme_setting_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:id="@+id/theme_setting_card"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="2dp"
         >
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
+                android:id="@+id/theme_setting_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/theme_setting_title"
-                android:text="Theme"
-                android:textStyle="bold"
+                android:paddingBottom="15dp"
+                android:paddingLeft="20dp"
 
+                android:paddingTop="15dp"
+                android:text="Theme"
                 android:textColor="@color/md_dark_background"
                 android:textSize="16sp"
-                android:paddingTop="15dp"
-                android:paddingLeft="20dp"
-                android:paddingBottom="15dp"
+                android:textStyle="bold"
                 />
             <!--PRIMARY COLOR-->
             <com.balysv.materialripple.MaterialRippleLayout
@@ -181,24 +303,24 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/PrimaryColor_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/PrimaryColor_Icon"
-                        android:src="@mipmap/ic_color_lens_black_24dp"
-                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp"
+                        android:src="@mipmap/ic_color_lens_black_24dp"
                         />
                     <TextView
                         android:id="@+id/PrimaryColor_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/md_dark_background"
-                        android:text="Primary Color"
-                        android:paddingTop="15dp"
                         android:paddingBottom="15dp"
+                        android:paddingTop="15dp"
+                        android:text="Primary Color"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -217,24 +339,24 @@
                 android:orientation="horizontal"
                 >
                 <ImageView
+                    android:id="@+id/accentColor_Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/accentColor_Icon"
-                    android:src="@mipmap/ic_colorize_black_24dp"
-                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:src="@mipmap/ic_colorize_black_24dp"
                     />
                 <TextView
                     android:id="@+id/accentColor_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_dark_background"
-                    android:text="Accent Color"
-                    android:paddingTop="15dp"
                     android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="Accent Color"
+                    android:textColor="@color/md_dark_background"
+                    android:textSize="16sp"
                     />
             </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -248,24 +370,24 @@
                 android:orientation="horizontal"
                 >
                 <ImageView
+                    android:id="@+id/DarkTheme_Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/DarkTheme_Icon"
-                    android:src="@mipmap/ic_invert_colors_black_24dp"
-                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:src="@mipmap/ic_invert_colors_black_24dp"
                     />
                 <TextView
                     android:id="@+id/DarkTheme_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="Dark Theme"
                     android:textColor="@color/md_dark_background"
                     android:textSize="16sp"
-                    android:text="Dark Theme"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
                     />
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/SetDarkTheme"
@@ -274,9 +396,9 @@
                     android:background="?android:selectableItemBackground"
                     android:button="@null"
                     android:hapticFeedbackEnabled="true"
-                    android:paddingTop="15dp"
-                    android:paddingRight="20dp"
                     android:paddingBottom="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
                     />
             </LinearLayout>
             <!--COLORED NAV BAR-->
@@ -288,24 +410,24 @@
                 android:orientation="horizontal"
                 >
                 <ImageView
+                    android:id="@+id/NavBar_Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/NavBar_Icon"
-                    android:src="@mipmap/ic_video_label_black_24dp"
-                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:src="@mipmap/ic_video_label_black_24dp"
                     />
                 <TextView
                     android:id="@+id/NavBar_Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="Colored Nav Bar"
                     android:textColor="@color/md_dark_background"
                     android:textSize="16sp"
-                    android:text="Colored Nav Bar"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
                     />
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/SetColoredNavBar"
@@ -315,11 +437,13 @@
                     android:background="?android:selectableItemBackground"
                     android:button="@null"
                     android:hapticFeedbackEnabled="true"
-                    android:paddingTop="15dp"
-                    android:paddingRight="20dp"
                     android:paddingBottom="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
                     />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

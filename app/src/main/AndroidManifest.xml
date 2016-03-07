@@ -4,13 +4,14 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:largeHeap="true"
+        android:theme="@style/AppTheme">
 
         <activity android:name=".IntroActivity"
             android:label="Intro Activity"
@@ -19,11 +20,6 @@
         <activity android:name=".SelectAlbumActivity"
                   android:label="Select Album"
                   android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <activity android:name=".SettingsActivityOld"
-                  android:label="Setting"
-                  android:theme="@style/Theme.AppCompat.NoActionBar">
-        </activity>
 
         <activity android:name=".AlbumsActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -69,9 +65,9 @@
         </activity>
 
         <activity
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
