@@ -90,10 +90,16 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
 
         try {
-            Bundle data = getIntent().getExtras();
-            photos = data.getParcelable("album");
-            if (photos != null)
-                photos.setContext(getApplicationContext());
+            if (getIntent().getData() != null) {
+                photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
+                photos.setCurrentPhoto(getIntent().getData().getPath());
+
+            } else if (getIntent().getExtras() != null) {
+                Bundle data = getIntent().getExtras();
+                photos = data.getParcelable("album");
+                if (photos != null)
+                    photos.setContext(getApplicationContext());
+            }
 
             mViewPager = (ViewPager) findViewById(R.id.photos_pager);
             adapter = new MediaPagerAdapter(getSupportFragmentManager(), photos.medias);
@@ -124,6 +130,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.

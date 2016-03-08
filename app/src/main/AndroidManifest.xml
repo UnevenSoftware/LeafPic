@@ -43,15 +43,17 @@
         </activity>
 
         <activity android:name=".PhotoPagerActivity"
-            android:label="Album"
+            android:label="@string/app_name"
             android:parentActivityName=".PhotosActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PhotosActivity"/>
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.albumPhoto"/>
                 <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
 

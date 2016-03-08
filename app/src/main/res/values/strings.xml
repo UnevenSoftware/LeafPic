@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Leaf Pic</string>
+    <string name="app_name">LeafPic</string>
     <string name="action_settings">Settings</string>
     <string name="action_sort">Sort</string>
     <string name="action_camera">Camera</string>
