@@ -26,8 +26,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -595,41 +593,28 @@ public class PhotosActivity extends ThemedActivity {
         */
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+        collapsingToolbarLayout.setTitle(photos.DisplayName);
+        collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
+        collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
+        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+
         if(thereIsCollapsing()){
             appBarLayout.setExpanded(true, true);
-            collapsingToolbarLayout.setTitle(photos.DisplayName);
-            collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
-            collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
-            collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
             mRecyclerView.setNestedScrollingEnabled(true);
+            //appBarLayout.setEnabled(true);
+            //collapsingToolbarLayout.setEnabled(true);
             updateHeaderContent();
         } else {
+            //collapsingToolbarLayout.setEnabled(false);
+            //appBarLayout.setEnabled(false);
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
             mRecyclerView.setNestedScrollingEnabled(false);
-            toolbar.setBackgroundColor(getPrimaryColor());
+            //fabCamera.setNestedScrollingEnabled(true);
         }
         setRecentApp(photos.DisplayName);
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) hideViews();
-                else showViews();
-            }
-        });
-
-    }
-
-    private void hideViews() {
-        fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
-    }
-
-    private void showViews() {
-        //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     private void updateHeaderContent() {

@@ -29,6 +29,122 @@
             GENERAL
             -->
             <android.support.v7.widget.CardView
+                android:id="@+id/general_setting_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="2dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/general_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/general"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        />
+
+                        <!--COLAPS TOOLBAR BAR-->
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_switch_CollapsingToolBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <ImageView
+                                android:id="@+id/collapsing_toolbar_Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="15dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="15dp"
+                                android:src="@mipmap/ic_gradient_black_24dp"
+                                />
+                            <TextView
+                                android:id="@+id/collapsing_toolbar_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="15dp"
+                                android:paddingTop="15dp"
+                                android:text="@string/collapsing_toolbar"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+
+                                />
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/SetCollapsingToolbar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="?android:selectableItemBackground"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:paddingBottom="15dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="15dp"
+                                />
+                        </LinearLayout>
+
+                    <!-- TRASLUCENT STATUS BAR-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_TraslucentStatusBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:id="@+id/Traslucent_StatusBar_Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_status_bar_black_24dp"
+                            />
+                        <TextView
+                            android:id="@+id/Traslucent_StatusBar_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="@string/traslucent_statusbar"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetTraslucentStatusBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingBottom="15dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!--
+            PICTURE SETTING
+            -->
+            <android.support.v7.widget.CardView
                 android:id="@+id/preview_picture_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,12 +192,11 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="Max Brightness"
+                            android:text="@string/max_brightness"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
 
                             />
-
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/set_max_luminosita"
                             android:layout_width="match_parent"
@@ -116,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="Picture Orientation"
+                            android:text="@string/picture_orientation"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
 
@@ -133,317 +248,194 @@
                             android:paddingRight="20dp"
                             android:paddingTop="15dp" />
                     </LinearLayout>
-
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
-    <!--
-    GENERAL
-    -->
-    <android.support.v7.widget.CardView
-        android:id="@+id/general_setting_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="2dp"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/general_setting_title"
+
+            <!--THEME-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/theme_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
-                android:paddingLeft="15dp"
-
-                android:paddingTop="15dp"
-                android:text="General"
-                android:textColor="@color/md_dark_background"
-
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
-
-                <!--COLAPS TOOLBAR BAR-->
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                >
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_switch_CollapsingToolBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:id="@+id/collapsing_toolbar_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="15dp"
-                        android:src="@mipmap/ic_gradient_black_24dp"
-                        />
+                    android:orientation="vertical">
                     <TextView
-                        android:id="@+id/collapsing_toolbar_Item"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:paddingTop="15dp"
-                        android:text="Collapsing Toolbar"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-
-                        />
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/SetCollapsingToolbar"
+                        android:id="@+id/theme_setting_title"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="?android:selectableItemBackground"
-                        android:button="@null"
-                        android:hapticFeedbackEnabled="true"
-                        android:paddingBottom="15dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="15dp"
-                        />
-                </LinearLayout>
-
-            <!-- TRASLUCENT STATUS BAR-->
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_switch_TraslucentStatusBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:id="@+id/Traslucent_StatusBar_Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    android:src="@mipmap/ic_status_bar_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/Traslucent_StatusBar_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
-                    android:text="Traslucent Status Bar"
-                    android:textColor="@color/md_dark_background"
-                    android:textSize="16sp"
-
-                    />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/SetTraslucentStatusBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?android:selectableItemBackground"
-                    android:button="@null"
-                    android:hapticFeedbackEnabled="true"
-                    android:paddingBottom="15dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-
-    <!--
-    THEME
-    -->
-    <android.support.v7.widget.CardView
-        android:id="@+id/theme_setting_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="2dp"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/theme_setting_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
-                android:paddingLeft="20dp"
-
-                android:paddingTop="15dp"
-                android:text="Theme"
-                android:textColor="@color/md_dark_background"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
-            <!--PRIMARY COLOR-->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false"
-                >
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_primaryColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:id="@+id/PrimaryColor_Icon"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="15dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
+
                         android:paddingTop="15dp"
-                        android:src="@mipmap/ic_color_lens_black_24dp"
-                        />
-                    <TextView
-                        android:id="@+id/PrimaryColor_Item"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:paddingTop="15dp"
-                        android:text="Primary Color"
+                        android:text="@string/theme"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         />
+                    <!--PRIMARY COLOR-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false"
+                        >
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_primaryColor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <ImageView
+                                android:id="@+id/PrimaryColor_Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="15dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="15dp"
+                                android:src="@mipmap/ic_color_lens_black_24dp"
+                                />
+                            <TextView
+                                android:id="@+id/PrimaryColor_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="15dp"
+                                android:paddingTop="15dp"
+                                android:text="@string/primary_color"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!--ACCENT COLOR-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_accentColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:id="@+id/accentColor_Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_colorize_black_24dp"
+                            />
+                        <TextView
+                            android:id="@+id/accentColor_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="@string/accent_color"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!--DARK THEME-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_DarkTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:id="@+id/DarkTheme_Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_invert_colors_black_24dp"
+                            />
+                        <TextView
+                            android:id="@+id/DarkTheme_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="@string/dark_theme"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetDarkTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingBottom="15dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            />
+                    </LinearLayout>
+                    <!--COLORED NAV BAR-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_ColoredNavBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:id="@+id/NavBar_Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_video_label_black_24dp"
+                            />
+                        <TextView
+                            android:id="@+id/NavBar_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="@string/Colored_NavBar"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetColoredNavBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingBottom="15dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
+            </android.support.v7.widget.CardView>
 
-            <!--ACCENT COLOR-->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_accentColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:id="@+id/accentColor_Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    android:src="@mipmap/ic_colorize_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/accentColor_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
-                    android:text="Accent Color"
-                    android:textColor="@color/md_dark_background"
-                    android:textSize="16sp"
-                    />
-            </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
-
-            <!--DARK THEME-->
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_switch_DarkTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:id="@+id/DarkTheme_Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    android:src="@mipmap/ic_invert_colors_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/DarkTheme_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
-                    android:text="Dark Theme"
-                    android:textColor="@color/md_dark_background"
-                    android:textSize="16sp"
-                    />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/SetDarkTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?android:selectableItemBackground"
-                    android:button="@null"
-                    android:hapticFeedbackEnabled="true"
-                    android:paddingBottom="15dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    />
-            </LinearLayout>
-            <!--COLORED NAV BAR-->
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/ll_switch_ColoredNavBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:id="@+id/NavBar_Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    android:src="@mipmap/ic_video_label_black_24dp"
-                    />
-                <TextView
-                    android:id="@+id/NavBar_Item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
-                    android:text="Colored Nav Bar"
-                    android:textColor="@color/md_dark_background"
-                    android:textSize="16sp"
-                    />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/SetColoredNavBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    android:background="?android:selectableItemBackground"
-                    android:button="@null"
-                    android:hapticFeedbackEnabled="true"
-                    android:paddingBottom="15dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="15dp"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
