@@ -472,6 +472,12 @@ public class PhotosActivity extends ThemedActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editmode) {
                             photos.deleteSelectedPhotos();
+
+                            if (photos.medias.size() == 0) {
+                                startActivity(new Intent(PhotosActivity.this, AlbumsActivity.class));
+                                return;
+                            }
+
                             adapter.notifyDataSetChanged();
                             updateHeaderContent();
                             finishEditMode();

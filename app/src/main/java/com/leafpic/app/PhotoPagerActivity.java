@@ -252,12 +252,19 @@ public class PhotoPagerActivity extends ThemedActivity {
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        StringUtils.showToast(getApplicationContext(), "doesn't work properly");
-                        //int index = mViewPager.getCurrentItem();
-                        //mViewPager.removeView(mViewPager.getChildAt(index));
+
+                        int index = mViewPager.getCurrentItem();
+                        StringUtils.showToast(getApplicationContext(), index + " - doesn't work properly");
+
                         //TODO improve delete single photo
-                        //medias.deleteCurrentPhoto();
-                        //adapter.notifyDataSetChanged();
+                        photos.deleteCurrentPhoto();
+                        if (photos.medias.size() == 0)
+                            startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
+                        adapter.notifyDataSetChanged();
+
+                        // adapter.removeFragmentat(index);
+                        // adapter.notifyDataSetChanged();
+                        //mViewPager.removeView(mViewPager.getChildAt(index));
                         //mViewPager.destroyDrawingCache();
                         //mViewPager.setCurrentItem(index + 1);
                     }
