@@ -602,7 +602,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
     }
-    String s="";
+
     public void ChangeBackGroundColor(){
         int colorTo;
         int colorFrom;
@@ -622,9 +622,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
         colorAnimation.start();
-
     }
-
 
     public int getStatusBarHeight() {
         int result = 0;
