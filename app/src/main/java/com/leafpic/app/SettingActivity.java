@@ -59,7 +59,7 @@ public class SettingActivity extends ThemedActivity {
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
 
-        setTheme();
+        applyTheme();
         maxLuminosita = SP.getBoolean("set_max_luminosita", false);
         pictureOrientation = SP.getBoolean("set_picture_orientation", false);
 
@@ -125,18 +125,17 @@ public class SettingActivity extends ThemedActivity {
             }
         });
         updateSwitchColor(swCollaps);
-
         /*********** SW TRASLUCENT STATUS BAR ****************/
         swStatusBar=(SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
         swStatusBar.setChecked(isTraslucentStatusBar());
         swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_traslucent_statusbar", !isTraslucentStatusBar());
                 editor.apply();
-                //updateTheme();
+                updateTheme();
+                setStatusBarColor();
                 updateSwitchColor(swStatusBar);
             }
         });
@@ -157,7 +156,6 @@ public class SettingActivity extends ThemedActivity {
                     setTheme(R.style.AppTheme);
                 else setTheme(R.style.AppTheme_Dark);
                 */
-
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
@@ -180,11 +178,9 @@ public class SettingActivity extends ThemedActivity {
                     getWindow().setNavigationBarColor(getPrimaryColor());
                 else
                     getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-
             }
         });
         updateSwitchColor(swNavBar);
-
 
     }
 
@@ -217,13 +213,8 @@ public class SettingActivity extends ThemedActivity {
                     colorPicker.setSelectedColor(i);
                     colorPicker2.setColors(ColorPalette.getColors(getBaseContext(), i));
                     colorPicker2.setSelectedColor(i2);
-                    break;
-                }
-                    /*colorPicker.setSelectedColor(getPrimaryColor());
+                    break;}
 
-                    colorPicker2.setColors(ColorPalette.getColors(getApplicationContext(), colorPicker.getColor()));
-
-                    colorPicker2.setSelectedColor(colorPicker.getColor());*/
         title.setBackgroundColor(getPrimaryColor());
         if (!isDarkTheme())
             cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryLight));
@@ -232,10 +223,12 @@ public class SettingActivity extends ThemedActivity {
         colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
             @Override
             public void onColorChanged(int c) {
-                title.setBackgroundColor(c);
-                getWindow().setStatusBarColor(c);
+                if(isTraslucentStatusBar()) {
+                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                } else getWindow().setStatusBarColor(c);
+
                 toolbar.setBackgroundColor(c);
-                //
+                title.setBackgroundColor(c);
                 colorPicker2.setColors(ColorPalette.getColors(getApplicationContext(), colorPicker.getColor()));
                 colorPicker2.setSelectedColor(colorPicker.getColor());
             }
@@ -243,13 +236,15 @@ public class SettingActivity extends ThemedActivity {
         colorPicker2.setOnColorChangedListener(new OnColorChangedListener() {
             @Override
             public void onColorChanged(int c) {
-                title.setBackgroundColor(c);
-                getWindow().setStatusBarColor(c);
+                if(isTraslucentStatusBar()) {
+                    getWindow().setStatusBarColor(getOscuredColor(c));
+                } else getWindow().setStatusBarColor(c);
+
                 toolbar.setBackgroundColor(c);
+                title.setBackgroundColor(c);
                 if (isNavigationBarColored())
                     getWindow().setNavigationBarColor(c);
                 else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-
             }
         });
 
@@ -257,7 +252,10 @@ public class SettingActivity extends ThemedActivity {
         PrimaryPikerDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getWindow().setStatusBarColor(getPrimaryColor());
+                if(isTraslucentStatusBar()) {
+                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                } else getWindow().setStatusBarColor(getPrimaryColor());
+
                 toolbar.setBackgroundColor(getPrimaryColor());
                 dialog.cancel();
             }
@@ -268,19 +266,28 @@ public class SettingActivity extends ThemedActivity {
                 editor.putInt("primary_color", colorPicker2.getColor());
                 editor.apply();
                 updateTheme();
-                setTheme();
+                //setTheme();
+                applyTheme();
+                if(isTraslucentStatusBar()) {
+                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                } else {
+                    getWindow().setStatusBarColor(getPrimaryColor());
+                }
             }
         });
         PrimaryPikerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                title.setBackgroundColor(getPrimaryColor());
-                getWindow().setStatusBarColor(getPrimaryColor());
+
+                //getWindow().setStatusBarColor(getPrimaryColor());
+                if(isTraslucentStatusBar()) {
+                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                } else getWindow().setStatusBarColor(getPrimaryColor());
+
                 toolbar.setBackgroundColor(getPrimaryColor());
                 if (isNavigationBarColored())
                     getWindow().setNavigationBarColor(getPrimaryColor());
                 else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-
             }
         });
         PrimaryPikerDialog.show();
@@ -365,6 +372,7 @@ public class SettingActivity extends ThemedActivity {
             public void onDismiss(DialogInterface dialog) {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
+                txtPT.setTextColor(getAccentColor());
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -401,7 +409,7 @@ public class SettingActivity extends ThemedActivity {
         toolbar.setTitle("Setting");
 
         /**** Status Bar */
-        getWindow().setStatusBarColor(getPrimaryColor());
+        setStatusBarColor();
 
         /**** Nav Bar ****/
         if (isNavigationBarColored())
@@ -410,7 +418,6 @@ public class SettingActivity extends ThemedActivity {
 
         /**** Recent App */
         setRecentApp("Setting");
-
 
         txtGT.setTextColor(getAccentColor());
         txtTT.setTextColor(getAccentColor());
