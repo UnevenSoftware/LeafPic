@@ -558,7 +558,7 @@ public class PhotosActivity extends ThemedActivity {
     public void initUiTweaks() {
 
         applyTheme();
-        setStatusBarTranslucent(false);
+        //setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/
@@ -592,7 +592,11 @@ public class PhotosActivity extends ThemedActivity {
         } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
         */
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+        if(isTraslucentStatusBar())
+            collapsingToolbarLayout.setStatusBarScrimColor(getOscuredColor(getPrimaryColor()));
+        else
+            collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());

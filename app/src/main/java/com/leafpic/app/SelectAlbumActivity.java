@@ -1,19 +1,11 @@
 package com.leafpic.app;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +18,6 @@ import com.leafpic.app.Adapters.SelectAlbumAdapter;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -76,10 +67,7 @@ public class SelectAlbumActivity extends ThemedActivity{
             }
         });
 
-
         final FloatingActionButton fabhidden = (FloatingActionButton) findViewById(R.id.fab_hidden);
-
-
         fabhidden.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         fabhidden.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,18 +80,15 @@ public class SelectAlbumActivity extends ThemedActivity{
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
         ll.setBackgroundColor(getBackgroundColor());
 
-
-       applyTheme();
+        applyTheme();
+        setStatusBarColor();
         setRecentApp(getString(R.string.app_name));
-
     }
 
     private void loadAlbumPreview(){
         if (hidden) albums.loadPreviewHiddenAlbums();
         else albums.loadPreviewAlbums();
-
         hidden=!hidden;
-
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         adapt = new SelectAlbumAdapter(albums.dispAlbums,getApplicationContext());
         adapt.setOnClickListener(new View.OnClickListener() {

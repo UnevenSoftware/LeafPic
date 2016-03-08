@@ -109,15 +109,17 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     }
 
     public void initUiTweaks() {
-
+        /******TOOLBAR***/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getPrimaryColor());
         applyTheme();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        //NOY WORK
-        //setStatusBarTranslucent(true);
+
+        /**** STATUS BAR*****/
+        setStatusBarColor();
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);

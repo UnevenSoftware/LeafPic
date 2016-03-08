@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ColorPalette;
@@ -66,26 +65,6 @@ public class ThemedActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
-        if (isTraslucentStatusBar()) {
-            //setStatusBarTranslucent(true);
-            float[] hsv = new float[3];
-            int color = getPrimaryColor();
-            Color.colorToHSV(color, hsv);
-            hsv[2] *= 0.85f; // value component
-            color = Color.HSVToColor(hsv);
-
-            getWindow().setStatusBarColor(color);
-        } else {
-            //setStatusBarTranslucent(false);
-            getWindow().setStatusBarColor(getPrimaryColor());
-        }
-            /*
-        if (isTraslucentStatusBar())
-            setStatusBarTranslucent(true);
-        else
-            setStatusBarTranslucent(false);
-        getWindow().setStatusBarColor(getPrimaryColor());
-        */
     }
 
     @Override
@@ -101,23 +80,38 @@ public class ThemedActivity extends AppCompatActivity {
         updateTheme();
     }
 
-    protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent) {
+    protected void setStatusBarColor() {
+
+        /* if (makeTranslucent) {
             //getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //getWindow().setStatusBarColor(getPrimaryColor());
         }
-        else
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
+        // TODO : IT WORKS BUT, MUST BE OPTIMIZED
+        if (isTraslucentStatusBar()) {
+            int c = getOscuredColor(getPrimaryColor());
+            getWindow().setStatusBarColor(c);
+        } else
+        getWindow().setStatusBarColor(getPrimaryColor());
+    }
+
+    public int getOscuredColor(int c){
+        float[] hsv = new float[3];
+        int color = c;
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.85f; // value component
+        color = Color.HSVToColor(hsv);
+        return color;
     }
 
     public void updateTheme(){
-        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.accent_blue));//TEAL CARD BG DEFAULT;
-        this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_blue_200));//TEAL COLOR DEFAULT
+        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_blue_300));//TEAL CARD BG DEFAULT;
+        this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_orange_500));//TEAL COLOR DEFAULT
         darkTheme = SP.getBoolean("set_dark_theme", false);
         coloredNavigationBar =SP. getBoolean("nav_bar", false);
         collapsing = SP.getBoolean("set_collaps_toolbar", true);
-        statusbar = SP.getBoolean("set_traslucent_statusbar",true);
+        statusbar = SP.getBoolean("set_traslucent_statusbar",false);
     }
 
     public void setRecentApp(String text){
