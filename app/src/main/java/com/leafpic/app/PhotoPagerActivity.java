@@ -265,7 +265,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         // adapter.removeFragmentat(index);
                         // adapter.notifyDataSetChanged();
                         //mViewPager.removeView(mViewPager.getChildAt(index));
-                        //mViewPager.destroyDrawingCache();
+                        mViewPager.destroyDrawingCache();
                         //mViewPager.setCurrentItem(index + 1);
                     }
                 });

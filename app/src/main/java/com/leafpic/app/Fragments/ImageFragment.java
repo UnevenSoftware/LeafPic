@@ -1,6 +1,7 @@
 package com.leafpic.app.Fragments;
 
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,13 +11,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by dnld on 18/02/16.
  */
+
 public class ImageFragment extends Fragment {
 
     SubsamplingScaleImageView picture;
@@ -54,8 +59,17 @@ public class ImageFragment extends Fragment {
         super.onDestroy();
         if(picture!=null) {
             picture.recycle();
+            mThumbnailBitmap.recycle();
             picture.setOnTouchListener(null);
         }
+    }
+
+    public void update() {
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                new DownloadFilesTask().execute();
+            }
+        });
     }
 
     @Override
@@ -69,8 +83,7 @@ public class ImageFragment extends Fragment {
         spinner.setVisibility(View.VISIBLE);
         picture.setVisibility(View.INVISIBLE);
         preview_picture.setVisibility(View.INVISIBLE);
-
-        picture.setImage(ImageSource.uri(path).dimensions(width, height).tilingEnabled());
+        update();
         picture.setVisibility(View.VISIBLE);
         spinner.setVisibility(View.GONE);
 
@@ -186,8 +199,38 @@ public class ImageFragment extends Fragment {
         }
     }
 
-
     public void rotatePicture(int rotation) {
         Log.wtf("asdf" , picture.getOrientation()+"");
+    }
+
+    private class DownloadFilesTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                mThumbnailBitmap = Glide.with(getContext())
+                        .load(path)
+                        .asBitmap()
+                        .centerCrop()
+                        .into(width, height)
+                        .get();
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        picture.setImage(ImageSource.bitmap(mThumbnailBitmap));
+                    }
+                });
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+
+        }
     }
 }
