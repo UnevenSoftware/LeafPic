@@ -28,6 +28,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +41,8 @@ import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
+import com.nineoldandroids.animation.ArgbEvaluator;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.yalantis.ucrop.UCrop;
@@ -60,6 +63,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     HandlingPhotos photos;
     MediaPagerAdapter adapter;
     SharedPreferences SP;
+    RelativeLayout ActivityBackgorund;
 
     Toolbar toolbar;
     boolean fullscreenmode;
@@ -73,11 +77,10 @@ public class PhotoPagerActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
         //startSystemUI();
+        ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
 
         initUiTweaks();
-
         final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -87,7 +90,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
 
         try {
-
             Bundle data = getIntent().getExtras();
             photos = data.getParcelable("album");
             if (photos != null)
@@ -434,8 +436,11 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     public void initUiTweaks() {
-
         SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
+
+        //RelativeLayout ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
+        ActivityBackgorund.setBackgroundColor(getBackgroundColor());
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
@@ -568,8 +573,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
-
                 fullscreenmode = true;
+                ChangeBackGroundColor();
             }
         });
     }
@@ -593,9 +598,33 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 fullscreenmode = false;
+                ChangeBackGroundColor();
             }
         });
     }
+    String s="";
+    public void ChangeBackGroundColor(){
+        int colorTo;
+        int colorFrom;
+        if(fullscreenmode) {
+            colorFrom = getBackgroundColor();
+            colorTo = (ContextCompat.getColor(PhotoPagerActivity.this ,R.color.md_black_1000));
+        } else {
+            colorFrom = (ContextCompat.getColor(PhotoPagerActivity.this ,R.color.md_black_1000));
+            colorTo = getBackgroundColor();
+        }
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(240); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                ActivityBackgorund.setBackgroundColor((Integer) animator.getAnimatedValue());
+            }
+        });
+        colorAnimation.start();
+
+    }
+
 
     public int getStatusBarHeight() {
         int result = 0;
