@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 /**
  * Created by dnld on 06/03/16.
@@ -19,11 +21,9 @@ public class FABScrollBehavior extends FloatingActionButton.Behavior {
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
         if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
-            child.hide();
-            //child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
-        } else if (dyConsumed < 0 && child.getVisibility() == View.GONE) {
-            child.show();
-            //child.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+            child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
+        } else /*if (dyConsumed < 0 && child.getVisibility() == View.GONE)*/ {
+            child.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
     }
 
