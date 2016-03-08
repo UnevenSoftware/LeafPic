@@ -36,23 +36,32 @@ public class SettingActivity extends ThemedActivity {
 
     TextView txtGT;
     TextView txtTT;
+    TextView txtPT;
 
     SwitchCompat swCollaps;
     SwitchCompat swDarkTheme;
     SwitchCompat swNavBar;
     SwitchCompat swStatusBar;
+    SwitchCompat swMaxLuminosita;
+    SwitchCompat swPictureOrientation;
+
+    boolean maxLuminosita, pictureOrientation;
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setContentView(R.layout.setting_layout);
+        setContentView(R.layout.activity_settings);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceManager.getDefaultSharedPreferences(this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
+        txtPT = (TextView) findViewById(R.id.picture_setting_title);
 
         setTheme();
+        maxLuminosita = SP.getBoolean("set_max_luminosita", false);
+        pictureOrientation = SP.getBoolean("set_picture_orientation", false);
 
         //PRIMARY COLOR PIKER*****************************************
         LinearLayout ll_PC = (LinearLayout) findViewById(R.id.ll_primaryColor);
@@ -74,6 +83,35 @@ public class SettingActivity extends ThemedActivity {
 
 
         /**** Switches ****/
+
+        /*********** SW Picture_orientation ************/
+        swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
+        swPictureOrientation.setChecked(pictureOrientation);
+        swPictureOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_picture_orientation", isChecked);
+                editor.apply();
+                updateSwitchColor(swPictureOrientation);
+            }
+        });
+        updateSwitchColor(swPictureOrientation);
+
+        /*********** SW MAX LUMINOSITA ************/
+        swMaxLuminosita = (SwitchCompat) findViewById(R.id.set_max_luminosita);
+        swMaxLuminosita.setChecked(maxLuminosita);
+        swMaxLuminosita.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_max_luminosita", isChecked);
+                editor.apply();
+                updateSwitchColor(swMaxLuminosita);
+            }
+        });
+        updateSwitchColor(swMaxLuminosita);
+
         /*********** SW COLLAPSING TOOLBAR ************/
         swCollaps=(SwitchCompat) findViewById(R.id.SetCollapsingToolbar);
         swCollaps.setChecked(thereIsCollapsing());
@@ -275,10 +313,17 @@ public class SettingActivity extends ThemedActivity {
                 title.setBackgroundColor(c);
                 txtGT.setTextColor(colorPicker.getColor());
                 txtTT.setTextColor(colorPicker.getColor());
+                txtPT.setTextColor(colorPicker.getColor());
+
                 if(swCollaps.isChecked()) swCollaps.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swDarkTheme.isChecked()) swDarkTheme.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swNavBar.isChecked()) swNavBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swStatusBar.isChecked()) swStatusBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
+                if (swMaxLuminosita.isChecked())
+                    swMaxLuminosita.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
+                if (swPictureOrientation.isChecked())
+                    swPictureOrientation.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
+
             }
         });
 
@@ -290,10 +335,13 @@ public class SettingActivity extends ThemedActivity {
                 dialog.cancel();
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
+                txtPT.setTextColor(getAccentColor());
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
                 updateSwitchColor(swStatusBar);
+                updateSwitchColor(swMaxLuminosita);
+                updateSwitchColor(swPictureOrientation);
             }
         });
         AccentPikerDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -303,11 +351,14 @@ public class SettingActivity extends ThemedActivity {
                 editor.apply();
                 updateTheme();
                 txtGT.setTextColor(getAccentColor());
+                txtPT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
                 updateSwitchColor(swStatusBar);
+                updateSwitchColor(swMaxLuminosita);
+                updateSwitchColor(swPictureOrientation);
 
             }
         });
@@ -320,6 +371,8 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
                 updateSwitchColor(swStatusBar);
+                updateSwitchColor(swMaxLuminosita);
+                updateSwitchColor(swPictureOrientation);
             }
         });
         AccentPikerDialog.show();
@@ -363,6 +416,8 @@ public class SettingActivity extends ThemedActivity {
 
         txtGT.setTextColor(getAccentColor());
         txtTT.setTextColor(getAccentColor());
+        txtPT.setTextColor(getAccentColor());
+
         setThemeOnChangeListener();
     }
 
@@ -372,13 +427,30 @@ public class SettingActivity extends ThemedActivity {
         //Card
         CardView cvGeneral = (CardView) findViewById(R.id.general_setting_card);
         CardView cvTheme = (CardView) findViewById(R.id.theme_setting_card);
+        CardView cvPicture = (CardView) findViewById(R.id.preview_picture_setting_card);
+
         //Linear Layout
 
         if(isDarkTheme()) {
 
             cvGeneral.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
             cvTheme.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
+            cvPicture.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
+
             bg.setBackgroundColor(getBackgroundColor());
+
+            // Picture preview
+            // TEXT AND ICON
+            TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
+            ImageView imgMax = (ImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
+            TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
+            ImageView imgOrient = (ImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
+            // SET COLOR
+            txtMax.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
+            imgMax.setImageResource(R.mipmap.ic_brightness_high_white_24dp);
+            txtOrient.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
+            imgOrient.setImageResource(R.mipmap.ic_screen_rotation_white_24dp);
+
 
             // GENERAL
             // TEXT AND ICON
@@ -420,6 +492,7 @@ public class SettingActivity extends ThemedActivity {
             cvGeneral.setBackgroundColor( ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
             cvTheme.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
             bg.setBackgroundColor(getBackgroundColor());
+            cvPicture.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
         }
     }
 }
