@@ -563,7 +563,7 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        applyTheme();
+        setNavBarColor();
         //setStatusBarTranslucent(false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 

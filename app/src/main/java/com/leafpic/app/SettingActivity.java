@@ -59,7 +59,7 @@ public class SettingActivity extends ThemedActivity {
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
 
-        applyTheme();
+        setNavBarColor();
         maxLuminosita = SP.getBoolean("set_max_luminosita", false);
         pictureOrientation = SP.getBoolean("set_picture_orientation", false);
 
@@ -267,7 +267,7 @@ public class SettingActivity extends ThemedActivity {
                 editor.apply();
                 updateTheme();
                 //setTheme();
-                applyTheme();
+                setNavBarColor();
                 if(isTraslucentStatusBar()) {
                     getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
                 } else {

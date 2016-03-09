@@ -112,7 +112,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         /******TOOLBAR***/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getPrimaryColor());
-        applyTheme();
+        setNavBarColor();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);

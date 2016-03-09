@@ -74,9 +74,6 @@ public class PhotoPagerActivity extends ThemedActivity {
      */
     private GoogleApiClient client;
 
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -629,17 +626,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
     }
-    /*
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
-                .setDuration(240).start();
-        fullscreenmode = false;
-        ChangeBackGroundColor();
-    }
-    */
+
     public void ChangeBackGroundColor(){
         int colorTo;
         int colorFrom;
