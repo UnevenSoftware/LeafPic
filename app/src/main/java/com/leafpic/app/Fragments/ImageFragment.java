@@ -49,8 +49,8 @@ public class ImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        width = getArguments().getInt("width", 300);
-        height = getArguments().getInt("height", 300);
+        width = getArguments().getInt("width", 500);
+        height = getArguments().getInt("height", 500);
         path = getArguments().getString("path");
     }
 
