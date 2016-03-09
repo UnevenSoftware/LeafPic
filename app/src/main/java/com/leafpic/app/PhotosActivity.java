@@ -141,6 +141,15 @@ public class PhotosActivity extends ThemedActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_photos, menu);
+
+        menu.findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
+
+        if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+            menu.findItem(R.id.date_taken_sort_action).setChecked(true);
+        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+            menu.findItem(R.id.name_sort_action).setChecked(true);
+        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+            menu.findItem(R.id.size_sort_action).setChecked(true);
         return true;
     }
 
@@ -171,7 +180,6 @@ public class PhotosActivity extends ThemedActivity {
         }
 
         togglePrimaryToolbarOptions(menu);
-        updateSort(menu);
         updateSelectedStuff();
 
         return super.onPrepareOptionsMenu(menu);
@@ -310,18 +318,6 @@ public class PhotosActivity extends ThemedActivity {
 
     }
 
-    public void updateSort(final Menu menu){
-
-        menu.findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
-
-        if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
-            menu.findItem(R.id.date_taken_sort_action).setChecked(true);
-        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
-            menu.findItem(R.id.name_sort_action).setChecked(true);
-        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
-            menu.findItem(R.id.size_sort_action).setChecked(true);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -370,9 +366,10 @@ public class PhotosActivity extends ThemedActivity {
 
             case R.id.sortPhotos:
                 if (!photos.hidden) {
-                    final PopupMenu popup = new PopupMenu(PhotosActivity.this, findViewById(R.id.sortPhotos));
+                   /* final PopupMenu popup = new PopupMenu(PhotosActivity.this, findViewById(R.id.sortPhotos));
                     popup.setGravity(Gravity.AXIS_PULL_BEFORE);
-                    popup.getMenuInflater().inflate(R.menu.sort, popup.getMenu());
+                    popup.getMenuInflater().inflate(R.menu.sort, popup.getMenu());*/
+                    //invalidateOptionsMenu();
 
 
                 } else StringUtils.showToast(getApplicationContext(), " In progress");
@@ -382,21 +379,25 @@ public class PhotosActivity extends ThemedActivity {
                 photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
                 photos.sort();
                 LoadPhotos();
+                item.setChecked(true);
                 break;
             case R.id.size_sort_action:
                 photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
                 photos.sort();
                 LoadPhotos();
+                item.setChecked(true);
                 break;
             case R.id.date_taken_sort_action:
                 photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
                 photos.sort();
                 LoadPhotos();
+                item.setChecked(true);
                 break;
             case R.id.ascending_sort_action:
                 photos.setDefaultSortingAscending(!photos.settings.ascending);
                 photos.sort();
                 LoadPhotos();
+                item.setChecked(!item.isChecked());
                 break;
 
             case R.id.renameAlbum:
