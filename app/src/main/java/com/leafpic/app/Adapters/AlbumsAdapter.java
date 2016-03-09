@@ -84,14 +84,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         holder.name.setTag(a.Path);
 
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_blue_300))));
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_teal_500))));
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500))));
 
         if (hexAccentColor.toString().equals(hexPrimaryColor)) {
             float[] hsv = new float[3];
             int color = SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500));
             Color.colorToHSV(color, hsv);
-            hsv[2] *= 0.75f; // value component
+            hsv[2] *= 0.72f; // value component
             color = Color.HSVToColor(hsv);
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
@@ -107,7 +107,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
 
-            if (SP.getBoolean("set_dark_theme", false))
+            if (SP.getBoolean("set_dark_theme", true))
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(),R.color.unselected_album));
             else holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
         }

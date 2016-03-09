@@ -60,11 +60,10 @@ public class ThemedActivity extends AppCompatActivity {
         else return ColorPalette.getLightTextColor(getApplicationContext());
     }
 
-    public void applyTheme() {
+    public void setNavBarColor() {
         if (isNavigationBarColored())
             getWindow().setNavigationBarColor(getPrimaryColor());
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-
     }
 
     @Override
@@ -81,7 +80,6 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     protected void setStatusBarColor() {
-
         /* if (makeTranslucent) {
             //getWindow().setStatusBarColor(Color.TRANSPARENT);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -106,9 +104,9 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void updateTheme(){
-        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_blue_300));//TEAL CARD BG DEFAULT;
+        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_teal_500));//TEAL CARD BG DEFAULT;
         this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_orange_500));//TEAL COLOR DEFAULT
-        darkTheme = SP.getBoolean("set_dark_theme", false);
+        darkTheme = SP.getBoolean("set_dark_theme", true);//DARK THEME DEFAULT
         coloredNavigationBar =SP. getBoolean("nav_bar", false);
         collapsing = SP.getBoolean("set_collaps_toolbar", true);
         statusbar = SP.getBoolean("set_traslucent_statusbar",false);

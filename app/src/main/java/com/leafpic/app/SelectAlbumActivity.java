@@ -80,7 +80,7 @@ public class SelectAlbumActivity extends ThemedActivity{
         LinearLayout ll = (LinearLayout) findViewById(R.id.select_album_layout);
         ll.setBackgroundColor(getBackgroundColor());
 
-        applyTheme();
+        setNavBarColor();
         setStatusBarColor();
         setRecentApp(getString(R.string.app_name));
     }
