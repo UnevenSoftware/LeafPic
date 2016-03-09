@@ -7,9 +7,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
+
 import com.leafpic.app.utils.StringUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -67,6 +72,17 @@ public class HandlingPhotos implements Parcelable {
             medias = db.getPhotosByAlbum(album.Path);
         }
 
+    }
+
+    public HandlingPhotos(Context ctx, String photoPath) {
+        context = ctx;
+        as = new MadiaStoreHandler(context);
+
+        Album album = as.getAlbumPhoto(photoPath);
+        selectedMedias = new ArrayList<Media>();
+        ID = album.ID;
+        medias = as.getAlbumPhotos(album);
+        // setSettings();
     }
 
     public HandlingPhotos(Context ctx) {
@@ -128,8 +144,7 @@ public class HandlingPhotos implements Parcelable {
     public void sort() {
 
         if (!hidden) {
-            Album a = new Album();
-            a.ID = ID;
+            Album a = new Album(ID);
             medias = as.getAlbumPhotos(a, getSortingMode());
         } else {
             HiddenPhotosHandler db = new HiddenPhotosHandler(context);

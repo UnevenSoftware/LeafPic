@@ -90,10 +90,16 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
 
         try {
-            Bundle data = getIntent().getExtras();
-            photos = data.getParcelable("album");
-            if (photos != null)
-                photos.setContext(getApplicationContext());
+            if (getIntent().getData() != null) {
+                photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
+                photos.setCurrentPhoto(getIntent().getData().getPath());
+
+            } else if (getIntent().getExtras() != null) {
+                Bundle data = getIntent().getExtras();
+                photos = data.getParcelable("album");
+                if (photos != null)
+                    photos.setContext(getApplicationContext());
+            }
 
             mViewPager = (ViewPager) findViewById(R.id.photos_pager);
             adapter = new MediaPagerAdapter(getSupportFragmentManager(), photos.medias);
@@ -124,6 +130,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -245,13 +252,20 @@ public class PhotoPagerActivity extends ThemedActivity {
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        StringUtils.showToast(getApplicationContext(), "doesn't work properly");
-                        //int index = mViewPager.getCurrentItem();
-                        //mViewPager.removeView(mViewPager.getChildAt(index));
+
+                        int index = mViewPager.getCurrentItem();
+                        StringUtils.showToast(getApplicationContext(), index + " - doesn't work properly");
+
                         //TODO improve delete single photo
-                        //medias.deleteCurrentPhoto();
-                        //adapter.notifyDataSetChanged();
-                        //mViewPager.destroyDrawingCache();
+                        photos.deleteCurrentPhoto();
+                        if (photos.medias.size() == 0)
+                            startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
+                        adapter.notifyDataSetChanged();
+
+                        // adapter.removeFragmentat(index);
+                        // adapter.notifyDataSetChanged();
+                        //mViewPager.removeView(mViewPager.getChildAt(index));
+                        mViewPager.destroyDrawingCache();
                         //mViewPager.setCurrentItem(index + 1);
                     }
                 });

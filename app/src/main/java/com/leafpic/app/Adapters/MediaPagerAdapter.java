@@ -21,11 +21,13 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     ArrayList<Media> medias;
     View.OnTouchListener listener;
 
-    public void  setOnTouchListener(View.OnTouchListener l){ listener = l; }
-
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> medias) {
         super(fm);
         this.medias = medias;
+    }
+
+    public void setOnTouchListener(View.OnTouchListener l) {
+        listener = l;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
             fragment.setOnTouchListener(listener);
             return fragment;
         } else {
-            ImageFragment fragment = ImageFragment.newInstance(p.Path, 300, 300);
+            ImageFragment fragment = ImageFragment.newInstance(p.Path, p.width, p.height);
             fragment.setOnTouchListener(listener);
             return fragment;
         }
@@ -60,6 +62,8 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getItemPosition(Object object) {
         // refresh all fragments when data set changed
+        ImageFragment fragment = (ImageFragment) object;
+        fragment.update();
         return PagerAdapter.POSITION_NONE;
     }
 

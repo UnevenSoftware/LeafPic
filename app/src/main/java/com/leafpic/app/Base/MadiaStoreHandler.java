@@ -289,6 +289,38 @@ public class MadiaStoreHandler {
         return list;
     }
 
+    public Album getAlbumPhoto(String a) {
+        Album asd = null;
+
+        String[] projection = new String[]{
+                MediaStore.Images.Media.DATA,
+                MediaStore.Files.FileColumns.PARENT
+        };
+
+        Uri images = MediaStore.Files.getContentUri("external");
+
+        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                + " and " + MediaStore.Images.ImageColumns.DATA + "='" + a + "'";
+
+        Cursor cur = context.getContentResolver().query(
+                images,
+                projection,
+                selectionImages,
+                null, null);
+
+        if (cur != null) {
+            if (cur.moveToFirst()) {
+                int pathColumn = cur.getColumnIndex(
+                        MediaStore.Files.FileColumns.PARENT);
+
+                asd = new Album(cur.getString(pathColumn));
+            }
+            cur.close();
+        }
+
+        return asd;
+    }
+
     public void LogStuff() {
 
         ArrayList<Album> asd = getMediaStoreAlbums();
