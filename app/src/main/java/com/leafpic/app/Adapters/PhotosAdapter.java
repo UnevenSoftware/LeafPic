@@ -1,8 +1,10 @@
 package com.leafpic.app.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {//implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate
 
     ArrayList<Media> medias;
+    SharedPreferences SP;
 
     BitmapDrawable drawable;// = ((BitmapDrawable) ContextCompat.getDrawable(holder.path.getContext(), R.drawable.ic_empty));
     private View.OnClickListener mOnClickListener;
@@ -35,7 +38,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public PhotosAdapter(ArrayList<Media> ph ,Context context) {
         medias = ph;
-        drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
+        SP = PreferenceManager.getDefaultSharedPreferences(context);
+        if(SP.getBoolean("set_dark_theme", true))
+            drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
+        else drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
     }
 
     @Override

@@ -102,7 +102,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            if (!SP.getBoolean("set_dark_theme", false)) textColor ="#FAFAFA";
+            if (!SP.getBoolean("set_dark_theme", true)) textColor ="#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
@@ -146,8 +146,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
         }
     }
-
-
 }
 
 
