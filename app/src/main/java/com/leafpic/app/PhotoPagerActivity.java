@@ -67,18 +67,32 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     Toolbar toolbar;
     boolean fullscreenmode;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-        //startSystemUI();
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
+
+        //MENAGE on STATUS BAR PULL DOWN
+        View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                        else hideSystemUI();
+                    }
+                });
 
         initUiTweaks();
         final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
@@ -450,11 +464,9 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     public void initUiTweaks() {
+
         SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
-
-        //RelativeLayout ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
@@ -587,6 +599,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
                 fullscreenmode = true;
                 ChangeBackGroundColor();
             }
@@ -616,7 +629,17 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
     }
-
+    /*
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+                .setDuration(240).start();
+        fullscreenmode = false;
+        ChangeBackGroundColor();
+    }
+    */
     public void ChangeBackGroundColor(){
         int colorTo;
         int colorFrom;
