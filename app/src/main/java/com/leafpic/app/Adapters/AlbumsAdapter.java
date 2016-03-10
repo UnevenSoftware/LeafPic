@@ -1,6 +1,5 @@
 package com.leafpic.app.Adapters;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
 
@@ -54,15 +52,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                         .create()
         );
     }
-    ViewPropertyAnimation.Animator animationObject = new ViewPropertyAnimation.Animator() {
-        @Override
-        public void animate(View view) {
-            view.setAlpha( 0f );
-            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-            fadeAnim.setDuration(100);
-            fadeAnim.start();
-        }
-    };
 
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
@@ -71,12 +60,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
-                //.signature(new MediaStoreSignature())
                 .asBitmap()
                 .centerCrop()
                 .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                //.crossFade()
-                .animate(animationObject)//android.R.anim.slide_in_left
+                .animate(R.anim.fade_in)//android.R.anim.slide_in_left
                 .into(holder.picture);
 
         /*ImageSize targetSize = new ImageSize(80, 50); // result Bitmap will be fit to this size
@@ -109,7 +96,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
 
-        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
+        String textColor = SP.getBoolean("set_dark_theme", true) ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));

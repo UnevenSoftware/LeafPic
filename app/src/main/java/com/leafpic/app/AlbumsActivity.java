@@ -10,6 +10,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -49,6 +51,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 
+
 public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
 
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
@@ -56,6 +59,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     AlbumsAdapter adapt;
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
+
+    SwipeRefreshLayout SwipeContainerRV;
 
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
@@ -66,6 +71,28 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
+
+        /****TODO: WORK BUT, MUST BE FIXXED BETTER****/
+        SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        SwipeContainerRV.setColorSchemeResources(R.color.accent_amber,
+                R.color.accent_blue,
+                R.color.accent_teal,
+                R.color.accent_brown);
+
+        SwipeContainerRV.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //refreshItems();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadAlbums();
+                        SwipeContainerRV.setRefreshing(false);
+                    }
+                }, 500);
+            }
+        });
+        /************************/
 
         initUiTweaks();
         checkPermissions();
@@ -583,6 +610,11 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
+
+
+
+
+
 
     @Override
     public void onStart() {

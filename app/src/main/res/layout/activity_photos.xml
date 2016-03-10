@@ -81,15 +81,27 @@
                 </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/grid_photos"
+
+        <!--         //TODO:MUST BE FIXXED
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/md_dark_background"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            >
+        -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/grid_photos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/md_dark_background"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                /> <!--REMOVE UP LINE ^-->
+        <!--
+        </android.support.v4.widget.SwipeRefreshLayout>
+           -->
 
         <android.support.design.widget.FloatingActionButton
             style="@style/fab"

@@ -12,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -57,6 +58,7 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     boolean listmode=false;
 
@@ -70,6 +72,22 @@ public class PhotosActivity extends ThemedActivity {
         super.onCreate(savedInstanceState);
         initActivityTransitions();
         setContentView(R.layout.activity_photos);
+
+        /****** TODO:MUST BE FIXXED
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoadPhotos();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+            }
+        });
+        ********/
 
         LoadPhotos();
         initUiTweaks();
@@ -611,9 +629,14 @@ public class PhotosActivity extends ThemedActivity {
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
 
+        //mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);        //TODO:MUST BE FIXXED
+
         if(thereIsCollapsing()){
             appBarLayout.setExpanded(true, true);
             mRecyclerView.setNestedScrollingEnabled(true);
+
+            //mSwipeRefreshLayout.setNestedScrollingEnabled(true);        //TODO:MUST BE FIXXED
+
             //appBarLayout.setEnabled(true);
             //collapsingToolbarLayout.setEnabled(true);
             updateHeaderContent();
@@ -623,6 +646,9 @@ public class PhotosActivity extends ThemedActivity {
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
             mRecyclerView.setNestedScrollingEnabled(false);
+
+            //mSwipeRefreshLayout.setNestedScrollingEnabled(false);      //TODO:MUST BE FIXXED
+
             //fabCamera.setNestedScrollingEnabled(true);
         }
         setRecentApp(photos.DisplayName);

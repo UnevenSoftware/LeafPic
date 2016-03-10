@@ -1,6 +1,5 @@
 package com.leafpic.app.Adapters;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Media;
@@ -95,8 +93,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .centerCrop()
                     .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .error(R.drawable.ic_error)
-                    //.crossFade()
-                    .animate(animationObject)//android.R.anim.slide_in_left
+                    .animate(R.anim.fade_in)
                     .into(holder.imageView);
         }
 
@@ -112,16 +109,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.imageView.setPadding(0,0,0,0);
         }
     }
-
-    ViewPropertyAnimation.Animator animationObject = new ViewPropertyAnimation.Animator() {
-        @Override
-        public void animate(View view) {
-            view.setAlpha( 0f );
-            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-            fadeAnim.setDuration(100);
-            fadeAnim.start();
-        }
-    };
 
     @Override
     public int getItemCount() {
