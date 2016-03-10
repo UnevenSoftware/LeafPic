@@ -5,18 +5,18 @@
         <item
                 android:id="@+id/name_sort_action"
                 android:checked="false"
-                android:title="by Name"
+                android:title="Name"
                 app:showAsAction="ifRoom"
         />
 
         <item
                 android:id="@+id/date_taken_sort_action"
-                android:title="by Date Taken"
+                android:title="Date"
                 app:showAsAction="ifRoom"
         />
         <item
                 android:id="@+id/size_sort_action"
-                android:title="by Size"
+                android:title="Size"
                 android:checked="false"
                 app:showAsAction="ifRoom"
         />

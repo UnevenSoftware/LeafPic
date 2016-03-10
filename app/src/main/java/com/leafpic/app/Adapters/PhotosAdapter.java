@@ -1,5 +1,6 @@
 package com.leafpic.app.Adapters;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.ViewPropertyAnimation;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Media;
@@ -39,9 +41,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public PhotosAdapter(ArrayList<Media> ph ,Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
-        if(SP.getBoolean("set_dark_theme", true))
-            drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
-        else drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
+        if(SP.getBoolean("set_dark_theme", true)==true)
+            drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
+        else drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
     }
 
     @Override
@@ -73,6 +75,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
+        SP = PreferenceManager.getDefaultSharedPreferences(holder.imageView.getContext());
+
         Media f = medias.get(position);
         Glide.clear(holder.imageView);//fix corruption
 
@@ -89,10 +93,12 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .asBitmap()
                     .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), 0))
                     .centerCrop()
-                    .placeholder(R.drawable.ic_empty)
+                    //.placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                    .error(R.drawable.ic_error)
+                    //.crossFade()
+                    .animate(animationObject)//android.R.anim.slide_in_left
                     .into(holder.imageView);
         }
-
 
         holder.path.setTag(f.Path);
 
@@ -106,6 +112,20 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.imageView.setPadding(0,0,0,0);
         }
     }
+
+    ViewPropertyAnimation.Animator animationObject = new ViewPropertyAnimation.Animator() {
+        @Override
+        public void animate(View view) {
+            // if it's a custom view class, cast it here
+            // then find subviews and do the animations
+            // here, we just use the entire view for the fade animation
+            view.setAlpha( 0f );
+
+            ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+            fadeAnim.setDuration(100);
+            fadeAnim.start();
+        }
+    };
 
     @Override
     public int getItemCount() {
@@ -127,6 +147,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         //Log.wtf("asdasd",getItemCount()+"");
         // notifyDataSetChanged();
     }
+
+
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
