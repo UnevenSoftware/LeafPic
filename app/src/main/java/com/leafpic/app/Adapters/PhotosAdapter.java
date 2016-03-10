@@ -93,7 +93,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .asBitmap()
                     .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), 0))
                     .centerCrop()
-                    //.placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                    .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .error(R.drawable.ic_error)
                     //.crossFade()
                     .animate(animationObject)//android.R.anim.slide_in_left
@@ -116,11 +116,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     ViewPropertyAnimation.Animator animationObject = new ViewPropertyAnimation.Animator() {
         @Override
         public void animate(View view) {
-            // if it's a custom view class, cast it here
-            // then find subviews and do the animations
-            // here, we just use the entire view for the fade animation
             view.setAlpha( 0f );
-
             ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
             fadeAnim.setDuration(100);
             fadeAnim.start();
