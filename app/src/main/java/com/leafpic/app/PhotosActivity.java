@@ -122,7 +122,8 @@ public class PhotosActivity extends ThemedActivity {
                 decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
                 RVdecor = false;
             }
-            else decoration = new GridSpacingItemDecoration(3, 0, includeEdge);
+            else
+                decoration = new GridSpacingItemDecoration(3, 0, includeEdge);
             mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
             //mRecyclerView.removeItemDecoration(decoration);
             mRecyclerView.addItemDecoration(decoration);

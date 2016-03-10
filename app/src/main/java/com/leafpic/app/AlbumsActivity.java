@@ -562,7 +562,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
             RVdecor = false;
         }
-        else decoration = new GridSpacingItemDecoration(2, 0, includeEdge);
+        else
+            decoration = new GridSpacingItemDecoration(2, 0, includeEdge);
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         //mRecyclerView.removeItemDecoration(decoration);
         mRecyclerView.addItemDecoration(decoration);
