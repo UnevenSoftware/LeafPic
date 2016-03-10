@@ -63,7 +63,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             fadeAnim.start();
         }
     };
-    
+
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
