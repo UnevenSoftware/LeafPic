@@ -46,6 +46,7 @@ import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.GridSpacingItemDecoration;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -552,6 +553,11 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
+        int spanCount = 2;
+        int spacing = 3;
+        boolean includeEdge = true;
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

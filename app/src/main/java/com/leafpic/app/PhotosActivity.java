@@ -39,6 +39,7 @@ import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.GridSpacingItemDecoration;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -114,6 +115,12 @@ public class PhotosActivity extends ThemedActivity {
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
             mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
+            int spanCount = 3;
+            int spacing = 3;
+            boolean includeEdge = true;
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+
+
             adapter = new PhotosAdapter(photos.medias,getApplicationContext());
 
             adapter.setOnClickListener(new View.OnClickListener() {
