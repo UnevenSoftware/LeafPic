@@ -1,4 +1,4 @@
-package com.leafpic.app.utils;
+package com.leafpic.app.Views;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
