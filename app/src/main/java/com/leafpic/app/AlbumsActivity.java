@@ -45,8 +45,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
+import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -60,7 +60,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     AlbumsAdapter adapt;
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
-
+    public boolean RVdecor=true;
     SwipeRefreshLayout SwipeContainerRV;
 
     Toolbar toolbar;
@@ -94,6 +94,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             }
         });
         /************************/
+
+
 
         initUiTweaks();
         checkPermissions();
@@ -552,11 +554,19 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             albums.loadPreviewAlbums();
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         int spanCount = 2;
-        int spacing = 3;
+        int spacing = 5;
         boolean includeEdge = true;
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        GridSpacingItemDecoration decoration;
+        if(RVdecor) {
+            decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
+            RVdecor = false;
+        }
+        else decoration = new GridSpacingItemDecoration(2, 0, includeEdge);
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
+        //mRecyclerView.removeItemDecoration(decoration);
+        mRecyclerView.addItemDecoration(decoration);
+
 
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnLongClickListener(new View.OnLongClickListener() {

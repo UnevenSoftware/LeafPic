@@ -38,8 +38,8 @@ import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
-import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
+import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -62,7 +62,7 @@ public class PhotosActivity extends ThemedActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     boolean listmode=false;
-
+    public boolean RVdecor=true;
     boolean editmode = false;
     PhotosAdapter adapter;
 
@@ -114,11 +114,18 @@ public class PhotosActivity extends ThemedActivity {
             final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
-            mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
             int spanCount = 3;
-            int spacing = 3;
+            int spacing = 5;
             boolean includeEdge = true;
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+            GridSpacingItemDecoration decoration;
+            if(RVdecor) {
+                decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
+                RVdecor = false;
+            }
+            else decoration = new GridSpacingItemDecoration(3, 0, includeEdge);
+            mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
+            //mRecyclerView.removeItemDecoration(decoration);
+            mRecyclerView.addItemDecoration(decoration);
 
 
             adapter = new PhotosAdapter(photos.medias,getApplicationContext());
