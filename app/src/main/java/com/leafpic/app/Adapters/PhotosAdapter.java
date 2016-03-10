@@ -39,9 +39,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public PhotosAdapter(ArrayList<Media> ph ,Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
-        if(SP.getBoolean("set_dark_theme", true))
-            drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
-        else drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
+        if(SP.getBoolean("set_dark_theme", true)==true)
+            drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
+        else drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
     }
 
     @Override
@@ -73,6 +73,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
+        SP = PreferenceManager.getDefaultSharedPreferences(holder.imageView.getContext());
+
         Media f = medias.get(position);
         Glide.clear(holder.imageView);//fix corruption
 
@@ -89,10 +91,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .asBitmap()
                     .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), 0))
                     .centerCrop()
-                    .placeholder(R.drawable.ic_empty)
+                    .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                    .error(R.drawable.ic_error)
+                    .animate(R.anim.fade_in)
                     .into(holder.imageView);
         }
-
 
         holder.path.setTag(f.Path);
 
@@ -127,6 +130,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         //Log.wtf("asdasd",getItemCount()+"");
         // notifyDataSetChanged();
     }
+
+
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

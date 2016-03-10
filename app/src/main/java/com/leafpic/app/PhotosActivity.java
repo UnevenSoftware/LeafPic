@@ -12,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
+import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -57,9 +59,10 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     boolean listmode=false;
-
+    public boolean RVdecor=true;
     boolean editmode = false;
     PhotosAdapter adapter;
 
@@ -70,6 +73,22 @@ public class PhotosActivity extends ThemedActivity {
         super.onCreate(savedInstanceState);
         initActivityTransitions();
         setContentView(R.layout.activity_photos);
+
+        /****** TODO:MUST BE FIXXED
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoadPhotos();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+            }
+        });
+        ********/
 
         LoadPhotos();
         initUiTweaks();
@@ -95,7 +114,21 @@ public class PhotosActivity extends ThemedActivity {
             final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album);
 
+            int spanCount = 3;
+            int spacing = 5;
+            boolean includeEdge = true;
+            GridSpacingItemDecoration decoration;
+            if(RVdecor) {
+                decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
+                RVdecor = false;
+            }
+            else
+                decoration = new GridSpacingItemDecoration(3, 0, includeEdge);
             mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
+            //mRecyclerView.removeItemDecoration(decoration);
+            mRecyclerView.addItemDecoration(decoration);
+
+
             adapter = new PhotosAdapter(photos.medias,getApplicationContext());
 
             adapter.setOnClickListener(new View.OnClickListener() {
@@ -611,9 +644,14 @@ public class PhotosActivity extends ThemedActivity {
 
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
 
+        //mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);        //TODO:MUST BE FIXXED
+
         if(thereIsCollapsing()){
             appBarLayout.setExpanded(true, true);
             mRecyclerView.setNestedScrollingEnabled(true);
+
+            //mSwipeRefreshLayout.setNestedScrollingEnabled(true);        //TODO:MUST BE FIXXED
+
             //appBarLayout.setEnabled(true);
             //collapsingToolbarLayout.setEnabled(true);
             updateHeaderContent();
@@ -623,6 +661,9 @@ public class PhotosActivity extends ThemedActivity {
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
             mRecyclerView.setNestedScrollingEnabled(false);
+
+            //mSwipeRefreshLayout.setNestedScrollingEnabled(false);      //TODO:MUST BE FIXXED
+
             //fabCamera.setNestedScrollingEnabled(true);
         }
         setRecentApp(photos.DisplayName);

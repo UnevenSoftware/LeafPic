@@ -60,10 +60,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
-                //.signature(new MediaStoreSignature())
                 .asBitmap()
                 .centerCrop()
-                .placeholder(R.drawable.ic_empty)
+                .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                .animate(R.anim.fade_in)//android.R.anim.slide_in_left
                 .into(holder.picture);
 
         /*ImageSize targetSize = new ImageSize(80, 50); // result Bitmap will be fit to this size
@@ -96,7 +96,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
 
-        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
+        String textColor = SP.getBoolean("set_dark_theme", true) ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
