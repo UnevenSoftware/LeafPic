@@ -7,24 +7,28 @@ import com.leafpic.app.utils.StringUtils;
 
 public class Media implements Parcelable {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
+        @Override
+        public Media createFromParcel(Parcel in) {
+            return new Media(in);
+        }
+
+        @Override
+        public Media[] newArray(int size) {
+            return new Media[size];
+        }
+    };
     public String Path;
     public String MIME;
     public String DateTaken;
     public String FolderPath;
     public String DateModified;
+    public int orientation = 0;
     public int width;
     public int height;
     public long size;
     boolean selected = false;
-
-
-    public boolean isGif(){
-        return (MIME!=null && MIME.equals("image/gif"));
-    }
-
-    public boolean isVideo(){
-        return (MIME!=null && MIME.startsWith("video/"));
-    }
 
     public Media(String path) {
         Path = path;
@@ -58,22 +62,6 @@ public class Media implements Parcelable {
         FolderPath = folderPath;
     }
 
-    public String getResolution(){
-        return width+"x"+height;
-    }
-
-    public String getHumanReadableSize(){
-        return StringUtils.humanReadableByteCount(size,true);
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean val) {
-        selected = val;
-    }
-
     protected Media(Parcel in) {
         Path = in.readString();
         MIME = in.readString();
@@ -84,6 +72,30 @@ public class Media implements Parcelable {
         height = in.readInt();
         size = in.readLong();
         selected = in.readByte() != 0x00;
+    }
+
+    public boolean isGif() {
+        return (MIME != null && MIME.equals("image/gif"));
+    }
+
+    public boolean isVideo() {
+        return (MIME != null && MIME.startsWith("video/"));
+    }
+
+    public String getResolution() {
+        return width + "x" + height;
+    }
+
+    public String getHumanReadableSize() {
+        return StringUtils.humanReadableByteCount(size, true);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean val) {
+        selected = val;
     }
 
     @Override
@@ -103,17 +115,4 @@ public class Media implements Parcelable {
         dest.writeLong(size);
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
-        @Override
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
-        }
-
-        @Override
-        public Media[] newArray(int size) {
-            return new Media[size];
-        }
-    };
 }

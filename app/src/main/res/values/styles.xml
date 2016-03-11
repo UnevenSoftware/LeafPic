@@ -2,7 +2,7 @@
     <color name="white_opaque">#FAFAFA</color>
     <color name="pitch_black">#212121</color>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <item name="android:background">@color/white_opaque</item>
         <item name="android:windowBackground">@color/white_opaque</item>
         <item name="android:colorBackground">@color/white_opaque</item>

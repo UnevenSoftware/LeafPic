@@ -55,16 +55,15 @@ import com.mikepenz.iconics.context.IconicsContextWrapper;
 
 public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
 
+    public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
-    public boolean RVdecor=true;
-    SwipeRefreshLayout SwipeContainerRV;
-
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
+    SwipeRefreshLayout SwipeContainerRV;
 
     private GoogleApiClient client;
 
@@ -72,7 +71,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-
         /****TODO: WORK BUT, MUST BE FIXXED BETTER****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         SwipeContainerRV.setColorSchemeResources(R.color.accent_amber,
@@ -94,8 +92,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             }
         });
         /************************/
-
-
 
         initUiTweaks();
         checkPermissions();
@@ -554,21 +550,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             albums.loadPreviewAlbums();
 
 
-        int spanCount = 2;
-        int spacing = 5;
-        boolean includeEdge = true;
-        GridSpacingItemDecoration decoration;
-        if(RVdecor) {
-            decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
-            RVdecor = false;
-        }
-        else
-            decoration = new GridSpacingItemDecoration(2, 0, includeEdge);
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
-        //mRecyclerView.removeItemDecoration(decoration);
-        mRecyclerView.addItemDecoration(decoration);
-
-
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -606,17 +588,12 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (RVdecor) {
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+            RVdecor = false;
+        }
         adapt.notifyDataSetChanged();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        /*
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) hideViews();
-                else showViews();
-            }
-        });
-        */
     }
 
     private void hideViews() {
@@ -627,11 +604,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
-
-
-
-
-
 
     @Override
     public void onStart() {

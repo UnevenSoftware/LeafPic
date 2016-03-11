@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.R;
 
@@ -61,33 +63,21 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
                 .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .priority(Priority.HIGH)
+                        //.signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
+
                 .centerCrop()
                 .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                 .animate(R.anim.fade_in)//android.R.anim.slide_in_left
                 .into(holder.picture);
-
-        /*ImageSize targetSize = new ImageSize(80, 50); // result Bitmap will be fit to this size
-        ImageLoader.getInstance().loadImage(a.getPathCoverAlbum(), targetSize, ImageLoaderUtils.fullSizeOptions, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.picture.setImageBitmap(loadedImage);
-            }
-        });*/
-        /*ImageSize targetSize = new ImageSize(200, 300); // result Bitmap will be fit to this size
-        ImageLoader.getInstance().loadImage(a.getPathCoverAlbum(), targetSize, ImageLoaderUtils.cropedOptions, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                holder.picture.setImageBitmap(loadedImage);
-            }
-        });*/
-        //ImageLoader.getInstance().displayImage(, (ImageAware) targetSize,ImageLoaderUtils.fullSizeOptions);
 
         holder.name.setTag(a.Path);
 
         String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_teal_500))));
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500))));
 
-        if (hexAccentColor.toString().equals(hexPrimaryColor)) {
+        if (hexAccentColor.equals(hexPrimaryColor)) {
             float[] hsv = new float[3];
             int color = SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500));
             Color.colorToHSV(color, hsv);

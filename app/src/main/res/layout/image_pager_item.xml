@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/media_view"
-            android:visibility="gone"
             android:layout_width="match_parent"
+        android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_height="match_parent"/>
+        android:visibility="gone" />
 
     <ImageView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/media_preview_view"
-        android:visibility="visible"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_height="match_parent"/>
+        android:visibility="invisible" />
 
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:elevation="5dp"
+        android:visibility="visible" />
 
 </FrameLayout>
