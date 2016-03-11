@@ -7,7 +7,7 @@
     <item android:id="@+id/filterPhotos"
         android:icon="@mipmap/ic_filter_list_white_24dp"
         android:orderInCategory="0"
-        android:title="Sort"
+        android:title="Filter"
         app:showAsAction="ifRoom"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -59,7 +59,7 @@
         />
 
     <item android:id="@+id/settingsTry_albums_action"
-        android:title="Setting"
+        android:title="Settings"
         app:showAsAction="never"
         />
     <item

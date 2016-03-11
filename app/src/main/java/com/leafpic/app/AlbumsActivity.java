@@ -53,7 +53,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 
 
-public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
+public class AlbumsActivity extends ThemedActivity {
 
     public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);

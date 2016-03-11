@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PhotoPagerActivity"
 >
-    <!-- general Stuff -->
-    <!-- Albums Stuff -->
     <item
         android:id="@+id/shareButton"
         android:icon="@mipmap/ic_share_white_24dp"
@@ -26,16 +24,16 @@
         <menu>
             <item
                     android:id="@+id/rotate_right_90"
-                    android:title="Rotate right 90°"
-                    android:icon="@mipmap/ic_rotate_right_white_24dp"/>
+                android:icon="@mipmap/ic_rotate_right_white_24dp"
+                android:title="Rotate right 90°" />
             <item
                     android:id="@+id/rotate_left_90"
-                    android:title="Rotate left 90°"
-                    android:icon="@mipmap/ic_rotate_left_white_24dp"/>
+                android:icon="@mipmap/ic_rotate_left_white_24dp"
+                android:title="Rotate left 90°" />
             <item
                     android:id="@+id/rotate_180"
-                    android:title="Rotate 180°"
-                    android:icon="@mipmap/ic_replay_white_24dp"/>
+                android:icon="@mipmap/ic_replay_white_24dp"
+                android:title="Rotate 180°" />
         </menu>
         </item>
     <item

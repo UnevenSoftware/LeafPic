@@ -31,7 +31,6 @@ public class MyGlideModule implements GlideModule {
         builder.setMemoryCache(new LruResourceCache(customMemoryCacheSize));
         builder.setBitmapPool(new LruBitmapPool(customBitmapPoolSize));
 
-        int size_disk = 999999999;
         int cacheSize100MegaBytes = 104857600;
         String downloadDirectoryPath = Environment.getDownloadCacheDirectory().getPath();
 

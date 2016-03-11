@@ -52,6 +52,7 @@ import java.util.ArrayList;
  */
 public class PhotosActivity extends ThemedActivity {
 
+    public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
@@ -60,9 +61,7 @@ public class PhotosActivity extends ThemedActivity {
     Toolbar toolbar;
     ImageView headerImage;
     SwipeRefreshLayout mSwipeRefreshLayout;
-
     boolean listmode=false;
-    public boolean RVdecor=true;
     boolean editmode = false;
     PhotosAdapter adapter;
 
@@ -476,7 +475,7 @@ public class PhotosActivity extends ThemedActivity {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
                             photos.DisplayName=txt_edit.getText().toString();
                             updateHeaderContent();
-                            //UpdatePhotos();//TODO update photos
+                            //UpdatePhotos();//TODO updatePhoto photos
                         }
                         else StringUtils.showToast(getApplicationContext(), "Insert Something!");
                     }
