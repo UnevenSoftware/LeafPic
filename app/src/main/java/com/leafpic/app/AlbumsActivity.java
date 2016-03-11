@@ -27,8 +27,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -81,15 +79,12 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         /****TODO: WORK BUT, MUST BE FIXXED BETTER****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         SwipeContainerRV.setColorSchemeResources(R.color.accent_amber,
-                R.color.accent_blue,
-                R.color.accent_teal,
-                R.color.accent_brown);
+                R.color.accent_blue);
 
         SwipeContainerRV.post(new Runnable() {
             @Override
             public void run() {
                 LoadUiAlbums();
-
                 //SwipeContainerRV.setRefreshing(true);
             }
         });
@@ -103,8 +98,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         });
 
         /************************/
-
-
         /****** APPP INTROOOOOOOOOOOOO
         Thread t = new Thread(new Runnable() {
             @Override
@@ -220,6 +213,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         invalidateOptionsMenu();
         checkPermissions();
         initUiTweaks();
+
+        refreshItems();
     }
 
     public void initUiTweaks() {
@@ -231,6 +226,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
 
         /**** STATUS BAR*****/
         setStatusBarColor();
@@ -264,8 +261,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
         setRecentApp(getString(R.string.app_name));
 
-
-        /***********************************/
     }
 
     public void setDrawerTheme(){
@@ -690,15 +685,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setBackgroundColor(getBackgroundColor());
     }
     */
-
-    private void hideViews() {
-        fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
-    }
-
-    private void showViews() {
-        //mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        fabCamera.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-    }
 
     @Override
     public void onStart() {
