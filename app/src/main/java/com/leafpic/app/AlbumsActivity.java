@@ -4,14 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -53,7 +50,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 
 
-public class AlbumsActivity extends ThemedActivity {
+public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
 
     public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
@@ -71,6 +68,15 @@ public class AlbumsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
+        checkPermissions();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                albums.loadPreviewAlbums();
+            }
+        }).start();
+        setupUI();
+        initUiTweaks();
 
         /****TODO: WORK BUT, MUST BE FIXXED BETTER****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -78,6 +84,16 @@ public class AlbumsActivity extends ThemedActivity {
                 R.color.accent_blue,
                 R.color.accent_teal,
                 R.color.accent_brown);
+
+        SwipeContainerRV.post(new Runnable() {
+            @Override
+            public void run() {
+                LoadUiAlbums();
+
+                //SwipeContainerRV.setRefreshing(true);
+            }
+        });
+
 
         SwipeContainerRV.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -88,11 +104,8 @@ public class AlbumsActivity extends ThemedActivity {
 
         /************************/
 
-        initUiTweaks();
-        checkPermissions();
 
-
-        /****** APPP INTROOOOOOOOOOOOO*/
+        /****** APPP INTROOOOOOOOOOOOO
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -108,7 +121,7 @@ public class AlbumsActivity extends ThemedActivity {
                 }
             }
         });
-        t.start();
+         t.start();*/
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -118,30 +131,37 @@ public class AlbumsActivity extends ThemedActivity {
     }
 
     void refreshItems() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LoadAlbumsData();
-            }
-        }, 1);
-        onItemsLoadComplete();
-    }
 
-    void onItemsLoadComplete() {
-        new Handler().postDelayed(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                SwipeContainerRV.setRefreshing(true);
+                albums.loadPreviewAlbums();
                 LoadUiAlbums();
+                SwipeContainerRV.setRefreshing(false);
             }
-        }, 1);
-        SwipeContainerRV.setRefreshing(false);//STOPPA IL PULL REFRESH
+        });
     }
 
     private void LoadAlbumsData(){
+
         if (hidden) {
             albums.loadPreviewHiddenAlbums();
         } else
             albums.loadPreviewAlbums();
+    }
+
+    public void setupUI() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (RVdecor) {
+            RVdecor = false;
+        }
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
     }
 
     private void LoadUiAlbums(){
@@ -183,24 +203,14 @@ public class AlbumsActivity extends ThemedActivity {
                 }
             }
         });
-
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapt);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        //mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
-        if (RVdecor) {
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
-            RVdecor = false;
-        }
         adapt.notifyDataSetChanged();
-        mRecyclerView.setBackgroundColor(getBackgroundColor());
     }
 
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
-            super.onPostCreate(savedInstanceState);
+        super.onPostCreate(savedInstanceState);
     }
     @Override
     public void onResume() {
@@ -316,12 +326,12 @@ public class AlbumsActivity extends ThemedActivity {
 
         /****DRAWER CLICK LISTENER****/
         findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 Intent intent = new Intent(AlbumsActivity.this, SettingActivity.class);
-                 startActivity(intent);
-             }
-         });
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AlbumsActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -359,7 +369,7 @@ public class AlbumsActivity extends ThemedActivity {
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         } //else
-            //loadAlbums();
+        //loadAlbums();
     }
 
     @Override
@@ -615,7 +625,7 @@ public class AlbumsActivity extends ThemedActivity {
             case 0:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     //loadAlbums();
-                break;
+                    break;
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     StringUtils.showToast(AlbumsActivity.this, "i got NET");
