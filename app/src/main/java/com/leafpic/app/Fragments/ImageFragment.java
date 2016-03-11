@@ -14,11 +14,12 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
-
-import java.util.concurrent.ExecutionException;
+import com.leafpic.app.utils.StringUtils;
 
 /**
  * Created by dnld on 18/02/16.
@@ -63,14 +64,30 @@ public class ImageFragment extends Fragment {
             picture.recycle();
             picture.setOnTouchListener(null);
         }
-        if (mThumbnailBitmap != null)
+        if (mThumbnailBitmap != null) {
             mThumbnailBitmap.recycle();
+            Log.wtf("asd", "recycled: ");
+        }
     }
 
-    public void update() {
+    public void updatePhoto() {
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                new DownloadFilesTask().execute();
+                System.gc();
+                Glide.with(getContext())
+                        .load(path)
+                                //.signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
+                        .asBitmap()
+                        .centerCrop()
+                        .skipMemoryCache(true)
+                        .priority(Priority.IMMEDIATE)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                                picture.setImage(ImageSource.bitmap(bitmap));
+                            }
+                        });
+
             }
         });
     }
@@ -80,32 +97,18 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.image_pager_item, container, false);
         picture = (SubsamplingScaleImageView) view.findViewById(R.id.media_view);
-        picture.recycle();
+        if (picture != null) picture.recycle();
         preview_picture = (ImageView) view.findViewById(R.id.media_preview_view);
         final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
-        //spinner.setVisibility(View.VISIBLE);
         spinner.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.accent));
         picture.setVisibility(View.INVISIBLE);
-        update();
+        updatePhoto();
         picture.setVisibility(View.VISIBLE);
         spinner.setVisibility(View.GONE);
 
         picture.setOnTouchListener(onTouchListener);
         picture.setMaxScale(10);
         return view;
-    }
-
-    private void recycleFullImageShowThumbnail() {
-        if (picture != null) {
-            picture.setOnTouchListener(null);
-            picture.recycle();
-            picture.setVisibility(View.INVISIBLE);
-        }
-
-
-        if (preview_picture != null) {
-            preview_picture.setVisibility(View.VISIBLE);
-        }
     }
 
     public void rotatePicture(int rotation) {
@@ -117,27 +120,26 @@ public class ImageFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                mThumbnailBitmap = Glide.with(getContext())
+                System.gc();
+                Glide.with(getContext())
                         .load(path)
                                 //.signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
                         .asBitmap()
                         .centerCrop()
-                                //.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .skipMemoryCache(true)
                         .priority(Priority.IMMEDIATE)
-                        .into(width, height)
-                        .get();
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        picture.setImage(ImageSource.bitmap(mThumbnailBitmap));
-                    }
-                });
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                                picture.setImage(ImageSource.bitmap(bitmap));
+                            }
+                        });
 
 
-            } catch (InterruptedException e) {
+            } catch (OutOfMemoryError e) {
+                StringUtils.showToast(getContext(), "Out of Memory!");
                 e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+
             }
             return null;
         }

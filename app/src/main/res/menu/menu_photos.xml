@@ -13,9 +13,9 @@
         />
     -->
     <item android:id="@+id/filterPhotos"
-        android:title="Sort"
-        android:orderInCategory="1"
         android:icon="@mipmap/ic_filter_list_white_24dp"
+        android:orderInCategory="1"
+        android:title="Filter"
         app:showAsAction="ifRoom"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -47,9 +47,9 @@
     </item>
 
     <item android:id="@+id/sortPhotos"
-        android:title="Sort"
-        android:orderInCategory="1"
         android:icon="@mipmap/ic_sort_white_24dp"
+        android:orderInCategory="1"
+        android:title="Sort"
         app:showAsAction="never"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -131,7 +131,7 @@
         app:showAsAction="never"
         />
     <item android:id="@+id/setting"
-        android:title="Setting"
+        android:title="Settings"
         app:showAsAction="never"
         />
 </menu>

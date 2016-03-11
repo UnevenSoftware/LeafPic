@@ -63,7 +63,7 @@ public class MediaPagerAdapter extends FragmentPagerAdapter {
     public int getItemPosition(Object object) {
         // refresh all fragments when data set changed
         ImageFragment fragment = (ImageFragment) object;
-        fragment.update();
+        fragment.updatePhoto();
         return PagerAdapter.POSITION_NONE;
     }
 

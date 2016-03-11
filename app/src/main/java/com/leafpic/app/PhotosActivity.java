@@ -52,6 +52,7 @@ import java.util.ArrayList;
  */
 public class PhotosActivity extends ThemedActivity {
 
+    public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
@@ -60,9 +61,7 @@ public class PhotosActivity extends ThemedActivity {
     Toolbar toolbar;
     ImageView headerImage;
     SwipeRefreshLayout mSwipeRefreshLayout;
-
     boolean listmode=false;
-    public boolean RVdecor=true;
     boolean editmode = false;
     PhotosAdapter adapter;
 
@@ -89,7 +88,7 @@ public class PhotosActivity extends ThemedActivity {
             }
         });
         ********/
-
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
         LoadPhotos();
         initUiTweaks();
     }
@@ -113,21 +112,6 @@ public class PhotosActivity extends ThemedActivity {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
             photos = new HandlingPhotos(PhotosActivity.this, album);
-
-            int spanCount = 3;
-            int spacing = 5;
-            boolean includeEdge = true;
-            GridSpacingItemDecoration decoration;
-            if(RVdecor) {
-                decoration = new GridSpacingItemDecoration(spanCount, spacing, includeEdge);
-                RVdecor = false;
-            }
-            else
-                decoration = new GridSpacingItemDecoration(3, 0, includeEdge);
-            mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
-            //mRecyclerView.removeItemDecoration(decoration);
-            mRecyclerView.addItemDecoration(decoration);
-
 
             adapter = new PhotosAdapter(photos.medias,getApplicationContext());
 
@@ -165,6 +149,10 @@ public class PhotosActivity extends ThemedActivity {
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mRecyclerView.setFitsSystemWindows(true);
+            if (RVdecor) {
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 5, true));
+                RVdecor = false;
+            }
 
         }
         catch (Exception e){ e.printStackTrace(); }
@@ -476,7 +464,7 @@ public class PhotosActivity extends ThemedActivity {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
                             photos.DisplayName=txt_edit.getText().toString();
                             updateHeaderContent();
-                            //UpdatePhotos();//TODO update photos
+                            //UpdatePhotos();//TODO updatePhoto photos
                         }
                         else StringUtils.showToast(getApplicationContext(), "Insert Something!");
                     }

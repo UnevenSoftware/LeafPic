@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -80,18 +81,8 @@ public class PhotoPagerActivity extends ThemedActivity {
         setContentView(R.layout.activity_photo);
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
 
-        //MENAGE on STATUS BAR PULL DOWN
-        View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
-                        else hideSystemUI();
-                    }
-                });
-
         initUiTweaks();
+
         final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -122,7 +113,10 @@ public class PhotoPagerActivity extends ThemedActivity {
             });
             mViewPager.setAdapter(adapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
+            getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " of " + photos.medias.size());
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
+            mViewPager.setOffscreenPageLimit(2);
+            // mViewPager.
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -131,6 +125,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 @Override
                 public void onPageSelected(int position) {
                     photos.setCurrentPhotoIndex(position);
+                    getSupportActionBar().setTitle((position + 1) + " of " + photos.medias.size());
                 }
 
                 @Override
@@ -157,7 +152,6 @@ public class PhotoPagerActivity extends ThemedActivity {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        ImageLoader.getInstance().clearMemoryCache();
         Glide.get(getApplicationContext()).clearMemory();
         Glide.get(getApplicationContext()).trimMemory(TRIM_MEMORY_COMPLETE);
         System.gc();
@@ -401,6 +395,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         .load(photos.getCurrentPhoto().Path)
                         .asBitmap()
                         .centerCrop()
+                        .priority(Priority.IMMEDIATE)
                         .placeholder(R.drawable.ic_empty)
                         .into(PhotoDetailsPreview);
 
@@ -470,7 +465,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
 
@@ -486,13 +481,23 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         }, 1500);
 
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                        else hideSystemUI();
+                    }
+                });
+
+
         if (SP.getBoolean("set_max_luminosita", false))
             updateBrightness(1.0F);
         else try {
-            float asd = android.provider.Settings.System.getInt(
+            float brightness = android.provider.Settings.System.getInt(
                     getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
-            asd = asd == 1.0F ? 255.0F : asd;
-            updateBrightness(asd);
+            brightness = brightness == 1.0F ? 255.0F : brightness;
+            updateBrightness(brightness);
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }

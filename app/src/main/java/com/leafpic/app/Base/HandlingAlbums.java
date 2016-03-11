@@ -3,6 +3,8 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
+
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
@@ -31,6 +33,19 @@ public class HandlingAlbums {
             dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
             dispAlbum.medias = as.getFirstAlbumPhoto(dispAlbum);
         }
+
+    }
+
+    public void loadPreviewAlbums(SwipeRefreshLayout ly) {
+        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        dispAlbums = as.getMediaStoreAlbums();
+
+        for (Album dispAlbum : dispAlbums) {
+            dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
+            dispAlbum.medias = as.getFirstAlbumPhoto(dispAlbum);
+        }
+        ly.setRefreshing(false);
 
     }
 
