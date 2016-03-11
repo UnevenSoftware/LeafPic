@@ -8,8 +8,6 @@
     tools:openDrawer="start">
 
     <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/Relative_Album_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,8 +40,8 @@
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
-            style="@style/fab"
             android:id="@+id/fab_camera"
+            style="@style/fab"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"

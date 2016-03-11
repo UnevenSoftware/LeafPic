@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.leafpic.app" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.leafpic.app">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -12,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat">
 
         <activity android:name=".IntroActivity"
             android:label="Intro Activity"
@@ -75,6 +76,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.leafpic.app.MyGlideModule"
+            android:value="GlideModule"
+            tools:node="remove" />
 
     </application>
 </manifest>
