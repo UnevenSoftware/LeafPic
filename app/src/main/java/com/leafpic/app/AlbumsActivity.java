@@ -63,7 +63,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
-    SwipeRefreshLayout SwipeContainerRV;
+    private SwipeRefreshLayout SwipeContainerRV;
 
     private GoogleApiClient client;
 
@@ -71,6 +71,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
+
         /****TODO: WORK BUT, MUST BE FIXXED BETTER****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         SwipeContainerRV.setColorSchemeResources(R.color.accent_amber,
@@ -81,21 +82,17 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         SwipeContainerRV.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //refreshItems();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadAlbums();
-                        SwipeContainerRV.setRefreshing(false);
-                    }
-                }, 500);
+                refreshItems();
             }
         });
+
         /************************/
 
         initUiTweaks();
         checkPermissions();
 
+
+        /****** APPP INTROOOOOOOOOOOOO*/
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -103,7 +100,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                         .getDefaultSharedPreferences(getBaseContext());
                 boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
                 if (isFirstStart) {
-                    //albums.loadPreviewHiddenAlbums();
                     Intent i = new Intent(AlbumsActivity.this, IntroActivity.class);
                     startActivity(i);
                     SharedPreferences.Editor e = getPrefs.edit();
@@ -114,11 +110,93 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         });
         t.start();
 
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
     }
+
+    void refreshItems() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LoadAlbumsData();
+            }
+        }, 1);
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LoadUiAlbums();
+            }
+        }, 1);
+        SwipeContainerRV.setRefreshing(false);//STOPPA IL PULL REFRESH
+    }
+
+    private void LoadAlbumsData(){
+        if (hidden) {
+            albums.loadPreviewHiddenAlbums();
+        } else
+            albums.loadPreviewAlbums();
+    }
+
+    private void LoadUiAlbums(){
+        /**** ALBUM UI LOAD ***/
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
+        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
+
+        /**** ON ALBUM LONG CLICK ***/
+        adapt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                TextView a = (TextView) v.findViewById(R.id.album_name);
+                adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+                editmode = true;
+                invalidateOptionsMenu();
+                return true;
+            }
+        });
+
+        /**** ON ALBUMS CLICK ***/
+        adapt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView a = (TextView) v.findViewById(R.id.album_name);
+                if (editmode) {
+                    adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+                    invalidateOptionsMenu();
+                } else {
+                    Album album = albums.getAlbum(a.getTag().toString());
+                    Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
+
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+                    Bundle b = new Bundle();
+                    b.putParcelable("album", album);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(adapt);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+        if (RVdecor) {
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+            RVdecor = false;
+        }
+        adapt.notifyDataSetChanged();
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
+    }
+
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -175,6 +253,9 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         });
 
         setRecentApp(getString(R.string.app_name));
+
+
+        /***********************************/
     }
 
     public void setDrawerTheme(){
@@ -277,8 +358,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             else
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-        } else
-            loadAlbums();
+        } //else
+            //loadAlbums();
     }
 
     @Override
@@ -533,7 +614,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         switch (requestCode) {
             case 0:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    loadAlbums();
+                    //loadAlbums();
                 break;
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
@@ -542,6 +623,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         }
     }
 
+    /*
     private void loadAlbums() {
 
         if (hidden) {
@@ -552,6 +634,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
+
         adapt.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -588,6 +671,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
         if (RVdecor) {
             mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
             RVdecor = false;
@@ -595,6 +679,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         adapt.notifyDataSetChanged();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
     }
+    */
 
     private void hideViews() {
         fabCamera.animate().translationY(fabCamera.getHeight()*2/*+fabBottomMargin*/).setInterpolator(new AccelerateInterpolator(2)).start();
