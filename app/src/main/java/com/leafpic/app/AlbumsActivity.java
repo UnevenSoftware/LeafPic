@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -128,6 +129,17 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     }
 
     void refreshItems() {
+        SwipeContainerRV.setRefreshing(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                albums.loadPreviewAlbums();
+                LoadUiAlbums();
+                SwipeContainerRV.setRefreshing(false);
+            }
+        },500);
+
+        /*
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -136,6 +148,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             }
         });
         SwipeContainerRV.setRefreshing(false);
+        */
     }
 
     private void LoadAlbumsData(){
@@ -351,7 +364,8 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 
                     /*****TODO*********************************************************************/
-                    LoadAlbumsData();
+                    //LoadAlbumsData();
+                    RefreshListener();
                     break;
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
