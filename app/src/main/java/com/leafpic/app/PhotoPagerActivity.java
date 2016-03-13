@@ -41,8 +41,6 @@ import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -155,12 +153,9 @@ public class PhotoPagerActivity extends ThemedActivity {
         if (data != null && resultCode == RESULT_OK) {
             final Bundle b = data.getExtras();
             switch (requestCode) {
-                case SelectAlbumActivity.COPY_TO_ACTION:
-                    StringUtils.showToast(getApplicationContext(), "copied ok");
-                    break;
                 case SelectAlbumActivity.MOVE_TO_ACTION:
                     int asd = Integer.valueOf(b.getString("photos_indexes"));
-                    if (asd > 0 && asd < photos.medias.size()) {
+                    if (asd >= 0 && asd < photos.medias.size()) {
                         photos.medias.remove(asd);
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((photos.getCurrentPhotoIndex() + 1) + " of " + photos.medias.size());
@@ -172,7 +167,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             copyFileToDownloads(imageUri);
-                            DiskCacheUtils.removeFromCache("file://" + photos.getCurrentPhoto().Path, ImageLoader.getInstance().getDiskCache());
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);
@@ -320,6 +314,14 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 RenameDialog.show();
                 break;
+
+            case R.id.advanced_photo_edit:
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                editIntent.setDataAndType(Uri.parse("file://" + photos.getCurrentPhoto().Path), photos.getCurrentPhoto().MIME);
+                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(editIntent, "Edit with"));
+
+                break;
             case R.id.details:
                 /****DATA****/
                 Media f = photos.getCurrentPhoto();
@@ -402,12 +404,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.setting:
-                Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
-
-                //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-                startActivity(intent2);
+                startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                 break;
 
             default:
