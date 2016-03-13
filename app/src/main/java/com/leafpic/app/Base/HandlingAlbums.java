@@ -33,7 +33,6 @@ public class HandlingAlbums {
             dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
             dispAlbum.medias = as.getFirstAlbumPhoto(dispAlbum);
         }
-
     }
 
     public void loadPreviewAlbums(SwipeRefreshLayout ly) {

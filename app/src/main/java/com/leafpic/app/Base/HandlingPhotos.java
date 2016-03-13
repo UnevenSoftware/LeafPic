@@ -405,7 +405,6 @@ public class HandlingPhotos implements Parcelable {
 
     public void scanFile(String[] path) {
         MediaScannerConnection.scanFile(context, path, null, new MediaScannerConnection.OnScanCompletedListener() {
-
             @Override
             public void onScanCompleted(String path, Uri uri) {
                 System.out.println("SCAN COMPLETED: " + path);

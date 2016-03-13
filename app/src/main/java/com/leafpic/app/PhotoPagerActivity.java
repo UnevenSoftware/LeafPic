@@ -33,9 +33,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
@@ -44,8 +41,6 @@ import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -69,12 +64,6 @@ public class PhotoPagerActivity extends ThemedActivity {
     Toolbar toolbar;
     boolean fullscreenmode;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,11 +81,11 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
 
         try {
-            if (getIntent().getData() != null) {
+            if (getIntent().getData() != null) { /*** Call from android.View */
                 photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
                 photos.setCurrentPhoto(getIntent().getData().getPath());
 
-            } else if (getIntent().getExtras() != null) {
+            } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity*/
                 Bundle data = getIntent().getExtras();
                 photos = data.getParcelable("album");
                 if (photos != null)
@@ -116,7 +105,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " of " + photos.medias.size());
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.setOffscreenPageLimit(2);
-            // mViewPager.
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -125,7 +113,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 @Override
                 public void onPageSelected(int position) {
                     photos.setCurrentPhotoIndex(position);
-                    getSupportActionBar().setTitle((position + 1) + " of " + photos.medias.size());
+                    toolbar.setTitle((position + 1) + " of " + photos.medias.size());
                 }
 
                 @Override
@@ -136,11 +124,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -170,23 +153,12 @@ public class PhotoPagerActivity extends ThemedActivity {
         if (data != null && resultCode == RESULT_OK) {
             final Bundle b = data.getExtras();
             switch (requestCode) {
-                case SelectAlbumActivity.COPY_TO_ACTION:
-                    StringUtils.showToast(getApplicationContext(), "copied ok");
-                    break;
                 case SelectAlbumActivity.MOVE_TO_ACTION:
-                    String asd = b.getString("photos_indexes");
-                    if (asd != null) {
-                        StringUtils.showToast(getApplicationContext(), "moved ok");
-                        //Log.wtf("asdasdasdas", medias.medias.size() + "");
-                        //medias.removePhoto(Integer.valueOf(asd));
-                        // TODO remove photo moved from older album [porco dio]
-                        //Log.wtf("asdasdasdas", medias.medias.size() + "");
-                        //adapter.removeItemAt(Integer.valueOf(asd));
-                        //mRecyclerView.removeViewAt(Integer.parseInt(asd));
-                        //medias.medias.remove(Integer.parseInt(asd));
-                        //mRecyclerView.removeViewAt(Integer.valueOf(asd));
-                        //adapter.notifyItemRemoved(Integer.parseInt(asd));
-                        //adapter.notifyDataSetChanged();
+                    int asd = Integer.valueOf(b.getString("photos_indexes"));
+                    if (asd >= 0 && asd < photos.medias.size()) {
+                        photos.medias.remove(asd);
+                        adapter.notifyDataSetChanged();
+                        toolbar.setTitle((photos.getCurrentPhotoIndex() + 1) + " of " + photos.medias.size());
                         invalidateOptionsMenu();
                     }
                     break;
@@ -195,7 +167,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             copyFileToDownloads(imageUri);
-                            DiskCacheUtils.removeFromCache("file://" + photos.getCurrentPhoto().Path, ImageLoader.getInstance().getDiskCache());
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);
@@ -234,7 +205,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Intent int1 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
-                int1.putExtra("photos_indexes", photos.getCurrentPhotoIndex());
+                int1.putExtra("photos_indexes", String.valueOf(photos.getCurrentPhotoIndex()));
                 startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
@@ -257,21 +228,12 @@ public class PhotoPagerActivity extends ThemedActivity {
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        int index = mViewPager.getCurrentItem();
-                        StringUtils.showToast(getApplicationContext(), index + " - doesn't work properly");
-
-                        //TODO improve delete single photo
                         photos.deleteCurrentPhoto();
                         if (photos.medias.size() == 0)
                             startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
                         adapter.notifyDataSetChanged();
+                        toolbar.setTitle(mViewPager.getCurrentItem() + 1 + " of " + photos.medias.size());
 
-                        // adapter.removeFragmentat(index);
-                        // adapter.notifyDataSetChanged();
-                        //mViewPager.removeView(mViewPager.getChildAt(index));
-                        mViewPager.destroyDrawingCache();
-                        //mViewPager.setCurrentItem(index + 1);
                     }
                 });
                 builder1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -279,8 +241,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     }
                 });
                 builder1.show();
-
                 return true;
+
             case R.id.edit_photo:
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
                 Uri uri = Uri.fromFile(new File(photos.getCurrentPhoto().Path));
@@ -292,11 +254,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 //uCrop = basisConfig(uCrop);
                 //uCrop = advancedConfig(uCrop);
 
-
                 uCrop.start(PhotoPagerActivity.this);
-
-               /* UCrop.of(Uri.parse("file/" + curPath), Uri.parse("file/" + curPath))
-                        .start(PhotoPagerActivity.this);*/
                 break;
 
             case R.id.useAsIntent:
@@ -347,7 +305,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String Type = photos.getCurrentPhoto().MIME;
                         StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString());
                         if (txt_edit.length() != 0)
                             photos.renamePhoto(photos.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString()));
@@ -356,6 +313,14 @@ public class PhotoPagerActivity extends ThemedActivity {
                     }
                 });
                 RenameDialog.show();
+                break;
+
+            case R.id.advanced_photo_edit:
+                Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                editIntent.setDataAndType(Uri.parse("file://" + photos.getCurrentPhoto().Path), photos.getCurrentPhoto().MIME);
+                editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(editIntent, "Edit with"));
+
                 break;
             case R.id.details:
                 /****DATA****/
@@ -439,12 +404,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.setting:
-                Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
-
-                //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-                startActivity(intent2);
+                startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                 break;
 
             default:
@@ -465,7 +425,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
 
@@ -660,46 +619,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "PhotoPager Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.leafpic.app/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "PhotoPager Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.leafpic.app/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 }
 

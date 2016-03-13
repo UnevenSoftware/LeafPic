@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -314,21 +315,20 @@ public class PhotosActivity extends ThemedActivity {
                     if (resultCode == RESULT_OK) {
                         String ind = b.getString("photos_indexes");
                         if (ind != null) {
-                            for (String asd : ind.split("ç")) {
-                                //Log.wtf("asdasdasdas", medias.medias.size() + "");
-                                //medias.removePhoto(Integer.valueOf(asd));
-                                // TODO remove photo moved from older album [porco dio]
-                                //Log.wtf("asdasdasdas", medias.medias.size() + "");
-                                //adapter.removeItemAt(Integer.valueOf(asd));
-                                //mRecyclerView.removeViewAt(Integer.parseInt(asd));
-                                //medias.medias.remove(Integer.parseInt(asd));
-                                //mRecyclerView.removeViewAt(Integer.valueOf(asd));
+                            Log.wtf("lengh", "" + photos.medias.size());
 
-                                //adapter.notifyItemRemoved(Integer.parseInt(asd));
+                            for (String asd : ind.split("ç")) {
+
+                                int a = Integer.valueOf(asd);
+                                Log.wtf("asd", "" + a);
+                                photos.medias.remove(a);
+                                //adapter.notifyItemRemoved(a);
                             }
+                            Log.wtf("lengh", "" + photos.medias.size());
+                            adapter.notifyDataSetChanged();
+                            invalidateOptionsMenu();
                         }
-                        //adapter.notifyDataSetChanged();
-                        invalidateOptionsMenu();
+
                     }
                     break;
                 default:

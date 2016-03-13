@@ -63,7 +63,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         return new ViewHolder(v);
     }
 
-    //@Override
+
     public double aspectRatioForIndex(int index) {
         Media f = medias.get(index);
         if (index > medias.size()) return 1.0;
@@ -95,7 +95,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .into(holder.imageView);
         }
 
-
         holder.path.setTag(f.Path);
 
         if (f.isSelected()) {
@@ -120,14 +119,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public void setOnLongClickListener(View.OnLongClickListener lis) {
         mOnLongClickListener = lis;
-    }
-
-    public void removeItemAt(int pos) {
-        //Log.wtf("asdasd",getItemCount()+"");
-        //medias.remove(pos);
-        //notifyItemRemoved(pos);
-        //Log.wtf("asdasd",getItemCount()+"");
-        // notifyDataSetChanged();
     }
 
 

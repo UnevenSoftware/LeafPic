@@ -35,7 +35,15 @@
                 android:icon="@mipmap/ic_replay_white_24dp"
                 android:title="Rotate 180°" />
         </menu>
-        </item>
+    </item>
+    <item
+        android:id="@+id/copyAction"
+        android:title="Copy to"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/moveAction"
+        android:title="Move to"
+        app:showAsAction="never" />
     <item
         android:id="@+id/useAsIntent"
         android:title="Use as"
@@ -52,24 +60,29 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/copyAction"
-        android:title="Copy to"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/moveAction"
-        android:title="Move to"
-        app:showAsAction="never"
-        />
-    <item
         android:id="@+id/details"
         android:title="Details"
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/setting"
-        android:title="Settings"
-        app:showAsAction="never"
-        />
+        android:title="More"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/advanced_photo_edit"
+                android:title="Advanced Edit"
+                app:showAsAction="never" />
+            <item
+                android:title="Open with"
+                app:showAsAction="never" />
+            <item
+                android:title="Upload to Imgiur"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/setting"
+                android:title="Settings"
+                app:showAsAction="never" />
+        </menu>
+    </item>
     <!-- End Albums Stuff -->
 </menu>
