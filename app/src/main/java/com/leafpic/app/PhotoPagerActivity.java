@@ -83,11 +83,11 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
 
         try {
-            if (getIntent().getData() != null) {
+            if (getIntent().getData() != null) { /*** Call from android.View */
                 photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
                 photos.setCurrentPhoto(getIntent().getData().getPath());
 
-            } else if (getIntent().getExtras() != null) {
+            } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity*/
                 Bundle data = getIntent().getExtras();
                 photos = data.getParcelable("album");
                 if (photos != null)
@@ -107,7 +107,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " of " + photos.medias.size());
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.setOffscreenPageLimit(2);
-            // mViewPager.
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -116,7 +115,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 @Override
                 public void onPageSelected(int position) {
                     photos.setCurrentPhotoIndex(position);
-                    getSupportActionBar().setTitle((position + 1) + " of " + photos.medias.size());
+                    toolbar.setTitle((position + 1) + " of " + photos.medias.size());
                 }
 
                 @Override
@@ -127,8 +126,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -162,19 +159,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                     StringUtils.showToast(getApplicationContext(), "copied ok");
                     break;
                 case SelectAlbumActivity.MOVE_TO_ACTION:
-                    String asd = b.getString("photos_indexes");
-                    if (asd != null) {
-                        StringUtils.showToast(getApplicationContext(), "moved ok");
-                        //Log.wtf("asdasdasdas", medias.medias.size() + "");
-                        //medias.removePhoto(Integer.valueOf(asd));
-                        // TODO remove photo moved from older album [porco dio]
-                        //Log.wtf("asdasdasdas", medias.medias.size() + "");
-                        //adapter.removeItemAt(Integer.valueOf(asd));
-                        //mRecyclerView.removeViewAt(Integer.parseInt(asd));
-                        //medias.medias.remove(Integer.parseInt(asd));
-                        //mRecyclerView.removeViewAt(Integer.valueOf(asd));
-                        //adapter.notifyItemRemoved(Integer.parseInt(asd));
-                        //adapter.notifyDataSetChanged();
+                    int asd = Integer.valueOf(b.getString("photos_indexes"));
+                    if (asd > 0 && asd < photos.medias.size()) {
+                        photos.medias.remove(asd);
+                        adapter.notifyDataSetChanged();
+                        toolbar.setTitle((photos.getCurrentPhotoIndex() + 1) + " of " + photos.medias.size());
                         invalidateOptionsMenu();
                     }
                     break;
@@ -222,7 +211,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Intent int1 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
-                int1.putExtra("photos_indexes", photos.getCurrentPhotoIndex());
+                int1.putExtra("photos_indexes", String.valueOf(photos.getCurrentPhotoIndex()));
                 startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
@@ -245,21 +234,12 @@ public class PhotoPagerActivity extends ThemedActivity {
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        int index = mViewPager.getCurrentItem();
-                        StringUtils.showToast(getApplicationContext(), index + " - doesn't work properly");
-
-                        //TODO improve delete single photo
                         photos.deleteCurrentPhoto();
                         if (photos.medias.size() == 0)
                             startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
                         adapter.notifyDataSetChanged();
+                        toolbar.setTitle(mViewPager.getCurrentItem() + 1 + " of " + photos.medias.size());
 
-                        // adapter.removeFragmentat(index);
-                        // adapter.notifyDataSetChanged();
-                        //mViewPager.removeView(mViewPager.getChildAt(index));
-                        mViewPager.destroyDrawingCache();
-                        //mViewPager.setCurrentItem(index + 1);
                     }
                 });
                 builder1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -267,8 +247,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     }
                 });
                 builder1.show();
-
                 return true;
+
             case R.id.edit_photo:
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
                 Uri uri = Uri.fromFile(new File(photos.getCurrentPhoto().Path));
@@ -280,11 +260,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 //uCrop = basisConfig(uCrop);
                 //uCrop = advancedConfig(uCrop);
 
-
                 uCrop.start(PhotoPagerActivity.this);
-
-               /* UCrop.of(Uri.parse("file/" + curPath), Uri.parse("file/" + curPath))
-                        .start(PhotoPagerActivity.this);*/
                 break;
 
             case R.id.useAsIntent:
@@ -335,7 +311,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String Type = photos.getCurrentPhoto().MIME;
                         StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString());
                         if (txt_edit.length() != 0)
                             photos.renamePhoto(photos.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString()));
@@ -453,7 +428,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
 

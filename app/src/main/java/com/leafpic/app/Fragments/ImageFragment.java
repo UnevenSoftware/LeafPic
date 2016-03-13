@@ -60,33 +60,37 @@ public class ImageFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(picture!=null) {
+      /*  if(picture!=null) {
             picture.recycle();
             picture.setOnTouchListener(null);
         }
         if (mThumbnailBitmap != null) {
             mThumbnailBitmap.recycle();
             Log.wtf("asd", "recycled: ");
-        }
+        }*/
     }
 
     public void updatePhoto() {
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 System.gc();
-                Glide.with(getContext())
-                        .load(path)
-                                //.signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
-                        .asBitmap()
-                        .centerCrop()
-                        .skipMemoryCache(true)
-                        .priority(Priority.IMMEDIATE)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-                                picture.setImage(ImageSource.bitmap(bitmap));
-                            }
-                        });
+                try {
+                    Glide.with(getContext())
+                            .load(path)
+                            .asBitmap()
+                            .centerCrop()
+                            .skipMemoryCache(true)
+                            .priority(Priority.IMMEDIATE)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                                    picture.setImage(ImageSource.bitmap(bitmap));
+                                }
+                            });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             }
         });

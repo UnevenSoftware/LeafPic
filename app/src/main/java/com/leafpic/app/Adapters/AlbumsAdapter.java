@@ -119,7 +119,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return albums.size();
     }
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout card_layout;
         ImageView picture;

@@ -1,7 +1,6 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,7 +41,6 @@ import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.context.IconicsContextWrapper;
 
 
 public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
@@ -199,6 +197,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             }
         });
         mRecyclerView.setAdapter(adapt);
+
         adapt.notifyDataSetChanged();
     }
 
@@ -377,6 +376,54 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     }
     //endregion
 
+    void updateSelectedStuff() {
+        int c;
+        try {
+            if ((c = albums.getSelectedCount()) != 0) {
+                toolbar.setTitle(c + "/" + albums.dispAlbums.size());
+                toolbar.setNavigationIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_check)
+                        .color(Color.WHITE)
+                        .sizeDp(20));
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editmode = false;
+                        invalidateOptionsMenu();
+                        albums.clearSelectedAlbums();
+                        adapt.notifyDataSetChanged();
+                    }
+                });
+                toolbar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (albums.getSelectedCount() == albums.dispAlbums.size())
+                            albums.clearSelectedAlbums();
+                        else albums.selectAllAlbums();
+                        adapt.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    }
+                });
+            } else {
+                toolbar.setTitle(getString(R.string.app_name));
+                toolbar.setNavigationIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_menu)
+                        .color(Color.WHITE)
+                        .sizeDp(20));
+                toolbar.setOnClickListener(null);
+                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDrawerLayout.openDrawer(GravityCompat.START);
+                    }
+                });
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -421,54 +468,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         return super.onPrepareOptionsMenu(menu);
     }
 
-    void updateSelectedStuff() {
-        int c;
-        try {
-            if ((c = albums.getSelectedCount()) != 0) {
-                getSupportActionBar().setTitle(c + "/" + albums.dispAlbums.size());
-                toolbar.setNavigationIcon(new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_check)
-                        .color(Color.WHITE)
-                        .sizeDp(20));
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editmode = false;
-                        invalidateOptionsMenu();
-                        albums.clearSelectedAlbums();
-                        adapt.notifyDataSetChanged();
-                    }
-                });
-                toolbar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (albums.getSelectedCount() == albums.dispAlbums.size())
-                            albums.clearSelectedAlbums();
-                        else albums.selectAllAlbums();
-                        adapt.notifyDataSetChanged();
-                        invalidateOptionsMenu();
-                    }
-                });
-            } else {
-                getSupportActionBar().setTitle(getString(R.string.app_name));
-                toolbar.setNavigationIcon(new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_menu)
-                        .color(Color.WHITE)
-                        .sizeDp(20));
-                toolbar.setOnClickListener(null);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDrawerLayout.openDrawer(GravityCompat.START);
-                    }
-                });
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void setOptionsAlbmuMenusItemsVisible(final Menu menu, boolean val) {
         MenuItem opt = menu.findItem(R.id.hideAlbumButton);
         opt.setEnabled(val).setVisible(val);
@@ -509,6 +508,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 });
                 popup.show(); //showing popup menu
                 break;
+
             case R.id.refreshhiddenAlbumsButton:
                 albums.loadPreviewHiddenAlbums();
                 adapt.notifyDataSetChanged();
@@ -619,10 +619,5 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             mDrawerLayout.closeDrawer(GravityCompat.START);
         else
             finish();
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 }
