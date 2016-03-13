@@ -69,7 +69,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
                 .centerCrop()
                 .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                .animate(R.anim.fade_in)//android.R.anim.slide_in_left
+                //animate(R.anim.fade_in)//android.R.anim.slide_in_left
                 .into(holder.picture);
 
         holder.name.setTag(a.Path);

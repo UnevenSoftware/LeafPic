@@ -2,9 +2,9 @@ package com.leafpic.app;
 
 import android.app.ActivityManager;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.View;
 
@@ -16,22 +16,27 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
  */
 public class IntroActivity extends AppIntro {
     int slide=1;
-
+    BitmapDrawable drawable;
     @Override
     public void init(Bundle savedInstanceState) {
 
         addSlide(AppIntroFragment.newInstance("Welcome To LeafPic!", "ColourFull Material Design Gallery!",
-                R.drawable.leafpic_big, Color.parseColor("#009688")));
+                R.drawable.leafpic_big, ContextCompat.getColor(this, R.color.accent_teal)));
 
-        addSlide(AppIntroFragment.newInstance("Leaf Pic", Html.fromHtml("<b>DONY GHEEEY </b><br><i>la descrizione itallica spifina!!!</i>"),
-                R.mipmap.ic_launcher, Color.parseColor("#607D8B")));
+        addSlide(AppIntroFragment.newInstance("Storage Permission", Html.fromHtml("ALLOW Storage permisison to use our gallery<b></b><br><i></i>"),
+                R.drawable.storage_permission, ContextCompat.getColor(this, R.color.accent_brown)));//Color.parseColor("#607D8B")
 
-        setBarColor(Color.parseColor("#00796B"));
-        setSeparatorColor(Color.parseColor("#009688"));
+        setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
+        setSeparatorColor(ContextCompat.getColor(this, R.color.accent_teal));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_teal));
+
+        drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+        setTaskDescription(new ActivityManager.TaskDescription
+                (getString(R.string.app_name), drawable.getBitmap(),
+                        ContextCompat.getColor(this, R.color.accent_teal)));
+
+        //MAYBE REMOVE
         showSkipButton(true);
-
-        BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-        setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), drawable.getBitmap(), Color.parseColor("#00796B")));
 
     }
 
@@ -61,12 +66,30 @@ public class IntroActivity extends AppIntro {
     public void onSlideChanged() {
         if (slide==1) {
             slide=2;
-            setSeparatorColor(Color.parseColor("#00796B"));
-            setBarColor(Color.parseColor("#00796B"));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_teal));
+            setSeparatorColor(ContextCompat.getColor(this, R.color.accent_teal));
+            setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
+            drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription
+                    (getString(R.string.app_name), drawable.getBitmap(),
+                    ContextCompat.getColor(this, R.color.accent_teal)));
+
         } else{
+            /* TODO: NOT WORK
+            if (ContextCompat.checkSelfPermission(IntroActivity.this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+            }
+            */
             slide=1;
-            setSeparatorColor(Color.parseColor("#607D8B"));
-            setBarColor(Color.parseColor("#455A64"));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_brown));
+            setSeparatorColor(ContextCompat.getColor(this, R.color.accent_brown));
+            setBarColor(ContextCompat.getColor(this, R.color.accent_brown));
+            drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription
+                    (getString(R.string.app_name), drawable.getBitmap(),
+                            ContextCompat.getColor(this, R.color.accent_brown)));
+
         }
     }
 

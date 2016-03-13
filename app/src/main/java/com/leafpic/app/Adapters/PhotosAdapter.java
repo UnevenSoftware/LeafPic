@@ -90,7 +90,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .asBitmap()
                     .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), 0))
                     .centerCrop()
-                    .placeholder(R.drawable.ic_empty)
+                    .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                    .animate(R.anim.fade_in)
                     .into(holder.imageView);
         }
 
