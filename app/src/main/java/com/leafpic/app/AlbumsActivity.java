@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -35,9 +34,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
@@ -52,7 +48,6 @@ import com.mikepenz.iconics.context.IconicsContextWrapper;
 public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
 
     //region PUBLIC VARIABLES
-    public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
@@ -61,7 +56,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
     private SwipeRefreshLayout SwipeContainerRV;
-    private GoogleApiClient client;
     //endregion
 
     @Override
@@ -83,6 +77,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         */
 
         /**** SET UP UI ****/
+        initUI();
         setupUI();
 
         /**** CHECK PERMISSION ****/
@@ -90,10 +85,6 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
 
         /**** SWIPE REFRESH ****/
         RefreshListener();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void StartAppIntro(){
@@ -137,7 +128,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
                 LoadUiAlbums();
                 SwipeContainerRV.setRefreshing(false);
             }
-        },500);
+        }, 500);
 
         /*
         runOnUiThread(new Runnable() {
@@ -211,18 +202,34 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         adapt.notifyDataSetChanged();
     }
 
-    //region UI/GRAPHIC
-    public void setupUI() {
-        setRecentApp(getString(R.string.app_name));
+    public void initUI() {
+
         /**** TOOLBAR ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getPrimaryColor());
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
-        /**** STATUS BAR + NAVBAR ****/
-        setStatusBarColor();
-        setNavBarColor();
+        /**** RECYCLER VIEW ****/
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+
+        /**** DRAWER ****/
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
+                mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            public void onDrawerClosed(View view) {
+                //Put your code here
+                // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                //Put your code here
+                //materialMenu.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+            }
+        });
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
@@ -235,31 +242,26 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
             }
         });
 
+        setRecentApp(getString(R.string.app_name));
+    }
+
+    //region UI/GRAPHIC
+    public void setupUI() {
+        /**** TOOLBAR ****/
+        toolbar.setBackgroundColor(getPrimaryColor());
+
+        /**** STATUS BAR + NAVBAR ****/
+        setStatusBarColor();
+        setNavBarColor();
+
+        /**** FAB ***/
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+
         /**** DRAWER ****/
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setDrawerTheme();
-        mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
-                mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) {
-                //Put your code here
-                // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
-            }
-            public void onDrawerOpened(View drawerView) {
-                //Put your code here
-                //materialMenu.animateIconState(MaterialMenuDrawable.IconState.ARROW);
-            }
-        });
 
         /**** RECYCLER VIEW ****/
-        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        if (RVdecor) {
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
-            RVdecor = false;
-        }
 
         /**** CHECK PERMISSION ****/
         //checkPermissions();
@@ -603,19 +605,13 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         super.onResume();
         albums.clearSelectedAlbums();
         setupUI();
+        invalidateOptionsMenu();
 
         //TODO: I WILL SEE IT LATER
-        //updateSelectedStuff();
-        //invalidateOptionsMenu();
+        adapt.notifyDataSetChanged();
         //checkPermissions();
         //refreshItems();
     }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -628,45 +624,5 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Albums Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.leafpic.app/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Albums Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.leafpic.app/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 }
