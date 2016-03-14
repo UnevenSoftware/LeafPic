@@ -107,7 +107,7 @@ public class AlbumsActivity extends ThemedActivity {
         refreshItems();
         //TODO: I WILL SEE IT LATER
         //adapt.notifyDataSetChanged();
-        //checkPermissions();
+
         //refreshItems();
     }
 
@@ -136,8 +136,7 @@ public class AlbumsActivity extends ThemedActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                albums.loadPreviewAlbums();
-                LoadUiAlbums();
+                checkPermissions();
                 SwipeContainerRV.setRefreshing(false);
             }
         }, 500);
