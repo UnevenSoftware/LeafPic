@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.leafpic.app.Views.ThemedActivity;
@@ -37,6 +38,8 @@ public class SettingActivity extends ThemedActivity {
     TextView txtGT;
     TextView txtTT;
     TextView txtPT;
+    TextView txtSBT;//TITLE
+    TextView txtSBC;//COUNT
 
     SwitchCompat swCollaps;
     SwitchCompat swDarkTheme;
@@ -44,6 +47,9 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swStatusBar;
     SwitchCompat swMaxLuminosita;
     SwitchCompat swPictureOrientation;
+    SwitchCompat swEnableAlpha;
+
+    SeekBar sbAlpha;
 
     boolean maxLuminosita, pictureOrientation;
 
@@ -58,6 +64,8 @@ public class SettingActivity extends ThemedActivity {
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
+        txtSBT = (TextView) findViewById(R.id.seek_bar_alpha_title);
+        txtSBC = (TextView) findViewById(R.id.seek_bar_alpha_count);
 
         setNavBarColor();
         maxLuminosita = SP.getBoolean("set_max_luminosita", false);
@@ -82,7 +90,51 @@ public class SettingActivity extends ThemedActivity {
         });
 
 
+        /**** SEEK BAR ****/
+        sbAlpha = (SeekBar) findViewById(R.id.seek_bar_alpha);
+        txtSBC.setText(((SP.getInt("set_alpha", 0))*100)/255 + "%");
+        txtSBC.setTextColor(getAccentColor());
+        sbAlpha.setProgress(SP.getInt("set_alpha", 0));
+
+        sbAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progress = SP.getInt("set_alpha", 0);
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                progress = progresValue;
+                txtSBC.setText((progress * 100)/255 + "%" /*+ "/" + seekBar.getMax()*/);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                txtSBC.setText((progress * 100)/255  + "%" /*+ "/" + seekBar.getMax()*/);
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putInt("set_alpha", progress);
+                editor.apply();
+            }
+        });
+
+
         /**** Switches ****/
+
+        /*********** SW Picture_orientation ************/
+        swEnableAlpha = (SwitchCompat) findViewById(R.id.set_alpha_enabled);
+        swEnableAlpha.setChecked(isTransparency());
+        swEnableAlpha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_alpha_enabled", isChecked);
+                editor.apply();
+                updateSwitchColor(swEnableAlpha);
+                sbAlpha.setEnabled(isChecked);
+            }
+        });
+        updateSwitchColor(swEnableAlpha);
 
         /*********** SW Picture_orientation ************/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
@@ -321,6 +373,7 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(colorPicker.getColor());
                 txtTT.setTextColor(colorPicker.getColor());
                 txtPT.setTextColor(colorPicker.getColor());
+                txtSBC.setTextColor(colorPicker.getColor());
 
                 if(swCollaps.isChecked()) swCollaps.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swDarkTheme.isChecked()) swDarkTheme.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
@@ -341,6 +394,8 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
+                txtSBC.setTextColor(getAccentColor());
+
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -358,6 +413,8 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
+                txtSBC.setTextColor(getAccentColor());
+
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -373,6 +430,8 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
+                txtSBC.setTextColor(getAccentColor());
+
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -450,11 +509,17 @@ public class SettingActivity extends ThemedActivity {
             ImageView imgMax = (ImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
             TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
             ImageView imgOrient = (ImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
+            //SEEKBAR
+            TextView txtSBT = (TextView) findViewById(R.id.seek_bar_alpha_title);
+            ImageView imgSB = (ImageView) findViewById(R.id.ll_seek_bar_alpha_icon);
             // SET COLOR
             txtMax.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
             imgMax.setImageResource(R.mipmap.ic_brightness_high_white_24dp);
             txtOrient.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
             imgOrient.setImageResource(R.mipmap.ic_screen_rotation_white_24dp);
+            //SEEKBAR
+            txtSBT.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
+            imgSB.setImageResource(R.mipmap.ic_brush_white_24dp);
 
 
             // GENERAL
@@ -494,9 +559,9 @@ public class SettingActivity extends ThemedActivity {
             ////////////
 
         } else {
+            bg.setBackgroundColor(getBackgroundColor());
             cvGeneral.setBackgroundColor( ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
             cvTheme.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
-            bg.setBackgroundColor(getBackgroundColor());
             cvPicture.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
         }
     }

@@ -165,7 +165,7 @@
                         android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="Picture Preview"
+                        android:text="Picture Settings"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -248,6 +248,83 @@
                             android:paddingRight="20dp"
                             android:paddingTop="15dp" />
                     </LinearLayout>
+
+
+                     <!-- ALPHA TITLE -->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_seek_bar_alpha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        >
+
+                        <ImageView
+                            android:id="@+id/ll_seek_bar_alpha_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp"
+                            android:src="@mipmap/ic_brush_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/seek_bar_alpha_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:text="Transparency"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/set_alpha_enabled"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingBottom="15dp"
+                            android:paddingRight="20dp"
+                            android:paddingTop="15dp" />
+
+                    </LinearLayout>
+
+                    <!-- ALPHA SEEKBAR -->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_seek_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/seek_bar_alpha_count"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="20dp"
+                            android:text="100%"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+
+                        <SeekBar
+                            android:id="@+id/seek_bar_alpha"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:max="255"
+                            />
+                    </LinearLayout>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

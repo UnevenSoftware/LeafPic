@@ -26,6 +26,7 @@ public class ThemedActivity extends AppCompatActivity {
     private boolean coloredNavigationBar;
     private boolean collapsing;
     private boolean statusbar;
+    private boolean alpha;
 
     public int getAccentColor() {
         return accentColor;
@@ -37,6 +38,10 @@ public class ThemedActivity extends AppCompatActivity {
 
     public boolean isTraslucentStatusBar() {
         return statusbar;
+    }
+
+    public boolean isTransparency() {
+        return alpha;
     }
 
     public int getPrimaryColor() {
@@ -116,6 +121,7 @@ public class ThemedActivity extends AppCompatActivity {
         coloredNavigationBar = SP. getBoolean("nav_bar", false);
         collapsing = SP.getBoolean("set_collaps_toolbar", true);
         statusbar = SP.getBoolean("set_traslucent_statusbar",false);
+        alpha = SP.getBoolean("set_alpha_enabled", false);
     }
 
     public void setRecentApp(String text){
