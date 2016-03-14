@@ -79,7 +79,7 @@ public class AlbumsActivity extends ThemedActivity {
         setupUI();
 
         /**** CHECK PERMISSION ****/
-        checkPermissions();
+        //checkPermissions(); // lo fa in on resume
 
         /**** SWIPE REFRESH ****/
         RefreshListener();
