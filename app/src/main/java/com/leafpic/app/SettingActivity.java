@@ -381,6 +381,7 @@ public class SettingActivity extends ThemedActivity {
                 if(swStatusBar.isChecked()) swStatusBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swMaxLuminosita.isChecked()) swMaxLuminosita.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swPictureOrientation.isChecked()) swPictureOrientation.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
+                if(swEnableAlpha.isChecked()) swEnableAlpha.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
 
             }
         });
@@ -402,6 +403,7 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swStatusBar);
                 updateSwitchColor(swMaxLuminosita);
                 updateSwitchColor(swPictureOrientation);
+                updateSwitchColor(swEnableAlpha);
             }
         });
         AccentPikerDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -421,6 +423,7 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swStatusBar);
                 updateSwitchColor(swMaxLuminosita);
                 updateSwitchColor(swPictureOrientation);
+                updateSwitchColor(swEnableAlpha);
 
             }
         });
@@ -438,6 +441,7 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swStatusBar);
                 updateSwitchColor(swMaxLuminosita);
                 updateSwitchColor(swPictureOrientation);
+                updateSwitchColor(swEnableAlpha);
             }
         });
         AccentPikerDialog.show();

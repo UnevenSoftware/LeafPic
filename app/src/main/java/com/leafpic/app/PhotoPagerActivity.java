@@ -419,20 +419,20 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-        toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
+        
+        if(isTransparency()){
+            toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
+            getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
+            getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) )); //ALPHA = 200
+        } else {
+            toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+            getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        }
         setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-        getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
-
-        //getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-        getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) )); //ALPHA = 200
-
 
         setRecentApp(getString(R.string.app_name));
 
