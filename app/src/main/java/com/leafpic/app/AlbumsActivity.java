@@ -97,6 +97,20 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         AppIntroThread.start();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        albums.clearSelectedAlbums();
+        setupUI();
+        invalidateOptionsMenu();
+
+        refreshItems();
+        //TODO: I WILL SEE IT LATER
+        //adapt.notifyDataSetChanged();
+        //checkPermissions();
+        //refreshItems();
+    }
+
     public void RefreshListener(){
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         SwipeContainerRV.setColorSchemeResources(R.color.accent_blue);
@@ -600,18 +614,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
     //endregion
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        albums.clearSelectedAlbums();
-        setupUI();
-        invalidateOptionsMenu();
 
-        //TODO: I WILL SEE IT LATER
-        adapt.notifyDataSetChanged();
-        //checkPermissions();
-        //refreshItems();
-    }
 
     @Override
     public void onBackPressed() {

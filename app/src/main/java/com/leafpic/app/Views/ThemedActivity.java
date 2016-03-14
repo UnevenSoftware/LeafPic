@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 
 import com.leafpic.app.R;
@@ -25,6 +26,7 @@ public class ThemedActivity extends AppCompatActivity {
     private boolean coloredNavigationBar;
     private boolean collapsing;
     private boolean statusbar;
+    private boolean alpha;
 
     public int getAccentColor() {
         return accentColor;
@@ -36,6 +38,10 @@ public class ThemedActivity extends AppCompatActivity {
 
     public boolean isTraslucentStatusBar() {
         return statusbar;
+    }
+
+    public boolean isTransparency() {
+        return alpha;
     }
 
     public int getPrimaryColor() {
@@ -103,6 +109,11 @@ public class ThemedActivity extends AppCompatActivity {
         return color;
     }
 
+    public int getTransparentColor(int color, int alpha){
+        int res = ColorUtils.setAlphaComponent(color, alpha);//(color & 0x00ffffff) | (alpha);
+        return  res;
+    }
+
     public void updateTheme(){
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_teal_500));//TEAL CARD BG DEFAULT;
         this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_orange_500));//TEAL COLOR DEFAULT
@@ -110,6 +121,7 @@ public class ThemedActivity extends AppCompatActivity {
         coloredNavigationBar = SP. getBoolean("nav_bar", false);
         collapsing = SP.getBoolean("set_collaps_toolbar", true);
         statusbar = SP.getBoolean("set_traslucent_statusbar",false);
+        alpha = SP.getBoolean("set_alpha_enabled", false);
     }
 
     public void setRecentApp(String text){
