@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
                 PHOTO_PATH + " TEXT," +
                 PHOTO_MIME + " TEXT," +
                 PHOTO_FOLDER_PATH + " TEXT, " +
-                PHOTO_DATE_TAKEN + " TEXT)");
+                PHOTO_DATE_TAKEN + " LONG)");
     }
 
     @Override
@@ -93,7 +94,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
             if (mime != null && mime.contains("image"))
                 addPhoto(new Media(
                         temp.getAbsolutePath(),
-                        String.valueOf(temp.lastModified()),
+                        temp.lastModified(),
                         mime, dir.getAbsolutePath()));
         }
     }
@@ -142,7 +143,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
             do {
                 contactList.add(new Media(
                         StringUtils.quoteReverse(cursor.getString(0)),
-                        cursor.getString(3),
+                        cursor.getLong(3),
                         cursor.getString(2),
                         cursor.getString(1)));
             } while (cursor.moveToNext());
@@ -163,7 +164,7 @@ public class HiddenPhotosHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst())
             contactList.add(new Media(
                     StringUtils.quoteReverse(cursor.getString(0)),
-                    cursor.getString(1)));
+                    cursor.getLong(1)));
 
         cursor.close();
         return contactList;

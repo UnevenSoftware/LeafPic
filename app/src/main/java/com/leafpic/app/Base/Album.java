@@ -2,6 +2,7 @@ package com.leafpic.app.Base;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
@@ -93,13 +94,18 @@ public class Album implements Parcelable {
     }
 
     public String getPathCoverAlbum() {
-        if (coverPath != null) return coverPath;
+        if (hasCustomCover()) return coverPath;
         if (medias.size() > 0) return "file://" + medias.get(0).Path;
         else return "drawable://" + R.drawable.ic_empty;
     }
 
+    public boolean hasCustomCover() {
+        return coverPath != null;
+    }
+
     public Media getCoverAlbum() {
-        if (coverPath != null) new Media(coverPath);
+        Log.wtf("asdasd", Path + "--" + coverPath);
+        if (coverPath != null) return new Media(coverPath);
         if (medias.size() > 0) return medias.get(0);
         return new Media("drawable://" + R.drawable.ic_empty);
     }

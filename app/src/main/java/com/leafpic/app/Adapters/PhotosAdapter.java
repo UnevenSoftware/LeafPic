@@ -88,7 +88,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
-                    .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), 0))
+                    .signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                     .centerCrop()
                     .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .animate(R.anim.fade_in)

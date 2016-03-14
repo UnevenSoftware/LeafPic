@@ -37,13 +37,13 @@ public class ImageFragment extends Fragment {
     private String MIME;
     private View.OnTouchListener onTouchListener;
 
-    public static ImageFragment newInstance(String path, String dateModified, int orientation, String mime) {
+    public static ImageFragment newInstance(String path, long dateModified, int orientation, String mime) {
         ImageFragment fragmentFirst = new ImageFragment();
 
         Bundle args = new Bundle();
         args.putInt("orientation", orientation);
         args.putString("path", path);
-        args.putString("dateModified", dateModified);
+        args.putLong("dateModified", dateModified);
         args.putString("mime", mime);
         fragmentFirst.setArguments(args);
 
@@ -56,7 +56,7 @@ public class ImageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         orientation = getArguments().getInt("orientation", 0);
-        DataModified = Long.valueOf(getArguments().getString("dateModified", "0"));
+        DataModified = getArguments().getLong("dateModified", 0);
         path = getArguments().getString("path");
         MIME = getArguments().getString("mime");
 

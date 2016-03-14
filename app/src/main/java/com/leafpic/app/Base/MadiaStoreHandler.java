@@ -108,8 +108,8 @@ public class MadiaStoreHandler {
                 do {
                     list.add(new Media(
                             cur.getString(pathColumn),
-                            cur.getString(dateColumn),
-                            cur.getString(dateMdofied),
+                            cur.getLong(dateColumn),
+                            cur.getLong(dateMdofied),
                             cur.getString(mimeColumn),
                             cur.getInt(width),
                             cur.getInt(height),
@@ -167,8 +167,8 @@ public class MadiaStoreHandler {
                 do {
                     list.add(new Media(
                             cur.getString(pathColumn),
-                            cur.getString(dateColumn),
-                            cur.getString(dateMdofied),
+                            cur.getLong(dateColumn),
+                            cur.getLong(dateMdofied),
                             cur.getString(mimeColumn),
                             cur.getInt(width),
                             cur.getInt(height),
@@ -226,8 +226,8 @@ public class MadiaStoreHandler {
                 do {
                     list.add(new Media(
                             cur.getString(pathColumn),
-                            cur.getString(dateColumn),
-                            cur.getString(dateMdofied),
+                            cur.getLong(dateColumn),
+                            cur.getLong(dateMdofied),
                             cur.getString(mimeColumn),
                             cur.getInt(width),
                             cur.getInt(height),
@@ -285,6 +285,7 @@ public class MadiaStoreHandler {
 
         if(cur != null) {
             if (cur.moveToFirst()) {
+
                 int pathColumn = cur.getColumnIndex(
                         MediaStore.Images.Media.DATA);
                 int dateColumn = cur.getColumnIndex(
@@ -302,8 +303,8 @@ public class MadiaStoreHandler {
                 do {
                     list.add(new Media(
                             cur.getString(pathColumn),
-                            cur.getString(dateColumn),
-                            cur.getString(dateMdofied),
+                            cur.getLong(dateColumn),
+                            cur.getLong(dateMdofied),
                             cur.getString(mimeColumn),
                             cur.getInt(width),
                             cur.getInt(height),

@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
+import com.bumptech.glide.signature.StringSignature;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.R;
@@ -69,12 +70,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .priority(Priority.HIGH)
-                .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
+                .signature(a.hasCustomCover()
+                        ? new StringSignature(f.Path)
+                        : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                 .centerCrop()
-                .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                .placeholder(SP.getBoolean("set_dark_theme", true)
+                        ? R.drawable.ic_empty
+                        : R.drawable.ic_empty_white)
                 .into(holder.picture);
 
         holder.name.setTag(a.Path);
+
 
         String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_teal_500))));
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500))));

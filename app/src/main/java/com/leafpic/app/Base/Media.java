@@ -1,5 +1,6 @@
 package com.leafpic.app.Base;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -21,9 +22,9 @@ public class Media implements Parcelable {
     };
     public String Path;
     public String MIME;
-    public String DateTaken;
+    public long DateTaken = -1;
     public String FolderPath;
-    public String DateModified;
+    public long DateModified = -1;
     public int orientation = 0;
     public int width;
     public int height;
@@ -34,18 +35,18 @@ public class Media implements Parcelable {
         Path = path;
     }
 
-    public Media(String path, String dateTaken) {
+    public Media(String path, long dateTaken) {
         Path = path;
         DateTaken = dateTaken;
     }
 
-    public Media(String path, String dateTaken, String mime) {
+    public Media(String path, long dateTaken, String mime) {
         Path = path;
         DateTaken = dateTaken;
         MIME = mime;
     }
 
-    public Media(String path, String dateTaken, String dateModified, String mime, int width, int height, int size) {
+    public Media(String path, long dateTaken, long dateModified, String mime, int width, int height, int size) {
         Path = path;
         DateTaken = dateTaken;
         MIME = mime;
@@ -55,23 +56,26 @@ public class Media implements Parcelable {
         this.size = size;
     }
 
-    public Media(String path, String dateTaken, String mime, String folderPath) {
+    public Media(String path, long dateTaken, String mime, String folderPath) {
         Path = path;
         DateTaken = dateTaken;
         MIME = mime;
         FolderPath = folderPath;
     }
-
     protected Media(Parcel in) {
         Path = in.readString();
         MIME = in.readString();
-        DateTaken = in.readString();
+        DateTaken = in.readLong();
         FolderPath = in.readString();
-        DateModified = in.readString();
+        DateModified = in.readLong();
         width = in.readInt();
         height = in.readInt();
         size = in.readLong();
         selected = in.readByte() != 0x00;
+    }
+
+    public Uri getUri() {
+        return Uri.parse("file://" + Path);
     }
 
     public boolean isGif() {
@@ -107,9 +111,9 @@ public class Media implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(Path);
         dest.writeString(MIME);
-        dest.writeString(DateTaken);
+        dest.writeLong(DateTaken);
         dest.writeString(FolderPath);
-        dest.writeString(DateModified);
+        dest.writeLong(DateModified);
         dest.writeInt(width);
         dest.writeInt(height);
         dest.writeLong(size);
