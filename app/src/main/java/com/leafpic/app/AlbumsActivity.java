@@ -43,7 +43,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 
-public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDialog.FolderCallback */ {
+public class AlbumsActivity extends ThemedActivity {
 
     //region PUBLIC VARIABLES
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);

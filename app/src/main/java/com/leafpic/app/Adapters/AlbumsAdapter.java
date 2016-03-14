@@ -19,7 +19,9 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.MediaStoreSignature;
 import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.Media;
 import com.leafpic.app.R;
 
 import java.util.ArrayList;
@@ -60,16 +62,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Album a = albums.get(position);
         a.setPath();
 
+        Media f = a.getCoverAlbum();
+
         Glide.with(holder.picture.getContext())
-                .load(a.getPathCoverAlbum())
+                .load(f.Path)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .priority(Priority.HIGH)
-                        //.signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
-
+                .signature(new MediaStoreSignature(f.MIME, Long.parseLong(f.DateModified), f.orientation))
                 .centerCrop()
                 .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                //animate(R.anim.fade_in)//android.R.anim.slide_in_left
                 .into(holder.picture);
 
         holder.name.setTag(a.Path);

@@ -39,14 +39,10 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
             fragment.setOnTouchListener(listener);
             return fragment;
         } else {
-            ImageFragment fragment = ImageFragment.newInstance(p.Path, p.width, p.height);
+            ImageFragment fragment = ImageFragment.newInstance(p.Path, p.DateModified, p.orientation, p.MIME);
             fragment.setOnTouchListener(listener);
             return fragment;
         }
-    }
-
-    public void rotatepictureAt(int index){
-        //getItem(index).re
     }
 
     @Override

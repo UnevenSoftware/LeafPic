@@ -262,7 +262,15 @@ public class MadiaStoreHandler {
     public ArrayList<Media> getFirstAlbumPhoto(Album a) {
         ArrayList<Media> list = new ArrayList<Media>();
 
-        String[] projection = new String[]{MediaStore.Images.Media.DATA};
+        String[] projection = new String[]{
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.MIME_TYPE,
+                MediaStore.Images.Media.WIDTH,
+                MediaStore.Images.Media.DATE_MODIFIED,
+                MediaStore.Images.Media.HEIGHT,
+                MediaStore.Images.Media.SIZE
+        };
 
         Uri images = MediaStore.Files.getContentUri("external");
 
@@ -279,13 +287,32 @@ public class MadiaStoreHandler {
             if (cur.moveToFirst()) {
                 int pathColumn = cur.getColumnIndex(
                         MediaStore.Images.Media.DATA);
+                int dateColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.DATE_TAKEN);
+                int mimeColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.MIME_TYPE);
+                int dateMdofied = cur.getColumnIndex(
+                        MediaStore.Images.Media.DATE_MODIFIED);
+                int width = cur.getColumnIndex(
+                        MediaStore.Images.Media.WIDTH);
+                int height = cur.getColumnIndex(
+                        MediaStore.Images.Media.HEIGHT);
+                int size = cur.getColumnIndex(
+                        MediaStore.Images.Media.SIZE);
                 do {
-                    list.add(new Media(cur.getString(pathColumn)));
+                    list.add(new Media(
+                            cur.getString(pathColumn),
+                            cur.getString(dateColumn),
+                            cur.getString(dateMdofied),
+                            cur.getString(mimeColumn),
+                            cur.getInt(width),
+                            cur.getInt(height),
+                            cur.getInt(size)
+                    ));
                 } while (cur.moveToNext());
             }
             cur.close();
         }
-
         return list;
     }
 

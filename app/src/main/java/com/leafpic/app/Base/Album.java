@@ -45,7 +45,6 @@ public class Album implements Parcelable {
         this.ID = ID;
     }
 
-
     public Album(String path, String displayName, boolean hidden, int count) {
         medias = new ArrayList<Media>();
         DisplayName = displayName;
@@ -97,6 +96,12 @@ public class Album implements Parcelable {
         if (coverPath != null) return coverPath;
         if (medias.size() > 0) return "file://" + medias.get(0).Path;
         else return "drawable://" + R.drawable.ic_empty;
+    }
+
+    public Media getCoverAlbum() {
+        if (coverPath != null) new Media(coverPath);
+        if (medias.size() > 0) return medias.get(0);
+        return new Media("drawable://" + R.drawable.ic_empty);
     }
 
     public void setCoverPath(String path) {

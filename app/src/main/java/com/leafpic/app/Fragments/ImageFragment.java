@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.signature.MediaStoreSignature;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
@@ -31,17 +32,19 @@ public class ImageFragment extends Fragment {
     ImageView preview_picture;
     Bitmap mThumbnailBitmap;
     private String path;
-    private int width;
-    private int height;
+    private long DataModified;
+    private int orientation;
+    private String MIME;
     private View.OnTouchListener onTouchListener;
 
-    public static ImageFragment newInstance(String path,int width,int height) {
+    public static ImageFragment newInstance(String path, String dateModified, int orientation, String mime) {
         ImageFragment fragmentFirst = new ImageFragment();
 
         Bundle args = new Bundle();
-        args.putInt("width", width);
-        args.putInt("height", height);
+        args.putInt("orientation", orientation);
         args.putString("path", path);
+        args.putString("dateModified", dateModified);
+        args.putString("mime", mime);
         fragmentFirst.setArguments(args);
 
         return fragmentFirst;
@@ -52,9 +55,11 @@ public class ImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        width = getArguments().getInt("width", 500);
-        height = getArguments().getInt("height", 500);
+        orientation = getArguments().getInt("orientation", 0);
+        DataModified = Long.valueOf(getArguments().getString("dateModified", "0"));
         path = getArguments().getString("path");
+        MIME = getArguments().getString("mime");
+
     }
 
     @Override
@@ -79,6 +84,7 @@ public class ImageFragment extends Fragment {
                             .load(path)
                             .asBitmap()
                             .centerCrop()
+                            .signature(new MediaStoreSignature(MIME, DataModified, orientation))
                             .skipMemoryCache(true)
                             .priority(Priority.IMMEDIATE)
                             .into(new SimpleTarget<Bitmap>() {

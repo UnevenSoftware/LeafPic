@@ -85,7 +85,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
                 photos.setCurrentPhoto(getIntent().getData().getPath());
 
-            } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity*/
+            } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity */
                 Bundle data = getIntent().getExtras();
                 photos = data.getParcelable("album");
                 if (photos != null)
@@ -120,7 +120,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 public void onPageScrollStateChanged(int state) {
                 }
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,13 +246,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
                 Uri uri = Uri.fromFile(new File(photos.getCurrentPhoto().Path));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
-                //uCrop = uCrop.useSourceImageAspectRatio();
                 uCrop.withOptions(getUcropOptions());
-
-                //fullSizeOptions.setCompressionFormat(Bitmap.CompressFormat.PNG);
-                //uCrop = basisConfig(uCrop);
-                //uCrop = advancedConfig(uCrop);
-
                 uCrop.start(PhotoPagerActivity.this);
                 break;
 
@@ -424,7 +417,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         if(isTransparency()){
             toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
             getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
-            getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) )); //ALPHA = 200
+            getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
         } else {
             toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
             getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
@@ -606,7 +599,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             colorTo = getBackgroundColor();
         }
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-        colorAnimation.setDuration(240); // milliseconds
+        colorAnimation.setDuration(240);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
