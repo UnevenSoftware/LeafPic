@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import com.leafpic.app.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -100,6 +101,13 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         checkAndCreateAlbum(id);
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_COVER + "='" + path + "' WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
+        db.close();
+    }
+
+    public void clearAlbumPreview(String id) {
+        checkAndCreateAlbum(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_COVER + "=NULL WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
         db.close();
     }
 

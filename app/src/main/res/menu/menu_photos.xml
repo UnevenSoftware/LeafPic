@@ -130,6 +130,11 @@
         android:title="Select all"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/clear_album_preview"
+        android:title="Clear album preview"
+        android:visible="false"
+        app:showAsAction="never" />
     <item android:id="@+id/setting"
         android:title="Settings"
         app:showAsAction="never"

@@ -201,6 +201,8 @@ public class PhotosActivity extends ThemedActivity {
             opt.setEnabled(false).setVisible(false);
         }
 
+        if (photos.hasCustomPreview()) menu.findItem(R.id.clear_album_preview).setVisible(true);
+
         togglePrimaryToolbarOptions(menu);
         updateSelectedStuff();
 
@@ -363,6 +365,13 @@ public class PhotosActivity extends ThemedActivity {
                 invalidateOptionsMenu();
                 break;
 
+            case R.id.clear_album_preview:
+                CustomAlbumsHandler as = new CustomAlbumsHandler(getApplicationContext());
+                as.clearAlbumPreview(photos.ID);
+                photos.setSettings();
+                updateHeaderContent();
+                //as.setAlbumPhotPreview(photos.ID,null);
+                break;
 
             case R.id.setAsAlbumPreview:
                 photos.setSelectedPhotoAsPreview();

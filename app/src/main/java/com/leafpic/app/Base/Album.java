@@ -104,8 +104,12 @@ public class Album implements Parcelable {
     }
 
     public Media getCoverAlbum() {
-        Log.wtf("asdasd", Path + "--" + coverPath);
-        if (coverPath != null) return new Media(coverPath);
+        if (coverPath != null) {
+            Log.wtf("asdasd", Path + "--" + coverPath);
+
+            return new Media(coverPath);
+
+        }
         if (medias.size() > 0) return medias.get(0);
         return new Media("drawable://" + R.drawable.ic_empty);
     }

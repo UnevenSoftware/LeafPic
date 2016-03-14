@@ -170,8 +170,12 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public String getPreviewAlbumImg() {
-        if (settings.coverPath != null) return settings.coverPath;
+        if (hasCustomPreview()) return settings.coverPath;
         return medias.get(0).Path;
+    }
+
+    public boolean hasCustomPreview() {
+        return settings.coverPath != null;
     }
 
     public void setSelectedPhotoAsPreview() {
