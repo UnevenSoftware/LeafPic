@@ -104,6 +104,7 @@ public class AlbumsActivity extends ThemedActivity /*implements FolderChooserDia
         setupUI();
         invalidateOptionsMenu();
 
+        refreshItems();
         //TODO: I WILL SEE IT LATER
         //adapt.notifyDataSetChanged();
         //checkPermissions();

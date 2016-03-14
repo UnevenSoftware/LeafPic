@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 
 import com.leafpic.app.R;
@@ -101,6 +102,11 @@ public class ThemedActivity extends AppCompatActivity {
         hsv[2] *= 0.85f; // value component
         color = Color.HSVToColor(hsv);
         return color;
+    }
+
+    public int getTransparentColor(int color, int alpha){
+        int res = ColorUtils.setAlphaComponent(color, alpha);//(color & 0x00ffffff) | (alpha);
+        return  res;
     }
 
     public void updateTheme(){

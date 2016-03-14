@@ -421,14 +421,18 @@ public class PhotoPagerActivity extends ThemedActivity {
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        //toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), 200));
         setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        //getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), 200));
 
-        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        //getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+        getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), 200));
+
 
         setRecentApp(getString(R.string.app_name));
 
