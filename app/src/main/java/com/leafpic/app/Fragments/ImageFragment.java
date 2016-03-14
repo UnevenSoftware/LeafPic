@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.signature.MediaStoreSignature;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.leafpic.app.R;
@@ -84,7 +84,8 @@ public class ImageFragment extends Fragment {
                             .load(path)
                             .asBitmap()
                             .centerCrop()
-                            .signature(new MediaStoreSignature(MIME, DataModified, orientation))
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    //.signature(new MediaStoreSignature(MIME, DataModified, orientation))
                             .skipMemoryCache(true)
                             .priority(Priority.IMMEDIATE)
                             .into(new SimpleTarget<Bitmap>() {

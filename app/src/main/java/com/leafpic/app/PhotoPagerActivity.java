@@ -166,6 +166,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             copyFileToDownloads(imageUri);
+                            //getFragmentManager().invalidateOptionsMenu();
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);

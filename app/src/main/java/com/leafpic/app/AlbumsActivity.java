@@ -64,14 +64,14 @@ public class AlbumsActivity extends ThemedActivity {
         /**** START APP ****/
 
         /*
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean isFirstStart = SP.getBoolean("firstStart", true);
-        if (isFirstStart) {
-            SharedPreferences.Editor e = SP.edit();
-            e.putBoolean("firstStart", false);
-            e.apply();
-            StartAppIntro();
-        }
+            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            boolean isFirstStart = SP.getBoolean("firstStart", true);
+            if (isFirstStart) {
+                SharedPreferences.Editor e = SP.edit();
+                e.putBoolean("firstStart", false);
+                e.apply();
+                StartAppIntro();
+            }
         */
 
         /**** SET UP UI ****/
