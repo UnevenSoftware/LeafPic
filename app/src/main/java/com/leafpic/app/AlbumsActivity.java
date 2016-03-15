@@ -101,7 +101,7 @@ public class AlbumsActivity extends ThemedActivity {
         albums.clearSelectedAlbums();
         setupUI();
         invalidateOptionsMenu();
-
+        setRecentApp(getString(R.string.app_name));
         new PrepareAlbumTask().execute();
     }
 
