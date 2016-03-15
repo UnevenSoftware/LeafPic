@@ -122,6 +122,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
+    public void updateDataset(ArrayList<Album> asd) {
+        albums = asd;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return albums.size();

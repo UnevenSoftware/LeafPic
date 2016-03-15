@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -78,11 +79,8 @@ public class AlbumsActivity extends ThemedActivity {
         initUI();
         setupUI();
 
-        /**** CHECK PERMISSION ****/
-        //checkPermissions(); // lo fa in on resume
-
         /**** SWIPE REFRESH ****/
-        RefreshListener();
+        //RefreshListener();
     }
 
     private void StartAppIntro(){
@@ -104,75 +102,40 @@ public class AlbumsActivity extends ThemedActivity {
         setupUI();
         invalidateOptionsMenu();
 
-        refreshItems();
-        //TODO: I WILL SEE IT LATER
-        //adapt.notifyDataSetChanged();
-
-        //refreshItems();
+        new PrepareAlbumTask().execute();
     }
 
-    public void RefreshListener(){
+    private void LoadAlbumsData() {
+        albums.loadPreviewAlbums();
+    }
+
+    public void initUI() {
+
+        /**** TOOLBAR ****/
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+        /**** RECYCLER VIEW ****/
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+
+        /**** SWIPE TO REFRESH ****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         SwipeContainerRV.setColorSchemeResources(R.color.accent_blue);
         SwipeContainerRV.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshItems();
+                new PrepareAlbumTask().execute();
             }
         });
-        /*
-        SwipeContainerRV.post(new Runnable() {
-            @Override
-            public void run() {
-                LoadUiAlbums();
-                //SwipeContainerRV.setRefreshing(true);
-            }
-        });
-        */
-    }
 
-    void refreshItems() {
-        SwipeContainerRV.setRefreshing(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkPermissions();
-                SwipeContainerRV.setRefreshing(false);
-            }
-        }, 500);
+        //TODO show the fucking refresh when app start
+        //SwipeContainerRV.setRefreshing(true);
 
-        /*
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                albums.loadPreviewAlbums();
-                LoadUiAlbums();
-            }
-        });
-        SwipeContainerRV.setRefreshing(false);
-        */
-    }
-
-    private void LoadAlbumsData(){
-        albums.loadPreviewAlbums();
-        LoadUiAlbums();
-        /*
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (hidden) {
-                    albums.loadPreviewHiddenAlbums();
-                    LoadUiAlbums();
-                } else {
-                    albums.loadPreviewAlbums();
-                    LoadUiAlbums();
-                }
-            }
-        }).start();
-        */
-    }
-
-    private void LoadUiAlbums(){
         /**** ALBUM UI LOAD ***/
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
 
@@ -209,24 +172,8 @@ public class AlbumsActivity extends ThemedActivity {
                 }
             }
         });
+
         mRecyclerView.setAdapter(adapt);
-
-        adapt.notifyDataSetChanged();
-    }
-
-    public void initUI() {
-
-        /**** TOOLBAR ****/
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-
-        /**** RECYCLER VIEW ****/
-        mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
 
         /**** DRAWER ****/
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -259,24 +206,12 @@ public class AlbumsActivity extends ThemedActivity {
 
     //region UI/GRAPHIC
     public void setupUI() {
-        /**** TOOLBAR ****/
         toolbar.setBackgroundColor(getPrimaryColor());
-
-        /**** STATUS BAR + NAVBAR ****/
         setStatusBarColor();
         setNavBarColor();
-
-        /**** FAB ***/
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-
-        /**** DRAWER ****/
         setDrawerTheme();
-
-        /**** RECYCLER VIEW ****/
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-
-        /**** CHECK PERMISSION ****/
-        //checkPermissions();
     }
 
     public void setDrawerTheme(){
@@ -342,7 +277,6 @@ public class AlbumsActivity extends ThemedActivity {
             }
         });
     }
-    //endregion
 
     //region PERMISSION
     public void checkPermissions() {
@@ -370,16 +304,14 @@ public class AlbumsActivity extends ThemedActivity {
             }
         } else LoadAlbumsData();
     }
+    //endregion
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case 0:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-
-                    /*****TODO*********************************************************************/
-                    //LoadAlbumsData();
-                    RefreshListener();
+                    //TODO ma che porco dio bisogna fare qua?
                     break;
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
@@ -387,7 +319,6 @@ public class AlbumsActivity extends ThemedActivity {
                 break;
         }
     }
-    //endregion
 
     void updateSelectedStuff() {
         int c;
@@ -436,6 +367,7 @@ public class AlbumsActivity extends ThemedActivity {
         }
 
     }
+    //endregion
 
     //region MENU
     @Override
@@ -610,10 +542,6 @@ public class AlbumsActivity extends ThemedActivity {
         }
         return true;
     }
-    //endregion
-
-
-
 
     @Override
     public void onBackPressed() {
@@ -621,5 +549,27 @@ public class AlbumsActivity extends ThemedActivity {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         else
             finish();
+    }
+    //endregion
+
+    public class PrepareAlbumTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            SwipeContainerRV.setRefreshing(true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            checkPermissions();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            adapt.updateDataset(albums.dispAlbums);
+            SwipeContainerRV.setRefreshing(false);
+        }
     }
 }
