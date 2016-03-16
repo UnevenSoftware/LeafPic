@@ -416,9 +416,11 @@ public class PhotoPagerActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         
         if(isTransparency()){
-            toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
-            getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0)) ));
+            toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
+            getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
             getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
+            if(isTraslucentStatusBar() && 255 - SP.getInt("set_alpha", 0)==255)
+                getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
         } else {
             toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
             getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
@@ -515,7 +517,11 @@ public class PhotoPagerActivity extends ThemedActivity {
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        options.setStatusBarColor(getPrimaryColor());
+        if(isTraslucentStatusBar())
+            options.setStatusBarColor(getOscuredColor(getPrimaryColor()));
+        else
+            options.setStatusBarColor(getPrimaryColor());
+        options.setCropFrameColor(getAccentColor());
         //fullSizeOptions.se
 
         // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
