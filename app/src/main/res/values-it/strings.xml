@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">LeafPic</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_sort">Sort</string>
-    <string name="action_camera">Camera</string>
-    <string name="camera">Camera</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_sort">Ordina</string>
+    <string name="action_camera">Fotocamera</string>
+    <string name="camera">Fotocamera</string>
 
 
     <string name="drawer_open">Open navigation drawer</string>

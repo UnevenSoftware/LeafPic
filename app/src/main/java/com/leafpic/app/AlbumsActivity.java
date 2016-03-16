@@ -39,6 +39,7 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -101,7 +102,7 @@ public class AlbumsActivity extends ThemedActivity {
         albums.clearSelectedAlbums();
         setupUI();
         invalidateOptionsMenu();
-        setRecentApp(getString(R.string.app_name));
+        //setRecentApp(getString(R.string.app_name));
         new PrepareAlbumTask().execute();
     }
 
@@ -117,11 +118,12 @@ public class AlbumsActivity extends ThemedActivity {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         /**** RECYCLER VIEW ****/
+        int nSpan = 2;//nColumns
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 5, true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true));
 
         /**** SWIPE TO REFRESH ****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -547,8 +549,7 @@ public class AlbumsActivity extends ThemedActivity {
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        else
-            finish();
+        else finish();
     }
     //endregion
 
