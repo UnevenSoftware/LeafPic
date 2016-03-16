@@ -121,7 +121,7 @@ public class SettingActivity extends ThemedActivity {
 
         /**** Switches ****/
 
-        /*********** SW Picture_orientation ************/
+        /*********** SW Enable_Trasparency ************/
         swEnableAlpha = (SwitchCompat) findViewById(R.id.set_alpha_enabled);
         swEnableAlpha.setChecked(isTransparency());
         swEnableAlpha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -134,6 +134,7 @@ public class SettingActivity extends ThemedActivity {
                 sbAlpha.setEnabled(isChecked);
             }
         });
+        sbAlpha.setEnabled(swEnableAlpha.isChecked());
         updateSwitchColor(swEnableAlpha);
 
         /*********** SW Picture_orientation ************/
