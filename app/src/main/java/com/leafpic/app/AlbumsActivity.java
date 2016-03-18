@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,6 +35,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
@@ -56,13 +60,52 @@ public class AlbumsActivity extends ThemedActivity {
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
     private SwipeRefreshLayout SwipeContainerRV;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
     //endregion
+    private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            TextView a = (TextView) v.findViewById(R.id.album_name);
+            adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+            editmode = true;
+            invalidateOptionsMenu();
+            return true;
+        }
+    };
+    private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView a = (TextView) v.findViewById(R.id.album_name);
+            if (editmode) {
+                adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+                invalidateOptionsMenu();
+            } else {
+                Album album = albums.getAlbum(a.getTag().toString());
+                Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
+                /**TODO:IMPLEMENT ANIMATION**/
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                Bundle b = new Bundle();
+                b.putParcelable("album", album);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
 
+        if (savedInstanceState != null) {
+            albums = savedInstanceState.getParcelable("albums");
+            StringUtils.showToast(getApplicationContext(), "porcodio le instance");
+        }
         /**** START APP ****/
 
         /*
@@ -82,9 +125,12 @@ public class AlbumsActivity extends ThemedActivity {
 
         /**** SWIPE REFRESH ****/
         //RefreshListener();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private void StartAppIntro(){
+    private void StartAppIntro() {
 
         Thread AppIntroThread = new Thread(new Runnable() {
             @Override
@@ -104,6 +150,12 @@ public class AlbumsActivity extends ThemedActivity {
         invalidateOptionsMenu();
         //setRecentApp(getString(R.string.app_name));
         new PrepareAlbumTask().execute();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("albums", albums);
     }
 
     private void LoadAlbumsData() {
@@ -142,38 +194,10 @@ public class AlbumsActivity extends ThemedActivity {
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
 
         /**** ON ALBUM LONG CLICK ***/
-        adapt.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                TextView a = (TextView) v.findViewById(R.id.album_name);
-                adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
-                editmode = true;
-                invalidateOptionsMenu();
-                return true;
-            }
-        });
+        adapt.setOnLongClickListener(null);
 
         /**** ON ALBUMS CLICK ***/
-        adapt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView a = (TextView) v.findViewById(R.id.album_name);
-                if (editmode) {
-                    adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
-                    invalidateOptionsMenu();
-                } else {
-                    Album album = albums.getAlbum(a.getTag().toString());
-                    Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
-                    /**TODO:IMPLEMENT ANIMATION**/
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    Bundle b = new Bundle();
-                    b.putParcelable("album", album);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                }
-            }
-        });
+        adapt.setOnClickListener(null);
 
         mRecyclerView.setAdapter(adapt);
 
@@ -216,7 +240,7 @@ public class AlbumsActivity extends ThemedActivity {
         mRecyclerView.setBackgroundColor(getBackgroundColor());
     }
 
-    public void setDrawerTheme(){
+    public void setDrawerTheme() {
         RelativeLayout DrawerHeader = (RelativeLayout) findViewById(R.id.Drawer_Header);
         DrawerHeader.setBackgroundColor(getPrimaryColor());
 
@@ -254,7 +278,7 @@ public class AlbumsActivity extends ThemedActivity {
         txtDS.setTextColor(getTextColor());
         txtDDonate.setTextColor(getTextColor());
 
-        if (isDarkTheme()){
+        if (isDarkTheme()) {
             imgDD.setImageResource(R.mipmap.ic_image_white_24dp);
             imgDH.setImageResource(R.mipmap.ic_visibility_off_white_24dp);
             imgDMoments.setImageResource(R.mipmap.ic_event_available_white_24dp);
@@ -551,6 +575,46 @@ public class AlbumsActivity extends ThemedActivity {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         else finish();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Albums Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.leafpic.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Albums Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.leafpic.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
     //endregion
 
     public class PrepareAlbumTask extends AsyncTask<Void, Void, Void> {
@@ -558,6 +622,8 @@ public class AlbumsActivity extends ThemedActivity {
         @Override
         protected void onPreExecute() {
             SwipeContainerRV.setRefreshing(true);
+            adapt.setOnLongClickListener(null);
+            adapt.setOnClickListener(null);
             super.onPreExecute();
         }
 
@@ -570,6 +636,8 @@ public class AlbumsActivity extends ThemedActivity {
         @Override
         protected void onPostExecute(Void result) {
             adapt.updateDataset(albums.dispAlbums);
+            adapt.setOnClickListener(albumOnClickListener);
+            adapt.setOnLongClickListener(albumOnLongCLickListener);
             SwipeContainerRV.setRefreshing(false);
         }
     }

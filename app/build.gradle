@@ -67,4 +67,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.balysv:material-ripple:1.0.2'
 
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

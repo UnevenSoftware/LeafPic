@@ -121,6 +121,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
+    public void updateDataset(ArrayList<Media> asd) {
+        medias = asd;
+        notifyDataSetChanged();
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView, selectHolder, gifIcon;
