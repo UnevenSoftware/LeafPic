@@ -86,10 +86,7 @@ public class ThemedActivity extends AppCompatActivity {
                 else
                     getWindow().setNavigationBarColor(getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), getTransparency()));
             else
-                if(isDarkTheme())
-                    getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
-                else
-                    getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
+                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
         }
         else
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
@@ -120,18 +117,11 @@ public class ThemedActivity extends AppCompatActivity {
         if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
             if(isApplyThemeOnImgAct())
                 if (isTraslucentStatusBar() && isTransparencyZero())
-                    //Toast.makeText(ThemedActivity.this, "TRASLUCENT STATUS BAR E TRASPARENZA ZERO", Toast.LENGTH_SHORT).show();
                     getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
                 else
-                    //Toast.makeText(ThemedActivity.this, "STATUS BAR CON TRASPARENZA MAGGIORE DI ZERO", Toast.LENGTH_SHORT).show();
                     getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
             else
-                if(isDarkTheme())
-                    //Toast.makeText(ThemedActivity.this, "STATUS BAR CON DARK THEME NO TEMA APPLICATO", Toast.LENGTH_SHORT).show();
-                    getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
-                else
-                    //Toast.makeText(ThemedActivity.this, "STATUS BAR CON WHITE THEME NO TEMA APPLICATO", Toast.LENGTH_SHORT).show();
-                    getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
+                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
         } else {
             if (isTraslucentStatusBar()) {
                 int c = getOscuredColor(getPrimaryColor());
