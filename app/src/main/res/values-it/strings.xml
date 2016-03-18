@@ -28,33 +28,33 @@
     <string name="asd">13 Photos</string>
 
     <!--SETTINGS PREFERENCES-->
-    <string name="general_setting">General Setting</string>
-    <string name="theme_setting">Theme</string>
+    <string name="general_setting">Impostazioni Generali</string>
+    <string name="theme_setting">Tema</string>
     <string name="security_setting">Security</string>
-    <string name="folder_setting">Folder</string>
-    <string name="primaryColor">Primary Color</string>
+    <string name="folder_setting">Cartella</string>
+    <string name="primaryColor">Colore Primario</string>
     <string name="color_palette">Color Palette</string>
-    <string name="setting_accent_color_title">Accent Color</string>
-    <string name="setting_primary_color_title">Primary Color</string>
+    <string name="setting_accent_color_title">Colore Particolare</string>
+    <string name="setting_primary_color_title">Colore Primario</string>
     <string name="skip">Why You Skip This Beautyfull Intro? Maledetto!!!</string>
 
     <!--STRINGS SETTING LAYOUT ACT-->
-    <string name="setting">Setting</string>
+    <string name="setting">Impostazioni</string>
 
-    <string name="general">General</string>
+    <string name="general">Generali</string>
     <string name="collapsing_toolbar">Collapsing Toolbar</string>
-    <string name="traslucent_statusbar">Traslucent Status Bar</string>
+    <string name="traslucent_statusbar">Status Bar Trasparente</string>
 
-    <string name="picture_preview">Picture Preview</string>
-    <string name="max_brightness">Max Brightness</string>
-    <string name="picture_orientation">Picture Orientation</string>
+    <string name="picture_preview">Preview Immagine</string>
+    <string name="max_brightness">Massima Luminosità</string>
+    <string name="picture_orientation">Gira Schermo</string>
 
 
-    <string name="theme">Theme</string>
-    <string name="primary_color">Primary Color</string>
-    <string name="accent_color">Accent Color</string>
-    <string name="dark_theme">Dark Theme</string>
-    <string name="Colored_NavBar">Colored NavBar</string>
+    <string name="theme">Tema</string>
+    <string name="primary_color">Colore Primario</string>
+    <string name="accent_color">Colore Particolare</string>
+    <string name="dark_theme">Tema Scuro</string>
+    <string name="Colored_NavBar">NavBar Colorata</string>
 
 
 </resources>

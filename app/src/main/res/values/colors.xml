@@ -34,7 +34,10 @@
     <color name="grey_1">#727272</color>
     <color name="grey_2">#424242</color>
     <color name="grey_3">#2b2b2b</color>
-    <color name="transparent_gray">#96100e11</color>
+
+    <color name="transparent_dark_gray">#CC100e11</color>
+    <color name="transparent_white_gray">#CCeeeeee</color>
+
     <color name="drawer_transparent_gray">#CC727272</color>
 
     <!--GREEN-->

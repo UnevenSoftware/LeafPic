@@ -250,17 +250,16 @@
                     </LinearLayout>
 
 
-                     <!-- ALPHA TITLE -->
+                     <!-- APPLY THEME ON 3TH ACT -->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_seek_bar_alpha"
+                        android:id="@+id/ll_apply_theme_3thAct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-
                         >
 
                         <ImageView
-                            android:id="@+id/ll_seek_bar_alpha_icon"
+                            android:id="@+id/ll_apply_theme_3thAct_icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
@@ -270,18 +269,18 @@
                             android:src="@mipmap/ic_brush_black_24dp" />
 
                         <TextView
-                            android:id="@+id/seek_bar_alpha_title"
+                            android:id="@+id/apply_theme_3thAct_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="Transparency"
+                            android:text="Apply Theme"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
 
                         <android.support.v7.widget.SwitchCompat
-                            android:id="@+id/set_alpha_enabled"
+                            android:id="@+id/apply_theme_3th_act_enabled"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="?android:selectableItemBackground"
@@ -290,6 +289,39 @@
                             android:paddingBottom="15dp"
                             android:paddingRight="20dp"
                             android:paddingTop="15dp" />
+
+                    </LinearLayout>
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_seek_bar_alpha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/seek_bar_alpha_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:paddingLeft="20dp"
+                            android:text="Transparency:"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/seek_bar_alpha_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="20dp"
+                            android:text="100%"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
 
                     </LinearLayout>
 
@@ -302,19 +334,6 @@
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         >
-
-                        <TextView
-                            android:id="@+id/seek_bar_alpha_count"
-                            android:layout_width="60dp"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingTop="15dp"
-                            android:paddingRight="20dp"
-                            android:text="100%"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
-                            />
-
                         <SeekBar
                             android:id="@+id/seek_bar_alpha"
                             android:layout_width="match_parent"

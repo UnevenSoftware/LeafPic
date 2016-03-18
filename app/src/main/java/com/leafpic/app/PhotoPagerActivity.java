@@ -415,17 +415,29 @@ public class PhotoPagerActivity extends ThemedActivity {
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         
-        if(isTransparency()){
-            toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
-            getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
-            getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), (255 - SP.getInt("set_alpha", 0))));
-            if(isTraslucentStatusBar() && 255 - SP.getInt("set_alpha", 0)==255)
+        if(isApplyThemeOnImgAct()){
+            toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+            getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+
+            if (isNavigationBarColored())
+                getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+            else
+                getWindow().setNavigationBarColor(getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), getTransparency()));
+
+            if(isTraslucentStatusBar() && isTransparencyZero())
                 getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
         } else {
-            toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-            getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
-            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_gray));
+            if(isDarkTheme()){
+                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+            } else {
+                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
+                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
+                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
+            }
         }
+
         setupSystemUI();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
