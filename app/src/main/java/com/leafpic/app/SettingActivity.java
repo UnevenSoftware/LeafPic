@@ -141,6 +141,10 @@ public class SettingActivity extends ThemedActivity {
         sbAlpha.setEnabled(swApplyTheme3thAct.isChecked());
         updateSwitchColor(swApplyTheme3thAct);
 
+
+
+
+
         /*********** SW Picture_orientation ************/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
         swPictureOrientation.setChecked(pictureOrientation);

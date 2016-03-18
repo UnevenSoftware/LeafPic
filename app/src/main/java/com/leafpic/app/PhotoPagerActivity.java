@@ -414,29 +414,17 @@ public class PhotoPagerActivity extends ThemedActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        
-        if(isApplyThemeOnImgAct()){
-            toolbar.setBackgroundColor(getTransparentColor(getPrimaryColor(), getTransparency()));
-            getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
 
-            if (isNavigationBarColored())
-                getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
-            else
-                getWindow().setNavigationBarColor(getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), getTransparency()));
-
-            if(isTraslucentStatusBar() && isTransparencyZero())
-                getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
-        } else {
-            if(isDarkTheme()){
-                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
-                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
-                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
-            } else {
-                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
-                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
-                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_white_gray));
-            }
-        }
+        /****SET THEME ****/
+        toolbar.setBackgroundColor( isApplyThemeOnImgAct()
+                ? (getTransparentColor(getPrimaryColor(), getTransparency()))
+                : (ContextCompat.getColor(getApplicationContext(),
+                isDarkTheme()
+                        ? R.color.transparent_dark_gray
+                        : R.color.transparent_white_gray )));
+        setStatusBarColor();
+        setNavBarColor();
+        /****END THEME****/
 
         setupSystemUI();
         setSupportActionBar(toolbar);
