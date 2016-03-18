@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 
+import com.leafpic.app.PhotoPagerActivity;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ColorPalette;
 
@@ -78,9 +79,18 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void setNavBarColor() {
-        if (isNavigationBarColored())
-            getWindow().setNavigationBarColor(getPrimaryColor());
-        else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+        if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
+            if(isApplyThemeOnImgAct())
+                if (isNavigationBarColored())
+                    getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+                else
+                    getWindow().setNavigationBarColor(getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), getTransparency()));
+            else
+                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+        }
+        else
+            if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
+            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
     }
 
     @Override
@@ -104,11 +114,21 @@ public class ThemedActivity extends AppCompatActivity {
         }
         else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
         // TODO : IT WORKS BUT, MUST BE OPTIMIZED
-        if (isTraslucentStatusBar()) {
-            int c = getOscuredColor(getPrimaryColor());
-            getWindow().setStatusBarColor(c);
-        } else
-        getWindow().setStatusBarColor(getPrimaryColor());
+        if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
+            if(isApplyThemeOnImgAct())
+                if (isTraslucentStatusBar() && isTransparencyZero())
+                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                else
+                    getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+            else
+                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+        } else {
+            if (isTraslucentStatusBar()) {
+                int c = getOscuredColor(getPrimaryColor());
+                getWindow().setStatusBarColor(c);
+            } else
+                getWindow().setStatusBarColor(getPrimaryColor());
+        }
     }
 
     public int getOscuredColor(int c){
