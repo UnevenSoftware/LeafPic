@@ -3,6 +3,8 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
@@ -12,7 +14,19 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 
-public class HandlingAlbums {
+public class HandlingAlbums implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<HandlingAlbums> CREATOR = new Parcelable.Creator<HandlingAlbums>() {
+        @Override
+        public HandlingAlbums createFromParcel(Parcel in) {
+            return new HandlingAlbums(in);
+        }
+
+        @Override
+        public HandlingAlbums[] newArray(int size) {
+            return new HandlingAlbums[size];
+        }
+    };
     public ArrayList<Album> dispAlbums;
     public int last_position_selecte = -1;
     private Context context;
@@ -22,6 +36,23 @@ public class HandlingAlbums {
         context = ctx;
         dispAlbums = new ArrayList<Album>();
         selectedAlbums = new ArrayList<Album>();
+    }
+
+    protected HandlingAlbums(Parcel in) {
+        if (in.readByte() == 0x01) {
+            dispAlbums = new ArrayList<Album>();
+            in.readList(dispAlbums, Album.class.getClassLoader());
+        } else {
+            dispAlbums = null;
+        }
+        last_position_selecte = in.readInt();
+        // context = (Context) in.readValue(Context.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            selectedAlbums = new ArrayList<Album>();
+            in.readList(selectedAlbums, Album.class.getClassLoader());
+        } else {
+            selectedAlbums = null;
+        }
     }
 
     public void loadPreviewAlbums() {
@@ -290,6 +321,29 @@ public class HandlingAlbums {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (dispAlbums == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(dispAlbums);
+        }
+        dest.writeInt(last_position_selecte);
+        // dest.writeValue(context);
+        if (selectedAlbums == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(selectedAlbums);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
@@ -41,6 +42,7 @@ import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -53,7 +55,6 @@ import java.util.ArrayList;
  */
 public class PhotosActivity extends ThemedActivity {
 
-    public boolean RVdecor = true;
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
     HandlingPhotos photos;
@@ -62,17 +63,49 @@ public class PhotosActivity extends ThemedActivity {
     Toolbar toolbar;
     ImageView headerImage;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    AppBarLayout appBarLayout;
     boolean listmode=false;
     boolean editmode = false;
     PhotosAdapter adapter;
 
     RecyclerView mRecyclerView;
+    View.OnLongClickListener albumOnLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            TextView is = (TextView) v.findViewById(R.id.photo_path);
+            adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
+            editmode = true;
+            invalidateOptionsMenu();
+            return true;
+        }
+    };
+    View.OnClickListener albumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView is = (TextView) v.findViewById(R.id.photo_path);
+            if (editmode) {
+                adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
+                invalidateOptionsMenu();
+            } else {
+                photos.setCurrentPhoto(is.getTag().toString());
+                Intent intent = new Intent(PhotosActivity.this, PhotoPagerActivity.class);
+                Bundle b = new Bundle();
+                b.putParcelable("album", photos);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initActivityTransitions();
         setContentView(R.layout.activity_photos);
+
+        Bundle data = getIntent().getExtras();
+        final Album album = data.getParcelable("album");
+        photos = new HandlingPhotos(PhotosActivity.this, album);
 
         /****** TODO:MUST BE FIXXED
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -88,75 +121,19 @@ public class PhotosActivity extends ThemedActivity {
                 }, 500);
             }
         });
-        ********/
-        mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
-        LoadPhotos();
+         ********/
+        //LoadPhotos();
         initUiTweaks();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LoadPhotos();
+        new PreparePhotosTask().execute();
+        //LoadPhotos();
         updateHeaderContent();
         updateSelectedStuff();
-        initUiTweaks();
-    }
-
-    public void UpdatePhotos() {
-        photos.updatePhotos();
-        adapter.notifyDataSetChanged();
-    }
-
-    public void LoadPhotos() {
-        try {
-            Bundle data = getIntent().getExtras();
-            final Album album = data.getParcelable("album");
-            photos = new HandlingPhotos(PhotosActivity.this, album);
-
-            adapter = new PhotosAdapter(photos.medias,getApplicationContext());
-
-            adapter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TextView is = (TextView) v.findViewById(R.id.photo_path);
-                    if (editmode) {
-                        adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
-                        invalidateOptionsMenu();
-                    } else {
-                        photos.setCurrentPhoto(is.getTag().toString());
-                        Intent intent = new Intent(PhotosActivity.this, PhotoPagerActivity.class);
-                        Bundle b = new Bundle();
-                        b.putParcelable("album", photos);
-                        intent.putExtras(b);
-                        startActivity(intent);
-                    }
-                }
-            });
-            adapter.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    TextView is = (TextView) v.findViewById(R.id.photo_path);
-                    adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
-                    editmode = true;
-                    invalidateOptionsMenu();
-                    return true;
-                }
-            });
-
-            mRecyclerView.setHasFixedSize(true);
-            mRecyclerView.setAdapter(adapter);
-            System.gc();
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mRecyclerView.setFitsSystemWindows(true);
-            if (RVdecor) {
-                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 5, true));
-                RVdecor = false;
-            }
-
-        }
-        catch (Exception e){ e.printStackTrace(); }
+        setupUI();
     }
 
     @Override
@@ -178,11 +155,7 @@ public class PhotosActivity extends ThemedActivity {
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         MenuItem opt;
-
-        if (editmode)
-            setOptionsAlbmuMenusItemsVisible(menu, false);
-         else
-            setOptionsAlbmuMenusItemsVisible(menu, true);
+        setOptionsAlbmuMenusItemsVisible(menu, !editmode);
 
         if (photos.hidden)
             menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.unhide_album_action));
@@ -408,13 +381,15 @@ public class PhotosActivity extends ThemedActivity {
             case R.id.name_sort_action:
                 photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
                 photos.sort();
-                LoadPhotos();
+                new PreparePhotosTask().execute();
+                //LoadPhotos();
                 item.setChecked(true);
                 break;
             case R.id.size_sort_action:
                 photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
                 photos.sort();
-                LoadPhotos();
+                new PreparePhotosTask().execute();
+
                 item.setChecked(true);
                 break;
             case R.id.date_taken_sort_action:
@@ -426,7 +401,8 @@ public class PhotosActivity extends ThemedActivity {
             case R.id.ascending_sort_action:
                 photos.setDefaultSortingAscending(!photos.settings.ascending);
                 photos.sort();
-                LoadPhotos();
+                new PreparePhotosTask().execute();
+
                 item.setChecked(!item.isChecked());
                 break;
 
@@ -603,9 +579,19 @@ public class PhotosActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
+        adapter = new PhotosAdapter(photos.medias, getApplicationContext());
+        adapter.setOnClickListener(albumOnClickListener);
+        adapter.setOnLongClickListener(albumOnLongClickListener);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, Measure.pxToDp(2, getApplicationContext()), true));
+        mRecyclerView.setFitsSystemWindows(true);
+        mRecyclerView.setAdapter(adapter);
+
 
         /****SET THEME***/
-        mRecyclerView.setBackgroundColor(getBackgroundColor());
 
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
@@ -629,41 +615,42 @@ public class PhotosActivity extends ThemedActivity {
         } else collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
         */
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        if(isTraslucentStatusBar())
-            collapsingToolbarLayout.setStatusBarScrimColor(getOscuredColor(getPrimaryColor()));
-        else
-            collapsingToolbarLayout.setStatusBarScrimColor(getPrimaryColor());
+
 
         collapsingToolbarLayout.setTitle(photos.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
+        //collapsingToolbarLayout.setTitleEnabled(false);
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
 
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        setupUI();
 
-        //mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);        //TODO:MUST BE FIXXED
-
-        if(isCollapsingToolbar()){
+        if (isCollapsingToolbar()) {
             appBarLayout.setExpanded(true, true);
-            mRecyclerView.setNestedScrollingEnabled(true);
-
-            //mSwipeRefreshLayout.setNestedScrollingEnabled(true);        //TODO:MUST BE FIXXED
-
-            //appBarLayout.setEnabled(true);
-            //collapsingToolbarLayout.setEnabled(true);
             updateHeaderContent();
         } else {
-            //collapsingToolbarLayout.setEnabled(false);
-            //appBarLayout.setEnabled(false);
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
-            mRecyclerView.setNestedScrollingEnabled(false);
-
-            //mSwipeRefreshLayout.setNestedScrollingEnabled(false);      //TODO:MUST BE FIXXED
-
-            //fabCamera.setNestedScrollingEnabled(true);
         }
         setRecentApp(photos.DisplayName);
+    }
+
+    public void setupUI() {
+
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
+        collapsingToolbarLayout.setStatusBarScrimColor(isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        mRecyclerView.setNestedScrollingEnabled(isCollapsingToolbar());
+
+    }
+
+    public void LoadPhotos() {
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateHeaderContent() {
@@ -693,5 +680,31 @@ public class PhotosActivity extends ThemedActivity {
         transition.excludeTarget(android.R.id.statusBarBackground, true);
         getWindow().setEnterTransition(transition);
         getWindow().setReturnTransition(transition);
+    }
+
+    public class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            //SwipeContainerRV.setRefreshing(true);
+            //adapter.setOnLongClickListener(null);
+            //adapter.setOnClickListener(null);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            //checkPermissions();
+            photos.updatePhotos();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.updateDataset(photos.medias);
+            // adapter.setOnClickListener(albumOnClickListener);
+            // adapter.setOnLongClickListener(albumOnLongClickListener);
+            // SwipeContainerRV.setRefreshing(false);
+        }
     }
 }
