@@ -259,7 +259,7 @@ public class MadiaStoreHandler {
         return c;
     }
 
-    public ArrayList<Media> getFirstAlbumPhoto(Album a) {
+    public ArrayList<Media> getFirstAlbumPhoto(String ID) {
         ArrayList<Media> list = new ArrayList<Media>();
 
         String[] projection = new String[]{
@@ -275,7 +275,7 @@ public class MadiaStoreHandler {
         Uri images = MediaStore.Files.getContentUri("external");
 
         String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+a.ID+"'";
+                + " and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
 
         Cursor cur = context.getContentResolver().query(
                 images,
@@ -348,15 +348,4 @@ public class MadiaStoreHandler {
 
         return asd;
     }
-
-    public void LogStuff() {
-
-        ArrayList<Album> asd = getMediaStoreAlbums();
-        for (Album album : asd) {
-            getFirstAlbumPhoto(album);
-            //Log.d(TAG,getAlbumPhotosCount(album)+"");
-        }
-
-    }
-
 }

@@ -3,8 +3,8 @@ package com.leafpic.app.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
@@ -29,23 +29,25 @@ public class HandlingAlbums {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         dispAlbums = as.getMediaStoreAlbums();
 
-        for (Album dispAlbum : dispAlbums) {
-            dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
-            dispAlbum.medias = as.getFirstAlbumPhoto(dispAlbum);
+        int cameraIndex = -1;
+
+        for (int i = 0; i < dispAlbums.size(); i++) {
+            dispAlbums.get(i).setCoverPath(h.getPhotPrevieAlbum(dispAlbums.get(i).ID));
+            dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
+
+            if (dispAlbums.get(i).DisplayName.equals("Camera")) cameraIndex = i;
+        }
+
+        if (cameraIndex != -1) {
+            Album camera = dispAlbums.remove(cameraIndex);
+            camera.DisplayName = context.getString(R.string.camera);
+            dispAlbums.add(0, camera);
         }
     }
 
-    public void loadPreviewAlbums(SwipeRefreshLayout ly) {
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        dispAlbums = as.getMediaStoreAlbums();
+    public void sortAlbums() {
 
-        for (Album dispAlbum : dispAlbums) {
-            dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.ID));
-            dispAlbum.medias = as.getFirstAlbumPhoto(dispAlbum);
-        }
-        ly.setRefreshing(false);
-
+        //dispAlbums.indexOf()
     }
 
     public int toggleSelectAlbum(String path) {

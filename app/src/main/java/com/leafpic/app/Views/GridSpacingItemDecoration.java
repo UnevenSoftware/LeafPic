@@ -24,19 +24,6 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildAdapterPosition(view); // item position
         int column = position % spanCount; // item column
 
-
-        /*
-        Log.w("#DEBUG>", "LEFT: " + parent.getPaddingLeft()
-                + " RIGHT: " + parent.getPaddingRight()
-                + " TOP: " + parent.getPaddingTop()
-                + " BOTOTM: " + parent.getPaddingBottom()
-                + " CLIPPADDING: " + parent.getClipToPadding()
-                + " START: " + parent.getPaddingStart()
-                + " OUTRECT:" + outRect
-                + " VIEW:" + view.getPaddingBottom()
-                + " VIEW " + view.getPaddingTop()
-        );*/
-
         if (includeEdge) {
             outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
             outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
