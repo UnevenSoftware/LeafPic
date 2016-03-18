@@ -36,6 +36,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
+    private boolean click=true;
 
     public AlbumsAdapter(ArrayList<Album> ph, Context ctx) {
         albums = ph;
@@ -148,6 +149,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
         }
     }
+
+    public void setClick(boolean value) { click = value; }
+
+    public boolean getClick() { return click; }
 }
 
 

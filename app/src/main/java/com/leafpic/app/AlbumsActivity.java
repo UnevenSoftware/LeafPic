@@ -70,21 +70,24 @@ public class AlbumsActivity extends ThemedActivity {
     private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            TextView a = (TextView) v.findViewById(R.id.album_name);
-            if (editmode) {
-                adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
-                invalidateOptionsMenu();
-            } else {
-                Album album = albums.getAlbum(a.getTag().toString());
-                Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
-                /**TODO:IMPLEMENT ANIMATION**/
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                Bundle b = new Bundle();
-                b.putParcelable("album", album);
-                intent.putExtras(b);
-                startActivity(intent);
+            if(adapt.getClick()) {
+                TextView a = (TextView) v.findViewById(R.id.album_name);
+                if (editmode) {
+                    adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+                    invalidateOptionsMenu();
+                } else {
+                    Album album = albums.getAlbum(a.getTag().toString());
+                    Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
+                    /**TODO:IMPLEMENT ANIMATION**/
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    Bundle b = new Bundle();
+                    b.putParcelable("album", album);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
             }
+
         }
     };
 
@@ -572,6 +575,7 @@ public class AlbumsActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
+            adapt.setClick(false);
             SwipeContainerRV.setRefreshing(true);
             adapt.setOnLongClickListener(null);
             adapt.setOnClickListener(null);
@@ -586,10 +590,12 @@ public class AlbumsActivity extends ThemedActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+
             adapt.updateDataset(albums.dispAlbums);
             adapt.setOnClickListener(albumOnClickListener);
             adapt.setOnLongClickListener(albumOnLongCLickListener);
             SwipeContainerRV.setRefreshing(false);
+            adapt.setClick(true);
         }
     }
 }
