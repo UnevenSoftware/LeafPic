@@ -25,6 +25,8 @@
     <string name="delete_photo_message">Are you sure you want to delete this media?</string>
     <string name="exclude_album_message">Are you sure you want to exclude the album?</string>
     <string name="rename_album_action">Rename</string>
+    <string name="rename_album_dialog_title">Rename</string>
+
     <string name="asd">13 Photos</string>
 
     <!--SETTINGS PREFERENCES-->
@@ -55,6 +57,14 @@
     <string name="accent_color">Accent Color</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="Colored_NavBar">Colored NavBar</string>
+    <string name="exclude_action">EXCLUDE</string>
+    <string name="cancel_action">CANCEL</string>
+    <string name="ok_action">OK</string>
+    <string name="delete_action">DELETE</string>
+    <string name="hide_action">HIDE</string>
+    <string name="sent_to_action">Send to</string>
+    <string name="singular_photo">Photo</string>
+    <string name="plural_photos">Photos</string>
 
 
 </resources>

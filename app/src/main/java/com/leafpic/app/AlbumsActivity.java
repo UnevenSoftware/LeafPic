@@ -55,8 +55,8 @@ public class AlbumsActivity extends ThemedActivity {
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
+    boolean click = false;
     private SwipeRefreshLayout SwipeContainerRV;
-
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -70,7 +70,7 @@ public class AlbumsActivity extends ThemedActivity {
     private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(adapt.getClick()) {
+            if (click) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 if (editmode) {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
@@ -575,7 +575,7 @@ public class AlbumsActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            adapt.setClick(false);
+            click = false;
             SwipeContainerRV.setRefreshing(true);
             adapt.setOnLongClickListener(null);
             adapt.setOnClickListener(null);
@@ -594,8 +594,8 @@ public class AlbumsActivity extends ThemedActivity {
             adapt.updateDataset(albums.dispAlbums);
             adapt.setOnClickListener(albumOnClickListener);
             adapt.setOnLongClickListener(albumOnLongCLickListener);
+            click = true;
             SwipeContainerRV.setRefreshing(false);
-            adapt.setClick(true);
         }
     }
 }
