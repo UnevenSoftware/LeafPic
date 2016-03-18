@@ -36,7 +36,7 @@
     <string name="color_palette">Color Palette</string>
     <string name="setting_accent_color_title">Accent Color</string>
     <string name="setting_primary_color_title">Primary Color</string>
-    <string name="skip">Why You Skip This Beautyfull Intro? Maledetto!!!</string>
+    <string name="skip">Why You Skip This Beautifull Intro? Maledetto!!!</string>
 
     <!--STRINGS SETTING LAYOUT ACT-->
     <string name="setting">Setting</string>
@@ -45,7 +45,7 @@
     <string name="collapsing_toolbar">Collapsing Toolbar</string>
     <string name="traslucent_statusbar">Traslucent Status Bar</string>
 
-    <string name="picture_preview">Picture Preview</string>
+    <string name="picture_preview">Picture Viewer</string>
     <string name="max_brightness">Max Brightness</string>
     <string name="picture_orientation">Picture Orientation</string>
 

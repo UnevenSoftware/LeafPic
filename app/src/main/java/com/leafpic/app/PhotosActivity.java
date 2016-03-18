@@ -103,9 +103,15 @@ public class PhotosActivity extends ThemedActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_photos);
 
-        Bundle data = getIntent().getExtras();
-        final Album album = data.getParcelable("album");
-        photos = new HandlingPhotos(PhotosActivity.this, album);
+        try {
+            Bundle data = getIntent().getExtras();
+            final Album album = data.getParcelable("album");
+            photos = new HandlingPhotos(PhotosActivity.this, album);
+
+        } catch (NullPointerException e) {
+            Log.d("asdff", "onCreate: asddsad", e);
+            finish();
+        }
 
         /****** TODO:MUST BE FIXXED
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -365,17 +371,6 @@ public class PhotosActivity extends ThemedActivity {
                     final PopupMenu popupfilter = new PopupMenu(PhotosActivity.this, findViewById(R.id.filterPhotos));
                     popupfilter.setGravity(Gravity.AXIS_PULL_BEFORE);
                     popupfilter.getMenuInflater().inflate(R.menu.filter, popupfilter.getMenu());
-                break;
-
-            case R.id.sortPhotos:
-                if (!photos.hidden) {
-                   /* final PopupMenu popup = new PopupMenu(PhotosActivity.this, findViewById(R.id.sortPhotos));
-                    popup.setGravity(Gravity.AXIS_PULL_BEFORE);
-                    popup.getMenuInflater().inflate(R.menu.sort, popup.getMenu());*/
-                    //invalidateOptionsMenu();
-
-
-                } else StringUtils.showToast(getApplicationContext(), " In progress");
                 break;
 
             case R.id.name_sort_action:
