@@ -36,7 +36,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
-    private boolean click=true;
 
     public AlbumsAdapter(ArrayList<Album> ph, Context ctx) {
         albums = ph;
@@ -59,14 +58,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         );
     }
 
+
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
         a.setPath();
+        Context c = holder.picture.getContext();
 
         Media f = a.getCoverAlbum();
 
-        Glide.with(holder.picture.getContext())
+        Glide.with(c)
                 .load(f.Path)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -88,7 +89,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         if (hexAccentColor.equals(hexPrimaryColor)) {
             float[] hsv = new float[3];
-            int color = SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500));
+            int color = SP.getInt("accent_color", ContextCompat.getColor(c, R.color.md_orange_500));
             Color.colorToHSV(color, hsv);
             hsv[2] *= 0.72f; // value component
             color = Color.HSVToColor(hsv);
@@ -107,12 +108,13 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.selectHolder.setVisibility(View.INVISIBLE);
 
             if (SP.getBoolean("set_dark_theme", true))
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(),R.color.unselected_album));
-            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
+                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.unselected_album));
+            else
+                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.background_material_light));
         }
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? "Photo" : "Photos") + "</font>"));
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos)) + "</font>"));
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -149,10 +151,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
         }
     }
-
-    public void setClick(boolean value) { click = value; }
-
-    public boolean getClick() { return click; }
 }
 
 
