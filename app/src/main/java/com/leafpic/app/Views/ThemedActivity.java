@@ -23,39 +23,50 @@ public class ThemedActivity extends AppCompatActivity {
     private int primaryColor;
     private int accentColor;
     private boolean darkTheme;
-    private boolean coloredNavigationBar;
-    private boolean collapsing;
-    private boolean statusbar;
-    private boolean alpha;
+    private boolean coloredNavBar;
+    private boolean openCollapsing;
+    private boolean oscuredStatusBar;
+    private boolean applyThemeImgAct; //TASPARENCY
 
-    public int getAccentColor() {
-        return accentColor;
-    }
 
     public boolean isNavigationBarColored() {
-        return coloredNavigationBar;
+        return coloredNavBar;
     }
 
     public boolean isTraslucentStatusBar() {
-        return statusbar;
+        return oscuredStatusBar;
     }
 
-    public boolean isTransparency() {
-        return alpha;
-    }
-
-    public int getPrimaryColor() {
-        return primaryColor;
+    public boolean isApplyThemeOnImgAct() {
+        return applyThemeImgAct;
     }
 
     public boolean isDarkTheme() {
         return darkTheme;
     }
 
-    public boolean thereIsCollapsing() {
-        return collapsing;
+    public boolean isCollapsingToolbar() {
+        return openCollapsing;
     }
 
+    public boolean isTransparencyZero() {
+        return 255 - SP.getInt("set_alpha", 0)==255 ? true : false;
+    }
+
+    public int getTransparency() {
+        return 255 - SP.getInt("set_alpha", 0);
+    }
+
+    public int getPrimaryColor() {
+        return primaryColor;
+    }
+
+    public int getAccentColor() {
+        return accentColor;
+    }
+
+
+    //METHOD
     public int getBackgroundColor(){
         if(darkTheme) return ColorPalette.getDarkBackgroundColor(getApplicationContext());
         else return ColorPalette.getLightBackgroundColor(getApplicationContext());
@@ -110,7 +121,7 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public int getTransparentColor(int color, int alpha){
-        int res = ColorUtils.setAlphaComponent(color, alpha);//(color & 0x00ffffff) | (alpha);
+        int res = ColorUtils.setAlphaComponent(color, alpha);
         return  res;
     }
 
@@ -118,10 +129,10 @@ public class ThemedActivity extends AppCompatActivity {
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_teal_500));//TEAL CARD BG DEFAULT;
         this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_orange_500));//TEAL COLOR DEFAULT
         darkTheme = SP.getBoolean("set_dark_theme", true);//DARK THEME DEFAULT
-        coloredNavigationBar = SP. getBoolean("nav_bar", false);
-        collapsing = SP.getBoolean("set_collaps_toolbar", true);
-        statusbar = SP.getBoolean("set_traslucent_statusbar",false);
-        alpha = SP.getBoolean("set_alpha_enabled", false);
+        coloredNavBar = SP. getBoolean("nav_bar", false);
+        openCollapsing = SP.getBoolean("set_collaps_toolbar", true);
+        oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",false);
+        applyThemeImgAct = SP.getBoolean("apply_theme_img_act", false);
     }
 
     public void setRecentApp(String text){

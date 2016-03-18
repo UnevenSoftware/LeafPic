@@ -643,7 +643,7 @@ public class PhotosActivity extends ThemedActivity {
 
         //mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);        //TODO:MUST BE FIXXED
 
-        if(thereIsCollapsing()){
+        if(isCollapsingToolbar()){
             appBarLayout.setExpanded(true, true);
             mRecyclerView.setNestedScrollingEnabled(true);
 
@@ -667,7 +667,7 @@ public class PhotosActivity extends ThemedActivity {
     }
 
     private void updateHeaderContent() {
-        if(thereIsCollapsing()) {
+        if(isCollapsingToolbar()) {
             headerImage = (ImageView) findViewById(R.id.header_image);
             Glide.with(PhotosActivity.this)
                     .load(photos.getPreviewAlbumImg())
