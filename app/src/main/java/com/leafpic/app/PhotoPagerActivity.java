@@ -416,12 +416,14 @@ public class PhotoPagerActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         /****SET THEME ****/
+        //TOOLBAR
         toolbar.setBackgroundColor( isApplyThemeOnImgAct()
                 ? (getTransparentColor(getPrimaryColor(), getTransparency()))
                 : (ContextCompat.getColor(getApplicationContext(),
                 isDarkTheme()
                         ? R.color.transparent_dark_gray
                         : R.color.transparent_white_gray )));
+        //STATUS & NAV BARS
         setStatusBarColor();
         setNavBarColor();
         /****END THEME****/
@@ -448,6 +450,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         else hideSystemUI();
                     }
                 });
+
 
 
         if (SP.getBoolean("set_max_luminosita", false))
