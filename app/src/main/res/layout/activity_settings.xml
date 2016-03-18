@@ -165,7 +165,7 @@
                         android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="Picture Settings"
+                        android:text="@string/picture_preview"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -303,8 +303,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
-                            android:paddingTop="15dp"
                             android:paddingLeft="20dp"
+                            android:paddingTop="15dp"
                             android:text="Transparency:"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
@@ -316,8 +316,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="right"
                             android:paddingBottom="15dp"
-                            android:paddingTop="15dp"
                             android:paddingRight="20dp"
+                            android:paddingTop="15dp"
                             android:text="100%"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
@@ -338,9 +338,9 @@
                             android:id="@+id/seek_bar_alpha"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:max="255"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:max="255"
                             />
                     </LinearLayout>
 
@@ -353,10 +353,10 @@
                 android:id="@+id/theme_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 app:cardCornerRadius="2dp"
                 >
                 <LinearLayout
