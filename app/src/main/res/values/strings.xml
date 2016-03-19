@@ -65,6 +65,7 @@
     <string name="sent_to_action">Send to</string>
     <string name="singular_photo">Photo</string>
     <string name="plural_photos">Photos</string>
+    <string name="local_folders">Local Folders</string>
 
 
 </resources>

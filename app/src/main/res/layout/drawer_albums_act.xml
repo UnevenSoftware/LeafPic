@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/DrawerMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:id="@+id/DrawerMain"
-    android:clickable="true">
+    android:clickable="true"
+    android:orientation="vertical">
     <RelativeLayout
+        android:id="@+id/Drawer_Header"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:id="@+id/Drawer_Header"
         android:clickable="true"
         android:elevation="8dp"
         >
@@ -41,15 +41,15 @@
         android:layout_height="0dp"
         />
     <ScrollView
+        android:id="@+id/Drawer_Body_Scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/Drawer_Body_Scroll"
         >
         <LinearLayout
+            android:id="@+id/Drawer_Body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:id="@+id/Drawer_Body"
             android:scrollbars="vertical"
             >
 
@@ -65,24 +65,24 @@
                     xmlns:app="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_Default"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/Drawer_Default_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Drawer_Default_Icon"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@mipmap/ic_image_black_24dp"
                         />
                     <TextView
                         android:id="@+id/Drawer_Default_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:textSize="16sp"
+                        android:padding="16dp"
+                        android:text="@string/local_folders"
                         android:textColor="@color/md_dark_background"
-                        android:text="Default Albums"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -102,20 +102,20 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/Drawer_Hidden_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Drawer_Hidden_Icon"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@mipmap/ic_visibility_off_black_24dp"
                         />
                     <TextView
                         android:id="@+id/Drawer_Hidden_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/md_dark_background"
+                        android:padding="16dp"
                         android:text="Hidden Albums"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -134,20 +134,20 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/Drawer_Moments_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Drawer_Moments_Icon"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@mipmap/ic_event_available_black_24dp"
                         />
                     <TextView
                         android:id="@+id/Drawer_Moments_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/md_dark_background"
+                        android:padding="16dp"
                         android:text="Moments"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -163,24 +163,24 @@
                     xmlns:app="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_Map"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/Drawer_Map_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Drawer_Map_Icon"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@mipmap/ic_location_on_black_24dp"
                         />
                     <TextView
                         android:id="@+id/Drawer_Map_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/md_dark_background"
+                        android:padding="16dp"
                         android:text="Map"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -189,8 +189,8 @@
             <View
                 android:id="@+id/Drawer_Body_Divider"
                 android:layout_width="match_parent"
-                android:padding="5dp"
                 android:layout_height="1dp"
+                android:padding="5dp"
 
                 />
 
@@ -209,20 +209,20 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/Drawer_Setting_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Drawer_Setting_Icon"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@mipmap/ic_settings_black_24dp"
                         />
                     <TextView
                         android:id="@+id/Drawer_Setting_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/md_dark_background"
+                        android:padding="16dp"
                         android:text="Settings"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -242,10 +242,10 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
+                        android:id="@+id/Drawer_Donate_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Drawer_Donate_Icon"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@mipmap/ic_card_giftcard_black_24dp"
                         />
                     <TextView
@@ -253,9 +253,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="15dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/md_dark_background"
                         android:text="Donate"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
