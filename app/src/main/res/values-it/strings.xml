@@ -1,60 +1,145 @@
 <resources>
-    <string name="app_name">LeafPic</string>
-    <string name="action_settings">Impostazioni</string>
-    <string name="action_sort">Ordina</string>
-    <string name="action_camera">Fotocamera</string>
-    <string name="camera">Fotocamera</string>
+    <!--LEAF PIC STRING'S-->
+    <string name="App_Name">LeafPic</string>
+    <string name="Sort">Ordina</string>
+    <string name="Camera">Fotocamera</string>
+
+    <!--INTRO ACTIVITY-->
+    <string name="WelcomeSlideTit">Benvenuto in LeafPic!</string>
+    <string name="WelcomeSlideSub">Galleria Colorata e in Material Design!</string>
+
+    <string name="StorageSlideTit">Storage Permission!</string>
+    <string name="StorageSlideSub">ACCETTA Storage Permission per usare la galleria.</string>
 
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="action_websearch">Web search</string>
-    <string name="exclude_album_option">Exclude</string>
-    <string name="delete_album_action">Delete</string>
-    <string name="exclude_album_action">Exclude</string>
-    <string name="hide_album_action">Hide</string>
-    <string name="unhide_album_action">Unhide</string>
-    <string name="refresh_hidde_folders_action">Refresh</string>
 
-    <string name="hide_album_message">Are you sure you want to hide this album?
+
+    <!--ALBUMS & SELECT ALBUMS ADAPTER-->
+    <string name="Singular_Photo">Immagine</string>
+    <string name="Plural_Photos">Immagini</string>
+    <!--DIALOG-->
+    <string name="Exclude_Action">ESCLUDI</string>
+    <string name="Cancel_Action">CANCELLA</string>
+    <string name="Delete_Action">ELIMINA</string>
+    <string name="Hide_Action">NASCONDI</string>
+    <string name="Ok_Action">OK</string>
+    <string name="Rename_Photo_Action">Rinomina Immagine</string>
+    <string name="Insert_A_Name">Inserisci</string>
+    <!--STORAGE PERMISSION-->
+    <string name="Storage_Permision_Denied">"Storage Permission Denied!"</string>
+
+
+    <!--PHOTOS ADAPTER-->
+    <!--NO STRINGS HERE-->
+    <!--MEDIA PAGER ADAPTER-->
+    <!--NO STRINGS HERE-->
+
+    <!--PHOTO PAGER ACT-->
+    <string name="of">Di</string>
+
+    <string name="Drawer_Open">Open navigation drawer</string>
+    <string name="Drawer_Close">Close navigation drawer</string>
+    <string name="WebSearch">Web search</string>
+    <string name="Exclude">Escludi</string>
+    <string name="Delete">Elimina</string>
+    <string name="Hide">Nascondi</string>
+    <string name="UnHide">Vedi</string>
+    <string name="Refresh">Ricarica</string>
+
+    <!--DIALOG MESAGES-->
+    <string name="Hide_Album_Message">Are you sure you want to hide this album?
         (it will insert .nomedia file in the folder and if there is others media them wont be
         available also from other apps! use EXCLUDE option instead)
     </string>
-    <string name="delete_album_message">Are you sure you want to delete the entire album folder?</string>
-    <string name="delete_photos_message">Are you sure you want to delete selected medias?</string>
-    <string name="delete_photo_message">Are you sure you want to delete this media?</string>
-    <string name="exclude_album_message">Are you sure you want to exclude the album?</string>
-    <string name="rename_album_action">Rename</string>
-    <string name="asd">13 Photos</string>
+    <string name="Delete_Album_Message">Are you sure you want to delete the entire album folder?</string>
+    <string name="Delete_Photos_Message">Are you sure you want to delete selected medias?</string>
+    <string name="Delete_Photo_Message">Are you sure you want to delete this media?</string>
+    <string name="Exclude_Album_Message">Are you sure you want to exclude the album?</string>
 
     <!--SETTINGS PREFERENCES-->
-    <string name="general_setting">Impostazioni Generali</string>
-    <string name="theme_setting">Tema</string>
-    <string name="security_setting">Security</string>
-    <string name="folder_setting">Cartella</string>
-    <string name="primaryColor">Colore Primario</string>
-    <string name="color_palette">Color Palette</string>
-    <string name="setting_accent_color_title">Colore Particolare</string>
-    <string name="setting_primary_color_title">Colore Primario</string>
-    <string name="App_Intro_Skip">Why You Skip This Beautyfull Intro? Maledetto!!!</string>
+    <string name="General_Setting">Impostazioni Generali</string>
+    <string name="Security">Sicurezza</string>
+    <string name="Folder">Cartella</string>
+    <string name="Color_Palette">Colore Palette</string>
+    <string name="App_Intro_Skip">Introduzione Saltata!</string>
 
-    <!--STRINGS SETTING LAYOUT ACT-->
+    <!--STRINGS LAYOUT ACT-->
     <string name="Settings">Impostazioni</string>
 
-    <string name="general">Generali</string>
-    <string name="collapsing_toolbar">Collapsing Toolbar</string>
-    <string name="traslucent_statusbar">Status Bar Trasparente</string>
 
-    <string name="picture_preview">Preview Immagine</string>
-    <string name="max_brightness">Massima Luminosità</string>
-    <string name="picture_orientation">Gira Schermo</string>
+    <string name="General">Generali</string>
+    <string name="Collapsing_Toolbar">Copertina Album</string>
+    <string name="Traslucent_Statusbar">Status Bar Oscurata</string>
 
+    <string name="Picture_Viewer">Galleria</string>
+    <string name="Max_Brightness">Max Luminosita</string>
+    <string name="Picture_Orientation">Orientamento Immagine</string>
+    <string name="Apply_Theme">Applica Tema</string>
+    <string name="Transparency">Trasparenza:</string>
 
-    <string name="theme">Tema</string>
-    <string name="primary_color">Colore Primario</string>
-    <string name="accent_color">Colore Particolare</string>
-    <string name="dark_theme">Tema Scuro</string>
+    <string name="Theme">Tema</string>
+    <string name="Primary_Color">Colore Primario</string>
+    <string name="Accent_Color">Colore Particolare</string>
+    <string name="Dark_Theme">Tema Dark</string>
     <string name="Colored_NavBar">NavBar Colorata</string>
+
+
+    <!--PHOTO DETAILS-->
+    <string name="Path">Percorso</string>
+    <string name="Type">Tipo</string>
+    <string name="Resolution">Risoluzione</string>
+
+
+
+    <string name="sent_to_action">Manda a</string>
+
+    <!--DRAWER STRINGS-->
+    <string name="Local_Folder">Cartella Locale</string>
+    <string name="Tags">Tags</string>
+    <string name="Timeline">Momenti</string>
+    <string name="Wallpapers">Wallpapers</string>
+    <string name="Donate">Dona</string>
+    <string name="GitHub">GitHub</string>
+
+
+    <!--MENUS-->
+    <!--FILTER-->
+    <string name="Filter_Menu_Title">Filtro</string>
+    <string name="All">Tutto</string>
+    <string name="Videos">Video</string>
+    <string name="Images">Immagini</string>
+    <string name="Gifs">Gif</string>
+    <!--SORT-->
+    <string name="Sort_Menu_Title">Ordina</string>
+    <string name="Name">Nome</string>
+    <string name="Date">Data</string>
+    <string name="Size">Dimensione</string>
+    <string name="Ascending">Ascendente</string>
+    <!--ALBUMS-->
+    <string name="Album_Menu_Select_All">Seleziona Tutto</string>
+    <string name="Menu_Delete">Elimina</string>
+    <string name="Menu_Exclude">Escludi</string>
+    <string name="Menu_Hide">Nascondi</string>
+    <string name="Menu_Refresh">Ricarica</string>
+    <!--PHOTO-->
+    <string name="Share">Condividi</string>
+    <string name="Rotate">Ruota</string>
+    <string name="Rotate_Right_90">Ruota Dx 90°</string>
+    <string name="Rotate_Left_90">Ruota Sx 90°</string>
+    <string name="Rotate_180">Ruota 180°</string>
+    <string name="CopyTo">Coppia</string>
+    <string name="MoveTo">Sposta</string>
+    <string name="UseAs">Usa Come</string>
+    <string name="Edit">Modifica</string>
+    <string name="Rename">Rinomina</string>
+    <string name="Details">Dettagli</string>
+    <string name="More">Altro</string>
+    <string name="EditWith">Modifica Con</string>
+    <string name="OpenWith">Apri Con</string>
+    <string name="Upload">Upload</string>
+    <!--PHOTOS-->
+    <string name="SetPreview">Imposta Copertina</string>
+    <string name="ClearPreview">Pulisci Copertina</string>
 
 
 </resources>

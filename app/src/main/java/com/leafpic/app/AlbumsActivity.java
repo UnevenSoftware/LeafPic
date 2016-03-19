@@ -199,7 +199,7 @@ public class AlbumsActivity extends ThemedActivity {
         /**** DRAWER ****/
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
-                mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+                mDrawerLayout, toolbar, R.string.Drawer_Open, R.string.Drawer_Close) {
             public void onDrawerClosed(View view) {
                 //Put your code here
                 // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
@@ -222,7 +222,7 @@ public class AlbumsActivity extends ThemedActivity {
             }
         });
 
-        setRecentApp(getString(R.string.app_name));
+        setRecentApp(getString(R.string.App_Name));
     }
 
     //region UI/GRAPHIC
@@ -379,7 +379,7 @@ public class AlbumsActivity extends ThemedActivity {
                     }
                 });
             } else {
-                toolbar.setTitle(getString(R.string.app_name));
+                toolbar.setTitle(getString(R.string.App_Name));
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_menu)
                         .color(Color.WHITE)
@@ -428,12 +428,12 @@ public class AlbumsActivity extends ThemedActivity {
             opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
             opt.setEnabled(true).setVisible(true);
             opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.unhide_album_action));
+            opt.setTitle(getString(R.string.UnHide));
         } else {
             opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
             opt.setEnabled(false).setVisible(false);
             opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.hide_album_action));
+            opt.setTitle(getString(R.string.Hide));
         }
         if (albums.getSelectedCount() == 0) {
             editmode = false;
@@ -497,7 +497,7 @@ public class AlbumsActivity extends ThemedActivity {
 
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
-                builder.setMessage(R.string.exclude_album_message)
+                builder.setMessage(R.string.Exclude_Album_Message)
                         .setPositiveButton( this.getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.excludeSelectedAlbums();
@@ -514,7 +514,7 @@ public class AlbumsActivity extends ThemedActivity {
 
             case R.id.deleteAction:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(AlbumsActivity.this);
-                builder1.setMessage(R.string.delete_album_message)
+                builder1.setMessage(R.string.Delete_Album_Message)
                         .setPositiveButton(this.getString(R.string.Delete_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.deleteSelectedAlbums();
@@ -537,7 +537,7 @@ public class AlbumsActivity extends ThemedActivity {
                 } else {
 
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
-                    builder2.setMessage(R.string.delete_album_message)
+                    builder2.setMessage(R.string.Delete_Album_Message)
                             .setPositiveButton( this.getString(R.string.Hide_Action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     albums.hideSelectedAlbums();

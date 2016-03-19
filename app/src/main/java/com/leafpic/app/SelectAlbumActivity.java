@@ -82,7 +82,7 @@ public class SelectAlbumActivity extends ThemedActivity{
 
         setNavBarColor();
         setStatusBarColor();
-        setRecentApp(getString(R.string.app_name));
+        setRecentApp(getString(R.string.App_Name));
     }
 
     private void loadAlbumPreview(){

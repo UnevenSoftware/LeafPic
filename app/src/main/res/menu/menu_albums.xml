@@ -24,28 +24,28 @@
         />
 
     <item android:id="@+id/settingsTry_albums_action"
-        android:title="@string/Album_Menu_Settings"
+        android:title="@string/Settings"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/Album_Menu_Delete"
+        android:title="@string/Menu_Delete"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/excludeAlbumButton"
-        android:title="@string/Album_Menu_Exclude"
+        android:title="@string/Menu_Exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:title="@string/Album_Menu_Exclude"
+        android:title="@string/Menu_Exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
-        android:title="@string/Album_Menu_Refresh"
+        android:title="@string/Menu_Refresh"
         app:showAsAction="never"
         />
 </menu>

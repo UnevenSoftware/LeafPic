@@ -31,7 +31,7 @@ public class IntroActivity extends AppIntro {
 
         drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
         setTaskDescription(new ActivityManager.TaskDescription
-                (getString(R.string.app_name), drawable.getBitmap(),
+                (getString(R.string.App_Name), drawable.getBitmap(),
                         ContextCompat.getColor(this, R.color.accent_teal)));
 
         //MAYBE REMOVE
@@ -70,7 +70,7 @@ public class IntroActivity extends AppIntro {
             setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
             drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription
-                    (getString(R.string.app_name), drawable.getBitmap(),
+                    (getString(R.string.App_Name), drawable.getBitmap(),
                     ContextCompat.getColor(this, R.color.accent_teal)));
 
         } else{
@@ -86,7 +86,7 @@ public class IntroActivity extends AppIntro {
             setBarColor(ContextCompat.getColor(this, R.color.accent_brown));
             drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription
-                    (getString(R.string.app_name), drawable.getBitmap(),
+                    (getString(R.string.App_Name), drawable.getBitmap(),
                             ContextCompat.getColor(this, R.color.accent_brown)));
 
         }

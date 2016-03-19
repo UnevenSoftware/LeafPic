@@ -49,7 +49,7 @@
                         android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="@string/general"
+                        android:text="@string/General"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -79,7 +79,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="15dp"
                                 android:paddingTop="15dp"
-                                android:text="@string/collapsing_toolbar"
+                                android:text="@string/Collapsing_Toolbar"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
 
@@ -121,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/traslucent_statusbar"
+                            android:text="@string/Traslucent_Statusbar"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -165,7 +165,7 @@
                         android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="@string/picture_preview"
+                        android:text="@string/Picture_Viewer"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -192,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/max_brightness"
+                            android:text="@string/Max_Brightness"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
 
@@ -231,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/picture_orientation"
+                            android:text="@string/Picture_Orientation"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
 
@@ -274,7 +274,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="Apply Theme"
+                            android:text="@string/Apply_Theme"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -305,7 +305,7 @@
                             android:paddingBottom="15dp"
                             android:paddingLeft="20dp"
                             android:paddingTop="15dp"
-                            android:text="Transparency:"
+                            android:text="@string/Transparency"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -324,7 +324,6 @@
                             />
 
                     </LinearLayout>
-
                     <!-- ALPHA SEEKBAR -->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_seek_bar"
@@ -343,7 +342,6 @@
                             android:paddingTop="15dp"
                             />
                     </LinearLayout>
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -371,7 +369,7 @@
                         android:paddingLeft="20dp"
 
                         android:paddingTop="15dp"
-                        android:text="@string/theme"
+                        android:text="@string/Theme"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -406,7 +404,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="15dp"
                                 android:paddingTop="15dp"
-                                android:text="@string/primary_color"
+                                android:text="@string/Primary_Color"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
                                 />
@@ -442,7 +440,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/accent_color"
+                            android:text="@string/Accent_Color"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -473,7 +471,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/dark_theme"
+                            android:text="@string/Dark_Theme"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -531,7 +529,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

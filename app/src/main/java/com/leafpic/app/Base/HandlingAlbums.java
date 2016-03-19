@@ -71,7 +71,7 @@ public class HandlingAlbums implements Parcelable {
 
         if (cameraIndex != -1) {
             Album camera = dispAlbums.remove(cameraIndex);
-            camera.DisplayName = context.getString(R.string.camera);
+            camera.DisplayName = context.getString(R.string.Camera);
             dispAlbums.add(0, camera);
         }
     }

@@ -12,16 +12,13 @@
         app:cardCornerRadius="2dp"
         android:id="@+id/rename_card"
         >
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <TextView
                     android:id="@+id/rename_title"
                     android:layout_width="match_parent"
@@ -29,27 +26,23 @@
                     android:layout_height="wrap_content"
                     android:background="@color/md_red_500"
                     android:padding="24dp"
-                    android:text="Rename"
+                    android:text="@string/Rename_Photo_Action"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
                 <RelativeLayout
                     android:id="@+id/body3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="24dp">
-
                     <EditText
                         android:id="@+id/dialog_txt"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:hint="Rename"
+                        android:hint="@string/Rename_Photo_Action"
                         android:singleLine="true" />
-
                 </RelativeLayout>
-
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

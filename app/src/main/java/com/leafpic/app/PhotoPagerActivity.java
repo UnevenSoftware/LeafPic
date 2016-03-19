@@ -225,7 +225,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             case R.id.deletePhoto:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
-                builder1.setMessage(R.string.delete_album_message);
+                builder1.setMessage(R.string.Delete_Album_Message);
                 builder1.setPositiveButton(this.getString(R.string.Delete_Action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         photos.deleteCurrentPhoto();
@@ -433,7 +433,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setRecentApp(getString(R.string.app_name));
+        setRecentApp(getString(R.string.App_Name));
 
         final Handler handler = new Handler();
 

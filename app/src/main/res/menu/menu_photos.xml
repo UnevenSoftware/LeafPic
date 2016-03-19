@@ -24,22 +24,22 @@
             <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/all_media_filter"
-                    android:title="@string/Filter_Menu_All"
+                    android:title="@string/All"
                     app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/video_media_filter"
-                    android:title="@string/Filter_Menu_Videos"
+                    android:title="@string/Videos"
                     app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/image_media_filter"
-                    android:title="@string/Filter_Menu_Images"
+                    android:title="@string/Images"
                     app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/gifs_media_filter"
-                    android:title="@string/Filter_Menu_Gifs"
+                    android:title="@string/Gifs"
                     app:showAsAction="ifRoom"
                     />
             </group>
@@ -60,26 +60,26 @@
             <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/name_sort_action"
-                    android:title="@string/Sort_Menu_Name"
+                    android:title="@string/Name"
                     app:showAsAction="ifRoom"
                     />
 
                 <item
                     android:id="@+id/date_taken_sort_action"
-                    android:title="@string/Sort_Menu_Date"
+                    android:title="@string/Date"
                     app:showAsAction="ifRoom"
 
                     />
                 <item
                     android:id="@+id/size_sort_action"
-                    android:title="@string/Sort_Menu_Size"
+                    android:title="@string/Size"
                     app:showAsAction="ifRoom"
                     />
             </group>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@+id/ascending_sort_action"
-                    android:title="@string/Sort_Menu_Ascending"
+                    android:title="@string/Ascending"
                     app:showAsAction="ifRoom"
                     />
             </group>
@@ -88,7 +88,7 @@
     <item
         android:id="@+id/sharePhotos"
         android:icon="@mipmap/ic_share_white_24dp"
-        android:title="@string/Photo_Menu_Share"
+        android:title="@string/Share"
         app:showAsAction="ifRoom"
         />
     <item
@@ -99,37 +99,37 @@
         />
     <item
         android:id="@+id/copyAction"
-        android:title="@string/Photo_Menu_CopyTo"
+        android:title="@string/CopyTo"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/moveAction"
-        android:title="@string/Photo_Menu_MoveTo"
+        android:title="@string/MoveTo"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/renameAlbum"
-        android:title="@string/Photo_Menu_Rename"
+        android:title="@string/Rename"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:title="@string/Album_Menu_Hide"
+        android:title="@string/Menu_Hide"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/excludeAlbumButton"
-        android:title="@string/Album_Menu_Exclude"
+        android:title="@string/Menu_Exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/setAsAlbumPreview"
-        android:title="@string/Photos_Menu_SetPreview"
+        android:title="@string/SetPreview"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/clear_album_preview"
-        android:title="@string/Photos_Menu_ClearPreview"
+        android:title="@string/ClearPreview"
         android:visible="false"
         app:showAsAction="never" />
     <item android:id="@+id/select_all_albums_action"
@@ -137,7 +137,7 @@
         app:showAsAction="never"
         />
     <item android:id="@+id/setting"
-        android:title="@string/Photo_Menu_Settings"
+        android:title="@string/Settings"
         app:showAsAction="never"
         />
 </menu>
