@@ -56,7 +56,6 @@
         android:id="@+id/drawer_items"
         layout="@layout/drawer_albums_act"
         />
-
 </android.support.v4.widget.DrawerLayout>
 
 

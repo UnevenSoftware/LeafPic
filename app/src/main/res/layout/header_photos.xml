@@ -21,7 +21,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
-                android:text="Slide"
+                android:text=""
         />
         <View
                 android:id="@+id/album_card_divider"
@@ -41,7 +41,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:text="13 Photos"
+                android:text=""
         />
     </LinearLayout>
 </RelativeLayout>

@@ -41,9 +41,12 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
     @Override
     public void onBindViewHolder(SelectAlbumAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
+
+        Context cntx = holder.picture.getContext();
+
         a.setPath();
 
-        Glide.with(holder.picture.getContext())
+        Glide.with(cntx)
                 .load(a.getPathCoverAlbum())
                 .asBitmap()
                 .centerCrop()
@@ -51,16 +54,16 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
                 .into(holder.picture);
 
         String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.accent_green))));
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(cntx, R.color.accent_green))));
 
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? "Photo" : "Photos") + "</font>"));
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? cntx.getString(R.string.Singular_Photo) : cntx.getString(R.string.Plural_Photos)) + "</font>"));
         holder.name.setTag(a.Path);
 
         if (SP.getBoolean("set_dark_theme", false))
-            holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.unselected_album));
-        else holder.card_layout.setBackgroundColor(ContextCompat.getColor(holder.card_layout.getContext(), R.color.background_material_light));
+            holder.card_layout.setBackgroundColor(ContextCompat.getColor(cntx, R.color.unselected_album));
+        else holder.card_layout.setBackgroundColor(ContextCompat.getColor(cntx, R.color.background_material_light));
     }
 
     public void setOnClickListener(View.OnClickListener lis) {

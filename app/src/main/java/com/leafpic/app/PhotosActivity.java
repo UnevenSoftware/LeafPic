@@ -166,9 +166,9 @@ public class PhotosActivity extends ThemedActivity {
         setOptionsAlbmuMenusItemsVisible(menu, !editmode);
 
         if (photos.hidden)
-            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.unhide_album_action));
+            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.UnHide));
          else
-            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.hide_album_action));
+            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.Hide));
 
 
         if (photos.getSelectedCount() == 0) {
@@ -417,7 +417,7 @@ public class PhotosActivity extends ThemedActivity {
                 CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
                 title.setBackgroundColor(getPrimaryColor());
-                title.setText(getString(R.string.rename_album_dialog_title));
+                title.setText(getString(R.string.Rename));
                 txt_edit.setText(photos.DisplayName);//da fixxare
                 txt_edit.selectAll();
 
@@ -435,13 +435,13 @@ public class PhotosActivity extends ThemedActivity {
                     txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark), PorterDuff.Mode.SRC_ATOP);
                 }
                 RenameDialog.setView(Rename_dialogLayout);
-                RenameDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                RenameDialog.setNeutralButton(getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
-                RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                RenameDialog.setPositiveButton(getString(R.string.Ok_Action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (txt_edit.length()!=0) {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
@@ -449,7 +449,7 @@ public class PhotosActivity extends ThemedActivity {
                             updateHeaderContent();
                             //UpdatePhotos();//TODO updatePhoto photos
                         }
-                        else StringUtils.showToast(getApplicationContext(), "Insert Something!");
+                        else StringUtils.showToast(getApplicationContext(), getString(R.string.Insert_A_Name));
                     }
                 });
                 RenameDialog.show();
@@ -457,23 +457,23 @@ public class PhotosActivity extends ThemedActivity {
 
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(PhotosActivity.this);
-                builder.setMessage(R.string.exclude_album_message)
-                        .setPositiveButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                builder.setMessage(R.string.Exclude_Album_Message)
+                        .setPositiveButton(getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 customAlbumsHandler.excludeAlbum(photos.ID);
                                 finish();
                             }
                         })
-                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder.show();
                 break;
 
             case R.id.deleteAction:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotosActivity.this);
-                if(editmode) builder1.setMessage(R.string.delete_photos_message);
-                else builder1.setMessage(R.string.delete_album_message);
-                builder1.setPositiveButton(getString(R.string.delete_action), new DialogInterface.OnClickListener() {
+                if(editmode) builder1.setMessage(R.string.Delete_Photos_Message);
+                else builder1.setMessage(R.string.Delete_Album_Message);
+                builder1.setPositiveButton(getString(R.string.Delete_Action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editmode) {
                             photos.deleteSelectedPhotos();
@@ -492,7 +492,7 @@ public class PhotosActivity extends ThemedActivity {
                         }
                     }
                 })
-                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder1.show();
                 break;
@@ -504,20 +504,20 @@ public class PhotosActivity extends ThemedActivity {
                 } else {
 
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(PhotosActivity.this);
-                    builder2.setMessage(R.string.delete_album_message)
-                            .setPositiveButton(getString(R.string.hide_action), new DialogInterface.OnClickListener() {
+                    builder2.setMessage(R.string.Delete_Album_Message)
+                            .setPositiveButton(getString(R.string.Hide_Action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     albums.hideAlbum(photos.FolderPath, photos.medias);
                                 }
                             })
-                            .setNeutralButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                            .setNeutralButton(getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     customAlbumsHandler.excludeAlbum(photos.ID);
                                     finish();
                                 }
                             })
-                            .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {}});
                     builder2.show();
                 }
@@ -588,9 +588,6 @@ public class PhotosActivity extends ThemedActivity {
         mRecyclerView.setFitsSystemWindows(true);
         mRecyclerView.setAdapter(adapter);
 
-
-        /****SET THEME***/
-
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -660,7 +657,7 @@ public class PhotosActivity extends ThemedActivity {
             String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
             textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
-                    "color='#FFFFFF'> " + (photos.medias.size() == 1 ? getString(R.string.singular_photo) : getString(R.string.plural_photos)) + "</font>"));
+                    "color='#FFFFFF'> " + (photos.medias.size() == 1 ? getString(R.string.Singular_Photo) : getString(R.string.Plural_Photos)) + "</font>"));
 
         }
     }

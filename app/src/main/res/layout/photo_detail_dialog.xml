@@ -73,7 +73,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Path"
+                            android:text="@string/Path"
                             android:textStyle="bold"
                             />
                         <TextView
@@ -99,7 +99,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Type"
+                            android:text="@string/Type"
                             android:textStyle="bold"
                             />
                         <TextView
@@ -124,7 +124,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Resolution"
+                            android:text="@string/Resolution"
                             android:textStyle="bold"
                             />
                         <TextView
@@ -149,7 +149,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Size"
+                            android:text="@string/Size"
                             android:textStyle="bold"
                             />
                         <TextView
@@ -174,7 +174,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Date Taken"
+                            android:text="@string/Date"
                             android:textStyle="bold"
                             />
                         <TextView
@@ -185,11 +185,8 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-
                 </LinearLayout>
-
             </RelativeLayout>
-
         </ScrollView>
     </android.support.v7.widget.CardView>
 </LinearLayout>

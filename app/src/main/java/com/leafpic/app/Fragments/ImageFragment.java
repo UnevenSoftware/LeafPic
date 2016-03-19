@@ -145,18 +145,14 @@ public class ImageFragment extends Fragment {
                                 picture.setImage(ImageSource.bitmap(bitmap));
                             }
                         });
-
-
             } catch (OutOfMemoryError e) {
                 StringUtils.showToast(getContext(), "Out of Memory!");
                 e.printStackTrace();
-
             }
             return null;
         }
 
         protected void onPostExecute(Void result) {
-
         }
     }
 }

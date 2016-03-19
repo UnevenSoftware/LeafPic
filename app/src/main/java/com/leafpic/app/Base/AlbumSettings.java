@@ -28,5 +28,4 @@ public class AlbumSettings {
         else
             return columnSortingMode + " DESC";
     }
-
 }

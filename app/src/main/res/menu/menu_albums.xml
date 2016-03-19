@@ -4,44 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item android:id="@+id/filterPhotos"
-        android:icon="@mipmap/ic_filter_list_white_24dp"
-        android:orderInCategory="0"
-        android:title="Filter"
-        app:showAsAction="ifRoom"
-        >
-        <menu xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context=".PhotosActivity">
-            <group  android:checkableBehavior="single">
-                <item
-                    android:id="@+id/all_media_filter"
-                    android:checked="true"
-                    android:title="All"
-                    app:showAsAction="ifRoom"
-                    />
-                <item
-                    android:id="@+id/video_media_filter"
-                    android:title="Videos"
-                    app:showAsAction="ifRoom"
-                    />
-                <item
-                    android:id="@+id/image_media_filter"
-                    android:title="Images"
-                    app:showAsAction="ifRoom"
-                    />
-                <item
-                    android:id="@+id/gifs_media_filter"
-                    android:title="Gifs"
-                    app:showAsAction="ifRoom"
-                    />
-            </group>
-        </menu>
-    </item>
-
     <item android:id="@+id/sort_action"
         android:icon="@mipmap/ic_sort_white_24dp"
-        android:title="Sort"
+        android:title="@string/Sort_Menu_Title"
         app:showAsAction="ifRoom"
         />
     <!--
@@ -54,33 +19,32 @@
     -->
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/select_all_albums_action"
-        android:title="Select all"
-        app:showAsAction="never"
-        />
-
-    <item android:id="@+id/settingsTry_albums_action"
-        android:title="Settings"
+        android:title="@string/Album_Menu_Select_All"
         app:showAsAction="never"
         />
     <item
-            android:id="@+id/deleteAction"
-            android:icon="@mipmap/ic_delete_white_24dp"
-            android:title="@string/delete_album_action"
-            app:showAsAction="ifRoom"
+        android:id="@+id/deleteAction"
+        android:icon="@mipmap/ic_delete_white_24dp"
+        android:title="@string/Menu_Delete"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/excludeAlbumButton"
-        android:title="@string/exclude_album_action"
+        android:title="@string/Menu_Exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:title="@string/hide_album_action"
+        android:title="@string/Menu_Exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
-        android:title="@string/refresh_hidde_folders_action"
+        android:title="@string/Menu_Refresh"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/settingsTry_albums_action"
+        android:title="@string/Settings"
         app:showAsAction="never"
         />
 </menu>

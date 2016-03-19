@@ -19,7 +19,6 @@
              android:layout_height="match_parent"
              android:src="@drawable/leafpic_big"
              />
-
     </RelativeLayout>
 
     <ScrollView
@@ -35,7 +34,6 @@
             android:orientation="vertical"
             android:scrollbars="vertical"
             >
-
             <!-- DEFAULT ALBUMS -->
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -65,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/local_folders"
+                        android:text="@string/Local_Folder"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -101,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="Tags"
+                        android:text="@string/Tags"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -135,14 +133,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="Timeline"
+                        android:text="@string/Timeline"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <!-- MOMENTS -->
+            <!-- WALLPAPERS -->
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,7 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="Wallpapers"
+                        android:text="@string/Wallpapers"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -215,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="Donate"
+                        android:text="@string/Donate"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -248,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="GitHub"
+                        android:text="@string/GitHub"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -283,13 +281,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="Settings"
+                        android:text="@string/Settings"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -5,18 +5,18 @@
         <item
                 android:id="@+id/name_sort_action"
                 android:checked="false"
-                android:title="Name"
+                android:title="@string/Name"
                 app:showAsAction="ifRoom"
         />
 
         <item
                 android:id="@+id/date_taken_sort_action"
-                android:title="Date"
+                android:title="@string/Date"
                 app:showAsAction="ifRoom"
         />
         <item
                 android:id="@+id/size_sort_action"
-                android:title="Size"
+                android:title="@string/Size"
                 android:checked="false"
                 app:showAsAction="ifRoom"
         />
@@ -24,7 +24,7 @@
     <group android:checkableBehavior="all">
         <item
                 android:id="@+id/ascending_sort_action"
-                android:title="Ascending"
+                android:title="@string/Ascending"
                 android:checked="false"
                 app:showAsAction="ifRoom"
         />

@@ -1,41 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="prefListColor">
-        <item>Blue</item>
-        <item>Green</item>
-        <item>Orange</item>
-    </string-array>
 
-    <string-array name="ColorsPref">
-        <item>#03A9F4</item>
-        <item>#00796B</item>
-        <item>#FBC02D</item>
-    </string-array>
-
-
-    <!--Primary TEst Color-->
-    <string-array name="PrimaryprefListColor">
-        <item>Blue</item>
-        <item>Green</item>
-        <item>Orange</item>
-    </string-array>
-
-    <string-array name="PrimaryColorsPref">
-        <item>#03A9F4</item>
-        <item>#009688</item>
-        <item>#FBC02D</item>
-    </string-array>
-
-
-    <!--PREFERENCES ACTIVITY ITEMS-->
-    <string-array name="PreferenceTheme">
-        <item>Light</item>
-        <item>Dark</item>
-    </string-array>
-
-    <string-array name="preference_accent_Color">
-        <item>#03A9F4</item>
-        <item>#00796B</item>
-        <item>#FBC02D</item>
-    </string-array>
 </resources>

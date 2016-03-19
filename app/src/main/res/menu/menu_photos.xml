@@ -15,7 +15,7 @@
     <item android:id="@+id/filterPhotos"
         android:icon="@mipmap/ic_filter_list_white_24dp"
         android:orderInCategory="1"
-        android:title="Filter"
+        android:title="@string/Filter_Menu_Title"
         app:showAsAction="ifRoom"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,32 +24,33 @@
             <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/all_media_filter"
-                    android:title="All"
+                    android:title="@string/All"
                     app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/video_media_filter"
-                    android:title="Videos"
+                    android:title="@string/Videos"
                     app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/image_media_filter"
-                    android:title="Images"
+                    android:title="@string/Images"
                     app:showAsAction="ifRoom"
                     />
                 <item
                     android:id="@+id/gifs_media_filter"
-                    android:title="Gifs"
+                    android:title="@string/Gifs"
                     app:showAsAction="ifRoom"
                     />
             </group>
         </menu>
     </item>
 
+
     <item android:id="@+id/sortPhotos"
         android:icon="@mipmap/ic_sort_white_24dp"
         android:orderInCategory="1"
-        android:title="Sort"
+        android:title="@string/Sort_Menu_Title"
         app:showAsAction="never"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -59,26 +60,26 @@
             <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/name_sort_action"
-                    android:title="Name"
+                    android:title="@string/Name"
                     app:showAsAction="ifRoom"
                     />
 
                 <item
                     android:id="@+id/date_taken_sort_action"
-                    android:title="Date"
+                    android:title="@string/Date"
                     app:showAsAction="ifRoom"
 
                     />
                 <item
                     android:id="@+id/size_sort_action"
-                    android:title="Size"
+                    android:title="@string/Size"
                     app:showAsAction="ifRoom"
                     />
             </group>
             <group android:checkableBehavior="all">
                 <item
                     android:id="@+id/ascending_sort_action"
-                    android:title="Ascending"
+                    android:title="@string/Ascending"
                     app:showAsAction="ifRoom"
                     />
             </group>
@@ -87,56 +88,56 @@
     <item
         android:id="@+id/sharePhotos"
         android:icon="@mipmap/ic_share_white_24dp"
-        android:title="Share"
+        android:title="@string/Share"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/delete_album_action"
+        android:title="@string/Menu_Delete"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/copyAction"
-        android:title="Copy to"
+        android:title="@string/CopyTo"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/moveAction"
-        android:title="Move to"
+        android:title="@string/MoveTo"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/renameAlbum"
-        android:title="@string/rename_album_action"
+        android:title="@string/Rename"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:title="@string/hide_album_action"
+        android:title="@string/Menu_Hide"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/excludeAlbumButton"
-        android:title="@string/exclude_album_action"
+        android:title="@string/Menu_Exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/setAsAlbumPreview"
-        android:title="Set as Preview"
-        app:showAsAction="never"
-        />
-    <item android:id="@+id/select_all_albums_action"
-        android:title="Select all"
+        android:title="@string/SetPreview"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/clear_album_preview"
-        android:title="Clear album preview"
+        android:title="@string/ClearPreview"
         android:visible="false"
         app:showAsAction="never" />
+    <item android:id="@+id/select_all_albums_action"
+        android:title="@string/Album_Menu_Select_All"
+        app:showAsAction="never"
+        />
     <item android:id="@+id/setting"
-        android:title="Settings"
+        android:title="@string/Settings"
         app:showAsAction="never"
         />
 </menu>
