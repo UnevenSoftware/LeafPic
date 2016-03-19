@@ -22,11 +22,6 @@
         android:title="@string/Album_Menu_Select_All"
         app:showAsAction="never"
         />
-
-    <item android:id="@+id/settingsTry_albums_action"
-        android:title="@string/Settings"
-        app:showAsAction="never"
-        />
     <item
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
@@ -46,6 +41,10 @@
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
         android:title="@string/Menu_Refresh"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/settingsTry_albums_action"
+        android:title="@string/Settings"
         app:showAsAction="never"
         />
 </menu>
