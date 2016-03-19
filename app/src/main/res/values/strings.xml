@@ -35,7 +35,7 @@
         <!--NO STRINGS HERE-->
 
     <!--PHOTO PAGER ACT-->
-    <string name="of">Of</string>
+    <string name="of">of</string>
 
     <string name="Drawer_Open">Open navigation drawer</string>
     <string name="Drawer_Close">Close navigation drawer</string>
