@@ -1,9 +1,44 @@
 <resources>
+    <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
     <string name="action_settings">Settings</string>
     <string name="action_sort">Sort</string>
     <string name="action_camera">Camera</string>
     <string name="camera">Camera</string>
+
+    <!--INTRO ACTIVITY-->
+    <string name="WelcomeSlideTit">Welcome To LeafPic!</string>
+    <string name="WelcomeSlideSub">ColourFull Material Design Gallery!</string>
+
+    <string name="StorageSlideTit">Storage Permission!</string>
+    <string name="StorageSlideSub">ALLOW Storage permisison to use our gallery.</string>
+
+
+
+
+    <!--ALBUMS & SELECT ALBUMS ADAPTER-->
+    <string name="singular_photo">Photo</string>
+    <string name="plural_photos">Photos</string>
+    <!--DIALOG-->
+    <string name="Exclude_Action">EXCLUDE</string>
+    <string name="Cancel_Action">CANCEL</string>
+    <string name="Delete_Action">DELETE</string>
+    <string name="Hide_Action">HIDE</string>
+    <string name="Ok_Action">OK</string>
+    <string name="Rename_Photo_Action">Rename Photo</string>
+    <string name="Insert_A_Name">Insert Something</string>
+    <!--STORAGE PERMISSION-->
+    <string name="Storage_Permision_Denied">"Storage Permission Denied!"</string>
+
+
+    <!--PHOTOS ADAPTER-->
+        <!--NO STRINGS HERE-->
+    <!--MEDIA PAGER ADAPTER-->
+        <!--NO STRINGS HERE-->
+
+    <!--PHOTO PAGER ACT-->
+    <string name="of">Of</string>
+
 
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -38,10 +73,10 @@
     <string name="color_palette">Color Palette</string>
     <string name="setting_accent_color_title">Accent Color</string>
     <string name="setting_primary_color_title">Primary Color</string>
-    <string name="skip">Why You Skip This Beautifull Intro? Maledetto!!!</string>
+    <string name="App_Intro_Skip">Introduction Skipped!</string>
 
-    <!--STRINGS SETTING LAYOUT ACT-->
-    <string name="setting">Setting</string>
+    <!--STRINGS LAYOUT ACT-->
+    <string name="Settings">Settings</string>
 
     <string name="general">General</string>
     <string name="collapsing_toolbar">Collapsing Toolbar</string>
@@ -51,21 +86,56 @@
     <string name="max_brightness">Max Brightness</string>
     <string name="picture_orientation">Picture Orientation</string>
 
-
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>
     <string name="accent_color">Accent Color</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="Colored_NavBar">Colored NavBar</string>
-    <string name="exclude_action">EXCLUDE</string>
-    <string name="cancel_action">CANCEL</string>
-    <string name="ok_action">OK</string>
-    <string name="delete_action">DELETE</string>
-    <string name="hide_action">HIDE</string>
+
     <string name="sent_to_action">Send to</string>
-    <string name="singular_photo">Photo</string>
-    <string name="plural_photos">Photos</string>
     <string name="local_folders">Local Folders</string>
 
+
+    <!--MENUS-->
+        <!--FILTER-->
+        <string name="Filter_Menu_Title">Filter</string>
+        <string name="Filter_Menu_All">All</string>
+        <string name="Filter_Menu_Videos">Videos</string>
+        <string name="Filter_Menu_Images">Images</string>
+        <string name="Filter_Menu_Gifs">Gifs</string>
+        <!--SORT-->
+        <string name="Sort_Menu_Title">Sort</string>
+        <string name="Sort_Menu_Name">Name</string>
+        <string name="Sort_Menu_Date">Date</string>
+        <string name="Sort_Menu_Size">Size</string>
+        <string name="Sort_Menu_Ascending">Ascending</string>
+        <!--ALBUMS-->
+        <string name="Album_Menu_Select_All">Select All</string>
+        <string name="Album_Menu_Settings">Settings</string>
+        <string name="Album_Menu_Delete">Delete</string>
+        <string name="Album_Menu_Exclude">Exclude</string>
+        <string name="Album_Menu_Hide">Hide</string>
+        <string name="Album_Menu_Refresh">Refresh</string>
+        <!--PHOTO-->
+        <string name="Photo_Menu_Share">Share</string>
+        <string name="Photo_Menu_Delete">Delete</string>
+        <string name="Photo_Menu_Rotate">Rotate</string>
+        <string name="Photo_Menu_Rotate_Right_90">Rotate Right 90°</string>
+        <string name="Photo_Menu_Rotate_Left_90">Rotate Left 90°</string>
+        <string name="Photo_Menu_Rotate_180">Rotate 180°</string>
+        <string name="Photo_Menu_CopyTo">Copy To</string>
+        <string name="Photo_Menu_MoveTo">Move To</string>
+        <string name="Photo_Menu_UseAs">Use As</string>
+        <string name="Photo_Menu_Edit">Edit</string>
+        <string name="Photo_Menu_Rename">Rename</string>
+        <string name="Photo_Menu_Details">Details</string>
+        <string name="Photo_Menu_More">More</string>
+        <string name="Photo_Menu_EditWith">Edit With</string>
+        <string name="Photo_Menu_OpenWith">Open With</string>
+        <string name="Photo_Menu_Upload">Upload</string>
+        <string name="Photo_Menu_Settings">Settings</string>
+        <!--PHOTOS-->
+        <string name="Photos_Menu_SetPreview">Set Preview</string>
+        <string name="Photos_Menu_ClearPreview">Clear Preview</string>
 
 </resources>

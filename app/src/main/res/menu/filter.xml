@@ -4,22 +4,22 @@
     <group  android:checkableBehavior="single">
         <item
             android:id="@+id/all_media_filter"
-            android:title="All"
+            android:title="@string/Filter_Menu_All"
             app:showAsAction="ifRoom"
             />
         <item
             android:id="@+id/video_media_filter"
-            android:title="Videos"
+            android:title="@string/Filter_Menu_Videos"
             app:showAsAction="ifRoom"
             />
         <item
             android:id="@+id/image_media_filter"
-            android:title="Images"
+            android:title="@string/Filter_Menu_Images"
             app:showAsAction="ifRoom"
             />
         <item
             android:id="@+id/gifs_media_filter"
-            android:title="Gifs"
+            android:title="@string/Filter_Menu_Gifs"
             app:showAsAction="ifRoom"
             />
     </group>

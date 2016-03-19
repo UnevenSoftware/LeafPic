@@ -36,10 +36,10 @@
     <string name="color_palette">Color Palette</string>
     <string name="setting_accent_color_title">Colore Particolare</string>
     <string name="setting_primary_color_title">Colore Primario</string>
-    <string name="skip">Why You Skip This Beautyfull Intro? Maledetto!!!</string>
+    <string name="App_Intro_Skip">Why You Skip This Beautyfull Intro? Maledetto!!!</string>
 
     <!--STRINGS SETTING LAYOUT ACT-->
-    <string name="setting">Impostazioni</string>
+    <string name="Settings">Impostazioni</string>
 
     <string name="general">Generali</string>
     <string name="collapsing_toolbar">Collapsing Toolbar</string>

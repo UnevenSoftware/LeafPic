@@ -22,9 +22,8 @@ public class FABScrollBehavior extends FloatingActionButton.Behavior {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
         if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
             child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
-        } else /*if (dyConsumed < 0 && child.getVisibility() == View.GONE)*/ {
+        } else /*if (dyConsumed < 0 && child.getVisibility() == View.GONE)*/
             child.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-        }
     }
 
     @Override

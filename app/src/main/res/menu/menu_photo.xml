@@ -7,80 +7,80 @@
     <item
         android:id="@+id/shareButton"
         android:icon="@mipmap/ic_share_white_24dp"
-        android:title="Share"
+        android:title="@string/Photo_Menu_Share"
         app:showAsAction="always"
     />
     <item
         android:id="@+id/deletePhoto"
         android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/delete_album_action"
+        android:title="@string/Photo_Menu_Delete"
         app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/edit_photo"
+        android:title="@string/Photo_Menu_Edit"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/rotatePhoto"
         android:icon="@mipmap/ic_rotate_right_white_24dp"
-        android:title="Rotate"
+        android:title="@string/Photo_Menu_Rotate"
         app:showAsAction="ifRoom">
         <menu>
             <item
                     android:id="@+id/rotate_right_90"
                 android:icon="@mipmap/ic_rotate_right_white_24dp"
-                android:title="Rotate right 90°" />
+                android:title="@string/Photo_Menu_Rotate_Right_90" />
             <item
                     android:id="@+id/rotate_left_90"
                 android:icon="@mipmap/ic_rotate_left_white_24dp"
-                android:title="Rotate left 90°" />
+                android:title="@string/Photo_Menu_Rotate_Left_90" />
             <item
                     android:id="@+id/rotate_180"
                 android:icon="@mipmap/ic_replay_white_24dp"
-                android:title="Rotate 180°" />
+                android:title="@string/Photo_Menu_Rotate_180" />
         </menu>
     </item>
     <item
         android:id="@+id/copyAction"
-        android:title="Copy to"
+        android:title="@string/Photo_Menu_CopyTo"
         app:showAsAction="never" />
     <item
         android:id="@+id/moveAction"
-        android:title="Move to"
+        android:title="@string/Photo_Menu_MoveTo"
         app:showAsAction="never" />
     <item
         android:id="@+id/useAsIntent"
-        android:title="Use as"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/edit_photo"
-        android:title="Edit"
+        android:title="@string/Photo_Menu_UseAs"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/renamePhoto"
-        android:title="Rename"
+        android:title="@string/Photo_Menu_Rename"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/details"
-        android:title="Details"
+        android:title="@string/Photo_Menu_Details"
         app:showAsAction="never"
         />
     <item
-        android:title="More"
+        android:title="@string/Photo_Menu_More"
         app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/advanced_photo_edit"
-                android:title="Advanced Edit"
+                android:title="@string/Photo_Menu_EditWith"
                 app:showAsAction="never" />
             <item
-                android:title="Open with"
+                android:title="@string/Photo_Menu_OpenWith"
                 app:showAsAction="never" />
             <item
-                android:title="Upload to Imgiur"
+                android:title="@string/Photo_Menu_Upload"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/setting"
-                android:title="Settings"
+                android:title="@string/Photo_Menu_Settings"
                 app:showAsAction="never" />
         </menu>
     </item>

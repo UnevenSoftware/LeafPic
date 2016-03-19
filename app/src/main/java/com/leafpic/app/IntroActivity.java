@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.AppIntro;
@@ -20,10 +19,10 @@ public class IntroActivity extends AppIntro {
     @Override
     public void init(Bundle savedInstanceState) {
 
-        addSlide(AppIntroFragment.newInstance("Welcome To LeafPic!", "ColourFull Material Design Gallery!",
+        addSlide(AppIntroFragment.newInstance(this.getString(R.string.WelcomeSlideTit), this.getString(R.string.WelcomeSlideSub),
                 R.drawable.leafpic_big, ContextCompat.getColor(this, R.color.accent_teal)));
 
-        addSlide(AppIntroFragment.newInstance("Storage Permission", Html.fromHtml("ALLOW Storage permisison to use our gallery<b></b><br><i></i>"),
+        addSlide(AppIntroFragment.newInstance(this.getString(R.string.StorageSlideTit), this.getString(R.string.StorageSlideSub),
                 R.drawable.storage_permission, ContextCompat.getColor(this, R.color.accent_brown)));//Color.parseColor("#607D8B")
 
         setBarColor(ContextCompat.getColor(this, R.color.accent_teal));

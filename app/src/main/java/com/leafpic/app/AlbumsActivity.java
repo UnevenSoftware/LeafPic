@@ -316,7 +316,7 @@ public class AlbumsActivity extends ThemedActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(AlbumsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-                StringUtils.showToast(AlbumsActivity.this, "Storage Permission Danied, Pleas Accept!");
+                StringUtils.showToast(AlbumsActivity.this, this.getString(R.string.Storage_Permision_Denied));
             else {
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
@@ -487,14 +487,14 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
-                        .setPositiveButton("EXCLUDE", new DialogInterface.OnClickListener() {
+                        .setPositiveButton( this.getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.excludeSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -504,14 +504,14 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.deleteAction:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(AlbumsActivity.this);
                 builder1.setMessage(R.string.delete_album_message)
-                        .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(this.getString(R.string.Delete_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.deleteSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        .setNegativeButton( this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -527,14 +527,14 @@ public class AlbumsActivity extends ThemedActivity {
 
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
                     builder2.setMessage(R.string.delete_album_message)
-                            .setPositiveButton("HIDE", new DialogInterface.OnClickListener() {
+                            .setPositiveButton( this.getString(R.string.Hide_Action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     albums.hideSelectedAlbums();
                                     adapt.notifyDataSetChanged();
                                     invalidateOptionsMenu();
                                 }
                             })
-                            .setNeutralButton("EXCLUDE", new DialogInterface.OnClickListener() {
+                            .setNeutralButton( this.getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     albums.excludeSelectedAlbums();
@@ -542,7 +542,7 @@ public class AlbumsActivity extends ThemedActivity {
                                     invalidateOptionsMenu();
                                 }
                             })
-                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            .setNegativeButton( this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                 }
                             });
