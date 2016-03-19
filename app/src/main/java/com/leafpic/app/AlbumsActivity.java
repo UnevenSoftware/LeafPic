@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,7 +28,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -39,10 +39,12 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 
 public class AlbumsActivity extends ThemedActivity {
@@ -243,8 +245,8 @@ public class AlbumsActivity extends ThemedActivity {
         ScrollView DrawerScroll = (ScrollView) findViewById(R.id.Drawer_Body_Scroll);
         DrawerScroll.setBackgroundColor(getBackgroundColor());
 
-        View DrawerDivider = findViewById(R.id.Drawer_Divider);
-        DrawerDivider.setBackgroundColor(getAccentColor());
+        //View DrawerDivider = findViewById(R.id.Drawer_Divider);
+        //  DrawerDivider.setBackgroundColor(getAccentColor());
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);
         DrawerDivider2.setBackgroundColor(ContextCompat.getColor(AlbumsActivity.this, R.color.drawer_transparent_gray));
 
@@ -252,40 +254,41 @@ public class AlbumsActivity extends ThemedActivity {
         TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);
         TextView txtDH = (TextView) findViewById(R.id.Drawer_Hidden_Item);
         TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
-        TextView txtDMap = (TextView) findViewById(R.id.Drawer_Map_Item);
         TextView txtDS = (TextView) findViewById(R.id.Drawer_Setting_Item);
         TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
+        TextView txtGithub = (TextView) findViewById(R.id.Drawer_github_Item);
+        TextView txtWall = (TextView) findViewById(R.id.Drawer_wallpapers_Item);
 
-        ImageView imgDD = (ImageView) findViewById(R.id.Drawer_Default_Icon);
-        ImageView imgDH = (ImageView) findViewById(R.id.Drawer_Hidden_Icon);
-        ImageView imgDMoments = (ImageView) findViewById(R.id.Drawer_Moments_Icon);
-        ImageView imgDMap = (ImageView) findViewById(R.id.Drawer_Map_Icon);
-        ImageView imgDS = (ImageView) findViewById(R.id.Drawer_Setting_Icon);
-        ImageView imgDDonate = (ImageView) findViewById(R.id.Drawer_Donate_Icon);
+
+        IconicsImageView imgDD = (IconicsImageView) findViewById(R.id.Drawer_Default_Icon);
+        IconicsImageView imgWall = (IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon);
+        IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Hidden_Icon);
+        IconicsImageView imgDMoments = (IconicsImageView) findViewById(R.id.Drawer_Moments_Icon);
+        IconicsImageView imgDDonate = (IconicsImageView) findViewById(R.id.Drawer_Donate_Icon);
+        IconicsImageView imgGithub = (IconicsImageView) findViewById(R.id.Drawer_github_Icon);
+        IconicsImageView imgDS = (IconicsImageView) findViewById(R.id.Drawer_Setting_Icon);
 
         /**textViews Colors*/
-        txtDD.setTextColor(getTextColor());
-        txtDH.setTextColor(getTextColor());
-        txtDMoments.setTextColor(getTextColor());
-        txtDMap.setTextColor(getTextColor());
-        txtDS.setTextColor(getTextColor());
-        txtDDonate.setTextColor(getTextColor());
+        int color = getTextColor();
+        txtDD.setTextColor(color);
+        txtDH.setTextColor(color);
+        txtDMoments.setTextColor(color);
+        txtDS.setTextColor(color);
+        txtDDonate.setTextColor(color);
+        txtGithub.setTextColor(color);
+        txtWall.setTextColor(color);
 
-        if (isDarkTheme()) {
-            imgDD.setImageResource(R.mipmap.ic_image_white_24dp);
-            imgDH.setImageResource(R.mipmap.ic_visibility_off_white_24dp);
-            imgDMoments.setImageResource(R.mipmap.ic_event_available_white_24dp);
-            imgDMap.setImageResource(R.mipmap.ic_location_on_white_24dp);
-            imgDS.setImageResource(R.mipmap.ic_settings_white_24dp);
-            imgDDonate.setImageResource(R.mipmap.ic_card_giftcard_white_24dp);
-        } else {
-            imgDD.setImageResource(R.mipmap.ic_image_black_24dp);
-            imgDH.setImageResource(R.mipmap.ic_visibility_off_black_24dp);
-            imgDMoments.setImageResource(R.mipmap.ic_event_available_black_24dp);
-            imgDMap.setImageResource(R.mipmap.ic_location_on_black_24dp);
-            imgDS.setImageResource(R.mipmap.ic_settings_black_24dp);
-            imgDDonate.setImageResource(R.mipmap.ic_card_giftcard_black_24dp);
-        }
+        color = isDarkTheme()
+                ? ColorPalette.getLightBackgroundColor(getApplicationContext())
+                : ColorPalette.getDarkBackgroundColor(getApplicationContext());
+
+        imgDD.setColor(color);
+        imgDDonate.setColor(color);
+        imgDH.setColor(color);
+        imgDMoments.setColor(color);
+        imgGithub.setColor(color);
+        imgDS.setColor(color);
+        imgWall.setColor(color);
 
         /****DRAWER CLICK LISTENER****/
         findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
@@ -293,6 +296,14 @@ public class AlbumsActivity extends ThemedActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AlbumsActivity.this, SettingActivity.class);
                 startActivity(intent);
+            }
+        });
+        findViewById(R.id.ll_drawer_github).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://github.com/DNLDsht/LeafPic"));
+                startActivity(i);
             }
         });
     }

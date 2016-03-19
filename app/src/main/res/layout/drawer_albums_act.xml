@@ -14,32 +14,14 @@
         android:clickable="true"
         android:elevation="8dp"
         >
-        <!--
-         <TextView
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:id="@+id/LeafPic"
-             android:text="LeafPic"
-             android:gravity="center"
-             android:textStyle="bold|italic"
-             android:textSize="50sp"
-             android:textColor="@color/md_white_1000"
-             />
-         -->
          <ImageView
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:src="@drawable/leafpic_big"
              />
-            <!--android:scaleType="centerCrop"-->
 
     </RelativeLayout>
-    <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
-    <View
-        android:id="@+id/Drawer_Divider"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        />
+
     <ScrollView
         android:id="@+id/Drawer_Body_Scroll"
         android:layout_width="match_parent"
@@ -48,7 +30,8 @@
         <LinearLayout
             android:id="@+id/Drawer_Body"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:scrollbars="vertical"
             >
@@ -62,24 +45,26 @@
                 >
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_Default"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <ImageView
+
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Default_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:src="@mipmap/ic_image_black_24dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="gmd-photo"
                         />
                     <TextView
                         android:id="@+id/Drawer_Default_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
                         android:text="@string/local_folders"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
@@ -95,25 +80,28 @@
                 app:mrl_rippleDelayClick="false">
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_Hidden"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <ImageView
+
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Hidden_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:src="@mipmap/ic_visibility_off_black_24dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="faw-thumb-tack"
                         />
+
                     <TextView
                         android:id="@+id/Drawer_Hidden_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="Hidden Albums"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
+                        android:text="Tags"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -127,105 +115,77 @@
                 app:mrl_rippleDelayClick="false">
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_Moments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <ImageView
+
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Moments_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:src="@mipmap/ic_event_available_black_24dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="gmd-timeline"
                         />
                     <TextView
                         android:id="@+id/Drawer_Moments_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="Moments"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
+                        android:text="Timeline"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <!-- MAP -->
+            <!-- MOMENTS -->
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleAlpha="0.05"
                 app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Map"
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_wallpapers_Moments"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:id="@+id/Drawer_Map_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:src="@mipmap/ic_location_on_black_24dp"
-                        />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/Drawer_wallpapers_Icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="gmd-wallpaper" />
+
                     <TextView
-                        android:id="@+id/Drawer_Map_Item"
+                        android:id="@+id/Drawer_wallpapers_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="Map"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
+                        android:text="Wallpapers"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
+                        android:textSize="16sp" />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
 
             <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
             <View
                 android:id="@+id/Drawer_Body_Divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
                 android:padding="5dp"
 
                 />
-
-            <!-- SETTING -->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Setting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:id="@+id/Drawer_Setting_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:src="@mipmap/ic_settings_black_24dp"
-                        />
-                    <TextView
-                        android:id="@+id/Drawer_Setting_Item"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="Settings"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
 
             <!--DONATE-->
             <com.balysv.materialripple.MaterialRippleLayout
@@ -235,25 +195,95 @@
                 app:mrl_rippleDelayClick="false">
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_drawer_Donate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <ImageView
+
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Donate_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:src="@mipmap/ic_card_giftcard_black_24dp"
-                        />
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="faw-gift" />
+
                     <TextView
                         android:id="@+id/Drawer_Donate_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:padding="15dp"
                         android:text="Donate"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <!--GitHub-->
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_github"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/Drawer_github_Icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="faw-github" />
+                    <TextView
+                        android:id="@+id/Drawer_github_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
+                        android:text="GitHub"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <!-- SETTING -->
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false">
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_Setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/Drawer_Setting_Icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="gmd-settings"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_Setting_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
+                        android:text="Settings"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
