@@ -94,7 +94,7 @@
     <item
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/Delete_Action"
+        android:title="@string/Menu_Delete"
         app:showAsAction="never"
         />
     <item
