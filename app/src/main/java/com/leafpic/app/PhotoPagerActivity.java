@@ -102,7 +102,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             });
             mViewPager.setAdapter(adapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
-            getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + this.getString(R.string.of) + photos.medias.size());
+            getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + this.getString(R.string.of) + " " + photos.medias.size());
             mViewPager.setPageTransformer(true, new DepthPageTransformer());
             mViewPager.setOffscreenPageLimit(2);
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -113,7 +113,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 @Override
                 public void onPageSelected(int position) {
                     photos.setCurrentPhotoIndex(position);
-                    toolbar.setTitle((position + 1) + PhotoPagerActivity.this.getString(R.string.of) + photos.medias.size());
+                    toolbar.setTitle((position + 1) + " " + PhotoPagerActivity.this.getString(R.string.of) + " " + photos.medias.size());
                 }
 
                 @Override
