@@ -48,8 +48,8 @@ public class SelectAlbumActivity extends ThemedActivity{
         photosIndexes = getIntent().getStringExtra("photos_indexes");
 
         p = new HandlingPhotos(SelectAlbumActivity.this);
-        if (code == MOVE_TO_ACTION) setTitle("Move to");
-        else if (code == COPY_TO_ACTION) setTitle("Copy to");
+        if (code == MOVE_TO_ACTION) setTitle(getString(R.string.move_to));
+        else if (code == COPY_TO_ACTION) setTitle(getString(R.string.copy_to));
 
         setResult(Activity.RESULT_CANCELED);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
