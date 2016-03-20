@@ -575,6 +575,8 @@ public class PhotosActivity extends ThemedActivity {
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if(isDarkTheme()==false)
+            toolbar.setPopupTheme(R.style.LightActionBarMenu);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
@@ -635,6 +637,8 @@ public class PhotosActivity extends ThemedActivity {
 
         mRecyclerView.setBackgroundColor(getBackgroundColor());
         collapsingToolbarLayout.setStatusBarScrimColor(isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        if(isDarkTheme()==false)
+            toolbar.setPopupTheme(R.style.LightActionBarMenu);
         mRecyclerView.setNestedScrollingEnabled(isCollapsingToolbar());
 
     }

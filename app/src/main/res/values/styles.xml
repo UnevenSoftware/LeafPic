@@ -42,6 +42,25 @@
     </style>
     -->
 
+    <!--LIGHT MENU THEME-->
+    <style name="LightActionBarMenu" parent="Theme.AppCompat.Light">
+        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Light</item>
+    </style>
+
+    <style name="MyApp.PopupMenu.Light" parent="Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/ic_empty_white</item>
+    </style>
+
+    <!--DARK MENU THEME-->
+    <style name="DarkActionBarMenu" parent="Theme.AppCompat.Light">
+        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
+    </style>
+
+    <style name="MyApp.PopupMenu.Dark" parent="Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/ic_empty</item>
+    </style>
+
+
     <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog">
 
     </style>

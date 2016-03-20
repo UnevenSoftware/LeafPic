@@ -97,7 +97,6 @@ public class AlbumsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-
         if (savedInstanceState != null) {
             albums = savedInstanceState.getParcelable("albums");
             StringUtils.showToast(getApplicationContext(), "porcodio le instance");
@@ -164,6 +163,12 @@ public class AlbumsActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
+        if(isDarkTheme()==false)
+            toolbar.setPopupTheme(R.style.LightActionBarMenu);
+        //TODO:FIX IT PLIS CUZ I KNOW U CAN
+        /*else
+            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
+
         /**** RECYCLER VIEW ****/
         int nSpan = 2;//nColumns
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
@@ -228,6 +233,12 @@ public class AlbumsActivity extends ThemedActivity {
     //region UI/GRAPHIC
     public void setupUI() {
         toolbar.setBackgroundColor(getPrimaryColor());
+        if(isDarkTheme()==false)
+            toolbar.setPopupTheme(R.style.LightActionBarMenu);
+        //TODO:FIX IT PLIS CUZ I KNOW U CAN
+        /*else
+            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
+
         setStatusBarColor();
         setNavBarColor();
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
