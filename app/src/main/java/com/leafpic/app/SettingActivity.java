@@ -14,7 +14,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -141,10 +141,6 @@ public class SettingActivity extends ThemedActivity {
         sbAlpha.setEnabled(swApplyTheme3thAct.isChecked());
         updateSwitchColor(swApplyTheme3thAct);
 
-
-
-
-
         /*********** SW Picture_orientation ************/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
         swPictureOrientation.setChecked(pictureOrientation);
@@ -212,11 +208,6 @@ public class SettingActivity extends ThemedActivity {
                 editor.putBoolean("set_dark_theme", !isDarkTheme());
                 editor.apply();
                 updateSwitchColor(swDarkTheme);
-                /*
-                if (swDarkTheme.isChecked())
-                    setTheme(R.style.AppTheme);
-                else setTheme(R.style.AppTheme_Dark);
-                */
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
@@ -250,6 +241,7 @@ public class SettingActivity extends ThemedActivity {
             sw.getThumbDrawable().setColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY);
         else
             sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
+
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
 
     }
@@ -327,7 +319,6 @@ public class SettingActivity extends ThemedActivity {
                 editor.putInt("primary_color", colorPicker2.getColor());
                 editor.apply();
                 updateTheme();
-                //setTheme();
                 setNavBarColor();
                 if(isTraslucentStatusBar()) {
                     getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
@@ -340,7 +331,6 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onDismiss(DialogInterface dialog) {
 
-                //getWindow().setStatusBarColor(getPrimaryColor());
                 if(isTraslucentStatusBar()) {
                     getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
                 } else getWindow().setStatusBarColor(getPrimaryColor());
@@ -355,7 +345,9 @@ public class SettingActivity extends ThemedActivity {
     }
 
     public void AccentColorPikerDialogShow(){
+
         final AlertDialog.Builder AccentPikerDialog;
+
         SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
         if (isDarkTheme())
             AccentPikerDialog = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Dark);
@@ -499,86 +491,77 @@ public class SettingActivity extends ThemedActivity {
     }
 
     public void setThemeOnChangeListener(){
-        //BackGround
+
+        /** BackGround **/
+
         LinearLayout bg = (LinearLayout) findViewById(R.id.setting_background);
-        //Card
+
+        /** Cards **/
+
         CardView cvGeneral = (CardView) findViewById(R.id.general_setting_card);
         CardView cvTheme = (CardView) findViewById(R.id.theme_setting_card);
         CardView cvPicture = (CardView) findViewById(R.id.preview_picture_setting_card);
 
-        //Linear Layout
+        /** Icons **/
 
-        if(isDarkTheme()) {
+        IconicsImageView imgOrient = (IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
+        IconicsImageView imgMax = (IconicsImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
+        IconicsImageView imgTSB = (IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
+        IconicsImageView imgCI = (IconicsImageView) findViewById(R.id.collapsing_toolbar_Icon);
+        IconicsImageView imgAT = (IconicsImageView) findViewById(R.id.ll_apply_theme_3thAct_icon);
+        IconicsImageView imgPC = (IconicsImageView) findViewById(R.id.PrimaryColor_Icon);
+        IconicsImageView imgAC = (IconicsImageView) findViewById(R.id.accentColor_Icon);
+        IconicsImageView imgDT = (IconicsImageView) findViewById(R.id.DarkTheme_Icon);
+        IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
 
-            cvGeneral.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
-            cvTheme.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
-            cvPicture.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_dark_cards));
+        int color = isDarkTheme()
+                ? ColorPalette.getLightBackgroundColor(getApplicationContext())
+                : ColorPalette.getDarkBackgroundColor(getApplicationContext());
 
-            bg.setBackgroundColor(getBackgroundColor());
+        imgMax.setColor(color);
+        imgAT.setColor(color);
+        imgCI.setColor(color);
+        imgTSB.setColor(color);
+        imgPC.setColor(color);
+        imgAC.setColor(color);
+        imgDT.setColor(color);
+        imgNB.setColor(color);
+        imgOrient.setColor(color);
 
-            // Picture preview
-            // TEXT AND ICON
-            TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
-            ImageView imgMax = (ImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
-            TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
-            ImageView imgOrient = (ImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
-            //SEEKBAR
+        /** TextViews **/
 
-            TextView txtATT = (TextView) findViewById(R.id.apply_theme_3thAct_title);
-            TextView txtSBT = (TextView) findViewById(R.id.seek_bar_alpha_title);
-            ImageView imgAT = (ImageView) findViewById(R.id.ll_apply_theme_3thAct_icon);
-            // SET COLOR
-            txtMax.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            imgMax.setImageResource(R.mipmap.ic_brightness_high_white_24dp);
-            txtOrient.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            imgOrient.setImageResource(R.mipmap.ic_screen_rotation_white_24dp);
-            //SEEKBAR
-            txtATT.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            txtSBT.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            imgAT.setImageResource(R.mipmap.ic_brush_white_24dp);
-
-
-            // GENERAL
-            // TEXT AND ICON
-            TextView txtC = (TextView) findViewById(R.id.collapsing_toolbar_Item);
-            ImageView imgCI = (ImageView) findViewById(R.id.collapsing_toolbar_Icon);
-            TextView txtTSB = (TextView) findViewById(R.id.Traslucent_StatusBar_Item);
-            ImageView imgTSB = (ImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
-            // SET COLOR
-            txtC.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            imgCI.setImageResource(R.mipmap.ic_gradient_white_24dp);
-            txtTSB.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            imgTSB.setImageResource(R.mipmap.ic_status_bar_white_24dp);
+        TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
+        TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
+        TextView txtATT = (TextView) findViewById(R.id.apply_theme_3thAct_title);
+        TextView txtSBT = (TextView) findViewById(R.id.seek_bar_alpha_title);
+        TextView txtC = (TextView) findViewById(R.id.collapsing_toolbar_Item);
+        TextView txtTSB = (TextView) findViewById(R.id.Traslucent_StatusBar_Item);
+        TextView txtPC = (TextView) findViewById(R.id.PrimaryColor_Item);
+        TextView txtAC = (TextView) findViewById(R.id.accentColor_Item);
+        TextView txtDT = (TextView) findViewById(R.id.DarkTheme_Item);
+        TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
 
 
-            // THEME
-            // TEXT
-            TextView txtPC = (TextView) findViewById(R.id.PrimaryColor_Item);
-            TextView txtAC = (TextView) findViewById(R.id.accentColor_Item);
-            TextView txtDT = (TextView) findViewById(R.id.DarkTheme_Item);
-            TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
-            // TEXT SET COLOR
-            txtPC.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            txtAC.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            txtDT.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            txtNB.setTextColor(ContextCompat.getColor(SettingActivity.this, R.color.cp_TextDark));
-            // ICON
-            ImageView imgPC = (ImageView) findViewById(R.id.PrimaryColor_Icon);
-            ImageView imgAC = (ImageView) findViewById(R.id.accentColor_Icon);
-            ImageView imgDT = (ImageView) findViewById(R.id.DarkTheme_Icon);
-            ImageView imgNB = (ImageView) findViewById(R.id.NavBar_Icon);
-            // SET ICON
-            imgPC.setImageResource(R.mipmap.ic_color_lens_white_24dp);
-            imgAC.setImageResource(R.mipmap.ic_colorize_white_24dp);
-            imgDT.setImageResource(R.mipmap.ic_invert_colors_white_24dp);
-            imgNB.setImageResource(R.mipmap.ic_video_label_white_24dp);
-            ////////////
+        txtMax.setTextColor(color);
+        txtOrient.setTextColor(color);
+        txtATT.setTextColor(color);
+        txtSBT.setTextColor(color);
+        txtC.setTextColor(color);
+        txtTSB.setTextColor(color);
+        txtPC.setTextColor(color);
+        txtAC.setTextColor(color);
+        txtDT.setTextColor(color);
+        txtNB.setTextColor(color);
 
-        } else {
-            bg.setBackgroundColor(getBackgroundColor());
-            cvGeneral.setBackgroundColor( ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
-            cvTheme.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
-            cvPicture.setBackgroundColor(ContextCompat.getColor(SettingActivity.this, R.color.md_light_cards));
-        }
+
+        color = ContextCompat.getColor(SettingActivity.this, isDarkTheme()
+                ? R.color.md_dark_cards
+                : R.color.md_light_cards);
+
+        cvGeneral.setBackgroundColor(color);
+        cvTheme.setBackgroundColor(color);
+        cvPicture.setBackgroundColor(color);
+
+        bg.setBackgroundColor(getBackgroundColor());
     }
 }

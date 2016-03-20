@@ -68,7 +68,7 @@
 
 
     <string name="general">General</string>
-    <string name="collapsing_toolbar">Albums Preview</string>
+    <string name="collapsing_toolbar">Collapsing Toolbar</string>
     <string name="traslucent_statusbar">Traslucent Status Bar</string>
 
     <string name="picture_viewer">Picture Viewer</string>
