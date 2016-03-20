@@ -20,6 +20,10 @@ public class StringUtils {
         }
         return type;
     }
+
+    public static String getGenericMIME(String mime) {
+        return mime.split("/")[0] + "/*";
+    }
     public static int getExifOrientation(String filepath) {
         int degree = 0;
         ExifInterface exif = null;

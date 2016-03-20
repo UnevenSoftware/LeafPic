@@ -527,7 +527,6 @@ public class PhotosActivity extends ThemedActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                 intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
-                intent.setType("image/*");
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
@@ -535,6 +534,7 @@ public class PhotosActivity extends ThemedActivity {
                     files.add(Uri.fromFile(new File(f.Path)));
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                intent.setType(StringUtils.getGenericMIME(photos.selectedMedias.get(0).MIME));
                 finishEditMode();
                 startActivity(intent);
                 break;

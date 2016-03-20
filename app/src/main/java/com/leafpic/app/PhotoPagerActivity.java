@@ -100,6 +100,16 @@ public class PhotoPagerActivity extends ThemedActivity {
                     return gestureDetector.onTouchEvent(event);
                 }
             });
+
+            adapter.setVideoOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Media p = photos.getCurrentPhoto();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.Path));
+                    intent.setDataAndType(Uri.parse(p.Path), p.MIME);
+                    startActivity(intent);
+                }
+            });
             mViewPager.setAdapter(adapter);
             mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
             getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + this.getString(R.string.of) + " " + photos.medias.size());

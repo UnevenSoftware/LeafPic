@@ -77,14 +77,14 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         Media f = medias.get(position);
         Glide.clear(holder.imageView);//fix corruption
 
-        if (f.isGif()) {
+        if (f.isImage() && f.isGif()) {
+
             Ion.with(holder.imageView.getContext())
                     .load(f.Path)
                     .intoImageView(holder.imageView);
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
             holder.gifIcon.setVisibility(View.INVISIBLE);
-
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
@@ -93,6 +93,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
+            holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.INVISIBLE);
         }
 
         holder.path.setTag(f.Path);
@@ -128,7 +129,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView, selectHolder, gifIcon;
+        ImageView imageView, selectHolder, gifIcon, videoIcon;
         TextView path;
 
 
@@ -137,6 +138,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             imageView = (ImageView) itemView.findViewById(R.id.photo_preview);
             selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);
             gifIcon = (ImageView) itemView.findViewById(R.id.type_icon);
+            videoIcon = (ImageView) itemView.findViewById(R.id.video_indicator);
             path = (TextView) itemView.findViewById(R.id.photo_path);
         }
     }

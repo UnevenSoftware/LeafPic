@@ -86,6 +86,10 @@ public class Media implements Parcelable {
         return (MIME != null && MIME.startsWith("video/"));
     }
 
+    public boolean isImage() {
+        return (MIME != null && MIME.startsWith("image/"));
+    }
+
     public String getResolution() {
         return width + "x" + height;
     }

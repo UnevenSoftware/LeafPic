@@ -39,13 +39,10 @@ public class MadiaStoreHandler {
                 MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
                 + " ) GROUP BY ( "+ MediaStore.Files.FileColumns.PARENT +" ";
 
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " ) GROUP BY ( "+ MediaStore.Files.FileColumns.PARENT +" ";
-
         String orderType = " " + MediaStore.Images.Media.DATE_TAKEN + " DESC";
 
         Cursor cur = context.getContentResolver().query(
-                images, projection, selectionImages, null, orderType);
+                images, projection, selection, null, orderType);
 
         if(cur != null) {
             if (cur.moveToFirst()) {
@@ -63,181 +60,15 @@ public class MadiaStoreHandler {
     }
 
     public ArrayList<Media> getAlbumPhotos(Album a) {
-
-        ArrayList<Media> list = new ArrayList<Media>();
-
-        String[] projection = new String[]{
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.MIME_TYPE,
-                MediaStore.Images.Media.WIDTH,
-                MediaStore.Images.Media.DATE_MODIFIED,
-                MediaStore.Images.Media.HEIGHT,
-                MediaStore.Images.Media.SIZE
-        };
-
-        Uri images = MediaStore.Files.getContentUri("external");
-
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+a.ID+"'";
-
-        Cursor cur = context.getContentResolver().query(
-                images,
-                projection,
-                selectionImages,
-                null, " " + MediaStore.Images.Media.DATE_TAKEN + " DESC");
-
-
-        if(cur != null) {
-            if (cur.moveToFirst()) {
-                int pathColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATA);
-                int dateColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATE_TAKEN);
-                int mimeColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.MIME_TYPE);
-                int dateMdofied = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATE_MODIFIED);
-                int width = cur.getColumnIndex(
-                        MediaStore.Images.Media.WIDTH);
-                int height = cur.getColumnIndex(
-                        MediaStore.Images.Media.HEIGHT);
-                int size = cur.getColumnIndex(
-                        MediaStore.Images.Media.SIZE);
-
-                do {
-                    list.add(new Media(
-                            cur.getString(pathColumn),
-                            cur.getLong(dateColumn),
-                            cur.getLong(dateMdofied),
-                            cur.getString(mimeColumn),
-                            cur.getInt(width),
-                            cur.getInt(height),
-                            cur.getInt(size)
-                    ));
-                } while (cur.moveToNext());
-            }
-            cur.close();
-        }
-        return list;
+        return getAlbumPhotos(a.ID, -1, null);
     }
 
     public ArrayList<Media> getAlbumPhotos(Album a, String sort) {
-
-        ArrayList<Media> list = new ArrayList<Media>();
-
-        String[] projection = new String[]{
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.MIME_TYPE,
-                MediaStore.Images.Media.WIDTH,
-                MediaStore.Images.Media.DATE_MODIFIED,
-                MediaStore.Images.Media.HEIGHT,
-                MediaStore.Images.Media.SIZE
-        };
-
-        Uri images = MediaStore.Files.getContentUri("external");
-
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+a.ID+"'";
-
-        Cursor cur = context.getContentResolver().query(
-                images,
-                projection,
-                selectionImages,
-                null, " " + sort);
-
-        if(cur != null) {
-            if (cur.moveToFirst()) {
-                int pathColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATA);
-                int dateColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATE_TAKEN);
-                int mimeColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.MIME_TYPE);
-                int dateMdofied = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATE_MODIFIED);
-                int width = cur.getColumnIndex(
-                        MediaStore.Images.Media.WIDTH);
-                int height = cur.getColumnIndex(
-                        MediaStore.Images.Media.HEIGHT);
-                int size = cur.getColumnIndex(
-                        MediaStore.Images.Media.SIZE);
-
-                do {
-                    list.add(new Media(
-                            cur.getString(pathColumn),
-                            cur.getLong(dateColumn),
-                            cur.getLong(dateMdofied),
-                            cur.getString(mimeColumn),
-                            cur.getInt(width),
-                            cur.getInt(height),
-                            cur.getInt(size)
-                    ));
-                } while (cur.moveToNext());
-            }
-            cur.close();
-        }
-        return list;
+        return getAlbumPhotos(a.ID, -1, sort);
     }
 
     public ArrayList<Media> getAlbumPhotos(String id, String sort) {
-
-        ArrayList<Media> list = new ArrayList<Media>();
-
-        String[] projection = new String[]{
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.MIME_TYPE,
-                MediaStore.Images.Media.WIDTH,
-                MediaStore.Images.Media.DATE_MODIFIED,
-                MediaStore.Images.Media.HEIGHT,
-                MediaStore.Images.Media.SIZE
-        };
-
-        Uri images = MediaStore.Files.getContentUri("external");
-
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+id+"'";
-
-        Cursor cur = context.getContentResolver().query(
-                images,
-                projection,
-              selectionImages,
-                null, " " + sort);
-
-        if(cur != null) {
-            if (cur.moveToFirst()) {
-                int pathColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATA);
-                int dateColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATE_TAKEN);
-                int mimeColumn = cur.getColumnIndex(
-                        MediaStore.Images.Media.MIME_TYPE);
-                int dateMdofied = cur.getColumnIndex(
-                        MediaStore.Images.Media.DATE_MODIFIED);
-                int width = cur.getColumnIndex(
-                        MediaStore.Images.Media.WIDTH);
-                int height = cur.getColumnIndex(
-                        MediaStore.Images.Media.HEIGHT);
-                int size = cur.getColumnIndex(
-                        MediaStore.Images.Media.SIZE);
-
-                do {
-                    list.add(new Media(
-                            cur.getString(pathColumn),
-                            cur.getLong(dateColumn),
-                            cur.getLong(dateMdofied),
-                            cur.getString(mimeColumn),
-                            cur.getInt(width),
-                            cur.getInt(height),
-                            cur.getInt(size)
-                    ));
-                } while (cur.moveToNext());
-            }
-            cur.close();
-        }
-        return list;
+        return getAlbumPhotos(id, -1, sort);
     }
 
     public int getAlbumPhotosCount(String id) {
@@ -245,12 +76,13 @@ public class MadiaStoreHandler {
         Uri images = MediaStore.Files.getContentUri("external");
         String[] projection = new String[]{ MediaStore.Files.FileColumns.PARENT };
 
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and "+ MediaStore.Files.FileColumns.PARENT +"='"+id+"'";
+        String selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
+                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
 
         Cursor cur = context.getContentResolver().query(
                 images, projection,
-                selectionImages,
+                selection,
                 null, null);
         if (cur != null) {
             c = cur.getCount();
@@ -260,6 +92,13 @@ public class MadiaStoreHandler {
     }
 
     public ArrayList<Media> getFirstAlbumPhoto(String ID) {
+        return getAlbumPhotos(ID, 1, null);
+    }
+
+    public ArrayList<Media> getAlbumPhotos(String ID, int n, String order) {
+
+        String limit = n == -1 ? "" : " DESC LIMIT " + n;
+        String orderStyle = order != null ? order : MediaStore.Images.Media.DATE_TAKEN;
         ArrayList<Media> list = new ArrayList<Media>();
 
         String[] projection = new String[]{
@@ -274,16 +113,17 @@ public class MadiaStoreHandler {
 
         Uri images = MediaStore.Files.getContentUri("external");
 
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE +"="+ MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
+        String selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
+                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
 
         Cursor cur = context.getContentResolver().query(
                 images,
                 projection,
-                selectionImages,
-                null, " " + MediaStore.Images.Media.DATE_TAKEN + " DESC LIMIT 1");
+                selection,
+                null, " " + orderStyle + limit);
 
-        if(cur != null) {
+        if (cur != null) {
             if (cur.moveToFirst()) {
 
                 int pathColumn = cur.getColumnIndex(
@@ -327,8 +167,9 @@ public class MadiaStoreHandler {
 
         Uri images = MediaStore.Files.getContentUri("external");
 
-        String selectionImages = MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-                + " and " + MediaStore.Images.ImageColumns.DATA + "='" + a + "'";
+        String selectionImages = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
+                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                + ") and " + MediaStore.Images.ImageColumns.DATA + "='" + a + "'";
 
         Cursor cur = context.getContentResolver().query(
                 images,
@@ -340,7 +181,6 @@ public class MadiaStoreHandler {
             if (cur.moveToFirst()) {
                 int pathColumn = cur.getColumnIndex(
                         MediaStore.Files.FileColumns.PARENT);
-
                 asd = new Album(cur.getString(pathColumn));
             }
             cur.close();
