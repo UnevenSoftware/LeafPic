@@ -163,8 +163,11 @@ public class AlbumsActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
-        if(!isDarkTheme())
+        if(isDarkTheme()==false)
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
+        //TODO:FIX IT PLIS CUZ I KNOW U CAN
+        /*else
+            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
 
         /**** RECYCLER VIEW ****/
         int nSpan = 2;//nColumns
@@ -232,6 +235,10 @@ public class AlbumsActivity extends ThemedActivity {
         toolbar.setBackgroundColor(getPrimaryColor());
         if(isDarkTheme()==false)
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
+        //TODO:FIX IT PLIS CUZ I KNOW U CAN
+        /*else
+            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
+
         setStatusBarColor();
         setNavBarColor();
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
