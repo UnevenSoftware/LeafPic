@@ -424,6 +424,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                 isDarkTheme()
                         ? R.color.transparent_dark_gray
                         : R.color.transparent_white_gray )));
+        if(isDarkTheme()==false)
+            toolbar.setPopupTheme(R.style.LightActionBarMenu);
         //STATUS & NAV BARS
         setStatusBarColor();
         setNavBarColor();

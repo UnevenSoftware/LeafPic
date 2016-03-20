@@ -42,6 +42,16 @@
     </style>
     -->
 
+    <style name="LightActionBarMenu" parent="Theme.AppCompat.Light">
+        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Light</item>
+    </style>
+
+    <!-- The beef: background color for Action Bar overflow menu -->
+    <style name="MyApp.PopupMenu.Light" parent="Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/ic_empty_white</item>
+    </style>
+
+
     <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog">
 
     </style>
