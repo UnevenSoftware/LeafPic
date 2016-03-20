@@ -96,7 +96,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.INVISIBLE);
         }
 
-
         holder.path.setTag(f.Path);
 
         if (f.isSelected()) {
