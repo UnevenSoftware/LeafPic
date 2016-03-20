@@ -43,7 +43,7 @@
         android:title="@string/menu_refresh"
         app:showAsAction="never"
         />
-    <item android:id="@+id/settingsTry_albums_action"
+    <item android:id="@+id/settings_albums_action"
         android:title="@string/settings"
         app:showAsAction="never"
         />

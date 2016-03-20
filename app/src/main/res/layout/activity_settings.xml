@@ -499,7 +499,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="20dp"
                             android:layout_marginStart="20dp"
-                            app:iiv_icon="gmd-call-to-action"
+                            app:iiv_icon="gmd-space-bar"
                             />
                         <TextView
                             android:id="@+id/NavBar_Item"

@@ -457,12 +457,6 @@ public class AlbumsActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.filterPhotos:
-                final PopupMenu popupfilter = new PopupMenu(AlbumsActivity.this, findViewById(R.id.filterPhotos));
-                popupfilter.setGravity(Gravity.AXIS_PULL_BEFORE);
-                popupfilter.getMenuInflater().inflate(R.menu.filter, popupfilter.getMenu());
-                break;
-
             case R.id.sort_action:
                 if (albums.getSelectedCount()==0) {//TODO: MUST BE FUKING FIXED
                     View sort_btn = findViewById(R.id.sort_action);
@@ -490,10 +484,16 @@ public class AlbumsActivity extends ThemedActivity {
                 break;
 
             case R.id.select_all_albums_action:
-                albums.selectAllAlbums();
-                adapt.notifyDataSetChanged();
-                invalidateOptionsMenu();
-                break;
+                if(albums.getSelectedCount()==adapt.getItemCount()){
+                    editmode = false;
+                    invalidateOptionsMenu();
+                    albums.clearSelectedAlbums();
+                    adapt.notifyDataSetChanged();
+                } else {
+                    albums.selectAllAlbums();
+                    adapt.notifyDataSetChanged();
+                    invalidateOptionsMenu();
+                } break;
 
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
@@ -560,7 +560,7 @@ public class AlbumsActivity extends ThemedActivity {
                     builder2.show();
                 }
                 break;
-            case R.id.settingsTry_albums_action:
+            case R.id.settings_albums_action:
                 Intent asd = new Intent(AlbumsActivity.this, SettingActivity.class);
                 startActivity(asd);
                 break;
