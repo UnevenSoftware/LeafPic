@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/Local_Folder"
+                        android:text="@string/local_folder"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/Tags"
+                        android:text="@string/tags"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/Timeline"
+                        android:text="@string/timeline"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -167,7 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/Wallpapers"
+                        android:text="@string/wallpapers"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -213,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/Donate"
+                        android:text="@string/donate"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -246,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/GitHub"
+                        android:text="@string/github"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -281,7 +281,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
-                        android:text="@string/Settings"
+                        android:text="@string/settings"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />

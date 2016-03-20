@@ -114,7 +114,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         }
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? c.getString(R.string.Singular_Photo) : c.getString(R.string.Plural_Photos)) + "</font>"));
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos)) + "</font>"));
     }
 
     public void setOnClickListener(View.OnClickListener lis) {

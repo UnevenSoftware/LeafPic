@@ -225,8 +225,8 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             case R.id.deletePhoto:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
-                builder1.setMessage(R.string.Delete_Album_Message);
-                builder1.setPositiveButton(this.getString(R.string.Delete_Action), new DialogInterface.OnClickListener() {
+                builder1.setMessage(R.string.delete_album_message);
+                builder1.setPositiveButton(this.getString(R.string.delete_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         photos.deleteCurrentPhoto();
                         if (photos.medias.size() == 0)
@@ -236,7 +236,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                     }
                 });
-                builder1.setNegativeButton(this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+                builder1.setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
@@ -273,7 +273,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
                 title.setBackgroundColor(getPrimaryColor());
-                title.setText(this.getString(R.string.Rename_Photo_Action));
+                title.setText(this.getString(R.string.rename_photo_action));
                 txt_edit.setText(StringUtils.getPhotoNamebyPath(photos.getCurrentPhoto().Path));
                 txt_edit.selectAll();
                 txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -291,19 +291,19 @@ public class PhotoPagerActivity extends ThemedActivity {
                 }
 
                 RenameDialog.setView(Rename_dialogLayout);
-                RenameDialog.setNeutralButton(this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+                RenameDialog.setNeutralButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
-                RenameDialog.setPositiveButton(this.getString(R.string.Ok_Action), new DialogInterface.OnClickListener() {
+                RenameDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         StringUtils.getPhotoPathRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString());
                         if (txt_edit.length() != 0)
                             photos.renamePhoto(photos.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(photos.getCurrentPhoto().Path, txt_edit.getText().toString()));
                         else
-                            StringUtils.showToast(getApplicationContext(), PhotoPagerActivity.this.getString(R.string.Insert_A_Name));
+                            StringUtils.showToast(getApplicationContext(), PhotoPagerActivity.this.getString(R.string.insert_a_name));
                     }
                 });
                 RenameDialog.show();
@@ -384,7 +384,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 }
 
                 DetailsDialog.setView(Details_DialogLayout);
-                DetailsDialog.setPositiveButton(this.getString(R.string.Ok_Action), new DialogInterface.OnClickListener() {
+                DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
@@ -433,7 +433,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setRecentApp(getString(R.string.App_Name));
+        setRecentApp(getString(R.string.app_name));
 
         final Handler handler = new Handler();
 
