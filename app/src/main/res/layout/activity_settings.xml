@@ -63,15 +63,15 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             >
-                            <ImageView
+
+                            <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/collapsing_toolbar_Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="15dp"
-                                android:paddingLeft="20dp"
-                                android:paddingRight="20dp"
-                                android:paddingTop="15dp"
-                                android:src="@mipmap/ic_gradient_black_24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginStart="20dp"
+                                app:iiv_icon="gmd-gradient"
                                 />
                             <TextView
                                 android:id="@+id/collapsing_toolbar_Item"
@@ -105,15 +105,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
-                        <ImageView
+
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/Traslucent_StatusBar_Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_status_bar_black_24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-open-in-browser"
                             />
                         <TextView
                             android:id="@+id/Traslucent_StatusBar_Item"
@@ -176,15 +176,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_max_luminosita_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_brightness_high_black_24dp" />
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-brightness-high" />
 
                         <TextView
                             android:id="@+id/max_luminosita_Item"
@@ -215,15 +214,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_screen_rotation_black_24dp" />
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-screen-rotation" />
 
                         <TextView
                             android:id="@+id/picture_orientation_Item"
@@ -258,16 +256,14 @@
                         android:orientation="horizontal"
                         >
 
-                        <ImageView
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_apply_theme_3thAct_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_brush_black_24dp" />
-
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-brush" />
                         <TextView
                             android:id="@+id/apply_theme_3thAct_title"
                             android:layout_width="wrap_content"
@@ -388,15 +384,15 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             >
-                            <ImageView
+
+                            <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/PrimaryColor_Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="15dp"
-                                android:paddingLeft="20dp"
-                                android:paddingRight="20dp"
-                                android:paddingTop="15dp"
-                                android:src="@mipmap/ic_color_lens_black_24dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginStart="20dp"
+                                app:iiv_icon="gmd-color-lens"
                                 />
                             <TextView
                                 android:id="@+id/PrimaryColor_Item"
@@ -424,15 +420,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
-                        <ImageView
+
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/accentColor_Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_colorize_black_24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-colorize"
                             />
                         <TextView
                             android:id="@+id/accentColor_Item"
@@ -455,15 +451,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
-                        <ImageView
+
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/DarkTheme_Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_invert_colors_black_24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-invert-colors"
                             />
                         <TextView
                             android:id="@+id/DarkTheme_Item"
@@ -495,15 +491,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
-                        <ImageView
+
+                        <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/NavBar_Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:paddingTop="15dp"
-                            android:src="@mipmap/ic_video_label_black_24dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-call-to-action"
                             />
                         <TextView
                             android:id="@+id/NavBar_Item"

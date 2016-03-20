@@ -245,8 +245,6 @@ public class AlbumsActivity extends ThemedActivity {
         ScrollView DrawerScroll = (ScrollView) findViewById(R.id.Drawer_Body_Scroll);
         DrawerScroll.setBackgroundColor(getBackgroundColor());
 
-        //View DrawerDivider = findViewById(R.id.Drawer_Divider);
-        //  DrawerDivider.setBackgroundColor(getAccentColor());
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);
         DrawerDivider2.setBackgroundColor(ContextCompat.getColor(AlbumsActivity.this, R.color.drawer_transparent_gray));
 
