@@ -26,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/md_red_500"
                     android:padding="24dp"
-                    android:text="@string/Rename_Photo_Action"
+                    android:text="@string/rename_photo_action"
                     android:textSize="18sp"
                     android:textStyle="bold" />
                 <RelativeLayout
@@ -40,7 +40,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:hint="@string/Rename_Photo_Action"
+                        android:hint="@string/rename_photo_action"
                         android:singleLine="true" />
                 </RelativeLayout>
             </LinearLayout>

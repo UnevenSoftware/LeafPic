@@ -199,7 +199,7 @@ public class AlbumsActivity extends ThemedActivity {
         /**** DRAWER ****/
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
-                mDrawerLayout, toolbar, R.string.Drawer_Open, R.string.Drawer_Close) {
+                mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
                 //Put your code here
                 // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
@@ -222,7 +222,7 @@ public class AlbumsActivity extends ThemedActivity {
             }
         });
 
-        setRecentApp(getString(R.string.App_Name));
+        setRecentApp(getString(R.string.app_name));
     }
 
     //region UI/GRAPHIC
@@ -327,7 +327,7 @@ public class AlbumsActivity extends ThemedActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(AlbumsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-                StringUtils.showToast(AlbumsActivity.this, this.getString(R.string.Storage_Permision_Denied));
+                StringUtils.showToast(AlbumsActivity.this, this.getString(R.string.storage_permision_denied));
             else {
                 ActivityCompat.requestPermissions(AlbumsActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
@@ -379,7 +379,7 @@ public class AlbumsActivity extends ThemedActivity {
                     }
                 });
             } else {
-                toolbar.setTitle(getString(R.string.App_Name));
+                toolbar.setTitle(getString(R.string.app_name));
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_menu)
                         .color(Color.WHITE)
@@ -428,12 +428,12 @@ public class AlbumsActivity extends ThemedActivity {
             opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
             opt.setEnabled(true).setVisible(true);
             opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.UnHide));
+            opt.setTitle(getString(R.string.unhide));
         } else {
             opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
             opt.setEnabled(false).setVisible(false);
             opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.Hide));
+            opt.setTitle(getString(R.string.hide));
         }
         if (albums.getSelectedCount() == 0) {
             editmode = false;
@@ -499,15 +499,15 @@ public class AlbumsActivity extends ThemedActivity {
 
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
-                builder.setMessage(R.string.Exclude_Album_Message)
-                        .setPositiveButton( this.getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
+                builder.setMessage(R.string.exclude_album_message)
+                        .setPositiveButton( this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.excludeSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton(this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -516,15 +516,15 @@ public class AlbumsActivity extends ThemedActivity {
 
             case R.id.deleteAction:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(AlbumsActivity.this);
-                builder1.setMessage(R.string.Delete_Album_Message)
-                        .setPositiveButton(this.getString(R.string.Delete_Action), new DialogInterface.OnClickListener() {
+                builder1.setMessage(R.string.delete_album_message)
+                        .setPositiveButton(this.getString(R.string.delete_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.deleteSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton( this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton( this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -539,15 +539,15 @@ public class AlbumsActivity extends ThemedActivity {
                 } else {
 
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
-                    builder2.setMessage(R.string.Delete_Album_Message)
-                            .setPositiveButton( this.getString(R.string.Hide_Action), new DialogInterface.OnClickListener() {
+                    builder2.setMessage(R.string.delete_album_message)
+                            .setPositiveButton( this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     albums.hideSelectedAlbums();
                                     adapt.notifyDataSetChanged();
                                     invalidateOptionsMenu();
                                 }
                             })
-                            .setNeutralButton( this.getString(R.string.Exclude_Action), new DialogInterface.OnClickListener() {
+                            .setNeutralButton( this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     albums.excludeSelectedAlbums();
@@ -555,7 +555,7 @@ public class AlbumsActivity extends ThemedActivity {
                                     invalidateOptionsMenu();
                                 }
                             })
-                            .setNegativeButton( this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+                            .setNegativeButton( this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                 }
                             });

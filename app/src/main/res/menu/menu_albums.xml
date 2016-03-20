@@ -6,7 +6,7 @@
 
     <item android:id="@+id/sort_action"
         android:icon="@mipmap/ic_sort_white_24dp"
-        android:title="@string/Sort_Menu_Title"
+        android:title="@string/sort_menu_title"
         app:showAsAction="ifRoom"
         />
     <!--
@@ -19,32 +19,32 @@
     -->
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/select_all_albums_action"
-        android:title="@string/Album_Menu_Select_All"
+        android:title="@string/album_menu_select_all"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/Menu_Delete"
+        android:title="@string/menu_delete"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/excludeAlbumButton"
-        android:title="@string/Menu_Exclude"
+        android:title="@string/menu_exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:title="@string/Menu_Exclude"
+        android:title="@string/menu_exclude"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/refreshhiddenAlbumsButton"
-        android:title="@string/Menu_Refresh"
+        android:title="@string/menu_refresh"
         app:showAsAction="never"
         />
     <item android:id="@+id/settingsTry_albums_action"
-        android:title="@string/Settings"
+        android:title="@string/settings"
         app:showAsAction="never"
         />
 </menu>

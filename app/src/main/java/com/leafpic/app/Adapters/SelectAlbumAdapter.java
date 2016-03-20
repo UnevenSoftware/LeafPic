@@ -58,7 +58,7 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
 
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? cntx.getString(R.string.Singular_Photo) : cntx.getString(R.string.Plural_Photos)) + "</font>"));
+                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? cntx.getString(R.string.singular_photo) : cntx.getString(R.string.plural_photos)) + "</font>"));
         holder.name.setTag(a.Path);
 
         if (SP.getBoolean("set_dark_theme", false))

@@ -310,7 +310,7 @@ public class SettingActivity extends ThemedActivity {
         });
 
         PrimaryPikerDialog.setView(Accent_dialogLayout);
-        PrimaryPikerDialog.setNeutralButton(getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+        PrimaryPikerDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(isTraslucentStatusBar()) {
@@ -321,7 +321,7 @@ public class SettingActivity extends ThemedActivity {
                 dialog.cancel();
             }
         });
-        PrimaryPikerDialog.setPositiveButton(getString(R.string.Ok_Action), new DialogInterface.OnClickListener() {
+        PrimaryPikerDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putInt("primary_color", colorPicker2.getColor());
@@ -397,7 +397,7 @@ public class SettingActivity extends ThemedActivity {
 
         AccentPikerDialog.setView(Accent_dialogLayout);
 
-        AccentPikerDialog.setNeutralButton(getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
+        AccentPikerDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -415,7 +415,7 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swApplyTheme3thAct);
             }
         });
-        AccentPikerDialog.setPositiveButton(getString(R.string.Ok_Action), new DialogInterface.OnClickListener() {
+        AccentPikerDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putInt("accent_color", colorPicker.getColor());
@@ -478,7 +478,7 @@ public class SettingActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
-        toolbar.setTitle(getString(R.string.Settings));
+        toolbar.setTitle(getString(R.string.settings));
 
         /**** Status Bar */
         setStatusBarColor();
@@ -489,7 +489,7 @@ public class SettingActivity extends ThemedActivity {
         else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
         /**** Recent App */
-        setRecentApp(getString(R.string.Settings));
+        setRecentApp(getString(R.string.settings));
 
         txtGT.setTextColor(getAccentColor());
         txtTT.setTextColor(getAccentColor());

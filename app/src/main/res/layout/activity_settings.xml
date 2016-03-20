@@ -49,7 +49,7 @@
                         android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="@string/General"
+                        android:text="@string/general"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -79,7 +79,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="15dp"
                                 android:paddingTop="15dp"
-                                android:text="@string/Collapsing_Toolbar"
+                                android:text="@string/collapsing_toolbar"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
 
@@ -121,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Traslucent_Statusbar"
+                            android:text="@string/traslucent_statusbar"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -165,7 +165,7 @@
                         android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="@string/Picture_Viewer"
+                        android:text="@string/picture_viewer"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -192,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Max_Brightness"
+                            android:text="@string/max_brightness"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
 
@@ -231,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Picture_Orientation"
+                            android:text="@string/picture_orientation"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
 
@@ -274,7 +274,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Apply_Theme"
+                            android:text="@string/apply_theme"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -305,7 +305,7 @@
                             android:paddingBottom="15dp"
                             android:paddingLeft="20dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Transparency"
+                            android:text="@string/transparency"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -369,7 +369,7 @@
                         android:paddingLeft="20dp"
 
                         android:paddingTop="15dp"
-                        android:text="@string/Theme"
+                        android:text="@string/theme"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -404,7 +404,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="15dp"
                                 android:paddingTop="15dp"
-                                android:text="@string/Primary_Color"
+                                android:text="@string/primary_color"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
                                 />
@@ -440,7 +440,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Accent_Color"
+                            android:text="@string/accent_color"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -471,7 +471,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Dark_Theme"
+                            android:text="@string/dark_theme"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />
@@ -511,7 +511,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
-                            android:text="@string/Colored_NavBar"
+                            android:text="@string/colored_navbar"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             />

@@ -19,10 +19,10 @@ public class IntroActivity extends AppIntro {
     @Override
     public void init(Bundle savedInstanceState) {
 
-        addSlide(AppIntroFragment.newInstance(this.getString(R.string.WelcomeSlideTit), this.getString(R.string.WelcomeSlideSub),
+        addSlide(AppIntroFragment.newInstance(this.getString(R.string.welcome_slide_title), this.getString(R.string.welcome_slide_sub),
                 R.drawable.leafpic_big, ContextCompat.getColor(this, R.color.accent_teal)));
 
-        addSlide(AppIntroFragment.newInstance(this.getString(R.string.StorageSlideTit), this.getString(R.string.StorageSlideSub),
+        addSlide(AppIntroFragment.newInstance(this.getString(R.string.storage_slide_title), this.getString(R.string.storage_slide_sub),
                 R.drawable.storage_permission, ContextCompat.getColor(this, R.color.accent_brown)));//Color.parseColor("#607D8B")
 
         setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
@@ -31,7 +31,7 @@ public class IntroActivity extends AppIntro {
 
         drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
         setTaskDescription(new ActivityManager.TaskDescription
-                (getString(R.string.App_Name), drawable.getBitmap(),
+                (getString(R.string.app_name), drawable.getBitmap(),
                         ContextCompat.getColor(this, R.color.accent_teal)));
 
         //MAYBE REMOVE
@@ -70,7 +70,7 @@ public class IntroActivity extends AppIntro {
             setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
             drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription
-                    (getString(R.string.App_Name), drawable.getBitmap(),
+                    (getString(R.string.app_name), drawable.getBitmap(),
                     ContextCompat.getColor(this, R.color.accent_teal)));
 
         } else{
@@ -86,7 +86,7 @@ public class IntroActivity extends AppIntro {
             setBarColor(ContextCompat.getColor(this, R.color.accent_brown));
             drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription
-                    (getString(R.string.App_Name), drawable.getBitmap(),
+                    (getString(R.string.app_name), drawable.getBitmap(),
                             ContextCompat.getColor(this, R.color.accent_brown)));
 
         }
