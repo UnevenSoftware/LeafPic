@@ -5,11 +5,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.koushikdutta.ion.Ion;
 import com.leafpic.app.R;
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by dnld on 18/02/16.
@@ -17,11 +19,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 public class VideoFragment extends Fragment {
 
-    ImageView picture;
-    IconicsImageView videoInd;
     private String path;
-    private View.OnTouchListener onTouchListener;
     private View.OnClickListener onClickListener;
+    private PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener;
 
     public static VideoFragment newInstance(String path) {
         VideoFragment fragmentFirst = new VideoFragment();
@@ -37,8 +37,8 @@ public class VideoFragment extends Fragment {
         this.onClickListener = onClickListener;
     }
 
-    public void setOnTouchListener(View.OnTouchListener l) {
-        onTouchListener = l;
+    public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
+        this.onPhotoTapListener = onPhotoTapListener;
     }
 
     @Override
@@ -52,16 +52,17 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_pager_layout, container, false);
-        picture = (ImageView) view.findViewById(R.id.media_view);
-        videoInd = (IconicsImageView) view.findViewById(R.id.video_indicator);
+        PhotoView picture = (PhotoView) view.findViewById(R.id.media_view);
+        IconicsImageView videoInd = (IconicsImageView) view.findViewById(R.id.video_indicator);
 
         Ion.with(getContext())
                 .load(path)
                 .withBitmap()
                 .intoImageView(picture);
+        picture.setZoomable(false);
 
+        picture.setOnPhotoTapListener(onPhotoTapListener);
         videoInd.setOnClickListener(onClickListener);
-        picture.setOnTouchListener(onTouchListener);
         return view;
     }
 }

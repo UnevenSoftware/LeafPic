@@ -2,23 +2,23 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/PhotoPager_Layout"
-    android:theme="@style/ThemeOverlay.AppCompat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat"
     >
 
-    <include layout="@layout/toolbar"
+    <include
         android:id="@+id/toolbar"
+        layout="@layout/toolbar"
         android:background="@color/trasparent_toolbar"
         android:windowActionBarOverlay="true"
         />
 
-    <android.support.v4.view.ViewPager
+    <com.leafpic.app.Views.HackyViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/photos_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"></com.leafpic.app.Views.HackyViewPager>
 
 </RelativeLayout>

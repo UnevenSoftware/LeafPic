@@ -13,6 +13,8 @@ import com.leafpic.app.Fragments.VideoFragment;
 
 import java.util.ArrayList;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 /**
  * Created by dnld on 18/02/16.
  */
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<Media> medias;
-    View.OnTouchListener listener;
+    PhotoViewAttacher.OnPhotoTapListener listener;
     View.OnClickListener videoOnClickListener;
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> medias) {
@@ -32,8 +34,8 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         this.videoOnClickListener = videoOnClickListener;
     }
 
-    public void setOnTouchListener(View.OnTouchListener l) {
-        listener = l;
+    public void setListener(PhotoViewAttacher.OnPhotoTapListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -42,16 +44,16 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         if (p.isImage()) {
             if (p.isGif()) {
                 GifFragment fragment = GifFragment.newInstance(p.Path);
-                fragment.setOnTouchListener(listener);
+                fragment.setOnPhotoTapListener(listener);
                 return fragment;
             } else {
                 ImageFragment fragment = ImageFragment.newInstance(p.Path, p.DateModified, p.orientation, p.MIME);
-                fragment.setOnTouchListener(listener);
+                fragment.setOnPhotoTapListener(listener);
                 return fragment;
             }
         } else {
             VideoFragment fragment = VideoFragment.newInstance(p.Path);
-            fragment.setOnTouchListener(listener);
+            fragment.setOnPhotoTapListener(listener);
             fragment.setOnClickListener(videoOnClickListener);
             return fragment;
         }
