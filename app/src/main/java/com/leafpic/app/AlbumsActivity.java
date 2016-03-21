@@ -24,6 +24,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -500,10 +501,13 @@ public class AlbumsActivity extends ThemedActivity {
                     invalidateOptionsMenu();
                     albums.clearSelectedAlbums();
                     adapt.notifyDataSetChanged();
+                    item.setTitle(R.string.album_menu_select_all);
                 } else {
                     albums.selectAllAlbums();
                     adapt.notifyDataSetChanged();
                     invalidateOptionsMenu();
+                    item.setTitle("Clear Selected");
+                    Log.wtf("asdasd", "clear");
                 } break;
 
             case R.id.excludeAlbumButton:
