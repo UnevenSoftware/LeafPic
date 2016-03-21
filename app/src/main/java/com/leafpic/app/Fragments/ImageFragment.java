@@ -62,6 +62,9 @@ public class ImageFragment extends Fragment {
                 .intoImageView(photoView);
 
         photoView.setOnPhotoTapListener(onPhotoTapListener);
+        photoView.setZoomTransitionDuration(375);
+        photoView.setMinimumScale(0.85F);
+        photoView.setMaximumScale(4.0F);
 
         return photoView;
     }
