@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +38,7 @@ import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
+import com.leafpic.app.Views.HackyViewPager;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.nineoldandroids.animation.ArgbEvaluator;
@@ -50,10 +52,14 @@ import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 /**
  * Created by dnld on 18/02/16.
  */
 public class PhotoPagerActivity extends ThemedActivity {
+
+    private static final String ISLOCKED_ARG = "isLocked";
 
     ViewPager mViewPager;
     HandlingPhotos photos;
@@ -80,6 +86,11 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
 
+        if (savedInstanceState != null) {
+            boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG, false);
+            ((HackyViewPager) mViewPager).setLocked(isLocked);
+        }
+
         try {
             if (getIntent().getData() != null) { /*** Call from android.View */
                 photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
@@ -92,12 +103,17 @@ public class PhotoPagerActivity extends ThemedActivity {
                     photos.setContext(getApplicationContext());
             }
 
-            mViewPager = (ViewPager) findViewById(R.id.photos_pager);
+            mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
             adapter = new MediaPagerAdapter(getSupportFragmentManager(), photos.medias);
-            adapter.setOnTouchListener(new View.OnTouchListener() {
+            adapter.setListener(new PhotoViewAttacher.OnPhotoTapListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return gestureDetector.onTouchEvent(event);
+                public void onPhotoTap(View view, float x, float y) {
+                    toggleSystemUI();
+                }
+
+                @Override
+                public void onOutsidePhotoTap() {
+                    toggleSystemUI();
                 }
             });
 
@@ -639,6 +655,18 @@ public class PhotoPagerActivity extends ThemedActivity {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    private boolean isViewPagerActive() {
+        return (mViewPager != null && mViewPager instanceof HackyViewPager);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if (isViewPagerActive()) {
+            outState.putBoolean(ISLOCKED_ARG, ((HackyViewPager) mViewPager).isLocked());
+        }
+        super.onSaveInstanceState(outState);
     }
 }
 
