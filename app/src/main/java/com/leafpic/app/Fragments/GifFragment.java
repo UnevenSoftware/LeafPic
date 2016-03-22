@@ -43,6 +43,7 @@ public class GifFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PhotoView photoView = new PhotoView(container.getContext());
+
         Ion.with(getContext())
                 .load(path)
                 .intoImageView(photoView);

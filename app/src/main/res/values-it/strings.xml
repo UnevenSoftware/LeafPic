@@ -68,7 +68,7 @@
 
 
     <string name="general">Generali</string>
-    <string name="collapsing_toolbar">Copertina Album</string>
+    <string name="collapsing_toolbar">Copertina Album RROOOORSASARTTGTREVHDFXHNHNSKJASFHDg</string>
     <string name="traslucent_statusbar">Status Bar Oscurata</string>
 
     <string name="picture_viewer">Galleria</string>
@@ -117,6 +117,7 @@
     <string name="ascending">Ascendente</string>
     <!--ALBUMS-->
     <string name="album_menu_select_all">Seleziona Tutto</string>
+    <string name="album_menu_deselect_all">Deseleziona Tutto</string>
     <string name="menu_delete">Elimina</string>
     <string name="menu_exclude">Escludi</string>
     <string name="menu_hide">Nascondi</string>
