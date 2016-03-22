@@ -24,7 +24,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +59,7 @@ public class AlbumsActivity extends ThemedActivity {
     boolean editmode = false, hidden = false;
     boolean click = false;
     private SwipeRefreshLayout SwipeContainerRV;
+
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -98,12 +98,8 @@ public class AlbumsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-        if (savedInstanceState != null) {
-            albums = savedInstanceState.getParcelable("albums");
-            StringUtils.showToast(getApplicationContext(), "porcodio le instance");
-        }
-        /**** START APP ****/
 
+        /**** START APP ****/
         /*
             SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             boolean isFirstStart = SP.getBoolean("firstStart", true);
@@ -145,12 +141,6 @@ public class AlbumsActivity extends ThemedActivity {
         invalidateOptionsMenu();
         //setRecentApp(getString(R.string.app_name));
         new PrepareAlbumTask().execute();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("albums", albums);
     }
 
     private void LoadAlbumsData() {
@@ -414,6 +404,13 @@ public class AlbumsActivity extends ThemedActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_albums, menu);
+
+        //MenuItem opt = menu.findItem(R.id.hideAlbumButton);
+        MenuItem opt = menu.findItem(R.id.select_all_albums_action);
+        if(albums.getSelectedCount()==adapt.getItemCount())
+            opt.setTitle(getString(R.string.album_menu_deselect_all));
+        else
+            opt.setTitle(getString(R.string.album_menu_select_all));
         return true;
     }
 
@@ -470,7 +467,7 @@ public class AlbumsActivity extends ThemedActivity {
         switch (item.getItemId()) {
 
             case R.id.sort_action:
-                if (albums.getSelectedCount()==0) {//TODO: MUST BE FUKING FIXED
+                if (albums.getSelectedCount()==0) {//TODO: MUST BE FIXED
                     View sort_btn = findViewById(R.id.sort_action);
                     PopupMenu popup = new PopupMenu(AlbumsActivity.this, sort_btn);
                     popup.setGravity(Gravity.AXIS_CLIP);
@@ -501,13 +498,10 @@ public class AlbumsActivity extends ThemedActivity {
                     invalidateOptionsMenu();
                     albums.clearSelectedAlbums();
                     adapt.notifyDataSetChanged();
-                    item.setTitle(R.string.album_menu_select_all);
                 } else {
                     albums.selectAllAlbums();
                     adapt.notifyDataSetChanged();
                     invalidateOptionsMenu();
-                    item.setTitle("Clear Selected");
-                    Log.wtf("asdasd", "clear");
                 } break;
 
             case R.id.excludeAlbumButton:

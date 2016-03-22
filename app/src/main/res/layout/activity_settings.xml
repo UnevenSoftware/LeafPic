@@ -90,6 +90,7 @@
                                 android:layout_height="match_parent"
                                 android:background="?android:selectableItemBackground"
                                 android:button="@null"
+                                android:gravity="right"
                                 android:hapticFeedbackEnabled="true"
                                 android:paddingBottom="15dp"
                                 android:paddingRight="20dp"

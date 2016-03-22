@@ -51,7 +51,10 @@ public class VideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.video_pager_layout, container, false);
+
         PhotoView picture = (PhotoView) view.findViewById(R.id.media_view);
         IconicsImageView videoInd = (IconicsImageView) view.findViewById(R.id.video_indicator);
 
@@ -62,6 +65,8 @@ public class VideoFragment extends Fragment {
         picture.setZoomable(false);
 
         picture.setOnPhotoTapListener(onPhotoTapListener);
+
+        //Log.wtf("asd",picture.getOnPhotoTapListener().toString());
         videoInd.setOnClickListener(onClickListener);
         return view;
     }
