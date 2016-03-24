@@ -408,9 +408,9 @@ public class AlbumsActivity extends ThemedActivity {
         //MenuItem opt = menu.findItem(R.id.hideAlbumButton);
         MenuItem opt = menu.findItem(R.id.select_all_albums_action);
         if(albums.getSelectedCount()==adapt.getItemCount())
-            opt.setTitle(getString(R.string.album_menu_deselect_all));
+            opt.setTitle(getString(R.string.deselect_all));
         else
-            opt.setTitle(getString(R.string.album_menu_select_all));
+            opt.setTitle(getString(R.string.select_all));
         return true;
     }
 
@@ -546,7 +546,7 @@ public class AlbumsActivity extends ThemedActivity {
                 } else {
 
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
-                    builder2.setMessage(R.string.delete_album_message)
+                    builder2.setMessage(R.string.hide_album_message)
                             .setPositiveButton( this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     albums.hideSelectedAlbums();

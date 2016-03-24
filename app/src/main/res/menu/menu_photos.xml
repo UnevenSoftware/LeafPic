@@ -21,7 +21,8 @@
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             tools:context=".PhotosActivity">
-            <group  android:checkableBehavior="single">
+            <group
+                android:checkableBehavior="single">
                 <item
                     android:id="@+id/all_media_filter"
                     android:title="@string/all"
@@ -51,12 +52,11 @@
         android:icon="@mipmap/ic_sort_white_24dp"
         android:orderInCategory="1"
         android:title="@string/sort_menu_title"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         >
         <menu xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             tools:context=".PhotosActivity">
-
             <group  android:checkableBehavior="single">
                 <item
                     android:id="@+id/name_sort_action"
@@ -95,7 +95,7 @@
         android:id="@+id/deleteAction"
         android:icon="@mipmap/ic_delete_white_24dp"
         android:title="@string/menu_delete"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/copyAction"
@@ -127,15 +127,19 @@
         android:title="@string/set_preview"
         app:showAsAction="never"
         />
+
     <item
         android:id="@+id/clear_album_preview"
         android:title="@string/clear_preview"
         android:visible="false"
-        app:showAsAction="never" />
-    <item android:id="@+id/select_all_albums_action"
-        android:title="@string/album_menu_select_all"
         app:showAsAction="never"
         />
+
+    <item android:id="@+id/select_all_albums_action"
+        android:title="@string/select_all"
+        app:showAsAction="never"
+        />
+
     <item android:id="@+id/setting"
         android:title="@string/settings"
         app:showAsAction="never"

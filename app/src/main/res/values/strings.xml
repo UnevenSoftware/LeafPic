@@ -11,9 +11,6 @@
     <string name="storage_slide_title">Storage Permission!</string>
     <string name="storage_slide_sub">ALLOW Storage permisison to use our gallery.</string>
 
-
-
-
     <!--ALBUMS & SELECT ALBUMS ADAPTER-->
     <string name="singular_photo">Photo</string>
     <string name="plural_photos">Photos</string>
@@ -27,7 +24,6 @@
     <string name="insert_a_name">Insert Something</string>
     <!--STORAGE PERMISSION-->
     <string name="storage_permision_denied">"Storage Permission Denied!"</string>
-
 
     <!--PHOTOS ADAPTER-->
         <!--NO STRINGS HERE-->
@@ -66,7 +62,6 @@
     <!--STRINGS LAYOUT ACT-->
     <string name="settings">Settings</string>
 
-
     <string name="general">General</string>
     <string name="collapsing_toolbar">Collapsing Toolbar</string>
     <string name="traslucent_statusbar">Traslucent Status Bar</string>
@@ -83,13 +78,10 @@
     <string name="dark_theme">Dark Theme</string>
     <string name="colored_navbar">Colored NavBar</string>
 
-
     <!--PHOTO DETAILS-->
     <string name="path">Path</string>
     <string name="type">Type</string>
     <string name="resolution">Resolution</string>
-
-
 
     <string name="sent_to_action">Send to</string>
 
@@ -100,7 +92,6 @@
     <string name="wallpapers">Wallpapers</string>
     <string name="donate">Donate</string>
     <string name="github">GitHub</string>
-
 
     <!--MENUS-->
         <!--FILTER-->
@@ -116,8 +107,8 @@
         <string name="size">Size</string>
         <string name="ascending">Ascending</string>
         <!--ALBUMS-->
-        <string name="album_menu_select_all">Select All</string>
-        <string name="album_menu_deselect_all">Deselect All</string>
+        <string name="select_all">Select All</string>
+        <string name="deselect_all">Deselect All</string>
         <string name="menu_delete">Delete</string>
         <string name="menu_exclude">Exclude</string>
         <string name="menu_hide">Hide</string>

@@ -148,7 +148,6 @@ public class PhotosActivity extends ThemedActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_photos, menu);
-
         menu.findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
 
         if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
@@ -157,6 +156,13 @@ public class PhotosActivity extends ThemedActivity {
             menu.findItem(R.id.name_sort_action).setChecked(true);
         else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
             menu.findItem(R.id.size_sort_action).setChecked(true);
+
+        MenuItem opt = menu.findItem(R.id.select_all_albums_action);
+        if(photos.getSelectedCount()==adapter.getItemCount())
+            opt.setTitle(getString(R.string.deselect_all));
+        else
+            opt.setTitle(getString(R.string.select_all));
+
         return true;
     }
 
@@ -167,9 +173,8 @@ public class PhotosActivity extends ThemedActivity {
 
         if (photos.hidden)
             menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.unhide));
-         else
+        else
             menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.hide));
-
 
         if (photos.getSelectedCount() == 0) {
             editmode = false;
@@ -183,10 +188,8 @@ public class PhotosActivity extends ThemedActivity {
         }
 
         if (photos.hasCustomPreview()) menu.findItem(R.id.clear_album_preview).setVisible(true);
-
         togglePrimaryToolbarOptions(menu);
         updateSelectedStuff();
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -341,9 +344,16 @@ public class PhotosActivity extends ThemedActivity {
                 break;
 
             case R.id.select_all_albums_action:
-                photos.selectAllPhotos();
-                adapter.notifyDataSetChanged();
-                invalidateOptionsMenu();
+                if(photos.getSelectedCount()==adapter.getItemCount()){
+                    editmode = false;
+                    invalidateOptionsMenu();
+                    photos.clearSelectedPhotos();
+                    adapter.notifyDataSetChanged();
+                } else {
+                    photos.selectAllPhotos();
+                    adapter.notifyDataSetChanged();
+                    invalidateOptionsMenu();
+                }
                 break;
 
             case R.id.clear_album_preview:
@@ -543,12 +553,6 @@ public class PhotosActivity extends ThemedActivity {
                 onBackPressed();
                 return true;
 
-            /*
-            case R.id.action_camera:
-                Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                startActivity(i);
-                return true;
-            */
             case R.id.setting:
                 Intent intent2= new Intent(getApplicationContext(), SettingActivity.class);
 
@@ -568,8 +572,7 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        setNavBarColor();
-        //setStatusBarTranslucent(false);
+        setNavBarColor(); 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/

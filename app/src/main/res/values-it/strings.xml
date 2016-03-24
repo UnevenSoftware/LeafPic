@@ -47,14 +47,16 @@
     <string name="refresh">Ricarica</string>
 
     <!--DIALOG MESAGES-->
-    <string name="hide_album_message">Are you sure you want to hide this album?
-        (it will insert .nomedia file in the folder and if there is others media them wont be
-        available also from other apps! use EXCLUDE option instead)
+    <string name="hide_album_message">Nascondere l album?
+        (questa operazione crea un file .nomedia nella cartella,
+        innoltre i file presenti in questa cartella potrebbero
+        non essere visibili da applicazioni di terzi!
+        è consigliato l uso dell opzione ESCLUDI!)
     </string>
-    <string name="delete_album_message">Are you sure you want to delete the entire album folder?</string>
-    <string name="delete_photos_message">Are you sure you want to delete selected medias?</string>
-    <string name="delete_photo_message">Are you sure you want to delete this media?</string>
-    <string name="exclude_album_message">Are you sure you want to exclude the album?</string>
+    <string name="delete_album_message">Cancellare l intero album?</string>
+    <string name="delete_photos_message">Cancellare i media selezionati?</string>
+    <string name="delete_photo_message">Cacellare il media selezionato?</string>
+    <string name="exclude_album_message">Escludere l album selezionato?</string>
 
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">Impostazioni Generali</string>
@@ -69,7 +71,7 @@
 
     <string name="general">Generali</string>
     <string name="collapsing_toolbar">Copertina Album</string>
-    <string name="traslucent_statusbar">Status Bar Oscurata</string>
+    <string name="traslucent_statusbar">Barra di notifiche oscurata</string>
 
     <string name="picture_viewer">Galleria</string>
     <string name="max_brightness">Max Luminosita</string>
@@ -81,7 +83,7 @@
     <string name="primary_color">Colore Primario</string>
     <string name="accent_color">Colore Particolare</string>
     <string name="dark_theme">Tema Dark</string>
-    <string name="colored_navbar">NavBar Colorata</string>
+    <string name="colored_navbar">Barra di navigazione colorata</string>
 
 
     <!--PHOTO DETAILS-->
@@ -116,8 +118,8 @@
     <string name="size">Dimensione</string>
     <string name="ascending">Ascendente</string>
     <!--ALBUMS-->
-    <string name="album_menu_select_all">Seleziona Tutto</string>
-    <string name="album_menu_deselect_all">Deseleziona Tutto</string>
+    <string name="select_all">Seleziona Tutto</string>
+    <string name="deselect_all">Deseleziona Tutto</string>
     <string name="menu_delete">Elimina</string>
     <string name="menu_exclude">Escludi</string>
     <string name="menu_hide">Nascondi</string>
