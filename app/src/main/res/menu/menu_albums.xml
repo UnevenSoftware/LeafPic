@@ -9,17 +9,10 @@
         android:title="@string/sort_menu_title"
         app:showAsAction="ifRoom"
         />
-    <!--
-    <item
-        android:id="@+id/action_camera"
-        android:icon="@mipmap/ic_photo_camera_white_24dp"
-        android:title="Camera"
-        app:showAsAction="ifRoom"
-        />
-    -->
+
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/select_all_albums_action"
-        android:title="@string/album_menu_select_all"
+        android:title="@string/select_all"
         app:showAsAction="never"
         />
     <item

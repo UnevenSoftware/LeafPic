@@ -28,7 +28,7 @@
         app:showAsAction="ifRoom">
         <menu>
             <item
-                    android:id="@+id/rotate_right_90"
+                android:id="@+id/rotate_right_90"
                 android:icon="@mipmap/ic_rotate_right_white_24dp"
                 android:title="@string/rotate_right_90" />
             <item
