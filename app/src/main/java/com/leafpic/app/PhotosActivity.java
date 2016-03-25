@@ -453,19 +453,20 @@ public class PhotosActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (txt_edit.length()!=0) {
+                        if (txt_edit.length() != 0) {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
-                            photos.DisplayName=txt_edit.getText().toString();
+                            photos.DisplayName = txt_edit.getText().toString();
                             updateHeaderContent();
                             //UpdatePhotos();//TODO updatePhoto photos
-                        }
-                        else StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
+                        } else
+                            StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
                     }
                 });
                 RenameDialog.show();
                 break;
 
             case R.id.excludeAlbumButton:
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(PhotosActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
                         .setPositiveButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
@@ -477,6 +478,7 @@ public class PhotosActivity extends ThemedActivity {
                         .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder.show();
+
                 break;
 
             case R.id.deleteAction:
@@ -572,7 +574,7 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        setNavBarColor(); 
+        setNavBarColor();
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/
