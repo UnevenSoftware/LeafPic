@@ -466,7 +466,6 @@ public class PhotosActivity extends ThemedActivity {
                 break;
 
             case R.id.excludeAlbumButton:
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(PhotosActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
                         .setPositiveButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
@@ -478,7 +477,6 @@ public class PhotosActivity extends ThemedActivity {
                         .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder.show();
-
                 break;
 
             case R.id.deleteAction:
@@ -503,8 +501,7 @@ public class PhotosActivity extends ThemedActivity {
                             finish();
                         }
                     }
-                })
-                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                }).setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder1.show();
                 break;
