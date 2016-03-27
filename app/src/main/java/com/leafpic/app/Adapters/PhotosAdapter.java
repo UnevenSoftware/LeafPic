@@ -48,6 +48,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_card, parent, false);
+
+        //int width=v.getLayoutParams().width;
+        //v.setLayoutParams(new FrameLayout.LayoutParams(v.getWidth(), v.getWidth()));//width , width
+
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         /*return new ViewHolder(
@@ -107,6 +111,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.imageView.clearColorFilter();
             holder.imageView.setPadding(0,0,0,0);
         }
+
     }
 
     @Override
