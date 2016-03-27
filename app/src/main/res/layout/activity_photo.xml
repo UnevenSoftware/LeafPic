@@ -15,10 +15,10 @@
         android:windowActionBarOverlay="true"
         />
 
-    <com.leafpic.app.Views.HackyViewPager
+    <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/photos_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.leafpic.app.Views.HackyViewPager>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

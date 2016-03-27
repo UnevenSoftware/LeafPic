@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.koushikdutta.ion.Ion;
+import com.leafpic.app.PhotoPagerActivity;
 import com.leafpic.app.R;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -21,7 +22,6 @@ public class VideoFragment extends Fragment {
 
     private String path;
     private View.OnClickListener onClickListener;
-    private PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener;
 
     public static VideoFragment newInstance(String path) {
         VideoFragment fragmentFirst = new VideoFragment();
@@ -35,10 +35,6 @@ public class VideoFragment extends Fragment {
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
-    }
-
-    public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
-        this.onPhotoTapListener = onPhotoTapListener;
     }
 
     @Override
@@ -64,7 +60,17 @@ public class VideoFragment extends Fragment {
                 .intoImageView(picture);
         picture.setZoomable(false);
 
-        picture.setOnPhotoTapListener(onPhotoTapListener);
+        picture.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float x, float y) {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+
+            @Override
+            public void onOutsidePhotoTap() {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+        });
 
         //Log.wtf("asd",picture.getOnPhotoTapListener().toString());
         videoInd.setOnClickListener(onClickListener);

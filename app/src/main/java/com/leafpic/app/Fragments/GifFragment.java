@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.koushikdutta.ion.Ion;
+import com.leafpic.app.PhotoPagerActivity;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -17,7 +18,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class GifFragment extends Fragment {
 
     private String path;
-    private PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener;
 
     // newInstance constructor for creating fragment with arguments
     public static GifFragment newInstance(String path) {
@@ -28,9 +28,6 @@ public class GifFragment extends Fragment {
         return fragmentFirst;
     }
 
-    public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
-        this.onPhotoTapListener = onPhotoTapListener;
-    }
 
     // Store instance variables based on arguments passed
     @Override
@@ -48,7 +45,17 @@ public class GifFragment extends Fragment {
                 .load(path)
                 .intoImageView(photoView);
 
-        photoView.setOnPhotoTapListener(onPhotoTapListener);
+        photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float x, float y) {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+
+            @Override
+            public void onOutsidePhotoTap() {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+        });
 
         return photoView;
     }

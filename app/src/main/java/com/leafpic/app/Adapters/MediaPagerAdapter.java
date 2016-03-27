@@ -22,7 +22,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<Media> medias;
-    PhotoViewAttacher.OnPhotoTapListener listener;
     View.OnClickListener videoOnClickListener;
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> medias) {
@@ -34,26 +33,14 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         this.videoOnClickListener = videoOnClickListener;
     }
 
-    public void setListener(PhotoViewAttacher.OnPhotoTapListener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public Fragment getItem(int pos) {
         Media p = medias.get(pos);
         if (p.isImage()) {
-            if (p.isGif()) {
-                GifFragment fragment = GifFragment.newInstance(p.Path);
-                fragment.setOnPhotoTapListener(listener);
-                return fragment;
-            } else {
-                ImageFragment fragment = ImageFragment.newInstance(p.Path, p.DateModified, p.orientation, p.MIME);
-                fragment.setOnPhotoTapListener(listener);
-                return fragment;
-            }
+            if (p.isGif()) return GifFragment.newInstance(p.Path);
+             else return ImageFragment.newInstance(p.Path, p.DateModified, p.orientation, p.MIME);
         } else {
             VideoFragment fragment = VideoFragment.newInstance(p.Path);
-            fragment.setOnPhotoTapListener(listener);
             fragment.setOnClickListener(videoOnClickListener);
             return fragment;
         }

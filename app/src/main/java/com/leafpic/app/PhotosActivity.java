@@ -159,7 +159,7 @@ public class PhotosActivity extends ThemedActivity {
 
         MenuItem opt = menu.findItem(R.id.select_all_albums_action);
         if(photos.getSelectedCount()==adapter.getItemCount())
-            opt.setTitle(getString(R.string.deselect_all));
+            opt.setTitle(getString(R.string.clear_selected));
         else
             opt.setTitle(getString(R.string.select_all));
 

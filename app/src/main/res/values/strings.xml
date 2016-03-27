@@ -108,7 +108,7 @@
         <string name="ascending">Ascending</string>
         <!--ALBUMS-->
         <string name="select_all">Select All</string>
-        <string name="deselect_all">Deselect All</string>
+        <string name="clear_selected">Clear Selected</string>
         <string name="menu_delete">Delete</string>
         <string name="menu_exclude">Exclude</string>
         <string name="menu_hide">Hide</string>
