@@ -48,6 +48,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -396,37 +397,27 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.details:
                 /****DATA****/
                 Media f = photos.getCurrentPhoto();
-                String date = "";
-                SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");
-                date = s.format(new Time(Long.valueOf(f.DateTaken)));
-
+                DateFormat as = SimpleDateFormat.getDateTimeInstance();
+                String date = as.format(new Time(f.DateTaken));
 
                 /****** BEAUTIFUL DIALOG ****/
-                final AlertDialog.Builder DetailsDialog;
-                if (isDarkTheme())
-                    DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
-                else
-                    DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Light);
-
+                final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this,
+                        isDarkTheme() ? R.style.AlertDialog_Dark : R.style.AlertDialog_Light);
 
                 final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
-                //OBJECT INSIDE
-                //WRITE
+
                 final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Size);
                 final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Type);
                 final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
                 final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Date);
                 final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
                 final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
-                CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
-                //READ
                 final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
                 final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
                 final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
                 final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
                 final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
 
-                //b PhotoDetailsPreview.setImageURI(medias.getCurrentPhotoIndex());
                 Glide.with(this)
                         .load(photos.getCurrentPhoto().Path)
                         .asBitmap()
@@ -439,40 +430,36 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Resolution.setText(f.getResolution());
                 Data.setText(date);
                 Type.setText(photos.getCurrentPhoto().MIME);
-
                 Path.setText(photos.getCurrentPhoto().Path);
 
-                if (!isDarkTheme()) {
-                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
-                    //READ
-                    txtData.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtPath.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtResolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtType.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtSize.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    //WRITE
-                    Data.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Path.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Resolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Type.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Size.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                } else {
-                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
-                }
+                int color = ContextCompat.getColor(getApplicationContext(),
+                        !isDarkTheme()
+                        ? R.color.cp_TextLight
+                        : R.color.cp_TextDark);
+
+                txtData.setTextColor(color);
+                txtPath.setTextColor(color);
+                txtResolution.setTextColor(color);
+                txtType.setTextColor(color);
+                txtSize.setTextColor(color);
+                Data.setTextColor(color);
+                Path.setTextColor(color);
+                Resolution.setTextColor(color);
+                Type.setTextColor(color);
+                Size.setTextColor(color);
+
+                CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
+                cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                        !isDarkTheme()
+                        ? R.color.cp_PrimaryLight
+                        : R.color.cp_PrimaryDark));
 
                 DetailsDialog.setView(Details_DialogLayout);
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
-                /*
-                DetailsDialog.setNeutralButton(this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });*/
                 DetailsDialog.show();
-
                 break;
 
             case R.id.setting:
@@ -498,16 +485,12 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-        //fullSizeOptions.set
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        if(isTraslucentStatusBar())
-            options.setStatusBarColor(getOscuredColor(getPrimaryColor()));
-        else
-            options.setStatusBarColor(getPrimaryColor());
+        options.setStatusBarColor
+                (isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
-        //fullSizeOptions.se
 
         // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
        /*

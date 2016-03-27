@@ -58,7 +58,7 @@ public class VideoFragment extends Fragment {
                 .load(path)
                 .withBitmap()
                 .intoImageView(picture);
-        picture.setZoomable(false);
+       // picture.setZoomable(false);
 
         picture.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
@@ -74,6 +74,12 @@ public class VideoFragment extends Fragment {
 
         //Log.wtf("asd",picture.getOnPhotoTapListener().toString());
         videoInd.setOnClickListener(onClickListener);
+
+        //TODO optimize zoom disabled
+        picture.setMinimumScale(1.0F);
+        picture.setMediumScale(1.0000001F);
+        picture.setMaximumScale(1.00001F);
+       // picture.setZoomable(false);
         return view;
     }
 }
