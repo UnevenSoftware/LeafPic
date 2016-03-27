@@ -292,12 +292,12 @@ public class PhotosActivity extends ThemedActivity {
 
 
             switch (requestCode) {
-                case SelectAlbumActivity.COPY_TO_ACTION:
+                case PickAlbumActivity.COPY_TO_ACTION:
                     if (resultCode == RESULT_OK) {
                         StringUtils.showToast(getApplicationContext(), "copied ok");
                     }
                     break;
-                case SelectAlbumActivity.MOVE_TO_ACTION:
+                case PickAlbumActivity.MOVE_TO_ACTION:
                     if (resultCode == RESULT_OK) {
                         String ind = b.getString("photos_indexes");
                         if (ind != null) {
@@ -330,17 +330,17 @@ public class PhotosActivity extends ThemedActivity {
         switch (item.getItemId()) {
 
             case R.id.moveAction:
-                Intent int1 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
+                Intent int1 = new Intent(PhotosActivity.this, PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
-                int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
+                int1.putExtra("request_code", PickAlbumActivity.MOVE_TO_ACTION);
                 int1.putExtra("photos_indexes", photos.getSelectedPhotosIndexSerilized());
-                startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
+                startActivityForResult(int1, PickAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
-                Intent int2 = new Intent(PhotosActivity.this, SelectAlbumActivity.class);
+                Intent int2 = new Intent(PhotosActivity.this, PickAlbumActivity.class);
                 int2.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
-                int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
-                startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
+                int2.putExtra("request_code", PickAlbumActivity.COPY_TO_ACTION);
+                startActivityForResult(int2, PickAlbumActivity.COPY_TO_ACTION);
                 break;
 
             case R.id.select_all_albums_action:

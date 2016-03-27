@@ -19,7 +19,7 @@
             android:label="Intro Activity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
-        <activity android:name=".SelectAlbumActivity"
+        <activity android:name=".PickAlbumActivity"
                   android:label="Select Album"
                   android:theme="@style/Theme.AppCompat.NoActionBar" />
 

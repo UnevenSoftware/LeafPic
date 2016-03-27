@@ -18,10 +18,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -68,15 +66,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
-
-        final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                toggleSystemUI();
-                return true;
-            }
-        });
+        setContentView(R.layout.activity_pager);
 
         try {
             if (getIntent().getData() != null) { /*** Call from android.View */
@@ -128,12 +118,14 @@ public class PhotoPagerActivity extends ThemedActivity {
         adapter.setVideoOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO Move to VideoFragment
                 Media p = photos.getCurrentPhoto();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.Path));
                 intent.setDataAndType(Uri.parse(p.Path), p.MIME);
                 startActivity(intent);
             }
         });
+
         getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + this.getString(R.string.of) + " " + photos.medias.size());
 
         mViewPager.setAdapter(adapter);
@@ -228,7 +220,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         if (data != null && resultCode == RESULT_OK) {
             final Bundle b = data.getExtras();
             switch (requestCode) {
-                case SelectAlbumActivity.MOVE_TO_ACTION:
+                case PickAlbumActivity.MOVE_TO_ACTION:
                     int asd = Integer.valueOf(b.getString("photos_indexes"));
                     if (asd >= 0 && asd < photos.medias.size()) {
                         photos.medias.remove(asd);
@@ -280,17 +272,17 @@ public class PhotoPagerActivity extends ThemedActivity {
                 return true;
 
             case R.id.moveAction:
-                Intent int1 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
+                Intent int1 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
-                int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
+                int1.putExtra("request_code", PickAlbumActivity.MOVE_TO_ACTION);
                 int1.putExtra("photos_indexes", String.valueOf(photos.getCurrentPhotoIndex()));
-                startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
+                startActivityForResult(int1, PickAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
-                Intent int2 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
+                Intent int2 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int2.putExtra("selected_photos", photos.getCurrentPhoto().Path);
-                int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
-                startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
+                int2.putExtra("request_code", PickAlbumActivity.COPY_TO_ACTION);
+                startActivityForResult(int2, PickAlbumActivity.COPY_TO_ACTION);
                 break;
 
             case R.id.shareButton:
