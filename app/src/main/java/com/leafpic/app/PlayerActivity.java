@@ -64,11 +64,9 @@ import com.google.android.exoplayer.util.DebugTextViewHelper;
 import com.google.android.exoplayer.util.MimeTypes;
 import com.google.android.exoplayer.util.Util;
 import com.google.android.exoplayer.util.VerboseLogUtil;
-import com.leafpic.app.player.DashRendererBuilder;
 import com.leafpic.app.player.DemoPlayer;
 import com.leafpic.app.player.ExtractorRendererBuilder;
 import com.leafpic.app.player.HlsRendererBuilder;
-import com.leafpic.app.player.SmoothStreamingRendererBuilder;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -82,9 +80,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     AudioCapabilitiesReceiver.Listener {
 
   // For use within demo app code.
-  public static final String CONTENT_ID_EXTRA = "content_id";
   public static final String CONTENT_TYPE_EXTRA = "content_type";
-  public static final String PROVIDER_EXTRA = "provider";
 
   // For use when launching the demo app using adb.
   private static final String CONTENT_EXT_EXTRA = "type";
@@ -99,14 +95,12 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     defaultCookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
   }
 
-  private EventLogger eventLogger;
   private MediaController mediaController;
   private View debugRootView;
   private View shutterView;
   private AspectRatioFrameLayout videoFrame;
   private SurfaceView surfaceView;
-  private TextView debugTextView;
-  private TextView playerStateTextView;
+
   private SubtitleLayout subtitleLayout;
   private Button videoButton;
   private Button audioButton;
@@ -114,16 +108,12 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
   private Button retryButton;
 
   private DemoPlayer player;
-  private DebugTextViewHelper debugViewHelper;
   private boolean playerNeedsPrepare;
-
   private long playerPosition;
   private boolean enableBackgroundAudio;
 
   private Uri contentUri;
   private int contentType;
-  private String contentId;
-  private String provider;
 
   private AudioCapabilitiesReceiver audioCapabilitiesReceiver;
 
@@ -133,7 +123,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setContentView(R.layout.player_activity);
+    setContentView(R.layout.activity_player);
     View root = findViewById(R.id.root);
     root.setOnTouchListener(new OnTouchListener() {
       @Override
@@ -149,11 +139,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     root.setOnKeyListener(new OnKeyListener() {
       @Override
       public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
-            || keyCode == KeyEvent.KEYCODE_MENU) {
-          return false;
-        }
-        return mediaController.dispatchKeyEvent(event);
+        return !(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_MENU) && mediaController.dispatchKeyEvent(event);
       }
     });
 
@@ -163,9 +149,6 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     videoFrame = (AspectRatioFrameLayout) findViewById(R.id.video_frame);
     surfaceView = (SurfaceView) findViewById(R.id.surface_view);
     surfaceView.getHolder().addCallback(this);
-    debugTextView = (TextView) findViewById(R.id.debug_text_view);
-
-    playerStateTextView = (TextView) findViewById(R.id.player_state_view);
     subtitleLayout = (SubtitleLayout) findViewById(R.id.subtitles);
 
     mediaController = new KeyCompatibleMediaController(this);
@@ -198,9 +181,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     Intent intent = getIntent();
     contentUri = intent.getData();
     contentType = intent.getIntExtra(CONTENT_TYPE_EXTRA,
-        inferContentType(contentUri, intent.getStringExtra(CONTENT_EXT_EXTRA)));
-    contentId = intent.getStringExtra(CONTENT_ID_EXTRA);
-    provider = intent.getStringExtra(PROVIDER_EXTRA);
+            inferContentType(contentUri, intent.getStringExtra(CONTENT_EXT_EXTRA)));
     configureSubtitleView();
     if (player == null) {
       if (!maybeRequestPermission()) {
@@ -322,13 +303,6 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
       playerNeedsPrepare = true;
       mediaController.setMediaPlayer(player.getPlayerControl());
       mediaController.setEnabled(true);
-      eventLogger = new EventLogger();
-      eventLogger.startSession();
-      player.addListener(eventLogger);
-      player.setInfoListener(eventLogger);
-      player.setInternalErrorListener(eventLogger);
-      debugViewHelper = new DebugTextViewHelper(player, debugTextView);
-      debugViewHelper.start();
     }
     if (playerNeedsPrepare) {
       player.prepare();
@@ -341,13 +315,9 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
 
   private void releasePlayer() {
     if (player != null) {
-      debugViewHelper.stop();
-      debugViewHelper = null;
       playerPosition = player.getCurrentPosition();
       player.release();
       player = null;
-      eventLogger.endSession();
-      eventLogger = null;
     }
   }
 
@@ -379,7 +349,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
         text += "unknown";
         break;
     }
-    playerStateTextView.setText(text);
+    //Log.d(TAG, "onStateChanged: "+text);
     updateButtonVisibilities();
   }
 
