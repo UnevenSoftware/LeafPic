@@ -143,6 +143,7 @@
     <!--PHOTOS-->
     <string name="set_preview">Imposta Copertina</string>
     <string name="clear_preview">Pulisci Copertina</string>
+    <string name="video_player">Riproduttore Video</string>
 
 
 </resources>
