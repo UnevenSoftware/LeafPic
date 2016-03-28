@@ -15,6 +15,22 @@
         android:largeHeap="true"
         android:theme="@style/Theme.AppCompat">
 
+        <activity android:name=".PlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleInstance"
+            android:label="@string/app_name"
+            android:theme="@style/PlayerTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:scheme="content"/>
+                <data android:scheme="asset"/>
+                <data android:scheme="file"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".IntroActivity"
             android:label="Intro Activity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
@@ -56,6 +72,7 @@
                 <action android:name="android.intent.action.albumPhoto"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
             </intent-filter>
         </activity>
 

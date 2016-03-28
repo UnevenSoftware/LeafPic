@@ -119,10 +119,13 @@ public class PhotoPagerActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 //TODO Move to VideoFragment
-                Media p = photos.getCurrentPhoto();
+                /*Media p = photos.getCurrentPhoto();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.Path));
                 intent.setDataAndType(Uri.parse(p.Path), p.MIME);
-                startActivity(intent);
+                startActivity(intent);*/
+                Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
+                        .setData(photos.getCurrentPhoto().getUri());
+                startActivity(mpdIntent);
             }
         });
 

@@ -66,4 +66,5 @@ dependencies {
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.commit451:PhotoView:1.2.5'
+    compile 'com.google.android.exoplayer:exoplayer:+'
 }
