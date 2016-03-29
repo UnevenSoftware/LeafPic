@@ -24,6 +24,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,10 +116,6 @@ public class AlbumsActivity extends ThemedActivity {
         initUI();
         setupUI();
 
-        /**** SWIPE REFRESH ****/
-        //RefreshListener();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
     private void StartAppIntro() {
@@ -154,7 +151,7 @@ public class AlbumsActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
-        if(isDarkTheme()==false)
+        if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
         //TODO:FIX IT PLIS CUZ I KNOW U CAN
         /*else
@@ -223,9 +220,12 @@ public class AlbumsActivity extends ThemedActivity {
 
     //region UI/GRAPHIC
     public void setupUI() {
+
+        //toolbar.setPopupTheme(isDarkTheme() ? R.style.MyDarkToolbarStyle : R.style.MyLightToolbarStyle);
+        //setSupportActionBar(toolbar);
+
         toolbar.setBackgroundColor(getPrimaryColor());
-        if(isDarkTheme()==false)
-            toolbar.setPopupTheme(R.style.LightActionBarMenu);
+
         //TODO:FIX IT PLIS CUZ I KNOW U CAN
         /*else
             toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
@@ -408,7 +408,7 @@ public class AlbumsActivity extends ThemedActivity {
         //MenuItem opt = menu.findItem(R.id.hideAlbumButton);
         MenuItem opt = menu.findItem(R.id.select_all_albums_action);
         if(albums.getSelectedCount()==adapt.getItemCount())
-            opt.setTitle(getString(R.string.deselect_all));
+            opt.setTitle(getString(R.string.clear_selected));
         else
             opt.setTitle(getString(R.string.select_all));
         return true;
@@ -546,7 +546,7 @@ public class AlbumsActivity extends ThemedActivity {
                 } else {
 
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
-                    builder2.setMessage(R.string.hide_album_message)
+                    builder2.setMessage(R.string.delete_album_message)
                             .setPositiveButton( this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     albums.hideSelectedAlbums();
@@ -590,8 +590,9 @@ public class AlbumsActivity extends ThemedActivity {
     }
 
     //endregion
+    public static String TAG = "AlbumsAct";
 
-    public class PrepareAlbumTask extends AsyncTask<Void, Void, Void> {
+    public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {

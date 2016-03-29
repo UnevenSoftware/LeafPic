@@ -2,8 +2,8 @@ package com.leafpic.app.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -19,34 +19,32 @@ import com.leafpic.app.R;
 
 import java.util.ArrayList;
 
-public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.ViewHolder> {
+public class PickAlbumAdapter extends RecyclerView.Adapter<PickAlbumAdapter.ViewHolder> {
 
     ArrayList<Album> albums;
     SharedPreferences SP;
 
     private View.OnClickListener mOnClickListener;
 
-    public SelectAlbumAdapter(ArrayList<Album> ph ,Context ctx) {
+    public PickAlbumAdapter(ArrayList<Album> ph, Context ctx) {
         albums = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_album_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pick_album_card, parent, false);
         v.setOnClickListener(mOnClickListener);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(SelectAlbumAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(PickAlbumAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
-
-        Context cntx = holder.picture.getContext();
 
         a.setPath();
 
-        Glide.with(cntx)
+        Glide.with(holder.picture.getContext())
                 .load(a.getPathCoverAlbum())
                 .asBitmap()
                 .centerCrop()
@@ -54,16 +52,12 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
                 .into(holder.picture);
 
         String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(cntx, R.color.accent_green))));
 
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? cntx.getString(R.string.singular_photo) : cntx.getString(R.string.plural_photos)) + "</font>"));
-        holder.name.setTag(a.Path);
 
-        if (SP.getBoolean("set_dark_theme", false))
-            holder.card_layout.setBackgroundColor(ContextCompat.getColor(cntx, R.color.unselected_album));
-        else holder.card_layout.setBackgroundColor(ContextCompat.getColor(cntx, R.color.background_material_light));
+        holder.name.setTag(a.Path);
+        holder.card_layout.setBackgroundColor(Color.TRANSPARENT);
+
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -78,13 +72,12 @@ public class SelectAlbumAdapter extends RecyclerView.Adapter<SelectAlbumAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout card_layout;
         ImageView picture;
-        TextView name, nPhotos;
+        TextView name;
 
         public ViewHolder(View itemView) {
             super(itemView);
             picture = (ImageView) itemView.findViewById(R.id.album_preview);
             name = (TextView) itemView.findViewById(R.id.album_name);
-            nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
             card_layout = (LinearLayout) itemView.findViewById(R.id.s_linear_card_Text);
         }
     }

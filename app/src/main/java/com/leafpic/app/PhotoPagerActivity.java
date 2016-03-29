@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -19,10 +18,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -38,7 +35,6 @@ import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
-import com.leafpic.app.Views.HackyViewPager;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 import com.nineoldandroids.animation.ArgbEvaluator;
@@ -50,16 +46,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by dnld on 18/02/16.
  */
 public class PhotoPagerActivity extends ThemedActivity {
-
-    private static final String ISLOCKED_ARG = "isLocked";
 
     ViewPager mViewPager;
     HandlingPhotos photos;
@@ -73,23 +66,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
-        ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
-
-        initUiTweaks();
-
-        final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                toggleSystemUI();
-                return true;
-            }
-        });
-
-        if (savedInstanceState != null) {
-            boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG, false);
-            ((HackyViewPager) mViewPager).setLocked(isLocked);
-        }
+        setContentView(R.layout.activity_pager);
 
         try {
             if (getIntent().getData() != null) { /*** Call from android.View */
@@ -103,58 +80,126 @@ public class PhotoPagerActivity extends ThemedActivity {
                     photos.setContext(getApplicationContext());
             }
 
-            mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
-            adapter = new MediaPagerAdapter(getSupportFragmentManager(), photos.medias);
-            adapter.setListener(new PhotoViewAttacher.OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float x, float y) {
-                    toggleSystemUI();
-                }
-
-                @Override
-                public void onOutsidePhotoTap() {
-                    toggleSystemUI();
-                }
-            });
-
-            adapter.setVideoOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Media p = photos.getCurrentPhoto();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.Path));
-                    intent.setDataAndType(Uri.parse(p.Path), p.MIME);
-                    startActivity(intent);
-                }
-            });
-            mViewPager.setAdapter(adapter);
-            mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
-            getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + this.getString(R.string.of) + " " + photos.medias.size());
-            mViewPager.setPageTransformer(true, new DepthPageTransformer());
-            mViewPager.setOffscreenPageLimit(2);
-            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    photos.setCurrentPhotoIndex(position);
-                    toolbar.setTitle((position + 1) + " " + PhotoPagerActivity.this.getString(R.string.of) + " " + photos.medias.size());
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                }
-            });
+           initUI();
+           setupUI();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void initUI(){
+        SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mViewPager = (ViewPager) findViewById(R.id.photos_pager);
+        ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
+
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setRecentApp(getString(R.string.app_name));
+        setupSystemUI();
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                hideSystemUI();
+            }
+        }, 1500);
+
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                        else hideSystemUI();
+                    }
+                });
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), photos.medias);
+
+        adapter.setVideoOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Move to VideoFragment
+                /*Media p = photos.getCurrentPhoto();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.Path));
+                intent.setDataAndType(Uri.parse(p.Path), p.MIME);
+                startActivity(intent);*/
+                Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
+                        .setData(photos.getCurrentPhoto().getUri());
+                startActivity(mpdIntent);
+            }
+        });
+
+        getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + this.getString(R.string.of) + " " + photos.medias.size());
+
+        mViewPager.setAdapter(adapter);
+        mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                photos.setCurrentPhotoIndex(position);
+                toolbar.setTitle((position + 1) + " " + PhotoPagerActivity.this.getString(R.string.of) + " " + photos.medias.size());
+                if (!fullscreenmode) new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        hideSystemUI();
+                    }
+                }, 1200);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+    }
+
+    public void setupUI(){
+
+        /**** Theme ****/
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(isApplyThemeOnImgAct()
+                ? (getTransparentColor(getPrimaryColor(), getTransparency()))
+                : (ContextCompat.getColor(getApplicationContext(),
+                isDarkTheme()
+                        ? R.color.transparent_dark_gray
+                        : R.color.transparent_white_gray)));
+
+        ActivityBackgorund.setBackgroundColor(getBackgroundColor());
+
+
+
+        if(!isDarkTheme())
+            toolbar.setPopupTheme(R.style.LightActionBarMenu);
+
+        setStatusBarColor();
+        setNavBarColor();
+
+
+        /**** Settings ****/
+
+        if (SP.getBoolean("set_max_luminosita", false))
+            updateBrightness(1.0F);
+        else try {
+            float brightness = android.provider.Settings.System.getInt(
+                    getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
+            brightness = brightness == 1.0F ? 255.0F : brightness;
+            updateBrightness(brightness);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
-        initUiTweaks();
+        setupUI();
+        //Toast.makeText(PhotoPagerActivity.this, "resume", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -178,7 +223,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         if (data != null && resultCode == RESULT_OK) {
             final Bundle b = data.getExtras();
             switch (requestCode) {
-                case SelectAlbumActivity.MOVE_TO_ACTION:
+                case PickAlbumActivity.MOVE_TO_ACTION:
                     int asd = Integer.valueOf(b.getString("photos_indexes"));
                     if (asd >= 0 && asd < photos.medias.size()) {
                         photos.medias.remove(asd);
@@ -219,6 +264,8 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -228,17 +275,17 @@ public class PhotoPagerActivity extends ThemedActivity {
                 return true;
 
             case R.id.moveAction:
-                Intent int1 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
+                Intent int1 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
-                int1.putExtra("request_code", SelectAlbumActivity.MOVE_TO_ACTION);
+                int1.putExtra("request_code", PickAlbumActivity.MOVE_TO_ACTION);
                 int1.putExtra("photos_indexes", String.valueOf(photos.getCurrentPhotoIndex()));
-                startActivityForResult(int1, SelectAlbumActivity.MOVE_TO_ACTION);
+                startActivityForResult(int1, PickAlbumActivity.MOVE_TO_ACTION);
                 break;
             case R.id.copyAction:
-                Intent int2 = new Intent(getApplicationContext(), SelectAlbumActivity.class);
+                Intent int2 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int2.putExtra("selected_photos", photos.getCurrentPhoto().Path);
-                int2.putExtra("request_code", SelectAlbumActivity.COPY_TO_ACTION);
-                startActivityForResult(int2, SelectAlbumActivity.COPY_TO_ACTION);
+                int2.putExtra("request_code", PickAlbumActivity.COPY_TO_ACTION);
+                startActivityForResult(int2, PickAlbumActivity.COPY_TO_ACTION);
                 break;
 
             case R.id.shareButton:
@@ -345,37 +392,27 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.details:
                 /****DATA****/
                 Media f = photos.getCurrentPhoto();
-                String date = "";
-                SimpleDateFormat s = new SimpleDateFormat("dd/mm/yyyy HH:MM");
-                date = s.format(new Time(Long.valueOf(f.DateTaken)));
-
+                DateFormat as = SimpleDateFormat.getDateTimeInstance();
+                String date = as.format(new Time(f.DateTaken));
 
                 /****** BEAUTIFUL DIALOG ****/
-                final AlertDialog.Builder DetailsDialog;
-                if (isDarkTheme())
-                    DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
-                else
-                    DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Light);
-
+                final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this,
+                        isDarkTheme() ? R.style.AlertDialog_Dark : R.style.AlertDialog_Light);
 
                 final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
-                //OBJECT INSIDE
-                //WRITE
+
                 final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Size);
                 final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Type);
                 final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
                 final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Date);
                 final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
                 final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
-                CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
-                //READ
                 final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
                 final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
                 final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
                 final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
                 final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
 
-                //b PhotoDetailsPreview.setImageURI(medias.getCurrentPhotoIndex());
                 Glide.with(this)
                         .load(photos.getCurrentPhoto().Path)
                         .asBitmap()
@@ -388,40 +425,36 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Resolution.setText(f.getResolution());
                 Data.setText(date);
                 Type.setText(photos.getCurrentPhoto().MIME);
-
                 Path.setText(photos.getCurrentPhoto().Path);
 
-                if (!isDarkTheme()) {
-                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
-                    //READ
-                    txtData.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtPath.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtResolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtType.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txtSize.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    //WRITE
-                    Data.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Path.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Resolution.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Type.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    Size.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                } else {
-                    cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
-                }
+                int color = ContextCompat.getColor(getApplicationContext(),
+                        !isDarkTheme()
+                        ? R.color.cp_TextLight
+                        : R.color.cp_TextDark);
+
+                txtData.setTextColor(color);
+                txtPath.setTextColor(color);
+                txtResolution.setTextColor(color);
+                txtType.setTextColor(color);
+                txtSize.setTextColor(color);
+                Data.setTextColor(color);
+                Path.setTextColor(color);
+                Resolution.setTextColor(color);
+                Type.setTextColor(color);
+                Size.setTextColor(color);
+
+                CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
+                cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                        !isDarkTheme()
+                        ? R.color.cp_PrimaryLight
+                        : R.color.cp_PrimaryDark));
 
                 DetailsDialog.setView(Details_DialogLayout);
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
-                /*
-                DetailsDialog.setNeutralButton(this.getString(R.string.Cancel_Action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });*/
                 DetailsDialog.show();
-
                 break;
 
             case R.id.setting:
@@ -436,104 +469,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void initUiTweaks() {
-
-        SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
-        ActivityBackgorund.setBackgroundColor(getBackgroundColor());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        /****SET THEME ****/
-        //TOOLBAR
-        toolbar.setBackgroundColor( isApplyThemeOnImgAct()
-                ? (getTransparentColor(getPrimaryColor(), getTransparency()))
-                : (ContextCompat.getColor(getApplicationContext(),
-                isDarkTheme()
-                        ? R.color.transparent_dark_gray
-                        : R.color.transparent_white_gray )));
-        if(isDarkTheme()==false)
-            toolbar.setPopupTheme(R.style.LightActionBarMenu);
-        //STATUS & NAV BARS
-        setStatusBarColor();
-        setNavBarColor();
-        /****END THEME****/
-
-        setupSystemUI();
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setRecentApp(getString(R.string.app_name));
-
-        final Handler handler = new Handler();
-
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                hideSystemUI();
-            }
-        }, 1500);
-
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
-                        else hideSystemUI();
-                    }
-                });
-
-
-
-        if (SP.getBoolean("set_max_luminosita", false))
-            updateBrightness(1.0F);
-        else try {
-            float brightness = android.provider.Settings.System.getInt(
-                    getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
-            brightness = brightness == 1.0F ? 255.0F : brightness;
-            updateBrightness(brightness);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-
-      /*  Settings.System.putInt(getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION,
-                SP.getBoolean("set_picture_orientation", false) ? 1 : 0);*/
-        /*if (SP.getBoolean("set_picture_orientation", false)){
-
-        }
-        sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
-        if(SP.getBoolean("set_picture_orientation", false))
-            sensorManager.registerListener(new SensorEventListener() {
-                int orientation = -1;
-
-                @Override
-                public void onSensorChanged(SensorEvent event) {
-                    if (event.values[1] < 6.5 && event.values[1] > -6.5) {
-                        if (orientation != 1) {
-                            Log.d("Sensor", "Landscape");
-                            WindowManager.LayoutParams lp = getWindow().getAttributes();
-                            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                            getWindow().setAttributes(lp);
-                        }
-                        orientation = 1;
-                    } else {
-                        if (orientation != 0) {
-                            Log.d("Sensor", "Portrait");
-                            WindowManager.LayoutParams lp = getWindow().getAttributes();
-                            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                            getWindow().setAttributes(lp);
-                        }
-                        orientation = 0;
-                    }
-                }
-
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int accuracy) {
-                    // TODO Auto-generated method stub
-
-                }
-            }, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-    */
-    }
-    //SensorManager sensorManager;
 
     private void updateBrightness(float level) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -545,16 +480,12 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-        //fullSizeOptions.set
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        if(isTraslucentStatusBar())
-            options.setStatusBarColor(getOscuredColor(getPrimaryColor()));
-        else
-            options.setStatusBarColor(getPrimaryColor());
+        options.setStatusBarColor
+                (isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
-        //fullSizeOptions.se
 
         // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
        /*
@@ -655,18 +586,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
-
-    private boolean isViewPagerActive() {
-        return (mViewPager != null && mViewPager instanceof HackyViewPager);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if (isViewPagerActive()) {
-            outState.putBoolean(ISLOCKED_ARG, ((HackyViewPager) mViewPager).isLocked());
-        }
-        super.onSaveInstanceState(outState);
     }
 }
 

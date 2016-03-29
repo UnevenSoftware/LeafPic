@@ -119,7 +119,7 @@
     <string name="ascending">Ascendente</string>
     <!--ALBUMS-->
     <string name="select_all">Seleziona Tutto</string>
-    <string name="deselect_all">Deseleziona Tutto</string>
+    <string name="clear_selected">Deseleziona Tutto</string>
     <string name="menu_delete">Elimina</string>
     <string name="menu_exclude">Escludi</string>
     <string name="menu_hide">Nascondi</string>
@@ -143,6 +143,7 @@
     <!--PHOTOS-->
     <string name="set_preview">Imposta Copertina</string>
     <string name="clear_preview">Pulisci Copertina</string>
+    <string name="video_player">Riproduttore Video</string>
 
 
 </resources>

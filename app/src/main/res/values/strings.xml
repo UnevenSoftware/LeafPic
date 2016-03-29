@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
     <string name="sort">Sort</string>
@@ -24,11 +24,6 @@
     <string name="insert_a_name">Insert Something</string>
     <!--STORAGE PERMISSION-->
     <string name="storage_permision_denied">"Storage Permission Denied!"</string>
-
-    <!--PHOTOS ADAPTER-->
-        <!--NO STRINGS HERE-->
-    <!--MEDIA PAGER ADAPTER-->
-        <!--NO STRINGS HERE-->
 
     <!--PHOTO PAGER ACT-->
     <string name="of">of</string>
@@ -108,7 +103,7 @@
         <string name="ascending">Ascending</string>
         <!--ALBUMS-->
         <string name="select_all">Select All</string>
-        <string name="deselect_all">Deselect All</string>
+        <string name="clear_selected">Clear Selected</string>
         <string name="menu_delete">Delete</string>
         <string name="menu_exclude">Exclude</string>
         <string name="menu_hide">Hide</string>
@@ -132,5 +127,27 @@
         <!--PHOTOS-->
         <string name="set_preview">Set Preview</string>
         <string name="clear_preview">Clear Preview</string>
+
+        <!--VIDEO PLayer-->
+        <string name="enable_background_audio">Play in background</string>
+        <string name="video">Video</string>
+        <string name="audio">Audio</string>
+        <string name="text">Text</string>
+        <string name="logging">Logging</string>
+        <string name="logging_normal">Normal</string>
+        <string name="logging_verbose">Verbose</string>
+        <string name="retry">Retry</string>
+        <string name="off">[off]</string>
+        <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
+        <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
+        <string name="error_drm_unknown">An unknown DRM error occurred</string>
+        <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+        <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+        <string name="error_querying_decoders">Unable to query device decoders</string>
+        <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
+        <string name="storage_permission_denied">Permission to access storage was denied</string>
+
+        <string name="video_player">Video Player</string>
+
 
 </resources>

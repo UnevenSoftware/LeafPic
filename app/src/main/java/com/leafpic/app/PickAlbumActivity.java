@@ -14,24 +14,26 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.leafpic.app.Adapters.SelectAlbumAdapter;
+import com.leafpic.app.Adapters.PickAlbumAdapter;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
+import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 /**
  * Created by dnld on 2/8/16.
  */
-public class SelectAlbumActivity extends ThemedActivity{
+public class PickAlbumActivity extends ThemedActivity{
 
     public static final int COPY_TO_ACTION = 23;
     public static final int MOVE_TO_ACTION = 911;
 
-    HandlingAlbums albums = new HandlingAlbums(SelectAlbumActivity.this);
+    HandlingAlbums albums = new HandlingAlbums(PickAlbumActivity.this);
     RecyclerView mRecyclerView;
-    SelectAlbumAdapter adapt;
+    PickAlbumAdapter adapt;
     String photoPaths;
     String photosIndexes;
     boolean hidden=false;
@@ -41,13 +43,13 @@ public class SelectAlbumActivity extends ThemedActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_album_activity);
+        setContentView(R.layout.pick_album_activity);
 
         photoPaths = getIntent().getStringExtra("selected_photos");
         code = getIntent().getIntExtra("request_code", -1);
         photosIndexes = getIntent().getStringExtra("photos_indexes");
 
-        p = new HandlingPhotos(SelectAlbumActivity.this);
+        p = new HandlingPhotos(PickAlbumActivity.this);
         if (code == MOVE_TO_ACTION) setTitle(getString(R.string.move_to));
         else if (code == COPY_TO_ACTION) setTitle(getString(R.string.copy_to));
 
@@ -58,7 +60,7 @@ public class SelectAlbumActivity extends ThemedActivity{
         toolbar.setNavigationIcon(
                 new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_arrow_back)
-                .color(Color.WHITE)
+                        .color(Color.WHITE)
                         .sizeDp(19));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +92,7 @@ public class SelectAlbumActivity extends ThemedActivity{
         else albums.loadPreviewAlbums();
         hidden=!hidden;
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
-        adapt = new SelectAlbumAdapter(albums.dispAlbums,getApplicationContext());
+        adapt = new PickAlbumAdapter(albums.dispAlbums,getApplicationContext());
         adapt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +120,8 @@ public class SelectAlbumActivity extends ThemedActivity{
         mRecyclerView.setAdapter(adapt);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(5, getApplicationContext()), true));
+
         adapt.notifyDataSetChanged();
     }
 }

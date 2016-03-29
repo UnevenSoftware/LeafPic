@@ -15,11 +15,29 @@
         android:largeHeap="true"
         android:theme="@style/Theme.AppCompat">
 
+        <activity android:name=".PlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleInstance"
+            android:label= "@string/video_player"
+            android:theme="@style/PlayerTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:scheme="content"/>
+                <data android:scheme="asset"/>
+                <data android:scheme="file"/>
+                <data android:mimeType="video/*"/>
+
+            </intent-filter>
+        </activity>
+
         <activity android:name=".IntroActivity"
             android:label="Intro Activity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
-        <activity android:name=".SelectAlbumActivity"
+        <activity android:name=".PickAlbumActivity"
                   android:label="Select Album"
                   android:theme="@style/Theme.AppCompat.NoActionBar" />
 
@@ -56,6 +74,7 @@
                 <action android:name="android.intent.action.albumPhoto"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
             </intent-filter>
         </activity>
 

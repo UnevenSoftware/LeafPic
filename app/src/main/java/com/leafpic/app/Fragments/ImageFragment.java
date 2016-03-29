@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.koushikdutta.ion.Ion;
+import com.leafpic.app.PhotoPagerActivity;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -21,7 +22,6 @@ public class ImageFragment extends Fragment {
     private long DataModified;
     private int orientation;
     private String MIME;
-    private PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener;
 
     public static ImageFragment newInstance(String path, long dateModified, int orientation, String mime) {
         ImageFragment fragmentFirst = new ImageFragment();
@@ -34,10 +34,6 @@ public class ImageFragment extends Fragment {
         fragmentFirst.setArguments(args);
 
         return fragmentFirst;
-    }
-
-    public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
-        this.onPhotoTapListener = onPhotoTapListener;
     }
 
     //public void setOnTouchListener(View.OnTouchListener l){onTouchListener = l;}
@@ -61,9 +57,19 @@ public class ImageFragment extends Fragment {
                 .deepZoom()
                 .intoImageView(photoView);
 
-        photoView.setOnPhotoTapListener(onPhotoTapListener);
+        photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float x, float y) {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+
+            @Override
+            public void onOutsidePhotoTap() {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+        });
         photoView.setZoomTransitionDuration(375);
-        photoView.setMinimumScale(0.85F);
+        //photoView.setMinimumScale(0.85F);
         photoView.setMaximumScale(4.0F);
 
         return photoView;
