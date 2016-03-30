@@ -38,6 +38,8 @@ import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
+import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -158,7 +160,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(isApplyThemeOnImgAct()
-                ? (getTransparentColor(getPrimaryColor(), getTransparency()))
+                ? (ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()))
                 : (ContextCompat.getColor(getApplicationContext(),
                 isDarkTheme()
                         ? R.color.transparent_dark_gray
@@ -478,7 +480,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
         options.setStatusBarColor
-                (isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+                (isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
 
         // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
@@ -529,7 +531,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     private void setupSystemUI() {
-        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+        toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
                 .setDuration(0).start();
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -540,7 +542,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     private void showSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
-                toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+                toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
                         .setDuration(240).start();
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -571,15 +573,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
         colorAnimation.start();
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 }
 

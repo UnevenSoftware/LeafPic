@@ -43,6 +43,7 @@ import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -594,9 +595,10 @@ public class PhotosActivity extends ThemedActivity {
         adapter.setOnClickListener(albumOnClickListener);
         adapter.setOnLongClickListener(albumOnLongClickListener);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
+        int nSpan = Measure.getPhotosColums(getApplicationContext());
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this,nSpan ));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, Measure.pxToDp(2, getApplicationContext()), true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(nSpan, Measure.pxToDp(2, getApplicationContext()), true));
         mRecyclerView.setFitsSystemWindows(true);
         mRecyclerView.setAdapter(adapter);
 
@@ -646,7 +648,7 @@ public class PhotosActivity extends ThemedActivity {
     public void setupUI() {
 
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        collapsingToolbarLayout.setStatusBarScrimColor(isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        collapsingToolbarLayout.setStatusBarScrimColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()): getPrimaryColor());
         if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
         mRecyclerView.setNestedScrollingEnabled(isCollapsingToolbar());
