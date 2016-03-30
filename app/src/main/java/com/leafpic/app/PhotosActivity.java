@@ -578,7 +578,7 @@ public class PhotosActivity extends ThemedActivity {
         /**** ToolBar*/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(isDarkTheme()==false)
+        if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -587,7 +587,7 @@ public class PhotosActivity extends ThemedActivity {
         adapter.setOnClickListener(albumOnClickListener);
         adapter.setOnLongClickListener(albumOnLongClickListener);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, Measure.pxToDp(2, getApplicationContext()), true));
         mRecyclerView.setFitsSystemWindows(true);
