@@ -16,6 +16,11 @@ public class MadiaStoreHandler {
 
     private String TAG = "MEDIASTORE_HANDLER";
 
+    public static final int FILTER_ALL=45;
+    public static final int FILTER_IMAGE=55;
+    public static final int FILTER_VIDEO=75;
+    public static final int FILTER_GIF=555;
+
     public MadiaStoreHandler(Context ctx) {
         context = ctx;
     }
@@ -60,42 +65,56 @@ public class MadiaStoreHandler {
     }
 
     public ArrayList<Media> getAlbumPhotos(Album a) {
-        return getAlbumPhotos(a.ID, -1, null);
+        return getAlbumPhotos(a.ID, -1, null,FILTER_ALL);
     }
 
     public ArrayList<Media> getAlbumPhotos(Album a, String sort) {
-        return getAlbumPhotos(a.ID, -1, sort);
+        return getAlbumPhotos(a.ID, -1, sort,FILTER_ALL);
+    }
+
+    public ArrayList<Media> getAlbumPhotos(String id, String sort,int filter) {
+        return getAlbumPhotos(id, -1, sort, filter);
     }
 
     public ArrayList<Media> getAlbumPhotos(String id, String sort) {
-        return getAlbumPhotos(id, -1, sort);
+        return getAlbumPhotos(id, -1, sort,FILTER_ALL);
     }
 
-    public int getAlbumPhotosCount(String id) {
-        int c = 0;
+    public int[] getAlbumPhotosCount(String id) {
+        int c[] = new int[2];
         Uri images = MediaStore.Files.getContentUri("external");
         String[] projection = new String[]{ MediaStore.Files.FileColumns.PARENT };
 
-        String selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
-                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
-                + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
+
+        String selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
 
         Cursor cur = context.getContentResolver().query(
-                images, projection,
-                selection,
-                null, null);
+                images, projection, selection, null, null);
         if (cur != null) {
-            c = cur.getCount();
+            c[0] = cur.getCount();
             cur.close();
         }
+        selection = "( "+  MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
+
+        cur = context.getContentResolver().query(
+                images, projection, selection, null, null);
+        if (cur != null) {
+            c[1] = cur.getCount();
+            cur.close();
+        }
+         /*selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
+                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";*/
+
+
         return c;
     }
 
     public ArrayList<Media> getFirstAlbumPhoto(String ID) {
-        return getAlbumPhotos(ID, 1, null);
+        return getAlbumPhotos(ID, 1, null, FILTER_ALL);
     }
 
-    public ArrayList<Media> getAlbumPhotos(String ID, int n, String order) {
+    public ArrayList<Media> getAlbumPhotos(String ID, int n, String order, int filter) {
 
         String limit = n == -1 ? "" : " DESC LIMIT " + n;
         String orderStyle = order != null ? order : MediaStore.Images.Media.DATE_TAKEN;
@@ -112,10 +131,28 @@ public class MadiaStoreHandler {
         };
 
         Uri images = MediaStore.Files.getContentUri("external");
+        String selection;
 
-        String selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
-                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
-                + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
+        switch (filter){
+
+            case FILTER_IMAGE:
+                selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
+                break;
+            case FILTER_VIDEO:
+                selection = "( "+  MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
+                break;
+            case FILTER_GIF:
+                selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and "
+                        + MediaStore.Files.FileColumns.PARENT + "='" + ID + "' and "
+                        + MediaStore.Images.Media.MIME_TYPE + "='image/gif'";
+                break;
+            case FILTER_ALL:
+            default:
+                selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
+                        MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                        + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
+                break;
+        }
 
         Cursor cur = context.getContentResolver().query(
                 images,

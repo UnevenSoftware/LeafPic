@@ -80,5 +80,8 @@
     <!--TESTO-->
     <color name="cp_TextLight">#424242</color>
     <color name="cp_TextDark">#f5f5f5</color>
-
+    <!--TESTO
+    <color name="md_dark_background">#000000</color>
+    <color name="md_red_500">#f44336</color>
+        -->
 </resources>

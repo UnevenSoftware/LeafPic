@@ -116,7 +116,6 @@ public class AlbumsActivity extends ThemedActivity {
         initUI();
         setupUI();
 
-        Toast.makeText(AlbumsActivity.this, "asd: "+Measure.getAlbumsColums(getApplicationContext()), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -467,27 +466,6 @@ public class AlbumsActivity extends ThemedActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
-            case R.id.sort_action:
-                if (albums.getSelectedCount()==0) {//TODO: MUST BE FIXED
-                    View sort_btn = findViewById(R.id.sort_action);
-                    PopupMenu popup = new PopupMenu(AlbumsActivity.this, sort_btn);
-                    popup.setGravity(Gravity.AXIS_CLIP);
-                    popup.getMenuInflater()
-                            .inflate(R.menu.sort, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        public boolean onMenuItemClick(MenuItem item) {
-                            Toast.makeText(
-                                    AlbumsActivity.this,
-                                    "You Clicked: " + item.getTitle(),
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            return true;
-                        }
-                    });
-                    popup.show(); //TODO: CRASH HERE WHEN YOU OPEN SORT WITH SELECTED ITEM PORCO DIOOOOOO
-                }
-                break;
 
             case R.id.refreshhiddenAlbumsButton:
                 albums.loadPreviewHiddenAlbums();

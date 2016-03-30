@@ -109,12 +109,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
             if (SP.getBoolean("set_dark_theme", true))
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.unselected_album));
-            else
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.background_material_light));
+            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.background_material_light));
         }
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos)) + "</font>"));
+                "color='" + textColor + "'> " +a.getContentDescdription(c) + "</font>"));
+        // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
