@@ -22,8 +22,8 @@ issue is.
 
 #### Translations
 
-If you are able to contribute a translation into a language missing from Slide,
-or spot any room for improvement in an existing translation, we greatly
+If you are able to contribute a translation into a language missing in LeafPic,
+or any improvement in an existing translation, we greatly
 appreciate anything you can assist with!
 
 ####Licensing
