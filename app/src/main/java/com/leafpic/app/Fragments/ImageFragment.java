@@ -1,5 +1,6 @@
 package com.leafpic.app.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,18 +20,14 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class ImageFragment extends Fragment {
 
     private String path;
-    private long DataModified;
-    private int orientation;
-    private String MIME;
 
-    public static ImageFragment newInstance(String path, long dateModified, int orientation, String mime) {
+    PhotoView photoView;
+
+    public static ImageFragment newInstance(String path) {
         ImageFragment fragmentFirst = new ImageFragment();
 
         Bundle args = new Bundle();
-        args.putInt("orientation", orientation);
         args.putString("path", path);
-        args.putLong("dateModified", dateModified);
-        args.putString("mime", mime);
         fragmentFirst.setArguments(args);
 
         return fragmentFirst;
@@ -40,16 +37,12 @@ public class ImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        orientation = getArguments().getInt("orientation", 0);
-        DataModified = getArguments().getLong("dateModified", 0);
         path = getArguments().getString("path");
-        MIME = getArguments().getString("mime");
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PhotoView photoView = new PhotoView(container.getContext());
+        photoView = new PhotoView(container.getContext());
 
         Ion.with(getContext())
                 .load(path)

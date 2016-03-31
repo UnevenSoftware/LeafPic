@@ -3,6 +3,7 @@ package com.leafpic.app.utils;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 
 import com.leafpic.app.R;
 
@@ -42,6 +43,19 @@ public class ColorPalette {
 
     public static int getLightTextColor(Context context){
         return ContextCompat.getColor(context, R.color.cp_TextLight);
+    }
+
+    public static int getOscuredColor(int c){
+        float[] hsv = new float[3];
+        int color = c;
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.85f; // value component
+        color = Color.HSVToColor(hsv);
+        return color;
+    }
+
+    public static int getTransparentColor(int color, int alpha){
+        return  ColorUtils.setAlphaComponent(color, alpha);
     }
 
     public static int[] getBaseColors(Context context) {

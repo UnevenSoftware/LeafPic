@@ -48,7 +48,13 @@ public class HandlingPhotos implements Parcelable {
     private ArrayList<Integer> selectedPhotosIndexs;
     private int current;
 
+    private String contentDescription = null;
+
     private Integer last_position_selecte = -1;
+
+    public String getContentDescription() {
+        return contentDescription;
+    }
 
     public HandlingPhotos(Context ctx, Album album) {
         context = ctx;
@@ -60,11 +66,13 @@ public class HandlingPhotos implements Parcelable {
         selectedPhotosIndexs = new ArrayList<Integer>();
 
         DisplayName = album.DisplayName;
+        contentDescription = album.getContentDescdription(context);
 
         if (!hidden) {
             ID = album.ID;
             setSettings();
             medias = as.getAlbumPhotos(album, getSortingMode());
+
         } else {
             ID = album.Path;
             setSettings();
@@ -72,6 +80,10 @@ public class HandlingPhotos implements Parcelable {
             medias = db.getPhotosByAlbum(album.Path);
         }
 
+    }
+
+    public void filterMedias(int filter){
+        medias = as.getAlbumPhotos(ID, getSortingMode(), filter);
     }
 
     public HandlingPhotos(Context ctx, String photoPath) {
@@ -82,7 +94,6 @@ public class HandlingPhotos implements Parcelable {
         selectedMedias = new ArrayList<Media>();
         ID = album.ID;
         medias = as.getAlbumPhotos(album);
-        // setSettings();
     }
 
     public HandlingPhotos(Context ctx) {

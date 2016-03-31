@@ -12,7 +12,7 @@
         app:showAsAction="ifRoom"
         />
     -->
-    <item android:id="@+id/filterPhotos"
+    <item
         android:icon="@mipmap/ic_filter_list_white_24dp"
         android:orderInCategory="1"
         android:title="@string/filter_menu_title"
@@ -26,6 +26,7 @@
                 <item
                     android:id="@+id/all_media_filter"
                     android:title="@string/all"
+                    android:checked="true"
                     app:showAsAction="ifRoom"
                     />
                 <item

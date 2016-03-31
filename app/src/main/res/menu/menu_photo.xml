@@ -74,6 +74,7 @@
                 app:showAsAction="never" />
             <item
                 android:title="@string/open_with"
+                android:id="@+id/open_with"
                 app:showAsAction="never" />
             <item
                 android:title="@string/upload"

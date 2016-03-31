@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.leafpic.app.PhotoPagerActivity;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ColorPalette;
+import com.leafpic.app.utils.Measure;
 
 /**
  * Created by dnld on 23/02/16.
@@ -51,7 +52,7 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public boolean isTransparencyZero() {
-        return 255 - SP.getInt("set_alpha", 0)==255 ? true : false;
+        return 255 - SP.getInt("set_alpha", 0) == 255;
     }
 
     public int getTransparency() {
@@ -82,9 +83,9 @@ public class ThemedActivity extends AppCompatActivity {
         if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
             if(isApplyThemeOnImgAct())
                 if (isNavigationBarColored())
-                    getWindow().setNavigationBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+                    getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
                 else
-                    getWindow().setNavigationBarColor(getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), getTransparency()));
+                    getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
             else
                 getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
         } else
@@ -116,33 +117,25 @@ public class ThemedActivity extends AppCompatActivity {
         if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
             if(isApplyThemeOnImgAct())
                 if (isTraslucentStatusBar() && isTransparencyZero())
-                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 else
-                    getWindow().setStatusBarColor(getTransparentColor(getPrimaryColor(), getTransparency()));
+                    getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
                 getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
         } else {
             if (isTraslucentStatusBar()) {
-                int c = getOscuredColor(getPrimaryColor());
+                int c = ColorPalette.getOscuredColor(getPrimaryColor());
                 getWindow().setStatusBarColor(c);
             } else
                 getWindow().setStatusBarColor(getPrimaryColor());
         }
     }
 
-    public int getOscuredColor(int c){
-        float[] hsv = new float[3];
-        int color = c;
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.85f; // value component
-        color = Color.HSVToColor(hsv);
-        return color;
-    }
 
-    public int getTransparentColor(int color, int alpha){
+    /*public int getTransparentColor(int color, int alpha){
         int res = ColorUtils.setAlphaComponent(color, alpha);
         return  res;
-    }
+    }*/
 
     public void updateTheme(){
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_teal_500));//TEAL CARD BG DEFAULT;

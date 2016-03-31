@@ -1,5 +1,7 @@
 package com.leafpic.app;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,9 +38,9 @@ import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
+import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
-import com.nineoldandroids.animation.ArgbEvaluator;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -69,10 +71,10 @@ public class PhotoPagerActivity extends ThemedActivity {
         setContentView(R.layout.activity_pager);
 
         try {
+
             if (getIntent().getData() != null) { /*** Call from android.View */
                 photos = new HandlingPhotos(getApplicationContext(), getIntent().getData().getPath());
                 photos.setCurrentPhoto(getIntent().getData().getPath());
-
             } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity */
                 Bundle data = getIntent().getExtras();
                 photos = data.getParcelable("album");
@@ -118,18 +120,13 @@ public class PhotoPagerActivity extends ThemedActivity {
         adapter.setVideoOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Move to VideoFragment
-                /*Media p = photos.getCurrentPhoto();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.Path));
-                intent.setDataAndType(Uri.parse(p.Path), p.MIME);
-                startActivity(intent);*/
                 Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
                         .setData(photos.getCurrentPhoto().getUri());
                 startActivity(mpdIntent);
             }
         });
 
-        getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + this.getString(R.string.of) + " " + photos.medias.size());
+        getSupportActionBar().setTitle((photos.getCurrentPhotoIndex() + 1) + " " + getString(R.string.of) + " " + photos.medias.size());
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(photos.getCurrentPhotoIndex());
@@ -143,7 +140,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             @Override
             public void onPageSelected(int position) {
                 photos.setCurrentPhotoIndex(position);
-                toolbar.setTitle((position + 1) + " " + PhotoPagerActivity.this.getString(R.string.of) + " " + photos.medias.size());
+                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + photos.medias.size());
                 if (!fullscreenmode) new Handler().postDelayed(new Runnable() {
                     public void run() {
                         hideSystemUI();
@@ -163,15 +160,13 @@ public class PhotoPagerActivity extends ThemedActivity {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(isApplyThemeOnImgAct()
-                ? (getTransparentColor(getPrimaryColor(), getTransparency()))
+                ? (ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()))
                 : (ContextCompat.getColor(getApplicationContext(),
                 isDarkTheme()
                         ? R.color.transparent_dark_gray
                         : R.color.transparent_white_gray)));
 
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
-
-
 
         if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
@@ -199,7 +194,6 @@ public class PhotoPagerActivity extends ThemedActivity {
     public void onResume() {
         super.onResume();
         setupUI();
-        //Toast.makeText(PhotoPagerActivity.this, "resume", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -237,7 +231,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             copyFileToDownloads(imageUri);
-                            //getFragmentManager().invalidateOptionsMenu();
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);
@@ -263,9 +256,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         photos.scanFile(new String[]{photos.getCurrentPhoto().Path});
     }
 
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -289,31 +279,10 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.shareButton:
-                String file_path = photos.medias.get(mViewPager.getCurrentItem()).Path;
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(StringUtils.getMimeType(file_path));
-                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file_path));
-                startActivity(Intent.createChooser(share, "Share Image"));
-                return true;
-
-            case R.id.deletePhoto:
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
-                builder1.setMessage(R.string.delete_album_message);
-                builder1.setPositiveButton(this.getString(R.string.delete_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        photos.deleteCurrentPhoto();
-                        if (photos.medias.size() == 0)
-                            startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
-                        adapter.notifyDataSetChanged();
-                        toolbar.setTitle(mViewPager.getCurrentItem() + 1 + " of " + photos.medias.size());
-
-                    }
-                });
-                builder1.setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                builder1.show();
+                share.setType(photos.medias.get(mViewPager.getCurrentItem()).MIME);
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + photos.medias.get(mViewPager.getCurrentItem()).Path));
+                startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
             case R.id.edit_photo:
@@ -325,13 +294,40 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.useAsIntent:
-                String file_path_use_as = photos.medias.get(mViewPager.getCurrentItem()).Path;
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-                intent.setDataAndType(Uri.parse("file://" + file_path_use_as), "image/*");
-                intent.putExtra("jpg", StringUtils.getMimeType(file_path_use_as));
-                startActivity(Intent.createChooser(intent, "Use As"));
+                intent.setDataAndType(
+                        Uri.parse("file://" + photos.medias.get(mViewPager.getCurrentItem()).Path),
+                        photos.medias.get(mViewPager.getCurrentItem()).MIME);
+                startActivity(Intent.createChooser(intent, getString(R.string.use_as)));
                 return true;
 
+            case R.id.open_with:
+                Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
+                intentopenWith.setDataAndType(
+                        Uri.parse("file://" + photos.medias.get(mViewPager.getCurrentItem()).Path),
+                        photos.medias.get(mViewPager.getCurrentItem()).MIME);
+                startActivity(Intent.createChooser(intentopenWith, getString(R.string.open_with)));
+                break;
+
+            case R.id.deletePhoto:
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
+                builder1.setMessage(R.string.delete_album_message);
+                builder1.setPositiveButton(this.getString(R.string.delete_action), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        photos.deleteCurrentPhoto();
+                        if (photos.medias.size() == 0)
+                            startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
+                        adapter.notifyDataSetChanged();
+                        toolbar.setTitle((mViewPager.getCurrentItem()+1) + getString(R.string.of) + photos.medias.size());
+
+                    }
+                });
+                builder1.setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                builder1.show();
+                break;
 
             case R.id.renamePhoto:
                 final AlertDialog.Builder RenameDialog;
@@ -484,7 +480,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
         options.setStatusBarColor
-                (isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+                (isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
 
         // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
@@ -535,7 +531,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     private void setupSystemUI() {
-        toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+        toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
                 .setDuration(0).start();
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -546,7 +542,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     private void showSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
-                toolbar.animate().translationY(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator())
+                toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
                         .setDuration(240).start();
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -577,15 +573,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
         colorAnimation.start();
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 }
 

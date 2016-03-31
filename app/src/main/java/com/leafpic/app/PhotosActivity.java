@@ -39,9 +39,11 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.HandlingPhotos;
+import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -370,19 +372,26 @@ public class PhotosActivity extends ThemedActivity {
                 updateHeaderContent();
                 break;
 
-            /*TODO:FIX THIS >LIST OR GRID
-            case R.id.action_mode_view:
-                if(listmode)
-                    item.setIcon(R.mipmap.ic_view_module_white_24dp);
-                else
-                    item.setIcon(R.mipmap.ic_view_list_white_24dp);
+            case R.id.all_media_filter:
+                photos.filterMedias(MadiaStoreHandler.FILTER_ALL);
+                adapter.updateDataset(photos.medias);
+                item.setChecked(true);
+                break;
+            case R.id.video_media_filter:
+                photos.filterMedias(MadiaStoreHandler.FILTER_VIDEO);
+                adapter.updateDataset(photos.medias);
+                item.setChecked(true);
+                break;
+            case R.id.image_media_filter:
+                photos.filterMedias(MadiaStoreHandler.FILTER_IMAGE);
+                adapter.updateDataset(photos.medias);
+                item.setChecked(true);
+                break;
 
-            break;
-            */
-            case R.id.filterPhotos:
-                    final PopupMenu popupfilter = new PopupMenu(PhotosActivity.this, findViewById(R.id.filterPhotos));
-                    popupfilter.setGravity(Gravity.AXIS_PULL_BEFORE);
-                    popupfilter.getMenuInflater().inflate(R.menu.filter, popupfilter.getMenu());
+            case R.id.gifs_media_filter:
+                photos.filterMedias(MadiaStoreHandler.FILTER_GIF);
+                adapter.updateDataset(photos.medias);
+                item.setChecked(true);
                 break;
 
             case R.id.name_sort_action:
@@ -457,9 +466,14 @@ public class PhotosActivity extends ThemedActivity {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
                             photos.DisplayName = txt_edit.getText().toString();
                             updateHeaderContent();
+<<<<<<< HEAD
                             //UpdatePhotos();//TODO updatePhoto photos
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
+=======
+                        }
+                        else StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
+>>>>>>> refs/remotes/origin/pr/12
                     }
                 });
                 RenameDialog.show();
@@ -586,9 +600,10 @@ public class PhotosActivity extends ThemedActivity {
         adapter.setOnClickListener(albumOnClickListener);
         adapter.setOnLongClickListener(albumOnLongClickListener);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
+        int nSpan = Measure.getPhotosColums(getApplicationContext());
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this,nSpan ));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, Measure.pxToDp(2, getApplicationContext()), true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(nSpan, Measure.pxToDp(2, getApplicationContext()), true));
         mRecyclerView.setFitsSystemWindows(true);
         mRecyclerView.setAdapter(adapter);
 
@@ -638,8 +653,8 @@ public class PhotosActivity extends ThemedActivity {
     public void setupUI() {
 
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        collapsingToolbarLayout.setStatusBarScrimColor(isTraslucentStatusBar() ? getOscuredColor(getPrimaryColor()) : getPrimaryColor());
-        if(isDarkTheme()==false)
+        collapsingToolbarLayout.setStatusBarScrimColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()): getPrimaryColor());
+        if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
         mRecyclerView.setNestedScrollingEnabled(isCollapsingToolbar());
 
@@ -663,7 +678,7 @@ public class PhotosActivity extends ThemedActivity {
             String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
             textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
-                    "color='#FFFFFF'> " + (photos.medias.size() == 1 ? getString(R.string.singular_photo) : getString(R.string.plural_photos)) + "</font>"));
+                    "color='#FFFFFF'> " + photos.getContentDescription() + "</font>"));
 
         }
     }

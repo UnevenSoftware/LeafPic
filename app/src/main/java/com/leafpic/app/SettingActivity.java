@@ -277,7 +277,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onColorChanged(int c) {
                 if(isTraslucentStatusBar()) {
-                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 } else getWindow().setStatusBarColor(c);
 
                 toolbar.setBackgroundColor(c);
@@ -290,7 +290,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onColorChanged(int c) {
                 if(isTraslucentStatusBar()) {
-                    getWindow().setStatusBarColor(getOscuredColor(c));
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(c));
                 } else getWindow().setStatusBarColor(c);
 
                 toolbar.setBackgroundColor(c);
@@ -306,7 +306,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(isTraslucentStatusBar()) {
-                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 } else getWindow().setStatusBarColor(getPrimaryColor());
 
                 toolbar.setBackgroundColor(getPrimaryColor());
@@ -321,7 +321,7 @@ public class SettingActivity extends ThemedActivity {
                 updateTheme();
                 setNavBarColor();
                 if(isTraslucentStatusBar()) {
-                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 } else {
                     getWindow().setStatusBarColor(getPrimaryColor());
                 }
@@ -332,7 +332,7 @@ public class SettingActivity extends ThemedActivity {
             public void onDismiss(DialogInterface dialog) {
 
                 if(isTraslucentStatusBar()) {
-                    getWindow().setStatusBarColor(getOscuredColor(getPrimaryColor()));
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 } else getWindow().setStatusBarColor(getPrimaryColor());
 
                 toolbar.setBackgroundColor(getPrimaryColor());
