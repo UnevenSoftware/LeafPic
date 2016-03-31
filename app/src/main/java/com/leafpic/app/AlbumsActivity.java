@@ -116,6 +116,8 @@ public class AlbumsActivity extends ThemedActivity {
         initUI();
         setupUI();
 
+        Toast.makeText(AlbumsActivity.this, "asd: "+Measure.getAlbumsColums(getApplicationContext()), Toast.LENGTH_SHORT).show();
+
     }
 
     private void StartAppIntro() {
@@ -158,7 +160,7 @@ public class AlbumsActivity extends ThemedActivity {
             toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
 
         /**** RECYCLER VIEW ****/
-        int nSpan = 2;//nColumns
+        int nSpan = Measure.getAlbumsColums(getApplicationContext());//nColumns
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
