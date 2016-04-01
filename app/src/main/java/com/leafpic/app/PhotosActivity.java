@@ -112,7 +112,7 @@ public class PhotosActivity extends ThemedActivity {
             //   finish();
 
         } catch (Exception e) {
-            Log.d("asdff", "onCreate: asddsad", e);
+           // Log.d("asdff", "onCreate: asddsad", e);
             finish();
         }
 
@@ -588,7 +588,7 @@ public class PhotosActivity extends ThemedActivity {
         if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
         adapter = new PhotosAdapter(photos.medias, getApplicationContext());
         adapter.setOnClickListener(albumOnClickListener);
