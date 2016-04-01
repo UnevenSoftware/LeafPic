@@ -359,6 +359,7 @@ public class HandlingPhotos implements Parcelable {
             e.printStackTrace();
         }
     }
+
     public void removePhoto(int index) {
         if (index > -1 && index < medias.size())
         medias.remove(index);

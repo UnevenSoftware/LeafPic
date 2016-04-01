@@ -54,6 +54,9 @@ public class HandlingAlbums implements Parcelable {
             selectedAlbums = null;
         }
     }
+    public void setContext(Context c){
+        context=c;
+    }
 
     public void loadPreviewAlbums() {
         MadiaStoreHandler as = new MadiaStoreHandler(context);
