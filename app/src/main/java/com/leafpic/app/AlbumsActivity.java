@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
@@ -58,8 +59,9 @@ public class AlbumsActivity extends ThemedActivity {
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
-    boolean click = false;
+    //boolean click = false;
     private SwipeRefreshLayout SwipeContainerRV;
+    int nReloads=-1;
 
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
@@ -74,7 +76,8 @@ public class AlbumsActivity extends ThemedActivity {
     private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (click) {
+            Log.d(TAG, "onClick: "+nReloads);
+            if (nReloads % 2 == 0) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 if (editmode) {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
@@ -112,6 +115,15 @@ public class AlbumsActivity extends ThemedActivity {
             }
         */
 
+        try {
+            Bundle data = getIntent().getExtras();
+            albums = data.getParcelable("albums");
+            assert albums != null;
+            albums.setContext(AlbumsActivity.this);
+        } catch (NullPointerException e) {
+            Log.d("asdff", "onCreate: asddsad", e);
+        }
+
         /**** SET UP UI ****/
         initUI();
         setupUI();
@@ -138,7 +150,8 @@ public class AlbumsActivity extends ThemedActivity {
         setupUI();
         invalidateOptionsMenu();
         //setRecentApp(getString(R.string.app_name));
-        new PrepareAlbumTask().execute();
+       if(nReloads != -1) new PrepareAlbumTask().execute();
+        nReloads++;
     }
 
     private void LoadAlbumsData() {
@@ -182,11 +195,8 @@ public class AlbumsActivity extends ThemedActivity {
         /**** ALBUM UI LOAD ***/
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
 
-        /**** ON ALBUM LONG CLICK ***/
-        //adapt.setOnLongClickListener(null);
-
-        /**** ON ALBUMS CLICK ***/
-        //adapt.setOnClickListener(null);
+        adapt.setOnClickListener(albumOnClickListener);
+        adapt.setOnLongClickListener(albumOnLongCLickListener);
 
         mRecyclerView.setAdapter(adapt);
 
@@ -309,47 +319,6 @@ public class AlbumsActivity extends ThemedActivity {
         });
     }
 
-    //region PERMISSION
-    public void checkPermissions() {
-
-        /* TODO: ASK IN FUTURE IF YOU NEED IT
-        if (ContextCompat.checkSelfPermission(AlbumsActivity.this, Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(AlbumsActivity.this,
-                    Manifest.permission.INTERNET))
-                StringUtils.showToast(AlbumsActivity.this, "eddai dammi internet");
-            else
-                ActivityCompat.requestPermissions(AlbumsActivity.this,
-                        new String[]{Manifest.permission.INTERNET}, 1);
-        }
-        */
-        /**** STORAGE PERMISSION ****/
-        if (ContextCompat.checkSelfPermission(AlbumsActivity.this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(AlbumsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-                StringUtils.showToast(AlbumsActivity.this, this.getString(R.string.storage_permision_denied));
-            else {
-                ActivityCompat.requestPermissions(AlbumsActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-            }
-        } else LoadAlbumsData();
-    }
-    //endregion
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 0:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    //TODO ma che porco dio bisogna fare qua?
-                    break;
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    StringUtils.showToast(AlbumsActivity.this, "I GOT INTERNET");
-                break;
-        }
-    }
 
     void updateSelectedStuff() {
         int c;
@@ -576,26 +545,22 @@ public class AlbumsActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            click = false;
+            nReloads++;
             SwipeContainerRV.setRefreshing(true);
-            adapt.setOnLongClickListener(null);
-            adapt.setOnClickListener(null);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            checkPermissions();
+            nReloads--;
+            LoadAlbumsData();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-
             adapt.updateDataset(albums.dispAlbums);
-            adapt.setOnClickListener(albumOnClickListener);
-            adapt.setOnLongClickListener(albumOnLongCLickListener);
-            click = true;
+            nReloads++;
             SwipeContainerRV.setRefreshing(false);
         }
     }
