@@ -76,7 +76,6 @@ public class AlbumsActivity extends ThemedActivity {
     private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "onClick: "+nReloads);
             if (nReloads % 2 == 0) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 if (editmode) {

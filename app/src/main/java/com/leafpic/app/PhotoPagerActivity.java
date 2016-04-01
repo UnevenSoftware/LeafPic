@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -95,10 +98,18 @@ public class PhotoPagerActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.photos_pager);
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
-
-
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                .color(Color.WHITE)
+                .sizeDp(18));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRecentApp(getString(R.string.app_name));
         setupSystemUI();
 
@@ -260,10 +271,6 @@ public class PhotoPagerActivity extends ThemedActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
-            case android.R.id.home:
-                finish();
-                break;
 
             case R.id.rotate_180:
                 ((ImageFragment) adapter.getItem(photos.getCurrentPhotoIndex())).rotatePicture(180);

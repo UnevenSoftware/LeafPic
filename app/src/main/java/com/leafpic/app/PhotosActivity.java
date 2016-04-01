@@ -112,7 +112,7 @@ public class PhotosActivity extends ThemedActivity {
             //   finish();
 
         } catch (Exception e) {
-            Log.d("asdff", "onCreate: asddsad", e);
+           // Log.d("asdff", "onCreate: asddsad", e);
             finish();
         }
 
