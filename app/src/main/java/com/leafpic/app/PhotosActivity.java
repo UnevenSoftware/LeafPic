@@ -18,7 +18,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -466,14 +465,9 @@ public class PhotosActivity extends ThemedActivity {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
                             photos.DisplayName = txt_edit.getText().toString();
                             updateHeaderContent();
-<<<<<<< HEAD
                             //UpdatePhotos();//TODO updatePhoto photos
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
-=======
-                        }
-                        else StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
->>>>>>> refs/remotes/origin/pr/12
                     }
                 });
                 RenameDialog.show();
