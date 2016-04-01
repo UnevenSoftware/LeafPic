@@ -18,7 +18,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -462,12 +461,13 @@ public class PhotosActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (txt_edit.length()!=0) {
+                        if (txt_edit.length() != 0) {
                             albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
-                            photos.DisplayName=txt_edit.getText().toString();
+                            photos.DisplayName = txt_edit.getText().toString();
                             updateHeaderContent();
-                        }
-                        else StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
+                            //UpdatePhotos();//TODO updatePhoto photos
+                        } else
+                            StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
                     }
                 });
                 RenameDialog.show();
@@ -509,8 +509,7 @@ public class PhotosActivity extends ThemedActivity {
                             finish();
                         }
                     }
-                })
-                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                }).setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder1.show();
                 break;
@@ -580,7 +579,7 @@ public class PhotosActivity extends ThemedActivity {
 
     public void initUiTweaks() {
 
-        setNavBarColor(); 
+        setNavBarColor();
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         /**** ToolBar*/

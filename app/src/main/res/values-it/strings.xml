@@ -19,7 +19,7 @@
     <string name="plural_photos">Immagini</string>
     <!--DIALOG-->
     <string name="exclude_action">ESCLUDI</string>
-    <string name="cancel_action">CANCELLA</string>
+    <string name="cancel_action">ANNULLA</string>
     <string name="delete_action">ELIMINA</string>
     <string name="hide_action">NASCONDI</string>
     <string name="ok_action">OK</string>
@@ -53,9 +53,9 @@
         non essere visibili da applicazioni di terzi!
         è consigliato l uso dell opzione ESCLUDI!)
     </string>
-    <string name="delete_album_message">Cancellare l intero album?</string>
-    <string name="delete_photos_message">Cancellare i media selezionati?</string>
-    <string name="delete_photo_message">Cacellare il media selezionato?</string>
+    <string name="delete_album_message">Eliminare l intero album?</string>
+    <string name="delete_photos_message">Eliminare i media selezionati?</string>
+    <string name="delete_photo_message">CEliminare il media selezionato?</string>
     <string name="exclude_album_message">Escludere l album selezionato?</string>
 
     <!--SETTINGS PREFERENCES-->

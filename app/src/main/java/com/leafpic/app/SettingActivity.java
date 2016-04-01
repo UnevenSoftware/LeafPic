@@ -553,6 +553,34 @@ public class SettingActivity extends ThemedActivity {
         txtDT.setTextColor(color);
         txtNB.setTextColor(color);
 
+        /** Sub Text Views**/
+
+        color = ContextCompat.getColor(SettingActivity.this, isDarkTheme()
+                ? R.color.md_grey_400
+                : R.color.md_grey_600);
+
+        TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
+        TextView txtOrient_Sub = (TextView) findViewById(R.id.picture_orientation_Item_Sub);
+        TextView txtATT_Sub = (TextView) findViewById(R.id.apply_theme_3thAct_title_Sub);
+        TextView txtSBT_Sub = (TextView) findViewById(R.id.seek_bar_alpha_title_Sub);
+        TextView txtC_Sub = (TextView) findViewById(R.id.collapsing_toolbar_Item_Sub);
+        TextView txtTSB_Sub = (TextView) findViewById(R.id.Traslucent_StatusBar_Item_Sub);
+        TextView txtPC_Sub = (TextView) findViewById(R.id.PrimaryColor_Item_Sub);
+        TextView txtAC_Sub = (TextView) findViewById(R.id.accentColor_Item_Sub);
+        TextView txtDT_Sub = (TextView) findViewById(R.id.DarkTheme_Item_Sub);
+        TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
+
+        txtMax_Sub.setTextColor(color);
+        txtOrient_Sub.setTextColor(color);
+        txtATT_Sub.setTextColor(color);
+        txtSBT_Sub.setTextColor(color);
+        txtC_Sub.setTextColor(color);
+        txtTSB_Sub.setTextColor(color);
+        txtPC_Sub.setTextColor(color);
+        txtAC_Sub.setTextColor(color);
+        txtDT_Sub.setTextColor(color);
+        txtNB_Sub.setTextColor(color);
+
 
         color = ContextCompat.getColor(SettingActivity.this, isDarkTheme()
                 ? R.color.md_dark_cards
