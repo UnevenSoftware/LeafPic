@@ -161,7 +161,7 @@
         <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
         <string name="error_querying_decoders">Unable to query device decoders</string>
         <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
-        <string name="storage_permission_denied">Permission to access storage was denied</string>
+        <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
 
         <string name="video_player">Video Player</string>
     <string name="media">Media</string>
