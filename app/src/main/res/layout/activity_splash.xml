@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Splah_RelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/md_dark_background" >
+    >
 
     <ImageView
+        android:padding="40dp"
         android:id="@+id/imgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:src="@drawable/leafpic_big" />
 
+    <!--
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -20,5 +24,6 @@
         android:gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:text="LeafPic ROCKS!!!!" />
+    -->
 
 </RelativeLayout>

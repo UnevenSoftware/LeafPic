@@ -8,25 +8,29 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.widget.RelativeLayout;
 
 import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.StringUtils;
 
 /**
  * Created by dnld on 01/04/16.
  */
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends ThemedActivity {
 
     //String now_playing, earned;
     HandlingAlbums albums;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         albums = new HandlingAlbums(SplashScreen.this);
 
         new PrefetchData().execute();
+        RelativeLayout RL = (RelativeLayout) findViewById(R.id.Splah_RelativeLayout);
+        RL.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background));
     }
 
     public void checkPermissions() {
