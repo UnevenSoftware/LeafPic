@@ -32,10 +32,9 @@
                 android:id="@+id/general_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
                 >
 
                 <LinearLayout
@@ -61,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
                             android:orientation="horizontal"
-                            android:weightSum="6"
+                            android:weightSum="10"
                             android:paddingTop="8dp"
                             android:paddingBottom="8dp"
                             >
@@ -70,7 +69,7 @@
                                 android:layout_height="22dp"
                                 android:layout_width="0dp"
                                 android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 app:iiv_icon="gmd-gradient"
                                 />
 
@@ -78,7 +77,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:layout_width="0dp"
-                                android:layout_weight="4"
+                                android:layout_weight="6"
                                 >
                                 <TextView
                                     android:id="@+id/collapsing_toolbar_Item"
@@ -108,7 +107,7 @@
                                 android:layout_height="match_parent"
                                 android:paddingRight="5dp"
                                 android:gravity="center"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 />
                         </LinearLayout>
 
@@ -119,7 +118,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="15dp"
                         >
@@ -130,13 +129,13 @@
                             android:layout_height="22dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-web-asset"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             />
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="4"
+                            android:layout_weight="6"
                             >
                             <TextView
                                 android:id="@+id/Traslucent_StatusBar_Item"
@@ -165,7 +164,7 @@
                             android:layout_height="match_parent"
                             android:paddingRight="5dp"
                             android:gravity="center"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -179,10 +178,10 @@
                 android:id="@+id/preview_picture_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="2dp">
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -206,7 +205,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         >
@@ -216,7 +215,7 @@
                             android:layout_height="22dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             app:iiv_icon="gmd-brightness-high" />
 
 
@@ -224,7 +223,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="4"
+                            android:layout_weight="6"
                             >
                             <TextView
                                 android:id="@+id/max_luminosita_Item"
@@ -253,7 +252,7 @@
                             android:layout_height="match_parent"
                             android:paddingRight="5dp"
                             android:gravity="center"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             />
                     </LinearLayout>
 
@@ -263,7 +262,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         >
@@ -273,14 +272,14 @@
                             android:layout_height="22dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             app:iiv_icon="gmd-screen-rotation" />
 
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="4"
+                            android:layout_weight="6"
                             >
                             <TextView
                                 android:id="@+id/picture_orientation_Item"
@@ -311,7 +310,7 @@
                             android:layout_height="match_parent"
                             android:paddingRight="5dp"
                             android:gravity="center"
-                            android:layout_weight="1" />
+                            android:layout_weight="2" />
                     </LinearLayout>
 
 
@@ -321,7 +320,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         >
@@ -331,13 +330,13 @@
                             android:layout_height="22dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             app:iiv_icon="gmd-brush" />
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="4"
+                            android:layout_weight="6"
                             >
                             <TextView
                                 android:id="@+id/apply_theme_3thAct_title"
@@ -366,7 +365,7 @@
                             android:layout_height="match_parent"
                             android:paddingRight="5dp"
                             android:gravity="center"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             />
                     </LinearLayout>
                     <!--DIVIDER VIEW-->
@@ -459,10 +458,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
                 app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -493,7 +490,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:weightSum="6"
+                            android:weightSum="10"
                             android:paddingTop="8dp"
                             android:paddingBottom="8dp"
                             >
@@ -503,14 +500,14 @@
                                 android:layout_height="22dp"
                                 android:layout_width="0dp"
                                 android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 app:iiv_icon="gmd-color-lens"
                                 />
                             <LinearLayout
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:layout_width="0dp"
-                                android:layout_weight="5"
+                                android:layout_weight="8"
                                 >
                                 <TextView
                                     android:id="@+id/PrimaryColor_Item"
@@ -544,7 +541,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         >
@@ -554,14 +551,14 @@
                             android:layout_height="22dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             app:iiv_icon="gmd-colorize"
                             />
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="5"
+                            android:layout_weight="8"
                             >
                             <TextView
                                 android:id="@+id/accentColor_Item"
@@ -590,7 +587,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         >
@@ -600,14 +597,14 @@
                             android:layout_height="22dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             app:iiv_icon="gmd-invert-colors"
                             />
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="4"
+                            android:layout_weight="6"
                             >
                             <TextView
                                 android:id="@+id/DarkTheme_Item"
@@ -636,7 +633,7 @@
                             android:layout_height="match_parent"
                             android:paddingRight="5dp"
                             android:gravity="center"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             />
                     </LinearLayout>
                     <!--COLORED NAV BAR-->
@@ -646,7 +643,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="6"
+                        android:weightSum="10"
                         android:paddingTop="8dp"
                         android:paddingBottom="15dp"
                         >
@@ -656,14 +653,14 @@
                             android:layout_height="22dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             app:iiv_icon="gmd-video-label"
                             />
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_width="0dp"
-                            android:layout_weight="4"
+                            android:layout_weight="6"
                             >
                             <TextView
                                 android:id="@+id/NavBar_Item"
@@ -692,7 +689,7 @@
                             android:layout_height="match_parent"
                             android:paddingRight="5dp"
                             android:gravity="center"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             />
                     </LinearLayout>
                 </LinearLayout>
