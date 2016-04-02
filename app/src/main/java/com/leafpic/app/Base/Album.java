@@ -23,7 +23,6 @@ public class Album implements Parcelable {
 
     ArrayList<Media> medias;
     private int[] count = new int[2];
-    private boolean hidden = false;
     private boolean selected = false;
     private String coverPath = null;
 
@@ -47,17 +46,10 @@ public class Album implements Parcelable {
         medias = new ArrayList<Media>();
         DisplayName = displayName;
         Path = path;
-        setHidden(hidden);
         this.count[0] = count;
     }
 
-    public boolean isHidden() {
-        return hidden;
-    }
 
-    public void setHidden(boolean value) {
-        hidden = value;
-    }
 
     public boolean isSelected() {
         return selected;
@@ -112,7 +104,6 @@ public class Album implements Parcelable {
         } else {
             medias = null;
         }
-        hidden = in.readByte() != 0x00;
         selected = in.readByte() != 0x00;
         coverPath = in.readString();
         count[0] = in.readInt();
@@ -135,7 +126,6 @@ public class Album implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(medias);
         }
-        dest.writeByte((byte) (hidden ? 0x01 : 0x00));
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
         dest.writeString(coverPath);
         dest.writeInt(count[0]);

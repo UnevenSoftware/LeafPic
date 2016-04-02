@@ -63,9 +63,8 @@ public class PhotosActivity extends ThemedActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     ImageView headerImage;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    //SwipeRefreshLayout mSwipeRefreshLayout;
     AppBarLayout appBarLayout;
-    boolean listmode=false;
     boolean editmode = false;
     PhotosAdapter adapter;
 
@@ -171,11 +170,6 @@ public class PhotosActivity extends ThemedActivity {
     public boolean onPrepareOptionsMenu(final Menu menu) {
         MenuItem opt;
         setOptionsAlbmuMenusItemsVisible(menu, !editmode);
-
-        if (photos.hidden)
-            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.unhide));
-        else
-            menu.findItem(R.id.hideAlbumButton).setTitle(getString(R.string.hide));
 
         if (photos.getSelectedCount() == 0) {
             editmode = false;
@@ -515,29 +509,25 @@ public class PhotosActivity extends ThemedActivity {
                 break;
 
             case R.id.hideAlbumButton:
-                if (photos.hidden) {
-                    albums.unHideAlbum(photos.FolderPath);
-                    finish();
-                } else {
 
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(PhotosActivity.this);
-                    builder2.setMessage(R.string.delete_album_message)
-                            .setPositiveButton(getString(R.string.hide_action), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    albums.hideAlbum(photos.FolderPath, photos.medias);
-                                }
-                            })
-                            .setNeutralButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    customAlbumsHandler.excludeAlbum(photos.ID);
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {}});
-                    builder2.show();
-                }
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(PhotosActivity.this);
+                builder2.setMessage(R.string.delete_album_message)
+                        .setPositiveButton(getString(R.string.hide_action), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                albums.hideAlbum(photos.FolderPath, photos.medias);
+                            }
+                        })
+                        .setNeutralButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                customAlbumsHandler.excludeAlbum(photos.ID);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {}});
+                builder2.show();
+
                 break;
 
             case R.id.sharePhotos:

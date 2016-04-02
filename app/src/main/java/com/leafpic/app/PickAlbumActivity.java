@@ -20,6 +20,7 @@ import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.Measure;
+import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -36,7 +37,6 @@ public class PickAlbumActivity extends ThemedActivity{
     PickAlbumAdapter adapt;
     String photoPaths;
     String photosIndexes;
-    boolean hidden=false;
     int code;
     HandlingPhotos p;
 
@@ -71,10 +71,14 @@ public class PickAlbumActivity extends ThemedActivity{
 
         final FloatingActionButton fabhidden = (FloatingActionButton) findViewById(R.id.fab_hidden);
         fabhidden.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+        fabhidden.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_add)
+                .color(Color.WHITE)
+                .sizeDp(15));
         fabhidden.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadAlbumPreview();
+                StringUtils.showToast(getApplicationContext(),"coming soon");
             }
         });
         loadAlbumPreview();
@@ -88,9 +92,7 @@ public class PickAlbumActivity extends ThemedActivity{
     }
 
     private void loadAlbumPreview(){
-        if (hidden) albums.loadPreviewHiddenAlbums();
-        else albums.loadPreviewAlbums();
-        hidden=!hidden;
+        albums.loadPreviewAlbums();
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         adapt = new PickAlbumAdapter(albums.dispAlbums,getApplicationContext());
         adapt.setOnClickListener(new View.OnClickListener() {
