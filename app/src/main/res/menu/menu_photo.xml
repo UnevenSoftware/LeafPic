@@ -7,13 +7,13 @@
     <item
         android:id="@+id/shareButton"
         android:title="@string/share"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:orderInCategory="0"
     />
     <item
         android:id="@+id/deletePhoto"
         android:title="@string/menu_delete"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:orderInCategory="1"
         />
     <group android:id="@+id/only_photos_otions">
@@ -26,7 +26,7 @@
             android:id="@+id/rotatePhoto"
             android:title="@string/rotate"
             android:orderInCategory="2"
-            app:showAsAction="ifRoom">
+            app:showAsAction="always">
             <menu>
                 <item
                     android:id="@+id/rotate_right_90"
@@ -49,12 +49,10 @@
     <item
         android:id="@+id/copyAction"
         android:title="@string/copy_to"
-        android:orderInCategory="3"
         app:showAsAction="never" />
     <item
         android:id="@+id/moveAction"
         android:title="@string/move_to"
-        android:orderInCategory="4"
         app:showAsAction="never" />
 
     <item

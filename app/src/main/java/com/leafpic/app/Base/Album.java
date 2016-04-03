@@ -42,15 +42,6 @@ public class Album implements Parcelable {
         this.ID = ID;
     }
 
-    public Album(String path, String displayName, boolean hidden, int count) {
-        medias = new ArrayList<Media>();
-        DisplayName = displayName;
-        Path = path;
-        this.count[0] = count;
-    }
-
-
-
     public boolean isSelected() {
         return selected;
     }

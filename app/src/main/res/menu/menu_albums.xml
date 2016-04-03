@@ -6,7 +6,8 @@
 
     <item android:id="@+id/search_action"
         android:title="@string/search_menu"
-        app:showAsAction="ifRoom"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"
         />
 
     <item android:id="@+id/sort_action"
