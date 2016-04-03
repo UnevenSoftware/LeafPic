@@ -58,7 +58,6 @@ public class PhotosActivity extends ThemedActivity {
 
     HandlingAlbums albums = new HandlingAlbums(PhotosActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(PhotosActivity.this);
-    HandlingPhotos photos;
     FloatingActionButton fabCamera;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
@@ -73,7 +72,7 @@ public class PhotosActivity extends ThemedActivity {
         @Override
         public boolean onLongClick(View v) {
             TextView is = (TextView) v.findViewById(R.id.photo_path);
-            adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
+            adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
             editmode = true;
             invalidateOptionsMenu();
             return true;
@@ -84,18 +83,20 @@ public class PhotosActivity extends ThemedActivity {
         public void onClick(View v) {
             TextView is = (TextView) v.findViewById(R.id.photo_path);
             if (editmode) {
-                adapter.notifyItemChanged(photos.toggleSelectPhoto(is.getTag().toString()));
+                adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
                 invalidateOptionsMenu();
             } else {
-                photos.setCurrentPhoto(is.getTag().toString());
+                album.setCurrentPhoto(is.getTag().toString());
                 Intent intent = new Intent(PhotosActivity.this, PhotoPagerActivity.class);
                 Bundle b = new Bundle();
-                b.putParcelable("album", photos);
+                b.putParcelable("album", album);
                 intent.putExtras(b);
                 startActivity(intent);
             }
         }
     };
+
+    Album album;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,12 @@ public class PhotosActivity extends ThemedActivity {
         try {
             Bundle data = getIntent().getExtras();
             final Album album = data.getParcelable("album");
-            photos = new HandlingPhotos(PhotosActivity.this, album);
+            assert album != null;
+            //photos = new HandlingPhotos(PhotosActivity.this, album);
+            this.album = album;
+            this.album.setContext(getApplicationContext());
+            //this.album.setSettings();
+
             // if (photos.medias == null)
             //   finish();
 
@@ -114,22 +120,6 @@ public class PhotosActivity extends ThemedActivity {
            // Log.d("asdff", "onCreate: asddsad", e);
             finish();
         }
-
-        /****** TODO:MUST BE FIXXED
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        LoadPhotos();
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
-            }
-        });
-         ********/
         //LoadPhotos();
         initUiTweaks();
     }
@@ -148,17 +138,17 @@ public class PhotosActivity extends ThemedActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_photos, menu);
-        menu.findItem(R.id.ascending_sort_action).setChecked(photos.settings.ascending);
+        menu.findItem(R.id.ascending_sort_action).setChecked(album.settings.ascending);
 
-        if (photos.settings.columnSortingMode == null || photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+        if (album.settings.columnSortingMode == null || album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
             menu.findItem(R.id.date_taken_sort_action).setChecked(true);
-        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+        else if (album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
             menu.findItem(R.id.name_sort_action).setChecked(true);
-        else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+        else if (album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
             menu.findItem(R.id.size_sort_action).setChecked(true);
 
         menu.findItem(R.id.select_all_albums_action).setTitle(getString(
-                photos.getSelectedCount()==adapter.getItemCount()
+                album.getSelectedCount() == adapter.getItemCount()
                         ? R.string.clear_selected
                         : R.string.select_all));
         menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
@@ -172,15 +162,15 @@ public class PhotosActivity extends ThemedActivity {
     public boolean onPrepareOptionsMenu(final Menu menu) {
         setOptionsAlbmuMenusItemsVisible(menu, !editmode);
 
-        if (photos.getSelectedCount() == 0) {
+        if (album.getSelectedCount() == 0) {
             editmode = false;
             setOptionsAlbmuMenusItemsVisible(menu, true);
-        } else if (photos.getSelectedCount() == 1)
+        } else if (album.getSelectedCount() == 1)
             menu.findItem(R.id.setAsAlbumPreview).setEnabled(true).setVisible(true);
          else
             menu.findItem(R.id.setAsAlbumPreview).setEnabled(false).setVisible(false);
 
-        menu.findItem(R.id.clear_album_preview).setVisible(photos.hasCustomPreview());
+        menu.findItem(R.id.clear_album_preview).setVisible(album.hasCustomCover());
 
         togglePrimaryToolbarOptions(menu);
         updateSelectedStuff();
@@ -208,9 +198,9 @@ public class PhotosActivity extends ThemedActivity {
 
         int c;
         try {
-            if ((c = photos.getSelectedCount()) != 0) {
+            if ((c = album.getSelectedCount()) != 0) {
 
-                collapsingToolbarLayout.setTitle(c + "/" + photos.medias.size());
+                collapsingToolbarLayout.setTitle(c + "/" + album.medias.size());
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_check)
                         .color(Color.WHITE)
@@ -222,9 +212,9 @@ public class PhotosActivity extends ThemedActivity {
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (photos.getSelectedCount() == photos.medias.size())
-                            photos.clearSelectedPhotos();
-                        else photos.selectAllPhotos();
+                        if (album.getSelectedCount() == album.medias.size())
+                            album.clearSelectedPhotos();
+                        else album.selectAllPhotos();
                         adapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
@@ -232,7 +222,7 @@ public class PhotosActivity extends ThemedActivity {
 
             } else {
 
-                collapsingToolbarLayout.setTitle(photos.DisplayName);
+                collapsingToolbarLayout.setTitle(album.DisplayName);
                 toolbar.setNavigationIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_arrow_back)
                         .color(Color.WHITE)
@@ -251,7 +241,7 @@ public class PhotosActivity extends ThemedActivity {
     private void finishEditMode() {
         editmode = false;
         invalidateOptionsMenu();
-        photos.clearSelectedPhotos();
+        album.clearSelectedPhotos();
         adapter.notifyDataSetChanged();
     }
 
@@ -270,7 +260,7 @@ public class PhotosActivity extends ThemedActivity {
                     break;
                 case PickAlbumActivity.MOVE_TO_ACTION:
                     if (resultCode == RESULT_OK) {
-                        String ind = b.getString("photos_indexes");
+                        /*String ind = b.getString("photos_indexes");
                         if (ind != null) {
                             Log.wtf("lengh", "" + photos.medias.size());
 
@@ -284,7 +274,7 @@ public class PhotosActivity extends ThemedActivity {
                             Log.wtf("lengh", "" + photos.medias.size());
                             adapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
-                        }
+                        }*/
 
                     }
                     break;
@@ -300,7 +290,7 @@ public class PhotosActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.moveAction:
+            /*case R.id.moveAction:
                 Intent int1 = new Intent(PhotosActivity.this, PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
                 int1.putExtra("request_code", PickAlbumActivity.MOVE_TO_ACTION);
@@ -312,16 +302,16 @@ public class PhotosActivity extends ThemedActivity {
                 int2.putExtra("selected_photos", photos.getSelectedPhotosSerilized());
                 int2.putExtra("request_code", PickAlbumActivity.COPY_TO_ACTION);
                 startActivityForResult(int2, PickAlbumActivity.COPY_TO_ACTION);
-                break;
+                break;*/
 
             case R.id.select_all_albums_action:
-                if(photos.getSelectedCount()==adapter.getItemCount()){
+                if(album.getSelectedCount()==adapter.getItemCount()){
                     editmode = false;
                     invalidateOptionsMenu();
-                    photos.clearSelectedPhotos();
+                    album.clearSelectedPhotos();
                     adapter.notifyDataSetChanged();
                 } else {
-                    photos.selectAllPhotos();
+                    album.selectAllPhotos();
                     adapter.notifyDataSetChanged();
                     invalidateOptionsMenu();
                 }
@@ -329,64 +319,61 @@ public class PhotosActivity extends ThemedActivity {
 
             case R.id.clear_album_preview:
                 CustomAlbumsHandler as = new CustomAlbumsHandler(getApplicationContext());
-                as.clearAlbumPreview(photos.ID);
-                photos.setSettings();
+                as.clearAlbumPreview(album.ID);
+                album.setSettings();
                 updateHeaderContent();
-                //as.setAlbumPhotPreview(photos.ID,null);
                 break;
 
             case R.id.setAsAlbumPreview:
-                photos.setSelectedPhotoAsPreview();
+                album.setSelectedPhotoAsPreview();
                 finishEditMode();
                 updateHeaderContent();
                 break;
 
             case R.id.all_media_filter:
-                photos.filterMedias(MadiaStoreHandler.FILTER_ALL);
-                adapter.updateDataset(photos.medias);
+                album.filterMedias(MadiaStoreHandler.FILTER_ALL);
+                adapter.updateDataset(album.medias);
                 item.setChecked(true);
                 break;
             case R.id.video_media_filter:
-                photos.filterMedias(MadiaStoreHandler.FILTER_VIDEO);
-                adapter.updateDataset(photos.medias);
+                album.filterMedias(MadiaStoreHandler.FILTER_VIDEO);
+                adapter.updateDataset(album.medias);
                 item.setChecked(true);
                 break;
             case R.id.image_media_filter:
-                photos.filterMedias(MadiaStoreHandler.FILTER_IMAGE);
-                adapter.updateDataset(photos.medias);
+                album.filterMedias(MadiaStoreHandler.FILTER_IMAGE);
+                adapter.updateDataset(album.medias);
                 item.setChecked(true);
                 break;
 
             case R.id.gifs_media_filter:
-                photos.filterMedias(MadiaStoreHandler.FILTER_GIF);
-                adapter.updateDataset(photos.medias);
+                album.filterMedias(MadiaStoreHandler.FILTER_GIF);
+                adapter.updateDataset(album.medias);
                 item.setChecked(true);
                 break;
 
             case R.id.name_sort_action:
-                photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
-                photos.sort();
+                album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
                 new PreparePhotosTask().execute();
 
                 item.setChecked(true);
                 break;
             case R.id.size_sort_action:
-                photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
-                photos.sort();
+                album.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
+
                 new PreparePhotosTask().execute();
 
                 item.setChecked(true);
                 break;
             case R.id.date_taken_sort_action:
-                photos.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
-                photos.sort();
+                album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+
                 new PreparePhotosTask().execute();
 
                 item.setChecked(true);
                 break;
             case R.id.ascending_sort_action:
-                photos.setDefaultSortingAscending(!photos.settings.ascending);
-                photos.sort();
+                album.setDefaultSortingAscending(!album.settings.ascending);
                 new PreparePhotosTask().execute();
 
                 item.setChecked(!item.isChecked());
@@ -406,7 +393,7 @@ public class PhotosActivity extends ThemedActivity {
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText(getString(R.string.rename));
-                txt_edit.setText(photos.DisplayName);//da fixxare
+                txt_edit.setText(album.DisplayName);//da fixxare
                 txt_edit.selectAll();
 
                 txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -432,8 +419,8 @@ public class PhotosActivity extends ThemedActivity {
                 RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (txt_edit.length() != 0) {
-                            albums.renameAlbum(photos.FolderPath, txt_edit.getText().toString());
-                            photos.DisplayName = txt_edit.getText().toString();
+                            albums.renameAlbum(album.Path, txt_edit.getText().toString());
+                            album.DisplayName = txt_edit.getText().toString();
                             updateHeaderContent();
                             //UpdatePhotos();//TODO updatePhoto photos
                         } else
@@ -448,7 +435,7 @@ public class PhotosActivity extends ThemedActivity {
                 builder.setMessage(R.string.exclude_album_message)
                         .setPositiveButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                customAlbumsHandler.excludeAlbum(photos.ID);
+                                customAlbumsHandler.excludeAlbum(album.ID);
                                 finish();
                             }
                         })
@@ -464,9 +451,9 @@ public class PhotosActivity extends ThemedActivity {
                 builder1.setPositiveButton(getString(R.string.delete_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editmode) {
-                            photos.deleteSelectedPhotos();
+                            album.deleteSelectedPhotos();
 
-                            if (photos.medias.size() == 0) {
+                            if (album.medias.size() == 0) {
                                 startActivity(new Intent(PhotosActivity.this, AlbumsActivity.class));
                                 return;
                             }
@@ -475,7 +462,7 @@ public class PhotosActivity extends ThemedActivity {
                             updateHeaderContent();
                             finishEditMode();
                         } else {
-                            albums.deleteAlbum(photos.FolderPath);
+                            albums.deleteAlbum(album.Path);
                             finish();
                         }
                     }
@@ -490,13 +477,13 @@ public class PhotosActivity extends ThemedActivity {
                 builder2.setMessage(R.string.delete_album_message)
                         .setPositiveButton(getString(R.string.hide_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                albums.hideAlbum(photos.FolderPath, photos.medias);
+                                albums.hideAlbum(album.Path);
                             }
                         })
                         .setNeutralButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                customAlbumsHandler.excludeAlbum(photos.ID);
+                                customAlbumsHandler.excludeAlbum(album.ID);
                                 finish();
                             }
                         })
@@ -513,11 +500,11 @@ public class PhotosActivity extends ThemedActivity {
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
-                for (Media f : photos.selectedMedias)
+                for (Media f : album.selectedMedias)
                     files.add(Uri.fromFile(new File(f.Path)));
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                intent.setType(StringUtils.getGenericMIME(photos.selectedMedias.get(0).MIME));
+                intent.setType(StringUtils.getGenericMIME(album.selectedMedias.get(0).MIME));
                 finishEditMode();
                 startActivity(intent);
                 break;
@@ -556,7 +543,7 @@ public class PhotosActivity extends ThemedActivity {
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_photos);
-        adapter = new PhotosAdapter(photos.medias, getApplicationContext());
+        adapter = new PhotosAdapter(album.medias, getApplicationContext());
         adapter.setOnClickListener(albumOnClickListener);
         adapter.setOnLongClickListener(albumOnLongClickListener);
         mRecyclerView.setHasFixedSize(true);
@@ -591,7 +578,7 @@ public class PhotosActivity extends ThemedActivity {
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
 
-        collapsingToolbarLayout.setTitle(photos.DisplayName);
+        collapsingToolbarLayout.setTitle(album.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
         //collapsingToolbarLayout.setTitleEnabled(false);
@@ -607,7 +594,7 @@ public class PhotosActivity extends ThemedActivity {
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
         }
-        setRecentApp(photos.DisplayName);
+        setRecentApp(album.DisplayName);
     }
 
     public void setupUI() {
@@ -625,7 +612,7 @@ public class PhotosActivity extends ThemedActivity {
         if(isCollapsingToolbar()) {
             headerImage = (ImageView) findViewById(R.id.header_image);
             Glide.with(PhotosActivity.this)
-                    .load(photos.getPreviewAlbumImg())
+                    .load(album.getPathCoverAlbum())
                     .asBitmap()
                     .centerCrop()
                     .placeholder(R.drawable.ic_empty)
@@ -633,13 +620,13 @@ public class PhotosActivity extends ThemedActivity {
             headerImage.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 
             TextView textView = (TextView) findViewById(R.id.album_name);
-            textView.setText(photos.DisplayName);
+            textView.setText(album.DisplayName);
             textView = (TextView) findViewById(R.id.album_photos_count);
 
             String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
 
-            textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + photos.medias.size() + "</font></b>" + "<font " +
-                    "color='#FFFFFF'> " + photos.getContentDescription() + "</font>"));
+            textView.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + album.count.getTotal() + "</font></b>" + "<font " +
+                    "color='#FFFFFF'> " + album.getContentDescdription(getApplicationContext()) + "</font>"));
 
         }
     }
@@ -664,13 +651,13 @@ public class PhotosActivity extends ThemedActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
             //checkPermissions();
-            photos.updatePhotos();
+            album.updatePhotos();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            adapter.updateDataset(photos.medias);
+            adapter.updateDataset(album.medias);
             // adapter.setOnClickListener(albumOnClickListener);
             // adapter.setOnLongClickListener(albumOnLongClickListener);
             // SwipeContainerRV.setRefreshing(false);

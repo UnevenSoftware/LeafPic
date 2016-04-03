@@ -39,6 +39,7 @@ public class HandlingPhotos implements Parcelable {
     public String FolderPath;
     public String ID;
     public String DisplayName;
+
     public ArrayList<Media> medias;
     public ArrayList<Media> selectedMedias;
     public AlbumSettings settings;
@@ -74,9 +75,9 @@ public class HandlingPhotos implements Parcelable {
         context = ctx;
         as = new MadiaStoreHandler(context);
 
-        Album album = as.getAlbumPhoto(photoPath);
+        //Album album = as.getAlbumPhoto(photoPath);
         selectedMedias = new ArrayList<Media>();
-        ID = album.ID;
+        //ID = album.ID;
         setSettings();
         updatePhotos();
     }
@@ -122,10 +123,6 @@ public class HandlingPhotos implements Parcelable {
         return s;
     }
 
-    public void sort() {
-        Album a = new Album(ID);
-        medias = as.getAlbumPhotos(a, getSortingMode());
-    }
 
     public void setDefaultSortingMode(String column) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
@@ -214,24 +211,6 @@ public class HandlingPhotos implements Parcelable {
         return null;
     }
 
-    public Integer getLastSelectedPhotoIndex() {
-        return selectedPhotosIndexs.get(selectedPhotosIndexs.size() - 1);
-    }
-
-    public int selectPhoto(String path, boolean val) {
-        Media x = getPhoto(path);
-        if (x != null) {
-            x.setSelected(val);
-            if (val) {
-                selectedMedias.add(x);
-                selectedPhotosIndexs.add(last_position_selecte);
-            } else {
-                selectedMedias.remove(x);
-                selectedPhotosIndexs.remove(last_position_selecte);
-            }
-        }
-        return last_position_selecte;
-    }
 
     public void selectAllPhotos(){
         for (int i = 0; i < medias.size(); i++)

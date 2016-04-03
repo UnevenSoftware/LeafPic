@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.leafpic.app.utils.StringUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -53,10 +55,13 @@ public class MadiaStoreHandler {
             if (cur.moveToFirst()) {
                 int idColumn = cur.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
                 int pathColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-                do if (!excludedAlbums.contains(cur.getString(idColumn)))
-                    list.add(new Album(cur.getString(idColumn),
+                do if (!excludedAlbums.contains(cur.getString(idColumn))){
+                    Album album = new Album(cur.getString(idColumn),
                             cur.getString(pathColumn),
-                            getAlbumPhotosCount(cur.getString(idColumn))));
+                            getAlbumPhotosCount(cur.getString(idColumn)));
+                    album.setCoverPath(h.getPhotPrevieAlbum(album.ID));
+                    list.add(album);
+                }
                 while (cur.moveToNext());
             }
             cur.close();
@@ -80,18 +85,17 @@ public class MadiaStoreHandler {
         return getAlbumPhotos(id, -1, sort,FILTER_ALL);
     }
 
-    public int[] getAlbumPhotosCount(String id) {
-        int c[] = new int[2];
+    public AlbumMediaCount getAlbumPhotosCount(String id) {
+        AlbumMediaCount c = new AlbumMediaCount();
         Uri images = MediaStore.Files.getContentUri("external");
         String[] projection = new String[]{ MediaStore.Files.FileColumns.PARENT };
-
 
         String selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
 
         Cursor cur = context.getContentResolver().query(
                 images, projection, selection, null, null);
         if (cur != null) {
-            c[0] = cur.getCount();
+            c.photos = cur.getCount();
             cur.close();
         }
         selection = "( "+  MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
@@ -99,14 +103,9 @@ public class MadiaStoreHandler {
         cur = context.getContentResolver().query(
                 images, projection, selection, null, null);
         if (cur != null) {
-            c[1] = cur.getCount();
+            c.videos = cur.getCount();
             cur.close();
         }
-         /*selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
-                MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
-                + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";*/
-
-
         return c;
     }
 
@@ -194,8 +193,8 @@ public class MadiaStoreHandler {
         return list;
     }
 
-    public Album getAlbumPhoto(String a) {
-        Album asd = null;
+    public String getAlbumPhoto(String a) {
+        String asd = null;
 
         String[] projection = new String[]{
                 MediaStore.Images.Media.DATA,
@@ -218,7 +217,7 @@ public class MadiaStoreHandler {
             if (cur.moveToFirst()) {
                 int pathColumn = cur.getColumnIndex(
                         MediaStore.Files.FileColumns.PARENT);
-                asd = new Album(cur.getString(pathColumn));
+                asd =cur.getString(pathColumn);
             }
             cur.close();
         }
