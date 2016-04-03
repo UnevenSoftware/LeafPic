@@ -39,7 +39,6 @@ import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 
@@ -210,7 +209,7 @@ public class AlbumsActivity extends ThemedActivity {
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE).sizeDp(15));
+        fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -395,7 +394,9 @@ public class AlbumsActivity extends ThemedActivity {
             menu.findItem(R.id.search_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
+
         menu.setGroupVisible(R.id.album_options_menu, editmode);
+        menu.setGroupVisible(R.id.general_action, !editmode);
 
         updateSelectedStuff();
         return super.onPrepareOptionsMenu(menu);

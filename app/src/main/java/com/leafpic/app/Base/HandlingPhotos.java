@@ -48,7 +48,7 @@ public class HandlingPhotos implements Parcelable {
     private ArrayList<Integer> selectedPhotosIndexs;
     private int current;
 
-    private int filter_photos = MadiaStoreHandler.FILTER_ALL;
+    private int filter_photos = Album.FILTER_ALL;
 
     private String contentDescription = null;
 

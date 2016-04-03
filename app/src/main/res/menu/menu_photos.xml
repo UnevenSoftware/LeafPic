@@ -4,80 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PhotosActivity"
     >
-    <item
-        android:id="@+id/filter_menu"
-        android:orderInCategory="1"
-        android:title="@string/filter_menu_title"
-        app:showAsAction="ifRoom"
-        >
-        <menu xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context=".PhotosActivity">
-            <group
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/all_media_filter"
-                    android:title="@string/all"
-                    android:checked="true"
-                    app:showAsAction="ifRoom"
-                    />
-                <item
-                    android:id="@+id/video_media_filter"
-                    android:title="@string/videos"
-                    app:showAsAction="ifRoom"
-                    />
-                <item
-                    android:id="@+id/image_media_filter"
-                    android:title="@string/images"
-                    app:showAsAction="ifRoom"
-                    />
-                <item
-                    android:id="@+id/gifs_media_filter"
-                    android:title="@string/gifs"
-                    app:showAsAction="ifRoom"
-                    />
-            </group>
-        </menu>
-    </item>
+    <group android:id="@id/general_action">
+        <item
+            android:id="@+id/filter_menu"
+            android:orderInCategory="1"
+            android:title="@string/filter_menu_title"
+            app:showAsAction="ifRoom"
+            >
+            <menu xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context=".PhotosActivity">
+                <group
+                    android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/all_media_filter"
+                        android:title="@string/all"
+                        android:checked="true"
+                        app:showAsAction="ifRoom"
+                        />
+                    <item
+                        android:id="@+id/video_media_filter"
+                        android:title="@string/videos"
+                        app:showAsAction="ifRoom"
+                        />
+                    <item
+                        android:id="@+id/image_media_filter"
+                        android:title="@string/images"
+                        app:showAsAction="ifRoom"
+                        />
+                    <item
+                        android:id="@+id/gifs_media_filter"
+                        android:title="@string/gifs"
+                        app:showAsAction="ifRoom"
+                        />
+                </group>
+            </menu>
+        </item>
+        <item android:id="@+id/sortPhotos"
+            android:orderInCategory="1"
+            android:title="@string/sort_menu_title"
+            app:showAsAction="ifRoom"
+            >
+            <menu xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context=".PhotosActivity">
+                <group  android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/name_sort_action"
+                        android:title="@string/name"
+                        app:showAsAction="ifRoom"
+                        />
 
+                    <item
+                        android:id="@+id/date_taken_sort_action"
+                        android:title="@string/date"
+                        app:showAsAction="ifRoom"
 
-    <item android:id="@+id/sortPhotos"
-        android:orderInCategory="1"
-        android:title="@string/sort_menu_title"
-        app:showAsAction="ifRoom"
-        >
-        <menu xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context=".PhotosActivity">
-            <group  android:checkableBehavior="single">
-                <item
-                    android:id="@+id/name_sort_action"
-                    android:title="@string/name"
-                    app:showAsAction="ifRoom"
-                    />
-
-                <item
-                    android:id="@+id/date_taken_sort_action"
-                    android:title="@string/date"
-                    app:showAsAction="ifRoom"
-
-                    />
-                <item
-                    android:id="@+id/size_sort_action"
-                    android:title="@string/size"
-                    app:showAsAction="ifRoom"
-                    />
-            </group>
-            <group android:checkableBehavior="all">
-                <item
-                    android:id="@+id/ascending_sort_action"
-                    android:title="@string/ascending"
-                    app:showAsAction="ifRoom"
-                    />
-            </group>
-        </menu>
-    </item>
-
+                        />
+                    <item
+                        android:id="@+id/size_sort_action"
+                        android:title="@string/size"
+                        app:showAsAction="ifRoom"
+                        />
+                </group>
+                <group android:checkableBehavior="all">
+                    <item
+                        android:id="@+id/ascending_sort_action"
+                        android:title="@string/ascending"
+                        app:showAsAction="ifRoom"
+                        />
+                </group>
+            </menu>
+        </item>
+    </group>
     <group android:id="@+id/photos_option_men">
         <item
             android:id="@+id/sharePhotos"

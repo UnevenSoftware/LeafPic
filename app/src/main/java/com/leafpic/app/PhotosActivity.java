@@ -191,6 +191,7 @@ public class PhotosActivity extends ThemedActivity {
 
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
         m.setGroupVisible(R.id.album_options_menu, val);
+        m.setGroupVisible(R.id.general_action, val);
         m.setGroupVisible(R.id.photos_option_men, !val);
     }
 
@@ -331,38 +332,39 @@ public class PhotosActivity extends ThemedActivity {
                 break;
 
             case R.id.all_media_filter:
-                album.filterMedias(MadiaStoreHandler.FILTER_ALL);
+                album.filterMedias(Album.FILTER_ALL);
                 adapter.updateDataset(album.medias);
                 item.setChecked(true);
+                fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
                 break;
             case R.id.video_media_filter:
-                album.filterMedias(MadiaStoreHandler.FILTER_VIDEO);
+                album.filterMedias(Album.FILTER_VIDEO);
                 adapter.updateDataset(album.medias);
                 item.setChecked(true);
+                fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
                 break;
             case R.id.image_media_filter:
-                album.filterMedias(MadiaStoreHandler.FILTER_IMAGE);
+                album.filterMedias(Album.FILTER_IMAGE);
                 adapter.updateDataset(album.medias);
                 item.setChecked(true);
+                fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
                 break;
 
             case R.id.gifs_media_filter:
-                album.filterMedias(MadiaStoreHandler.FILTER_GIF);
+                album.filterMedias(Album.FILTER_GIF);
                 adapter.updateDataset(album.medias);
                 item.setChecked(true);
+                fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
                 break;
 
             case R.id.name_sort_action:
                 album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
                 new PreparePhotosTask().execute();
-
                 item.setChecked(true);
                 break;
             case R.id.size_sort_action:
                 album.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
-
                 new PreparePhotosTask().execute();
-
                 item.setChecked(true);
                 break;
             case R.id.date_taken_sort_action:
@@ -555,12 +557,17 @@ public class PhotosActivity extends ThemedActivity {
         mRecyclerView.setAdapter(adapter);
 
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE).sizeDp(15));
+        fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                startActivity(i);
+                if (album.areFiltersActive()){
+                    album.filterMedias(Album.FILTER_ALL);
+                    adapter.updateDataset(album.medias);
+                    toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
+                    fabCamera.setImageDrawable(new IconicsDrawable(PhotosActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+                } else startActivity( new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+
             }
         });
 
@@ -581,7 +588,6 @@ public class PhotosActivity extends ThemedActivity {
         collapsingToolbarLayout.setTitle(album.DisplayName);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.CENTER_HORIZONTAL);
         collapsingToolbarLayout.setContentScrimColor(getPrimaryColor());
-        //collapsingToolbarLayout.setTitleEnabled(false);
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), android.R.color.transparent));
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
 
@@ -594,6 +600,7 @@ public class PhotosActivity extends ThemedActivity {
             appBarLayout.setExpanded(false, false);
             findViewById(R.id.album_card_divider).setVisibility(View.GONE);
         }
+
         setRecentApp(album.DisplayName);
     }
 
