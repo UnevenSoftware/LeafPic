@@ -28,7 +28,7 @@
         />
     <item
         android:id="@+id/hideAlbumButton"
-        android:title="@string/menu_exclude"
+        android:title="@string/menu_hide"
         app:showAsAction="never"
         />
     <item

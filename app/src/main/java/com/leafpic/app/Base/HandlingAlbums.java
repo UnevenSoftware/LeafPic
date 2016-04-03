@@ -105,12 +105,11 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public void selectAllAlbums(){
-        for (Album dispAlbum : dispAlbums) {
+        for (Album dispAlbum : dispAlbums)
             if(!dispAlbum.isSelected()) {
                 dispAlbum.setSelcted(true);
                 selectedAlbums.add(dispAlbum);
             }
-        }
     }
 
     public int getSelectedCount() {
@@ -125,12 +124,11 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public Album getAlbum(String p) {
-        for (int i = 0; i < dispAlbums.size(); i++) {
+        for (int i = 0; i < dispAlbums.size(); i++)
             if (dispAlbums.get(i).Path.equals(p)) {
                 last_position_selecte = i;
                 return dispAlbums.get(i);
             }
-        }
         return null;
     }
 
@@ -187,20 +185,6 @@ public class HandlingAlbums implements Parcelable {
     public void hideAlbum(final Album a) {
         hideAlbum(a.Path);
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-                MadiaStoreHandler mediaStoreHandler = new MadiaStoreHandler(context);
-                for (Media photo : mediaStoreHandler.getAlbumPhotos(a)) {
-                    photo.FolderPath = a.Path;
-                    db.addPhoto(photo);
-                }
-                db.close();
-            }
-        });
-        t.start();
-
         dispAlbums.remove(a);
     }
 
@@ -228,20 +212,6 @@ public class HandlingAlbums implements Parcelable {
                 out.flush();
                 out.close();
                 scanFile(new String[]{file.getAbsolutePath()});
-
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-
-                        for (Media photo : ph) {
-                            photo.FolderPath = dirName.getAbsolutePath();
-                            db.addPhoto(photo);
-                        }
-                        db.close();
-                    }
-                });
-                t.start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -261,34 +231,19 @@ public class HandlingAlbums implements Parcelable {
         dispAlbums.remove(a);
     }
 
-    public boolean loadPreviewHiddenAlbums() {
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-        if (db.getPhotosCount() == 0)
-            db.loadHiddenALbums();
-
-        dispAlbums = db.getAlbums();
-        for (Album dispAlbum : dispAlbums) {
-            dispAlbum.setCoverPath(h.getPhotPrevieAlbum(dispAlbum.Path));
-            dispAlbum.medias = db.getFirstPhotosByAlbum(dispAlbum.Path);
-        }
-        db.close();
-        return true;
-    }
-
-    public void unHideSelectedAlbums() {
+    /*public void unHideSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)
             unHideAlbum(selectedAlbum);
 
         clearSelectedAlbums();
-    }
+    }*/
 
-    public void unHideAlbum(Album a) {
+   /* public void unHideAlbum(Album a) {
         unHideAlbum(a.Path);
         dispAlbums.remove(a);
-    }
+    }*/
 
-    public void unHideAlbum(String path) {
+   /* public void unHideAlbum(String path) {
 
         HiddenPhotosHandler db = new HiddenPhotosHandler(context);
         File dirName = new File(path);
@@ -304,7 +259,7 @@ public class HandlingAlbums implements Parcelable {
         }
         dispAlbums.remove(getAlbum(path));
         db.close();
-    }
+    }*/
 
     /*************
      * This Metods doesnt work for the moment
@@ -341,7 +296,6 @@ public class HandlingAlbums implements Parcelable {
             dest.writeList(dispAlbums);
         }
         dest.writeInt(last_position_selecte);
-        // dest.writeValue(context);
         if (selectedAlbums == null) {
             dest.writeByte((byte) (0x00));
         } else {

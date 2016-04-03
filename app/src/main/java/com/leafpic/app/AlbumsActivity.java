@@ -1,18 +1,14 @@
 package com.leafpic.app;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,11 +17,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,17 +27,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
-import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -59,7 +50,6 @@ public class AlbumsActivity extends ThemedActivity {
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
     boolean editmode = false, hidden = false;
-    //boolean click = false;
     private SwipeRefreshLayout SwipeContainerRV;
     int nReloads=-1;
 
@@ -435,11 +425,6 @@ public class AlbumsActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.refreshhiddenAlbumsButton:
-                albums.loadPreviewHiddenAlbums();
-                adapt.notifyDataSetChanged();
-                break;
-
             case R.id.select_all_albums_action:
                 if(albums.getSelectedCount()==adapt.getItemCount()){
                     editmode = false;
@@ -487,35 +472,29 @@ public class AlbumsActivity extends ThemedActivity {
                 break;
 
             case R.id.hideAlbumButton:
-                if (hidden) {
-                    albums.unHideSelectedAlbums();
-                    adapt.notifyDataSetChanged();
-                    invalidateOptionsMenu();
-                } else {
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
+                builder2.setMessage(R.string.delete_album_message)
+                        .setPositiveButton( this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                albums.hideSelectedAlbums();
+                                adapt.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            }
+                        })
+                        .setNeutralButton( this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                albums.excludeSelectedAlbums();
+                                adapt.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            }
+                        })
+                        .setNegativeButton( this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                builder2.show();
 
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
-                    builder2.setMessage(R.string.delete_album_message)
-                            .setPositiveButton( this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    albums.hideSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                }
-                            })
-                            .setNeutralButton( this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    albums.excludeSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                }
-                            })
-                            .setNegativeButton( this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            });
-                    builder2.show();
-                }
                 break;
             case R.id.settings_albums_action:
                 Intent asd = new Intent(AlbumsActivity.this, SettingActivity.class);
