@@ -6,54 +6,57 @@
 >
     <item
         android:id="@+id/shareButton"
-        android:icon="@mipmap/ic_share_white_24dp"
         android:title="@string/share"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="0"
     />
     <item
         android:id="@+id/deletePhoto"
-        android:icon="@mipmap/ic_delete_white_24dp"
         android:title="@string/menu_delete"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1"
         />
-    <item
-        android:id="@+id/edit_photo"
-        android:title="@string/edit"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/rotatePhoto"
-        android:icon="@mipmap/ic_rotate_right_white_24dp"
-        android:title="@string/rotate"
-        app:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/rotate_right_90"
-                android:icon="@mipmap/ic_rotate_right_white_24dp"
-                android:title="@string/rotate_right_90" />
-            <item
+    <group android:id="@+id/only_photos_otions">
+        <item
+            android:id="@+id/edit_photo"
+            android:title="@string/edit"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/rotatePhoto"
+            android:title="@string/rotate"
+            android:orderInCategory="2"
+            app:showAsAction="ifRoom">
+            <menu>
+                <item
+                    android:id="@+id/rotate_right_90"
+                    android:title="@string/rotate_right_90" />
+                <item
                     android:id="@+id/rotate_left_90"
-                android:icon="@mipmap/ic_rotate_left_white_24dp"
-                android:title="@string/rotate_left_90" />
-            <item
+                    android:title="@string/rotate_left_90" />
+                <item
                     android:id="@+id/rotate_180"
-                android:icon="@mipmap/ic_replay_white_24dp"
-                android:title="@string/rotate_180" />
-        </menu>
-    </item>
+                    android:title="@string/rotate_180" />
+            </menu>
+        </item>
+        <item
+            android:id="@+id/useAsIntent"
+            android:title="@string/use_as"
+            app:showAsAction="never"
+            />
+    </group>
+
     <item
         android:id="@+id/copyAction"
         android:title="@string/copy_to"
+        android:orderInCategory="3"
         app:showAsAction="never" />
     <item
         android:id="@+id/moveAction"
         android:title="@string/move_to"
+        android:orderInCategory="4"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/useAsIntent"
-        android:title="@string/use_as"
-        app:showAsAction="never"
-        />
+
     <item
         android:id="@+id/renamePhoto"
         android:title="@string/rename"

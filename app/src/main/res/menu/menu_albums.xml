@@ -2,40 +2,39 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".AlbumsActivity">
+
+    <item android:id="@+id/search_action"
+        android:title="@string/search_menu"
+        app:showAsAction="ifRoom"
+        />
 
     <item android:id="@+id/sort_action"
-        android:icon="@mipmap/ic_sort_white_24dp"
         android:title="@string/sort_menu_title"
         app:showAsAction="ifRoom"
         />
 
-    <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/select_all_albums_action"
-        android:title="@string/select_all"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/deleteAction"
-        android:icon="@mipmap/ic_delete_white_24dp"
-        android:title="@string/menu_delete"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/excludeAlbumButton"
-        android:title="@string/menu_exclude"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/hideAlbumButton"
-        android:title="@string/menu_hide"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/refreshhiddenAlbumsButton"
-        android:title="@string/menu_refresh"
-        app:showAsAction="never"
-        />
+    <group android:id="@+id/album_options_menu">
+        <item android:id="@+id/select_all_albums_action"
+            android:title="@string/select_all"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/deleteAction"
+            android:title="@string/menu_delete"
+            app:showAsAction="ifRoom"
+            />
+        <item
+            android:id="@+id/excludeAlbumButton"
+            android:title="@string/menu_exclude"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/hideAlbumButton"
+            android:title="@string/menu_hide"
+            app:showAsAction="never"
+            />
+    </group>
     <item android:id="@+id/settings_albums_action"
         android:title="@string/settings"
         app:showAsAction="never"

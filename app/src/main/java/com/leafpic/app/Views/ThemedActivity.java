@@ -2,6 +2,7 @@ package com.leafpic.app.Views;
 
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.leafpic.app.PhotoPagerActivity;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ColorPalette;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 
 /**
  * Created by dnld on 23/02/16.
@@ -99,6 +102,10 @@ public class ThemedActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         updateTheme();
+    }
+
+    public IconicsDrawable getToolbarIcon(IIcon icon){
+        return new IconicsDrawable(this).icon(icon).color(Color.WHITE).sizeDp(18);
     }
 
     @Override

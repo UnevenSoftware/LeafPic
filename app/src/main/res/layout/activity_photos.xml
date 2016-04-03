@@ -104,7 +104,7 @@
         -->
 
         <android.support.design.widget.FloatingActionButton
-            style="@style/fab"
+            style="@style/fab_camera"
             android:id="@+id/fab_camera"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"

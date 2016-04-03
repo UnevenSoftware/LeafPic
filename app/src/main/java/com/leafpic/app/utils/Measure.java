@@ -30,6 +30,7 @@ public class Measure {
 
     public static int getAlbumsColums(Context c){
         int width = getScreenWidth(c);
+
         return Math.round(width/Costants.ALBUM_CARD_WIDTH);
     }
 

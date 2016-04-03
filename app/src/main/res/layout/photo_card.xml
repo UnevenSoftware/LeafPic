@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="120dp"
     >
-    <ImageView
+    <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/selected_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         android:layout_gravity="top|end"
         android:layout_margin="10dp"
         android:elevation="10dp"
-        android:src="@mipmap/ic_check_circle_white_18dp"
         android:visibility="invisible"
+        app:iiv_color="@color/white"
+        app:iiv_icon="gmd-check-circle"
     />
 
     <com.mikepenz.iconics.view.IconicsImageView

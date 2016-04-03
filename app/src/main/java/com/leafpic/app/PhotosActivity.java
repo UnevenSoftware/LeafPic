@@ -157,75 +157,51 @@ public class PhotosActivity extends ThemedActivity {
         else if (photos.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
             menu.findItem(R.id.size_sort_action).setChecked(true);
 
-        MenuItem opt = menu.findItem(R.id.select_all_albums_action);
-        if(photos.getSelectedCount()==adapter.getItemCount())
-            opt.setTitle(getString(R.string.clear_selected));
-        else
-            opt.setTitle(getString(R.string.select_all));
-
+        menu.findItem(R.id.select_all_albums_action).setTitle(getString(
+                photos.getSelectedCount()==adapter.getItemCount()
+                        ? R.string.clear_selected
+                        : R.string.select_all));
+        menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
+        menu.findItem(R.id.sortPhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
+        menu.findItem(R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+        menu.findItem(R.id.deleteAction).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        MenuItem opt;
         setOptionsAlbmuMenusItemsVisible(menu, !editmode);
 
         if (photos.getSelectedCount() == 0) {
             editmode = false;
             setOptionsAlbmuMenusItemsVisible(menu, true);
-        } else if (photos.getSelectedCount() == 1) {
-            opt = menu.findItem(R.id.setAsAlbumPreview);
-            opt.setEnabled(true).setVisible(true);
-        } else {
-            opt = menu.findItem(R.id.setAsAlbumPreview);
-            opt.setEnabled(false).setVisible(false);
-        }
+        } else if (photos.getSelectedCount() == 1)
+            menu.findItem(R.id.setAsAlbumPreview).setEnabled(true).setVisible(true);
+         else
+            menu.findItem(R.id.setAsAlbumPreview).setEnabled(false).setVisible(false);
 
-        if (photos.hasCustomPreview()) menu.findItem(R.id.clear_album_preview).setVisible(true);
+        menu.findItem(R.id.clear_album_preview).setVisible(photos.hasCustomPreview());
+
         togglePrimaryToolbarOptions(menu);
         updateSelectedStuff();
         return super.onPrepareOptionsMenu(menu);
     }
 
     private void togglePrimaryToolbarOptions(final Menu menu) {
-        MenuItem opt;
         if (editmode) {
-            opt = menu.findItem(R.id.sortPhotos);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            opt = menu.findItem(R.id.deleteAction);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            opt = menu.findItem(R.id.sharePhotos);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu.findItem(R.id.sortPhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu.findItem(R.id.sharePhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         } else {
-            opt = menu.findItem(R.id.sortPhotos);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            opt = menu.findItem(R.id.deleteAction);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            opt = menu.findItem(R.id.sharePhotos);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menu.findItem(R.id.sortPhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menu.findItem(R.id.sharePhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
-
     }
 
     private void setOptionsAlbmuMenusItemsVisible(final Menu m, boolean val) {
-        MenuItem option = m.findItem(R.id.hideAlbumButton);
-        option.setEnabled(val).setVisible(val);
-        option = m.findItem(R.id.excludeAlbumButton);
-        option.setEnabled(val).setVisible(val);
-        option = m.findItem(R.id.renameAlbum);
-        option.setEnabled(val).setVisible(val);
-        option = m.findItem(R.id.select_all_albums_action);
-        option.setEnabled(!val).setVisible(!val);
-
-        option = m.findItem(R.id.sharePhotos);
-        option.setEnabled(!val).setVisible(!val);
-        option = m.findItem(R.id.moveAction);
-        option.setEnabled(!val).setVisible(!val);
-        option = m.findItem(R.id.copyAction);
-        option.setEnabled(!val).setVisible(!val);
-        option = m.findItem(R.id.setAsAlbumPreview);
-        option.setEnabled(!val).setVisible(!val);
+        m.setGroupVisible(R.id.album_options_menu, val);
+        m.setGroupVisible(R.id.photos_option_men, !val);
     }
 
     void updateSelectedStuff() {
@@ -585,14 +561,14 @@ public class PhotosActivity extends ThemedActivity {
         adapter.setOnLongClickListener(albumOnLongClickListener);
         mRecyclerView.setHasFixedSize(true);
         int nSpan = Measure.getPhotosColums(getApplicationContext());
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,nSpan ));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(nSpan, Measure.pxToDp(2, getApplicationContext()), true));
         mRecyclerView.setFitsSystemWindows(true);
         mRecyclerView.setAdapter(adapter);
 
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+        fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE).sizeDp(15));
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -641,6 +617,7 @@ public class PhotosActivity extends ThemedActivity {
         if(!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
         mRecyclerView.setNestedScrollingEnabled(isCollapsingToolbar());
+        fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
 
     }
 

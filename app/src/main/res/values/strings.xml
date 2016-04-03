@@ -160,6 +160,7 @@
         <string name="video_player">Video Player</string>
     <string name="media">Media</string>
     <string name="send_to">Send to</string>
+    <string name="search_menu">search</string>
 
 
 </resources>

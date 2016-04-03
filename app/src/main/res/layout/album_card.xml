@@ -23,16 +23,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-            <ImageView
+            <com.mikepenz.iconics.view.IconicsImageView
                 android:id="@+id/selected_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:elevation="10dp"
-                android:src="@mipmap/ic_done_white_48dp"
                 android:visibility="invisible"
+                app:iiv_color="@color/white"
+                app:iiv_icon="gmd-check"
                 />
 
             <ImageView

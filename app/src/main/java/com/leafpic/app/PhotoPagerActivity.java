@@ -109,7 +109,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRecentApp(getString(R.string.app_name));
         setupSystemUI();
 
@@ -158,6 +157,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         hideSystemUI();
                     }
                 }, 1200);
+                invalidateOptionsMenu();
             }
 
             @Override
@@ -220,7 +220,22 @@ public class PhotoPagerActivity extends ThemedActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_photo, menu);
+
+        menu.findItem(R.id.deletePhoto).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+        menu.findItem(R.id.shareButton).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+        menu.findItem(R.id.rotatePhoto).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_rotate_right));
+        menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_rotate_right));
+        menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_rotate_left));
+        menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_replay));
+
         return true;
+    }
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+
+        menu.setGroupVisible(R.id.only_photos_otions, !photos.getCurrentPhoto().isVideo());
+        return super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override

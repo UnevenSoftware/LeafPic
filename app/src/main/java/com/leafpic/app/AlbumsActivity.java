@@ -37,6 +37,7 @@ import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 
@@ -49,7 +50,7 @@ public class AlbumsActivity extends ThemedActivity {
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
-    boolean editmode = false, hidden = false;
+    boolean editmode = false;
     private SwipeRefreshLayout SwipeContainerRV;
     int nReloads=-1;
 
@@ -206,7 +207,7 @@ public class AlbumsActivity extends ThemedActivity {
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-        fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+        fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE).sizeDp(15));
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -354,7 +355,6 @@ public class AlbumsActivity extends ThemedActivity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
     }
     //endregion
 
@@ -364,62 +364,37 @@ public class AlbumsActivity extends ThemedActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_albums, menu);
 
-        //MenuItem opt = menu.findItem(R.id.hideAlbumButton);
-        MenuItem opt = menu.findItem(R.id.select_all_albums_action);
-        if(albums.getSelectedCount()==adapt.getItemCount())
-            opt.setTitle(getString(R.string.clear_selected));
-        else
-            opt.setTitle(getString(R.string.select_all));
+        menu.findItem(R.id.select_all_albums_action).setTitle(
+                 getString(albums.getSelectedCount()==adapt.getItemCount()
+                         ? R.string.clear_selected
+                         : R.string.select_all));
+        menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
+        menu.findItem(R.id.deleteAction).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+        menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        MenuItem opt;
-        if (editmode) {
-            setOptionsAlbmuMenusItemsVisible(menu, true);
-            opt = menu.findItem(R.id.sort_action);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            opt = menu.findItem(R.id.deleteAction);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        } else {
-            setOptionsAlbmuMenusItemsVisible(menu, false);
-            opt = menu.findItem(R.id.sort_action);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            opt = menu.findItem(R.id.deleteAction);
-            opt.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        }
-
-        if (hidden) {
-            opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
-            opt.setEnabled(true).setVisible(true);
-            opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.unhide));
-        } else {
-            opt = menu.findItem(R.id.refreshhiddenAlbumsButton);
-            opt.setEnabled(false).setVisible(false);
-            opt = menu.findItem(R.id.hideAlbumButton);
-            opt.setTitle(getString(R.string.hide));
-        }
-        if (albums.getSelectedCount() == 0) {
+        if (albums.getSelectedCount() == 0)
             editmode = false;
-            invalidateOptionsMenu();
+
+        if (editmode) {
+            menu.findItem(R.id.sort_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menu.findItem(R.id.search_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        } else {
+            menu.findItem(R.id.sort_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu.findItem(R.id.search_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
+        menu.setGroupVisible(R.id.album_options_menu, editmode);
+
         updateSelectedStuff();
         return super.onPrepareOptionsMenu(menu);
+
     }
 
-    private void setOptionsAlbmuMenusItemsVisible(final Menu menu, boolean val) {
-        MenuItem opt = menu.findItem(R.id.hideAlbumButton);
-        opt.setEnabled(val).setVisible(val);
-        opt = menu.findItem(R.id.deleteAction);
-        opt.setEnabled(val).setVisible(val);
-        opt = menu.findItem(R.id.excludeAlbumButton);
-        opt.setEnabled(val).setVisible(val);
-
-        opt = menu.findItem(R.id.select_all_albums_action);
-        opt.setEnabled(val).setVisible(val);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -474,14 +449,14 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.hideAlbumButton:
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
                 builder2.setMessage(R.string.delete_album_message)
-                        .setPositiveButton( this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.hideSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNeutralButton( this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                        .setNeutralButton(this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 albums.excludeSelectedAlbums();
@@ -489,7 +464,7 @@ public class AlbumsActivity extends ThemedActivity {
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton( this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });

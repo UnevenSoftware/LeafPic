@@ -84,11 +84,10 @@
         <item name="colorControlHighlight">#FFF</item>
     </style>
 
-    <style name="fab">
+    <style name="fab_camera">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">4dp</item>
-        <item name="android:src">@mipmap/ic_photo_camera_white_24dp</item>
         <item name="borderWidth">0dp</item>
         <item name="elevation">6dp</item>
         <item name="pressedTranslationZ">12dp</item>
@@ -99,7 +98,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">4dp</item>
-        <item name="android:src">@mipmap/ic_visibility_off_white_24dp</item>
         <item name="borderWidth">0dp</item>
         <item name="elevation">50dp</item>
         <item name="pressedTranslationZ">12dp</item>
