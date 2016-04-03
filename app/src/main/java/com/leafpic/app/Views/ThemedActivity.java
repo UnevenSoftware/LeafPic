@@ -2,18 +2,15 @@ package com.leafpic.app.Views;
 
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 
 import com.leafpic.app.PhotoPagerActivity;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ColorPalette;
-import com.leafpic.app.utils.Measure;
 
 /**
  * Created by dnld on 23/02/16.
@@ -72,6 +69,11 @@ public class ThemedActivity extends AppCompatActivity {
     public int getBackgroundColor(){
         if(darkTheme) return ColorPalette.getDarkBackgroundColor(getApplicationContext());
         else return ColorPalette.getLightBackgroundColor(getApplicationContext());
+    }
+
+    public int getInvertedBackgroundColor(){
+        if(darkTheme) return ColorPalette.getLightBackgroundColor(getApplicationContext());
+        else return ColorPalette.getDarkBackgroundColor(getApplicationContext());
     }
 
     public int getTextColor(){

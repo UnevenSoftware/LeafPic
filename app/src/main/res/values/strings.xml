@@ -58,36 +58,30 @@
     <string name="settings">Settings</string>
 
     <string name="general">General</string>
-    <string name="collapsing_toolbar">Collapsing Toolbar</string>
-    <string name="collapsing_toolbar_sub">Album cover on top.</string>
-
-    <string name="traslucent_statusbar">Traslucent Status Bar</string>
-    <string name="traslucent_statusbar_sub">Set a darken notification bar.</string>
+    <string name="collapsing_toolbar">Album cover</string>
+    <string name="collapsing_toolbar_sub">Show album cover on toolbar.</string>
+    <string name="traslucent_statusbar">Darken Status Bar</string>
+    <string name="traslucent_statusbar_sub">Apply a darken primary color to the notification bar.</string>
 
     <string name="picture_viewer">Picture Viewer</string>
-    <string name="max_brightness">Max Brightness</string>
-    <string name="max_brightness_sub">The brightness become on limit when open a picture.</string>
-
+    <string name="max_brightness">Maximum Brightness</string>
+    <string name="max_brightness_sub">Maximum brightness when view a media.</string>
     <string name="picture_orientation">Picture Orientation</string>
     <string name="picture_orientation_sub">Allow LeafPic to rotate the image automatically.</string>
-
     <string name="apply_theme">Apply Theme</string>
-    <string name="apply_theme_sub">Apply theme on the picture viewer.</string>
+    <string name="apply_theme_sub">Apply custom color on the picture viewer.</string>
     <string name="transparency">Transparency:</string>
-    <string name="transparency_sub">Apply a custom transparency to the picture viewer ui element.</string>
+    <string name="transparency_sub">Apply a custom transparency to the picture viewer.</string>
 
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>
-    <string name="primary_color_sub">Primary Color, the main color that color toolbar and album card.</string>
-
+    <string name="primary_color_sub">The main color which is used in application UI.</string>
     <string name="accent_color">Accent Color</string>
-    <string name="accent_color_sub">Accent Color, the secondary color that color fab and album number of photos.</string>
-
+    <string name="accent_color_sub">The secondary color which is used to tint widgets an UI details.</string>
     <string name="dark_theme">Dark Theme</string>
-    <string name="dark_theme_sub">set the dark theme.</string>
-
-    <string name="colored_navbar">Colored NavBar</string>
-    <string name="colored_navbar_sub">Color the NavigationBar with the primary color.</string>
+    <string name="dark_theme_sub">Apply a dark theme to the application.</string>
+    <string name="colored_navbar">Colored Navigation Bar</string>
+    <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
 
     <!--PHOTO DETAILS-->
     <string name="path">Path</string>

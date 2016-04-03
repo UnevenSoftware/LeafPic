@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -55,7 +56,6 @@ public class SettingActivity extends ThemedActivity {
 
     boolean maxLuminosita, pictureOrientation;
 
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -100,13 +100,17 @@ public class SettingActivity extends ThemedActivity {
         txtSBC.setTextColor(getAccentColor());
         sbAlpha.setProgress(SP.getInt("set_alpha", 0));
 
+        sbAlpha.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY)); // MULTIPLY rende un po piu chiara la
+                                    // parte non ancora progredita cioe quello che rimane dio porco da andare avanti tu avrai sicuramente capito quindi suca bello
+        //sbAlpha.setBackgroundColor(getTextColor());//questo è solo per fare un effetto figo
+
         sbAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progress = SP.getInt("set_alpha", 0);
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 progress = progresValue;
-                txtSBC.setText((progress * 100)/255 + "%" /*+ "/" + seekBar.getMax()*/);
+                txtSBC.setText((progress * 100) / 255 + "%" /*+ "/" + seekBar.getMax()*/);
             }
 
             @Override
@@ -115,7 +119,7 @@ public class SettingActivity extends ThemedActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                txtSBC.setText((progress * 100)/255  + "%" /*+ "/" + seekBar.getMax()*/);
+                txtSBC.setText((progress * 100) / 255 + "%" /*+ "/" + seekBar.getMax()*/);
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putInt("set_alpha", progress);
                 editor.apply();

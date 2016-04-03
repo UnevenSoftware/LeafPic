@@ -68,22 +68,31 @@
     <!--STRINGS LAYOUT ACT-->
     <string name="settings">Impostazioni</string>
 
-
     <string name="general">Generali</string>
     <string name="collapsing_toolbar">Copertina Album</string>
+    <string name="collapsing_toolbar_sub"> Mostra copertina album nella barra degli strumenti(toolbar).</string>
     <string name="traslucent_statusbar">Barra di notifiche oscurata</string>
+    <string name="traslucent_statusbar_sub">Applica un colore primario oscurato alla barra delle notifiche(statusbar).</string>
 
-    <string name="picture_viewer">Galleria</string>
-    <string name="max_brightness">Max Luminosita</string>
+    <string name="picture_viewer">Visualizzatore Media</string>
+    <string name="max_brightness">Massima Luminosita</string>
+    <string name="max_brightness_sub">Massima luminosita quando accedo ai media.</string>
     <string name="picture_orientation">Orientamento Immagine</string>
+    <string name="picture_orientation_sub">Permetti a LeafPic di ruotare automaticamente il display.</string>
     <string name="apply_theme">Applica Tema</string>
+    <string name="apply_theme_sub">Applica i colori al visualizzatore media.</string>
     <string name="transparency">Trasparenza:</string>
+    <string name="transparency_sub">Applica trasparenza al visualizzatore media.</string>
 
     <string name="theme">Tema</string>
     <string name="primary_color">Colore Primario</string>
-    <string name="accent_color">Colore Particolare</string>
-    <string name="dark_theme">Tema Dark</string>
+    <string name="primary_color_sub">Il colore più usato nel applicazione.</string>
+    <string name="accent_color">Colore Secondario</string>
+    <string name="accent_color_sub">Colore utilizzato per i dettagli dell\u0027interfaccia.</string><!--\u0027 == '-->
+    <string name="dark_theme">Tema Scuro</string>
+    <string name="dark_theme_sub">Applica un tema scuro all\u0027applicazione.</string>
     <string name="colored_navbar">Barra di navigazione colorata</string>
+    <string name="colored_navbar_sub">Applica il colore primario alla barra di navigazione.</string>
 
 
     <!--PHOTO DETAILS-->
