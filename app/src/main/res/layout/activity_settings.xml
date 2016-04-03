@@ -436,14 +436,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
+
                         >
                         <SeekBar
                             android:id="@+id/seek_bar_alpha"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:max="255"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
                             android:paddingBottom="15dp"
                             android:paddingTop="15dp"
                             />
@@ -516,6 +517,7 @@
                                     android:text="@string/primary_color"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
+                                    android:paddingRight="5dp"
                                     />
                                 <TextView
                                     android:id="@+id/PrimaryColor_Item_Sub"
@@ -524,6 +526,7 @@
                                     android:text="@string/primary_color_sub"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
+                                    android:paddingRight="5dp"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -567,6 +570,7 @@
                                 android:text="@string/accent_color"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
+                                android:paddingRight="5dp"
                                 />
                             <TextView
                                 android:id="@+id/accentColor_Item_Sub"
@@ -575,6 +579,7 @@
                                 android:text="@string/accent_color_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="14sp"
+                                android:paddingRight="5dp"
                                 />
                         </LinearLayout>
                     </LinearLayout>
