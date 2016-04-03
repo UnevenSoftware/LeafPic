@@ -203,20 +203,7 @@ public class HandlingAlbums implements Parcelable {
         }
     }
 
-    public void hideAlbum(String path, final ArrayList<Media> ph) {
-        final File dirName = new File(path);
-        File file = new File(dirName, ".nomedia");
-        if (!file.exists()) {
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                out.flush();
-                out.close();
-                scanFile(new String[]{file.getAbsolutePath()});
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 
     public void excludeSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)
@@ -230,36 +217,6 @@ public class HandlingAlbums implements Parcelable {
         h.excludeAlbum(a.ID);
         dispAlbums.remove(a);
     }
-
-    /*public void unHideSelectedAlbums() {
-        for (Album selectedAlbum : selectedAlbums)
-            unHideAlbum(selectedAlbum);
-
-        clearSelectedAlbums();
-    }*/
-
-   /* public void unHideAlbum(Album a) {
-        unHideAlbum(a.Path);
-        dispAlbums.remove(a);
-    }*/
-
-   /* public void unHideAlbum(String path) {
-
-        HiddenPhotosHandler db = new HiddenPhotosHandler(context);
-        File dirName = new File(path);
-        File file = new File(dirName, ".nomedia");
-        if (file.exists()) {
-            try {
-                file.delete();
-                scanFile(new String[]{file.getAbsolutePath()});
-                db.deleteAlbum(path);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        dispAlbums.remove(getAlbum(path));
-        db.close();
-    }*/
 
     /*************
      * This Metods doesnt work for the moment

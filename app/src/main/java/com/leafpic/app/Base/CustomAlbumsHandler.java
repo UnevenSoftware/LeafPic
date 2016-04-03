@@ -29,11 +29,9 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     private static final String ALBUM_DEAFAULT_SORT_ASCENDING = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "column_count";
 
-    Context context;
 
     public CustomAlbumsHandler(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
-        context = ctx;
     }
 
     public void onCreate(SQLiteDatabase db) {
