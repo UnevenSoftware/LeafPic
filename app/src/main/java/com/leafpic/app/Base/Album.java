@@ -24,6 +24,11 @@ import java.util.ArrayList;
  */
 public class Album implements Parcelable {
 
+    public static final int FILTER_ALL=45;
+    public static final int FILTER_IMAGE=55;
+    public static final int FILTER_VIDEO=75;
+    public static final int FILTER_GIF=555;
+
     Context context;
 
     public String ID = null;
@@ -37,7 +42,7 @@ public class Album implements Parcelable {
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
 
     private int current;
-    private int filter_photos = MadiaStoreHandler.FILTER_ALL;
+    private int filter_photos = FILTER_ALL;
 
     private Integer last_position_selecte = -1;
 
@@ -59,8 +64,6 @@ public class Album implements Parcelable {
     public void setContext(Context ctx) {
         context = ctx;
     }
-
-
 
     public void setSettings() {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
@@ -92,6 +95,10 @@ public class Album implements Parcelable {
     }
 
     /** media stuff */
+    public boolean areFiltersActive(){
+        return filter_photos != FILTER_ALL;
+    }
+
     public void filterMedias(int filter){
         filter_photos=filter;
         updatePhotos();
@@ -176,8 +183,6 @@ public class Album implements Parcelable {
         selected = value;
     }
 
-
-
     public void setPath() {
         try {
             Path = StringUtils.getBucketPathbyImagePath(medias.get(0).Path);
@@ -199,7 +204,7 @@ public class Album implements Parcelable {
     public Media getCoverAlbum() {
         if (hasCustomCover())
             return new Media(settings.coverPath);
-        if (medias.size() > 0) return medias.get(0);//return also image info like date, orientation...
+        if (medias.size() > 0) return medias.get(0); //return also image info like date, orientation...
         return new Media("drawable://" + R.drawable.ic_empty);
     }
 

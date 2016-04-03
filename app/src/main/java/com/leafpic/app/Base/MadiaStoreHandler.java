@@ -18,15 +18,11 @@ public class MadiaStoreHandler {
 
     private String TAG = "MEDIASTORE_HANDLER";
 
-    public static final int FILTER_ALL=45;
-    public static final int FILTER_IMAGE=55;
-    public static final int FILTER_VIDEO=75;
-    public static final int FILTER_GIF=555;
+
 
     public MadiaStoreHandler(Context ctx) {
         context = ctx;
     }
-
 
     public ArrayList<Album> getMediaStoreAlbums() {
         ArrayList<Album> list = new ArrayList<Album>();
@@ -70,11 +66,11 @@ public class MadiaStoreHandler {
     }
 
     public ArrayList<Media> getAlbumPhotos(Album a) {
-        return getAlbumPhotos(a.ID, -1, null,FILTER_ALL);
+        return getAlbumPhotos(a.ID, -1, null,Album.FILTER_ALL);
     }
 
     public ArrayList<Media> getAlbumPhotos(Album a, String sort) {
-        return getAlbumPhotos(a.ID, -1, sort,FILTER_ALL);
+        return getAlbumPhotos(a.ID, -1, sort,Album.FILTER_ALL);
     }
 
     public ArrayList<Media> getAlbumPhotos(String id, String sort,int filter) {
@@ -82,7 +78,7 @@ public class MadiaStoreHandler {
     }
 
     public ArrayList<Media> getAlbumPhotos(String id, String sort) {
-        return getAlbumPhotos(id, -1, sort,FILTER_ALL);
+        return getAlbumPhotos(id, -1, sort,Album.FILTER_ALL);
     }
 
     public AlbumMediaCount getAlbumPhotosCount(String id) {
@@ -110,7 +106,7 @@ public class MadiaStoreHandler {
     }
 
     public ArrayList<Media> getFirstAlbumPhoto(String ID) {
-        return getAlbumPhotos(ID, 1, null, FILTER_ALL);
+        return getAlbumPhotos(ID, 1, null, Album.FILTER_ALL);
     }
 
     public ArrayList<Media> getAlbumPhotos(String ID, int n, String order, int filter) {
@@ -134,18 +130,18 @@ public class MadiaStoreHandler {
 
         switch (filter){
 
-            case FILTER_IMAGE:
+            case Album.FILTER_IMAGE:
                 selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
                 break;
-            case FILTER_VIDEO:
+            case Album.FILTER_VIDEO:
                 selection = "( "+  MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
                 break;
-            case FILTER_GIF:
+            case Album.FILTER_GIF:
                 selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and "
                         + MediaStore.Files.FileColumns.PARENT + "='" + ID + "' and "
                         + MediaStore.Images.Media.MIME_TYPE + "='image/gif'";
                 break;
-            case FILTER_ALL:
+            case Album.FILTER_ALL:
             default:
                 selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
                         MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO

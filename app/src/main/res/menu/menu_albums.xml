@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".AlbumsActivity">
 
-    <item android:id="@+id/search_action"
-        android:title="@string/search_menu"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView"
-        />
+    <group android:id="@+id/general_action">
+        <item android:id="@+id/search_action"
+            android:title="@string/search_menu"
+            app:actionViewClass="android.support.v7.widget.SearchView"
+            app:showAsAction="ifRoom|collapseActionView"
+            />
 
-    <item android:id="@+id/sort_action"
-        android:title="@string/sort_menu_title"
-        app:showAsAction="ifRoom"
-        />
+        <item android:id="@+id/sort_action"
+            android:title="@string/sort_menu_title"
+            app:showAsAction="ifRoom"
+            />
+    </group>
 
     <group android:id="@+id/album_options_menu">
         <item android:id="@+id/select_all_albums_action"
