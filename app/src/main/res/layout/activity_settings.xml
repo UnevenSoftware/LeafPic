@@ -167,8 +167,59 @@
                             android:layout_weight="2"
                             />
                     </LinearLayout>
-                </LinearLayout>
 
+                    <!-- EXCLUDED ALBUM-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_excluded_album"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="10"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="15dp"
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/Excluded_Album_Icon"
+                                android:layout_width="0dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-folder"
+                                android:layout_weight="2"
+                                />
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="8"
+                                android:paddingRight="5dp"
+                                >
+                                <TextView
+                                    android:id="@+id/Excluded_Album_Item_Title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excluded_albums"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/Excluded_Album_Item_Title_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excluded_albums_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+                </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <!--
