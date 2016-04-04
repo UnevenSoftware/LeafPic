@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -36,12 +35,10 @@ import java.util.ArrayList;
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
-
     HandlingAlbums albums = new HandlingAlbums(ExcludedAlbumsActivity.this);
     CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-
     //UI
     Toolbar toolbar;
 
@@ -49,11 +46,10 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
+
         //albums.dispAlbums = h.getExcludedALbums();
         albums.loadExcludedAlbums();
-       initUI();
-
-
+        initUI();
     }
 
     public void initUI(){
@@ -65,10 +61,11 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         /** RECYCLE VIEW**/
         mRecyclerView = (RecyclerView) findViewById(R.id.excluded_albums);
         mRecyclerView.setHasFixedSize(true);
+
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(3, getApplicationContext()), true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(0, getApplicationContext()), true));
 
 
         /**SET UP UI COLORS**/
@@ -83,8 +80,8 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
+        setRecentApp(getString(R.string.excluded_albums));
     }
-
 
     private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
 
@@ -103,11 +100,17 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                 h.clearAlbumExclude(albums.get(pos).ID);
                 albums.remove(pos);
                 notifyItemRemoved(pos);
+                MaterialRippleLayout.on(v)
+                        .rippleOverlay(true)
+                        .rippleAlpha(0.2f)
+                        .rippleColor(0xFF585858)
+                        .rippleHover(true)
+                        .rippleDuration(1)
+                        .create();
             }
         };
-
         public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_item, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_card, parent, false);
             v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
             return new ViewHolder(
                     MaterialRippleLayout.on(v)

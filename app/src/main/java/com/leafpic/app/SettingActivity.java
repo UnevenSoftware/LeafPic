@@ -529,9 +529,12 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
 
+        /*
         int color = isDarkTheme()
                 ? ColorPalette.getLightBackgroundColor(getApplicationContext())
                 : ColorPalette.getDarkBackgroundColor(getApplicationContext());
+        */
+        int color = getIconColor();
 
         imgMax.setColor(color);
         imgAT.setColor(color);

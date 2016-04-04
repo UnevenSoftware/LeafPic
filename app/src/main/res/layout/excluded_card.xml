@@ -9,10 +9,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="10"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         >
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/folder_icon"
-            android:layout_height="22dp"
+            android:layout_height="20dp"
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
@@ -45,7 +47,7 @@
 
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/UnExclude_icon"
-            android:layout_height="22dp"
+            android:layout_height="16dp"
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"

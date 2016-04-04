@@ -35,7 +35,6 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -245,10 +244,10 @@ public class AlbumsActivity extends ThemedActivity {
         DrawerHeader.setBackgroundColor(getPrimaryColor());
 
         LinearLayout DrawerBody = (LinearLayout) findViewById(R.id.Drawer_Body);
-        DrawerBody.setBackgroundColor(getBackgroundColor());
+        DrawerBody.setBackgroundColor(getDrawerBackground());//getBackgroundColor()
 
         ScrollView DrawerScroll = (ScrollView) findViewById(R.id.Drawer_Body_Scroll);
-        DrawerScroll.setBackgroundColor(getBackgroundColor());
+        DrawerScroll.setBackgroundColor(getDrawerBackground());//getBackgroundColor()
 
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);
         DrawerDivider2.setBackgroundColor(ContextCompat.getColor(AlbumsActivity.this, R.color.drawer_transparent_gray));
@@ -281,9 +280,12 @@ public class AlbumsActivity extends ThemedActivity {
         txtGithub.setTextColor(color);
         txtWall.setTextColor(color);
 
+        /*
         color = isDarkTheme()
                 ? ColorPalette.getLightBackgroundColor(getApplicationContext())
                 : ColorPalette.getDarkBackgroundColor(getApplicationContext());
+        */
+        color=getIconColor();
 
         imgDD.setColor(color);
         imgDDonate.setColor(color);

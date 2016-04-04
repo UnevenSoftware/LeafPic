@@ -25,9 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <!--
-            GENERAL
-            -->
+
+            <!--GENERAL-->
             <android.support.v7.widget.CardView
                 android:id="@+id/general_setting_card"
                 android:layout_width="match_parent"
@@ -66,7 +65,7 @@
                             >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/collapsing_toolbar_Icon"
-                                android:layout_height="22dp"
+                                android:layout_height="20dp"
                                 android:layout_width="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
@@ -126,7 +125,7 @@
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/Traslucent_StatusBar_Icon"
                             android:layout_width="0dp"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-web-asset"
                             android:layout_weight="2"
@@ -188,7 +187,7 @@
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/Excluded_Album_Icon"
                                 android:layout_width="0dp"
-                                android:layout_height="22dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-folder"
                                 android:layout_weight="2"
@@ -222,9 +221,7 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <!--
-            PICTURE SETTING
-            -->
+            <!--PICTURE SETTING-->
             <android.support.v7.widget.CardView
                 android:id="@+id/preview_picture_setting_card"
                 android:layout_width="match_parent"
@@ -263,7 +260,7 @@
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_max_luminosita_icon"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
@@ -320,7 +317,7 @@
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
@@ -378,7 +375,7 @@
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_apply_theme_3thAct_icon"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
@@ -503,7 +500,6 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-
             <!--THEME-->
             <android.support.v7.widget.CardView
                 android:id="@+id/theme_setting_card"
@@ -549,7 +545,7 @@
 
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/PrimaryColor_Icon"
-                                android:layout_height="22dp"
+                                android:layout_height="20dp"
                                 android:layout_width="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
@@ -602,7 +598,7 @@
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/accentColor_Icon"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
@@ -650,7 +646,7 @@
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/DarkTheme_Icon"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
@@ -706,7 +702,7 @@
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/NavBar_Icon"
-                            android:layout_height="22dp"
+                            android:layout_height="20dp"
                             android:layout_width="0dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
@@ -750,6 +746,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
