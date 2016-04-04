@@ -1,18 +1,5 @@
 package com.leafpic.app;
 
-<<<<<<< HEAD
-import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-
-import com.leafpic.app.Adapters.AlbumsAdapter;
-import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Views.GridSpacingItemDecoration;
-import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.Measure;
-=======
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -43,22 +29,16 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
->>>>>>> refs/remotes/DNLDsht/master
 
 /**
  * Created by Jibo on 04/04/2016.
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
-
     HandlingAlbums albums = new HandlingAlbums(ExcludedAlbumsActivity.this);
-<<<<<<< HEAD
-=======
     CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
->>>>>>> refs/remotes/DNLDsht/master
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
-
     //UI
     Toolbar toolbar;
 
@@ -66,15 +46,10 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
-<<<<<<< HEAD
- 
-=======
+
         //albums.dispAlbums = h.getExcludedALbums();
         albums.loadExcludedAlbums();
-       initUI();
->>>>>>> refs/remotes/DNLDsht/master
-
-
+        initUI();
     }
 
     public void initUI(){
@@ -86,19 +61,15 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         /** RECYCLE VIEW**/
         mRecyclerView = (RecyclerView) findViewById(R.id.excluded_albums);
         mRecyclerView.setHasFixedSize(true);
-<<<<<<< HEAD
-=======
+
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
->>>>>>> refs/remotes/DNLDsht/master
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(3, getApplicationContext()), true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(0, getApplicationContext()), true));
 
 
         /**SET UP UI COLORS**/
         toolbar.setBackgroundColor(getPrimaryColor());
-<<<<<<< HEAD
-=======
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,14 +77,11 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
->>>>>>> refs/remotes/DNLDsht/master
         setStatusBarColor();
         setNavBarColor();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
+        setRecentApp(getString(R.string.excluded_albums));
     }
-<<<<<<< HEAD
-=======
-
 
     private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
 
@@ -132,11 +100,17 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                 h.clearAlbumExclude(albums.get(pos).ID);
                 albums.remove(pos);
                 notifyItemRemoved(pos);
+                MaterialRippleLayout.on(v)
+                        .rippleOverlay(true)
+                        .rippleAlpha(0.2f)
+                        .rippleColor(0xFF585858)
+                        .rippleHover(true)
+                        .rippleDuration(1)
+                        .create();
             }
         };
-
         public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_item, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_card, parent, false);
             v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
             return new ViewHolder(
                     MaterialRippleLayout.on(v)
@@ -198,5 +172,4 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
             }
         }
     }
->>>>>>> refs/remotes/DNLDsht/master
 }

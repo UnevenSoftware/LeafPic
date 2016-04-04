@@ -95,11 +95,7 @@ public class SettingActivity extends ThemedActivity {
 
         //EXCLUDED ALBUMS INTENT*****************************************
         LinearLayout ll_EA = (LinearLayout) findViewById(R.id.ll_excluded_album);
-<<<<<<< HEAD
-        ll_AC.setOnClickListener(new View.OnClickListener() {
-=======
         ll_EA.setOnClickListener(new View.OnClickListener() {
->>>>>>> refs/remotes/DNLDsht/master
             @Override
             public void onClick(View v) {
                 Intent eaa = new Intent(SettingActivity.this, ExcludedAlbumsActivity.class);
@@ -533,9 +529,12 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
 
+        /*
         int color = isDarkTheme()
                 ? ColorPalette.getLightBackgroundColor(getApplicationContext())
                 : ColorPalette.getDarkBackgroundColor(getApplicationContext());
+        */
+        int color = getIconColor();
 
         imgMax.setColor(color);
         imgAT.setColor(color);

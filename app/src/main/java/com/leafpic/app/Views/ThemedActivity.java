@@ -84,6 +84,18 @@ public class ThemedActivity extends AppCompatActivity {
         else return ColorPalette.getLightTextColor(getApplicationContext());
     }
 
+    public int getIconColor(){
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_grey_300
+                : R.color.md_grey_700);
+    }
+
+    public int getDrawerBackground(){
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_grey_800
+                : R.color.md_grey_200);
+    }
+
     public void setNavBarColor() {
         if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
             if(isApplyThemeOnImgAct())

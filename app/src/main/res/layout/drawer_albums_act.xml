@@ -34,6 +34,7 @@
             android:orientation="vertical"
             android:scrollbars="vertical"
             >
+
             <!-- DEFAULT ALBUMS -->
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -51,8 +52,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Default_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="gmd-photo"
@@ -86,8 +87,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Hidden_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="faw-thumb-tack"
@@ -105,6 +106,7 @@
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
             <!-- MOMENTS -->
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -121,8 +123,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Moments_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="gmd-timeline"
@@ -155,8 +157,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_wallpapers_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="gmd-wallpaper" />
@@ -173,7 +175,6 @@
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-
             <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
             <View
                 android:id="@+id/Drawer_Body_Divider"
@@ -182,7 +183,6 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
                 android:padding="5dp"
-
                 />
 
             <!--DONATE-->
@@ -201,8 +201,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Donate_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="faw-gift" />
@@ -235,8 +235,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_github_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="faw-github" />
@@ -269,8 +269,8 @@
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/Drawer_Setting_Icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
                         app:iiv_icon="gmd-settings"
@@ -287,6 +287,7 @@
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

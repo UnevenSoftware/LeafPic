@@ -95,10 +95,7 @@
         </activity>
 
         <activity android:name=".ExcludedAlbumsActivity"
-<<<<<<< HEAD
-=======
             android:label="@string/excluded_albums"
->>>>>>> refs/remotes/DNLDsht/master
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.ExcludedAlbums"/>
