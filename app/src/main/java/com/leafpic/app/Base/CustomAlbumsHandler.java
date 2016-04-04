@@ -147,7 +147,6 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
         if (cur.moveToFirst())
             do {
-                Log.wtf("asd",cur.getString(0));
                 list.add(new Album(cur.getString(0)));
             }while (cur.moveToNext());
 

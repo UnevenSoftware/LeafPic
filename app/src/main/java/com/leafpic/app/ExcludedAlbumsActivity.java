@@ -47,9 +47,14 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
 
-        //albums.dispAlbums = h.getExcludedALbums();
         albums.loadExcludedAlbums();
+        checkNothing(albums.dispAlbums);
         initUI();
+    }
+
+    public void checkNothing(ArrayList<Album> asd){
+        TextView a = (TextView) findViewById(R.id.nothing_to_show);
+        a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
     public void initUI(){
@@ -65,7 +70,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(0, getApplicationContext()), true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(1, getApplicationContext()), false));
 
 
         /**SET UP UI COLORS**/
@@ -88,6 +93,12 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         ArrayList<Album> albums;
         SharedPreferences SP;
 
+        public int getIndex(String id) {
+            for (int i = 0; i < albums.size(); i++)
+                    if (albums.get(i).ID.equals(id)) return i;
+            return -1;
+        }
+
         public ExcludedAlbumsAdapter(ArrayList<Album> ph, Context ctx){
             albums = ph;
             SP = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -96,17 +107,22 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         private View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = ((Integer) v.getTag());
-                h.clearAlbumExclude(albums.get(pos).ID);
-                albums.remove(pos);
-                notifyItemRemoved(pos);
-                MaterialRippleLayout.on(v)
-                        .rippleOverlay(true)
-                        .rippleAlpha(0.2f)
-                        .rippleColor(0xFF585858)
-                        .rippleHover(true)
-                        .rippleDuration(1)
-                        .create();
+                String ID = v.getTag().toString();
+                int pos;
+                if((pos = getIndex(ID)) !=-1) {
+                    h.clearAlbumExclude(ID);
+                    albums.remove(pos);
+                    notifyItemRemoved(pos);
+
+                    MaterialRippleLayout.on(v)
+                            .rippleOverlay(true)
+                            .rippleAlpha(0.2f)
+                            .rippleColor(0xFF585858)
+                            .rippleHover(true)
+                            .rippleDuration(1)
+                            .create();
+                    checkNothing(albums);
+                }
             }
         };
         public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -148,7 +164,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                     : R.color.md_light_cards);
             holder.card_layout.setBackgroundColor(color);
 
-            holder.imgUnExclude.setTag(position);
+            holder.imgUnExclude.setTag(a.ID);
         }
 
         public int getItemCount() {

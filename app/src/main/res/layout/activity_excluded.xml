@@ -11,10 +11,26 @@
         android:background="@color/toolbar"
         android:windowActionBarOverlay="true"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/excluded_albums"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
             />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nothing_to_show"
+            android:text="@string/there_is_nothing_to_show"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
 </LinearLayout>

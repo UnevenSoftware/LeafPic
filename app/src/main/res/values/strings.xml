@@ -15,13 +15,13 @@
     <string name="singular_photo">Photo</string>
     <string name="plural_photos">Photos</string>
     <!--DIALOG-->
-    <string name="exclude_action">EXCLUDE</string>
-    <string name="cancel_action">CANCEL</string>
-    <string name="delete_action">DELETE</string>
-    <string name="hide_action">HIDE</string>
-    <string name="ok_action">OK</string>
-    <string name="rename_photo_action">Rename Photo</string>
-    <string name="insert_a_name">Insert Something</string>
+    <string name="exclude_action">Exclude</string>
+    <string name="cancel_action">Cancel</string>
+    <string name="delete_action">Delete</string>
+    <string name="hide_action">Hide</string>
+    <string name="ok_action">Ok</string>
+    <string name="rename_photo_action">Rename photo</string>
+    <string name="insert_a_name">Insert something</string>
     <!--STORAGE PERMISSION-->
     <string name="storage_permision_denied">"Storage Permission Denied!"</string>
 
@@ -60,8 +60,8 @@
     <string name="general">General</string>
     <string name="collapsing_toolbar">Album cover</string>
     <string name="collapsing_toolbar_sub">Show album cover on toolbar.</string>
-    <string name="traslucent_statusbar">Darken Status Bar</string>
-    <string name="traslucent_statusbar_sub">Apply a darken primary color to the notification bar.</string>
+    <string name="traslucent_statusbar">Darker Status Bar</string>
+    <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Excluded Albums</string>
     <string name="excluded_albums_sub">Menage the excluded albums.</string>
 
@@ -101,68 +101,67 @@
     <string name="github">GitHub</string>
 
     <!--MENUS-->
-        <!--FILTER-->
-        <string name="filter_menu_title">Filter</string>
-        <string name="all">All</string>
-        <string name="videos">Videos</string>
-        <string name="images">Images</string>
-        <string name="gifs">Gifs</string>
-        <!--SORT-->
-        <string name="sort_menu_title">Sort</string>
-        <string name="name">Name</string>
-        <string name="date">Date</string>
-        <string name="size">Size</string>
-        <string name="ascending">Ascending</string>
-        <!--ALBUMS-->
-        <string name="select_all">Select All</string>
-        <string name="clear_selected">Clear Selected</string>
-        <string name="menu_delete">Delete</string>
-        <string name="menu_exclude">Exclude</string>
-        <string name="menu_hide">Hide</string>
-        <string name="menu_refresh">Refresh</string>
-        <!--PHOTO-->
-        <string name="share">Share</string>
-        <string name="rotate">Rotate</string>
-        <string name="rotate_right_90">Rotate Right 90°</string>
-        <string name="rotate_left_90">Rotate Left 90°</string>
-        <string name="rotate_180">Rotate 180°</string>
-        <string name="copy_to">Copy To</string>
-        <string name="move_to">Move To</string>
-        <string name="use_as">Use As</string>
-        <string name="edit">Edit</string>
-        <string name="rename">Rename</string>
-        <string name="details">Details</string>
-        <string name="more">More</string>
-        <string name="edit_with">Edit With</string>
-        <string name="open_with">Open With</string>
-        <string name="upload">Upload</string>
-        <!--PHOTOS-->
-        <string name="set_preview">Set Preview</string>
-        <string name="clear_preview">Clear Preview</string>
+    <!--FILTER-->
+    <string name="filter_menu_title">Filter</string>
+    <string name="all">All</string>
+    <string name="videos">Video</string>
+    <string name="images">Images</string>
+    <string name="gifs">Gifs</string>
+    <!--SORT-->
+    <string name="sort_menu_title">Sort</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="size">Size</string>
+    <string name="ascending">Ascending</string>
+    <!--ALBUMS-->
+    <string name="select_all">Select All</string>
+    <string name="clear_selected">Clear Selected</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_exclude">Exclude</string>
+    <string name="menu_hide">Hide</string>
+    <string name="menu_refresh">Refresh</string>
+    <!--PHOTO-->
+    <string name="share">Share</string>
+    <string name="rotate">Rotate</string>
+    <string name="rotate_right_90">Rotate right 90°</string>
+    <string name="rotate_left_90">Rotate left 90°</string>
+    <string name="rotate_180">Rotate 180°</string>
+    <string name="copy_to">Copy to</string>
+    <string name="move_to">Move to</string>
+    <string name="use_as">Use as</string>
+    <string name="edit">Edit</string>
+    <string name="rename">Rename</string>
+    <string name="details">Details</string>
+    <string name="more">More</string>
+    <string name="edit_with">Edit with</string>
+    <string name="open_with">Open with</string>
+    <string name="upload">Upload</string>
+    <!--PHOTOS-->
+    <string name="set_preview">Set as preview</string>
+    <string name="clear_preview">Clear preview</string>
 
-        <!--VIDEO PLayer-->
-        <string name="enable_background_audio">Play in background</string>
-        <string name="video">Video</string>
-        <string name="audio">Audio</string>
-        <string name="text">Text</string>
-        <string name="logging">Logging</string>
-        <string name="logging_normal">Normal</string>
-        <string name="logging_verbose">Verbose</string>
-        <string name="retry">Retry</string>
-        <string name="off">[off]</string>
-        <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
-        <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
-        <string name="error_drm_unknown">An unknown DRM error occurred</string>
-        <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
-        <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
-        <string name="error_querying_decoders">Unable to query device decoders</string>
-        <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
-        <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
+    <!--VIDEO PLayer-->
+    <string name="enable_background_audio">Play in background</string>
+    <string name="video">Video</string>
+    <string name="audio">Audio</string>
+    <string name="text">Text</string>
+    <string name="logging">Logging</string>
+    <string name="logging_normal">Normal</string>
+    <string name="logging_verbose">Verbose</string>
+    <string name="retry">Retry</string>
+    <string name="off">[off]</string>
+    <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
+    <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
+    <string name="error_drm_unknown">An unknown DRM error occurred</string>
+    <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+    <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+    <string name="error_querying_decoders">Unable to query device decoders</string>
+    <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
+    <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
 
-        <string name="video_player">Video Player</string>
+    <string name="video_player">Video Player</string>
     <string name="media">Media</string>
     <string name="send_to">Send to</string>
     <string name="search_menu">search</string>
-
-
+    <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
 </resources>
