@@ -36,8 +36,6 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
     HandlingAlbums albums = new HandlingAlbums(ExcludedAlbumsActivity.this);
     CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
     RecyclerView mRecyclerView;
-    AlbumsAdapter adapt;
-    //UI
     Toolbar toolbar;
 
     @Override
@@ -68,7 +66,10 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/DNLDsht/master
 
         /**SET UP UI COLORS**/
         toolbar.setBackgroundColor(getPrimaryColor());
