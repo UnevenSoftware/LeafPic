@@ -52,6 +52,10 @@ public class Album implements Parcelable {
         this.count = count;
     }
 
+    public Album(String id) {
+        ID = id;
+    }
+
     public Album(Context ctx, String photoPath) {
         context = ctx;
         MadiaStoreHandler as = new MadiaStoreHandler(context);

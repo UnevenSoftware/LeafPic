@@ -29,7 +29,6 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     private static final String ALBUM_DEAFAULT_SORT_ASCENDING = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "column_count";
 
-
     public CustomAlbumsHandler(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -138,6 +137,30 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         cur.close();
         db.close();
         return list;
+    }
+
+    public ArrayList<Album> getExcludedALbums() {
+        ArrayList<Album> list = new ArrayList<Album>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_ID }, ALBUM_EXCLUDED + "='true'", null, null,
+                null, null);
+
+        if (cur.moveToFirst())
+            do {
+                Log.wtf("asd",cur.getString(0));
+                list.add(new Album(cur.getString(0)));
+            }while (cur.moveToNext());
+
+        cur.close();
+        db.close();
+        return list;
+    }
+
+    public void clearAlbumExclude(String id) {
+        //checkAndCreateAlbum(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "=NULL WHERE " + ALBUM_ID + "='" + StringUtils.quoteReplace(id) + "'");
+        db.close();
     }
 
     public void LogEXCLUDEALBUMS() {
