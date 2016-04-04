@@ -20,10 +20,8 @@ import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
-import com.leafpic.app.utils.Measure;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -70,7 +68,6 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, Measure.pxToDp(1, getApplicationContext()), false));
 
 
         /**SET UP UI COLORS**/
