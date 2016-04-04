@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 
 public class HandlingAlbums implements Parcelable {
+
+    public final String CAMERA_PATTERN = "DCIM/Camera";//TODO improve with regex
+
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HandlingAlbums> CREATOR = new Parcelable.Creator<HandlingAlbums>() {
         @Override
@@ -47,7 +50,6 @@ public class HandlingAlbums implements Parcelable {
             dispAlbums = null;
         }
         last_position_selecte = in.readInt();
-        // context = (Context) in.readValue(Context.class.getClassLoader());
         if (in.readByte() == 0x01) {
             selectedAlbums = new ArrayList<Album>();
             in.readList(selectedAlbums, Album.class.getClassLoader());
@@ -69,8 +71,8 @@ public class HandlingAlbums implements Parcelable {
         for (int i = 0; i < dispAlbums.size(); i++) {
             dispAlbums.get(i).setCoverPath(h.getPhotPrevieAlbum(dispAlbums.get(i).ID));
             dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
-
-            if (dispAlbums.get(i).DisplayName.equals("Camera")) cameraIndex = i;
+            dispAlbums.get(i).setPath();
+            if (dispAlbums.get(i).Path.contains(CAMERA_PATTERN)) cameraIndex = i;
         }
 
         if (cameraIndex != -1) {
