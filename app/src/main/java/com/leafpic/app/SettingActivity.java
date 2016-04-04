@@ -93,6 +93,16 @@ public class SettingActivity extends ThemedActivity {
             }
         });
 
+        //EXCLUDED ALBUMS INTENT*****************************************
+        LinearLayout ll_EA = (LinearLayout) findViewById(R.id.ll_excluded_album);
+        ll_AC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent eaa = new Intent(SettingActivity.this, ExcludedAlbumsActivity.class);
+                startActivity(eaa);
+            }
+        });
+
 
         /**** SEEK BAR ****/
         sbAlpha = (SeekBar) findViewById(R.id.seek_bar_alpha);
@@ -517,6 +527,7 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgAC = (IconicsImageView) findViewById(R.id.accentColor_Icon);
         IconicsImageView imgDT = (IconicsImageView) findViewById(R.id.DarkTheme_Icon);
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
+        IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
 
         int color = isDarkTheme()
                 ? ColorPalette.getLightBackgroundColor(getApplicationContext())
@@ -531,6 +542,7 @@ public class SettingActivity extends ThemedActivity {
         imgDT.setColor(color);
         imgNB.setColor(color);
         imgOrient.setColor(color);
+        imgEA.setColor(color);
 
         /** TextViews **/
 
@@ -544,6 +556,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtAC = (TextView) findViewById(R.id.accentColor_Item);
         TextView txtDT = (TextView) findViewById(R.id.DarkTheme_Item);
         TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
+        TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
 
 
         txtMax.setTextColor(color);
@@ -556,6 +569,7 @@ public class SettingActivity extends ThemedActivity {
         txtAC.setTextColor(color);
         txtDT.setTextColor(color);
         txtNB.setTextColor(color);
+        txtEAT.setTextColor(color);
 
         /** Sub Text Views**/
 
@@ -573,6 +587,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtAC_Sub = (TextView) findViewById(R.id.accentColor_Item_Sub);
         TextView txtDT_Sub = (TextView) findViewById(R.id.DarkTheme_Item_Sub);
         TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
+        TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
 
         txtMax_Sub.setTextColor(color);
         txtOrient_Sub.setTextColor(color);
@@ -584,7 +599,7 @@ public class SettingActivity extends ThemedActivity {
         txtAC_Sub.setTextColor(color);
         txtDT_Sub.setTextColor(color);
         txtNB_Sub.setTextColor(color);
-
+        txtEAT_Sub.setTextColor(color);
 
         color = ContextCompat.getColor(SettingActivity.this, isDarkTheme()
                 ? R.color.md_dark_cards

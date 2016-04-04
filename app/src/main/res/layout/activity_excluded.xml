@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:background="@color/toolbar"
+        android:windowActionBarOverlay="true"
+        />
+    <!--
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    -->
+        <!--Excluded List-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/excluded_albums"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            />
+        <!--END Excluded List-->
+    <!--
+    </ScrollView>
+    -->
+</LinearLayout>

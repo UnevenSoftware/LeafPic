@@ -62,6 +62,8 @@
     <string name="collapsing_toolbar_sub">Show album cover on toolbar.</string>
     <string name="traslucent_statusbar">Darken Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darken primary color to the notification bar.</string>
+    <string name="excluded_albums">Excluded Albums</string>
+    <string name="excluded_albums_sub">Menage the excluded albums.</string>
 
     <string name="picture_viewer">Picture Viewer</string>
     <string name="max_brightness">Maximum Brightness</string>
