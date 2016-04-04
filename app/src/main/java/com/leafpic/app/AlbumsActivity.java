@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -205,6 +206,9 @@ public class AlbumsActivity extends ThemedActivity {
                 //materialMenu.animateIconState(MaterialMenuDrawable.IconState.ARROW);
             }
         });
+
+        TextView logo = (TextView) findViewById(R.id.txtLogo);
+        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);

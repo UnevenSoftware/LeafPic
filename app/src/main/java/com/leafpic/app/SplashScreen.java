@@ -3,12 +3,14 @@ package com.leafpic.app;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.leafpic.app.Base.HandlingAlbums;
@@ -30,6 +32,9 @@ public class SplashScreen extends ThemedActivity {
         setContentView(R.layout.activity_splash);
         albums = new HandlingAlbums(SplashScreen.this);
 
+        TextView logo = (TextView) findViewById(R.id.txtLogo);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf");
+        logo.setTypeface(tf);
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             new PrefetchData().execute();
         } else {
