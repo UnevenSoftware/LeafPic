@@ -29,7 +29,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
-
+ 
 
 
     }
