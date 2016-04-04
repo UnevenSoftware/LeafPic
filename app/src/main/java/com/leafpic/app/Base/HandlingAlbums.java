@@ -5,6 +5,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
@@ -76,6 +77,17 @@ public class HandlingAlbums implements Parcelable {
             Album camera = dispAlbums.remove(cameraIndex);
             camera.DisplayName = context.getString(R.string.camera);
             dispAlbums.add(0, camera);
+        }
+    }
+
+    public void loadExcludedAlbums(){
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        dispAlbums = h.getExcludedALbums();
+
+        for (int i = 0; i < dispAlbums.size(); i++) {
+            dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
+            dispAlbums.get(i).setPath();
         }
     }
 

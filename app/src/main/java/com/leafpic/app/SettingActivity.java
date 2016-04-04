@@ -95,7 +95,11 @@ public class SettingActivity extends ThemedActivity {
 
         //EXCLUDED ALBUMS INTENT*****************************************
         LinearLayout ll_EA = (LinearLayout) findViewById(R.id.ll_excluded_album);
+<<<<<<< HEAD
         ll_AC.setOnClickListener(new View.OnClickListener() {
+=======
+        ll_EA.setOnClickListener(new View.OnClickListener() {
+>>>>>>> refs/remotes/DNLDsht/master
             @Override
             public void onClick(View v) {
                 Intent eaa = new Intent(SettingActivity.this, ExcludedAlbumsActivity.class);
