@@ -106,8 +106,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.selectHolder.setVisibility(View.INVISIBLE);
 
             if (SP.getBoolean("set_dark_theme", true))
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.unselected_album));
-            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.background_material_light));
+                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
+            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_light_cards));
         }
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +

@@ -11,9 +11,6 @@
     <string name="storage_slide_title">Storage Permission!</string>
     <string name="storage_slide_sub">ACCETTA Storage Permission per usare la galleria.</string>
 
-
-
-
     <!--ALBUMS & SELECT ALBUMS ADAPTER-->
     <string name="singular_photo">Immagine</string>
     <string name="plural_photos">Immagini</string>
@@ -94,13 +91,10 @@
     <string name="colored_navbar">Barra di navigazione colorata</string>
     <string name="colored_navbar_sub">Applica il colore primario alla barra di navigazione.</string>
 
-
     <!--PHOTO DETAILS-->
     <string name="path">Percorso</string>
     <string name="type">Tipo</string>
     <string name="resolution">Risoluzione</string>
-
-
 
     <string name="sent_to_action">Manda a</string>
 
@@ -111,7 +105,6 @@
     <string name="wallpapers">Wallpapers</string>
     <string name="donate">Dona</string>
     <string name="github">GitHub</string>
-
 
     <!--MENUS-->
     <!--FILTER-->

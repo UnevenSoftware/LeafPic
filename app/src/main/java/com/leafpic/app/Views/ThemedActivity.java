@@ -70,30 +70,45 @@ public class ThemedActivity extends AppCompatActivity {
 
     //METHOD
     public int getBackgroundColor(){
-        if(darkTheme) return ColorPalette.getDarkBackgroundColor(getApplicationContext());
-        else return ColorPalette.getLightBackgroundColor(getApplicationContext());
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_dark_background
+                : R.color.md_light_background);
     }
 
     public int getInvertedBackgroundColor(){
-        if(darkTheme) return ColorPalette.getLightBackgroundColor(getApplicationContext());
-        else return ColorPalette.getDarkBackgroundColor(getApplicationContext());
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_light_background
+                : R.color.md_dark_background);
     }
 
     public int getTextColor(){
-        if(darkTheme) return ColorPalette.getDarkTextColor(getApplicationContext());
-        else return ColorPalette.getLightTextColor(getApplicationContext());
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_grey_200
+                : R.color.md_grey_800);
+    }
+
+    public int getSubTextColor(){
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_grey_400
+                : R.color.md_grey_600);
+    }
+
+    public int getCardBackgroundColor(){
+        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
+                ? R.color.md_dark_cards
+                : R.color.md_light_cards);
     }
 
     public int getIconColor(){
         return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_grey_300
-                : R.color.md_grey_700);
+                ? R.color.md_dark_primary_icon
+                : R.color.md_light_primary_icon);
     }
 
     public int getDrawerBackground(){
         return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_grey_800
-                : R.color.md_grey_200);
+                ? R.color.md_dark_cards
+                : R.color.md_light_cards);
     }
 
     public void setNavBarColor() {
@@ -104,7 +119,7 @@ public class ThemedActivity extends AppCompatActivity {
                 else
                     getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
             else
-                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
         } else
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
             else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
@@ -142,7 +157,8 @@ public class ThemedActivity extends AppCompatActivity {
                 else
                     getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
-                getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_dark_gray));
+                getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 150));//TODO ;UST BE BETER FIXXED
         } else {
             if (isTraslucentStatusBar()) {
                 int c = ColorPalette.getOscuredColor(getPrimaryColor());
@@ -151,12 +167,6 @@ public class ThemedActivity extends AppCompatActivity {
                 getWindow().setStatusBarColor(getPrimaryColor());
         }
     }
-
-
-    /*public int getTransparentColor(int color, int alpha){
-        int res = ColorUtils.setAlphaComponent(color, alpha);
-        return  res;
-    }*/
 
     public void updateTheme(){
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_teal_500));//TEAL CARD BG DEFAULT;

@@ -13,7 +13,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,8 +35,6 @@ import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.HandlingPhotos;
-import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
@@ -400,17 +396,11 @@ public class PhotosActivity extends ThemedActivity {
 
                 txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
-                if (!isDarkTheme()){
-                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
-                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.cp_TextLight), PorterDuff.Mode.SRC_ATOP);
-                } else{
-                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.cp_PrimaryDark));
-                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
-                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
-                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark), PorterDuff.Mode.SRC_ATOP);
-                }
+                cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
+                txt_edit.setTextColor(getTextColor());
+                txt_edit.setHintTextColor(getTextColor());
+                txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
                     @Override

@@ -11,7 +11,7 @@
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
-        android:background="@color/trasparent_toolbar"
+        android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true"
         />
 

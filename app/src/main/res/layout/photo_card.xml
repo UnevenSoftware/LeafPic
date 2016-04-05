@@ -12,7 +12,7 @@
         android:layout_margin="10dp"
         android:elevation="10dp"
         android:visibility="invisible"
-        app:iiv_color="@color/white"
+        app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-check-circle"
     />
 
@@ -25,7 +25,7 @@
         android:layout_marginStart="5dp"
         android:elevation="10dp"
         android:visibility="invisible"
-        app:iiv_color="@color/white"
+        app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-gif"
     />
 
@@ -36,7 +36,7 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:elevation="10dp"
         android:visibility="invisible"
-        app:iiv_color="@color/white"
+        app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-play-circle-filled" />
     <TextView
         android:id="@+id/photo_path"

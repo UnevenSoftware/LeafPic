@@ -1,46 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="white_opaque">#FAFAFA</color>
-    <color name="pitch_black">#212121</color>
-
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
-        <item name="android:background">@color/white_opaque</item>
-        <item name="android:windowBackground">@color/white_opaque</item>
-        <item name="android:colorBackground">@color/white_opaque</item>
-
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="android:textColorSecondary">@color/textColorSecondary</item>
-        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
-        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
-
-    </style>
-
-    <style name="AppTheme.Dark" parent="Theme.AppCompat">
-        <item name="android:background">@color/pitch_black</item>
-        <item name="android:windowBackground">@color/pitch_black</item>
-        <item name="android:colorBackground">@color/pitch_black</item>
-
-        <item name="colorPrimary">@color/colorPrimaryInverse</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkInverse</item>
-        <item name="colorAccent">@color/colorAccentInverse</item>
-        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
-        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
-        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
-        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
-
-    </style>
-
-    <!--
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/material_drawer_primary</item>
-        <item name="colorPrimaryDark">@color/material_drawer_primary_dark</item>
-        <item name="colorAccent">@color/material_drawer_accent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-    </style>
-    -->
 
     <!--LIGHT MENU THEME-->
     <style name="LightActionBarMenu" parent="Theme.AppCompat.Light">
@@ -72,7 +30,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@color/toolbar</item>
+        <item name="android:background">@color/md_dark_appbar</item>
         <item name="android:elevation" tools:ignore="NewApi">5dp</item>
         <item name="theme">@style/MyToolbarTheme</item>
 
@@ -124,15 +82,15 @@
     <!--DIALOG THEME-->
 
     <style name="AlertDialog_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/cp_AccentLight</item><!--BOTTONI-->
-        <item name="android:textColorPrimary">@color/cp_TextLight</item><!--TESTO-->
-        <item name="android:background">@color/cp_PrimaryLight</item><!--SFONDO-->
+        <item name="colorAccent">@color/md_light_primary_icon</item><!--BOTTONI-->
+        <item name="android:textColorPrimary">@color/md_light_primary_text</item><!--TESTO-->
+        <item name="android:background">@color/cardview_light_background</item><!--SFONDO-->
     </style>
 
     <style name="AlertDialog_Dark" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/cp_AccentDark</item><!--BOTTONI-->
-        <item name="android:textColorPrimary">@color/cp_TextDark</item><!--TESTO-->
-        <item name="android:background">@color/cp_PrimaryDark</item><!--SFONDO-->
+        <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
+        <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
+        <item name="android:background">@color/cardview_dark_background</item><!--SFONDO-->
     </style>
 
 
@@ -146,7 +104,7 @@
     </style>
 
 
-
+    <!--Player-->
     <style name="RootTheme" parent="android:Theme.Holo">
     </style>
 

@@ -17,7 +17,7 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:elevation="10dp"
         android:visibility="visible"
-        app:iiv_color="@color/white"
+        app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-play-circle-filled" />
 
 </FrameLayout>

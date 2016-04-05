@@ -25,24 +25,9 @@ public class ColorPalette {
                 ContextCompat.getColor(context, R.color.md_yellow_500),
                 ContextCompat.getColor(context, R.color.md_orange_500),
                 ContextCompat.getColor(context, R.color.md_deep_orange_500),
+                ContextCompat.getColor(context, R.color.md_brown_500),
                 ContextCompat.getColor(context, R.color.md_blue_grey_500),
         };
-    }
-
-    public static int getDarkBackgroundColor(Context context){
-        return ContextCompat.getColor(context, R.color.act_bg_dark);
-    }
-
-    public static int getLightBackgroundColor(Context context){
-        return ContextCompat.getColor(context, R.color.act_bg_light);
-    }
-
-    public static int getDarkTextColor(Context context){
-        return ContextCompat.getColor(context, R.color.cp_TextDark);
-    }
-
-    public static int getLightTextColor(Context context){
-        return ContextCompat.getColor(context, R.color.cp_TextLight);
     }
 
     public static int getOscuredColor(int c){
