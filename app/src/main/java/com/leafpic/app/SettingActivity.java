@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -16,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
@@ -50,9 +51,6 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swStatusBar;
     SwitchCompat swMaxLuminosita;
     SwitchCompat swPictureOrientation;
-    SwitchCompat swApplyTheme3thAct;
-
-    SeekBar sbAlpha;
 
     boolean maxLuminosita, pictureOrientation;
 
@@ -66,10 +64,6 @@ public class SettingActivity extends ThemedActivity {
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
-
-        txtATT = (TextView) findViewById(R.id.apply_theme_3thAct_title);
-        txtSBT = (TextView) findViewById(R.id.seek_bar_alpha_title);
-        txtSBC = (TextView) findViewById(R.id.seek_bar_alpha_count);
 
         setNavBarColor();
         maxLuminosita = SP.getBoolean("set_max_luminosita", false);
@@ -103,57 +97,18 @@ public class SettingActivity extends ThemedActivity {
             }
         });
 
-
-        /**** SEEK BAR ****/
-        sbAlpha = (SeekBar) findViewById(R.id.seek_bar_alpha);
-        txtSBC.setText(((SP.getInt("set_alpha", 0))*100)/255 + "%");
-        txtSBC.setTextColor(getAccentColor());
-        sbAlpha.setProgress(SP.getInt("set_alpha", 0));
-
-        sbAlpha.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY)); // MULTIPLY rende un po piu chiara la
-                                    // parte non ancora progredita cioe quello che rimane dio porco da andare avanti tu avrai sicuramente capito quindi suca bello
-        //sbAlpha.setBackgroundColor(getTextColor());//questo è solo per fare un effetto figo
-
-        sbAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progress = SP.getInt("set_alpha", 0);
-
+        //CUSTOMIZE PICTURE VIEWER DIALOG*****************************************
+        LinearLayout ll_CPV = (LinearLayout) findViewById(R.id.ll_custom_thirdAct);
+        ll_CPV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                progress = progresValue;
-                txtSBC.setText((progress * 100) / 255 + "%" /*+ "/" + seekBar.getMax()*/);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                txtSBC.setText((progress * 100) / 255 + "%" /*+ "/" + seekBar.getMax()*/);
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putInt("set_alpha", progress);
-                editor.apply();
+            public void onClick(View v) {
+                CustomizePictureViewerDialog();
             }
         });
+
 
 
         /**** Switches ****/
-
-        /*********** SW Enable_Trasparency ************/
-        swApplyTheme3thAct = (SwitchCompat) findViewById(R.id.apply_theme_3th_act_enabled);
-        swApplyTheme3thAct.setChecked(isApplyThemeOnImgAct());
-        swApplyTheme3thAct.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("apply_theme_img_act", isChecked);
-                editor.apply();
-                updateSwitchColor(swApplyTheme3thAct);
-                sbAlpha.setEnabled(isChecked);
-            }
-        });
-        sbAlpha.setEnabled(swApplyTheme3thAct.isChecked());
-        updateSwitchColor(swApplyTheme3thAct);
 
         /*********** SW Picture_orientation ************/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
@@ -377,9 +332,6 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(colorPicker.getColor());
                 txtTT.setTextColor(colorPicker.getColor());
                 txtPT.setTextColor(colorPicker.getColor());
-                txtSBC.setTextColor(colorPicker.getColor());
-
-                sbAlpha.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY));
 
                 if(swCollaps.isChecked()) swCollaps.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swDarkTheme.isChecked()) swDarkTheme.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
@@ -387,8 +339,6 @@ public class SettingActivity extends ThemedActivity {
                 if(swStatusBar.isChecked()) swStatusBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swMaxLuminosita.isChecked()) swMaxLuminosita.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swPictureOrientation.isChecked()) swPictureOrientation.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
-                if(swApplyTheme3thAct.isChecked()) swApplyTheme3thAct.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
-
             }
         });
         AccentPikerDialog.setView(Accent_dialogLayout);
@@ -400,8 +350,6 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
-                txtSBC.setTextColor(getAccentColor());
-                sbAlpha.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY));
 
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
@@ -409,7 +357,6 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swStatusBar);
                 updateSwitchColor(swMaxLuminosita);
                 updateSwitchColor(swPictureOrientation);
-                updateSwitchColor(swApplyTheme3thAct);
             }
         });
         AccentPikerDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
@@ -421,8 +368,6 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
-                txtSBC.setTextColor(getAccentColor());
-                sbAlpha.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY));
 
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
@@ -430,7 +375,6 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swStatusBar);
                 updateSwitchColor(swMaxLuminosita);
                 updateSwitchColor(swPictureOrientation);
-                updateSwitchColor(swApplyTheme3thAct);
             }
         });
         AccentPikerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -439,8 +383,6 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
-                txtSBC.setTextColor(getAccentColor());
-                sbAlpha.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY));
 
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
@@ -448,10 +390,123 @@ public class SettingActivity extends ThemedActivity {
                 updateSwitchColor(swStatusBar);
                 updateSwitchColor(swMaxLuminosita);
                 updateSwitchColor(swPictureOrientation);
-                updateSwitchColor(swApplyTheme3thAct);
             }
         });
         AccentPikerDialog.show();
+    }
+
+    public void CustomizePictureViewerDialog(){
+
+        final AlertDialog.Builder CustomizeViewer;
+
+        SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
+        if (isDarkTheme())
+            CustomizeViewer = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Dark);
+        else
+            CustomizeViewer = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Light);
+
+        final View CustomizeThird_dialogLayout = getLayoutInflater().inflate(R.layout.third_act_theme_dialog, null);
+        final TextView txtTitle = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.third_act_theme_title);
+        final TextView txtAT3A = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.apply_theme_3thAct_title);
+        final TextView txtAT3A_Sub = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.apply_theme_3thAct_title_Sub);
+        final IconicsImageView imgAT3A = (IconicsImageView) CustomizeThird_dialogLayout.findViewById(R.id.ll_apply_theme_3thAct_icon);
+        final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) CustomizeThird_dialogLayout.findViewById(R.id.apply_theme_3th_act_enabled);
+
+        CardView cv = (CardView) CustomizeThird_dialogLayout.findViewById(R.id.third_act_theme_card);
+        cv.setBackgroundColor(getCardBackgroundColor());
+        txtTitle.setBackgroundColor(getPrimaryColor());//or Getprimary
+        txtAT3A.setTextColor(getTextColor());
+        txtAT3A_Sub.setTextColor(getSubTextColor());
+        imgAT3A.setColor(getIconColor());
+
+        /**SWITCH**/
+        swApplyTheme_Viewer.setChecked(isApplyThemeOnImgAct());
+        swApplyTheme_Viewer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateSwitchColor(swApplyTheme_Viewer);
+            }
+        });
+        updateSwitchColor(swApplyTheme_Viewer);
+
+        /**RADIO BUTTONS**/
+        final TextView txtTrasparencyTit = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.seek_bar_alpha_title);
+        final TextView txtTrasparency_Sub = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.seek_bar_alpha_title_Sub);
+        txtTrasparencyTit.setTextColor(getTextColor());
+        txtTrasparency_Sub.setTextColor(getSubTextColor());
+
+        final RadioGroup rg = (RadioGroup) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency);
+        final RadioButton rb_0 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_0);
+        final RadioButton rb_10 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_10);
+        final RadioButton rb_20 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_20);
+        final RadioButton rb_30 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_30);
+        final RadioButton rb_50 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_50);
+        final RadioButton rb_80 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_80);
+        final RadioButton rb_100 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_100);
+
+        int col = getPrimaryColor(); /*ContextCompat.getColor(SettingActivity.this, R.color.md_grey_500);*/
+        rb_0.setBackgroundColor(ColorPalette.getTransparentColor(col, (100*255) / 100 ));
+        rb_10.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-10) * 255 ) / 100 ));
+        rb_20.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-20) * 255) / 100 ));
+        rb_30.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-30) * 255) / 100 ));
+        rb_50.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-50) * 255) / 100 ));
+        rb_80.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-80) * 255) / 100 ));
+        rb_100.setBackgroundColor(ColorPalette.getTransparentColor(col, 255 / 100));
+
+        int transparency= ((SP.getInt("set_alpha", 0))*100)/255;
+        Toast.makeText(SettingActivity.this, "Trasparenza: "+transparency, Toast.LENGTH_LONG).show();
+        switch (transparency){
+            case 0: rb_0.setChecked(true); break;
+            case 9:
+            case 10: rb_10.setChecked(true); break;
+
+            case 19:
+            case 20: rb_20.setChecked(true); break;
+
+            case 29:
+            case 30: rb_30.setChecked(true); break;
+
+            case 49:
+            case 50: rb_50.setChecked(true); break;
+
+            case 80: rb_80.setChecked(true); break;
+            case 100: rb_100.setChecked(true); break;
+        }
+
+        CustomizeViewer.setView(CustomizeThird_dialogLayout);
+        CustomizeViewer.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        CustomizeViewer.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("apply_theme_img_act", swApplyTheme_Viewer.isChecked());
+
+                int selectedId = rg.getCheckedRadioButtonId();
+                View radioButton = rg.findViewById(selectedId);
+                int idx = rg.indexOfChild(radioButton);
+                switch (idx){
+                    case 0: editor.putInt("set_alpha", 0);  break;
+                    case 1: editor.putInt("set_alpha", (10*255)/100);  break;
+                    case 2: editor.putInt("set_alpha", (20*255)/100);  break;
+                    case 3: editor.putInt("set_alpha", (30*255)/100);  break;
+                    case 4: editor.putInt("set_alpha", (50*255)/100);  break;
+                    case 5: editor.putInt("set_alpha", (80*255)/100);  break;
+                    case 6: editor.putInt("set_alpha", (100*255)/100);  break;
+                    default: editor.putInt("set_alpha", 0); break;
+                }
+                editor.apply();
+                updateTheme();
+            }
+        });
+        CustomizeViewer.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+            }
+        });
+        CustomizeViewer.show();
     }
 
     @Override
@@ -505,38 +560,39 @@ public class SettingActivity extends ThemedActivity {
         CardView cvTheme = (CardView) findViewById(R.id.theme_setting_card);
         CardView cvPicture = (CardView) findViewById(R.id.preview_picture_setting_card);
 
-        cvGeneral.setBackgroundColor(getCardBackgroundColor());
-        cvTheme.setBackgroundColor(getCardBackgroundColor());
-        cvPicture.setBackgroundColor(getCardBackgroundColor());
+        int color = getCardBackgroundColor();
+        cvGeneral.setBackgroundColor(color);
+        cvTheme.setBackgroundColor(color);
+        cvPicture.setBackgroundColor(color);
 
         /** Icons **/
         IconicsImageView imgOrient = (IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
         IconicsImageView imgMax = (IconicsImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
         IconicsImageView imgTSB = (IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
         IconicsImageView imgCI = (IconicsImageView) findViewById(R.id.collapsing_toolbar_Icon);
-        IconicsImageView imgAT = (IconicsImageView) findViewById(R.id.ll_apply_theme_3thAct_icon);
+        IconicsImageView imgC3A = (IconicsImageView) findViewById(R.id.custom_3thAct_icon);
         IconicsImageView imgPC = (IconicsImageView) findViewById(R.id.PrimaryColor_Icon);
         IconicsImageView imgAC = (IconicsImageView) findViewById(R.id.accentColor_Icon);
         IconicsImageView imgDT = (IconicsImageView) findViewById(R.id.DarkTheme_Icon);
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
 
-        imgMax.setColor(getIconColor());
-        imgAT.setColor(getIconColor());
-        imgCI.setColor(getIconColor());
-        imgTSB.setColor(getIconColor());
-        imgPC.setColor(getIconColor());
-        imgAC.setColor(getIconColor());
-        imgDT.setColor(getIconColor());
-        imgNB.setColor(getIconColor());
-        imgOrient.setColor(getIconColor());
-        imgEA.setColor(getIconColor());
+        color = getIconColor();
+        imgMax.setColor(color);
+        imgC3A.setColor(color);
+        imgCI.setColor(color);
+        imgTSB.setColor(color);
+        imgPC.setColor(color);
+        imgAC.setColor(color);
+        imgDT.setColor(color);
+        imgNB.setColor(color);
+        imgOrient.setColor(color);
+        imgEA.setColor(color);
 
         /** TextViews **/
         TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
         TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
-        TextView txtATT = (TextView) findViewById(R.id.apply_theme_3thAct_title);
-        TextView txtSBT = (TextView) findViewById(R.id.seek_bar_alpha_title);
+        TextView txtC3AT = (TextView) findViewById(R.id.custom_3thAct_title);
         TextView txtC = (TextView) findViewById(R.id.collapsing_toolbar_Item);
         TextView txtTSB = (TextView) findViewById(R.id.Traslucent_StatusBar_Item);
         TextView txtPC = (TextView) findViewById(R.id.PrimaryColor_Item);
@@ -545,23 +601,22 @@ public class SettingActivity extends ThemedActivity {
         TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
 
-        txtMax.setTextColor(getTextColor());
-        txtOrient.setTextColor(getTextColor());
-        txtATT.setTextColor(getTextColor());
-        txtSBT.setTextColor(getTextColor());
-        txtC.setTextColor(getTextColor());
-        txtTSB.setTextColor(getTextColor());
-        txtPC.setTextColor(getTextColor());
-        txtAC.setTextColor(getTextColor());
-        txtDT.setTextColor(getTextColor());
-        txtNB.setTextColor(getTextColor());
-        txtEAT.setTextColor(getTextColor());
+        color=getTextColor();
+        txtMax.setTextColor(color);
+        txtOrient.setTextColor(color);
+        txtC3AT.setTextColor(color);
+        txtC.setTextColor(color);
+        txtTSB.setTextColor(color);
+        txtPC.setTextColor(color);
+        txtAC.setTextColor(color);
+        txtDT.setTextColor(color);
+        txtNB.setTextColor(color);
+        txtEAT.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
         TextView txtOrient_Sub = (TextView) findViewById(R.id.picture_orientation_Item_Sub);
-        TextView txtATT_Sub = (TextView) findViewById(R.id.apply_theme_3thAct_title_Sub);
-        TextView txtSBT_Sub = (TextView) findViewById(R.id.seek_bar_alpha_title_Sub);
+        TextView txtC3A_Sub = (TextView) findViewById(R.id.custom_3thAct_Sub);
         TextView txtC_Sub = (TextView) findViewById(R.id.collapsing_toolbar_Item_Sub);
         TextView txtTSB_Sub = (TextView) findViewById(R.id.Traslucent_StatusBar_Item_Sub);
         TextView txtPC_Sub = (TextView) findViewById(R.id.PrimaryColor_Item_Sub);
@@ -570,17 +625,17 @@ public class SettingActivity extends ThemedActivity {
         TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
 
-        txtMax_Sub.setTextColor(getSubTextColor());
-        txtOrient_Sub.setTextColor(getSubTextColor());
-        txtATT_Sub.setTextColor(getSubTextColor());
-        txtSBT_Sub.setTextColor(getSubTextColor());
-        txtC_Sub.setTextColor(getSubTextColor());
-        txtTSB_Sub.setTextColor(getSubTextColor());
-        txtPC_Sub.setTextColor(getSubTextColor());
-        txtAC_Sub.setTextColor(getSubTextColor());
-        txtDT_Sub.setTextColor(getSubTextColor());
-        txtNB_Sub.setTextColor(getSubTextColor());
-        txtEAT_Sub.setTextColor(getSubTextColor());
+        color=getSubTextColor();
+        txtMax_Sub.setTextColor(color);
+        txtOrient_Sub.setTextColor(color);
+        txtC3A_Sub.setTextColor(color);
+        txtC_Sub.setTextColor(color);
+        txtTSB_Sub.setTextColor(color);
+        txtPC_Sub.setTextColor(color);
+        txtAC_Sub.setTextColor(color);
+        txtDT_Sub.setTextColor(color);
+        txtNB_Sub.setTextColor(color);
+        txtEAT_Sub.setTextColor(color);
 
     }
 }
