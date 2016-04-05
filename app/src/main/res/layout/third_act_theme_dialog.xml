@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp"
+        android:id="@+id/third_act_theme_card"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/third_act_theme_title"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/md_dark_primary_text"
+                    android:layout_height="wrap_content"
+                    android:background="@color/md_dark_appbar"
+                    android:padding="24dp"
+                    android:text="@string/picture_viewer_theme"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_apply_theme_3thAct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/ll_apply_theme_3thAct_icon"
+                        android:layout_height="20dp"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        app:iiv_icon="gmd-brush" />
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="6"
+                        >
+                        <TextView
+                            android:id="@+id/apply_theme_3thAct_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/apply_theme"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/apply_theme_3thAct_title_Sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/apply_theme_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/apply_theme_3th_act_enabled"
+                        android:background="?android:selectableItemBackground"
+                        android:button="@null"
+                        android:hapticFeedbackEnabled="true"
+
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:paddingRight="5dp"
+                        android:gravity="center"
+                        android:layout_weight="2"
+                        />
+                </LinearLayout>
+
+                <!-- TRASPARENCY -->
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_seek_bar_alpha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="5"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        >
+                        <TextView
+                            android:id="@+id/seek_bar_alpha_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/transparency"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            android:paddingLeft="20dp"
+                            />
+                        <TextView
+                            android:id="@+id/seek_bar_alpha_title_Sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/transparency_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:textSize="14sp"
+                            android:paddingLeft="20dp"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!--RADIO BUTTONS-->
+                <RadioGroup
+                    android:id="@+id/radio_transparency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    >
+                    <RadioButton
+                        android:id="@+id/radio_transparency_0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:checked="true"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/radio_transparency_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="10%"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/radio_transparency_20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="20%"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/radio_transparency_30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="30%"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/radio_transparency_50"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="50%"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/radio_transparency_80"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="80%"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/radio_transparency_100"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="100%"
+                        />
+                </RadioGroup>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
