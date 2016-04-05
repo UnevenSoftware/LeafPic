@@ -23,7 +23,7 @@
              android:layout_marginStart="15dp"
              android:text="@string/app_name"
              android:textSize="50sp"
-             android:textColor="@color/white"
+             android:textColor="@color/md_white_1000"
              />
     </RelativeLayout>
 

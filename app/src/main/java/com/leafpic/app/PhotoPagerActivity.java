@@ -37,9 +37,7 @@ import com.bumptech.glide.Priority;
 import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.Album;
-import com.leafpic.app.Base.HandlingPhotos;
 import com.leafpic.app.Base.Media;
-import com.leafpic.app.Fragments.ImageFragment;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
@@ -79,7 +77,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         try {
 
             if (getIntent().getData() != null) { /*** Call from android.View */
-
                 album = new Album(getApplicationContext(), getIntent().getData().getPath());
                 //photos.setCurrentPhoto(getIntent().getData().getPath());
             } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity */
@@ -88,9 +85,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                 assert album != null;
                 album.setContext(getApplicationContext());
             }
-
-           initUI();
-           setupUI();
+            initUI();
+            setupUI();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,11 +172,9 @@ public class PhotoPagerActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(isApplyThemeOnImgAct()
                 ? (ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()))
-                : (ContextCompat.getColor(getApplicationContext(),
-                isDarkTheme()
-                        ? R.color.transparent_dark_gray
-                        : R.color.transparent_white_gray)));
-
+                : (isDarkTheme()
+                        ? ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), 175)
+                        : ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
         if(!isDarkTheme())
@@ -379,6 +373,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
                 final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
                 CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
+                cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
 
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText(this.getString(R.string.rename_photo_action));
@@ -386,17 +381,9 @@ public class PhotoPagerActivity extends ThemedActivity {
                 txt_edit.selectAll();
                 txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
-                if (!isDarkTheme()) {
-                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryLight));
-                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight));
-                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextLight), PorterDuff.Mode.SRC_ATOP);
-                } else {
-                    cv_Rename_Dialog.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_PrimaryDark));
-                    txt_edit.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
-                    txt_edit.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark));
-                    txt_edit.getBackground().mutate().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.cp_TextDark), PorterDuff.Mode.SRC_ATOP);
-                }
+                txt_edit.setHintTextColor(getTextColor());
+                txt_edit.setTextColor(getTextColor());
+                txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
 
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
@@ -435,7 +422,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                         isDarkTheme() ? R.style.AlertDialog_Dark : R.style.AlertDialog_Light);
 
                 final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
-
                 final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Size);
                 final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Type);
                 final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
@@ -462,27 +448,19 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Type.setText(album.getCurrentPhoto().MIME);
                 Path.setText(album.getCurrentPhoto().Path);
 
-                int color = ContextCompat.getColor(getApplicationContext(),
-                        !isDarkTheme()
-                        ? R.color.cp_TextLight
-                        : R.color.cp_TextDark);
-
-                txtData.setTextColor(color);
-                txtPath.setTextColor(color);
-                txtResolution.setTextColor(color);
-                txtType.setTextColor(color);
-                txtSize.setTextColor(color);
-                Data.setTextColor(color);
-                Path.setTextColor(color);
-                Resolution.setTextColor(color);
-                Type.setTextColor(color);
-                Size.setTextColor(color);
+                txtData.setTextColor(getTextColor());
+                txtPath.setTextColor(getTextColor());
+                txtResolution.setTextColor(getTextColor());
+                txtType.setTextColor(getTextColor());
+                txtSize.setTextColor(getTextColor());
+                Data.setTextColor(getSubTextColor());
+                Path.setTextColor(getSubTextColor());
+                Resolution.setTextColor(getSubTextColor());
+                Type.setTextColor(getSubTextColor());
+                Size.setTextColor(getSubTextColor());
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
-                cv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                        !isDarkTheme()
-                        ? R.color.cp_PrimaryLight
-                        : R.color.cp_PrimaryDark));
+                cv.setBackgroundColor(getCardBackgroundColor());
 
                 DetailsDialog.setView(Details_DialogLayout);
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {

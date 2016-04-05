@@ -36,6 +36,7 @@ import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -254,7 +255,8 @@ public class AlbumsActivity extends ThemedActivity {
         DrawerScroll.setBackgroundColor(getDrawerBackground());//getBackgroundColor()
 
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);
-        DrawerDivider2.setBackgroundColor(ContextCompat.getColor(AlbumsActivity.this, R.color.drawer_transparent_gray));
+        DrawerDivider2.setBackgroundColor(ColorPalette.getTransparentColor(
+                ContextCompat.getColor(AlbumsActivity.this, R.color.md_black_1000), 150));
 
         /** drawer items **/
         TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);

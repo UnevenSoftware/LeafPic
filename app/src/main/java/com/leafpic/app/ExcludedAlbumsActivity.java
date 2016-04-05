@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
-import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -66,10 +63,6 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/DNLDsht/master
 
         /**SET UP UI COLORS**/
         toolbar.setBackgroundColor(getPrimaryColor());
@@ -145,22 +138,11 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
             holder.album_name.setText(StringUtils.getBucketNamebyBucketPath(a.Path));
 
             /**SET LAYOUT THEME**/
-            int color = SP.getBoolean("set_dark_theme", true)
-                    ? ColorPalette.getLightBackgroundColor(c)
-                    : ColorPalette.getDarkBackgroundColor(c);
-            holder.imgFolder.setColor(color);
-            holder.imgUnExclude.setColor(color);
-            holder.album_name.setTextColor(color);
-
-            color = ContextCompat.getColor(c, SP.getBoolean("set_dark_theme", true)
-                    ? R.color.md_grey_400
-                    : R.color.md_grey_600);
-            holder.album_path.setTextColor(color);
-
-            color = ContextCompat.getColor(c, SP.getBoolean("set_dark_theme", true)
-                    ? R.color.md_dark_cards
-                    : R.color.md_light_cards);
-            holder.card_layout.setBackgroundColor(color);
+            holder.album_name.setTextColor(getTextColor());
+            holder.album_path.setTextColor(getSubTextColor());
+            holder.imgFolder.setColor(getIconColor());
+            holder.imgUnExclude.setColor(getIconColor());
+            holder.card_layout.setBackgroundColor(getCardBackgroundColor());
 
             holder.imgUnExclude.setTag(a.ID);
         }

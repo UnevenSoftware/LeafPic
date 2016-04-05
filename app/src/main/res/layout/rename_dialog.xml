@@ -22,9 +22,9 @@
                 <TextView
                     android:id="@+id/rename_title"
                     android:layout_width="match_parent"
-                    android:textColor="@color/cp_AccentDark"
+                    android:textColor="@color/md_dark_primary_text"
                     android:layout_height="wrap_content"
-                    android:background="@color/md_red_500"
+                    android:background="@color/md_dark_appbar"
                     android:padding="24dp"
                     android:text="@string/rename_photo_action"
                     android:textSize="18sp"

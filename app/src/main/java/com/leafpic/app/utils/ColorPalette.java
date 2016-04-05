@@ -29,22 +29,6 @@ public class ColorPalette {
         };
     }
 
-    public static int getDarkBackgroundColor(Context context){
-        return ContextCompat.getColor(context, R.color.act_bg_dark);
-    }
-
-    public static int getLightBackgroundColor(Context context){
-        return ContextCompat.getColor(context, R.color.act_bg_light);
-    }
-
-    public static int getDarkTextColor(Context context){
-        return ContextCompat.getColor(context, R.color.cp_TextDark);
-    }
-
-    public static int getLightTextColor(Context context){
-        return ContextCompat.getColor(context, R.color.cp_TextLight);
-    }
-
     public static int getOscuredColor(int c){
         float[] hsv = new float[3];
         int color = c;

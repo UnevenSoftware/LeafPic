@@ -16,7 +16,7 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"
-            android:background="@color/toolbar" />
+            android:background="@color/md_dark_appbar" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grid_albums"
