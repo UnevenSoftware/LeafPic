@@ -15,10 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
@@ -429,49 +426,21 @@ public class SettingActivity extends ThemedActivity {
         });
         updateSwitchColor(swApplyTheme_Viewer);
 
-        /**RADIO BUTTONS**/
+        /**COLOR PICK**/
+        final LineColorPicker TrasparentCP = (LineColorPicker) CustomizeThird_dialogLayout.findViewById(R.id.pickerTransparent);
+        int[] colors = new int[10];
+        for (int i=0; i<10;i++){
+            colors[i]=(ColorPalette.getTransparentColor(getPrimaryColor(), ((100-(i*10))*255)/100));
+        }
+        TrasparentCP.setColors(colors);
+        int transColor = ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency());
+        TrasparentCP.setSelectedColor(transColor);
+
+        /**TEXT VIEWS**/
         final TextView txtTrasparencyTit = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.seek_bar_alpha_title);
         final TextView txtTrasparency_Sub = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.seek_bar_alpha_title_Sub);
         txtTrasparencyTit.setTextColor(getTextColor());
         txtTrasparency_Sub.setTextColor(getSubTextColor());
-
-        final RadioGroup rg = (RadioGroup) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency);
-        final RadioButton rb_0 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_0);
-        final RadioButton rb_10 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_10);
-        final RadioButton rb_20 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_20);
-        final RadioButton rb_30 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_30);
-        final RadioButton rb_50 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_50);
-        final RadioButton rb_80 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_80);
-        final RadioButton rb_100 = (RadioButton) CustomizeThird_dialogLayout.findViewById(R.id.radio_transparency_100);
-
-        int col = getPrimaryColor(); /*ContextCompat.getColor(SettingActivity.this, R.color.md_grey_500);*/
-        rb_0.setBackgroundColor(ColorPalette.getTransparentColor(col, (100*255) / 100 ));
-        rb_10.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-10) * 255 ) / 100 ));
-        rb_20.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-20) * 255) / 100 ));
-        rb_30.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-30) * 255) / 100 ));
-        rb_50.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-50) * 255) / 100 ));
-        rb_80.setBackgroundColor(ColorPalette.getTransparentColor(col, ((100-80) * 255) / 100 ));
-        rb_100.setBackgroundColor(ColorPalette.getTransparentColor(col, 255 / 100));
-
-        int transparency= ((SP.getInt("set_alpha", 0))*100)/255;
-        Toast.makeText(SettingActivity.this, "Trasparenza: "+transparency, Toast.LENGTH_LONG).show();
-        switch (transparency){
-            case 0: rb_0.setChecked(true); break;
-            case 9:
-            case 10: rb_10.setChecked(true); break;
-
-            case 19:
-            case 20: rb_20.setChecked(true); break;
-
-            case 29:
-            case 30: rb_30.setChecked(true); break;
-
-            case 49:
-            case 50: rb_50.setChecked(true); break;
-
-            case 80: rb_80.setChecked(true); break;
-            case 100: rb_100.setChecked(true); break;
-        }
 
         CustomizeViewer.setView(CustomizeThird_dialogLayout);
         CustomizeViewer.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
@@ -483,20 +452,8 @@ public class SettingActivity extends ThemedActivity {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("apply_theme_img_act", swApplyTheme_Viewer.isChecked());
-
-                int selectedId = rg.getCheckedRadioButtonId();
-                View radioButton = rg.findViewById(selectedId);
-                int idx = rg.indexOfChild(radioButton);
-                switch (idx){
-                    case 0: editor.putInt("set_alpha", 0);  break;
-                    case 1: editor.putInt("set_alpha", (10*255)/100);  break;
-                    case 2: editor.putInt("set_alpha", (20*255)/100);  break;
-                    case 3: editor.putInt("set_alpha", (30*255)/100);  break;
-                    case 4: editor.putInt("set_alpha", (50*255)/100);  break;
-                    case 5: editor.putInt("set_alpha", (80*255)/100);  break;
-                    case 6: editor.putInt("set_alpha", (100*255)/100);  break;
-                    default: editor.putInt("set_alpha", 0); break;
-                }
+                int c = Color.alpha(TrasparentCP.getColor());
+                editor.putInt("set_alpha", 255 - c);
                 editor.apply();
                 updateTheme();
             }

@@ -121,64 +121,23 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <!--RADIO BUTTONS-->
-                <RadioGroup
-                    android:id="@+id/radio_transparency"
+                <RelativeLayout
+                    android:id="@+id/body3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     >
-                    <RadioButton
-                        android:id="@+id/radio_transparency_0"
+                    <uz.shift.colorpicker.LineColorPicker
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/pickerTransparent"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="0%"
-                        android:checked="true"
-                        />
+                        android:layout_height="60dp"
+                        app:orientation="horizontal"
+                        app:selectedColorIndex="0" />
+                </RelativeLayout>
 
-                    <RadioButton
-                        android:id="@+id/radio_transparency_10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="10%"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/radio_transparency_20"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="20%"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/radio_transparency_30"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="30%"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/radio_transparency_50"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="50%"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/radio_transparency_80"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="80%"
-                        />
-
-                    <RadioButton
-                        android:id="@+id/radio_transparency_100"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="100%"
-                        />
-                </RadioGroup>
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>
