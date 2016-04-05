@@ -7,50 +7,61 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/third_act_theme_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="300dp"
         app:cardCornerRadius="2dp"
-        android:id="@+id/third_act_theme_card"
         >
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+
                 <TextView
                     android:id="@+id/third_act_theme_title"
                     android:layout_width="match_parent"
-                    android:textColor="@color/md_dark_primary_text"
                     android:layout_height="wrap_content"
                     android:background="@color/md_dark_appbar"
                     android:padding="24dp"
                     android:text="@string/picture_viewer_theme"
+                    android:textColor="@color/md_dark_primary_text"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_apply_theme_3thAct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="10"
+                            android:paddingBottom="8dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
+                            android:weightSum="10"
                     >
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/ll_apply_theme_3thAct_icon"
-                        android:layout_height="20dp"
                         android:layout_width="0dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
                         app:iiv_icon="gmd-brush" />
                     <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="6"
+                        android:orientation="vertical"
                         >
                         <TextView
                             android:id="@+id/apply_theme_3thAct_title"
@@ -71,15 +82,15 @@
                     </LinearLayout>
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/apply_theme_3th_act_enabled"
-                        android:background="?android:selectableItemBackground"
-                        android:button="@null"
-                        android:hapticFeedbackEnabled="true"
-
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:paddingRight="5dp"
-                        android:gravity="center"
                         android:layout_weight="2"
+
+                        android:background="?android:selectableItemBackground"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:hapticFeedbackEnabled="true"
+                        android:paddingRight="5dp"
                         />
                 </LinearLayout>
 
@@ -89,34 +100,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="5"
-                    android:paddingTop="8dp"
                     android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:weightSum="5"
                     >
 
                     <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="5"
+                        android:orientation="vertical"
                         >
                         <TextView
                             android:id="@+id/seek_bar_alpha_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
                             android:text="@string/transparency"
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
-                            android:paddingLeft="20dp"
                             />
                         <TextView
                             android:id="@+id/seek_bar_alpha_title_Sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
                             android:text="@string/transparency_sub"
                             android:textColor="@color/md_grey_400"
                             android:textSize="14sp"
-                            android:paddingLeft="20dp"
                             />
                     </LinearLayout>
 
@@ -137,8 +148,8 @@
                         app:orientation="horizontal"
                         app:selectedColorIndex="0" />
                 </RelativeLayout>
-
+                    </LinearLayout>
+                </ScrollView>
             </LinearLayout>
-        </ScrollView>
     </android.support.v7.widget.CardView>
 </LinearLayout>
