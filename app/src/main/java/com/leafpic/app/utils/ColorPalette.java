@@ -25,6 +25,7 @@ public class ColorPalette {
                 ContextCompat.getColor(context, R.color.md_yellow_500),
                 ContextCompat.getColor(context, R.color.md_orange_500),
                 ContextCompat.getColor(context, R.color.md_deep_orange_500),
+                ContextCompat.getColor(context, R.color.md_brown_500),
                 ContextCompat.getColor(context, R.color.md_blue_grey_500),
         };
     }
