@@ -363,140 +363,58 @@
 
 
                      <!-- APPLY THEME ON 3TH ACT -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_apply_theme_3thAct"
+                    <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false"
                         >
-
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_apply_theme_3thAct_icon"
-                            android:layout_height="20dp"
-                            android:layout_width="0dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-brush" />
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_width="0dp"
-                            android:layout_weight="6"
-                            >
-                            <TextView
-                                android:id="@+id/apply_theme_3thAct_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/apply_theme"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-                                />
-                            <TextView
-                                android:id="@+id/apply_theme_3thAct_title_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/apply_theme_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                        <android.support.v7.widget.SwitchCompat
-                            android:id="@+id/apply_theme_3th_act_enabled"
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:hapticFeedbackEnabled="true"
-
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:paddingRight="5dp"
-                            android:gravity="center"
-                            android:layout_weight="2"
-                            />
-                    </LinearLayout>
-                    <!--DIVIDER VIEW-->
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="20dp"
-                        />
-
-                    <!-- TRASPARENCY -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_seek_bar_alpha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="6"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        >
-
-                        <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_width="0dp"
-                            android:layout_weight="5"
-                            >
-                            <TextView
-                                android:id="@+id/seek_bar_alpha_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/transparency"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-                                android:paddingLeft="20dp"
-                                />
-                            <TextView
-                                android:id="@+id/seek_bar_alpha_title_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/transparency_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                android:paddingLeft="20dp"
-                                />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/seek_bar_alpha_count"
-                            android:text="100%"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
-
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:paddingRight="5dp"
-                            android:gravity="center"
-                            android:layout_weight="1"
-                            />
-
-                    </LinearLayout>
-                    <!-- ALPHA SEEKBAR -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_seek_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-
-                        >
-                        <SeekBar
-                            android:id="@+id/seek_bar_alpha"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_custom_thirdAct"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:max="255"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="10"
+                            android:paddingTop="8dp"
                             android:paddingBottom="15dp"
-                            android:paddingTop="15dp"
-                            />
-                    </LinearLayout>
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/custom_3thAct_icon"
+                                android:layout_height="20dp"
+                                android:layout_width="0dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-brush"
+                                />
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="8"
+                                >
+                                <TextView
+                                    android:id="@+id/custom_3thAct_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/custom_3thAct"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    android:paddingRight="5dp"
+                                    />
+                                <TextView
+                                    android:id="@+id/custom_3thAct_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/custom_3thAct_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    android:paddingRight="5dp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

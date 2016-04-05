@@ -66,6 +66,10 @@
     <string name="excluded_albums_sub">Menage the excluded albums.</string>
 
     <string name="picture_viewer">Picture Viewer</string>
+    <string name="picture_viewer_theme">Picture Viewer Theme</string>
+    <string name="custom_3thAct">Customize Viewer</string>
+    <string name="custom_3thAct_sub">Apply a custom picture viewer style.</string>
+
     <string name="max_brightness">Maximum Brightness</string>
     <string name="max_brightness_sub">Maximum brightness when view a media.</string>
     <string name="picture_orientation">Picture Orientation</string>
