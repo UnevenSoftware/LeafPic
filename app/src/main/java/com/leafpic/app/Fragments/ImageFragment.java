@@ -1,20 +1,21 @@
 package com.leafpic.app.Fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
+import com.koushikdutta.ion.Ion;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.PhotoPagerActivity;
-import com.leafpic.app.R;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -25,8 +26,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ImageFragment extends Fragment {
 
-    PhotoView photoView;
     private Media img;
+
     //PhotoViewAttacher mAttacher;
 
     public static ImageFragment newInstance(Media asd) {
@@ -58,27 +59,29 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //photoView = new PhotoView(container.getContext());
 
-        View view = inflater.inflate(R.layout.image_fragment, container, false);
-
-        photoView = (PhotoView) view.findViewById(R.id.media_view);
-
-        Glide.with(getContext())
-                .load(img.Path)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .skipMemoryCache(true)
-                .priority(Priority.HIGH)
-                .signature(new MediaStoreSignature(img.MIME, img.DateModified, img.orientation))
-                        //.centerCrop()
-                .into(photoView);
-
-        /*Ion.with(getContext())
-                .load(img.Path)
-                .withBitmap()
-                .deepZoom()
-                .intoImageView(photoView);*/
-        //mAttacher = new PhotoViewAttacher(photoView,true);
-        //photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        //View view = inflater.inflate(R.layout.image_fragment, container, false);
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
+        //photoView = (PhotoView) view.findViewById(R.id.media_view);
+        PhotoView photoView = new PhotoView(getContext());
+        /**/
+        if (SP.getBoolean("set_delay_full_image", true)) {
+            Ion.with(getContext())
+                    .load(img.Path)
+                    .withBitmap()
+                    .deepZoom()
+                    .intoImageView(photoView);
+        } else {
+            Glide.with(getContext())
+                    .load(img.Path)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .skipMemoryCache(true)
+                    .priority(Priority.HIGH)
+                    .signature(new MediaStoreSignature(img.MIME, img.DateModified, img.orientation))
+                            //.centerCrop()
+                    .into(photoView);
+        }
+        photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
@@ -94,9 +97,12 @@ public class ImageFragment extends Fragment {
         photoView.setMaximumScale(6.0F);//first set maximum
         photoView.setMinimumScale(1.0F);
         photoView.setMediumScale(3.5F);
+        //photoView.u
         //photoView.setRotationBy(img.orientation);
 
-        return view;
+        //container.addView(photoView, RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.MATCH_PARENT);
+        return photoView;
+        //return view;
     }
 
     @Override
@@ -105,7 +111,7 @@ public class ImageFragment extends Fragment {
         //StringUtils.showToast(getContext(),"resume");
     }
 
-    private void rotateLoop() { //april fools
+   /* private void rotateLoop() { //april fools
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -116,12 +122,9 @@ public class ImageFragment extends Fragment {
     }
 
     public void rotatePicture(int rotation) {
-        if (photoView!=null)
+        if (photoView!=null){
             photoView.setRotationBy(rotation);
-        else {
-            Log.d("asdasdas", "rotatePicture: nulll");
-            photoView = (PhotoView) getView().findViewById(R.id.media_view);
-            photoView.setRotationBy(rotation);
+            photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
-    }
+    }*/
 }
