@@ -52,26 +52,26 @@
                     <item
                         android:id="@+id/name_sort_action"
                         android:title="@string/name"
-                        app:showAsAction="ifRoom"
+                        app:showAsAction="never"
                         />
 
                     <item
                         android:id="@+id/date_taken_sort_action"
                         android:title="@string/date"
-                        app:showAsAction="ifRoom"
+                        app:showAsAction="never"
 
                         />
                     <item
                         android:id="@+id/size_sort_action"
                         android:title="@string/size"
-                        app:showAsAction="ifRoom"
+                        app:showAsAction="never"
                         />
                 </group>
                 <group android:checkableBehavior="all">
                     <item
                         android:id="@+id/ascending_sort_action"
                         android:title="@string/ascending"
-                        app:showAsAction="ifRoom"
+                        app:showAsAction="never"
                         />
                 </group>
             </menu>

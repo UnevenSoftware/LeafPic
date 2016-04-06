@@ -5,7 +5,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+import android.provider.MediaStore;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 
 public class HandlingAlbums implements Parcelable {
-
-    public final String CAMERA_PATTERN = "DCIM/Camera";//TODO improve with regex
 
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HandlingAlbums> CREATOR = new Parcelable.Creator<HandlingAlbums>() {
@@ -31,8 +29,11 @@ public class HandlingAlbums implements Parcelable {
             return new HandlingAlbums[size];
         }
     };
+    public final String CAMERA_PATTERN = "DCIM/Camera";//TODO improve with regex
     public ArrayList<Album> dispAlbums;
     public int last_position_selecte = -1;
+    String columnSortingMode = MediaStore.Images.ImageColumns.DATE_TAKEN;
+    String ascending = " DESC";
     private Context context;
     private ArrayList<Album> selectedAlbums;
 
@@ -64,7 +65,7 @@ public class HandlingAlbums implements Parcelable {
     public void loadPreviewAlbums() {
         MadiaStoreHandler as = new MadiaStoreHandler(context);
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        dispAlbums = as.getMediaStoreAlbums();
+        dispAlbums = as.getMediaStoreAlbums(getSortingMode());
 
         int cameraIndex = -1;
 
@@ -82,6 +83,18 @@ public class HandlingAlbums implements Parcelable {
         }
     }
 
+    public void setDefaultSortingMode(String column) {
+        columnSortingMode = column;
+    }
+
+    public void setDefaultSortingAscending(Boolean ascending) {
+
+        this.ascending = ascending ? " ASC" : " DESC";
+    }
+
+    public String getSortingMode() {
+        return " " + columnSortingMode + ascending;
+    }
     public void loadExcludedAlbums(){
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         MadiaStoreHandler as = new MadiaStoreHandler(context);

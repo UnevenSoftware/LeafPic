@@ -13,8 +13,30 @@
 
         <item android:id="@+id/sort_action"
             android:title="@string/sort_menu_title"
-            app:showAsAction="ifRoom"
-            />
+            app:showAsAction="ifRoom">
+            <menu xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context=".PhotosActivity">
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/name_sort_action"
+                        android:title="@string/name"
+                        app:showAsAction="never" />
+
+                    <item
+                        android:id="@+id/date_taken_sort_action"
+                        android:checked="true"
+                        android:title="@string/date"
+                        app:showAsAction="never" />
+                </group>
+                <group android:checkableBehavior="all">
+                    <item
+                        android:id="@+id/ascending_sort_action"
+                        android:title="@string/ascending"
+                        app:showAsAction="ifRoom" />
+                </group>
+            </menu>
+        </item>
     </group>
 
     <group android:id="@+id/album_options_menu">

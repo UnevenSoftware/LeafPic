@@ -22,7 +22,7 @@ public class MadiaStoreHandler {
         context = ctx;
     }
 
-    public ArrayList<Album> getMediaStoreAlbums() {
+    public ArrayList<Album> getMediaStoreAlbums(String order) {
         ArrayList<Album> list = new ArrayList<Album>();
 
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
@@ -40,10 +40,9 @@ public class MadiaStoreHandler {
                 MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
                 + " ) GROUP BY ( "+ MediaStore.Files.FileColumns.PARENT +" ";
 
-        String orderType = " " + MediaStore.Images.Media.DATE_TAKEN + " DESC";
 
         Cursor cur = context.getContentResolver().query(
-                images, projection, selection, null, orderType);
+                images, projection, selection, null, order);
 
         if(cur != null) {
             if (cur.moveToFirst()) {
@@ -63,20 +62,9 @@ public class MadiaStoreHandler {
         return list;
     }
 
-    public ArrayList<Media> getAlbumPhotos(Album a) {
-        return getAlbumPhotos(a.ID, -1, null,Album.FILTER_ALL);
-    }
-
-    public ArrayList<Media> getAlbumPhotos(Album a, String sort) {
-        return getAlbumPhotos(a.ID, -1, sort,Album.FILTER_ALL);
-    }
 
     public ArrayList<Media> getAlbumPhotos(String id, String sort,int filter) {
         return getAlbumPhotos(id, -1, sort, filter);
-    }
-
-    public ArrayList<Media> getAlbumPhotos(String id, String sort) {
-        return getAlbumPhotos(id, -1, sort,Album.FILTER_ALL);
     }
 
     public AlbumMediaCount getAlbumPhotosCount(String id) {

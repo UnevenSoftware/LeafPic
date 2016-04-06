@@ -415,6 +415,22 @@ public class AlbumsActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case R.id.name_sort_action:
+                albums.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATA);
+                new PrepareAlbumTask().execute();
+                item.setChecked(true);
+                break;
+            case R.id.date_taken_sort_action:
+                albums.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                new PrepareAlbumTask().execute();
+                item.setChecked(true);
+                break;
+            case R.id.ascending_sort_action:
+                albums.setDefaultSortingAscending(!item.isChecked());
+                new PrepareAlbumTask().execute();
+                item.setChecked(!item.isChecked());
+                break;
+
             case R.id.select_all_albums_action:
                 if(albums.getSelectedCount()==adapt.getItemCount()){
                     editmode = false;
