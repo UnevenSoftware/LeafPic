@@ -122,7 +122,7 @@ public class ThemedActivity extends AppCompatActivity {
                 getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
         } else
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+            else getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 125));
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ThemedActivity extends AppCompatActivity {
                     getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
                 getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 150));//TODO ;UST BE BETER FIXXED
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
         } else {
             if (isTraslucentStatusBar()) {
                 int c = ColorPalette.getOscuredColor(getPrimaryColor());
