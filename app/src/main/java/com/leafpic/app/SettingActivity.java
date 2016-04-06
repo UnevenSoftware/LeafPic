@@ -48,8 +48,9 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swStatusBar;
     SwitchCompat swMaxLuminosita;
     SwitchCompat swPictureOrientation;
+    SwitchCompat swDelayFullImage;
 
-    boolean maxLuminosita, pictureOrientation;
+    boolean maxLuminosita, pictureOrientation, delayfullimage;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class SettingActivity extends ThemedActivity {
         setNavBarColor();
         maxLuminosita = SP.getBoolean("set_max_luminosita", false);
         pictureOrientation = SP.getBoolean("set_picture_orientation", false);
+        delayfullimage = SP.getBoolean("set_delay_full_image", true);
 
         //PRIMARY COLOR PIKER*****************************************
         LinearLayout ll_PC = (LinearLayout) findViewById(R.id.ll_primaryColor);
@@ -89,8 +91,7 @@ public class SettingActivity extends ThemedActivity {
         ll_EA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent eaa = new Intent(SettingActivity.this, ExcludedAlbumsActivity.class);
-                startActivity(eaa);
+                startActivity(new Intent(SettingActivity.this, ExcludedAlbumsActivity.class));
             }
         });
 
@@ -106,6 +107,20 @@ public class SettingActivity extends ThemedActivity {
 
 
         /**** Switches ****/
+
+        /*********** SW Delay Full Image ************/
+        swDelayFullImage = (SwitchCompat) findViewById(R.id.set_full_resolution);
+        swDelayFullImage.setChecked(delayfullimage);
+        swDelayFullImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_delay_full_image", isChecked);
+                editor.apply();
+                updateSwitchColor(swDelayFullImage);
+            }
+        });
+        updateSwitchColor(swDelayFullImage);
 
         /*********** SW Picture_orientation ************/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
@@ -348,6 +363,7 @@ public class SettingActivity extends ThemedActivity {
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
 
+                updateSwitchColor(swDelayFullImage);
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -365,7 +381,7 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
-
+                updateSwitchColor(swDelayFullImage);
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -380,7 +396,7 @@ public class SettingActivity extends ThemedActivity {
                 txtGT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
-
+                updateSwitchColor(swDelayFullImage);
                 updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
@@ -525,6 +541,8 @@ public class SettingActivity extends ThemedActivity {
         /** Icons **/
         IconicsImageView imgOrient = (IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
         IconicsImageView imgMax = (IconicsImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
+        IconicsImageView imgDelay = (IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon);
+
         IconicsImageView imgTSB = (IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
         IconicsImageView imgCI = (IconicsImageView) findViewById(R.id.collapsing_toolbar_Icon);
         IconicsImageView imgC3A = (IconicsImageView) findViewById(R.id.custom_3thAct_icon);
@@ -536,6 +554,7 @@ public class SettingActivity extends ThemedActivity {
 
         color = getIconColor();
         imgMax.setColor(color);
+        imgDelay.setColor(color);
         imgC3A.setColor(color);
         imgCI.setColor(color);
         imgTSB.setColor(color);
@@ -548,6 +567,7 @@ public class SettingActivity extends ThemedActivity {
 
         /** TextViews **/
         TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
+        TextView txtDelay = (TextView) findViewById(R.id.full_resolution_Item);
         TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
         TextView txtC3AT = (TextView) findViewById(R.id.custom_3thAct_title);
         TextView txtC = (TextView) findViewById(R.id.collapsing_toolbar_Item);
@@ -569,9 +589,11 @@ public class SettingActivity extends ThemedActivity {
         txtDT.setTextColor(color);
         txtNB.setTextColor(color);
         txtEAT.setTextColor(color);
+        txtDelay.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
+        TextView txtDelay_Sub = (TextView) findViewById(R.id.full_resolution_Item_Sub);
         TextView txtOrient_Sub = (TextView) findViewById(R.id.picture_orientation_Item_Sub);
         TextView txtC3A_Sub = (TextView) findViewById(R.id.custom_3thAct_Sub);
         TextView txtC_Sub = (TextView) findViewById(R.id.collapsing_toolbar_Item_Sub);
@@ -583,6 +605,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
 
         color=getSubTextColor();
+        txtDelay_Sub.setTextColor(color);
         txtMax_Sub.setTextColor(color);
         txtOrient_Sub.setTextColor(color);
         txtC3A_Sub.setTextColor(color);

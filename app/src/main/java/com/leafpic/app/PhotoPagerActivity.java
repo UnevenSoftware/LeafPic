@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -38,7 +39,6 @@ import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.Media;
-import com.leafpic.app.Fragments.ImageFragment;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
@@ -197,6 +197,9 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
+
+        if (SP.getBoolean("set_picture_orientation", false))
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
 
@@ -285,7 +288,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.rotate_180:
+            /*case R.id.rotate_180:
                 ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(180);
                 break;
 
@@ -296,7 +299,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.rotate_left_90:
                 ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(-90);
                 break;
-
+*/
            /* case R.id.moveAction:
                 Intent int1 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);

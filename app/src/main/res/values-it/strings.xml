@@ -148,6 +148,7 @@
     <string name="video_player">Riproduttore Video</string>
     <string name="media">Media</string>
     <string name="send_to">Send to</string>
+    <string name="full_resolution">FUll resolution</string>
 
 
 </resources>

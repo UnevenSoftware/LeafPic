@@ -73,7 +73,7 @@
     <string name="max_brightness">Maximum Brightness</string>
     <string name="max_brightness_sub">Maximum brightness when view a media.</string>
     <string name="picture_orientation">Picture Orientation</string>
-    <string name="picture_orientation_sub">Allow LeafPic to rotate the image automatically.</string>
+    <string name="picture_orientation_sub">Update orientation changes using the sensor</string>
     <string name="apply_theme">Apply Theme</string>
     <string name="apply_theme_sub">Apply custom color on the picture viewer.</string>
     <string name="transparency">Transparency:</string>
@@ -168,4 +168,5 @@
     <string name="send_to">Send to</string>
     <string name="search_menu">search</string>
     <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
+    <string name="full_resolution">FUll resolution</string>
 </resources>

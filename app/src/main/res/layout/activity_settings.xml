@@ -56,27 +56,27 @@
                         <LinearLayout
                             xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/ll_switch_CollapsingToolBar"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:weightSum="10"
-                            android:paddingTop="8dp"
                             android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/collapsing_toolbar_Icon"
-                                android:layout_height="20dp"
                                 android:layout_width="0dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
                                 app:iiv_icon="gmd-gradient"
                                 />
 
                             <LinearLayout
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="6"
+                                android:orientation="vertical"
                                 >
                                 <TextView
                                     android:id="@+id/collapsing_toolbar_Item"
@@ -98,15 +98,15 @@
 
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/SetCollapsingToolbar"
-                                android:background="?android:selectableItemBackground"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:paddingRight="5dp"
-                                android:gravity="center"
                                 android:layout_weight="2"
+
+                                android:background="?android:selectableItemBackground"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:hapticFeedbackEnabled="true"
+                                android:paddingRight="5dp"
                                 />
                         </LinearLayout>
 
@@ -117,9 +117,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
                         android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -127,14 +127,14 @@
                             android:layout_width="0dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-web-asset"
                             android:layout_weight="2"
+                            app:iiv_icon="gmd-web-asset"
                             />
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="6"
+                            android:orientation="vertical"
                             >
                             <TextView
                                 android:id="@+id/Traslucent_StatusBar_Item"
@@ -155,15 +155,15 @@
                             </LinearLayout>
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/SetTraslucentStatusBar"
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:hapticFeedbackEnabled="true"
-
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:paddingRight="5dp"
-                            android:gravity="center"
                             android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
                             />
                     </LinearLayout>
 
@@ -179,9 +179,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:weightSum="10"
-                            android:paddingTop="8dp"
                             android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
 
                             <com.mikepenz.iconics.view.IconicsImageView
@@ -189,14 +189,14 @@
                                 android:layout_width="0dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-folder"
                                 android:layout_weight="2"
+                                app:iiv_icon="gmd-folder"
                                 />
                             <LinearLayout
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="8"
+                                android:orientation="vertical"
                                 android:paddingRight="5dp"
                                 >
                                 <TextView
@@ -253,25 +253,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
                         android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_max_luminosita_icon"
-                            android:layout_height="20dp"
                             android:layout_width="0dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-brightness-high" />
 
 
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="6"
+                            android:orientation="vertical"
                             >
                             <TextView
                                 android:id="@+id/max_luminosita_Item"
@@ -292,15 +292,15 @@
                             </LinearLayout>
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/set_max_luminosita"
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:hapticFeedbackEnabled="true"
-
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:paddingRight="5dp"
-                            android:gravity="center"
                             android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
                             />
                     </LinearLayout>
 
@@ -310,24 +310,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
                         android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
-                            android:layout_height="20dp"
                             android:layout_width="0dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-screen-rotation" />
 
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="6"
+                            android:orientation="vertical"
                             >
                             <TextView
                                 android:id="@+id/picture_orientation_Item"
@@ -350,15 +350,15 @@
                         </LinearLayout>
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/set_picture_orientation"
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:hapticFeedbackEnabled="true"
-
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:paddingRight="5dp"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
                             android:gravity="center"
-                            android:layout_weight="2" />
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp" />
                     </LinearLayout>
 
 
@@ -375,47 +375,112 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:weightSum="10"
-                            android:paddingTop="8dp"
                             android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
 
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/custom_3thAct_icon"
-                                android:layout_height="20dp"
                                 android:layout_width="0dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
                                 app:iiv_icon="gmd-brush"
                                 />
                             <LinearLayout
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="8"
+                                android:orientation="vertical"
                                 >
                                 <TextView
                                     android:id="@+id/custom_3thAct_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
                                     android:text="@string/custom_3thAct"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
-                                    android:paddingRight="5dp"
                                     />
                                 <TextView
                                     android:id="@+id/custom_3thAct_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
                                     android:text="@string/custom_3thAct_sub"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
-                                    android:paddingRight="5dp"
                                     />
                             </LinearLayout>
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!-- FULL resolution -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_switch_full_resolution"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10">
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/ll_switch_full_resolution_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-image" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/full_resolution_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Delay load full-size image"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+
+                                    />
+
+                                <TextView
+                                    android:id="@+id/full_resolution_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Load full image when zoom in"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_full_resolution"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+
+                                android:background="?android:selectableItemBackground"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:hapticFeedbackEnabled="true"
+                                android:paddingRight="5dp" />
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
                 </LinearLayout>
+
             </android.support.v7.widget.CardView>
 
             <!--THEME-->
@@ -456,42 +521,42 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:weightSum="10"
-                            android:paddingTop="8dp"
                             android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
 
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/PrimaryColor_Icon"
-                                android:layout_height="20dp"
                                 android:layout_width="0dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
                                 app:iiv_icon="gmd-color-lens"
                                 />
                             <LinearLayout
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_width="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="8"
+                                android:orientation="vertical"
                                 >
                                 <TextView
                                     android:id="@+id/PrimaryColor_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
                                     android:text="@string/primary_color"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
-                                    android:paddingRight="5dp"
                                     />
                                 <TextView
                                     android:id="@+id/PrimaryColor_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
                                     android:text="@string/primary_color_sub"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
-                                    android:paddingRight="5dp"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -509,42 +574,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
                         android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/accentColor_Icon"
-                            android:layout_height="20dp"
                             android:layout_width="0dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-colorize"
                             />
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="8"
+                            android:orientation="vertical"
                             >
                             <TextView
                                 android:id="@+id/accentColor_Item"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingRight="5dp"
                                 android:text="@string/accent_color"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
-                                android:paddingRight="5dp"
                                 />
                             <TextView
                                 android:id="@+id/accentColor_Item_Sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingRight="5dp"
                                 android:text="@string/accent_color_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="14sp"
-                                android:paddingRight="5dp"
                                 />
                         </LinearLayout>
                     </LinearLayout>
@@ -557,24 +622,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
                         android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/DarkTheme_Icon"
-                            android:layout_height="20dp"
                             android:layout_width="0dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-invert-colors"
                             />
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="6"
+                            android:orientation="vertical"
                             >
                             <TextView
                                 android:id="@+id/DarkTheme_Item"
@@ -595,15 +660,15 @@
                         </LinearLayout>
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/SetDarkTheme"
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:hapticFeedbackEnabled="true"
-
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:paddingRight="5dp"
-                            android:gravity="center"
                             android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
                             />
                     </LinearLayout>
                     <!--COLORED NAV BAR-->
@@ -613,24 +678,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="10"
-                        android:paddingTop="8dp"
                         android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/NavBar_Icon"
-                            android:layout_height="20dp"
                             android:layout_width="0dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-video-label"
                             />
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="6"
+                            android:orientation="vertical"
                             >
                             <TextView
                                 android:id="@+id/NavBar_Item"
@@ -651,15 +716,15 @@
                             </LinearLayout>
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/SetColoredNavBar"
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:hapticFeedbackEnabled="true"
-
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:paddingRight="5dp"
-                            android:gravity="center"
                             android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
                             />
                     </LinearLayout>
                 </LinearLayout>
