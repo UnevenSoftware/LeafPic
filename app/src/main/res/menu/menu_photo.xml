@@ -6,15 +6,15 @@
 >
     <item
         android:id="@+id/shareButton"
+        android:orderInCategory="0"
         android:title="@string/share"
         app:showAsAction="always"
-        android:orderInCategory="0"
     />
     <item
         android:id="@+id/deletePhoto"
-        android:title="@string/menu_delete"
-        app:showAsAction="always"
         android:orderInCategory="1"
+        android:title="@string/delete"
+        app:showAsAction="always"
         />
     <group android:id="@+id/only_photos_otions">
         <item
@@ -24,8 +24,8 @@
             />
         <item
             android:id="@+id/rotatePhoto"
-            android:title="@string/rotate"
             android:orderInCategory="2"
+            android:title="@string/rotate"
             app:showAsAction="always">
             <menu>
                 <item
@@ -74,8 +74,8 @@
                 android:title="@string/edit_with"
                 app:showAsAction="never" />
             <item
-                android:title="@string/open_with"
                 android:id="@+id/open_with"
+                android:title="@string/open_with"
                 app:showAsAction="never" />
             <item
                 android:title="@string/upload"

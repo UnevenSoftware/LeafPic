@@ -64,6 +64,7 @@ public class PhotosActivity extends ThemedActivity {
     PhotosAdapter adapter;
 
     RecyclerView mRecyclerView;
+    Album album;
     View.OnLongClickListener albumOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -91,8 +92,6 @@ public class PhotosActivity extends ThemedActivity {
             }
         }
     };
-
-    Album album;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -402,7 +401,7 @@ public class PhotosActivity extends ThemedActivity {
                 txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
 
                 RenameDialog.setView(Rename_dialogLayout);
-                RenameDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                RenameDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -425,13 +424,13 @@ public class PhotosActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(PhotosActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
-                        .setPositiveButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.exclude), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 customAlbumsHandler.excludeAlbum(album.ID);
                                 finish();
                             }
                         })
-                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder.show();
                 break;
@@ -440,7 +439,7 @@ public class PhotosActivity extends ThemedActivity {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotosActivity.this);
                 if(editmode) builder1.setMessage(R.string.delete_photos_message);
                 else builder1.setMessage(R.string.delete_album_message);
-                builder1.setPositiveButton(getString(R.string.delete_action), new DialogInterface.OnClickListener() {
+                builder1.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editmode) {
                             album.deleteSelectedPhotos();
@@ -458,7 +457,7 @@ public class PhotosActivity extends ThemedActivity {
                             finish();
                         }
                     }
-                }).setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder1.show();
                 break;
@@ -467,19 +466,19 @@ public class PhotosActivity extends ThemedActivity {
 
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(PhotosActivity.this);
                 builder2.setMessage(R.string.delete_album_message)
-                        .setPositiveButton(getString(R.string.hide_action), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.hide), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.hideAlbum(album.Path);
                             }
                         })
-                        .setNeutralButton(getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                        .setNeutralButton(getString(R.string.exclude), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 customAlbumsHandler.excludeAlbum(album.ID);
                                 finish();
                             }
                         })
-                        .setNegativeButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {}});
                 builder2.show();
 

@@ -349,7 +349,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.deletePhoto:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
                 builder1.setMessage(R.string.delete_album_message);
-                builder1.setPositiveButton(this.getString(R.string.delete_action), new DialogInterface.OnClickListener() {
+                builder1.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         album.deleteCurrentPhoto();
                         if (album.medias.size() == 0)
@@ -359,7 +359,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                     }
                 });
-                builder1.setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                builder1.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
@@ -390,7 +390,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
 
                 RenameDialog.setView(Rename_dialogLayout);
-                RenameDialog.setNeutralButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                RenameDialog.setNeutralButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

@@ -18,8 +18,8 @@
                     android:checkableBehavior="single">
                     <item
                         android:id="@+id/all_media_filter"
-                        android:title="@string/all"
                         android:checked="true"
+                        android:title="@string/all"
                         app:showAsAction="ifRoom"
                         />
                     <item
@@ -107,7 +107,7 @@
 
     <item
         android:id="@+id/deleteAction"
-        android:title="@string/menu_delete"
+        android:title="@string/delete"
         app:showAsAction="ifRoom"
         />
 
@@ -119,12 +119,12 @@
             />
         <item
             android:id="@+id/hideAlbumButton"
-            android:title="@string/menu_hide"
+            android:title="@string/hide"
             app:showAsAction="never"
             />
         <item
             android:id="@+id/excludeAlbumButton"
-            android:title="@string/menu_exclude"
+            android:title="@string/exclude"
             app:showAsAction="never"
             />
     </group>
