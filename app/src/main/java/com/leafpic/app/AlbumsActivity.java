@@ -45,6 +45,8 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 public class AlbumsActivity extends ThemedActivity {
 
+    //endregion
+    public static String TAG = "AlbumsAct";
     //region PUBLIC VARIABLES
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
     RecyclerView mRecyclerView;
@@ -53,9 +55,8 @@ public class AlbumsActivity extends ThemedActivity {
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
     boolean editmode = false;
-    private SwipeRefreshLayout SwipeContainerRV;
     int nReloads=-1;
-
+    private SwipeRefreshLayout SwipeContainerRV;
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -318,7 +319,7 @@ public class AlbumsActivity extends ThemedActivity {
             }
         });
     }
-
+    //endregion
 
     void updateSelectedStuff() {
         int c;
@@ -366,7 +367,6 @@ public class AlbumsActivity extends ThemedActivity {
             e.printStackTrace();
         }
     }
-    //endregion
 
     //region MENU
     @Override
@@ -411,7 +411,6 @@ public class AlbumsActivity extends ThemedActivity {
 
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -431,14 +430,14 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
-                        .setPositiveButton( this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.excludeSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -448,14 +447,14 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.deleteAction:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(AlbumsActivity.this);
                 builder1.setMessage(R.string.delete_album_message)
-                        .setPositiveButton(this.getString(R.string.delete_action), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.deleteSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton( this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -465,14 +464,14 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.hideAlbumButton:
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
                 builder2.setMessage(R.string.delete_album_message)
-                        .setPositiveButton(this.getString(R.string.hide_action), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 albums.hideSelectedAlbums();
                                 adapt.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNeutralButton(this.getString(R.string.exclude_action), new DialogInterface.OnClickListener() {
+                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 albums.excludeSelectedAlbums();
@@ -480,7 +479,7 @@ public class AlbumsActivity extends ThemedActivity {
                                 invalidateOptionsMenu();
                             }
                         })
-                        .setNegativeButton(this.getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
@@ -506,9 +505,6 @@ public class AlbumsActivity extends ThemedActivity {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         else finish();
     }
-
-    //endregion
-    public static String TAG = "AlbumsAct";
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 

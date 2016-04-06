@@ -15,10 +15,7 @@
     <string name="singular_photo">Immagine</string>
     <string name="plural_photos">Immagini</string>
     <!--DIALOG-->
-    <string name="exclude_action">ESCLUDI</string>
-    <string name="cancel_action">ANNULLA</string>
-    <string name="delete_action">ELIMINA</string>
-    <string name="hide_action">NASCONDI</string>
+    <string name="cancel">ANNULLA</string>
     <string name="ok_action">OK</string>
     <string name="rename_photo_action">Rinomina Immagine</string>
     <string name="insert_a_name">Inserisci</string>
@@ -37,11 +34,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="web_search">Web search</string>
-    <string name="exclude">Escludi</string>
-    <string name="delete">Elimina</string>
-    <string name="hide">Nascondi</string>
     <string name="unhide">Vedi</string>
-    <string name="refresh">Ricarica</string>
 
     <!--DIALOG MESAGES-->
     <string name="hide_album_message">Nascondere l album?
@@ -122,10 +115,10 @@
     <!--ALBUMS-->
     <string name="select_all">Seleziona Tutto</string>
     <string name="clear_selected">Deseleziona Tutto</string>
-    <string name="menu_delete">Elimina</string>
-    <string name="menu_exclude">Escludi</string>
-    <string name="menu_hide">Nascondi</string>
-    <string name="menu_refresh">Ricarica</string>
+    <string name="delete">Elimina</string>
+    <string name="exclude">Escludi</string>
+    <string name="hide">Nascondi</string>
+    <string name="refresh">Ricarica</string>
     <!--PHOTO-->
     <string name="share">Condividi</string>
     <string name="rotate">Ruota</string>

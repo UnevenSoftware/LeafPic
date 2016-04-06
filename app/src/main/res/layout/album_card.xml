@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-    android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="2dp"
-        >
-
+    android:elevation="@dimen/cardview_default_elevation"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="@dimen/cardview_default_elevation">
         <RelativeLayout
-            android:id="@+id/album_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
-
         <RelativeLayout
                 android:id="@+id/header_album_card"
                 android:layout_width="wrap_content"
@@ -86,4 +79,3 @@
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
-</FrameLayout>

@@ -277,7 +277,7 @@ public class SettingActivity extends ThemedActivity {
         });
 
         PrimaryPikerDialog.setView(Accent_dialogLayout);
-        PrimaryPikerDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+        PrimaryPikerDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(isTraslucentStatusBar()) {
@@ -355,7 +355,7 @@ public class SettingActivity extends ThemedActivity {
         });
         AccentPikerDialog.setView(Accent_dialogLayout);
 
-        AccentPikerDialog.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+        AccentPikerDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -459,7 +459,7 @@ public class SettingActivity extends ThemedActivity {
         txtTrasparency_Sub.setTextColor(getSubTextColor());
 
         CustomizeViewer.setView(CustomizeThird_dialogLayout);
-        CustomizeViewer.setNeutralButton(getString(R.string.cancel_action), new DialogInterface.OnClickListener() {
+        CustomizeViewer.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
