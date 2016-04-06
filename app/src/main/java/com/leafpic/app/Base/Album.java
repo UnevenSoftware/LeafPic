@@ -6,17 +6,11 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -28,22 +22,29 @@ public class Album implements Parcelable {
     public static final int FILTER_IMAGE=55;
     public static final int FILTER_VIDEO=75;
     public static final int FILTER_GIF=555;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
+        @Override
+        public Album createFromParcel(Parcel in) {
+            return new Album(in);
+        }
 
-    Context context;
-
+        @Override
+        public Album[] newArray(int size) {
+            return new Album[size];
+        }
+    };
     public String ID = null;
     public String DisplayName = null;
     public String Path = null;
-    private boolean selected = false;
     public AlbumSettings settings = new AlbumSettings();
-    public AlbumMediaCount count;
-
+    public AlbumMediaCount count = new AlbumMediaCount();
     public ArrayList<Media> medias;
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
-
-    private int current;
+    Context context;
+    private boolean selected = false;
+    private int current = -1;
     private int filter_photos = FILTER_ALL;
-
     private Integer last_position_selecte = -1;
 
     public Album(String id, String name, AlbumMediaCount count) {
@@ -65,6 +66,27 @@ public class Album implements Parcelable {
         setCurrentPhoto(photoPath);
     }
 
+    /**
+     * parcellable
+     */
+
+    protected Album(Parcel in) {
+        ID = in.readString();
+        DisplayName = in.readString();
+        Path = in.readString();
+        settings = (AlbumSettings) in.readValue(AlbumSettings.class.getClassLoader());
+        count = (AlbumMediaCount) in.readValue(AlbumMediaCount.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            medias = new ArrayList<Media>();
+            in.readList(medias, Media.class.getClassLoader());
+        } else {
+            medias = null;
+        }
+        current = in.readInt();
+        filter_photos = in.readInt();
+        last_position_selecte = in.readByte() == 0x00 ? null : in.readInt();
+    }
+
     public void setContext(Context ctx) {
         context = ctx;
     }
@@ -73,7 +95,6 @@ public class Album implements Parcelable {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         settings = h.getSettings(ID);
     }
-
 
     public void setDefaultSortingMode(String column) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
@@ -156,7 +177,6 @@ public class Album implements Parcelable {
         return null;
     }
 
-
     public void selectAllPhotos(){
         for (int i = 0; i < medias.size(); i++)
             if(!medias.get(i).isSelected()) {
@@ -177,7 +197,6 @@ public class Album implements Parcelable {
 
         return last_position_selecte;
     }
-
 
     public boolean isSelected() {
         return selected;
@@ -239,26 +258,6 @@ public class Album implements Parcelable {
         deletePhoto(getCurrentPhoto());
     }
 
-    public void deletePhoto(Media a) {
-        HandlingAlbums h = new HandlingAlbums(context);
-        File file = new File(a.Path);
-        h.deleteFolderRecursive(file);
-        medias.remove(a);
-    }
-
-    public void renamePhoto(String olderPath, String path){
-        try {
-            File from = new File(olderPath);
-            File to = new File(path);
-            scanFile(new String[]{from.getAbsolutePath()});
-            from.renameTo(to);
-            scanFile(new String[]{to.getAbsolutePath()});
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
    /* public void movePhoto(String olderPath, String folderPath) {
         try {
             File from = new File(olderPath);
@@ -303,6 +302,26 @@ public class Album implements Parcelable {
         }
     }*/
 
+    public void deletePhoto(Media a) {
+        HandlingAlbums h = new HandlingAlbums(context);
+        File file = new File(a.Path);
+        h.deleteFolderRecursive(file);
+        medias.remove(a);
+    }
+
+    public void renamePhoto(String olderPath, String path) {
+        try {
+            File from = new File(olderPath);
+            File to = new File(path);
+            scanFile(new String[]{from.getAbsolutePath()});
+            from.renameTo(to);
+            scanFile(new String[]{to.getAbsolutePath()});
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void scanFile(String[] path) {
         MediaScannerConnection.scanFile(context, path, null, new MediaScannerConnection.OnScanCompletedListener() {
             @Override
@@ -310,25 +329,6 @@ public class Album implements Parcelable {
                 System.out.println("SCAN COMPLETED: " + path);
             }
         });
-    }
-
-    /**parcellable*/
-
-    protected Album(Parcel in) {
-        ID = in.readString();
-        DisplayName = in.readString();
-        Path = in.readString();
-        settings = (AlbumSettings) in.readValue(AlbumSettings.class.getClassLoader());
-        count = (AlbumMediaCount) in.readValue(AlbumMediaCount.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            medias = new ArrayList<Media>();
-            in.readList(medias, Media.class.getClassLoader());
-        } else {
-            medias = null;
-        }
-        current = in.readInt();
-        filter_photos = in.readInt();
-        last_position_selecte = in.readByte() == 0x00 ? null : in.readInt();
     }
 
     @Override
@@ -358,17 +358,4 @@ public class Album implements Parcelable {
             dest.writeInt(last_position_selecte);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
-        @Override
-        public Album createFromParcel(Parcel in) {
-            return new Album(in);
-        }
-
-        @Override
-        public Album[] newArray(int size) {
-            return new Album[size];
-        }
-    };
 }

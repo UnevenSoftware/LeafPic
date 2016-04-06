@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.leafpic.app.utils.StringUtils;
-
 import java.util.ArrayList;
 
 /**
@@ -122,7 +120,8 @@ public class MadiaStoreHandler {
                 MediaStore.Images.Media.WIDTH,
                 MediaStore.Images.Media.DATE_MODIFIED,
                 MediaStore.Images.Media.HEIGHT,
-                MediaStore.Images.Media.SIZE
+                MediaStore.Images.Media.SIZE,
+                MediaStore.Images.Media.ORIENTATION
         };
 
         Uri images = MediaStore.Files.getContentUri("external");
@@ -172,6 +171,8 @@ public class MadiaStoreHandler {
                         MediaStore.Images.Media.HEIGHT);
                 int size = cur.getColumnIndex(
                         MediaStore.Images.Media.SIZE);
+                int orientation = cur.getColumnIndex(
+                        MediaStore.Images.Media.ORIENTATION);
                 do {
                     list.add(new Media(
                             cur.getString(pathColumn),
@@ -180,7 +181,8 @@ public class MadiaStoreHandler {
                             cur.getString(mimeColumn),
                             cur.getInt(width),
                             cur.getInt(height),
-                            cur.getInt(size)
+                            cur.getInt(size),
+                            cur.getInt(orientation)
                     ));
                 } while (cur.moveToNext());
             }

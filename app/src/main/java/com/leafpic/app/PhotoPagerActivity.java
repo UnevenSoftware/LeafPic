@@ -38,6 +38,7 @@ import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.Media;
+import com.leafpic.app.Fragments.ImageFragment;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
@@ -173,8 +174,8 @@ public class PhotoPagerActivity extends ThemedActivity {
         toolbar.setBackgroundColor(isApplyThemeOnImgAct()
                 ? (ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()))
                 : (isDarkTheme()
-                        ? ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000), 175)
-                        : ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
+                ? ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175)
+                : ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
         if(!isDarkTheme())
@@ -284,19 +285,19 @@ public class PhotoPagerActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            /*case R.id.rotate_180:
-                ((ImageFragment) adapter.getItem(photos.getCurrentPhotoIndex())).rotatePicture(180);
+            case R.id.rotate_180:
+                ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(180);
                 break;
 
             case R.id.rotate_right_90:
-                ((ImageFragment) adapter.getItem(photos.getCurrentPhotoIndex())).rotatePicture(90);
+                ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(90);
                 break;
 
             case R.id.rotate_left_90:
-                ((ImageFragment) adapter.getItem(photos.getCurrentPhotoIndex())).rotatePicture(-90);
+                ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(-90);
                 break;
 
-            case R.id.moveAction:
+           /* case R.id.moveAction:
                 Intent int1 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
                 int1.putExtra("request_code", PickAlbumActivity.MOVE_TO_ACTION);

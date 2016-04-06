@@ -20,10 +20,10 @@ public class Media implements Parcelable {
             return new Media[size];
         }
     };
-    public String Path;
-    public String MIME;
+    public String Path = null;
+    public String MIME = null;
     public long DateTaken = -1;
-    public String FolderPath;
+    public String FolderPath = null;
     public long DateModified = -1;
     public int orientation = 0;
     public int width;
@@ -35,18 +35,7 @@ public class Media implements Parcelable {
         Path = path;
     }
 
-    public Media(String path, long dateTaken) {
-        Path = path;
-        DateTaken = dateTaken;
-    }
-
-    public Media(String path, long dateTaken, String mime) {
-        Path = path;
-        DateTaken = dateTaken;
-        MIME = mime;
-    }
-
-    public Media(String path, long dateTaken, long dateModified, String mime, int width, int height, int size) {
+    public Media(String path, long dateTaken, long dateModified, String mime, int width, int height, int size, int orientation) {
         Path = path;
         DateTaken = dateTaken;
         MIME = mime;
@@ -54,14 +43,9 @@ public class Media implements Parcelable {
         this.width = width;
         this.height=height;
         this.size = size;
+        this.orientation = orientation;
     }
 
-    public Media(String path, long dateTaken, String mime, String folderPath) {
-        Path = path;
-        DateTaken = dateTaken;
-        MIME = mime;
-        FolderPath = folderPath;
-    }
     protected Media(Parcel in) {
         Path = in.readString();
         MIME = in.readString();
@@ -72,6 +56,7 @@ public class Media implements Parcelable {
         height = in.readInt();
         size = in.readLong();
         selected = in.readByte() != 0x00;
+        orientation = in.readInt();
     }
 
     public Uri getUri() {
@@ -122,5 +107,6 @@ public class Media implements Parcelable {
         dest.writeInt(height);
         dest.writeLong(size);
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
+        dest.writeInt(orientation);
     }
 }
