@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
     <string name="sort">Ordina</string>
