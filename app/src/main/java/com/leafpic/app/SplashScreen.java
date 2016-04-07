@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.PermissionUtils;
-import com.leafpic.app.utils.StringUtils;
 
 /**
  * Created by dnld on 01/04/16.
@@ -33,8 +31,7 @@ public class SplashScreen extends ThemedActivity {
         albums = new HandlingAlbums(SplashScreen.this);
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf");
-        logo.setTypeface(tf);
+        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             new PrefetchData().execute();
         } else {

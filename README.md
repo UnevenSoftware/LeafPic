@@ -25,7 +25,6 @@ issue is.
 If you are able to contribute a translation into a language missing from Slide,
 or spot any kind of improvement in an existing translation, we greatly
 appreciate anything you can assist with!
-
 [The project uses Crowdin](https://crowdin.com/project/leafpic), a platform that allows anybody to contribute to translating the app
 
 #### Licensing
