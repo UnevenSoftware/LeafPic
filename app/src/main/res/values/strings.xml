@@ -6,10 +6,10 @@
 
     <!--INTRO ACTIVITY-->
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
-    <string name="welcome_slide_sub">ColourFull Material Designed Gallery!</string>
+    <string name="welcome_slide_sub">Color-Full Material Designed Gallery!</string>
 
     <string name="storage_slide_title">Storage Permission!</string>
-    <string name="storage_slide_sub">ALLOW Storage permisison to use our gallery.</string>
+    <string name="storage_slide_sub">Allow storage permission to use our gallery.</string>
 
     <!--ALBUMS & SELECT ALBUMS ADAPTER-->
     <string name="singular_photo">Photo</string>
@@ -19,7 +19,7 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="hide">Hide</string>
-    <string name="ok_action">Ok</string>
+    <string name="ok_action">OK</string>
     <string name="rename_photo_action">Rename photo</string>
     <string name="insert_a_name">Insert something</string>
     <!--STORAGE PERMISSION-->
