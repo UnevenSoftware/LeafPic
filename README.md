@@ -3,11 +3,11 @@
 
 <div style="dispaly:flex;" >
 
-<img  src="screenshots/1.png" width="23%" >
-<img style="margin-left:10px;"  src="screenshots/2.png" width="23%" >
-<img style="margin-left:10px;" src="screenshots/3.png" width="23%" >
-<img style="margin-left:10px;" src="screenshots/4.png" width="23%" >
-<img style="margin-left:10px;" src="screenshots/5.png" width="23%" >
+<img  src="screenshots/1.png" width="20%" >
+<img style="margin-left:10px;"  src="screenshots/2.png" width="20%" >
+<img style="margin-left:10px;" src="screenshots/3.png" width="20%" >
+<img style="margin-left:10px;" src="screenshots/4.png" width="20%" >
+<img style="margin-left:10px;" src="screenshots/5.png" width="20%" >
 
 </div>
 LeafPic is an ad-free, open-source and full material android gallery alternative
