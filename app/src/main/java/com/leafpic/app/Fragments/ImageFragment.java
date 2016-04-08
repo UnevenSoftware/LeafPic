@@ -57,12 +57,9 @@ public class ImageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //View view = inflater.inflate(R.layout.image_fragment, container, false);
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
         PhotoView photoView = new PhotoView(getContext());
 
-        //photoView.setId(imageViewID);
-        /**/
         if (SP.getBoolean("set_delay_full_image", true)) {
             Ion.with(getContext())
                     .load(img.Path)
@@ -93,12 +90,7 @@ public class ImageFragment extends Fragment {
         });
         photoView.setZoomTransitionDuration(375);
         photoView.setScaleLevels(1.0F, 3.5F, 6.0F);
-        //photoView.u
-        //photoView.setRotationBy(img.orientation);
-
-        //container.addView(photoView, RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.MATCH_PARENT);
         return photoView;
-        //return view;
     }
 
     @Override
