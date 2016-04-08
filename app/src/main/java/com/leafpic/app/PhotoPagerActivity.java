@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +40,8 @@ import com.leafpic.app.Adapters.MediaPagerAdapter;
 import com.leafpic.app.Animations.DepthPageTransformer;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.Media;
+import com.leafpic.app.Fragments.ImageFragment;
+import com.leafpic.app.Views.HackyViewPager;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
@@ -60,7 +63,9 @@ import java.text.SimpleDateFormat;
  */
 public class PhotoPagerActivity extends ThemedActivity {
 
-    ViewPager mViewPager;
+    private static final String ISLOCKED_ARG = "isLocked";
+
+    HackyViewPager mViewPager;
     //HandlingPhotos photos;
     MediaPagerAdapter adapter;
     SharedPreferences SP;
@@ -75,6 +80,12 @@ public class PhotoPagerActivity extends ThemedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
 
+        SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
+
+        if (savedInstanceState != null)
+            mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
         try {
 
             if (getIntent().getData() != null) { /*** Call from android.View */
@@ -94,9 +105,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     public void initUI(){
-        SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mViewPager = (ViewPager) findViewById(R.id.photos_pager);
+
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
@@ -171,11 +180,10 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(isApplyThemeOnImgAct()
-                ? (ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()))
-                : (isDarkTheme()
-                ? ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175)
-                : ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
+        if (!isApplyThemeOnImgAct())
+            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(isDarkTheme() ? ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000) : ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
+        else
+            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
         if(!isDarkTheme())
@@ -288,7 +296,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            /*case R.id.rotate_180:
+            case R.id.rotate_180:
                 ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(180);
                 break;
 
@@ -299,7 +307,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.rotate_left_90:
                 ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentPhotoIndex())).rotatePicture(-90);
                 break;
-*/
+
            /* case R.id.moveAction:
                 Intent int1 = new Intent(getApplicationContext(), PickAlbumActivity.class);
                 int1.putExtra("selected_photos", photos.getCurrentPhoto().Path);
@@ -500,8 +508,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        options.setStatusBarColor
-                (isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        options.setStatusBarColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
 
         // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
@@ -524,6 +531,14 @@ public class PhotoPagerActivity extends ThemedActivity {
        */
 
         return options;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if (mViewPager != null) {
+            outState.putBoolean(ISLOCKED_ARG, mViewPager.isLocked());
+        }
+        super.onSaveInstanceState(outState);
     }
 
     public void toggleSystemUI() {

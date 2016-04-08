@@ -24,11 +24,10 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by dnld on 18/02/16.
  */
 
+@SuppressWarnings("ResourceType")
 public class ImageFragment extends Fragment {
 
     private Media img;
-
-    //PhotoViewAttacher mAttacher;
 
     public static ImageFragment newInstance(Media asd) {
         ImageFragment fragmentFirst = new ImageFragment();
@@ -57,12 +56,12 @@ public class ImageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //photoView = new PhotoView(container.getContext());
 
         //View view = inflater.inflate(R.layout.image_fragment, container, false);
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
-        //photoView = (PhotoView) view.findViewById(R.id.media_view);
         PhotoView photoView = new PhotoView(getContext());
+
+        //photoView.setId(imageViewID);
         /**/
         if (SP.getBoolean("set_delay_full_image", true)) {
             Ion.with(getContext())
@@ -81,7 +80,6 @@ public class ImageFragment extends Fragment {
                             //.centerCrop()
                     .into(photoView);
         }
-        photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
@@ -94,9 +92,7 @@ public class ImageFragment extends Fragment {
             }
         });
         photoView.setZoomTransitionDuration(375);
-        photoView.setMaximumScale(6.0F);//first set maximum
-        photoView.setMinimumScale(1.0F);
-        photoView.setMediumScale(3.5F);
+        photoView.setScaleLevels(1.0F, 3.5F, 6.0F);
         //photoView.u
         //photoView.setRotationBy(img.orientation);
 
@@ -119,12 +115,14 @@ public class ImageFragment extends Fragment {
                 rotateLoop();
             }
         }, 5);
-    }
+    }*/
 
     public void rotatePicture(int rotation) {
+        PhotoView photoView = (PhotoView) getView();
         if (photoView!=null){
             photoView.setRotationBy(rotation);
+            //photoView.refreshDrawableState();
             photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
-    }*/
+    }
 }
