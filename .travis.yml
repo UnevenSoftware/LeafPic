@@ -9,5 +9,5 @@ android:
   - android-23
   - extra-android-m2repository
   - extra-google-m2repository
-
-gradle build connectedCheck
+script:
+  gradle build connectedCheck
