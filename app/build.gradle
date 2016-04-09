@@ -28,7 +28,10 @@ android {
     defaultConfig {
         generatedDensities = []
     }
-
+    
+    lintOptions {
+      abortOnError false
+    }
     // This is handled for you by the 2.0+ Gradle Plugin
     aaptOptions {
         additionalParameters "--no-version-vectors"
