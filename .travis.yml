@@ -1,11 +1,6 @@
 
 language: android
 
-sudo: true
-
-env:
-  global:
-    - MALLOC_ARENA_MAX=2
 
 android:
   components:
