@@ -44,8 +44,8 @@
     <string name="delete_photos_message">Are you sure you want to delete selected medias?</string>
     <string name="delete_photo_message">Are you sure you want to delete this media?</string>
     <string name="exclude_album_message">
-        Are you sure you want to exclude the album?\n
-        You can restore it going to Settings!
+        Are you sure you want to exclude that album?\n
+        You can restore it in Settings!
     </string>
 
     <!--SETTINGS PREFERENCES-->

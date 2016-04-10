@@ -5,11 +5,40 @@
     tools:context=".AlbumsActivity">
 
     <group android:id="@+id/general_action">
+
         <item android:id="@+id/search_action"
             android:title="@string/search_menu"
             app:actionViewClass="android.support.v7.widget.SearchView"
-            app:showAsAction="ifRoom|collapseActionView"
-            />
+            app:showAsAction="ifRoom|collapseActionView" />
+
+        <item
+            android:id="@+id/filter_menu"
+            android:title="@string/filter_menu_title"
+            app:showAsAction="ifRoom">
+            <menu xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context=".AlbumsActivity">
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/all_media_filter"
+                        android:checked="true"
+                        android:title="@string/all"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/video_media_filter"
+                        android:title="@string/videos"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/image_media_filter"
+                        android:title="@string/images"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/gifs_media_filter"
+                        android:title="@string/gifs"
+                        app:showAsAction="never" />
+                </group>
+            </menu>
+        </item>
 
         <item android:id="@+id/sort_action"
             android:title="@string/sort_menu_title"
@@ -22,45 +51,78 @@
                         android:id="@+id/name_sort_action"
                         android:title="@string/name"
                         app:showAsAction="never" />
-
                     <item
                         android:id="@+id/date_taken_sort_action"
                         android:checked="true"
                         android:title="@string/date"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/size_sort_action"
+                        android:title="@string/size"
                         app:showAsAction="never" />
                 </group>
                 <group android:checkableBehavior="all">
                     <item
                         android:id="@+id/ascending_sort_action"
                         android:title="@string/ascending"
-                        app:showAsAction="ifRoom" />
+                        app:showAsAction="never" />
                 </group>
             </menu>
         </item>
     </group>
 
-    <group android:id="@+id/album_options_menu">
-        <item android:id="@+id/select_all_albums_action"
-            android:title="@string/select_all"
-            app:showAsAction="never"
-            />
+    <group android:id="@+id/photos_option_men">
         <item
-            android:id="@+id/deleteAction"
-            android:title="@string/delete"
-            app:showAsAction="ifRoom"
-            />
+            android:id="@+id/sharePhotos"
+            android:title="@string/share"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/copyAction"
+            android:title="@string/copy_to"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/moveAction"
+            android:title="@string/move_to"
+            app:showAsAction="never" />
+
+    </group>
+
+    <group android:id="@+id/album_options_menu">
         <item
             android:id="@+id/excludeAlbumButton"
             android:title="@string/exclude"
-            app:showAsAction="never"
-            />
+            app:showAsAction="never" />
         <item
             android:id="@+id/hideAlbumButton"
             android:title="@string/hide"
-            app:showAsAction="never"
-            />
+            app:showAsAction="never" />
     </group>
-    <item android:id="@+id/settings_albums_action"
+
+
+    <item
+        android:id="@+id/select_all"
+        android:title="@string/select_all"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/delete_action"
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/clear_album_preview"
+        android:title="@string/clear_preview"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/setAsAlbumPreview"
+        android:title="@string/set_preview"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
         android:title="@string/settings"
         app:showAsAction="never"
         />

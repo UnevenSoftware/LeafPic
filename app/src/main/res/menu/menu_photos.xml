@@ -77,6 +77,7 @@
             </menu>
         </item>
     </group>
+
     <group android:id="@+id/photos_option_men">
         <item
             android:id="@+id/sharePhotos"
@@ -106,7 +107,7 @@
     </group>
 
     <item
-        android:id="@+id/deleteAction"
+        android:id="@+id/delete_action"
         android:title="@string/delete"
         app:showAsAction="ifRoom"
         />

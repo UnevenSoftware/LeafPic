@@ -17,8 +17,8 @@
 
         <activity android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:launchMode="singleInstance"
             android:label= "@string/video_player"
+            android:launchMode="singleInstance"
             android:theme="@style/PlayerTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -42,7 +42,7 @@
                   android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity android:name=".SplashScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
