@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,8 +39,15 @@ public class SplashScreen extends ThemedActivity {
         }
 
         RelativeLayout RL = (RelativeLayout) findViewById(R.id.Splah_RelativeLayout);
-        RL.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background));
-        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background));
+        RL.setBackgroundColor(getBackgroundColor());
+        logo.setTextColor(getInvertedBackgroundColor());
+
+
+        setNavBarColor();
+        setStatusBarColor();
+        //getWindow().setNavigationBarColor(getInvertedBackgroundColor());
+        //getWindow().setStatusBarColor(getInvertedBackgroundColor());
+
     }
 
     @Override
@@ -58,7 +64,6 @@ public class SplashScreen extends ThemedActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
 
     private class PrefetchData extends AsyncTask<Void, Void, Void> {
         @Override
@@ -77,7 +82,5 @@ public class SplashScreen extends ThemedActivity {
             startActivity(i);
             finish();
         }
-
     }
-
 }

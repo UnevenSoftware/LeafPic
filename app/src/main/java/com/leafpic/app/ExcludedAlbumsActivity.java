@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -33,6 +34,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
     HandlingAlbums albums = new HandlingAlbums(ExcludedAlbumsActivity.this);
     CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
     RecyclerView mRecyclerView;
+    RelativeLayout rl_ea;
     Toolbar toolbar;
 
     @Override
@@ -47,6 +49,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
     public void checkNothing(ArrayList<Album> asd){
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
+        a.setTextColor(getTextColor());
         a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
@@ -63,6 +66,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
 
         /**SET UP UI COLORS**/
         toolbar.setBackgroundColor(getPrimaryColor());
@@ -75,8 +79,9 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         });
         setStatusBarColor();
         setNavBarColor();
-        mRecyclerView.setBackgroundColor(getBackgroundColor());
         setRecentApp(getString(R.string.excluded_albums));
+        rl_ea = (RelativeLayout) findViewById(R.id.rl_ea);
+        rl_ea.setBackgroundColor(getBackgroundColor());
     }
 
     private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
@@ -104,7 +109,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                     h.clearAlbumExclude(ID);
                     albums.remove(pos);
                     notifyItemRemoved(pos);
-
+                    /*TODO: IT CRASH WITH RIPPLE EFFECT
                     MaterialRippleLayout.on(v)
                             .rippleOverlay(true)
                             .rippleAlpha(0.2f)
@@ -112,6 +117,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                             .rippleHover(true)
                             .rippleDuration(1)
                             .create();
+                            */
                     checkNothing(albums);
                 }
             }
