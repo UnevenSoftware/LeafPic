@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/about_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <!--
+    TOOLBAR
+    -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:background="@color/md_dark_appbar"
+        android:windowActionBarOverlay="true"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--GENERAL-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                        <!--ABOUT APP TITLE-->
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_switch_CollapsingToolBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_app_Icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-gradient"
+                                />
+
+                            <TextView
+                                android:id="@+id/about_app_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="15dp"
+                                android:text="@string/app_name"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                />
+                        </LinearLayout>
+
+                    <!-- VERSION ABOUT APP-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Traslucent_StatusBar_Icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-info"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/about_version_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Version"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_version_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1.0"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                            </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <!--PICTURE SETTING-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/preview_picture_setting_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/picture_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/picture_viewer"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!--MAX BRIGHTENESS-->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_max_luminosita"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/ll_switch_max_luminosita_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-brightness-high" />
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/max_luminosita_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/max_brightness"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/max_luminosita_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/max_brightness_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                            </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/set_max_luminosita"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
+
+                    <!-- PICTURE ORIENTATION-->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_picture_orientation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/ll_switch_picture_orientation_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-screen-rotation" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/picture_orientation_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/picture_orientation"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+
+                                />
+                            <TextView
+                                android:id="@+id/picture_orientation_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/picture_orientation_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+
+                        </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/set_picture_orientation"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp" />
+                    </LinearLayout>
+
+
+                     <!-- APPLY THEME ON 3TH ACT -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false"
+                        >
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_custom_thirdAct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/custom_3thAct_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-brush"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/custom_3thAct_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
+                                    android:text="@string/custom_3thAct"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/custom_3thAct_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
+                                    android:text="@string/custom_3thAct_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!-- FULL resolution -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_switch_full_resolution"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10">
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/ll_switch_full_resolution_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-image" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/full_resolution_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Delay load full-size image"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+
+                                    />
+
+                                <TextView
+                                    android:id="@+id/full_resolution_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Load full image when zoom in"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_full_resolution"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+
+                                android:background="?android:selectableItemBackground"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:hapticFeedbackEnabled="true"
+                                android:paddingRight="5dp" />
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!--THEME-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/theme_setting_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/theme_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+
+                        android:paddingTop="15dp"
+                        android:text="@string/theme"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        />
+                    <!--PRIMARY COLOR-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false"
+                        >
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_primaryColor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/PrimaryColor_Icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-color-lens"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/PrimaryColor_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
+                                    android:text="@string/primary_color"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/PrimaryColor_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
+                                    android:text="@string/primary_color_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!--ACCENT COLOR-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_accentColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/accentColor_Icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-colorize"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/accentColor_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingRight="5dp"
+                                android:text="@string/accent_color"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/accentColor_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingRight="5dp"
+                                android:text="@string/accent_color_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!--DARK THEME-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_DarkTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/DarkTheme_Icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-invert-colors"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/DarkTheme_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dark_theme"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/DarkTheme_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dark_theme_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetDarkTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
+                    <!--COLORED NAV BAR-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_ColoredNavBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/NavBar_Icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-video-label"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/NavBar_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/colored_navbar"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/NavBar_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/colored_navbar_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                            </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetColoredNavBar"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
