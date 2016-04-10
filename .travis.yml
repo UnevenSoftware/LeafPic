@@ -1,20 +1,43 @@
-
+sudo: false
 language: android
 
 android:
   components:
   - platform-tools
   - tools
-  - build-tools-23.0.3
-  - android-23
-  - extra-android-m2repository
-  - extra-google-m2repository
-  
-  before_script:
-  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+
+  # The BuildTools version used by your project
+      - build-tools-23.0.1
+
+      # The SDK version used to compile your project
+      - android-23
+
+      # Additional components
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+
+      # Specify at least one system image,
+      # if you need to run emulator(s) during your tests
+      # - sys-img-armeabi-v7a-android-21
+      - sys-img-armeabi-v7a-android-23
+
+    licenses:
+      - 'android-sdk-license-.+'
+env:
+global:
+  # install timeout in minutes (2 minutes by default)
+  - ADB_INSTALL_TIMEOUT=8
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force --name test --target android-23 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
+  - adb devices
   - adb shell input keyevent 82 &
-  
+
 script:
-  ./gradlew build connectedCheck
+  - echo $ADB_INSTALL_TIMEOUT
+  - android list target
+  - ./gradlew connectedAndroidTest
