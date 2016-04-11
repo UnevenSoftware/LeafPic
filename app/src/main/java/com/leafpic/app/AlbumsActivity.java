@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +29,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -244,9 +247,7 @@ public class AlbumsActivity extends ThemedActivity {
         nReloads++;
     }
 
-    private void LoadAlbumsData() {
-        albums.loadPreviewAlbums();
-    }
+
 
 
     public void initUI() {
@@ -570,6 +571,7 @@ public class AlbumsActivity extends ThemedActivity {
         menu.findItem(R.id.delete_action).setVisible((albumsMode && editmode) || (!albumsMode));
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
+        menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -702,7 +704,31 @@ public class AlbumsActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
-                        .setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(this.getString(R.string.exclude), new class ReanameAlbum extends AsyncTask<String, Void, Void> {
+
+                @Override
+                protected void onPreExecute() {
+                    SwipeContainerRV.setRefreshing(true);
+                    super.onPreExecute();
+                }
+
+                @Override
+                protected Void doInBackground(String... arg0) {
+                    albums.renameAlbum(albums.getSelectedAlbum(0).Path, arg0[0]);
+
+                    //LoadAlbumsData();
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    //adapt.updateDataset(albums.dispAlbums);
+                    //nReloads++;
+                    new PrepareAlbumTask().execute();
+                    //SwipeContainerRV.setRefreshing(false);
+                }
+            })
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 if (albumsMode) {
                                     albums.excludeSelectedAlbums();
@@ -713,10 +739,6 @@ public class AlbumsActivity extends ThemedActivity {
                                     displayAlbums();
                                 }
                             }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
                         });
                 builder.show();
                 break;
@@ -725,6 +747,10 @@ public class AlbumsActivity extends ThemedActivity {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
                 builder2.setMessage(R.string.hide_album_message)
                         .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        })
+                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 if (albumsMode) {
                                     albums.hideSelectedAlbums();
@@ -736,7 +762,7 @@ public class AlbumsActivity extends ThemedActivity {
                                 }
                             }
                         })
-                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (albumsMode) {
@@ -748,13 +774,62 @@ public class AlbumsActivity extends ThemedActivity {
                                     displayAlbums();
                                 }
                             }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
                         });
                 builder2.show();
                 break;
+
+            case R.id.renameAlbum:
+
+                DialogInterface.OnClickListener() {
+                public void onClick (DialogInterface dialog,int id){
+                }
+            }
+
+            final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
+                    AlbumsActivity.this,
+                    isDarkTheme()
+                            ? R.style.AlertDialog_Dark
+                            : R.style.AlertDialog_Light);
+
+            final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
+            final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
+            final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
+            CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
+
+            cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
+            title.setBackgroundColor(getPrimaryColor());
+            title.setText(getString(R.string.rename_album));
+            txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+            txt_edit.setTextColor(getTextColor());
+            txt_edit.setText(albumsMode ? albums.getSelectedAlbum(0).DisplayName : album.DisplayName);
+            RenameDialog.setView(Rename_dialogLayout);
+
+            RenameDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (txt_edit.length() != 0) {
+                        if (albumsMode) {
+                            new ReanameAlbum().execute(txt_edit.getText().toString());
+                            //onResume();
+                        } else {
+                            albums.renameAlbum(album.Path, txt_edit.getText().toString());
+                        }
+                        toolbar.setTitle(album.DisplayName = txt_edit.getText().toString());
+                    } else
+                        StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
+
+                }
+            });
+            RenameDialog.show();
+            txt_edit.requestFocus();
+
+
+            break;
 
             /**TODO redo foollowing merged stuff **/
 
@@ -811,7 +886,7 @@ public class AlbumsActivity extends ThemedActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
             nReloads--;
-            LoadAlbumsData();
+            albums.loadPreviewAlbums();
             return null;
         }
 

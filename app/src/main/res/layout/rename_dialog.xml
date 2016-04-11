@@ -7,10 +7,10 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/rename_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="2dp"
-        android:id="@+id/rename_card"
         >
         <ScrollView
             android:layout_width="match_parent"
@@ -22,11 +22,11 @@
                 <TextView
                     android:id="@+id/rename_title"
                     android:layout_width="match_parent"
-                    android:textColor="@color/md_dark_primary_text"
                     android:layout_height="wrap_content"
                     android:background="@color/md_dark_appbar"
                     android:padding="24dp"
                     android:text="@string/rename_photo_action"
+                    android:textColor="@color/md_dark_primary_text"
                     android:textSize="18sp"
                     android:textStyle="bold" />
                 <RelativeLayout
@@ -41,6 +41,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:hint="@string/rename_photo_action"
+                        android:inputType="text"
                         android:singleLine="true" />
                 </RelativeLayout>
             </LinearLayout>

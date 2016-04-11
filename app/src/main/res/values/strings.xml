@@ -22,6 +22,7 @@
     <string name="ok_action">OK</string>
     <string name="rename_photo_action">Rename photo</string>
     <string name="insert_a_name">Insert something</string>
+    <string name="nothing_changed">Nothing changed!</string>
     <!--STORAGE PERMISSION-->
     <string name="storage_permision_denied">"Storage Permission Denied!"</string>
 
@@ -143,6 +144,7 @@
     <string name="use_as">Use as</string>
     <string name="edit">Edit</string>
     <string name="rename">Rename</string>
+    <string name="rename_album">Rename album</string>
     <string name="details">Details</string>
     <string name="more">More</string>
     <string name="edit_with">Edit with</string>

@@ -171,6 +171,10 @@ public class HandlingAlbums implements Parcelable {
         dispAlbums.remove(a);
     }
 
+    public Album getSelectedAlbum(int index) {
+        return selectedAlbums.get(index);
+    }
+
     public void deleteAlbum(String path) {
         File dir = new File(path);
         deleteFolderRecursive(dir);
@@ -181,16 +185,16 @@ public class HandlingAlbums implements Parcelable {
             String[] children = dir.list();
             for (String child : children) {
                 File temp = new File(dir, child);
-                if (temp.isDirectory())
-                    deleteFolderRecursive(temp);
-                else {
+                if (!temp.isDirectory()) {
+                    //deleteFolderRecursive(temp);
+                    //else {
                     temp.delete();
                     scanFile(new String[]{temp.getAbsolutePath()});
                 }
             }
         }
-        dir.delete();
-        scanFile(new String[]{dir.getAbsolutePath()});
+        //dir.delete();
+        //scanFile(new String[]{dir.getAbsolutePath()});
     }
 
     public void scanFile(String[] path) {

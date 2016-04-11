@@ -84,13 +84,14 @@
     <style name="AlertDialog_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/md_light_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_light_primary_text</item><!--TESTO-->
-        <item name="android:background">@color/cardview_light_background</item><!--SFONDO-->
+        <item name="android:backgroundTint">@color/cardview_light_background</item>
     </style>
 
-    <style name="AlertDialog_Dark" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AlertDialog_Dark" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
-        <item name="android:background">@color/cardview_dark_background</item><!--SFONDO-->
+        <!--<item name="android:background">@color/cardview_dark_background</item>SFONDO-->
+        <item name="android:backgroundTint">@color/cardview_dark_background</item>
     </style>
 
 
