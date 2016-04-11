@@ -40,7 +40,7 @@ public class IntroActivity extends AppIntro {
     }
 
     private void loadMainActivity() {
-        Intent intent = new Intent(this, AlbumsActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

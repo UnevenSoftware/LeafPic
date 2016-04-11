@@ -49,7 +49,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AlbumsActivity"
+        <activity android:name=".MainActivity"
+                  android:configChanges="orientation|screenSize"
                   android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.albumsAct"/>
@@ -57,26 +58,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PhotosActivity"
-                  android:label="Album"
-                  android:parentActivityName=".AlbumsActivity"
-                  android:theme="@style/Theme.AppCompat.NoActionBar">
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".AlbumsActivity"/>
-            <intent-filter>
-                <action android:name="android.intent.action.albumPhotos"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
-
         <activity android:name=".PhotoPagerActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".PhotosActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PhotosActivity"/>
+                android:value=".MainActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.albumPhoto"/>
