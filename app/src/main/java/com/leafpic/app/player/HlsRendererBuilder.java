@@ -135,18 +135,6 @@ public class HlsRendererBuilder implements DemoPlayer.RendererBuilder {
       MediaCodecVideoTrackRenderer videoRenderer = new MediaCodecVideoTrackRenderer(context,
               sampleSource, MediaCodecSelector.DEFAULT, MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT,
               5000, mainHandler, player, 50);
-<<<<<<< HEAD
-      MediaCodecAudioTrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource,
-              MediaCodecSelector.DEFAULT, null, true, player.getMainHandler(), player,
-              AudioCapabilities.getCapabilities(context), AudioManager.STREAM_MUSIC);
-      MetadataTrackRenderer<List<Id3Frame>> id3Renderer = new MetadataTrackRenderer<List<Id3Frame>>(
-              sampleSource, new Id3Parser(), player, mainHandler.getLooper());
-
-      // Build the text renderer, preferring Webvtt where available.
-      boolean preferWebvtt = false;
-      if (manifest instanceof HlsMasterPlaylist) {
-        preferWebvtt = !((HlsMasterPlaylist) manifest).subtitles.isEmpty();
-=======
       MetadataTrackRenderer<List<Id3Frame>> id3Renderer = new MetadataTrackRenderer<List<Id3Frame>>(
               sampleSource, new Id3Parser(), player, mainHandler.getLooper());
 
@@ -168,7 +156,6 @@ public class HlsRendererBuilder implements DemoPlayer.RendererBuilder {
         audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource,
                 MediaCodecSelector.DEFAULT, null, true, player.getMainHandler(), player,
                 AudioCapabilities.getCapabilities(context), AudioManager.STREAM_MUSIC);
->>>>>>> refs/remotes/DNLDsht/master
       }
 
       // Build the text renderer.
@@ -176,11 +163,7 @@ public class HlsRendererBuilder implements DemoPlayer.RendererBuilder {
       if (haveSubtitles) {
         DataSource textDataSource = new DefaultUriDataSource(context, bandwidthMeter, userAgent);
         HlsChunkSource textChunkSource = new HlsChunkSource(false /* isMaster */, textDataSource,
-<<<<<<< HEAD
-                url, manifest, DefaultHlsTrackSelector.newAudioInstance(), bandwidthMeter,
-=======
                 url, manifest, DefaultHlsTrackSelector.newSubtitleInstance(), bandwidthMeter,
->>>>>>> refs/remotes/DNLDsht/master
                 timestampAdjusterProvider, HlsChunkSource.ADAPTIVE_MODE_SPLICE);
         HlsSampleSource textSampleSource = new HlsSampleSource(textChunkSource, loadControl,
                 TEXT_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player, DemoPlayer.TYPE_TEXT);
