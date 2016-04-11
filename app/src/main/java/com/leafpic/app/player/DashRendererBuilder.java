@@ -76,7 +76,7 @@ public class DashRendererBuilder implements DemoPlayer.RendererBuilder {
   private AsyncRendererBuilder currentAsyncBuilder;
 
   public DashRendererBuilder(Context context, String userAgent, String url,
-      MediaDrmCallback drmCallback) {
+                             MediaDrmCallback drmCallback) {
     this.context = context;
     this.userAgent = userAgent;
     this.url = url;
@@ -98,13 +98,13 @@ public class DashRendererBuilder implements DemoPlayer.RendererBuilder {
   }
 
   private static final class AsyncRendererBuilder
-      implements ManifestFetcher.ManifestCallback<MediaPresentationDescription>, UtcTimingCallback {
+          implements ManifestFetcher.ManifestCallback<MediaPresentationDescription>, UtcTimingCallback {
 
     private final Context context;
     private final String userAgent;
     private final MediaDrmCallback drmCallback;
     private final DemoPlayer player;
-    private final ManifestFetcher manifestFetcher;
+    private final ManifestFetcher<MediaPresentationDescription> manifestFetcher;
     private final UriDataSource manifestDataSource;
 
     private boolean canceled;
@@ -112,14 +112,14 @@ public class DashRendererBuilder implements DemoPlayer.RendererBuilder {
     private long elapsedRealtimeOffset;
 
     public AsyncRendererBuilder(Context context, String userAgent, String url,
-        MediaDrmCallback drmCallback, DemoPlayer player) {
+                                MediaDrmCallback drmCallback, DemoPlayer player) {
       this.context = context;
       this.userAgent = userAgent;
       this.drmCallback = drmCallback;
       this.player = player;
       MediaPresentationDescriptionParser parser = new MediaPresentationDescriptionParser();
       manifestDataSource = new DefaultUriDataSource(context, userAgent);
-      manifestFetcher = new ManifestFetcher(url, manifestDataSource, parser);
+      manifestFetcher = new ManifestFetcher<MediaPresentationDescription>(url, manifestDataSource, parser);
     }
 
     public void init() {
@@ -195,7 +195,7 @@ public class DashRendererBuilder implements DemoPlayer.RendererBuilder {
       if (hasContentProtection) {
         if (Util.SDK_INT < 18) {
           player.onRenderersError(
-              new UnsupportedDrmException(UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME));
+                  new UnsupportedDrmException(UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME));
           return;
         }
         try {
@@ -211,38 +211,38 @@ public class DashRendererBuilder implements DemoPlayer.RendererBuilder {
       // Build the video renderer.
       DataSource videoDataSource = new DefaultUriDataSource(context, bandwidthMeter, userAgent);
       ChunkSource videoChunkSource = new DashChunkSource(manifestFetcher,
-          DefaultDashTrackSelector.newVideoInstance(context, true, filterHdContent),
-          videoDataSource, new AdaptiveEvaluator(bandwidthMeter), LIVE_EDGE_LATENCY_MS,
-          elapsedRealtimeOffset, mainHandler, player, DemoPlayer.TYPE_VIDEO);
+              DefaultDashTrackSelector.newVideoInstance(context, true, filterHdContent),
+              videoDataSource, new AdaptiveEvaluator(bandwidthMeter), LIVE_EDGE_LATENCY_MS,
+              elapsedRealtimeOffset, mainHandler, player, DemoPlayer.TYPE_VIDEO);
       ChunkSampleSource videoSampleSource = new ChunkSampleSource(videoChunkSource, loadControl,
-          VIDEO_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player,
-          DemoPlayer.TYPE_VIDEO);
+              VIDEO_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player,
+              DemoPlayer.TYPE_VIDEO);
       TrackRenderer videoRenderer = new MediaCodecVideoTrackRenderer(context, videoSampleSource,
-          MediaCodecSelector.DEFAULT, MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT, 5000,
-          drmSessionManager, true, mainHandler, player, 50);
+              MediaCodecSelector.DEFAULT, MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT, 5000,
+              drmSessionManager, true, mainHandler, player, 50);
 
       // Build the audio renderer.
       DataSource audioDataSource = new DefaultUriDataSource(context, bandwidthMeter, userAgent);
       ChunkSource audioChunkSource = new DashChunkSource(manifestFetcher,
-          DefaultDashTrackSelector.newAudioInstance(), audioDataSource, null, LIVE_EDGE_LATENCY_MS,
-          elapsedRealtimeOffset, mainHandler, player, DemoPlayer.TYPE_AUDIO);
+              DefaultDashTrackSelector.newAudioInstance(), audioDataSource, null, LIVE_EDGE_LATENCY_MS,
+              elapsedRealtimeOffset, mainHandler, player, DemoPlayer.TYPE_AUDIO);
       ChunkSampleSource audioSampleSource = new ChunkSampleSource(audioChunkSource, loadControl,
-          AUDIO_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player,
-          DemoPlayer.TYPE_AUDIO);
+              AUDIO_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player,
+              DemoPlayer.TYPE_AUDIO);
       TrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(audioSampleSource,
-          MediaCodecSelector.DEFAULT, drmSessionManager, true, mainHandler, player,
-          AudioCapabilities.getCapabilities(context), AudioManager.STREAM_MUSIC);
+              MediaCodecSelector.DEFAULT, drmSessionManager, true, mainHandler, player,
+              AudioCapabilities.getCapabilities(context), AudioManager.STREAM_MUSIC);
 
       // Build the text renderer.
       DataSource textDataSource = new DefaultUriDataSource(context, bandwidthMeter, userAgent);
       ChunkSource textChunkSource = new DashChunkSource(manifestFetcher,
-          DefaultDashTrackSelector.newTextInstance(), textDataSource, null, LIVE_EDGE_LATENCY_MS,
-          elapsedRealtimeOffset, mainHandler, player, DemoPlayer.TYPE_TEXT);
+              DefaultDashTrackSelector.newTextInstance(), textDataSource, null, LIVE_EDGE_LATENCY_MS,
+              elapsedRealtimeOffset, mainHandler, player, DemoPlayer.TYPE_TEXT);
       ChunkSampleSource textSampleSource = new ChunkSampleSource(textChunkSource, loadControl,
-          TEXT_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player,
-          DemoPlayer.TYPE_TEXT);
+              TEXT_BUFFER_SEGMENTS * BUFFER_SEGMENT_SIZE, mainHandler, player,
+              DemoPlayer.TYPE_TEXT);
       TrackRenderer textRenderer = new TextTrackRenderer(textSampleSource, player,
-          mainHandler.getLooper());
+              mainHandler.getLooper());
 
       // Invoke the callback.
       TrackRenderer[] renderers = new TrackRenderer[DemoPlayer.RENDERER_COUNT];
@@ -255,9 +255,10 @@ public class DashRendererBuilder implements DemoPlayer.RendererBuilder {
     private static int getWidevineSecurityLevel(StreamingDrmSessionManager sessionManager) {
       String securityLevelProperty = sessionManager.getPropertyString("securityLevel");
       return securityLevelProperty.equals("L1") ? SECURITY_LEVEL_1 : securityLevelProperty
-          .equals("L3") ? SECURITY_LEVEL_3 : SECURITY_LEVEL_UNKNOWN;
+              .equals("L3") ? SECURITY_LEVEL_3 : SECURITY_LEVEL_UNKNOWN;
     }
 
   }
 
 }
+
