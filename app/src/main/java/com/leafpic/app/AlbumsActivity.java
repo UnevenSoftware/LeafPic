@@ -759,7 +759,7 @@ public class AlbumsActivity extends ThemedActivity {
                 break;
 
             case R.id.renameAlbum:
-//porco dio
+            //porco dio
                 class ReanameAlbum extends AsyncTask<String, Void, Void> {
 
                     @Override
@@ -770,9 +770,8 @@ public class AlbumsActivity extends ThemedActivity {
 
                     @Override
                     protected Void doInBackground(String... arg0) {
+                        Log.wtf("",arg0[0]);
                         albums.renameAlbum(albums.getSelectedAlbum(0).Path, arg0[0]);
-
-                        //LoadAlbumsData();
                         return null;
                     }
 
@@ -826,7 +825,7 @@ public class AlbumsActivity extends ThemedActivity {
                 txt_edit.requestFocus();
 
 
-                break;
+            break;
 
             /**TODO redo foollowing merged stuff **/
 
