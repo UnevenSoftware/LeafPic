@@ -149,7 +149,7 @@ public class PhotosActivity extends ThemedActivity {
         menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
         menu.findItem(R.id.sortPhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
         menu.findItem(R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
-        menu.findItem(R.id.deleteAction).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+        menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         return true;
     }
 
@@ -175,11 +175,11 @@ public class PhotosActivity extends ThemedActivity {
     private void togglePrimaryToolbarOptions(final Menu menu) {
         if (editmode) {
             menu.findItem(R.id.sortPhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu.findItem(R.id.delete_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             menu.findItem(R.id.sharePhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         } else {
             menu.findItem(R.id.sortPhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menu.findItem(R.id.delete_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             menu.findItem(R.id.sharePhotos).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
     }
@@ -301,7 +301,7 @@ public class PhotosActivity extends ThemedActivity {
                 break;*/
 
             case R.id.select_all_albums_action:
-                if(album.getSelectedCount()==adapter.getItemCount()){
+                if (album.getSelectedCount() == adapter.getItemCount()) {
                     editmode = false;
                     invalidateOptionsMenu();
                     album.clearSelectedPhotos();
@@ -357,6 +357,7 @@ public class PhotosActivity extends ThemedActivity {
                 new PreparePhotosTask().execute();
                 item.setChecked(true);
                 break;
+
             case R.id.size_sort_action:
                 album.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
                 new PreparePhotosTask().execute();
@@ -364,7 +365,6 @@ public class PhotosActivity extends ThemedActivity {
                 break;
             case R.id.date_taken_sort_action:
                 album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
-
                 new PreparePhotosTask().execute();
 
                 item.setChecked(true);
@@ -372,53 +372,7 @@ public class PhotosActivity extends ThemedActivity {
             case R.id.ascending_sort_action:
                 album.setDefaultSortingAscending(!album.settings.ascending);
                 new PreparePhotosTask().execute();
-
                 item.setChecked(!item.isChecked());
-                break;
-
-            case R.id.renameAlbum:
-                final AlertDialog.Builder RenameDialog;
-                if (isDarkTheme())
-                    RenameDialog = new AlertDialog.Builder(PhotosActivity.this, R.style.AlertDialog_Dark);
-                else
-                    RenameDialog = new AlertDialog.Builder(PhotosActivity.this, R.style.AlertDialog_Light);
-
-                final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
-                final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
-                final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
-                CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
-
-                title.setBackgroundColor(getPrimaryColor());
-                title.setText(getString(R.string.rename));
-                txt_edit.setText(album.DisplayName);//da fixxare
-                txt_edit.selectAll();
-
-                txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-
-                cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
-                txt_edit.setTextColor(getTextColor());
-                txt_edit.setHintTextColor(getTextColor());
-                txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-
-                RenameDialog.setView(Rename_dialogLayout);
-                RenameDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (txt_edit.length() != 0) {
-                            albums.renameAlbum(album.Path, txt_edit.getText().toString());
-                            album.DisplayName = txt_edit.getText().toString();
-                            updateHeaderContent();
-                            //UpdatePhotos();//TODO updatePhoto photos
-                        } else
-                            StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
-                    }
-                });
-                RenameDialog.show();
                 break;
 
             case R.id.excludeAlbumButton:
@@ -435,7 +389,36 @@ public class PhotosActivity extends ThemedActivity {
                 builder.show();
                 break;
 
-            case R.id.deleteAction:
+            case R.id.sharePhotos:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
+
+                ArrayList<Uri> files = new ArrayList<Uri>();
+
+                for (Media f : album.selectedMedias)
+                    files.add(Uri.fromFile(new File(f.Path)));
+
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                intent.setType(StringUtils.getGenericMIME(album.selectedMedias.get(0).MIME));
+                finishEditMode();
+                startActivity(intent);
+                break;
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            case R.id.setting:
+                Intent intent2 = new Intent(getApplicationContext(), SettingActivity.class);
+
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+                startActivity(intent2);
+                return true;
+
+            case R.id.delete_action:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotosActivity.this);
                 if(editmode) builder1.setMessage(R.string.delete_photos_message);
                 else builder1.setMessage(R.string.delete_album_message);
@@ -484,34 +467,50 @@ public class PhotosActivity extends ThemedActivity {
 
                 break;
 
-            case R.id.sharePhotos:
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
+            case R.id.renameAlbum:
+                final AlertDialog.Builder RenameDialog;
+                if (isDarkTheme())
+                    RenameDialog = new AlertDialog.Builder(PhotosActivity.this, R.style.AlertDialog_Dark);
+                else
+                    RenameDialog = new AlertDialog.Builder(PhotosActivity.this, R.style.AlertDialog_Light);
 
-                ArrayList<Uri> files = new ArrayList<Uri>();
+                final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
+                final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
+                final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
+                CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
-                for (Media f : album.selectedMedias)
-                    files.add(Uri.fromFile(new File(f.Path)));
+                title.setBackgroundColor(getPrimaryColor());
+                title.setText(getString(R.string.rename));
+                txt_edit.setText(album.DisplayName);//da fixxare
+                txt_edit.selectAll();
 
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                intent.setType(StringUtils.getGenericMIME(album.selectedMedias.get(0).MIME));
-                finishEditMode();
-                startActivity(intent);
+                txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+                cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
+                txt_edit.setTextColor(getTextColor());
+                txt_edit.setHintTextColor(getTextColor());
+                txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+
+                RenameDialog.setView(Rename_dialogLayout);
+                RenameDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (txt_edit.length() != 0) {
+                            albums.renameAlbum(album.Path, txt_edit.getText().toString());
+                            album.DisplayName = txt_edit.getText().toString();
+                            updateHeaderContent();
+                            //UpdatePhotos();//TODO updatePhoto photos
+                        } else
+                            StringUtils.showToast(getApplicationContext(), getString(R.string.insert_a_name));
+                    }
+                });
+                RenameDialog.show();
                 break;
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-
-            case R.id.setting:
-                Intent intent2= new Intent(getApplicationContext(), SettingActivity.class);
-
-                //intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                //intent2.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-                startActivity(intent2);
-                return true;
 
             default:
                 // If we got here, the user's action was not recognized.

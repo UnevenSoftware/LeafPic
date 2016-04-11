@@ -57,6 +57,10 @@ public class Album implements Parcelable {
         ID = id;
     }
 
+    public Album(Context ctx) {
+        context = ctx;
+    }
+
     public Album(Context ctx, String photoPath) {
         context = ctx;
         MadiaStoreHandler as = new MadiaStoreHandler(context);

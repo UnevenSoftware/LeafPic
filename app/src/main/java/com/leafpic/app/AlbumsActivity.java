@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,15 +33,21 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.leafpic.app.Adapters.AlbumsAdapter;
+import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
+import com.leafpic.app.Base.Media;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.Measure;
+import com.leafpic.app.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import java.util.ArrayList;
 
 
 public class AlbumsActivity extends ThemedActivity {
@@ -49,13 +56,47 @@ public class AlbumsActivity extends ThemedActivity {
     public static String TAG = "AlbumsAct";
     //region PUBLIC VARIABLES
     HandlingAlbums albums = new HandlingAlbums(AlbumsActivity.this);
+    CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(AlbumsActivity.this);
+    Album album = new Album(AlbumsActivity.this);
+
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
+    PhotosAdapter adapter;
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
-    boolean editmode = false;
+
+    boolean editmode = false, albumsMode = true;
     int nReloads=-1;
+    View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            TextView is = (TextView) v.findViewById(R.id.photo_path);
+            adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
+            editmode = true;
+            invalidateOptionsMenu();
+            return true;
+        }
+    };
+    View.OnClickListener photosOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (nReloads % 2 != 0) {
+                TextView is = (TextView) v.findViewById(R.id.photo_path);
+                if (editmode) {
+                    adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
+                    invalidateOptionsMenu();
+                } else {
+                    album.setCurrentPhoto(is.getTag().toString());
+                    Intent intent = new Intent(AlbumsActivity.this, PhotoPagerActivity.class);
+                    Bundle b = new Bundle();
+                    b.putParcelable("album", album);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            }
+        }
+    };
     private SwipeRefreshLayout SwipeContainerRV;
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
@@ -76,20 +117,74 @@ public class AlbumsActivity extends ThemedActivity {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
                     invalidateOptionsMenu();
                 } else {
-                    Album album = albums.getAlbum(a.getTag().toString());
-                    Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
-                    /**TODO:IMPLEMENT ANIMATION**/
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    openAlbum(albums.getAlbum(a.getTag().toString()));
+                    /*Intent intent = new Intent(AlbumsActivity.this, PhotosActivity.class);
+
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
                     intent.putExtras(b);
-                    startActivity(intent);
+                    startActivity(intent);*/
                 }
             }
-
         }
     };
+
+    public void openAlbum(Album a) {
+        album = a;
+        toolbar.setTitle(a.DisplayName);
+        album.setContext(AlbumsActivity.this);
+        new PreparePhotosTask().execute();
+        adapter = new PhotosAdapter(album.medias, AlbumsActivity.this);
+        adapter.setOnClickListener(photosOnClickListener);
+        adapter.setOnLongClickListener(photosOnLongClickListener);
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
+        mRecyclerView.setAdapter(adapter);
+
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                .color(Color.WHITE)
+                .sizeDp(20));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayAlbums();
+            }
+        });
+        albumsMode = editmode = false;
+        invalidateOptionsMenu();
+    }
+
+    public void displayAlbums() {
+        toolbar.setTitle(getString(R.string.app_name));
+        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
+        adapt.setOnClickListener(albumOnClickListener);
+        adapt.setOnLongClickListener(albumOnLongCLickListener);
+
+        new PrepareAlbumTask().execute();
+        int nspan = Measure.getAlbumsColums(getApplicationContext());
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nspan));
+        //mRecyclerView.removeItemDecoration(GridSpacingItemDecoration.class);
+        //mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(nspan, Measure.pxToDp(2, getApplicationContext()), true));
+
+        mRecyclerView.setAdapter(adapt);
+
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_menu)
+                .color(Color.WHITE)
+                .sizeDp(20));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        albumsMode = true;
+        editmode = false;
+        invalidateOptionsMenu();
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,14 +237,17 @@ public class AlbumsActivity extends ThemedActivity {
         albums.clearSelectedAlbums();
         setupUI();
         invalidateOptionsMenu();
-        //setRecentApp(getString(R.string.app_name));
-       if(nReloads != -1) new PrepareAlbumTask().execute();
+        if (albumsMode) {
+            if (nReloads != -1) new PrepareAlbumTask().execute();
+        } else new PreparePhotosTask().execute();
+
         nReloads++;
     }
 
     private void LoadAlbumsData() {
         albums.loadPreviewAlbums();
     }
+
 
     public void initUI() {
 
@@ -165,12 +263,16 @@ public class AlbumsActivity extends ThemedActivity {
             toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
 
         /**** RECYCLER VIEW ****/
-        int nSpan = Measure.getAlbumsColums(getApplicationContext());//nColumns
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(Measure.getAlbumsColums(getApplicationContext()), Measure.pxToDp(2, getApplicationContext()), true));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
+
+        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
+        adapt.setOnClickListener(albumOnClickListener);
+        adapt.setOnLongClickListener(albumOnLongCLickListener);
+        mRecyclerView.setAdapter(adapt);
 
         /**** SWIPE TO REFRESH ****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -179,20 +281,12 @@ public class AlbumsActivity extends ThemedActivity {
             @Override
             public void onRefresh() {
                 onResume();
-                //new PrepareAlbumTask().execute();
             }
         });
 
         //TODO show the fucking refresh when app start
         //SwipeContainerRV.setRefreshing(true);
 
-        /**** ALBUM UI LOAD ***/
-        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
-
-        adapt.setOnClickListener(albumOnClickListener);
-        adapt.setOnLongClickListener(albumOnLongCLickListener);
-
-        mRecyclerView.setAdapter(adapt);
 
         /**** DRAWER ****/
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -218,8 +312,12 @@ public class AlbumsActivity extends ThemedActivity {
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                startActivity(i);
+                if (!albumsMode && album.areFiltersActive()) {
+                    album.filterMedias(Album.FILTER_ALL);
+                    adapter.updateDataset(album.medias);
+                    toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
+                    fabCamera.setImageDrawable(new IconicsDrawable(AlbumsActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+                } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
             }
         });
 
@@ -324,63 +422,115 @@ public class AlbumsActivity extends ThemedActivity {
     void updateSelectedStuff() {
         int c;
         try {
-            if ((c = albums.getSelectedCount()) != 0) {
-                toolbar.setTitle(c + "/" + albums.dispAlbums.size());
-                toolbar.setNavigationIcon(new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_check)
-                        .color(Color.WHITE)
-                        .sizeDp(20));
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editmode = false;
-                        invalidateOptionsMenu();
-                        albums.clearSelectedAlbums();
-                        adapt.notifyDataSetChanged();
-                    }
-                });
-                toolbar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (albums.getSelectedCount() == albums.dispAlbums.size())
+            if (albumsMode) {
+                if ((c = albums.getSelectedCount()) != 0) {
+                    toolbar.setTitle(c + "/" + albums.dispAlbums.size());
+                    toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            editmode = false;
                             albums.clearSelectedAlbums();
-                        else albums.selectAllAlbums();
-                        adapt.notifyDataSetChanged();
-                        invalidateOptionsMenu();
-                    }
-                });
+                            adapt.notifyDataSetChanged();
+                            invalidateOptionsMenu();
+                        }
+                    });
+                    toolbar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (albums.getSelectedCount() == albums.dispAlbums.size())
+                                albums.clearSelectedAlbums();
+                            else albums.selectAllAlbums();
+                            adapt.notifyDataSetChanged();
+                            invalidateOptionsMenu();
+                        }
+                    });
+                } else {
+                    toolbar.setTitle(getString(R.string.app_name));
+                    toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
+                    toolbar.setOnClickListener(null);
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDrawerLayout.openDrawer(GravityCompat.START);
+                        }
+                    });
+                }
             } else {
-                toolbar.setTitle(getString(R.string.app_name));
-                toolbar.setNavigationIcon(new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_menu)
-                        .color(Color.WHITE)
-                        .sizeDp(20));
-                toolbar.setOnClickListener(null);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDrawerLayout.openDrawer(GravityCompat.START);
-                    }
-                });
+                if ((c = album.getSelectedCount()) != 0) {
+                    toolbar.setTitle(c + "/" + album.medias.size());
+                    toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finishEditMode();
+                        }
+                    });
+                    toolbar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (album.getSelectedCount() == album.medias.size())
+                                album.clearSelectedPhotos();
+                            else album.selectAllPhotos();
+                            adapter.notifyDataSetChanged();
+                            invalidateOptionsMenu();
+                        }
+                    });
+                } else {
+                    toolbar.setTitle(album.DisplayName);
+                    toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+                    toolbar.setOnClickListener(null);
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            displayAlbums();
+                        }
+                    });
+                }
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
+    private void finishEditMode() {
+        editmode = false;
+        invalidateOptionsMenu();
+        album.clearSelectedPhotos();
+        adapter.notifyDataSetChanged();
+    }
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_albums, menu);
 
-        menu.findItem(R.id.select_all_albums_action).setTitle(
-                 getString(albums.getSelectedCount()==adapt.getItemCount()
-                         ? R.string.clear_selected
-                         : R.string.select_all));
+        if (albumsMode) {
+            menu.findItem(R.id.select_all).setTitle(
+                    getString(albums.getSelectedCount() == adapt.getItemCount()
+                            ? R.string.clear_selected
+                            : R.string.select_all));
+        } else {
+            menu.findItem(R.id.select_all).setTitle(getString(
+                    album.getSelectedCount() == adapter.getItemCount()
+                            ? R.string.clear_selected
+                            : R.string.select_all));
+
+            menu.findItem(R.id.ascending_sort_action).setChecked(album.settings.ascending);
+            if (album.settings.columnSortingMode == null || album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+                menu.findItem(R.id.date_taken_sort_action).setChecked(true);
+            else if (album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+                menu.findItem(R.id.name_sort_action).setChecked(true);
+            else if (album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+                menu.findItem(R.id.size_sort_action).setChecked(true);
+        }
+
         menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
-        menu.findItem(R.id.deleteAction).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+        menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
+        menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
+        menu.findItem(R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+        menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
 
         final MenuItem searchItem = menu.findItem(R.id.search_action);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -390,67 +540,166 @@ public class AlbumsActivity extends ThemedActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        if (albums.getSelectedCount() == 0)
-            editmode = false;
-
-        if (editmode) {
-            menu.findItem(R.id.sort_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            menu.findItem(R.id.search_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        if (albumsMode) {
+            editmode = albums.getSelectedCount() != 0;
+            menu.setGroupVisible(R.id.album_options_menu, editmode);
+            menu.setGroupVisible(R.id.photos_option_men, false);
         } else {
-            menu.findItem(R.id.sort_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            menu.findItem(R.id.search_action).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            menu.findItem(R.id.deleteAction).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            editmode = album.getSelectedCount() != 0;
+            menu.setGroupVisible(R.id.photos_option_men, editmode);
+            menu.setGroupVisible(R.id.album_options_menu, !editmode);
         }
 
-        menu.setGroupVisible(R.id.album_options_menu, editmode);
+        togglePrimaryToolbarOptions(menu);
+        updateSelectedStuff();
+
+        /** custom items **/
+        menu.findItem(R.id.select_all).setVisible(editmode);
+        menu.findItem(R.id.delete_action).setVisible((albumsMode && editmode) || (!albumsMode));
+        menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
+        menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void togglePrimaryToolbarOptions(final Menu menu) {
         menu.setGroupVisible(R.id.general_action, !editmode);
 
-        updateSelectedStuff();
-        return super.onPrepareOptionsMenu(menu);
-
+        if (!editmode) {
+            menu.findItem(R.id.size_sort_action).setVisible(!albumsMode);
+            menu.findItem(R.id.filter_menu).setVisible(!albumsMode);
+            menu.findItem(R.id.search_action).setVisible(albumsMode);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case R.id.select_all:
+                if (albumsMode) {
+                    if (albums.getSelectedCount() == adapt.getItemCount()) {
+                        editmode = false;
+                        albums.clearSelectedAlbums();
+                    } else albums.selectAllAlbums();
+                    adapt.notifyDataSetChanged();
+                } else {
+                    if (album.getSelectedCount() == adapter.getItemCount()) {
+                        editmode = false;
+                        album.clearSelectedPhotos();
+                    } else album.selectAllPhotos();
+                    adapter.notifyDataSetChanged();
+                }
+                invalidateOptionsMenu();
+                break;
+
             case R.id.name_sort_action:
-                albums.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATA);
-                new PrepareAlbumTask().execute();
+                if (albumsMode) {
+                    albums.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATA);
+                    new PrepareAlbumTask().execute();
+                } else {
+                    album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DISPLAY_NAME);
+                    new PreparePhotosTask().execute();
+                }
                 item.setChecked(true);
                 break;
             case R.id.date_taken_sort_action:
-                albums.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
-                new PrepareAlbumTask().execute();
+                if (albumsMode) {
+                    albums.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                    new PrepareAlbumTask().execute();
+                } else {
+                    album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+                    new PreparePhotosTask().execute();
+                }
                 item.setChecked(true);
                 break;
+
+            case R.id.size_sort_action:
+                if (!albumsMode) {
+                    album.setDefaultSortingMode(MediaStore.Images.ImageColumns.SIZE);
+                    new PreparePhotosTask().execute();
+                    item.setChecked(true);
+                }
+                break;
+
             case R.id.ascending_sort_action:
-                albums.setDefaultSortingAscending(!item.isChecked());
-                new PrepareAlbumTask().execute();
+                if (albumsMode) {
+                    albums.setDefaultSortingAscending(!item.isChecked());
+                    new PrepareAlbumTask().execute();
+                } else {
+                    album.setDefaultSortingAscending(!album.settings.ascending);
+                    new PreparePhotosTask().execute();
+                }
                 item.setChecked(!item.isChecked());
                 break;
 
-            case R.id.select_all_albums_action:
-                if(albums.getSelectedCount()==adapt.getItemCount()){
-                    editmode = false;
-                    invalidateOptionsMenu();
-                    albums.clearSelectedAlbums();
-                    adapt.notifyDataSetChanged();
-                } else {
-                    albums.selectAllAlbums();
-                    adapt.notifyDataSetChanged();
-                    invalidateOptionsMenu();
-                } break;
+            case R.id.all_media_filter:
+                if (!albumsMode) {
+                    album.filterMedias(Album.FILTER_ALL);
+                    adapter.updateDataset(album.medias);
+                    item.setChecked(true);
+                    fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+                }
+                break;
+            case R.id.video_media_filter:
+                if (!albumsMode) {
+                    album.filterMedias(Album.FILTER_VIDEO);
+                    adapter.updateDataset(album.medias);
+                    item.setChecked(true);
+                    fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
+                }
+                break;
+            case R.id.image_media_filter:
+                if (!albumsMode) {
+                    album.filterMedias(Album.FILTER_IMAGE);
+                    adapter.updateDataset(album.medias);
+                    item.setChecked(true);
+                    fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
+                }
+                break;
+
+            case R.id.gifs_media_filter:
+                if (!albumsMode) {
+                    album.filterMedias(Album.FILTER_GIF);
+                    adapter.updateDataset(album.medias);
+                    item.setChecked(true);
+                    fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
+                }
+                break;
+
+            case R.id.settings:
+                startActivity(new Intent(AlbumsActivity.this, SettingActivity.class));
+                break;
+
+            case R.id.sharePhotos:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
+
+                ArrayList<Uri> files = new ArrayList<Uri>();
+
+                for (Media f : album.selectedMedias)
+                    files.add(f.getUri());
+
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                intent.setType(StringUtils.getGenericMIME(album.selectedMedias.get(0).MIME));
+                finishEditMode();
+                startActivity(intent);
+                break;
 
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AlbumsActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
                         .setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                albums.excludeSelectedAlbums();
-                                adapt.notifyDataSetChanged();
-                                invalidateOptionsMenu();
+                                if (albumsMode) {
+                                    albums.excludeSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                } else {
+                                    customAlbumsHandler.excludeAlbum(album.ID);
+                                    displayAlbums();
+                                }
                             }
                         })
                         .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -460,14 +709,55 @@ public class AlbumsActivity extends ThemedActivity {
                 builder.show();
                 break;
 
-            case R.id.deleteAction:
+            case R.id.hideAlbumButton:
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
+                builder2.setMessage(R.string.hide_album_message)
+                        .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (albumsMode) {
+                                    albums.hideSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                } else {
+                                    albums.hideAlbum(album.Path);
+                                    displayAlbums();
+                                }
+                            }
+                        })
+                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (albumsMode) {
+                                    albums.excludeSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                } else {
+                                    customAlbumsHandler.excludeAlbum(album.ID);
+                                    displayAlbums();
+                                }
+                            }
+                        })
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                builder2.show();
+                break;
+
+            /**TODO redo foollowing merged stuff **/
+
+            case R.id.delete_action:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(AlbumsActivity.this);
                 builder1.setMessage(R.string.delete_album_message)
                         .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                albums.deleteSelectedAlbums();
-                                adapt.notifyDataSetChanged();
-                                invalidateOptionsMenu();
+                                if (albumsMode) {
+                                    albums.deleteSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                } else {
+                                    StringUtils.showToast(getApplicationContext(), "Not Yet!");
+                                }
                             }
                         })
                         .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -477,35 +767,6 @@ public class AlbumsActivity extends ThemedActivity {
                 builder1.show();
                 break;
 
-            case R.id.hideAlbumButton:
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(AlbumsActivity.this);
-                builder2.setMessage(R.string.delete_album_message)
-                        .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                albums.hideSelectedAlbums();
-                                adapt.notifyDataSetChanged();
-                                invalidateOptionsMenu();
-                            }
-                        })
-                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                albums.excludeSelectedAlbums();
-                                adapt.notifyDataSetChanged();
-                                invalidateOptionsMenu();
-                            }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                builder2.show();
-
-                break;
-            case R.id.settings_albums_action:
-                Intent asd = new Intent(AlbumsActivity.this, SettingActivity.class);
-                startActivity(asd);
-                break;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -517,9 +778,13 @@ public class AlbumsActivity extends ThemedActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        else finish();
+        if (albumsMode) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            else finish();
+        } else
+            displayAlbums();
+
     }
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
@@ -541,6 +806,30 @@ public class AlbumsActivity extends ThemedActivity {
         @Override
         protected void onPostExecute(Void result) {
             adapt.updateDataset(albums.dispAlbums);
+            nReloads++;
+            SwipeContainerRV.setRefreshing(false);
+        }
+    }
+
+    public class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            nReloads++;
+            SwipeContainerRV.setRefreshing(true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            nReloads--;
+            album.updatePhotos();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.updateDataset(album.medias);
             nReloads++;
             SwipeContainerRV.setRefreshing(false);
         }

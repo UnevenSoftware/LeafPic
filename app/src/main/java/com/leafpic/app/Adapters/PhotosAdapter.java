@@ -79,10 +79,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
-        Glide.clear(holder.imageView);//fix corruption
+        //Glide.clear(holder.imageView);//fix corruption
 
         if (f.isImage() && f.isGif()) {
-
             Ion.with(holder.imageView.getContext())
                     .load(f.Path)
                     .intoImageView(holder.imageView);
