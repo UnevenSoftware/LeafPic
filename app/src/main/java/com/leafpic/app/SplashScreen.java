@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Views.ThemedActivity;
+import com.leafpic.app.utils.ColorPalette;
 import com.leafpic.app.utils.PermissionUtils;
 
 /**
@@ -45,12 +47,27 @@ public class SplashScreen extends ThemedActivity {
         logo.setTextColor(getInvertedBackgroundColor());
 
 
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        //getWindow().setStatusBarColor(Color.TRANSPARENT);
+        //getWindow().setNavigationBarColor(Color.TRANSPARENT);
+
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        setNavBarColor();
+        setStatusBarColor();
+    }
+
+    @Override
+    public void setNavBarColor() {
+        getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
+                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 70));
+    }
+
+    @Override
+    protected void setStatusBarColor() {
+        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
+                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 70));
     }
 
     @Override
