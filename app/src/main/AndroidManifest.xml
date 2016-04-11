@@ -94,6 +94,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AboutActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.ABOUT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ExcludedAlbumsActivity"
             android:label="@string/excluded_albums"
             android:theme="@style/Theme.AppCompat.NoActionBar">
