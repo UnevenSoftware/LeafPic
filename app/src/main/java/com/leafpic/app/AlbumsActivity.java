@@ -365,6 +365,8 @@ public class AlbumsActivity extends ThemedActivity {
         TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
         TextView txtGithub = (TextView) findViewById(R.id.Drawer_github_Item);
         TextView txtWall = (TextView) findViewById(R.id.Drawer_wallpapers_Item);
+        TextView txtAbout = (TextView) findViewById(R.id.Drawer_About_Item);
+
 
 
         IconicsImageView imgDD = (IconicsImageView) findViewById(R.id.Drawer_Default_Icon);
@@ -374,6 +376,7 @@ public class AlbumsActivity extends ThemedActivity {
         IconicsImageView imgDDonate = (IconicsImageView) findViewById(R.id.Drawer_Donate_Icon);
         IconicsImageView imgGithub = (IconicsImageView) findViewById(R.id.Drawer_github_Icon);
         IconicsImageView imgDS = (IconicsImageView) findViewById(R.id.Drawer_Setting_Icon);
+        IconicsImageView imgAbout = (IconicsImageView) findViewById(R.id.Drawer_About_Icon);
 
         /**textViews Colors*/
         int color = getTextColor();
@@ -384,6 +387,7 @@ public class AlbumsActivity extends ThemedActivity {
         txtDDonate.setTextColor(color);
         txtGithub.setTextColor(color);
         txtWall.setTextColor(color);
+        txtAbout.setTextColor(color);
 
         /*
         color = isDarkTheme()
@@ -399,12 +403,20 @@ public class AlbumsActivity extends ThemedActivity {
         imgGithub.setColor(color);
         imgDS.setColor(color);
         imgWall.setColor(color);
+        imgAbout.setColor(color);
 
         /****DRAWER CLICK LISTENER****/
         findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AlbumsActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AlbumsActivity.this, AboutActivity.class);
                 startActivity(intent);
             }
         });

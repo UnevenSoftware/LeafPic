@@ -90,6 +90,16 @@
     <string name="colored_navbar">Colored Navigation Bar</string>
     <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
 
+    <!--ABOUT STRINGS-->
+    <string name="about">About</string>
+    <string name="about_version">Version</string>
+    <string name="about_library_license">Library License</string>
+    <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
+
+    <string name="about_authors">Authors</string>
+    <string name="about_author_donald_sub">Major Programmer, Designer</string>
+    <string name="about_author_gilbert_sub">Major Designer, Programmer</string>
+
     <!--PHOTO DETAILS-->
     <string name="path">Path</string>
     <string name="type">Type</string>
