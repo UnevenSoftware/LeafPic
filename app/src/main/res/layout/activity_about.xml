@@ -132,7 +132,7 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
-                            app:iiv_icon="gmd-info"
+                            app:iiv_icon="gmd-insert-drive-file"
                             />
                         <LinearLayout
                             android:layout_width="0dp"
@@ -229,11 +229,37 @@
                                 />
                         </LinearLayout>
                     </LinearLayout>
-                    <!-- DONALD SOCIAL LINK
-                    ..
-                    ..
-                    ..
-                    -->
+                    <!-- DONALD SOCIAL LINK-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_donald_social"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+                        <TextView
+                            android:id="@+id/donald_googleplus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="G+"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            android:layout_weight="5"
+                            />
+                        <TextView
+                            android:id="@+id/donald_facebook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about_author_donald_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:textSize="14sp"
+                            android:layout_weight="5"
+                            />
+                    </LinearLayout>
+
 
 
                     <!--GILBERT NDRESAJ -->
