@@ -30,7 +30,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/grid_albums"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:scrollbars="vertical"
                 />
@@ -45,9 +45,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
+            android:layout_marginEnd="15dp"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
+            android:visibility="gone"
             app:elevation="4dp"
             app:layout_behavior="com.leafpic.app.Views.FABScrollBehavior" />
     </android.support.design.widget.CoordinatorLayout>

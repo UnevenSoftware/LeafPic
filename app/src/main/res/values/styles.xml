@@ -30,7 +30,6 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@color/md_dark_appbar</item>
         <item name="android:elevation" tools:ignore="NewApi">5dp</item>
         <item name="theme">@style/MyToolbarTheme</item>
 

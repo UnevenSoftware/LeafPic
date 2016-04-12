@@ -31,6 +31,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,7 +41,6 @@ import android.widget.TextView;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
-import com.leafpic.app.Base.AlbumSettings;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.Media;
@@ -138,7 +138,7 @@ public class MainActivity extends ThemedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_albums);
+        setContentView(R.layout.activity_main);
 
         try {
             Bundle data = getIntent().getExtras();
@@ -236,7 +236,20 @@ public class MainActivity extends ThemedActivity {
             mRecyclerView.addItemDecoration(photosDecoration);
         }
     }
+    private void setupSystemUI() {
+        int status_height = Measure.getStatusBarHeight(getResources());
+        toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
+        //mRecyclerView.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator())
+                //.setDuration(0).start();/*status_height+*/Measure.getNavBarHeight(getResources())
+        mRecyclerView.setPadding(0,status_height,0,(0));
+        //fabCamera.animate().translationY(-Measure.getNavBarHeight(Resources.getSystem())).setInterpolator(new DecelerateInterpolator(2)).start();
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        setNavBarColor();
 
+    }
     public void initUI() {
 
         /**** TOOLBAR ****/
@@ -249,7 +262,6 @@ public class MainActivity extends ThemedActivity {
         //TODO:FIX IT PLIS CUZ I KNOW U CAN
         /*else
             toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
-
         /**** RECYCLER VIEW ****/
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         mRecyclerView.setHasFixedSize(true);
@@ -263,6 +275,7 @@ public class MainActivity extends ThemedActivity {
         adapt.setOnClickListener(albumOnClickListener);
         adapt.setOnLongClickListener(albumOnLongCLickListener);
         mRecyclerView.setAdapter(adapt);
+
 
         /**** SWIPE TO REFRESH ****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -296,6 +309,7 @@ public class MainActivity extends ThemedActivity {
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,10 +321,16 @@ public class MainActivity extends ThemedActivity {
                 } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
             }
         });
+        setupSystemUI();
 
         setRecentApp(getString(R.string.app_name));
     }
 
+    @Override
+    public void setNavBarColor() {
+        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
+                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
+    }
     //region UI/GRAPHIC
     public void setupUI() {
 
@@ -324,7 +344,7 @@ public class MainActivity extends ThemedActivity {
             toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
 
         setStatusBarColor();
-        setNavBarColor();
+        //setNavBarColor();
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         setDrawerTheme();
         mRecyclerView.setBackgroundColor(getBackgroundColor());
