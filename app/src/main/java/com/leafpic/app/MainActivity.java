@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -31,7 +30,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -272,6 +270,7 @@ public class MainActivity extends ThemedActivity {
         mRecyclerView.addItemDecoration(albumsDecoration);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
 
+        /*
         Resources resources = this.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         int navbarHeight=0;
@@ -281,7 +280,8 @@ public class MainActivity extends ThemedActivity {
         ViewGroup.LayoutParams params=mRecyclerView.getLayoutParams();
         params.height+=navbarHeight;
         mRecyclerView.setLayoutParams(params);
-
+        */
+        
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnClickListener(albumOnClickListener);
         adapt.setOnLongClickListener(albumOnLongCLickListener);
