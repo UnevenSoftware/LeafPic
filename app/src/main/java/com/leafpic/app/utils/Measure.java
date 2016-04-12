@@ -34,12 +34,12 @@ public class Measure {
     }
 
     public static int getPhotosColums(Context c){
-        int n = Math.round(getDensity(c)/ Costants.PHOTO_CARD_WIDTH);;
+        int n = Math.round(getDensity(c)/ Costants.PHOTO_CARD_WIDTH);
         return n < 3 ? 3 : n;
     }
 
     public static int getDensity(Context c){
-        return Math.round((getScreenWidth(c) / c.getResources().getDisplayMetrics().density));
+        return Math.round((getScreenWidth(c) * c.getResources().getDisplayMetrics().density));
     }
 
     public static int getStatusBarHeight(Resources r) {

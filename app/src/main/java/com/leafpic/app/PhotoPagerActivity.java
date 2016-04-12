@@ -91,7 +91,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             if (getIntent().getData() != null) { /*** Call from android.View */
                 album = new Album(getApplicationContext(), getIntent().getData().getPath());
                 //photos.setCurrentPhoto(getIntent().getData().getPath());
-            } else if (getIntent().getExtras() != null) { /*** Call from PhotosActivity */
+            } else if (getIntent().getExtras() != null) { /*** Call from MainActivity */
                 Bundle data = getIntent().getExtras();
                 album = data.getParcelable("album");
                 assert album != null;
@@ -361,7 +361,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         album.deleteCurrentPhoto();
                         if (album.medias.size() == 0)
-                            startActivity(new Intent(PhotoPagerActivity.this, AlbumsActivity.class));
+                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem()+1) + getString(R.string.of) + album.medias.size());
 
@@ -510,25 +510,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         options.setToolbarColor(getPrimaryColor());
         options.setStatusBarColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
-
-        // fullSizeOptions.setDimmedLayerColor(Color.CYAN);
-       /*
-        Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
-        fullSizeOptions.setMaxScaleMultiplier(5);
-        fullSizeOptions.setImageToCropBoundsAnimDuration(666);
-        fullSizeOptions.setDimmedLayerColor(Color.CYAN);
-        fullSizeOptions.setOvalDimmedLayer(true);
-        fullSizeOptions.setShowCropFrame(false);
-        fullSizeOptions.setCropGridStrokeWidth(20);
-        fullSizeOptions.setCropGridColor(Color.GREEN);
-        fullSizeOptions.setCropGridColumnCount(2);
-        fullSizeOptions.setCropGridRowCount(1);
-        // Color palette
-        fullSizeOptions.setToolbarColor(ContextCompat.getColor(this, R.color.your_color_res));
-        fullSizeOptions.setStatusBarColor(ContextCompat.getColor(this, R.color.your_color_res));
-        fullSizeOptions.setActiveWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
-		fullSizeOptions.setToolbarTitleTextColor(ContextCompat.getColor(this, R.color.your_color_res));
-       */
 
         return options;
     }
