@@ -97,6 +97,16 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        //Crowdin
+        findViewById(R.id.ll_about_support_translate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://crowdin.com/project/leafpic"));
+                startActivity(i);
+            }
+        });
+
     }
 
     public void setThemeOnChangeListener(){

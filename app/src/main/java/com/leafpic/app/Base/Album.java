@@ -311,10 +311,13 @@ public class Album implements Parcelable {
     }
 
     public void deletePhoto(Media a) {
-        HandlingAlbums h = new HandlingAlbums(context);
+        //HandlingAlbums h = new HandlingAlbums(context);
         File file = new File(a.Path);
-        h.deleteFolderRecursive(file);
-        medias.remove(a);
+        if(file.delete()){
+            MediaScannerConnection.scanFile(context,new String[]{a.Path},null,null);
+            medias.remove(a);
+        }
+        //h.deleteFolderRecursive(file);
     }
 
     public void renamePhoto(String olderPath, String path) {

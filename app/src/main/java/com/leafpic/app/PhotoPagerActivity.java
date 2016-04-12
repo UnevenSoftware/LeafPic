@@ -360,11 +360,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                 builder1.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         album.deleteCurrentPhoto();
-                        if (album.medias.size() == 0)
-                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
+                        if (album.medias.size() == 0) {
+                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));finish();
+                        }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem()+1) + getString(R.string.of) + album.medias.size());
-
+                        toolbar.setTitle((mViewPager.getCurrentItem()+1) +" "+ getString(R.string.of)+" " + album.medias.size());
                     }
                 });
                 builder1.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -375,27 +375,23 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.renamePhoto:
-                final AlertDialog.Builder RenameDialog;
-                if (isDarkTheme())
-                    RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Dark);
-                else
-                    RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, R.style.AlertDialog_Light);
+                final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
+                    PhotoPagerActivity.this,
+                    isDarkTheme()
+                            ? R.style.AlertDialog_Dark
+                            : R.style.AlertDialog_Light);
 
                 final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
                 final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
                 CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
+
                 cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
-
                 title.setBackgroundColor(getPrimaryColor());
-                title.setText(this.getString(R.string.rename_photo_action));
-                txt_edit.setText(StringUtils.getPhotoNamebyPath(album.getCurrentPhoto().Path));
-                txt_edit.selectAll();
-                txt_edit.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-
-                txt_edit.setHintTextColor(getTextColor());
-                txt_edit.setTextColor(getTextColor());
+                title.setText(getString(R.string.rename_photo_action));
                 txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+                txt_edit.setTextColor(getTextColor());
+                txt_edit.setText(StringUtils.getPhotoNamebyPath(album.getCurrentPhoto().Path));
 
                 RenameDialog.setView(Rename_dialogLayout);
                 RenameDialog.setNeutralButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -410,7 +406,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         if (txt_edit.length() != 0)
                             album.renamePhoto(album.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(album.getCurrentPhoto().Path, txt_edit.getText().toString()));
                         else
-                            StringUtils.showToast(getApplicationContext(), PhotoPagerActivity.this.getString(R.string.insert_a_name));
+                            StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
                     }
                 });
                 RenameDialog.show();

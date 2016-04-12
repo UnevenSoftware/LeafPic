@@ -49,4 +49,11 @@ public class Measure {
 
         return 0;
     }
+    public static int getNavBarHeight(Resources r) {
+        int resourceId = r.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0)
+            return r.getDimensionPixelSize(resourceId);
+
+        return 0;
+    }
 }
