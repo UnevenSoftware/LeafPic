@@ -58,8 +58,8 @@ public class SplashScreen extends ThemedActivity {
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
         }
 
-        RelativeLayout RL = (RelativeLayout) findViewById(R.id.Splah_RelativeLayout);
-        RL.setBackgroundColor(getBackgroundColor());
+        RelativeLayout RelLay = (RelativeLayout) findViewById(R.id.Splah_Bg);
+        RelLay.setBackgroundColor(getBackgroundColor());
         logo.setTextColor(getInvertedBackgroundColor());
 
         getWindow().getDecorView().setSystemUiVisibility(

@@ -350,7 +350,6 @@ public class MainActivity extends ThemedActivity {
         TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
         TextView txtDS = (TextView) findViewById(R.id.Drawer_Setting_Item);
         TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
-        TextView txtGithub = (TextView) findViewById(R.id.Drawer_github_Item);
         TextView txtWall = (TextView) findViewById(R.id.Drawer_wallpapers_Item);
         TextView txtAbout = (TextView) findViewById(R.id.Drawer_About_Item);
 
@@ -361,7 +360,6 @@ public class MainActivity extends ThemedActivity {
         IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Hidden_Icon);
         IconicsImageView imgDMoments = (IconicsImageView) findViewById(R.id.Drawer_Moments_Icon);
         IconicsImageView imgDDonate = (IconicsImageView) findViewById(R.id.Drawer_Donate_Icon);
-        IconicsImageView imgGithub = (IconicsImageView) findViewById(R.id.Drawer_github_Icon);
         IconicsImageView imgDS = (IconicsImageView) findViewById(R.id.Drawer_Setting_Icon);
         IconicsImageView imgAbout = (IconicsImageView) findViewById(R.id.Drawer_About_Icon);
 
@@ -372,7 +370,6 @@ public class MainActivity extends ThemedActivity {
         txtDMoments.setTextColor(color);
         txtDS.setTextColor(color);
         txtDDonate.setTextColor(color);
-        txtGithub.setTextColor(color);
         txtWall.setTextColor(color);
         txtAbout.setTextColor(color);
 
@@ -387,7 +384,6 @@ public class MainActivity extends ThemedActivity {
         imgDDonate.setColor(color);
         imgDH.setColor(color);
         imgDMoments.setColor(color);
-        imgGithub.setColor(color);
         imgDS.setColor(color);
         imgWall.setColor(color);
         imgAbout.setColor(color);
@@ -407,14 +403,7 @@ public class MainActivity extends ThemedActivity {
                 startActivity(intent);
             }
         });
-        findViewById(R.id.ll_drawer_github).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/DNLDsht/LeafPic"));
-                startActivity(i);
-            }
-        });
+
     }
     //endregion
 
