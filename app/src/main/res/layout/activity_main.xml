@@ -5,18 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start">
-
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/Relative_Album_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <!---->
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <include
                 android:id="@+id/toolbar"
@@ -25,20 +23,17 @@
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                android:layout_height="wrap_content">
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/grid_albums"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:scrollbars="vertical"
                 />
-
             </android.support.v4.widget.SwipeRefreshLayout>
 
         </LinearLayout>
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_camera"
             style="@style/fab_camera"
@@ -50,9 +45,9 @@
             app:borderWidth="0dp"
             android:visibility="gone"
             app:elevation="4dp"
-            app:layout_behavior="com.leafpic.app.Views.FABScrollBehavior" />
+            app:layout_behavior="com.leafpic.app.Views.FABScrollBehavior"
+            />
     </android.support.design.widget.CoordinatorLayout>
-
     <include
         android:id="@+id/drawer_items"
         layout="@layout/drawer_albums_act"
