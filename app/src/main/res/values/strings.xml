@@ -100,6 +100,22 @@
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_sub">Major Programmer, Designer</string>
     <string name="about_author_gilbert_sub">Major Designer, Programmer</string>
+    <string name="about_googleplus">Google+</string>
+
+    <string name="about_support">Support Development</string>
+    <string name="about_support_translate">Translate</string>
+    <string name="about_support_translate_sub">Help us to translate LeafPic in more languages.</string>
+
+    <string name="about_support_rate">Rate</string>
+    <string name="about_support_rate_sub">Leave us a positive rating if you like LeafPic.</string>
+
+    <string name="about_support_github">GitHub</string>
+    <string name="about_support_github_sub">Fork our repo and push changes.</string>
+
+
+
+
+
 
     <!--PHOTO DETAILS-->
     <string name="path">Path</string>

@@ -78,7 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingBottom="15dp"
+                        android:paddingBottom="8dp"
                         android:paddingTop="8dp"
                         android:weightSum="10"
                         >
@@ -100,7 +100,7 @@
                                 android:id="@+id/about_version_item"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Version"
+                                android:text="@string/about_version"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
                                 />
@@ -229,7 +229,7 @@
                                 />
                         </LinearLayout>
                     </LinearLayout>
-                    <!-- DONALD SOCIAL LINK-->
+                    <!-- DONALD SOCIAL LINK
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_donald_social"
@@ -244,9 +244,10 @@
                             android:id="@+id/donald_googleplus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="G+"
+                            android:layout_gravity="center"
+                            android:text="@string/about_googleplus"
                             android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
+                            android:textSize="20sp"
                             android:layout_weight="5"
                             />
                         <TextView
@@ -259,7 +260,7 @@
                             android:layout_weight="5"
                             />
                     </LinearLayout>
-
+                    -->
 
 
                     <!--GILBERT NDRESAJ -->
@@ -310,6 +311,174 @@
                     ..
                     ..
                     -->
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <!--SUPPORT APP-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_support_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!--ABOUT SUPPORT TITLE-->
+                    <TextView
+                        android:id="@+id/about_support_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/about_support"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        />
+                    <!-- TRANLATE -->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_translate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="15dp"
+                        android:weightSum="10"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_translate_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-flag"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/about_support_translate_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_translate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_translate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_translate_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- RATE -->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_rate_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-star"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/about_support_rate_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_rate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_rate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_rate_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- GIT HUB -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_support_github"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_support_github_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="faw-github"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_support_github_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_github"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_support_github_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_github_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
 
 
                 </LinearLayout>
