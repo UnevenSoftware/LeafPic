@@ -39,7 +39,7 @@ public class Album implements Parcelable {
     public String Path = null;
     public AlbumSettings settings = new AlbumSettings();
     public AlbumMediaCount count = new AlbumMediaCount();
-    public ArrayList<Media> medias;
+    public ArrayList<Media> medias = new ArrayList<Media>();
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
     Context context;
     private boolean selected = false;
@@ -210,12 +210,12 @@ public class Album implements Parcelable {
         selected = value;
     }
 
-    public void setPath() {
-        try {
+    public boolean setPath() {
+        if(medias.size() > 0) {
             Path = StringUtils.getBucketPathbyImagePath(medias.get(0).Path);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            return true;
         }
+        return false;
     }
 
     public boolean hasCustomCover() {
@@ -305,6 +305,10 @@ public class Album implements Parcelable {
             e.printStackTrace();
         }
     }*/
+
+    public ArrayList<Media> getSelectedMedias() {
+        return selectedMedias;
+    }
 
     public void deletePhoto(Media a) {
         HandlingAlbums h = new HandlingAlbums(context);
