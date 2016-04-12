@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 import com.leafpic.app.Adapters.AlbumsAdapter;
 import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
+import com.leafpic.app.Base.AlbumSettings;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.Media;
@@ -51,6 +53,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -167,20 +170,19 @@ public class MainActivity extends ThemedActivity {
     public void openAlbum(Album a) {
         album = a;
         toolbar.setTitle(a.DisplayName);
-        album.setContext(MainActivity.this);
-        new PreparePhotosTask().execute();
-        adapter = new PhotosAdapter(album.medias, MainActivity.this);
-        adapter.setOnClickListener(photosOnClickListener);
-        adapter.setOnLongClickListener(photosOnLongClickListener);
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         mRecyclerView.removeItemDecoration(albumsDecoration);
         mRecyclerView.addItemDecoration(photosDecoration);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
+        album.setContext(MainActivity.this);
+
+        adapter = new PhotosAdapter(album.medias, MainActivity.this);
+        new PreparePhotosTask().execute();
+
+        adapter.setOnClickListener(photosOnClickListener);
+        adapter.setOnLongClickListener(photosOnLongClickListener);
         mRecyclerView.setAdapter(adapter);
 
-        toolbar.setNavigationIcon(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_arrow_back)
-                .color(Color.WHITE)
-                .sizeDp(20));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,34 +195,26 @@ public class MainActivity extends ThemedActivity {
 
 
     public void displayAlbums() {
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
-        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
-        adapt.setOnClickListener(albumOnClickListener);
-        adapt.setOnLongClickListener(albumOnLongCLickListener);
-
-        new PrepareAlbumTask().execute();
-
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
         mRecyclerView.removeItemDecoration(photosDecoration);
         mRecyclerView.addItemDecoration(albumsDecoration);
 
+        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
+        new PrepareAlbumTask().execute();
+
+        adapt.setOnClickListener(albumOnClickListener);
+        adapt.setOnLongClickListener(albumOnLongCLickListener);
         mRecyclerView.setAdapter(adapt);
 
-        toolbar.setNavigationIcon(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_menu)
-                .color(Color.WHITE)
-                .sizeDp(20));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-            }
+            public void onClick(View v) { mDrawerLayout.openDrawer(Gravity.START);}
         });
-
         albumsMode = true;
         editmode = false;
         invalidateOptionsMenu();
-
     }
 
     @Override
@@ -751,7 +745,7 @@ public class MainActivity extends ThemedActivity {
                 break;
 
             case R.id.renameAlbum:
-                class ReanameAlbum extends AsyncTask<String, Void, Void> {
+                class ReanameAlbum extends AsyncTask<String, Integer, Void> {
 
                     @Override
                     protected void onPreExecute() {
@@ -760,11 +754,36 @@ public class MainActivity extends ThemedActivity {
                     }
 
                     @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        Log.wtf(TAG,"update "  +values[0]);
+                    }
+
+                    @Override
                     protected Void doInBackground(String... arg0) {
                         Log.wtf("",arg0[0]);
-                        albums.renameAlbum(albums.getSelectedAlbum(0).Path, arg0[0]);
+                        //albums.renameAlbum(albums.getSelectedAlbum(0).Path, arg0[0]);
+                        try {
+                            File from = new File(albums.getSelectedAlbum(0).Path);
+                            File to = new File(StringUtils.getAlbumPathRenamed(albums.getSelectedAlbum(0).Path, arg0[0]));
+                           /* String s[] = from.list(), dirPath = from.getAbsolutePath();
+                            for (String paht : s) {
+                                scanFile(new String[]{dirPath + "/" + paht});
+                            }*/
+                            if(from.renameTo(to)) {
+                                String s[] = to.list();
+                                String dirPath = to.getAbsolutePath();
+                                for (int i = 0; i < s.length; i++) {
+                                    scanFile(new String[]{dirPath + "/" + s[i]});
+                                    setProgress(i);
+                                }
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         return null;
                     }
+
 
                     @Override
                     protected void onPostExecute(Void result) {
@@ -804,9 +823,9 @@ public class MainActivity extends ThemedActivity {
                                 new ReanameAlbum().execute(txt_edit.getText().toString());
                                 //onResume();
                             } else {
-                                albums.renameAlbum(album.Path, txt_edit.getText().toString());
+                                //albums.renameAlbum(album.Path, txt_edit.getText().toString());
+                                //toolbar.setTitle(album.DisplayName = txt_edit.getText().toString());
                             }
-                            toolbar.setTitle(album.DisplayName = txt_edit.getText().toString());
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
 
@@ -814,13 +833,55 @@ public class MainActivity extends ThemedActivity {
                 });
                 RenameDialog.show();
                 txt_edit.requestFocus();
-
-
             break;
 
             /**TODO redo foollowing merged stuff **/
 
             case R.id.delete_action:
+
+                class DeletePhotos extends AsyncTask<String, Integer, Void> {
+                    @Override
+                    protected void onPreExecute() {
+                        SwipeContainerRV.setRefreshing(true);
+                        super.onPreExecute();
+                    }
+                    @Override
+                    protected Void doInBackground(String... arg0) {
+                        ArrayList<Media> selected= album.getSelectedMedias();
+                        String paths[] = new String[selected.size()];
+                        for (int i = 0; i <selected.size(); i++) {
+                            File file = new File(selected.get(i).Path);
+                            if (file.delete()) {
+                                paths[i]=selected.get(i).Path;
+                                //MediaScannerConnection.scanFile(MainActivity.this, new String[]{selected.get(i).Path}, null, null);
+                                //getContentResolver().delete(selected.get(i).getUri(), null, null);
+                                //sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                                album.medias.remove(selected.get(i));
+                            }
+                        }
+                        MediaScannerConnection.scanFile(MainActivity.this, paths, null, null);
+                        album.clearSelectedPhotos();
+                        return null;
+                    }
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        if (album.medias.size()==0){
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) { e.printStackTrace(); }
+                            displayAlbums();
+                            //onResume();
+                            //displayAlbums();
+                            //adapt.notifyDataSetChanged();
+                        }
+                        else {
+                            adapter.updateDataset(album.medias);
+                            invalidateOptionsMenu();
+                            SwipeContainerRV.setRefreshing(false);
+                        }
+                    }
+                }
+
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
                 builder1.setMessage(R.string.delete_album_message)
                         .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -829,9 +890,8 @@ public class MainActivity extends ThemedActivity {
                                     albums.deleteSelectedAlbums();
                                     adapt.notifyDataSetChanged();
                                     invalidateOptionsMenu();
-                                } else {
-                                    StringUtils.showToast(getApplicationContext(), "Not Yet!");
-                                }
+                                } else
+                                    new DeletePhotos().execute();
                             }
                         })
                         .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -886,6 +946,15 @@ public class MainActivity extends ThemedActivity {
         } else
             displayAlbums();
 
+    }
+
+    public void scanFile(String[] path) {
+        MediaScannerConnection.scanFile(getApplicationContext(), path, null, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                System.out.println("Photo rename COMPLETED: " + path);
+            }
+        });
     }
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {

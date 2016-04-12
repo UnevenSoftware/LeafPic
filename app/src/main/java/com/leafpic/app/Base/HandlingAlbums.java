@@ -70,10 +70,13 @@ public class HandlingAlbums implements Parcelable {
         int cameraIndex = -1;
 
         for (int i = 0; i < dispAlbums.size(); i++) {
-            dispAlbums.get(i).setCoverPath(h.getPhotPrevieAlbum(dispAlbums.get(i).ID));
             dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
-            dispAlbums.get(i).setPath();
-            if (dispAlbums.get(i).Path.contains(CAMERA_PATTERN)) cameraIndex = i;
+            if(!dispAlbums.get(i).setPath())
+                dispAlbums.remove(dispAlbums.get(i));
+            else {
+                dispAlbums.get(i).setCoverPath(h.getPhotPrevieAlbum(dispAlbums.get(i).ID));
+                if (dispAlbums.get(i).Path.contains(CAMERA_PATTERN)) cameraIndex = i;
+            }
         }
 
         if (cameraIndex != -1) {
@@ -258,8 +261,9 @@ public class HandlingAlbums implements Parcelable {
             File from = new File(olderPath);
             File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
             String s[] = from.list(), dirPath = from.getAbsolutePath();
-            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
-
+            for (String paht : s) {
+                scanFile(new String[]{dirPath + "/" + paht});
+            }
             from.renameTo(to);
             s = to.list();
             dirPath = to.getAbsolutePath();
