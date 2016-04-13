@@ -511,6 +511,30 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     @Override
+    public void setNavBarColor() {
+        if (isApplyThemeOnImgAct())
+            if (isNavigationBarColored())
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+            else
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
+        else
+            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
+    }
+
+
+    @Override
+    protected void setStatusBarColor() {
+        if(isApplyThemeOnImgAct())
+            if (isTraslucentStatusBar() && isTransparencyZero())
+                getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+            else
+                getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+        else
+            getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
+                    ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (mViewPager != null) {
             outState.putBoolean(ISLOCKED_ARG, mViewPager.isLocked());
