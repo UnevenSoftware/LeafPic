@@ -16,7 +16,7 @@
         android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true"
         />
-b 
+b
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
