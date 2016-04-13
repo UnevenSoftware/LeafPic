@@ -281,7 +281,7 @@ public class MainActivity extends ThemedActivity {
         params.height+=navbarHeight;
         mRecyclerView.setLayoutParams(params);
         */
-        
+
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnClickListener(albumOnClickListener);
         adapt.setOnLongClickListener(albumOnLongCLickListener);
