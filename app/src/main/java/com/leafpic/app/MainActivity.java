@@ -27,7 +27,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -210,7 +209,7 @@ public class MainActivity extends ThemedActivity {
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { mDrawerLayout.openDrawer(Gravity.START);}
+            public void onClick(View v) { mDrawerLayout.openDrawer(GravityCompat.START);}
         });
         albumsMode = true;
         editmode = false;
@@ -270,6 +269,18 @@ public class MainActivity extends ThemedActivity {
         photosDecoration = new GridSpacingItemDecoration(Measure.getPhotosColums(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
         mRecyclerView.addItemDecoration(albumsDecoration);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
+
+        /*
+        Resources resources = this.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        int navbarHeight=0;
+        if (resourceId > 0) {
+             navbarHeight = resources.getDimensionPixelSize(resourceId);
+        }
+        ViewGroup.LayoutParams params=mRecyclerView.getLayoutParams();
+        params.height+=navbarHeight;
+        mRecyclerView.setLayoutParams(params);
+        */
 
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
         adapt.setOnClickListener(albumOnClickListener);

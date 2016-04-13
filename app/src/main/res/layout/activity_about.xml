@@ -16,7 +16,7 @@
         android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true"
         />
-
+b 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -262,7 +262,6 @@
                     </LinearLayout>
                     -->
 
-
                     <!--GILBERT NDRESAJ -->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -312,10 +311,8 @@
                     ..
                     -->
 
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
 
             <!--SUPPORT APP-->
             <android.support.v7.widget.CardView
@@ -479,7 +476,6 @@
                             </LinearLayout>
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
-
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
