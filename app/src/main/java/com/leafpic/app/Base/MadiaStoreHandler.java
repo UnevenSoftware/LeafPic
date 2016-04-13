@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -93,6 +94,33 @@ public class MadiaStoreHandler {
 
     public ArrayList<Media> getFirstAlbumPhoto(String ID) {
         return getAlbumPhotos(ID, 1, null, Album.FILTER_ALL);
+    }
+
+    public void getThumnails(){
+
+        String[] projection = new String[]{
+                MediaStore.Images.Thumbnails.DATA,
+                MediaStore.Images.Thumbnails.IMAGE_ID
+        };
+
+        Uri images = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
+Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),images,projection);
+        Cursor cur = MediaStore.Images.Thumbnails.query(context.getContentResolver(),images,projection);
+                /*context.getContentResolver().query(
+                images,
+                projection,
+                null, null, null);*/
+        if (cur.moveToFirst()){
+            int pathColumn = cur.getColumnIndex(
+                    MediaStore.Images.Thumbnails.DATA);
+            int ThumbCOlumn = cur.getColumnIndex(
+                    MediaStore.Images.Thumbnails.IMAGE_ID);
+            do {
+                Log.wtf("data",cur.getString(pathColumn));
+                Log.wtf("data-thumb",cur.getString(ThumbCOlumn));
+            }while (cur.moveToNext());
+        }
+        cur.close();
     }
 
     public ArrayList<Media> getAlbumPhotos(String ID, int n, String order, int filter) {

@@ -112,15 +112,6 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void setNavBarColor() {
-        if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
-            if(isApplyThemeOnImgAct())
-                if (isNavigationBarColored())
-                    getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
-                else
-                    getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
-            else
-                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
-        } else
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
             else getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
     }
@@ -143,29 +134,10 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     protected void setStatusBarColor() {
-        /* if (makeTranslucent) {
-            //getWindow().setStatusBarColor(Color.TRANSPARENT);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //getWindow().setStatusBarColor(getPrimaryColor());
-        }
-        else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
-        // TODO : IT WORKS BUT, MUST BE OPTIMIZED
-        if (this.getClass().getSimpleName().equals(PhotoPagerActivity.class.getSimpleName())) {
-            if(isApplyThemeOnImgAct())
-                if (isTraslucentStatusBar() && isTransparencyZero())
-                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
-                else
-                    getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
-            else
-                getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
-        } else {
-            if (isTraslucentStatusBar()) {
-                int c = ColorPalette.getOscuredColor(getPrimaryColor());
-                getWindow().setStatusBarColor(c);
-            } else
-                getWindow().setStatusBarColor(getPrimaryColor());
-        }
+        if (isTraslucentStatusBar())
+            getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+         else
+            getWindow().setStatusBarColor(getPrimaryColor());
     }
 
     public void updateTheme(){
