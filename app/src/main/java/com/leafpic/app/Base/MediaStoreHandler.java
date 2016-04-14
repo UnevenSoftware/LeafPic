@@ -25,6 +25,27 @@ public class MediaStoreHandler {
         context = ctx;
     }
 
+    public static void deleteAlbumMedia(Album a, Context context1) {
+        String[] projection = {MediaStore.Images.Media._ID};
+
+        String selection = MediaStore.Files.FileColumns.PARENT + " = ?";
+        String[] selectionArgs = new String[]{a.ID};
+
+        Uri queryUri = MediaStore.Files.getContentUri("external");
+        ContentResolver contentResolver = context1.getContentResolver();
+        Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
+        if (c.moveToFirst()) {
+            int columnID = c.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+            do {
+                long id = c.getLong(columnID);
+                Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                contentResolver.delete(deleteUri, null, null);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+    }
+
     public ArrayList<Album> getMediaStoreAlbums(String order) {
         ArrayList<Album> list = new ArrayList<Album>();
 
@@ -64,7 +85,6 @@ public class MediaStoreHandler {
         }
         return list;
     }
-
 
     public ArrayList<Media> getAlbumPhotos(String id, String sort,int filter) {
         return getAlbumPhotos(id, -1, sort, filter);
@@ -123,27 +143,6 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
             }while (cur.moveToNext());
         }
         cur.close();
-    }
-
-    public static void deleteAlbumMedia(Album a, Context context1){
-        String[] projection = { MediaStore.Images.Media._ID };
-
-        String selection = MediaStore.Files.FileColumns.PARENT + " = ?";
-        String[] selectionArgs = new String[] { a.ID };
-
-        Uri queryUri = MediaStore.Files.getContentUri("external");
-        ContentResolver contentResolver = context1.getContentResolver();
-        Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
-        if (c.moveToFirst()) {
-            int columnID = c.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-            do {
-                long id = c.getLong(columnID);
-                Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                contentResolver.delete(deleteUri, null, null);
-            }while (c.moveToNext());
-
-        }
-        c.close();
     }
 
     public ArrayList<Media> getAlbumPhotos(String ID, int n, String order, int filter) {

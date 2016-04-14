@@ -42,8 +42,8 @@ import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.MediaStoreHandler;
 import com.leafpic.app.Base.Media;
+import com.leafpic.app.Base.MediaStoreHandler;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
@@ -61,7 +61,7 @@ public class MainActivity extends ThemedActivity {
 
     public static String TAG = "AlbumsAct";
 
-    HandlingAlbums albums = new HandlingAlbums(MainActivity.this);
+    HandlingAlbums albums;// = new HandlingAlbums(MainActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
     Album album = new Album(MainActivity.this);
 
@@ -71,13 +71,9 @@ public class MainActivity extends ThemedActivity {
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
-    private SwipeRefreshLayout SwipeContainerRV;
-
     boolean editmode = false, albumsMode = true, contentReady = false , firstLaunch = true;
-
     GridSpacingItemDecoration albumsDecoration;
     GridSpacingItemDecoration photosDecoration;
-
     View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -88,7 +84,6 @@ public class MainActivity extends ThemedActivity {
             return true;
         }
     };
-
     View.OnClickListener photosOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -108,7 +103,7 @@ public class MainActivity extends ThemedActivity {
             }
         }
     };
-
+    private SwipeRefreshLayout SwipeContainerRV;
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -138,7 +133,7 @@ public class MainActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        albums = new HandlingAlbums(MainActivity.this);
         try {
             Bundle data = getIntent().getExtras();
             albums = data.getParcelable("albums");
@@ -526,6 +521,14 @@ public class MainActivity extends ThemedActivity {
                     getString(albums.getSelectedCount() == adapt.getItemCount()
                             ? R.string.clear_selected
                             : R.string.select_all));
+            menu.findItem(R.id.ascending_sort_action).setChecked(albums.isAscending());
+            String column = albums.getColumnSortingMode();
+            if (column.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+                menu.findItem(R.id.date_taken_sort_action).setChecked(true);
+            else if (column.equals(MediaStore.Images.ImageColumns.DATA))
+                menu.findItem(R.id.name_sort_action).setChecked(true);
+            /*else if (album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+                menu.findItem(R.id.size_sort_action).setChecked(true);*/
         } else {
             menu.findItem(R.id.select_all).setTitle(getString(
                     album.getSelectedCount() == adapter.getItemCount()
@@ -711,122 +714,49 @@ public class MainActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
-                        .setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                if (albumsMode) {
-                                    albums.excludeSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                } else {
-                                    customAlbumsHandler.excludeAlbum(album.ID);
-                                    displayAlbums();
-                                }
-                            }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                builder.show();
-                break;
-
-            case R.id.hideAlbumButton:
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
-                builder2.setMessage(R.string.hide_album_message)
-                        .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                if (albumsMode) {
-                                    albums.hideSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                } else {
-                                    albums.hideAlbum(album.Path);
-                                    displayAlbums();
-                                }
-                            }
-                        })
-                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (albumsMode) {
-                                    albums.excludeSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                } else {
-                                    customAlbumsHandler.excludeAlbum(album.ID);
-                                    displayAlbums();
-                                }
-                            }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                builder2.show();
-                break;
-
-            case R.id.delete_action:
-
-                class DeletePhotos extends AsyncTask<String, Integer, Void> {
-                    @Override
-                    protected void onPreExecute() {
-                        SwipeContainerRV.setRefreshing(true);
-                        contentReady = false;
-                        super.onPreExecute();
-                    }
-                    @Override
-                    protected Void doInBackground(String... arg0) {
-                        if (!albumsMode) {
-                            if (editmode) {
-                                ArrayList<Media> selected = album.getSelectedMedias();
-                                for (int i = 0; i < selected.size(); i++) {
-                                    getContentResolver().delete(selected.get(i).getUri(), null, null);
-                                    album.medias.remove(selected.get(i));
-                                }
-                                album.clearSelectedPhotos();
-                            } else {
-                                MediaStoreHandler.deleteAlbumMedia(album,MainActivity.this);
-                                album.medias.clear();
-                            }
-                        } else
-                            albums.deleteSelectedAlbums(MainActivity.this);
-                        return null;
-                    }
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        if (!albumsMode) {
-                            if (album.medias.size() == 0)
-                                displayAlbums();
-                            else
-                                adapter.updateDataset(album.medias);
-                        } else
-                            adapt.notifyDataSetChanged();
-
-                        contentReady = true;
-                        invalidateOptionsMenu();
-                        SwipeContainerRV.setRefreshing(false);
-                    }
+                        .setPositiveButton(this.getString(R.string.exclude), new class DeletePhotos extends AsyncTask<String, Integer, Void> {
+                @Override
+                protected void onPreExecute() {
+                    SwipeContainerRV.setRefreshing(true);
+                    contentReady = false;
+                    super.onPreExecute();
                 }
 
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-                builder1.setMessage(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message)
-                        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                new DeletePhotos().execute();
+                @Override
+                protected Void doInBackground(String... arg0) {
+                    if (!albumsMode) {
+                        if (editmode) {
+                            ArrayList<Media> selected = album.getSelectedMedias();
+                            for (int i = 0; i < selected.size(); i++) {
+                                getContentResolver().delete(selected.get(i).getUri(), null, null);
+                                album.medias.remove(selected.get(i));
                             }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                builder1.show();
-                break;
+                            album.clearSelectedPhotos();
+                        } else {
+                            MediaStoreHandler.deleteAlbumMedia(album, MainActivity.this);
+                            album.medias.clear();
+                        }
+                    } else
+                        albums.deleteSelectedAlbums(MainActivity.this);
+                    return null;
+                }
 
-            /**TODO redo foollowing merged stuff **/
+                @Override
+                protected void onPostExecute(Void result) {
+                    if (!albumsMode) {
+                        if (album.medias.size() == 0)
+                            displayAlbums();
+                        else
+                            adapter.updateDataset(album.medias);
+                    } else
+                        adapt.notifyDataSetChanged();
 
-
-
-            case R.id.renameAlbum:
+                    contentReady = true;
+                    invalidateOptionsMenu();
+                    SwipeContainerRV.setRefreshing(false);
+                }
+            })
+                .setNegativeButton(this.getString(R.string.cancel), new
                 class ReanameAlbum extends AsyncTask<String, Integer, Void> {
 
                     @Override
@@ -837,12 +767,12 @@ public class MainActivity extends ThemedActivity {
 
                     @Override
                     protected void onProgressUpdate(Integer... values) {
-                        Log.wtf(TAG,"update "  +values[0]);
+                        Log.wtf(TAG, "update " + values[0]);
                     }
 
                     @Override
                     protected Void doInBackground(String... arg0) {
-                        Log.wtf("",arg0[0]);
+                        Log.wtf("", arg0[0]);
                         //albums.renameAlbum(albums.getSelectedAlbum(0).Path, arg0[0]);
                         try {
                             File from = new File(albums.getSelectedAlbum(0).Path);
@@ -851,7 +781,7 @@ public class MainActivity extends ThemedActivity {
                             for (String paht : s) {
                                 scanFile(new String[]{dirPath + "/" + paht});
                             }*/
-                            if(from.renameTo(to)) {
+                            if (from.renameTo(to)) {
                                 String s[] = to.list();
                                 String dirPath = to.getAbsolutePath();
                                 for (int i = 0; i < s.length; i++) {
@@ -874,7 +804,83 @@ public class MainActivity extends ThemedActivity {
                         new PrepareAlbumTask().execute();
                         //SwipeContainerRV.setRefreshing(false);
                     }
-                }
+                });
+                builder.show();
+                break;
+
+            case R.id.hideAlbumButton:
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
+                builder2.setMessage(R.string.hide_album_message)
+                        .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (albumsMode) {
+                                    albums.excludeSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                } else {
+                                    customAlbumsHandler.excludeAlbum(album.ID);
+                                    displayAlbums();
+                                }
+                            }
+                        })
+                        .setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        })
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (albumsMode) {
+                                    albums.hideSelectedAlbums();
+                                    adapt.notifyDataSetChanged();
+                                    invalidateOptionsMenu();
+                                } else {
+                                    albums.hideAlbum(album.Path);
+                                    displayAlbums();
+                                }
+                            }
+                        });
+                builder2.show();
+                break;
+
+            case R.id.delete_action:
+
+                DialogInterface.OnClickListener() {
+                @Override
+                public void onClick (DialogInterface dialog,int which){
+                    if (albumsMode) {
+                        albums.excludeSelectedAlbums();
+                        adapt.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    } else {
+                        customAlbumsHandler.excludeAlbum(album.ID);
+                        displayAlbums();
+                                }
+                            }
+            }
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setMessage(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message)
+                        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        })
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new DeletePhotos().execute();
+                            }
+                        });
+                builder1.show();
+                break;
+
+            /**TODO redo foollowing merged stuff **/
+
+
+
+            case R.id.renameAlbum:
+                DialogInterface.OnClickListener() {
+                public void onClick (DialogInterface dialog,int id){
+                            }
+                        }
 
                 final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
                         MainActivity.this,
