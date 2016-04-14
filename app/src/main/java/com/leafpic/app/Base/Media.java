@@ -1,8 +1,10 @@
 package com.leafpic.app.Base;
 
+import android.content.ContentUris;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 
 import com.leafpic.app.utils.StringUtils;
 
@@ -20,6 +22,8 @@ public class Media implements Parcelable {
             return new Media[size];
         }
     };
+
+    public long ID;
     public String Path = null;
     public String MIME = null;
     public long DateTaken = -1;
@@ -35,7 +39,8 @@ public class Media implements Parcelable {
         Path = path;
     }
 
-    public Media(String path, long dateTaken, long dateModified, String mime, int width, int height, int size, int orientation) {
+    public Media(long id, String path, long dateTaken, long dateModified, String mime, int width, int height, int size, int orientation) {
+        ID = id;
         Path = path;
         DateTaken = dateTaken;
         MIME = mime;
@@ -60,7 +65,7 @@ public class Media implements Parcelable {
     }
 
     public Uri getUri() {
-        return Uri.parse("file://" + Path);
+        return ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ID);
     }
 
     public boolean isGif() {

@@ -128,6 +128,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+
+
     @Override
     public int getItemCount() {
         return albums.size();

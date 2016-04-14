@@ -1,5 +1,7 @@
 package com.leafpic.app.Base;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 12/31/15.
  */
-public class MadiaStoreHandler {
+public class MediaStoreHandler {
 
     Context context;
 
@@ -19,7 +21,7 @@ public class MadiaStoreHandler {
 
 
 
-    public MadiaStoreHandler(Context ctx) {
+    public MediaStoreHandler(Context ctx) {
         context = ctx;
     }
 
@@ -123,6 +125,27 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
         cur.close();
     }
 
+    public static void deleteAlbumMedia(Album a, Context context1){
+        String[] projection = { MediaStore.Images.Media._ID };
+
+        String selection = MediaStore.Files.FileColumns.PARENT + " = ?";
+        String[] selectionArgs = new String[] { a.ID };
+
+        Uri queryUri = MediaStore.Files.getContentUri("external");
+        ContentResolver contentResolver = context1.getContentResolver();
+        Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
+        if (c.moveToFirst()) {
+            int columnID = c.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+            do {
+                long id = c.getLong(columnID);
+                Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                contentResolver.delete(deleteUri, null, null);
+            }while (c.moveToNext());
+
+        }
+        c.close();
+    }
+
     public ArrayList<Media> getAlbumPhotos(String ID, int n, String order, int filter) {
 
         String limit = n == -1 ? "" : " DESC LIMIT " + n;
@@ -130,6 +153,7 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
         ArrayList<Media> list = new ArrayList<Media>();
 
         String[] projection = new String[]{
+                MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.MIME_TYPE,
@@ -173,6 +197,8 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
         if (cur != null) {
             if (cur.moveToFirst()) {
 
+                int idColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media._ID);
                 int pathColumn = cur.getColumnIndex(
                         MediaStore.Images.Media.DATA);
                 int dateColumn = cur.getColumnIndex(
@@ -191,6 +217,7 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
                         MediaStore.Images.Media.ORIENTATION);
                 do {
                     list.add(new Media(
+                            cur.getLong(idColumn),
                             cur.getString(pathColumn),
                             cur.getLong(dateColumn),
                             cur.getLong(dateMdofied),

@@ -63,7 +63,7 @@ public class Album implements Parcelable {
 
     public Album(Context ctx, String photoPath) {
         context = ctx;
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         ID = as.getAlbumPhoto(photoPath);
         setSettings();
         updatePhotos();
@@ -134,8 +134,9 @@ public class Album implements Parcelable {
     }
 
     public void updatePhotos() {
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         medias = as.getAlbumPhotos(ID, getSortingMode(), filter_photos);
+        clearSelectedPhotos();
     }
 
     public void clearSelectedPhotos() {

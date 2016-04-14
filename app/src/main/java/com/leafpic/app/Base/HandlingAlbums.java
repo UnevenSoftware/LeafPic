@@ -1,11 +1,13 @@
 package com.leafpic.app.Base;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
@@ -63,7 +65,7 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public void loadPreviewAlbums() {
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         dispAlbums = as.getMediaStoreAlbums(getSortingMode());
 
@@ -100,7 +102,7 @@ public class HandlingAlbums implements Parcelable {
     }
     public void loadExcludedAlbums(){
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         dispAlbums = h.getExcludedALbums();
 
         for (int i = 0; i < dispAlbums.size(); i++) {
@@ -162,21 +164,28 @@ public class HandlingAlbums implements Parcelable {
         return null;
     }
 
-    public void deleteSelectedAlbums() {
+    public void deleteSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums)
-            deleteAlbum(selectedAlbum);
+                MediaStoreHandler.deleteAlbumMedia(selectedAlbum,context);
+            //deleteAlbum(selectedAlbum,context);
 
         clearSelectedAlbums();
     }
 
-    public void deleteAlbum(Album a) {
-        deleteAlbum(a.Path);
+    public void deleteAlbum(Album a,ContentResolver contentResolver) {
+        a.updatePhotos();
+        for (Media media : a.medias)
+            Log.wtf("result_delete",""+
+             contentResolver.delete(media.getUri(),null,null));
+
         dispAlbums.remove(a);
     }
 
     public Album getSelectedAlbum(int index){
         return selectedAlbums.get(index);
     }
+
+
 
     public void deleteAlbum(String path) {
         File dir = new File(path);
