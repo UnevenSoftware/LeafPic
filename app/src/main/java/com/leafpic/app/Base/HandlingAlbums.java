@@ -29,10 +29,12 @@ public class HandlingAlbums implements Parcelable {
             return new HandlingAlbums[size];
         }
     };
+
+    private SharedPreferences SP;
     public final String CAMERA_PATTERN = "DCIM/Camera";//TODO improve with regex
     public ArrayList<Album> dispAlbums;
     public int last_position_selecte = -1;
-    private SharedPreferences SP;
+
     private Context context;
     private ArrayList<Album> selectedAlbums;
 
@@ -87,36 +89,36 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public String getColumnSortingMode() {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
         return SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN);
     }
 
     public boolean isAscending() {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
         return SP.getBoolean("ascending_mode", false);
     }
 
     public void setDefaultSortingMode(String column) {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = SP.edit();
-        editor.putString("column_sort", column);
+        editor.putString("column_sort",column);
         editor.apply();
     }
 
     public void setDefaultSortingAscending(Boolean ascending) {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = SP.edit();
-        editor.putBoolean("ascending_mode", ascending);
+        editor.putBoolean("ascending_mode",ascending);
         editor.apply();
     }
 
     public String getSortingMode() {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
 
-        return " " + SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN)
-                + (SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
+        return " " +  SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN)
+                + ( SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
     }
 
     public void loadExcludedAlbums(){
