@@ -298,7 +298,6 @@ public class MainActivity extends ThemedActivity {
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,11 +393,6 @@ public class MainActivity extends ThemedActivity {
         txtWall.setTextColor(color);
         txtAbout.setTextColor(color);
 
-        /*
-        color = isDarkTheme()
-                ? ColorPalette.getLightBackgroundColor(getApplicationContext())
-                : ColorPalette.getDarkBackgroundColor(getApplicationContext());
-        */
         color=getIconColor();
 
         imgDD.setColor(color);
@@ -717,6 +711,7 @@ public class MainActivity extends ThemedActivity {
                 break;
 
             case R.id.excludeAlbumButton:
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage(R.string.exclude_album_message)
                         .setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
@@ -736,9 +731,47 @@ public class MainActivity extends ThemedActivity {
                             }
                         });
                 builder.show();
+                */
+
+
+                final AlertDialog.Builder ExcludeDialog = new AlertDialog.Builder(
+                        MainActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
+
+                final View Exclude_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+                final TextView txt_Exclude_title = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_title);
+                final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
+                CardView cv_Exclude_Dialog = (CardView) Exclude_dialogLayout.findViewById(R.id.message_card);
+
+                cv_Exclude_Dialog.setBackgroundColor(getCardBackgroundColor());
+                txt_Exclude_title.setBackgroundColor(getPrimaryColor());
+                txt_Exclude_title.setText(getString(R.string.delete));
+                txt_Exclude_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
+                txt_Exclude_message.setTextColor(getTextColor());
+                ExcludeDialog.setView(Exclude_dialogLayout);
+
+                ExcludeDialog.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (albumsMode) {
+                            albums.excludeSelectedAlbums();
+                            adapt.notifyDataSetChanged();
+                            invalidateOptionsMenu();
+                        } else {
+                            customAlbumsHandler.excludeAlbum(album.ID);
+                            displayAlbums();
+                        }
+                    }
+                });
+                ExcludeDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {}
+                });
+                ExcludeDialog.show();
                 break;
 
             case R.id.hideAlbumButton:
+                /*
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
                 builder2.setMessage(R.string.hide_album_message)
                         .setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
@@ -771,10 +804,58 @@ public class MainActivity extends ThemedActivity {
                             }
                         });
                 builder2.show();
+                */
+
+                final AlertDialog.Builder HideDialog = new AlertDialog.Builder(
+                        MainActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
+
+                final View Hide_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+                final TextView txt_Hide_title = (TextView) Hide_dialogLayout.findViewById(R.id.text_dialog_title);
+                final TextView txt_Hide_message = (TextView) Hide_dialogLayout.findViewById(R.id.text_dialog_message);
+                CardView cv_Hide_Dialog = (CardView) Hide_dialogLayout.findViewById(R.id.message_card);
+
+                cv_Hide_Dialog.setBackgroundColor(getCardBackgroundColor());
+                txt_Hide_title.setBackgroundColor(getPrimaryColor());
+                txt_Hide_title.setText(getString(R.string.hide));
+                txt_Hide_message.setText(R.string.hide_album_message);
+                txt_Hide_message.setTextColor(getTextColor());
+                HideDialog.setView(Hide_dialogLayout);
+                //BUTTONS
+                HideDialog.setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (albumsMode) {
+                            albums.hideSelectedAlbums();
+                            adapt.notifyDataSetChanged();
+                            invalidateOptionsMenu();
+                        } else {
+                            albums.hideAlbum(album.Path);
+                            displayAlbums();
+                        }
+                    }
+                });
+                HideDialog.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (albumsMode) {
+                            albums.excludeSelectedAlbums();
+                            adapt.notifyDataSetChanged();
+                            invalidateOptionsMenu();
+                        } else {
+                            customAlbumsHandler.excludeAlbum(album.ID);
+                            displayAlbums();
+                        }
+                    }
+                });
+                HideDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {}
+                });
+                HideDialog.show();
                 break;
 
             case R.id.delete_action:
-
                 class DeletePhotos extends AsyncTask<String, Integer, Void> {
                     @Override
                     protected void onPreExecute() {
@@ -815,7 +896,7 @@ public class MainActivity extends ThemedActivity {
                         SwipeContainerRV.setRefreshing(false);
                     }
                 }
-
+                /*
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
                 builder1.setMessage(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message)
                         .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -828,12 +909,39 @@ public class MainActivity extends ThemedActivity {
                             }
                         });
                 builder1.show();
+                */
+
+                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(
+                        MainActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
+
+                final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+                final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
+                final TextView txt_Delete_message = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_message);
+                CardView cv_Delete_Dialog = (CardView) Delete_dialogLayout.findViewById(R.id.message_card);
+
+                cv_Delete_Dialog.setBackgroundColor(getCardBackgroundColor());
+                txt_Delete_title.setBackgroundColor(getPrimaryColor());
+                txt_Delete_title.setText(getString(R.string.delete));
+                txt_Delete_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
+                txt_Delete_message.setTextColor(getTextColor());
+                DeleteDialog.setView(Delete_dialogLayout);
+
+                DeleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                DeleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new DeletePhotos().execute();
+                    }
+                });
+                DeleteDialog.show();
                 break;
 
             /**TODO redo foollowing merged stuff **/
-
-
-
             case R.id.renameAlbum:
                 class ReanameAlbum extends AsyncTask<String, Integer, Void> {
 
