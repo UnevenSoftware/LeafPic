@@ -80,7 +80,7 @@ public class StringUtils {
     }
 
     public static long getID(String uri){
-        return Long.parseLong(uri.substring(uri.lastIndexOf('/')));
+        return Long.parseLong(uri.substring(uri.lastIndexOf('/')+1));
     }
 
     public static String getPhotoExtensionbyPath(String path) {
