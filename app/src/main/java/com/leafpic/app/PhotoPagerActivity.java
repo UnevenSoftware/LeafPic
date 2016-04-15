@@ -404,22 +404,22 @@ public class PhotoPagerActivity extends ThemedActivity {
                 RenameDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (txt_edit.length() != 0) {
-                            //album.renamePhoto(album.getCurrentPhoto(), txt_edit.getText().toString());
                             try {
                                 File from = new File(album.getCurrentPhoto().Path);
                                 final File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path,  txt_edit.getText().toString()));
-                                //scanFile(new String[]{from.getAbsolutePath()});
                                 if (from.renameTo(to)) {
-                                    MediaScannerConnection.scanFile(PhotoPagerActivity.this, new String[]{to.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                                    MediaScannerConnection.scanFile(
+                                            getApplicationContext(),
+                                            new String[]{ to.getAbsolutePath() }, null,
+                                            new MediaScannerConnection.OnScanCompletedListener() {
                                         @Override
                                         public void onScanCompleted(String path, Uri uri) {
                                             getContentResolver().delete(album.getCurrentPhoto().getUri(), null, null);
-                                            album.getCurrentPhoto().ID=StringUtils.getID(uri+"");
+                                            album.getCurrentPhoto().ID = StringUtils.getID(uri+"");
                                             album.getCurrentPhoto().Path = to.getAbsolutePath();
                                         }
                                     });
                                 }
-
                             } catch (Exception e) { e.printStackTrace();  }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
