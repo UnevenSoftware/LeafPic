@@ -24,6 +24,7 @@ public class StringUtils {
     public static String getGenericMIME(String mime) {
         return mime.split("/")[0] + "/*";
     }
+
     public static int getExifOrientation(String filepath) {
         int degree = 0;
         ExifInterface exif = null;
@@ -66,7 +67,20 @@ public class StringUtils {
     public static String getPhotoNamebyPath(String path) {
         String b[] = path.split("/");
         String fi = b[b.length - 1];
-        return fi.substring(0, fi.indexOf('.'));
+        return fi.substring(0, fi.lastIndexOf('.'));
+    }
+
+    public static String getPhotoPathRenamed(String olderPath, String newName) {
+        String c = "", b[] = olderPath.split("/");
+        for (int x = 0; x < b.length - 1; x++) c += b[x] + "/";
+        c += newName;
+        String name = b[b.length - 1];
+        c += name.substring(name.lastIndexOf('.'));
+        return c;
+    }
+
+    public static long getID(String uri){
+        return Long.parseLong(uri.substring(uri.lastIndexOf('/')));
     }
 
     public static String getPhotoExtensionbyPath(String path) {
@@ -117,13 +131,7 @@ public class StringUtils {
         return path;
     }
 
-    public static String getPhotoPathRenamed(String olderPath, String newName) {
-        String c = "", b[] = olderPath.split("/");
-        for (int x = 0; x < b.length - 2; x++) c += b[x] + "/";
-        c += newName + "/";
-        c += b[b.length - 1];
-        return c;
-    }
+
 
     public static String getBucketPathbyImagePath(String path) {
         String b[] = path.split("/");

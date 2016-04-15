@@ -1,8 +1,8 @@
 package com.leafpic.app.Base;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -29,11 +29,12 @@ public class HandlingAlbums implements Parcelable {
             return new HandlingAlbums[size];
         }
     };
+
+    private SharedPreferences SP;
     public final String CAMERA_PATTERN = "DCIM/Camera";//TODO improve with regex
     public ArrayList<Album> dispAlbums;
     public int last_position_selecte = -1;
-    String columnSortingMode = MediaStore.Images.ImageColumns.DATE_TAKEN;
-    String ascending = " DESC";
+
     private Context context;
     private ArrayList<Album> selectedAlbums;
 
@@ -63,7 +64,7 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public void loadPreviewAlbums() {
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         dispAlbums = as.getMediaStoreAlbums(getSortingMode());
 
@@ -86,32 +87,48 @@ public class HandlingAlbums implements Parcelable {
         }
     }
 
+    public String getColumnSortingMode() {
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        return SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN);
+    }
+
+    public boolean isAscending() {
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        return SP.getBoolean("ascending_mode", false);
+    }
+
     public void setDefaultSortingMode(String column) {
-        columnSortingMode = column;
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putString("column_sort",column);
+        editor.apply();
     }
 
     public void setDefaultSortingAscending(Boolean ascending) {
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
 
-        this.ascending = ascending ? " ASC" : " DESC";
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putBoolean("ascending_mode",ascending);
+        editor.apply();
     }
 
     public String getSortingMode() {
-        return " " + columnSortingMode + ascending;
+        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+
+        return " " +  SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN)
+                + ( SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
     }
+
     public void loadExcludedAlbums(){
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         dispAlbums = h.getExcludedALbums();
 
         for (int i = 0; i < dispAlbums.size(); i++) {
             dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
             dispAlbums.get(i).setPath();
         }
-    }
-
-    public void sortAlbums() {
-
-        //dispAlbums.indexOf()
     }
 
     public int toggleSelectAlbum(String path) {
@@ -162,52 +179,18 @@ public class HandlingAlbums implements Parcelable {
         return null;
     }
 
-    public void deleteSelectedAlbums() {
+    public void deleteSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums)
-            deleteAlbum(selectedAlbum);
-
+                MediaStoreHandler.deleteAlbumMedia(selectedAlbum,context);
         clearSelectedAlbums();
-    }
-
-    public void deleteAlbum(Album a) {
-        deleteAlbum(a.Path);
-        dispAlbums.remove(a);
     }
 
     public Album getSelectedAlbum(int index){
         return selectedAlbums.get(index);
     }
 
-    public void deleteAlbum(String path) {
-        File dir = new File(path);
-        deleteFolderRecursive(dir);
-    }
-
-    public void deleteFolderRecursive(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String child : children) {
-                File temp = new File(dir, child);
-                if (!temp.isDirectory()){
-                    //deleteFolderRecursive(temp);
-                //else {
-                    temp.delete();
-                    scanFile(new String[]{temp.getAbsolutePath()});
-                }
-            }
-        }
-        //dir.delete();
-        //scanFile(new String[]{dir.getAbsolutePath()});
-    }
-
     public void scanFile(String[] path) {
-        MediaScannerConnection.scanFile(context, path, null, new MediaScannerConnection.OnScanCompletedListener() {
-
-            @Override
-            public void onScanCompleted(String path, Uri uri) {
-                System.out.println("SCAN COMPLETED: " + path);
-            }
-        });
+        MediaScannerConnection.scanFile(context, path, null, null);
     }
 
     public void hideSelectedAlbums() {
@@ -218,7 +201,6 @@ public class HandlingAlbums implements Parcelable {
 
     public void hideAlbum(final Album a) {
         hideAlbum(a.Path);
-
         dispAlbums.remove(a);
     }
 
@@ -236,8 +218,6 @@ public class HandlingAlbums implements Parcelable {
             }
         }
     }
-
-
 
     public void excludeSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)

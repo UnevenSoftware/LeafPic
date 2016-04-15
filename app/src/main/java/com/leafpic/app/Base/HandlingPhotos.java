@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.leafpic.app.utils.StringUtils;
 
@@ -44,7 +43,7 @@ public class HandlingPhotos implements Parcelable {
     public ArrayList<Media> selectedMedias;
     public AlbumSettings settings;
     Context context;
-    MadiaStoreHandler as;
+    MediaStoreHandler as;
     private ArrayList<Integer> selectedPhotosIndexs;
     private int current;
 
@@ -58,7 +57,7 @@ public class HandlingPhotos implements Parcelable {
 
     public HandlingPhotos(Context ctx, Album album) {
         context = ctx;
-        as = new MadiaStoreHandler(context);
+        as = new MediaStoreHandler(context);
         ID = album.ID;
         FolderPath = album.Path;
         DisplayName = album.DisplayName;
@@ -73,7 +72,7 @@ public class HandlingPhotos implements Parcelable {
 
     public HandlingPhotos(Context ctx, String photoPath) {
         context = ctx;
-        as = new MadiaStoreHandler(context);
+        as = new MediaStoreHandler(context);
 
         //Album album = as.getAlbumPhoto(photoPath);
         selectedMedias = new ArrayList<Media>();
@@ -84,7 +83,7 @@ public class HandlingPhotos implements Parcelable {
 
     public HandlingPhotos(Context ctx) {
         context = ctx;
-        as = new MadiaStoreHandler(context);
+        as = new MediaStoreHandler(context);
         selectedMedias = new ArrayList<Media>();
     }
 
@@ -249,9 +248,10 @@ public class HandlingPhotos implements Parcelable {
     }
 
     public void deletePhoto(Media a) {
-        HandlingAlbums h = new HandlingAlbums(context);
-        File file = new File(a.Path);
-        h.deleteFolderRecursive(file);
+        //HandlingAlbums h = new HandlingAlbums(context);
+        //File file = new File(a.Path);
+        //h.deleteFolderRecursive(file);
+        context.getContentResolver().delete(a.getUri(),null,null);
         medias.remove(a);
     }
 

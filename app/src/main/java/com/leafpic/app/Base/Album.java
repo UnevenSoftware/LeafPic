@@ -63,7 +63,7 @@ public class Album implements Parcelable {
 
     public Album(Context ctx, String photoPath) {
         context = ctx;
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         ID = as.getAlbumPhoto(photoPath);
         setSettings();
         updatePhotos();
@@ -134,8 +134,9 @@ public class Album implements Parcelable {
     }
 
     public void updatePhotos() {
-        MadiaStoreHandler as = new MadiaStoreHandler(context);
+        MediaStoreHandler as = new MediaStoreHandler(context);
         medias = as.getAlbumPhotos(ID, getSortingMode(), filter_photos);
+        clearSelectedPhotos();
     }
 
     public void clearSelectedPhotos() {
@@ -311,22 +312,20 @@ public class Album implements Parcelable {
     }
 
     public void deletePhoto(Media a) {
-        //HandlingAlbums h = new HandlingAlbums(context);
-        File file = new File(a.Path);
-        if(file.delete()){
-            MediaScannerConnection.scanFile(context,new String[]{a.Path},null,null);
-            medias.remove(a);
-        }
-        //h.deleteFolderRecursive(file);
+        context.getContentResolver().delete(a.getUri(), null, null);
+        medias.remove(a);
     }
 
-    public void renamePhoto(String olderPath, String path) {
+    public void renamePhoto(Media olderMedia, String newName) {
         try {
-            File from = new File(olderPath);
-            File to = new File(path);
-            scanFile(new String[]{from.getAbsolutePath()});
-            from.renameTo(to);
-            scanFile(new String[]{to.getAbsolutePath()});
+            File from = new File(olderMedia.Path);
+            File to = new File(StringUtils.getPhotoPathRenamed(olderMedia.Path, newName));
+            //scanFile(new String[]{from.getAbsolutePath()});
+            if (from.renameTo(to)) {
+                scanFile(new String[]{to.getAbsolutePath()});
+                context.getContentResolver().delete(olderMedia.getUri(), null, null);
+                olderMedia.Path = to.getAbsolutePath();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -31,7 +30,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -44,8 +42,8 @@ import com.leafpic.app.Adapters.PhotosAdapter;
 import com.leafpic.app.Base.Album;
 import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
-import com.leafpic.app.Base.MadiaStoreHandler;
 import com.leafpic.app.Base.Media;
+import com.leafpic.app.Base.MediaStoreHandler;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
@@ -63,7 +61,7 @@ public class MainActivity extends ThemedActivity {
 
     public static String TAG = "AlbumsAct";
 
-    HandlingAlbums albums = new HandlingAlbums(MainActivity.this);
+    HandlingAlbums albums;// = new HandlingAlbums(MainActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
     Album album = new Album(MainActivity.this);
 
@@ -75,8 +73,7 @@ public class MainActivity extends ThemedActivity {
     Toolbar toolbar;
     private SwipeRefreshLayout SwipeContainerRV;
 
-    boolean editmode = false, albumsMode = true;
-    int nReloads=-1;
+    boolean editmode = false, albumsMode = true, contentReady = false , firstLaunch = true;
 
     GridSpacingItemDecoration albumsDecoration;
     GridSpacingItemDecoration photosDecoration;
@@ -95,7 +92,7 @@ public class MainActivity extends ThemedActivity {
     View.OnClickListener photosOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (nReloads % 2 != 0) {
+            if (contentReady) {
                 TextView is = (TextView) v.findViewById(R.id.photo_path);
                 if (editmode) {
                     adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
@@ -126,7 +123,7 @@ public class MainActivity extends ThemedActivity {
     private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (nReloads % 2 == 0) {
+            if (contentReady) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 if (editmode) {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
@@ -141,7 +138,7 @@ public class MainActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        albums = new HandlingAlbums(MainActivity.this);
         try {
             Bundle data = getIntent().getExtras();
             albums = data.getParcelable("albums");
@@ -152,7 +149,7 @@ public class MainActivity extends ThemedActivity {
         /**** SET UP UI ****/
         initUI();
         setupUI();
-        //MadiaStoreHandler hs = new MadiaStoreHandler(MainActivity.this);
+        //MediaStoreHandler hs = new MediaStoreHandler(MainActivity.this);
         //hs.getThumnails();
 
 
@@ -164,11 +161,12 @@ public class MainActivity extends ThemedActivity {
         albums.clearSelectedAlbums();
         setupUI();
         invalidateOptionsMenu();
+
         if (albumsMode) {
-            if (nReloads != -1) new PrepareAlbumTask().execute();
+            if (!firstLaunch) new PrepareAlbumTask().execute();
         } else new PreparePhotosTask().execute();
 
-        nReloads++;
+        firstLaunch=false;
     }
 
     public void openAlbum(Album a) {
@@ -265,6 +263,7 @@ public class MainActivity extends ThemedActivity {
         adapt.setOnClickListener(albumOnClickListener);
         adapt.setOnLongClickListener(albumOnLongCLickListener);
         mRecyclerView.setAdapter(adapt);
+        contentReady=true;
 
 
         /**** SWIPE TO REFRESH ****/
@@ -509,6 +508,13 @@ public class MainActivity extends ThemedActivity {
         album.clearSelectedPhotos();
         adapter.notifyDataSetChanged();
     }
+
+    public void checkNothing(){
+        TextView a = (TextView) findViewById(R.id.nothing_to_show);
+        a.setTextColor(getTextColor());
+        a.setVisibility( (albumsMode && albums.dispAlbums.size()==0) || (!albumsMode && album.medias.size() == 0) ? View.VISIBLE : View.GONE);
+    }
+
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -520,6 +526,14 @@ public class MainActivity extends ThemedActivity {
                     getString(albums.getSelectedCount() == adapt.getItemCount()
                             ? R.string.clear_selected
                             : R.string.select_all));
+            menu.findItem(R.id.ascending_sort_action).setChecked(albums.isAscending());
+            String column = albums.getColumnSortingMode();
+            if (column.equals(MediaStore.Images.ImageColumns.DATE_TAKEN))
+                menu.findItem(R.id.date_taken_sort_action).setChecked(true);
+            else if (column.equals(MediaStore.Images.ImageColumns.DATA))
+                menu.findItem(R.id.name_sort_action).setChecked(true);
+            /*else if (album.settings.columnSortingMode.equals(MediaStore.Images.ImageColumns.SIZE))
+                menu.findItem(R.id.size_sort_action).setChecked(true);*/
         } else {
             menu.findItem(R.id.select_all).setTitle(getString(
                     album.getSelectedCount() == adapter.getItemCount()
@@ -649,6 +663,7 @@ public class MainActivity extends ThemedActivity {
                     album.filterMedias(Album.FILTER_ALL);
                     adapter.updateDataset(album.medias);
                     item.setChecked(true);
+                    checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
                 }
                 break;
@@ -657,6 +672,7 @@ public class MainActivity extends ThemedActivity {
                     album.filterMedias(Album.FILTER_VIDEO);
                     adapter.updateDataset(album.medias);
                     item.setChecked(true);
+                    checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
                 }
                 break;
@@ -665,6 +681,7 @@ public class MainActivity extends ThemedActivity {
                     album.filterMedias(Album.FILTER_IMAGE);
                     adapter.updateDataset(album.medias);
                     item.setChecked(true);
+                    checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
                 }
                 break;
@@ -674,6 +691,7 @@ public class MainActivity extends ThemedActivity {
                     album.filterMedias(Album.FILTER_GIF);
                     adapter.updateDataset(album.medias);
                     item.setChecked(true);
+                    checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
                 }
                 break;
@@ -755,6 +773,67 @@ public class MainActivity extends ThemedActivity {
                 builder2.show();
                 break;
 
+            case R.id.delete_action:
+
+                class DeletePhotos extends AsyncTask<String, Integer, Void> {
+                    @Override
+                    protected void onPreExecute() {
+                        SwipeContainerRV.setRefreshing(true);
+                        contentReady = false;
+                        super.onPreExecute();
+                    }
+                    @Override
+                    protected Void doInBackground(String... arg0) {
+                        if (!albumsMode) {
+                            if (editmode) {
+                                ArrayList<Media> selected = album.getSelectedMedias();
+                                for (int i = 0; i < selected.size(); i++) {
+                                    getContentResolver().delete(selected.get(i).getUri(), null, null);
+                                    album.medias.remove(selected.get(i));
+                                }
+                                album.clearSelectedPhotos();
+                            } else {
+                                MediaStoreHandler.deleteAlbumMedia(album,MainActivity.this);
+                                album.medias.clear();
+                            }
+                        } else
+                            albums.deleteSelectedAlbums(MainActivity.this);
+                        return null;
+                    }
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        if (!albumsMode) {
+                            if (album.medias.size() == 0)
+                                displayAlbums();
+                            else
+                                adapter.updateDataset(album.medias);
+                        } else
+                            adapt.notifyDataSetChanged();
+
+                        contentReady = true;
+                        invalidateOptionsMenu();
+                        SwipeContainerRV.setRefreshing(false);
+                    }
+                }
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setMessage(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message)
+                        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new DeletePhotos().execute();
+                            }
+                        })
+                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                builder1.show();
+                break;
+
+            /**TODO redo foollowing merged stuff **/
+
+
+
             case R.id.renameAlbum:
                 class ReanameAlbum extends AsyncTask<String, Integer, Void> {
 
@@ -808,8 +887,8 @@ public class MainActivity extends ThemedActivity {
                 final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
                         MainActivity.this,
                         isDarkTheme()
-                        ? R.style.AlertDialog_Dark
-                        : R.style.AlertDialog_Light);
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
 
                 final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
@@ -844,100 +923,7 @@ public class MainActivity extends ThemedActivity {
                 });
                 RenameDialog.show();
                 txt_edit.requestFocus();
-            break;
-
-            /**TODO redo foollowing merged stuff **/
-
-            case R.id.delete_action:
-
-                class DeletePhotos extends AsyncTask<String, Integer, Void> {
-                    @Override
-                    protected void onPreExecute() {
-                        SwipeContainerRV.setRefreshing(true);
-                        super.onPreExecute();
-                    }
-                    @Override
-                    protected Void doInBackground(String... arg0) {
-                        ArrayList<Media> selected= album.getSelectedMedias();
-                        String paths[] = new String[selected.size()];
-                        for (int i = 0; i <selected.size(); i++) {
-                            File file = new File(selected.get(i).Path);
-                            if (file.delete()) {
-                                paths[i]=selected.get(i).Path;
-                                //MediaScannerConnection.scanFile(MainActivity.this, new String[]{selected.get(i).Path}, null, null);
-                                //getContentResolver().delete(selected.get(i).getUri(), null, null);
-                                //sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-                                album.medias.remove(selected.get(i));
-                            }
-                        }
-                        MediaScannerConnection.scanFile(MainActivity.this, paths, null, null);
-                        album.clearSelectedPhotos();
-                        return null;
-                    }
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        if (album.medias.size()==0){
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) { e.printStackTrace(); }
-                            displayAlbums();
-                            //onResume();
-                            //displayAlbums();
-                            //adapt.notifyDataSetChanged();
-                        }
-                        else {
-                            adapter.updateDataset(album.medias);
-                            invalidateOptionsMenu();
-                            SwipeContainerRV.setRefreshing(false);
-                        }
-                    }
-                }
-
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-                builder1.setMessage(R.string.delete_album_message)
-                        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                if (albumsMode) {
-                                    albums.deleteSelectedAlbums();
-                                    adapt.notifyDataSetChanged();
-                                    invalidateOptionsMenu();
-                                } else
-                                    new DeletePhotos().execute();
-                            }
-                        })
-                        .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
-                builder1.show();
                 break;
-
-            /*case R.id.delete_action:
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(PhotosActivity.this);
-                if(editmode) builder1.setMessage(R.string.delete_photos_message);
-                else builder1.setMessage(R.string.delete_album_message);
-                builder1.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (editmode) {
-                            album.deleteSelectedPhotos();
-
-                            if (album.medias.size() == 0) {
-                                startActivity(new Intent(PhotosActivity.this, MainActivity.class));
-                                return;
-                            }
-
-                            adapter.notifyDataSetChanged();
-                            updateHeaderContent();
-                            finishEditMode();
-                        } else {
-                            albums.deleteAlbum(album.Path);
-                            finish();
-                        }
-                    }
-                }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {}});
-                builder1.show();
-                break;*/
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -972,14 +958,13 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            nReloads++;
+            contentReady = false;
             SwipeContainerRV.setRefreshing(true);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            nReloads--;
             albums.loadPreviewAlbums();
             return null;
         }
@@ -987,7 +972,8 @@ public class MainActivity extends ThemedActivity {
         @Override
         protected void onPostExecute(Void result) {
             adapt.updateDataset(albums.dispAlbums);
-            nReloads++;
+            contentReady=true;
+            checkNothing();
             SwipeContainerRV.setRefreshing(false);
         }
     }
@@ -996,14 +982,13 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            nReloads++;
+            contentReady = false;
             SwipeContainerRV.setRefreshing(true);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            nReloads--;
             album.updatePhotos();
             return null;
         }
@@ -1011,7 +996,8 @@ public class MainActivity extends ThemedActivity {
         @Override
         protected void onPostExecute(Void result) {
             adapter.updateDataset(album.medias);
-            nReloads++;
+            contentReady=true;
+            checkNothing();
             SwipeContainerRV.setRefreshing(false);
         }
     }
