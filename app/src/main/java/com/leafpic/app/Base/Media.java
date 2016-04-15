@@ -52,6 +52,7 @@ public class Media implements Parcelable {
     }
 
     protected Media(Parcel in) {
+        ID = in.readLong();
         Path = in.readString();
         MIME = in.readString();
         DateTaken = in.readLong();
@@ -103,6 +104,7 @@ public class Media implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(ID);
         dest.writeString(Path);
         dest.writeString(MIME);
         dest.writeLong(DateTaken);

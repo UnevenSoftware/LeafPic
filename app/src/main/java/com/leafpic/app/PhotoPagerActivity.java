@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +22,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -361,7 +361,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         album.deleteCurrentPhoto();
                         if (album.medias.size() == 0) {
-                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));finish();
+                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
+                            finish();
                         }
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem()+1) +" "+ getString(R.string.of)+" " + album.medias.size());
@@ -402,10 +403,25 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path, txt_edit.getText().toString());
-                        if (txt_edit.length() != 0)
-                            album.renamePhoto(album.getCurrentPhoto().Path, StringUtils.getPhotoRenamed(album.getCurrentPhoto().Path, txt_edit.getText().toString()));
-                        else
+                        if (txt_edit.length() != 0) {
+                            //album.renamePhoto(album.getCurrentPhoto(), txt_edit.getText().toString());
+                            try {
+                                File from = new File(album.getCurrentPhoto().Path);
+                                final File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path,  txt_edit.getText().toString()));
+                                //scanFile(new String[]{from.getAbsolutePath()});
+                                if (from.renameTo(to)) {
+                                    MediaScannerConnection.scanFile(PhotoPagerActivity.this, new String[]{to.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                                        @Override
+                                        public void onScanCompleted(String path, Uri uri) {
+                                            getContentResolver().delete(album.getCurrentPhoto().getUri(), null, null);
+                                            album.getCurrentPhoto().ID=StringUtils.getID(uri+"");
+                                            album.getCurrentPhoto().Path = to.getAbsolutePath();
+                                        }
+                                    });
+                                }
+
+                            } catch (Exception e) { e.printStackTrace();  }
+                        } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
                     }
                 });
@@ -417,8 +433,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                 editIntent.setDataAndType(Uri.parse("file://" + album.getCurrentPhoto().Path), album.getCurrentPhoto().MIME);
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(editIntent, "Edit with"));
-
                 break;
+
             case R.id.details:
                 /****DATA****/
                 Media f = album.getCurrentPhoto();

@@ -40,7 +40,6 @@ public class HandlingAlbums implements Parcelable {
 
     public HandlingAlbums(Context ctx) {
         context = ctx;
-        //SP = PreferenceManager.getDefaultSharedPreferences(ctx); //context.getSharedPreferences("album_sort",Context.MODE_PRIVATE);
         dispAlbums = new ArrayList<Album>();
         selectedAlbums = new ArrayList<Album>();
     }
