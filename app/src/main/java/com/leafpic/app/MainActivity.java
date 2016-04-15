@@ -309,6 +309,10 @@ public class MainActivity extends ThemedActivity {
                 } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
             }
         });
+        //
+        // Resources resources = MainActivity.this.getResources();
+        //int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+
 
         int status_height = Measure.getStatusBarHeight(getResources());
         getWindow().getDecorView().setSystemUiVisibility(
