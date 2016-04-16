@@ -377,8 +377,6 @@ public class MainActivity extends ThemedActivity {
         TextView txtWall = (TextView) findViewById(R.id.Drawer_wallpapers_Item);
         TextView txtAbout = (TextView) findViewById(R.id.Drawer_About_Item);
 
-
-
         IconicsImageView imgDD = (IconicsImageView) findViewById(R.id.Drawer_Default_Icon);
         IconicsImageView imgWall = (IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon);
         IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Hidden_Icon);
