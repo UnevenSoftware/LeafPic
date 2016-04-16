@@ -94,7 +94,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                     .centerCrop()
                     .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                    .animate(R.anim.fade_in)
+                    .animate(R.anim.slide_fade_photos)
                     .into(holder.imageView);
             holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.INVISIBLE);
         }

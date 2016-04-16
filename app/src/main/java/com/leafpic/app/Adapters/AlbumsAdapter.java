@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -64,7 +65,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Album a = albums.get(position);
         Context c = holder.picture.getContext();
         Media f = a.getCoverAlbum();
-
+        /*
+        YoYo.with(Techniques.SlideInUp)
+                .duration(100)
+                .playOn(holder.cv);
+        */
         Glide.with(c)
                 .load(f.Path)
                 .asBitmap()
@@ -77,6 +82,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .placeholder(SP.getBoolean("set_dark_theme", true)
                         ? R.drawable.ic_empty
                         : R.drawable.ic_empty_white)
+                .animate(R.anim.slide_fade_photos)
                 .into(holder.picture);
 
         holder.name.setTag(position);
@@ -140,6 +146,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         ImageView selectHolder;
         TextView name;
         TextView nPhotos;
+        CardView cv;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -148,6 +155,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_text);
             name = (TextView) itemView.findViewById(R.id.album_name);
             nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
+            cv = (CardView) itemView.findViewById(R.id.album_card);
         }
     }
 }

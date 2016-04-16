@@ -139,7 +139,6 @@ public class AboutActivity extends ThemedActivity {
         IconicsImageView imgSTranslate = (IconicsImageView) findViewById(R.id.about_support_rate_icon);
         IconicsImageView imgSGitHub = (IconicsImageView) findViewById(R.id.about_support_github_icon);
 
-
         color = getIconColor();
         imgAAV.setColor(color);
         imgAALL.setColor(color);
@@ -166,7 +165,6 @@ public class AboutActivity extends ThemedActivity {
         txtSRate.setTextColor(color);
         txtSTranslate.setTextColor(color);
         txtSGitHub.setTextColor(color);
-
 
         /** Sub Text Views**/
         TextView txtAV_Sub = (TextView) findViewById(R.id.about_version_item_sub);

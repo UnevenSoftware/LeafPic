@@ -2,11 +2,12 @@
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/album_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-    android:elevation="@dimen/cardview_default_elevation"
-    app:cardCornerRadius="0dp"
-    app:cardElevation="@dimen/cardview_default_elevation">
+        android:elevation="@dimen/cardview_default_elevation"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/cardview_default_elevation">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
