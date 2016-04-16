@@ -8,7 +8,6 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 
 import com.leafpic.app.R;
-import com.leafpic.app.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +32,6 @@ public class HandlingAlbums implements Parcelable {
     private SharedPreferences SP;
     public final String CAMERA_PATTERN = "DCIM/Camera";//TODO improve with regex
     public ArrayList<Album> dispAlbums;
-    public int last_position_selecte = -1;
 
     private Context context;
     private ArrayList<Album> selectedAlbums;
@@ -51,7 +49,6 @@ public class HandlingAlbums implements Parcelable {
         } else {
             dispAlbums = null;
         }
-        last_position_selecte = in.readInt();
         if (in.readByte() == 0x01) {
             selectedAlbums = new ArrayList<Album>();
             in.readList(selectedAlbums, Album.class.getClassLoader());
@@ -131,24 +128,13 @@ public class HandlingAlbums implements Parcelable {
         }
     }
 
-    public int toggleSelectAlbum(String path) {
-        Album s = getAlbum(path);
-        if (s != null) {
-            s.setSelcted(!s.isSelected());
-            if (s.isSelected()) selectedAlbums.add(s);
-            else selectedAlbums.remove(s);
+    public int toggleSelectAlbum(int index) {
+        if (dispAlbums.get(index) != null) {
+            dispAlbums.get(index).setSelcted(!dispAlbums.get(index).isSelected());
+            if (dispAlbums.get(index).isSelected()) selectedAlbums.add(dispAlbums.get(index));
+            else selectedAlbums.remove(dispAlbums.get(index));
         }
-        return last_position_selecte;
-    }
-
-    public int selectAlbum(String path, boolean val) {
-        Album x = getAlbum(path);
-        if (x != null) {
-            if (val) selectedAlbums.add(x);
-            else selectedAlbums.remove(x);
-            x.setSelcted(val);
-        }
-        return last_position_selecte;
+        return index;
     }
 
     public void selectAllAlbums(){
@@ -170,13 +156,17 @@ public class HandlingAlbums implements Parcelable {
         selectedAlbums.clear();
     }
 
-    public Album getAlbum(String p) {
-        for (int i = 0; i < dispAlbums.size(); i++)
-            if (dispAlbums.get(i).Path.equals(p)) {
-                last_position_selecte = i;
-                return dispAlbums.get(i);
-            }
-        return null;
+    public Album getAlbum(int p) {
+        return dispAlbums.get(p);
+    }
+
+    public int getIndex(Album a){
+        return dispAlbums.indexOf(a);
+    }
+
+    public void replaceAlbum(int index,Album a){
+        dispAlbums.remove(index);
+        dispAlbums.add(index,a);
     }
 
     public void deleteSelectedAlbums(Context context) {
@@ -232,28 +222,6 @@ public class HandlingAlbums implements Parcelable {
         dispAlbums.remove(a);
     }
 
-    /*************
-     * This Metods doesnt work for the moment
-     **************/
-
-    public void renameAlbum(String olderPath, String name) {
-        try {
-            File from = new File(olderPath);
-            File to = new File(StringUtils.getAlbumPathRenamed(olderPath, name));
-            String s[] = from.list(), dirPath = from.getAbsolutePath();
-            for (String paht : s) {
-                scanFile(new String[]{dirPath + "/" + paht});
-            }
-            from.renameTo(to);
-            s = to.list();
-            dirPath = to.getAbsolutePath();
-            for (String paht : s) scanFile(new String[]{dirPath + "/" + paht});
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -267,7 +235,6 @@ public class HandlingAlbums implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(dispAlbums);
         }
-        dest.writeInt(last_position_selecte);
         if (selectedAlbums == null) {
             dest.writeByte((byte) (0x00));
         } else {

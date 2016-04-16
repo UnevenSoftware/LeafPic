@@ -442,7 +442,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         if (txt_edit.length() != 0) {
                             try {
                                 File from = new File(album.getCurrentPhoto().Path);
-                                final File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path,  txt_edit.getText().toString()));
+                                File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path,  txt_edit.getText().toString()));
                                 if (from.renameTo(to)) {
                                     MediaScannerConnection.scanFile(
                                             getApplicationContext(),
@@ -452,7 +452,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                                         public void onScanCompleted(String path, Uri uri) {
                                             getContentResolver().delete(album.getCurrentPhoto().getUri(), null, null);
                                             album.getCurrentPhoto().ID = StringUtils.getID(uri+"");
-                                            album.getCurrentPhoto().Path = to.getAbsolutePath();
+                                            album.getCurrentPhoto().Path = path;
                                         }
                                     });
                                 }

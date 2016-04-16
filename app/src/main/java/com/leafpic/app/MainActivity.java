@@ -26,7 +26,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,7 +81,7 @@ public class MainActivity extends ThemedActivity {
         @Override
         public boolean onLongClick(View v) {
             TextView is = (TextView) v.findViewById(R.id.photo_path);
-            adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
+            adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
             editmode = true;
             invalidateOptionsMenu();
             return true;
@@ -95,10 +94,11 @@ public class MainActivity extends ThemedActivity {
             if (contentReady) {
                 TextView is = (TextView) v.findViewById(R.id.photo_path);
                 if (editmode) {
-                    adapter.notifyItemChanged(album.toggleSelectPhoto(is.getTag().toString()));
+                    adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
                     invalidateOptionsMenu();
                 } else {
-                    album.setCurrentPhoto(is.getTag().toString());
+                    //Log.wtf("index",)
+                    album.setCurrentPhotoIndex(Integer.parseInt(is.getTag().toString()));
                     Intent intent = new Intent(MainActivity.this, PhotoPagerActivity.class);
                     Bundle b = new Bundle();
                     b.putParcelable("album", album);
@@ -113,7 +113,7 @@ public class MainActivity extends ThemedActivity {
         @Override
         public boolean onLongClick(View v) {
             TextView a = (TextView) v.findViewById(R.id.album_name);
-            adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+            adapt.notifyItemChanged(albums.toggleSelectAlbum(Integer.parseInt(a.getTag().toString())));
             editmode = true;
             invalidateOptionsMenu();
             return true;
@@ -126,10 +126,10 @@ public class MainActivity extends ThemedActivity {
             if (contentReady) {
                 TextView a = (TextView) v.findViewById(R.id.album_name);
                 if (editmode) {
-                    adapt.notifyItemChanged(albums.toggleSelectAlbum(a.getTag().toString()));
+                    adapt.notifyItemChanged(albums.toggleSelectAlbum(Integer.parseInt(a.getTag().toString())));
                     invalidateOptionsMenu();
                 } else
-                    openAlbum(albums.getAlbum(a.getTag().toString()));
+                    openAlbum(albums.getAlbum(Integer.parseInt(a.getTag().toString())));
             }
         }
     };
@@ -947,7 +947,7 @@ public class MainActivity extends ThemedActivity {
 
             /**TODO redo foollowing merged stuff **/
             case R.id.renameAlbum:
-                class ReanameAlbum extends AsyncTask<String, Integer, Void> {
+                class ReanameAlbum extends AsyncTask<String, Integer, Integer> {
 
                     @Override
                     protected void onPreExecute() {
@@ -956,43 +956,68 @@ public class MainActivity extends ThemedActivity {
                     }
 
                     @Override
-                    protected void onProgressUpdate(Integer... values) {
-                        Log.wtf(TAG,"update "  +values[0]);
-                    }
-
-                    @Override
-                    protected Void doInBackground(String... arg0) {
-                        Log.wtf("",arg0[0]);
-                        //albums.renameAlbum(albums.getSelectedAlbum(0).Path, arg0[0]);
+                    protected Integer doInBackground(String... arg0) {
+                        int res=-1;
                         try {
-                            File from = new File(albums.getSelectedAlbum(0).Path);
-                            File to = new File(StringUtils.getAlbumPathRenamed(albums.getSelectedAlbum(0).Path, arg0[0]));
-                           /* String s[] = from.list(), dirPath = from.getAbsolutePath();
-                            for (String paht : s) {
-                                scanFile(new String[]{dirPath + "/" + paht});
-                            }*/
-                            if(from.renameTo(to)) {
-                                String s[] = to.list();
-                                String dirPath = to.getAbsolutePath();
-                                for (int i = 0; i < s.length; i++) {
-                                    scanFile(new String[]{dirPath + "/" + s[i]});
-                                    setProgress(i);
+                            if (albumsMode) {
+                                album = albums.getSelectedAlbum(0);
+                                res = albums.getIndex(album);
+                                album.setContext(MainActivity.this);
+                                album.updatePhotos();
+                            }
+
+                            File dir = new File(StringUtils.getAlbumPathRenamed(album.Path, arg0[0]));
+                            if(dir.mkdir()) {
+                                album.Path=dir.getAbsolutePath();
+                                album.DisplayName=arg0[0];
+                                for ( int i = 0; i < album.medias.size(); i++) {
+                                    final int asd = i;
+                                    File from = new File(album.medias.get(i).Path);
+                                    File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(album.medias.get(i).Path, arg0[0]));
+
+                                    if (from.renameTo(to)) {
+                                        MediaScannerConnection.scanFile(
+                                                getApplicationContext(),
+                                                new String[]{to.getAbsolutePath()}, null,
+                                                new MediaScannerConnection.OnScanCompletedListener() {
+                                                    @Override
+                                                    public void onScanCompleted(String path, Uri uri) {
+                                                        getContentResolver().delete(album.medias.get(asd).getUri(), null, null);
+                                                        album.medias.get(asd).ID=StringUtils.getID(uri+"");
+                                                        album.medias.get(asd).Path=path;
+                                                        if (asd==0) {
+                                                            MediaStoreHandler h = new MediaStoreHandler(MainActivity.this);
+                                                            album.ID = h.getAlbumPhoto(path);
+                                                        }
+                                                    }
+                                                });
+                                    }
                                 }
                             }
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        return null;
+                        return res;
                     }
 
 
                     @Override
-                    protected void onPostExecute(Void result) {
-                        //adapt.updateDataset(albums.dispAlbums);
-                        //nReloads++;
-                        new PrepareAlbumTask().execute();
-                        //SwipeContainerRV.setRefreshing(false);
+                    protected void onPostExecute(Integer result) {
+                        if (albumsMode) {
+                            if (result != -1) {
+                                albums.replaceAlbum(result, album);
+                                adapt.notifyItemChanged(result);
+                            }
+
+                            albums.clearSelectedAlbums();
+                            adapt.notifyDataSetChanged();
+                        } else {
+                            toolbar.setTitle(album.DisplayName);
+                            adapter.notifyDataSetChanged();
+                        }
+                        invalidateOptionsMenu();
+                        SwipeContainerRV.setRefreshing(false);
                     }
                 }
 
@@ -1021,13 +1046,10 @@ public class MainActivity extends ThemedActivity {
                 RenameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (txt_edit.length() != 0) {
-                            if (albumsMode) {
+
                                 new ReanameAlbum().execute(txt_edit.getText().toString());
                                 //onResume();
-                            } else {
-                                //albums.renameAlbum(album.Path, txt_edit.getText().toString());
-                                //toolbar.setTitle(album.DisplayName = txt_edit.getText().toString());
-                            }
+
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
 

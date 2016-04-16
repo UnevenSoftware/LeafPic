@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.StringUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +44,6 @@ public class Album implements Parcelable {
     private boolean selected = false;
     private int current = -1;
     private int filter_photos = FILTER_ALL;
-    private Integer last_position_selecte = -1;
 
     public Album(String id, String name, AlbumMediaCount count) {
         ID = id;
@@ -88,7 +86,6 @@ public class Album implements Parcelable {
         }
         current = in.readInt();
         filter_photos = in.readInt();
-        last_position_selecte = in.readByte() == 0x00 ? null : in.readInt();
     }
 
     public void setContext(Context ctx) {
@@ -173,15 +170,6 @@ public class Album implements Parcelable {
         current = n;
     }
 
-    public Media getPhoto(String path) {
-        for (int i = 0; i < medias.size(); i++)
-            if (medias.get(i).Path.equals(path)) {
-                last_position_selecte = i;
-                return medias.get(i);
-            }
-        return null;
-    }
-
     public void selectAllPhotos(){
         for (int i = 0; i < medias.size(); i++)
             if(!medias.get(i).isSelected()) {
@@ -190,17 +178,16 @@ public class Album implements Parcelable {
             }
     }
 
-    public int toggleSelectPhoto(String path) {
-        Media x = getPhoto(path);
-        if (x != null) {
-            x.setSelected(!x.isSelected());
-            if (x.isSelected())
-                selectedMedias.add(x);
-             else
-                selectedMedias.remove(x);
+    public int toggleSelectPhoto(int index) {
+        if (medias.get(index) != null) {
+            medias.get(index).setSelected(!medias.get(index).isSelected());
+            if (medias.get(index).isSelected())
+                selectedMedias.add(medias.get(index));
+            else
+                selectedMedias.remove(medias.get(index));
         }
 
-        return last_position_selecte;
+        return index;
     }
 
     public boolean isSelected() {
@@ -250,13 +237,6 @@ public class Album implements Parcelable {
 
     public int getImagesCount() {
         return count.getTotal();
-    }
-
-    public void deleteSelectedPhotos() {
-        for (Media media : selectedMedias)
-            deletePhoto(media);
-
-        clearSelectedPhotos();
     }
 
     public void deleteCurrentPhoto() {
@@ -316,22 +296,6 @@ public class Album implements Parcelable {
         medias.remove(a);
     }
 
-    public void renamePhoto(Media olderMedia, String newName) {
-        try {
-            File from = new File(olderMedia.Path);
-            File to = new File(StringUtils.getPhotoPathRenamed(olderMedia.Path, newName));
-            //scanFile(new String[]{from.getAbsolutePath()});
-            if (from.renameTo(to)) {
-                scanFile(new String[]{to.getAbsolutePath()});
-                context.getContentResolver().delete(olderMedia.getUri(), null, null);
-                olderMedia.Path = to.getAbsolutePath();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void scanFile(String[] path) {
         MediaScannerConnection.scanFile(context, path, null, new MediaScannerConnection.OnScanCompletedListener() {
             @Override
@@ -361,11 +325,5 @@ public class Album implements Parcelable {
         }
         dest.writeInt(current);
         dest.writeInt(filter_photos);
-        if (last_position_selecte == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeInt(last_position_selecte);
-        }
     }
 }
