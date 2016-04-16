@@ -355,6 +355,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.deletePhoto:
+                /*
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(new ContextThemeWrapper(PhotoPagerActivity.this, android.R.style.Theme_Dialog));
                 builder1.setMessage(R.string.delete_album_message);
                 builder1.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -373,6 +374,41 @@ public class PhotoPagerActivity extends ThemedActivity {
                     }
                 });
                 builder1.show();
+                */
+                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(
+                        PhotoPagerActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
+
+                final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+                final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
+                final TextView txt_Delete_message = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_message);
+                CardView cv_Delete_Dialog = (CardView) Delete_dialogLayout.findViewById(R.id.message_card);
+
+                cv_Delete_Dialog.setBackgroundColor(getCardBackgroundColor());
+                txt_Delete_title.setBackgroundColor(getPrimaryColor());
+                txt_Delete_title.setText(getString(R.string.delete));
+                txt_Delete_message.setText(R.string.delete_album_message);
+                txt_Delete_message.setTextColor(getTextColor());
+                DeleteDialog.setView(Delete_dialogLayout);
+
+                DeleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                DeleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        album.deleteCurrentPhoto();
+                        if (album.medias.size() == 0) {
+                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
+                            finish();
+                        }
+                        adapter.notifyDataSetChanged();
+                        toolbar.setTitle((mViewPager.getCurrentItem()+1) +" "+ getString(R.string.of)+" " + album.medias.size());
+                    }
+                });
+                DeleteDialog.show();
                 break;
 
             case R.id.renamePhoto:

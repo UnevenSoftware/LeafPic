@@ -177,6 +177,7 @@ public class AboutActivity extends ThemedActivity {
         TextView txtSTranslate_Sub = (TextView) findViewById(R.id.about_support_translate_item_sub);
         TextView txtSGitHub_Sub = (TextView) findViewById(R.id.about_support_github_item_sub);
 
+        txtAV_Sub.setText(BuildConfig.VERSION_NAME);
 
         color=getSubTextColor();
         txtAV_Sub.setTextColor(color);
