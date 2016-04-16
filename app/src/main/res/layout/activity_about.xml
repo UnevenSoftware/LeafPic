@@ -115,48 +115,54 @@
                     </LinearLayout>
 
                     <!-- LICENSE LIBRARY -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_libs"
+                    <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="15dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_libs_icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-insert-drive-file"
-                            />
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
                         <LinearLayout
-                            android:layout_width="0dp"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_libs"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
-                            <TextView
-                                android:id="@+id/about_libs_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_library_license"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_libs_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-insert-drive-file"
                                 />
-                            <TextView
-                                android:id="@+id/about_libs_item_sub"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/about_library_license_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_libs_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_library_license"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_libs_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_library_license_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -186,129 +192,104 @@
                         />
 
                     <!--DONALD SHTJEFTNI -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_donald"
+                    <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_author_donald_icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-person"
-                            />
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
                         <LinearLayout
-                            android:layout_width="0dp"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_donald"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
-                            <TextView
-                                android:id="@+id/about_author_donald_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Donald Shtjefni"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_author_donald_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-person"
                                 />
-                            <TextView
-                                android:id="@+id/about_author_donald_item_sub"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/about_author_donald_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
+                                android:layout_weight="6"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_author_donald_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Donald Shtjefni"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_author_donald_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_author_donald_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
-                    <!-- DONALD SOCIAL LINK
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_donald_social"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-                        <TextView
-                            android:id="@+id/donald_googleplus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/about_googleplus"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="20sp"
-                            android:layout_weight="5"
-                            />
-                        <TextView
-                            android:id="@+id/donald_facebook"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/about_author_donald_sub"
-                            android:textColor="@color/md_grey_400"
-                            android:textSize="14sp"
-                            android:layout_weight="5"
-                            />
-                    </LinearLayout>
-                    -->
+                    </com.balysv.materialripple.MaterialRippleLayout>
 
                     <!--GILBERT NDRESAJ -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_gilbert"
+                    <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_author_gilbert_icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-person"
-                            />
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
                         <LinearLayout
-                            android:layout_width="0dp"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_gilbert"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
-                            <TextView
-                                android:id="@+id/about_author_gilbert_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Gilbert Ndresaj"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_author_gilbert_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-person"
                                 />
-                            <TextView
-                                android:id="@+id/about_author_gilbert_item_sub"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/about_author_gilbert_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
+                                android:layout_weight="6"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_author_gilbert_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Gilbert Ndresaj"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_author_gilbert_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_author_gilbert_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
-                    <!-- GILBERT SOCIAL LINK
-                    ..
-                    ..
-                    ..
-                    -->
+                    </com.balysv.materialripple.MaterialRippleLayout>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -339,93 +320,104 @@
                         android:textStyle="bold"
                         />
                     <!-- TRANLATE -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_support_translate"
+                    <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="15dp"
-                        android:weightSum="10"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_support_translate_icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-flag"
-                            />
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
                         <LinearLayout
-                            android:layout_width="0dp"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_support_translate"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="15dp"
+                            android:weightSum="10"
                             >
-                            <TextView
-                                android:id="@+id/about_support_translate_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_translate"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_support_translate_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-flag"
                                 />
-                            <TextView
-                                android:id="@+id/about_support_translate_item_sub"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/about_support_translate_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_support_translate_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_translate"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_support_translate_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_translate_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
 
                     <!-- RATE -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_support_rate"
+                    <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="15dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_support_rate_icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-star"
-                            />
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
                         <LinearLayout
-                            android:layout_width="0dp"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_support_rate"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
                             >
-                            <TextView
-                                android:id="@+id/about_support_rate_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_rate"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_support_rate_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-star"
                                 />
-                            <TextView
-                                android:id="@+id/about_support_rate_item_sub"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/about_support_rate_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_support_rate_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_rate"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_support_rate_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_rate_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
-
+                    </com.balysv.materialripple.MaterialRippleLayout>
                     <!-- GIT HUB -->
                     <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"

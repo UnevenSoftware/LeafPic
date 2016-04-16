@@ -58,13 +58,17 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="15dp"
+            android:layout_margin="15dp"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
-            android:visibility="gone"
             app:elevation="4dp"
+
             app:layout_behavior="com.leafpic.app.Views.FABScrollBehavior"
+            android:visibility="gone"
             />
+        <!--
+
+        -->
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/drawer_items"
