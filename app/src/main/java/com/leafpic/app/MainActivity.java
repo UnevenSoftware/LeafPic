@@ -1,6 +1,5 @@
 package com.leafpic.app;
 
-import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -28,6 +27,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -130,8 +130,10 @@ public class MainActivity extends ThemedActivity {
                 if (editmode) {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(Integer.parseInt(a.getTag().toString())));
                     invalidateOptionsMenu();
-                } else
+                } else {
                     openAlbum(albums.getAlbum(Integer.parseInt(a.getTag().toString())));
+                    setRecentApp(albums.getAlbum(Integer.parseInt(a.getTag().toString())).DisplayName);
+                }
             }
         }
     };
@@ -374,7 +376,7 @@ public class MainActivity extends ThemedActivity {
 
         /** drawer items **/
         TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);
-        TextView txtDH = (TextView) findViewById(R.id.Drawer_Hidden_Item);
+        TextView txtDH = (TextView) findViewById(R.id.Drawer_Tags_Item);
         TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
         TextView txtDS = (TextView) findViewById(R.id.Drawer_Setting_Item);
         TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
@@ -383,7 +385,7 @@ public class MainActivity extends ThemedActivity {
 
         IconicsImageView imgDD = (IconicsImageView) findViewById(R.id.Drawer_Default_Icon);
         IconicsImageView imgWall = (IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon);
-        IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Hidden_Icon);
+        IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Tags_Icon);
         IconicsImageView imgDMoments = (IconicsImageView) findViewById(R.id.Drawer_Moments_Icon);
         IconicsImageView imgDDonate = (IconicsImageView) findViewById(R.id.Drawer_Donate_Icon);
         IconicsImageView imgDS = (IconicsImageView) findViewById(R.id.Drawer_Setting_Icon);
@@ -425,8 +427,59 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
+        findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
+
+        findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CoominqSoonDialog("Moments");
+            }
+        });
+
+        findViewById(R.id.ll_drawer_Tags).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CoominqSoonDialog("Tags");
+            }
+        });
+        findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CoominqSoonDialog("Wallpapers");
+            }
+        });
     }
     //endregion
+
+    void CoominqSoonDialog(String what){
+        final AlertDialog.Builder CoomingSoonDialog = new AlertDialog.Builder(
+                MainActivity.this,
+                isDarkTheme()
+                        ? R.style.AlertDialog_Dark
+                        : R.style.AlertDialog_Light);
+        final View Exclude_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+        final TextView txt_Exclude_title = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_title);
+        final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
+        CardView cv_Exclude_Dialog = (CardView) Exclude_dialogLayout.findViewById(R.id.message_card);
+
+        cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+        txt_Exclude_title.setBackgroundColor(getPrimaryColor());
+        txt_Exclude_title.setText(what);
+        txt_Exclude_message.setText("Cooming Soon!");
+        txt_Exclude_message.setTextColor(getTextColor());
+        CoomingSoonDialog.setView(Exclude_dialogLayout);
+
+        CoomingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        CoomingSoonDialog.show();
+    }
 
     void updateSelectedStuff() {
         int c;
@@ -1076,8 +1129,10 @@ public class MainActivity extends ThemedActivity {
             if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             else finish();
-        } else
+        } else {
             displayAlbums();
+            setRecentApp(getString(R.string.app_name));
+        }
 
     }
 

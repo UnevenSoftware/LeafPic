@@ -91,14 +91,14 @@
                 app:mrl_rippleDelayClick="false">
                 <LinearLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Hidden"
+                    android:id="@+id/ll_drawer_Tags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
 
                     <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_Hidden_Icon"
+                        android:id="@+id/Drawer_Tags_Icon"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
@@ -107,7 +107,7 @@
                         />
 
                     <TextView
-                        android:id="@+id/Drawer_Hidden_Item"
+                        android:id="@+id/Drawer_Tags_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
@@ -162,7 +162,7 @@
                 app:mrl_rippleDelayClick="false">
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_wallpapers_Moments"
+                    android:id="@+id/ll_drawer_Wallpapers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">

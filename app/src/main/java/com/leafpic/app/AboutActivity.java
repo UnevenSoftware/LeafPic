@@ -87,12 +87,12 @@ public class AboutActivity extends ThemedActivity {
 
     public void ClickListeners(){
 
-        ///GitHub LISTENER
+        ///GitHub
         findViewById(R.id.ll_about_support_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/DNLDsht/LeafPic"));
+                i.setData(Uri.parse("https://github.com/CyberAstronauts/LeafPic"));
                 startActivity(i);
             }
         });
@@ -103,6 +103,26 @@ public class AboutActivity extends ThemedActivity {
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse("https://crowdin.com/project/leafpic"));
+                startActivity(i);
+            }
+        });
+
+        //Donald
+        findViewById(R.id.ll_donald).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://github.com/DNLDsht"));
+                startActivity(i);
+            }
+        });
+
+        //Gilbert
+        findViewById(R.id.ll_gilbert).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://github.com/Mow3l"));
                 startActivity(i);
             }
         });
