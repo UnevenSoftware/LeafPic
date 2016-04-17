@@ -39,7 +39,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public PhotosAdapter(ArrayList<Media> ph ,Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
-        if (SP.getBoolean("set_dark_theme", true))
+        if (SP.getBoolean("set_dark_theme", false))
             drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
         else
             drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
