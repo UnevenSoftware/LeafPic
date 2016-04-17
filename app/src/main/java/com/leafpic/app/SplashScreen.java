@@ -1,10 +1,12 @@
 package com.leafpic.app;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -72,14 +74,18 @@ public class SplashScreen extends ThemedActivity {
 
     @Override
     public void setNavBarColor() {
-        getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 70));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
+                    ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 70));
+        }
     }
 
     @Override
     protected void setStatusBarColor() {
-        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 70));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
+                    ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 70));
+        }
     }
 
     @Override

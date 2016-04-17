@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,6 +11,7 @@ import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -327,12 +329,14 @@ public class MainActivity extends ThemedActivity {
 
     @Override
     public void setNavBarColor() {
-        if (isNavigationBarColored())
-            super.setNavBarColor();
-        else
-            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-                    ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
-        //getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), 110));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (isNavigationBarColored())
+                super.setNavBarColor();
+            else
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
+            //getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), 110));
+        }
     }
     //region UI/GRAPHIC
     public void setupUI() {
