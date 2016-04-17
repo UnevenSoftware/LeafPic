@@ -107,6 +107,26 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        //Donald
+        findViewById(R.id.ll_donald).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://github.com/DNLDsht"));
+                startActivity(i);
+            }
+        });
+
+        //Gilbert
+        findViewById(R.id.ll_gilbert).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://github.com/Mow3l"));
+                startActivity(i);
+            }
+        });
+
     }
 
     public void setThemeOnChangeListener(){
