@@ -82,7 +82,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .placeholder(SP.getBoolean("set_dark_theme", true)
                         ? R.drawable.ic_empty
                         : R.drawable.ic_empty_white)
-                .animate(R.anim.slide_fade_photos)
+                .animate(R.anim.fade_in)
                 .into(holder.picture);
 
         holder.name.setTag(position);

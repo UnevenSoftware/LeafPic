@@ -66,7 +66,7 @@ public class Media implements Parcelable {
     }
 
     public Uri getUri() {
-        return ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ID);
+        return ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), ID);
     }
 
     public boolean isGif() {

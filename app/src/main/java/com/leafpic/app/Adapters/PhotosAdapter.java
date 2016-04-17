@@ -32,7 +32,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     ArrayList<Media> medias;
     SharedPreferences SP;
 
-    BitmapDrawable drawable;// = ((BitmapDrawable) ContextCompat.getDrawable(holder.path.getContext(), R.drawable.ic_empty));
+    BitmapDrawable drawable;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
@@ -79,7 +79,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
-        //Glide.clear(holder.imageView);//fix corruption
 
         if (f.isImage() && f.isGif()) {
             Ion.with(holder.imageView.getContext())
@@ -93,8 +92,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .asBitmap()
                     .signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                     .centerCrop()
-                    .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                    .animate(R.anim.slide_fade_photos)
+                   .placeholder(drawable)
+                    // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                    .animate(R.anim.fade_in)
                     .into(holder.imageView);
             holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.INVISIBLE);
         }
