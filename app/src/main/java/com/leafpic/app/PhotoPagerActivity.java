@@ -527,6 +527,16 @@ public class PhotoPagerActivity extends ThemedActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
+                DetailsDialog.setNeutralButton(this.getString(R.string.edit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
+                        Uri uri = Uri.fromFile(new File(album.getCurrentPhoto().Path));
+                        UCrop uCrop = UCrop.of(uri, mDestinationUri);
+                        uCrop.withOptions(getUcropOptions());
+                        uCrop.start(PhotoPagerActivity.this);
+                    }
+                });
                 DetailsDialog.show();
                 break;
 
