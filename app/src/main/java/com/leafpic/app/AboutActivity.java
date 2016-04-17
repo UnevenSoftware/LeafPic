@@ -121,9 +121,9 @@ public class AboutActivity extends ThemedActivity {
         CardView cvSupport = (CardView) findViewById(R.id.about_support_card);
 
         int color = getCardBackgroundColor();
-        cvApp.setBackgroundColor(color);
-        cvAuthor.setBackgroundColor(color);
-        cvSupport.setBackgroundColor(color);
+        cvApp.setCardBackgroundColor(color);
+        cvAuthor.setCardBackgroundColor(color);
+        cvSupport.setCardBackgroundColor(color);
 
         /** Icons **/
         //ABOUT APP

@@ -2,6 +2,7 @@ package com.leafpic.app;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -562,28 +564,33 @@ public class PhotoPagerActivity extends ThemedActivity {
         return options;
     }
 
+
     @Override
     public void setNavBarColor() {
-        if (isApplyThemeOnImgAct())
-            if (isNavigationBarColored())
-                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (isApplyThemeOnImgAct())
+                if (isNavigationBarColored())
+                    getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+                else
+                    getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
             else
-                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
-        else
-            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
+        }
     }
 
 
     @Override
     protected void setStatusBarColor() {
-        if(isApplyThemeOnImgAct())
-            if (isTraslucentStatusBar() && isTransparencyZero())
-                getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (isApplyThemeOnImgAct())
+                if (isTraslucentStatusBar() && isTransparencyZero())
+                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                else
+                    getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
-                getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
-        else
-            getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                    ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
+                getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
+        }
     }
 
     @Override

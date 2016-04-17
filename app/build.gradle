@@ -20,7 +20,7 @@ android {
     buildToolsVersion "23.0.3"
     defaultConfig {
         applicationId "com.leafpic.app"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
