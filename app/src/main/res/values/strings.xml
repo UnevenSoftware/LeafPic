@@ -8,9 +8,6 @@
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
     <string name="welcome_slide_sub">Color-Full Material Designed Gallery!</string>
 
-    <string name="storage_slide_title">Storage Permission!</string>
-    <string name="storage_slide_sub">Allow storage permission to use our gallery.</string>
-
     <!--ALBUMS & SELECT ALBUMS ADAPTER-->
     <string name="singular_photo">Photo</string>
     <string name="plural_photos">Photos</string>
@@ -112,16 +109,10 @@
     <string name="about_support_github">GitHub</string>
     <string name="about_support_github_sub">Fork the repo and push changes or submit new issues.</string>
 
-
-
-
-
-
     <!--PHOTO DETAILS-->
     <string name="path">Path</string>
     <string name="type">Type</string>
     <string name="resolution">Resolution</string>
-    <string name="camera_info">@string/camera</string>
     <string name="sent_to_action">Send to</string>
 
     <!--DRAWER STRINGS-->
@@ -178,7 +169,7 @@
     <string name="logging_normal">Normal</string>
     <string name="logging_verbose">Verbose</string>
     <string name="retry">Retry</string>
-    <string name="off">[off]</string>
+    <string name="off">off</string>
     <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
     <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
     <string name="error_drm_unknown">An unknown DRM error occurred</string>
