@@ -1,9 +1,11 @@
 package com.leafpic.app.Views;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -104,9 +106,13 @@ public class ThemedActivity extends AppCompatActivity {
                 : R.color.md_light_cards);
     }
 
+
     public void setNavBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
-            else getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
+            else
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
+        }
     }
 
     @Override
@@ -127,10 +133,12 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     protected void setStatusBarColor() {
-        if (isTraslucentStatusBar())
-            getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
-         else
-            getWindow().setStatusBarColor(getPrimaryColor());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (isTraslucentStatusBar())
+                getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+            else
+                getWindow().setStatusBarColor(getPrimaryColor());
+        }
     }
 
     public void updateTheme(){
@@ -142,8 +150,11 @@ public class ThemedActivity extends AppCompatActivity {
         applyThemeImgAct = SP.getBoolean("apply_theme_img_act", false);
     }
 
+
     public void setRecentApp(String text){
-        BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-        setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.leafpic.app;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,6 +11,7 @@ import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -327,12 +329,14 @@ public class MainActivity extends ThemedActivity {
 
     @Override
     public void setNavBarColor() {
-        if (isNavigationBarColored())
-            super.setNavBarColor();
-        else
-            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-                    ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
-        //getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), 110));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (isNavigationBarColored())
+                super.setNavBarColor();
+            else
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
+            //getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), 110));
+        }
     }
     //region UI/GRAPHIC
     public void setupUI() {
@@ -747,7 +751,7 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Exclude_Dialog = (CardView) Exclude_dialogLayout.findViewById(R.id.message_card);
 
-                cv_Exclude_Dialog.setBackgroundColor(getCardBackgroundColor());
+                cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Exclude_title.setBackgroundColor(getPrimaryColor());
                 txt_Exclude_title.setText(getString(R.string.delete));
                 txt_Exclude_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
@@ -819,7 +823,7 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Hide_message = (TextView) Hide_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Hide_Dialog = (CardView) Hide_dialogLayout.findViewById(R.id.message_card);
 
-                cv_Hide_Dialog.setBackgroundColor(getCardBackgroundColor());
+                cv_Hide_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Hide_title.setBackgroundColor(getPrimaryColor());
                 txt_Hide_title.setText(getString(R.string.hide));
                 txt_Hide_message.setText(R.string.hide_album_message);
@@ -924,7 +928,7 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Delete_message = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Delete_Dialog = (CardView) Delete_dialogLayout.findViewById(R.id.message_card);
 
-                cv_Delete_Dialog.setBackgroundColor(getCardBackgroundColor());
+                cv_Delete_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Delete_title.setBackgroundColor(getPrimaryColor());
                 txt_Delete_title.setText(getString(R.string.delete));
                 txt_Delete_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
@@ -1030,7 +1034,7 @@ public class MainActivity extends ThemedActivity {
                 final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
                 CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
 
-                cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
+                cv_Rename_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 title.setBackgroundColor(getPrimaryColor());
                 title.setText(getString(R.string.rename_album));
                 txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);

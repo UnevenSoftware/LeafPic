@@ -3,6 +3,7 @@ package com.leafpic.app;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -27,13 +28,15 @@ public class IntroActivity extends AppIntro {
 
         setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
         setSeparatorColor(ContextCompat.getColor(this, R.color.accent_teal));
-        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_teal));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_teal));
+
 
         drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
         setTaskDescription(new ActivityManager.TaskDescription
                 (getString(R.string.app_name), drawable.getBitmap(),
                         ContextCompat.getColor(this, R.color.accent_teal)));
-
+        }
         //MAYBE REMOVE
         showSkipButton(true);
 
@@ -65,13 +68,13 @@ public class IntroActivity extends AppIntro {
     public void onSlideChanged() {
         if (slide==1) {
             slide=2;
-            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_teal));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_teal));
+            }
             setSeparatorColor(ContextCompat.getColor(this, R.color.accent_teal));
             setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
             drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription
-                    (getString(R.string.app_name), drawable.getBitmap(),
-                    ContextCompat.getColor(this, R.color.accent_teal)));
+
 
         } else{
             /* TODO: NOT WORK
@@ -81,14 +84,11 @@ public class IntroActivity extends AppIntro {
             }
             */
             slide=1;
-            getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_brown));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.accent_brown));
+            }
             setSeparatorColor(ContextCompat.getColor(this, R.color.accent_brown));
             setBarColor(ContextCompat.getColor(this, R.color.accent_brown));
-            drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription
-                    (getString(R.string.app_name), drawable.getBitmap(),
-                            ContextCompat.getColor(this, R.color.accent_brown)));
-
         }
     }
 
