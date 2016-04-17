@@ -183,7 +183,9 @@ public class PhotoPagerActivity extends ThemedActivity {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (!isApplyThemeOnImgAct())
-            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(isDarkTheme() ? ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000) : ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
+            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(isDarkTheme()
+                    ? ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000)
+                    : ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800), 175)));
         else
             toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
