@@ -1,6 +1,5 @@
 package com.leafpic.app;
 
-import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -130,8 +129,10 @@ public class MainActivity extends ThemedActivity {
                 if (editmode) {
                     adapt.notifyItemChanged(albums.toggleSelectAlbum(Integer.parseInt(a.getTag().toString())));
                     invalidateOptionsMenu();
-                } else
+                } else {
                     openAlbum(albums.getAlbum(Integer.parseInt(a.getTag().toString())));
+                    setRecentApp(albums.getAlbum(Integer.parseInt(a.getTag().toString())).DisplayName);
+                }
             }
         }
     };
@@ -1076,8 +1077,10 @@ public class MainActivity extends ThemedActivity {
             if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             else finish();
-        } else
+        } else {
             displayAlbums();
+            setRecentApp(getString(R.string.app_name));
+        }
 
     }
 
