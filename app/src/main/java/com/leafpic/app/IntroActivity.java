@@ -22,8 +22,8 @@ public class IntroActivity extends AppIntro {
         addSlide(AppIntroFragment.newInstance(this.getString(R.string.welcome_slide_title), this.getString(R.string.welcome_slide_sub),
                 R.drawable.leafpic_big, ContextCompat.getColor(this, R.color.accent_teal)));
 
-        addSlide(AppIntroFragment.newInstance(this.getString(R.string.storage_slide_title), this.getString(R.string.storage_slide_sub),
-                R.drawable.storage_permission, ContextCompat.getColor(this, R.color.accent_brown)));//Color.parseColor("#607D8B")
+       /* addSlide(AppIntroFragment.newInstance(this.getString(R.string.storage_slide_title), this.getString(R.string.storage_slide_sub),
+                R.drawable.storage_permission, ContextCompat.getColor(this, R.color.accent_brown)));//Color.parseColor("#607D8B")*/
 
         setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
         setSeparatorColor(ContextCompat.getColor(this, R.color.accent_teal));
