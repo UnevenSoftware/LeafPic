@@ -42,7 +42,6 @@ public class SettingActivity extends ThemedActivity {
     TextView txtSBT;//TITLE
     TextView txtSBC;//COUNT
 
-    SwitchCompat swCollaps;
     SwitchCompat swDarkTheme;
     SwitchCompat swNavBar;
     SwitchCompat swStatusBar;
@@ -150,19 +149,6 @@ public class SettingActivity extends ThemedActivity {
         });
         updateSwitchColor(swMaxLuminosita);
 
-        /*********** SW COLLAPSING TOOLBAR ************/
-        swCollaps=(SwitchCompat) findViewById(R.id.SetCollapsingToolbar);
-        swCollaps.setChecked(isCollapsingToolbar());
-        swCollaps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_collaps_toolbar", !isCollapsingToolbar());
-                editor.apply();
-                updateSwitchColor(swCollaps);
-            }
-        });
-        updateSwitchColor(swCollaps);
         /*********** SW TRASLUCENT STATUS BAR ****************/
         swStatusBar=(SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
         swStatusBar.setChecked(isTraslucentStatusBar());
@@ -345,7 +331,6 @@ public class SettingActivity extends ThemedActivity {
                 txtTT.setTextColor(colorPicker.getColor());
                 txtPT.setTextColor(colorPicker.getColor());
 
-                if(swCollaps.isChecked()) swCollaps.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swDarkTheme.isChecked()) swDarkTheme.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swNavBar.isChecked()) swNavBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
                 if(swStatusBar.isChecked()) swStatusBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
@@ -364,7 +349,6 @@ public class SettingActivity extends ThemedActivity {
                 txtPT.setTextColor(getAccentColor());
 
                 updateSwitchColor(swDelayFullImage);
-                updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
                 updateSwitchColor(swStatusBar);
@@ -382,7 +366,6 @@ public class SettingActivity extends ThemedActivity {
                 txtPT.setTextColor(getAccentColor());
                 txtTT.setTextColor(getAccentColor());
                 updateSwitchColor(swDelayFullImage);
-                updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
                 updateSwitchColor(swStatusBar);
@@ -397,7 +380,6 @@ public class SettingActivity extends ThemedActivity {
                 txtTT.setTextColor(getAccentColor());
                 txtPT.setTextColor(getAccentColor());
                 updateSwitchColor(swDelayFullImage);
-                updateSwitchColor(swCollaps);
                 updateSwitchColor(swDarkTheme);
                 updateSwitchColor(swNavBar);
                 updateSwitchColor(swStatusBar);
@@ -544,7 +526,6 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgDelay = (IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon);
 
         IconicsImageView imgTSB = (IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
-        IconicsImageView imgCI = (IconicsImageView) findViewById(R.id.collapsing_toolbar_Icon);
         IconicsImageView imgC3A = (IconicsImageView) findViewById(R.id.custom_3thAct_icon);
         IconicsImageView imgPC = (IconicsImageView) findViewById(R.id.PrimaryColor_Icon);
         IconicsImageView imgAC = (IconicsImageView) findViewById(R.id.accentColor_Icon);
@@ -556,7 +537,6 @@ public class SettingActivity extends ThemedActivity {
         imgMax.setColor(color);
         imgDelay.setColor(color);
         imgC3A.setColor(color);
-        imgCI.setColor(color);
         imgTSB.setColor(color);
         imgPC.setColor(color);
         imgAC.setColor(color);
@@ -570,7 +550,6 @@ public class SettingActivity extends ThemedActivity {
         TextView txtDelay = (TextView) findViewById(R.id.full_resolution_Item);
         TextView txtOrient = (TextView) findViewById(R.id.picture_orientation_Item);
         TextView txtC3AT = (TextView) findViewById(R.id.custom_3thAct_title);
-        TextView txtC = (TextView) findViewById(R.id.collapsing_toolbar_Item);
         TextView txtTSB = (TextView) findViewById(R.id.Traslucent_StatusBar_Item);
         TextView txtPC = (TextView) findViewById(R.id.PrimaryColor_Item);
         TextView txtAC = (TextView) findViewById(R.id.accentColor_Item);
@@ -582,7 +561,6 @@ public class SettingActivity extends ThemedActivity {
         txtMax.setTextColor(color);
         txtOrient.setTextColor(color);
         txtC3AT.setTextColor(color);
-        txtC.setTextColor(color);
         txtTSB.setTextColor(color);
         txtPC.setTextColor(color);
         txtAC.setTextColor(color);
@@ -596,7 +574,6 @@ public class SettingActivity extends ThemedActivity {
         TextView txtDelay_Sub = (TextView) findViewById(R.id.full_resolution_Item_Sub);
         TextView txtOrient_Sub = (TextView) findViewById(R.id.picture_orientation_Item_Sub);
         TextView txtC3A_Sub = (TextView) findViewById(R.id.custom_3thAct_Sub);
-        TextView txtC_Sub = (TextView) findViewById(R.id.collapsing_toolbar_Item_Sub);
         TextView txtTSB_Sub = (TextView) findViewById(R.id.Traslucent_StatusBar_Item_Sub);
         TextView txtPC_Sub = (TextView) findViewById(R.id.PrimaryColor_Item_Sub);
         TextView txtAC_Sub = (TextView) findViewById(R.id.accentColor_Item_Sub);
@@ -609,7 +586,6 @@ public class SettingActivity extends ThemedActivity {
         txtMax_Sub.setTextColor(color);
         txtOrient_Sub.setTextColor(color);
         txtC3A_Sub.setTextColor(color);
-        txtC_Sub.setTextColor(color);
         txtTSB_Sub.setTextColor(color);
         txtPC_Sub.setTextColor(color);
         txtAC_Sub.setTextColor(color);
