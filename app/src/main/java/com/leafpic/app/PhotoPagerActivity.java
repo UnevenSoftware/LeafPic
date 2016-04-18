@@ -183,7 +183,9 @@ public class PhotoPagerActivity extends ThemedActivity {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (!isApplyThemeOnImgAct())
-            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(isDarkTheme() ? ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000) : ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_500), 175)));
+            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(isDarkTheme()
+                    ? ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000)
+                    : ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800), 175)));
         else
             toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
@@ -527,6 +529,16 @@ public class PhotoPagerActivity extends ThemedActivity {
                 DetailsDialog.setView(Details_DialogLayout);
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                DetailsDialog.setNeutralButton(this.getString(R.string.edit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
+                        Uri uri = Uri.fromFile(new File(album.getCurrentPhoto().Path));
+                        UCrop uCrop = UCrop.of(uri, mDestinationUri);
+                        uCrop.withOptions(getUcropOptions());
+                        uCrop.start(PhotoPagerActivity.this);
                     }
                 });
                 DetailsDialog.show();

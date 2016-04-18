@@ -1,6 +1,5 @@
 package com.leafpic.app.Views;
 
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.leafpic.app.PhotoPagerActivity;
 import com.leafpic.app.R;
 import com.leafpic.app.utils.ColorPalette;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -28,7 +26,6 @@ public class ThemedActivity extends AppCompatActivity {
     private int accentColor;
     private boolean darkTheme;
     private boolean coloredNavBar;
-    private boolean openCollapsing;
     private boolean oscuredStatusBar;
     private boolean applyThemeImgAct; //TASPARENCY
 
@@ -49,10 +46,6 @@ public class ThemedActivity extends AppCompatActivity {
         return darkTheme;
     }
 
-    public boolean isCollapsingToolbar() {
-        return openCollapsing;
-    }
-
     public boolean isTransparencyZero() {
         return 255 - SP.getInt("set_alpha", 0) == 255;
     }
@@ -68,7 +61,6 @@ public class ThemedActivity extends AppCompatActivity {
     public int getAccentColor() {
         return accentColor;
     }
-
 
     //METHOD
     public int getBackgroundColor(){
@@ -149,11 +141,10 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void updateTheme(){
-        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_teal_500));//TEAL CARD BG DEFAULT;
-        this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_orange_500));//TEAL COLOR DEFAULT
-        darkTheme = SP.getBoolean("set_dark_theme", true);//DARK THEME DEFAULT
+        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_indigo_500));//DEFAULT;
+        this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500));//COLOR DEFAULT
+        darkTheme = SP.getBoolean("set_dark_theme", false);//DARK THEME DEFAULT
         coloredNavBar = SP. getBoolean("nav_bar", false);
-        openCollapsing = SP.getBoolean("set_collaps_toolbar", true);
         oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",true);
         applyThemeImgAct = SP.getBoolean("apply_theme_img_act", false);
     }

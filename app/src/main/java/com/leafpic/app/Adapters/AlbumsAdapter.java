@@ -79,7 +79,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                         ? new StringSignature(f.Path)
                         : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                 .centerCrop()
-                .placeholder(SP.getBoolean("set_dark_theme", true)
+                .placeholder(SP.getBoolean("set_dark_theme", false)
                         ? R.drawable.ic_empty
                         : R.drawable.ic_empty_white)
                 .animate(R.anim.fade_in)
@@ -87,30 +87,30 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         holder.name.setTag(position);
 
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_teal_500))));
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_orange_500))));
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_indigo_500))));
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_light_blue_500))));
 
         if (hexAccentColor.equals(hexPrimaryColor)) {
             float[] hsv = new float[3];
-            int color = SP.getInt("accent_color", ContextCompat.getColor(c, R.color.md_orange_500));
+            int color = SP.getInt("accent_color", ContextCompat.getColor(c, R.color.md_light_blue_500));
             Color.colorToHSV(color, hsv);
             hsv[2] *= 0.72f; // value component
             color = Color.HSVToColor(hsv);
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
 
-        String textColor = SP.getBoolean("set_dark_theme", true) ? "#FAFAFA" : "#2b2b2b";
+        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            if (!SP.getBoolean("set_dark_theme", true)) textColor ="#FAFAFA";
+            if (!SP.getBoolean("set_dark_theme", false)) textColor ="#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.INVISIBLE);
 
-            if (SP.getBoolean("set_dark_theme", true))
+            if (SP.getBoolean("set_dark_theme", false))
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
             else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_light_cards));
         }
