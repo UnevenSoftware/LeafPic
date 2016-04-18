@@ -31,7 +31,7 @@
              android:layout_alignParentBottom="true"
              android:layout_marginBottom="7dp"
              android:layout_marginStart="15dp"
-             android:text="leafpiC"
+             android:text="LeafPic"
              android:textColor="@color/md_white_1000"
              android:textSize="50sp"
              />
