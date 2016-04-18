@@ -86,17 +86,17 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .intoImageView(holder.imageView);
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
-            holder.gifIcon.setVisibility(View.INVISIBLE);
+            holder.gifIcon.setVisibility(View.GONE);
             Glide.with(holder.imageView.getContext())
                     .load(f.Path)
                     .asBitmap()
                     .signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                     .centerCrop()
-                   .placeholder(drawable)
+                    .placeholder(drawable)
                     // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
-            holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.INVISIBLE);
+            holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
         }
 
         holder.path.setTag(position);
@@ -106,7 +106,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
             holder.imageView.setPadding(15,15,15,15);
         } else {
-            holder.selectHolder.setVisibility(View.INVISIBLE);
+            holder.selectHolder.setVisibility(View.GONE);
             holder.imageView.clearColorFilter();
             holder.imageView.setPadding(0,0,0,0);
         }

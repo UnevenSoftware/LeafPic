@@ -2,10 +2,10 @@
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/album_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/cardview_default_elevation"
         app:cardCornerRadius="0dp"
         app:cardElevation="@dimen/cardview_default_elevation">
         <RelativeLayout
@@ -25,10 +25,10 @@
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:elevation="10dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:iiv_color="@color/md_white_1000"
                 app:iiv_icon="gmd-check"
-                />
+                tools:targetApi="lollipop" />
 
             <ImageView
                 android:id="@+id/album_preview"
