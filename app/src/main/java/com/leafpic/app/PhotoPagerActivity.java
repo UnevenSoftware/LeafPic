@@ -123,11 +123,13 @@ public class PhotoPagerActivity extends ThemedActivity {
         setRecentApp(getString(R.string.app_name));
         setupSystemUI();
 
+        /*
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
         }, 1500);
+        */
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
                 (new View.OnSystemUiVisibilityChangeListener() {
@@ -165,7 +167,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + album.medias.size());
                 if (!fullscreenmode) new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        hideSystemUI();
+                        //hideSystemUI();
                     }
                 }, 1200);
                 invalidateOptionsMenu();

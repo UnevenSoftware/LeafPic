@@ -437,26 +437,26 @@ public class MainActivity extends ThemedActivity {
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CoominqSoonDialog("Moments");
+                CominqSoonDialog("Moments");
             }
         });
 
         findViewById(R.id.ll_drawer_Tags).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CoominqSoonDialog("Tags");
+                CominqSoonDialog("Tags");
             }
         });
         findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CoominqSoonDialog("Wallpapers");
+                CominqSoonDialog("Wallpapers");
             }
         });
     }
     //endregion
 
-    void CoominqSoonDialog(String what){
+    void CominqSoonDialog(String what){
         final AlertDialog.Builder CoomingSoonDialog = new AlertDialog.Builder(
                 MainActivity.this,
                 isDarkTheme()
@@ -470,7 +470,7 @@ public class MainActivity extends ThemedActivity {
         cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
         txt_Exclude_title.setBackgroundColor(getPrimaryColor());
         txt_Exclude_title.setText(what);
-        txt_Exclude_message.setText("Cooming Soon!");
+        txt_Exclude_message.setText("Coming Soon!");
         txt_Exclude_message.setTextColor(getTextColor());
         CoomingSoonDialog.setView(Exclude_dialogLayout);
 
