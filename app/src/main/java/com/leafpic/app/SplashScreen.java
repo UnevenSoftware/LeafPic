@@ -51,7 +51,7 @@ public class SplashScreen extends ThemedActivity {
         albums = new HandlingAlbums(SplashScreen.this);
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
-        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Hipstelvetica Light.ttf"));
+        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             new PrefetchData().execute();
         } else {

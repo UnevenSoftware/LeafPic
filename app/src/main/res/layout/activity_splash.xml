@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="LeafPic"
+        android:text="leaFpiC"
         android:textColor="@color/md_white_1000"
         android:textSize="60sp"
          />

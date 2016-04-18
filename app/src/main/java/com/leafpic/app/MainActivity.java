@@ -655,6 +655,18 @@ public class MainActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case R.id.copyAction:
+                //Initializing a bottom sheet
+                CopyMove_BottomSheet bottomSheetDialogFragment = new CopyMove_BottomSheet();
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+              //  Bundle b = new Bundle();
+               // b.putParcelableArrayList("albums",albums.dispAlbums);
+               // bottomSheetDia
+                // logFragment.setArguments(b);
+                //show it
+                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                break;
+
             case R.id.select_all:
                 if (albumsMode) {
                     if (albums.getSelectedCount() == adapt.getItemCount()) {
