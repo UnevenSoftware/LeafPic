@@ -1114,6 +1114,22 @@ public class MainActivity extends ThemedActivity {
                 txt_edit.requestFocus();
                 break;
 
+            case R.id.clear_album_preview:
+                if(!albumsMode) {
+                    CustomAlbumsHandler as = new CustomAlbumsHandler(getApplicationContext());
+                    as.clearAlbumPreview(album.ID);
+                    album.setSettings();
+                }
+                break;
+
+            case R.id.setAsAlbumPreview:
+                if (!albumsMode) {
+                    album.setSelectedPhotoAsPreview();
+                    finishEditMode();
+                }
+                break;
+
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

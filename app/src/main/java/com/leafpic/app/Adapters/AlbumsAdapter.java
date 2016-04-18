@@ -108,7 +108,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             if (!SP.getBoolean("set_dark_theme", false)) textColor ="#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
-            holder.selectHolder.setVisibility(View.INVISIBLE);
+            holder.selectHolder.setVisibility(View.GONE);
 
             if (SP.getBoolean("set_dark_theme", false))
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));

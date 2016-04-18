@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="120dp"
     >
@@ -11,10 +12,10 @@
         android:layout_gravity="top|end"
         android:layout_margin="10dp"
         android:elevation="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-check-circle"
-    />
+        tools:targetApi="lollipop" />
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/type_icon"
@@ -24,10 +25,10 @@
         android:layout_marginBottom="1dp"
         android:layout_marginStart="5dp"
         android:elevation="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-gif"
-    />
+        tools:targetApi="lollipop" />
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/video_indicator"
@@ -35,9 +36,10 @@
         android:layout_height="30dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:elevation="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:iiv_color="@color/md_white_1000"
-        app:iiv_icon="gmd-play-circle-filled" />
+        app:iiv_icon="gmd-play-circle-filled"
+        tools:targetApi="lollipop" />
     <TextView
         android:id="@+id/photo_path"
         android:layout_width="wrap_content"
