@@ -19,7 +19,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label= "@string/video_player"
             android:launchMode="singleInstance"
-            android:theme="@style/PlayerTheme">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT"/>

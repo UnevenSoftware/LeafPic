@@ -38,10 +38,7 @@ public class SettingActivity extends ThemedActivity {
     TextView txtGT;
     TextView txtTT;
     TextView txtPT;
-
-    TextView txtATT;//APPLY THEME TITLE
-    TextView txtSBT;//TITLE
-    TextView txtSBC;//COUNT
+    TextView txtVT;
 
     SwitchCompat swDarkTheme;
     SwitchCompat swNavBar;
@@ -49,8 +46,10 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swMaxLuminosita;
     SwitchCompat swPictureOrientation;
     SwitchCompat swDelayFullImage;
+    SwitchCompat swInternalBrowser;
 
-    boolean maxLuminosita, pictureOrientation, delayfullimage;
+
+    boolean maxLuminosita, pictureOrientation, delayfullimage,internalPlayer;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -62,11 +61,14 @@ public class SettingActivity extends ThemedActivity {
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
+        txtVT = (TextView) findViewById(R.id.video_setting_title);
+
 
         setNavBarColor();
         maxLuminosita = SP.getBoolean("set_max_luminosita", false);
         pictureOrientation = SP.getBoolean("set_picture_orientation", false);
         delayfullimage = SP.getBoolean("set_delay_full_image", true);
+        internalPlayer =  SP.getBoolean("set_internal_player", false);
 
         //PRIMARY COLOR PIKER*****************************************
         LinearLayout ll_PC = (LinearLayout) findViewById(R.id.ll_primaryColor);
@@ -105,7 +107,19 @@ public class SettingActivity extends ThemedActivity {
         });
 
 
-
+        /*********** SW Internal Player ************/
+        swInternalBrowser = (SwitchCompat) findViewById(R.id.set_internal_player);
+        swInternalBrowser.setChecked(internalPlayer);
+        swInternalBrowser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_internal_player", isChecked);
+                editor.apply();
+                updateSwitchColor(swInternalBrowser);
+            }
+        });
+        updateSwitchColor(swInternalBrowser);
         /**** Switches ****/
 
         /*********** SW Delay Full Image ************/
@@ -208,6 +222,14 @@ public class SettingActivity extends ThemedActivity {
     public void updateSwitchColor(SwitchCompat sw){
         if(sw.isChecked())
             sw.getThumbDrawable().setColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY);
+        else
+            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
+        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+    }
+
+    public void updateSwitchColor(SwitchCompat sw,int color){
+        if(sw.isChecked())
+            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
         else
             sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
@@ -341,15 +363,8 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onColorChanged(int c) {
                 title.setBackgroundColor(c);
-                txtGT.setTextColor(colorPicker.getColor());
-                txtTT.setTextColor(colorPicker.getColor());
-                txtPT.setTextColor(colorPicker.getColor());
+                updateAccentViewsColor(colorPicker.getColor());
 
-                if(swDarkTheme.isChecked()) swDarkTheme.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
-                if(swNavBar.isChecked()) swNavBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
-                if(swStatusBar.isChecked()) swStatusBar.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
-                if(swMaxLuminosita.isChecked()) swMaxLuminosita.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
-                if(swPictureOrientation.isChecked()) swPictureOrientation.getThumbDrawable().setColorFilter(colorPicker.getColor(), PorterDuff.Mode.MULTIPLY);
             }
         });
         AccentPikerDialog.setView(Accent_dialogLayout);
@@ -358,16 +373,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                txtGT.setTextColor(getAccentColor());
-                txtTT.setTextColor(getAccentColor());
-                txtPT.setTextColor(getAccentColor());
-
-                updateSwitchColor(swDelayFullImage);
-                updateSwitchColor(swDarkTheme);
-                updateSwitchColor(swNavBar);
-                updateSwitchColor(swStatusBar);
-                updateSwitchColor(swMaxLuminosita);
-                updateSwitchColor(swPictureOrientation);
+                updateAccentViewsColor(getAccentColor());
             }
         });
         AccentPikerDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
@@ -376,29 +382,13 @@ public class SettingActivity extends ThemedActivity {
                 editor.putInt("accent_color", colorPicker.getColor());
                 editor.apply();
                 updateTheme();
-                txtGT.setTextColor(getAccentColor());
-                txtPT.setTextColor(getAccentColor());
-                txtTT.setTextColor(getAccentColor());
-                updateSwitchColor(swDelayFullImage);
-                updateSwitchColor(swDarkTheme);
-                updateSwitchColor(swNavBar);
-                updateSwitchColor(swStatusBar);
-                updateSwitchColor(swMaxLuminosita);
-                updateSwitchColor(swPictureOrientation);
+                updateAccentViewsColor(getAccentColor());
             }
         });
         AccentPikerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                txtGT.setTextColor(getAccentColor());
-                txtTT.setTextColor(getAccentColor());
-                txtPT.setTextColor(getAccentColor());
-                updateSwitchColor(swDelayFullImage);
-                updateSwitchColor(swDarkTheme);
-                updateSwitchColor(swNavBar);
-                updateSwitchColor(swStatusBar);
-                updateSwitchColor(swMaxLuminosita);
-                updateSwitchColor(swPictureOrientation);
+                updateAccentViewsColor(getAccentColor());
             }
         });
         AccentPikerDialog.show();
@@ -478,6 +468,21 @@ public class SettingActivity extends ThemedActivity {
         CustomizeViewer.show();
     }
 
+    public void updateAccentViewsColor(int color){
+        txtGT.setTextColor(color);
+        txtTT.setTextColor(color);
+        txtPT.setTextColor(color);
+        txtVT.setTextColor(color);
+
+        updateSwitchColor(swDelayFullImage, color);
+        updateSwitchColor(swDarkTheme, color);
+        updateSwitchColor(swNavBar, color);
+        updateSwitchColor(swStatusBar, color);
+        updateSwitchColor(swMaxLuminosita, color);
+        updateSwitchColor(swPictureOrientation, color);
+        updateSwitchColor(swInternalBrowser, color);
+    }
+
     @Override
     public void onPostResume() {
         super.onPostResume();
@@ -514,6 +519,8 @@ public class SettingActivity extends ThemedActivity {
         txtGT.setTextColor(getAccentColor());
         txtTT.setTextColor(getAccentColor());
         txtPT.setTextColor(getAccentColor());
+        txtVT.setTextColor(getAccentColor());
+
 
         setThemeOnChangeListener();
     }
@@ -528,11 +535,13 @@ public class SettingActivity extends ThemedActivity {
         CardView cvGeneral = (CardView) findViewById(R.id.general_setting_card);
         CardView cvTheme = (CardView) findViewById(R.id.theme_setting_card);
         CardView cvPicture = (CardView) findViewById(R.id.preview_picture_setting_card);
+        CardView cvVideo= (CardView) findViewById(R.id.video_setting_card);
 
         int color = getCardBackgroundColor();
         cvGeneral.setCardBackgroundColor(color);
         cvTheme.setCardBackgroundColor(color);
         cvPicture.setCardBackgroundColor(color);
+        cvVideo.setCardBackgroundColor(color);
 
         /** Icons **/
         IconicsImageView imgOrient = (IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
@@ -546,9 +555,12 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgDT = (IconicsImageView) findViewById(R.id.DarkTheme_Icon);
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
+        IconicsImageView imgIN = (IconicsImageView) findViewById(R.id.internal_player_Icon);
+
 
         color = getIconColor();
         imgMax.setColor(color);
+        imgIN.setColor(color);
         imgDelay.setColor(color);
         imgC3A.setColor(color);
         imgTSB.setColor(color);
@@ -570,8 +582,10 @@ public class SettingActivity extends ThemedActivity {
         TextView txtDT = (TextView) findViewById(R.id.DarkTheme_Item);
         TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
+        TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
 
         color=getTextColor();
+        txtInt.setTextColor(color);
         txtMax.setTextColor(color);
         txtOrient.setTextColor(color);
         txtC3AT.setTextColor(color);
@@ -594,8 +608,11 @@ public class SettingActivity extends ThemedActivity {
         TextView txtDT_Sub = (TextView) findViewById(R.id.DarkTheme_Item_Sub);
         TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
+        TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
+
 
         color=getSubTextColor();
+        txtInt_Sub.setTextColor(color);
         txtDelay_Sub.setTextColor(color);
         txtMax_Sub.setTextColor(color);
         txtOrient_Sub.setTextColor(color);

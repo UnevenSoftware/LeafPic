@@ -144,9 +144,17 @@ public class PhotoPagerActivity extends ThemedActivity {
         adapter.setVideoOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
-                        .setData(album.getCurrentPhoto().getUri());
-                startActivity(mpdIntent);
+                if (SP.getBoolean("set_internal_player",false)) {
+                    Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
+                            .setData(album.getCurrentPhoto().getUri());
+                    startActivity(mpdIntent);
+                } else{
+                    Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
+                    intentopenWith.setDataAndType(
+                           album.medias.get(mViewPager.getCurrentItem()).getUri(),
+                            album.medias.get(mViewPager.getCurrentItem()).MIME);
+                    startActivity(intentopenWith);
+                }
             }
         });
 

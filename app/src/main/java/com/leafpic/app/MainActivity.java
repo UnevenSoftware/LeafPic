@@ -325,6 +325,7 @@ public class MainActivity extends ThemedActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
+
         SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
         mRecyclerView.setPadding(0,0,0, status_height+Measure.getNavBarHeight(getResources()));
 

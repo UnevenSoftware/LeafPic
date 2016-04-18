@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:background="@color/md_dark_appbar"
+        android:windowActionBarOverlay="true"
+        />
 
   <com.google.android.exoplayer.AspectRatioFrameLayout android:id="@+id/video_frame"
       android:layout_width="match_parent"
@@ -27,6 +33,13 @@
 
   </com.google.android.exoplayer.AspectRatioFrameLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/media_player_anchor"
+        android:layout_gravity="bottom"
+        />
+<!--
   <LinearLayout
       android:background="#88000000"
       android:id="@+id/controls_root"
@@ -66,5 +79,5 @@
           android:visibility="gone"
           style="@style/DemoButton"/>
 
-    </LinearLayout>
+    </LinearLayout>-->
 </FrameLayout>

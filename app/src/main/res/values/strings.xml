@@ -85,6 +85,10 @@
     <string name="dark_theme_sub">Apply a dark theme to the application.</string>
     <string name="colored_navbar">Colored Navigation Bar</string>
     <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
+    <string name="internal_player">Internal Video Player</string>
+    <string name="internal_player_sub">Use embedded video player</string>
+
+
 
     <!--ABOUT STRINGS-->
     <string name="about">About</string>
