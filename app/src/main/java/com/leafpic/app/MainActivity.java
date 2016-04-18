@@ -659,7 +659,12 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.copyAction:
                 //Initializing a bottom sheet
-                BottomSheetDialogFragment bottomSheetDialogFragment = new CustomModalDialog();
+                CustomModalDialog bottomSheetDialogFragment = new CustomModalDialog();
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+              //  Bundle b = new Bundle();
+               // b.putParcelableArrayList("albums",albums.dispAlbums);
+               // bottomSheetDia
+                // logFragment.setArguments(b);
                 //show it
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
                 break;
