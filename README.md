@@ -10,24 +10,22 @@
 <img style="margin-left:10px;" src="screenshots/5.png" width="19%" >
 
 </div>
-LeafPic is an ad-free, open-source and full material android gallery alternative
+LeafPic is an ad-free, open-source and full material designed android alternative gallery
 #### Contributing
 
 ###### Code & Issues
-If you are a developer and wish to contribute to the app please fork the project
+If you are a developer and you wish to contribute to the app please fork the project
 and submit a pull request.
-If you have any questions, feel free to ask [me](mailto:dnld.sht@gmail.com) whatever you want.
+If you have any questions, feel free to ask [me](mailto:dnld.sht@gmail.com) about whatever you want.
 [Here](https://github.com/CyberAstronauts/LeafPic/issues) is the list of known issues.
-if you want submit new ones please add usefull description or screenshots to help us see exactly what the
-issue is.
+If you want to report new bugs please add helpful description or screenshots.
 
 ###### Translations
-If you are able to contribute a translation into a language missing from LeafPic,
-or spot any kind of improvement in an existing translation, we greatly
-appreciate anything you can assist with!
+If you are able to contribute with a new translation of a missing language or if you want to improve an existing one, we greatly appreciate any suggestion!
 [The project uses Crowdin](https://crowdin.com/project/leafpic), a platform that allows anybody to contribute to translating the app
 
 #### Licensing
-Leafpic is licensed under the [GNU v3 Public License](https://github.com/DNLDsht/LeafPic/blob/master/LICENSE).
+Leafpic is licensed under the [GNU v3 Public License](https://github.com/CyberAstronauts/LeafPic/blob/master/LICENSE).
+
 
 
