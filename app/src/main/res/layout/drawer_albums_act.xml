@@ -20,7 +20,7 @@
     <RelativeLayout
         android:id="@+id/Drawer_Header"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="160dp"
         android:clickable="true"
         android:elevation="8dp"
         >
@@ -31,7 +31,7 @@
              android:layout_alignParentBottom="true"
              android:layout_marginBottom="7dp"
              android:layout_marginStart="15dp"
-             android:text="LeafPic"
+             android:text="leaFpiC"
              android:textColor="@color/md_white_1000"
              android:textSize="50sp"
              />
