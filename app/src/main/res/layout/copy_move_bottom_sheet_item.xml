@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_album_bottom_sheet_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp"
+    android:weightSum="10"
+    >
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/bottom_sheet_folder_icon"
+        android:layout_height="20dp"
+        android:layout_width="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="2"
+        app:iiv_icon="gmd-folder"
+        />
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:layout_weight="8"
+        >
+        <TextView
+            android:id="@+id/Bottom_Sheet_Title_Item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/md_dark_background"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/Bottom_Sheet_Count_Item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/md_grey_400"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+</LinearLayout>
