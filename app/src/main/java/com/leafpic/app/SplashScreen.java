@@ -1,7 +1,6 @@
 package com.leafpic.app;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -52,7 +51,7 @@ public class SplashScreen extends ThemedActivity {
         albums = new HandlingAlbums(SplashScreen.this);
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
-        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
+        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Hipstelvetica Light.ttf"));
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             new PrefetchData().execute();
         } else {
