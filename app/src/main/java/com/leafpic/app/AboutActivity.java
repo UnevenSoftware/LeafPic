@@ -127,15 +127,6 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
-        //Rate
-        findViewById(R.id.ll_about_support_rate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id="+getPackageName()));
-                startActivity(intent);
-            }
-        });
     }
 
     public void setThemeOnChangeListener(){

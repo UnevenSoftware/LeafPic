@@ -67,7 +67,7 @@
                             android:id="@+id/apply_theme_3thAct_title_Sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/use_primary_color_in_viewer"
+                            android:text="Use primary color in the viewer"
                             android:textColor="@color/md_grey_400"
                             android:textSize="14sp"
                             />

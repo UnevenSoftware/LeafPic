@@ -168,7 +168,6 @@
 
             <!--ABOUT AUTOR-->
             <android.support.v7.widget.CardView
-                android:visibility="gone"
                 android:id="@+id/about_authors_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -322,7 +321,6 @@
                         />
                     <!-- TRANLATE -->
                     <com.balysv.materialripple.MaterialRippleLayout
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:mrl_rippleAlpha="0.05"
@@ -422,7 +420,6 @@
                     </com.balysv.materialripple.MaterialRippleLayout>
                     <!-- GIT HUB -->
                     <com.balysv.materialripple.MaterialRippleLayout
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:mrl_rippleAlpha="0.05"
