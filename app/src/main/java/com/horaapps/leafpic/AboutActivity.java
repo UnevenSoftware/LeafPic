@@ -92,7 +92,7 @@ public class AboutActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/CyberAstronauts/LeafPic"));
+                i.setData(Uri.parse("https://github.com/HoraApps/LeafPic"));
                 startActivity(i);
             }
         });

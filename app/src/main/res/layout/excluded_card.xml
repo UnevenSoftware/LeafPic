@@ -31,7 +31,6 @@
                 android:id="@+id/Excluded_Title_Item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/collapsing_toolbar"
                 android:textColor="@color/md_dark_background"
                 android:textSize="16sp"
                 />
@@ -39,7 +38,6 @@
                 android:id="@+id/Excluded_Path_Item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/collapsing_toolbar_sub"
                 android:textColor="@color/md_grey_400"
                 android:textSize="14sp"
                 />

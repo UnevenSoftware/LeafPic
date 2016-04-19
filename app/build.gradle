@@ -26,7 +26,10 @@ android {
         versionName "v0.2.5"
     }
 
-    lintOptions { disable 'MissingTranslation' }
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+    }
     // This is handled for you by the 2.0+ Gradle Plugin
     aaptOptions {
         additionalParameters "--no-version-vectors"
@@ -57,7 +60,7 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
     compile 'com.github.paolorotolo:appintro:3.4.0'
-    compile 'com.yalantis:ucrop:1.3.0'
+    compile 'com.yalantis:ucrop:1.4.1'
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.commit451:PhotoView:1.2.5'
