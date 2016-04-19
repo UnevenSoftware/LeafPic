@@ -77,6 +77,11 @@
     <string name="full_resolution">Full resolution</string>
     <string name="of">of</string>
 
+    <!-- AFFIX -->
+    <string name="affix">Affix</string>
+    <string name="affix_vertical">Affix Vertical</string>
+    <string name="affix_vertical_sub">Affix horizontal by default!</string>
+
     <!-- RANDOM -->
     <string name="done">done!</string>
     <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
@@ -137,7 +142,7 @@
 
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_sub">Major Developer</string>
-    <string name="about_author_gilbert_sub">Major Designer</string>
+    <string name="about_author_gilbert_sub">Major Designer, Programmer</string>
     <string name="about_googleplus" translatable="false">Google+</string>
 
     <string name="about_support">Support Development</string>
