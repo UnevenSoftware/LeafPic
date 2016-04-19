@@ -161,19 +161,19 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(
             ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
     */
-    mediaController.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
-    mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
+    //mediaController.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
+    //mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
 
     mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(getResources()));
-    mediaController.setDrawingCacheBackgroundColor(getPrimaryColor());
+    //mediaController.setDrawingCacheBackgroundColor(getPrimaryColor());
     //mediaController.show();
 
-    mediaController.animate().translationY(Measure.getNavBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-            .setDuration(240).start();
+    /*mediaController.animate().translationY(Measure.getNavBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+            .setDuration(240).start();*/
 
     setStatusBarColor();
     setNavBarColor();
-    setRecentApp("LeafPic");
+    setRecentApp(getString(R.string.app_name));
   }
 
   @Override
