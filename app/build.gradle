@@ -26,7 +26,10 @@ android {
         versionName "v0.2.5"
     }
 
-    lintOptions { disable 'MissingTranslation' }
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+    }
     // This is handled for you by the 2.0+ Gradle Plugin
     aaptOptions {
         additionalParameters "--no-version-vectors"
