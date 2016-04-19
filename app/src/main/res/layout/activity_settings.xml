@@ -639,7 +639,7 @@
                                     android:id="@+id/full_resolution_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Delay load full-size image"
+                                    android:text="@string/delay_load_full_image"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
 
@@ -649,7 +649,7 @@
                                     android:id="@+id/full_resolution_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Load full image when zoom in"
+                                    android:text="@string/load_full_image_when_zoom_in"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp" />
 

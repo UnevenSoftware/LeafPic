@@ -46,6 +46,7 @@
             />
     </group>
 
+    <!--
     <item
         android:id="@+id/copyAction"
         android:title="@string/copy_to"
@@ -54,6 +55,7 @@
         android:id="@+id/moveAction"
         android:title="@string/move_to"
         app:showAsAction="never" />
+     -->
 
     <item
         android:id="@+id/renamePhoto"
@@ -77,9 +79,11 @@
                 android:id="@+id/open_with"
                 android:title="@string/open_with"
                 app:showAsAction="never" />
+            <!--
             <item
                 android:title="@string/upload"
                 app:showAsAction="never" />
+            -->
             <item
                 android:id="@+id/setting"
                 android:title="@string/settings"

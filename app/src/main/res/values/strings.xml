@@ -187,4 +187,7 @@
     <string name="search_menu">search</string>
     <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
     <string name="full_resolution">FUll resolution</string>
+    <string name="delay_load_full_image">Delay load full-size image</string>
+    <string name="load_full_image_when_zoom_in">Load full image when zoom in</string>
+    <string name="use_primary_color_in_viewer">Use primary color in the viewer</string>
 </resources>
