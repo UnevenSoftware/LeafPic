@@ -99,7 +99,7 @@
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_sub">Major Programmer, Designer</string>
     <string name="about_author_gilbert_sub">Major Designer, Programmer</string>
-    <string name="about_googleplus">Google+</string>
+    <string name="about_googleplus" translatable="false">Google+</string>
 
     <string name="about_support">Support Development</string>
     <string name="about_support_translate">Translate</string>
@@ -186,5 +186,5 @@
     <string name="send_to">Send to</string>
     <string name="search_menu">search</string>
     <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
-    <string name="full_resolution">FUll resolution</string>
+    <string name="full_resolution">Full resolution</string>
 </resources>
