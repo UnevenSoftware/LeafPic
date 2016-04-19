@@ -138,38 +138,48 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
                     .icon(GoogleMaterial.Icon.gmd_arrow_back)
                     .color(Color.WHITE)
                     .sizeDp(19));
+
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         onBackPressed();
       }
     });
-    getSupportActionBar().setTitle("");
+    getSupportActionBar().setTitle("LeafPic Player");
 
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
     int status_height = Measure.getStatusBarHeight(getResources());
     toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
-    setNavBarColor();
-    /*mediaController.setBackgroundColor(ColorPalette.getTransparentColor(
+
+    /*
+    mediaController.setBackgroundColor(ColorPalette.getTransparentColor(
             ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
     mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(
             ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
-    mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(getResources()));*/
+    */
+    mediaController.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
+    mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
 
+    mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(getResources()));
+    mediaController.setDrawingCacheBackgroundColor(getPrimaryColor());
     //mediaController.show();
-    //mediaController.animate().translationY(Measure.getNavBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-            //.setDuration(240).start();
+
+    mediaController.animate().translationY(Measure.getNavBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+            .setDuration(240).start();
+
     setStatusBarColor();
+    setNavBarColor();
+    setRecentApp("LeafPic");
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_video, menu);
-
     return true;
   }
 
@@ -240,7 +250,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         return !(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_MENU) && mediaController.dispatchKeyEvent(event);
       }
     });
-  root.setBackgroundColor(R.color.md_black_1000);
+    root.setBackgroundColor(getBackgroundColor());
     shutterView = findViewById(R.id.shutter);
 
     videoFrame = (AspectRatioFrameLayout) findViewById(R.id.video_frame);

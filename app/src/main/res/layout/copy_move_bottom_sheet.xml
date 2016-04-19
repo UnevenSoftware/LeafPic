@@ -5,7 +5,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+        <TextView
+            android:id="@+id/bottom_sheet_title"
+            android:layout_width="match_parent"
+            android:textColor="@color/md_dark_primary_text"
+            android:layout_height="wrap_content"
+            android:background="@color/md_dark_appbar"
+            android:padding="24dp"
+            android:text="TitleBottomSheet"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_modal_dialog_albums"
             android:layout_width="match_parent"

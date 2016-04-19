@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -46,7 +45,6 @@ import com.leafpic.app.Base.CustomAlbumsHandler;
 import com.leafpic.app.Base.HandlingAlbums;
 import com.leafpic.app.Base.Media;
 import com.leafpic.app.Base.MediaStoreHandler;
-import com.leafpic.app.Fragments.CustomModalDialog;
 import com.leafpic.app.Views.GridSpacingItemDecoration;
 import com.leafpic.app.Views.ThemedActivity;
 import com.leafpic.app.utils.ColorPalette;
@@ -659,7 +657,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.copyAction:
                 //Initializing a bottom sheet
-                CustomModalDialog bottomSheetDialogFragment = new CustomModalDialog();
+                CopyMove_BottomSheet bottomSheetDialogFragment = new CopyMove_BottomSheet();
                 bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
               //  Bundle b = new Bundle();
                // b.putParcelableArrayList("albums",albums.dispAlbums);
