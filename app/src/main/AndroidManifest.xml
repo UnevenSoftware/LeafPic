@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.leafpic.app">
+    package="com.horaapps.leafpic">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -37,10 +35,6 @@
             android:label="Intro Activity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
-        <activity android:name=".PickAlbumActivity"
-                  android:label="Select Album"
-                  android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity android:name=".SplashScreen"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -70,7 +64,7 @@
                 <action android:name="android.intent.action.albumPhoto"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="image/*" />
-                <data android:mimeType="video/*" />
+                <!--<data android:mimeType="video/*"/>-->
             </intent-filter>
         </activity>
 
@@ -105,7 +99,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <meta-data
-            android:name="com.leafpic.app.MyGlideModule"
+            android:name="com.horaapps.leafpic.CustomGlideModule"
             android:value="GlideModule" />
 
     </application>
