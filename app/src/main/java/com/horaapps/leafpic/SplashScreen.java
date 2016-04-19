@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class SplashScreen extends ThemedActivity {
     public final int READ_EXTERNAL_STORAGE_ID = 12;
 
     HandlingAlbums albums;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class SplashScreen extends ThemedActivity {
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             new PrefetchData().execute();
         } else {
-            String[] permissions = new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE };
+            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
         }
 
@@ -69,6 +71,14 @@ public class SplashScreen extends ThemedActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setNavBarColor();
         setStatusBarColor();
+
+        Bundle data = getIntent().getExtras();
+        if (data != null) {
+            String ab = data.getString("albumPath");
+            if (ab != null) {
+                Log.d("LEAFPIC", String.format("TODO: I SHOULD OPEN NOW THE ALBUM VIEW OF: %s", ab));
+            }
+        }
     }
 
     @Override
@@ -94,7 +104,7 @@ public class SplashScreen extends ThemedActivity {
                 boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 if (granted)
                     new PrefetchData().execute();
-                 else
+                else
                     Toast.makeText(SplashScreen.this, getString(R.string.storage_permission_denied), Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -113,9 +123,9 @@ public class SplashScreen extends ThemedActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                Bundle b = new Bundle();
-                b.putParcelable("albums", albums);
-                i.putExtras(b);
+            Bundle b = new Bundle();
+            b.putParcelable("albums", albums);
+            i.putExtras(b);
             startActivity(i);
             finish();
         }
