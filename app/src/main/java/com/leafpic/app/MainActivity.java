@@ -181,6 +181,9 @@ public class MainActivity extends ThemedActivity {
         mRecyclerView.addItemDecoration(photosDecoration);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
         album.setContext(MainActivity.this);
+        if(album.settings.columnSortingMode==null){
+            album.setDefaultSortingMode(MediaStore.Images.ImageColumns.DATE_TAKEN);
+        }
 
         adapter = new PhotosAdapter(album.medias, MainActivity.this);
         new PreparePhotosTask().execute();
@@ -819,8 +822,8 @@ public class MainActivity extends ThemedActivity {
 
                 cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Exclude_title.setBackgroundColor(getPrimaryColor());
-                txt_Exclude_title.setText(getString(R.string.delete));
-                txt_Exclude_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
+                txt_Exclude_title.setText(getString(R.string.exclude));
+                txt_Exclude_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.exclude_album_message : R.string.exclude_album_message);
                 txt_Exclude_message.setTextColor(getTextColor());
                 ExcludeDialog.setView(Exclude_dialogLayout);
 
