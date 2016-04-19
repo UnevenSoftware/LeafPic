@@ -63,7 +63,7 @@
             app:borderWidth="0dp"
             app:elevation="4dp"
 
-            app:layout_behavior="com.leafpic.app.Views.FABScrollBehavior"
+            app:layout_behavior=".Views.FABScrollBehavior"
             android:visibility="gone"
             />
         <!--

@@ -15,7 +15,7 @@
         android:windowActionBarOverlay="true"
         />
 
-    <com.leafpic.app.Views.HackyViewPager
+    <com.horaapps.leafpic.Views.HackyViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/photos_pager"
         android:layout_width="match_parent"
