@@ -144,8 +144,8 @@ public class ThemedActivity extends AppCompatActivity {
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_indigo_500));//DEFAULT;
         this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500));//COLOR DEFAULT
         darkTheme = SP.getBoolean("set_dark_theme", false);//DARK THEME DEFAULT
-        coloredNavBar = SP. getBoolean("nav_bar", false);
-        oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",true);
+        coloredNavBar = SP. getBoolean("nav_bar", true);
+        oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",false);
         applyThemeImgAct = SP.getBoolean("apply_theme_img_act", false);
     }
 
