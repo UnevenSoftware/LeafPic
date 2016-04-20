@@ -93,6 +93,13 @@
         <item name="android:backgroundTint">@color/cardview_dark_background</item>
     </style>
 
+    <!--LICENSE DIALOG-->
+    <style name="LicenseDialog_Dark" parent="android:Theme.Dialog">
+        <item name="android:textColor">@color/md_white_1000</item>
+        <item name="android:background">@color/cardview_dark_background</item>
+        <item name="android:backgroundTint">@color/cardview_dark_background</item>
+        <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
+    </style>
 
     <!--PREFERENCE SCREEN-->
     <style name="PreferencesThemeDark">
