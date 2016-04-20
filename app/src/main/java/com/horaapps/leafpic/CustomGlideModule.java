@@ -9,7 +9,6 @@ import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.engine.cache.LruResourceCache;
 import com.bumptech.glide.load.engine.cache.MemorySizeCalculator;
-import com.bumptech.glide.module.GlideModule;
 
 /**
  * Created by dnld on 10/03/16.

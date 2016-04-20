@@ -251,11 +251,11 @@ public class HandlingAlbums implements Parcelable {
 
             Intent shortcutIntent;
             shortcutIntent = new Intent(appCtx, SplashScreen.class);
-            shortcutIntent.setAction("com.horaapps.leafpic.OPEN_ALBUM");
-            shortcutIntent.putExtra("albumPath", selectedAlbum.Path);
+            shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
+            shortcutIntent.putExtra("albumID", selectedAlbum.ID);
+            shortcutIntent.putExtra("albumName", selectedAlbum.DisplayName);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
 
             Intent addIntent = new Intent();
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);

@@ -149,18 +149,20 @@ public class MainActivity extends ThemedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         albums = new HandlingAlbums(MainActivity.this);
-        try {
+
+        /*try {
             Bundle data = getIntent().getExtras();
             albums = data.getParcelable("albums");
             assert albums != null;
             albums.setContext(MainActivity.this);
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }
+        }*/
 
         /**** SET UP UI ****/
         initUI();
         setupUI();
+        displayPrefetchedData(getIntent().getExtras());
     }
 
     @Override
@@ -179,6 +181,9 @@ public class MainActivity extends ThemedActivity {
     }
 
     public void openAlbum(Album a) {
+        openAlbum(a,true);
+    }
+    public void openAlbum(Album a, boolean reload) {
         album = a;
         toolbar.setTitle(a.DisplayName);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
@@ -188,7 +193,7 @@ public class MainActivity extends ThemedActivity {
         album.setContext(MainActivity.this);
 
         adapter = new PhotosAdapter(album.medias, MainActivity.this);
-        new PreparePhotosTask().execute();
+        if (reload) new PreparePhotosTask().execute();
 
         adapter.setOnClickListener(photosOnClickListener);
         adapter.setOnLongClickListener(photosOnLongClickListener);
@@ -204,21 +209,24 @@ public class MainActivity extends ThemedActivity {
         invalidateOptionsMenu();
     }
 
-
     public void displayAlbums() {
+        displayAlbums(true);
+    }
+
+    public void displayAlbums(boolean reload) {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
         mRecyclerView.removeItemDecoration(photosDecoration);
         mRecyclerView.addItemDecoration(albumsDecoration);
 
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
-        new PrepareAlbumTask().execute();
+        if (reload) new PrepareAlbumTask().execute();
 
         adapt.setOnClickListener(albumOnClickListener);
         adapt.setOnLongClickListener(albumOnLongCLickListener);
         mRecyclerView.setAdapter(adapt);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,6 +237,7 @@ public class MainActivity extends ThemedActivity {
         editmode = false;
         invalidateOptionsMenu();
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -249,12 +258,29 @@ public class MainActivity extends ThemedActivity {
         }
     }
 
+    public void displayPrefetchedData(Bundle data){
+        try {
+            int content = data.getInt("content");
+            if (content==SplashScreen.ALBUMS_PREFETCHED) {
+                albums = data.getParcelable("albums");
+                assert albums != null;
+                albums.setContext(MainActivity.this);
+                displayAlbums(false);
+            } else if (content==SplashScreen.PHOTS_PREFETCHED) {
+                album = data.getParcelable("album");
+                assert album != null;
+                album.setContext(MainActivity.this);
+                openAlbum(album,false);
+            }
+            contentReady = true;
+        } catch (NullPointerException e) { e.printStackTrace(); }
+    }
+
     public void initUI() {
 
         /**** TOOLBAR ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         if (!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
@@ -267,14 +293,6 @@ public class MainActivity extends ThemedActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         albumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColums(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
         photosDecoration = new GridSpacingItemDecoration(Measure.getPhotosColums(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
-        mRecyclerView.addItemDecoration(albumsDecoration);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
-
-        adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
-        adapt.setOnClickListener(albumOnClickListener);
-        adapt.setOnLongClickListener(albumOnLongCLickListener);
-        mRecyclerView.setAdapter(adapt);
-        contentReady = true;
 
 
         /**** SWIPE TO REFRESH ****/
@@ -792,6 +810,9 @@ public class MainActivity extends ThemedActivity {
                 break;
             case R.id.installShortcut:
                 albums.InstallShortcutForSelectedAlbums(this.getApplicationContext());
+                albums.clearSelectedAlbums();
+                adapt.notifyDataSetChanged();
+                invalidateOptionsMenu();
                 break;
             case R.id.excludeAlbumButton:
 

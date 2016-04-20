@@ -62,6 +62,11 @@ public class Album implements Parcelable {
         ID = id;
     }
 
+    public Album(String id, Context ctx) {
+        ID = id;
+        context = ctx;
+    }
+
     public Album(Context ctx) {
         context = ctx;
     }
@@ -237,7 +242,6 @@ public class Album implements Parcelable {
         }
 //        Log.d("SELECT", String.format("target: %d  indexRightBeforeOrAfter: %d", targetIndex, indexRightBeforeOrAfter));
     }
-
 
     public boolean isSelected() {
         return selected;
