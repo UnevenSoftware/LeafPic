@@ -1,12 +1,12 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
     <group android:id="@+id/general_action">
 
-        <item android:id="@+id/search_action"
+        <item
+            android:id="@+id/search_action"
             android:title="@string/search_menu"
             app:actionViewClass="android.support.v7.widget.SearchView"
             app:showAsAction="ifRoom|collapseActionView" />
@@ -40,7 +40,8 @@
             </menu>
         </item>
 
-        <item android:id="@+id/sort_action"
+        <item
+            android:id="@+id/sort_action"
             android:title="@string/sort_menu_title"
             app:showAsAction="ifRoom">
             <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -123,10 +124,12 @@
         android:title="@string/set_preview"
         android:visible="false"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/installShortcut"
+        android:title="@string/install_shortcut"
+        app:showAsAction="never" />
     <item
         android:id="@+id/settings"
         android:title="@string/settings"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 </menu>
