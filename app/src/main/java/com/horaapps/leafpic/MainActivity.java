@@ -83,8 +83,14 @@ public class MainActivity extends ThemedActivity {
         @Override
         public boolean onLongClick(View v) {
             TextView is = (TextView) v.findViewById(R.id.photo_path);
-            adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
-            editmode = true;
+
+            if (!editmode) {
+                // If it is the first long press
+                adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
+                editmode = true;
+            } else {
+                album.selectAllPhotosUpTo(Integer.parseInt(is.getTag().toString()), adapter);
+            }
             invalidateOptionsMenu();
             return true;
         }
