@@ -146,7 +146,7 @@
 
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_sub">Major Developer</string>
-    <string name="about_author_gilbert_sub">Major Designer, Programmer</string>
+    <string name="about_author_gilbert_sub">Major Designer</string>
     <string name="about_googleplus" translatable="false">Google+</string>
 
     <string name="about_support">Support Development</string>
@@ -186,5 +186,6 @@
     <string name="error_drm_unknown">An unknown DRM error occurred</string>
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
     <string name="error_querying_decoders">Unable to query device decoders</string>
+    <string name="install_shortcut">Install shortcut</string>
 
 </resources>

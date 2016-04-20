@@ -104,7 +104,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         }
     }
 
-    public void initUI(){
+    public void initUI() {
 
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         setSupportActionBar(toolbar);
@@ -142,14 +142,14 @@ public class PhotoPagerActivity extends ThemedActivity {
         adapter.setVideoOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SP.getBoolean("set_internal_player",false)) {
+                if (SP.getBoolean("set_internal_player", false)) {
                     Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
                             .setData(album.getCurrentPhoto().getUri());
                     startActivity(mpdIntent);
-                } else{
+                } else {
                     Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
                     intentopenWith.setDataAndType(
-                           album.medias.get(mViewPager.getCurrentItem()).getUri(),
+                            album.medias.get(mViewPager.getCurrentItem()).getUri(),
                             album.medias.get(mViewPager.getCurrentItem()).MIME);
                     startActivity(intentopenWith);
                 }
@@ -186,7 +186,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     }
 
-    public void setupUI(){
+    public void setupUI() {
 
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -198,7 +198,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
-        if(!isDarkTheme())
+        if (!isDarkTheme())
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
 
         setStatusBarColor();
@@ -251,6 +251,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         return true;
     }
+
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
 
@@ -389,42 +390,42 @@ public class PhotoPagerActivity extends ThemedActivity {
                             finish();
                         }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem()+1) +" "+ getString(R.string.of)+" " + album.medias.size());
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.medias.size());
                     }
                 });
                 DeleteDialog.show();
                 break;
 
-             case R.id.moveAction:
-                 final HandlingAlbums handlingAlbums = new HandlingAlbums(PhotoPagerActivity.this);
-                 handlingAlbums.loadPreviewAlbums();
-                 final CopyMove_BottomSheet sheetMove = new CopyMove_BottomSheet();
-                 sheetMove.setAlbumArrayList(handlingAlbums.dispAlbums);
-                 sheetMove.setTitle(getString(R.string.move_to));
-                 sheetMove.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
-                         album.moveCurentPhoto(handlingAlbums.getAlbum(index).Path);
-                         album.medias.remove(album.getCurrentPhotoIndex());
-                         if (album.medias.size() == 0) {
-                             startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                             finish();
-                         }
-                         adapter.notifyDataSetChanged();
-                         toolbar.setTitle((mViewPager.getCurrentItem()+1) +" "+ getString(R.string.of)+" " + album.medias.size());
-                         sheetMove.dismiss();
-                     }
-                 });
-                 sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
-                 break;
+            case R.id.moveAction:
+                final HandlingAlbums handlingAlbums = new HandlingAlbums(PhotoPagerActivity.this);
+                handlingAlbums.loadPreviewAlbums();
+                final CopyMove_BottomSheet sheetMove = new CopyMove_BottomSheet();
+                sheetMove.setAlbumArrayList(handlingAlbums.dispAlbums);
+                sheetMove.setTitle(getString(R.string.move_to));
+                sheetMove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
+                        album.moveCurentPhoto(handlingAlbums.getAlbum(index).Path);
+                        album.medias.remove(album.getCurrentPhotoIndex());
+                        if (album.medias.size() == 0) {
+                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
+                            finish();
+                        }
+                        adapter.notifyDataSetChanged();
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.medias.size());
+                        sheetMove.dismiss();
+                    }
+                });
+                sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
+                break;
 
             case R.id.renamePhoto:
                 final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
-                    PhotoPagerActivity.this,
-                    isDarkTheme()
-                            ? R.style.AlertDialog_Dark
-                            : R.style.AlertDialog_Light);
+                        PhotoPagerActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
 
                 final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
@@ -450,21 +451,23 @@ public class PhotoPagerActivity extends ThemedActivity {
                         if (txt_edit.length() != 0) {
                             try {
                                 File from = new File(album.getCurrentPhoto().Path);
-                                File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path,  txt_edit.getText().toString()));
+                                File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path, txt_edit.getText().toString()));
                                 if (from.renameTo(to)) {
                                     MediaScannerConnection.scanFile(
                                             getApplicationContext(),
-                                            new String[]{ to.getAbsolutePath() }, null,
+                                            new String[]{to.getAbsolutePath()}, null,
                                             new MediaScannerConnection.OnScanCompletedListener() {
-                                        @Override
-                                        public void onScanCompleted(String path, Uri uri) {
-                                            getContentResolver().delete(album.getCurrentPhoto().getUri(), null, null);
-                                            album.getCurrentPhoto().ID = StringUtils.getID(uri+"");
-                                            album.getCurrentPhoto().Path = path;
-                                        }
-                                    });
+                                                @Override
+                                                public void onScanCompleted(String path, Uri uri) {
+                                                    getContentResolver().delete(album.getCurrentPhoto().getUri(), null, null);
+                                                    album.getCurrentPhoto().ID = StringUtils.getID(uri + "");
+                                                    album.getCurrentPhoto().Path = path;
+                                                }
+                                            });
                                 }
-                            } catch (Exception e) { e.printStackTrace();  }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
                     }
@@ -528,13 +531,14 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Size.setTextColor(getSubTextColor());
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
-                cv.setBackgroundColor(getCardBackgroundColor());
+                cv.setCardBackgroundColor(getCardBackgroundColor());
 
                 DetailsDialog.setView(Details_DialogLayout);
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
+
                 DetailsDialog.setNeutralButton(this.getString(R.string.edit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -545,6 +549,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         uCrop.start(PhotoPagerActivity.this);
                     }
                 });
+
                 DetailsDialog.show();
                 break;
 
@@ -666,14 +671,14 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
     }
 
-    public void ChangeBackGroundColor(){
+    public void ChangeBackGroundColor() {
         int colorTo;
         int colorFrom;
-        if(fullscreenmode) {
+        if (fullscreenmode) {
             colorFrom = getBackgroundColor();
-            colorTo = (ContextCompat.getColor(PhotoPagerActivity.this ,R.color.md_black_1000));
+            colorTo = (ContextCompat.getColor(PhotoPagerActivity.this, R.color.md_black_1000));
         } else {
-            colorFrom = (ContextCompat.getColor(PhotoPagerActivity.this ,R.color.md_black_1000));
+            colorFrom = (ContextCompat.getColor(PhotoPagerActivity.this, R.color.md_black_1000));
             colorTo = getBackgroundColor();
         }
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);

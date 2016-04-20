@@ -1,6 +1,7 @@
 package com.horaapps.leafpic.Base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.os.Parcel;
@@ -8,6 +9,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 
 import com.horaapps.leafpic.R;
+import com.horaapps.leafpic.SplashScreen;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,8 +58,9 @@ public class HandlingAlbums implements Parcelable {
             selectedAlbums = null;
         }
     }
-    public void setContext(Context c){
-        context=c;
+
+    public void setContext(Context c) {
+        context = c;
     }
 
     public void loadPreviewAlbums() {
@@ -69,7 +72,7 @@ public class HandlingAlbums implements Parcelable {
 
         for (int i = 0; i < dispAlbums.size(); i++) {
             dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
-            if(!dispAlbums.get(i).setPath())
+            if (!dispAlbums.get(i).setPath())
                 dispAlbums.remove(dispAlbums.get(i));
             else {
                 dispAlbums.get(i).setCoverPath(h.getPhotPrevieAlbum(dispAlbums.get(i).ID));
@@ -85,39 +88,39 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public String getColumnSortingMode() {
-        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
         return SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN);
     }
 
     public boolean isAscending() {
-        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
         return SP.getBoolean("ascending_mode", false);
     }
 
     public void setDefaultSortingMode(String column) {
-        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = SP.edit();
-        editor.putString("column_sort",column);
+        editor.putString("column_sort", column);
         editor.apply();
     }
 
     public void setDefaultSortingAscending(Boolean ascending) {
-        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = SP.edit();
-        editor.putBoolean("ascending_mode",ascending);
+        editor.putBoolean("ascending_mode", ascending);
         editor.apply();
     }
 
     public String getSortingMode() {
-        SP = context.getSharedPreferences("albums-sort",Context.MODE_PRIVATE);
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
 
-        return " " +  SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN)
-                + ( SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
+        return " " + SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN)
+                + (SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
     }
 
-    public void loadExcludedAlbums(){
+    public void loadExcludedAlbums() {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         MediaStoreHandler as = new MediaStoreHandler(context);
         dispAlbums = h.getExcludedALbums();
@@ -137,9 +140,9 @@ public class HandlingAlbums implements Parcelable {
         return index;
     }
 
-    public void selectAllAlbums(){
+    public void selectAllAlbums() {
         for (Album dispAlbum : dispAlbums)
-            if(!dispAlbum.isSelected()) {
+            if (!dispAlbum.isSelected()) {
                 dispAlbum.setSelcted(true);
                 selectedAlbums.add(dispAlbum);
             }
@@ -160,22 +163,22 @@ public class HandlingAlbums implements Parcelable {
         return dispAlbums.get(p);
     }
 
-    public int getIndex(Album a){
+    public int getIndex(Album a) {
         return dispAlbums.indexOf(a);
     }
 
-    public void replaceAlbum(int index,Album a){
+    public void replaceAlbum(int index, Album a) {
         dispAlbums.remove(index);
-        dispAlbums.add(index,a);
+        dispAlbums.add(index, a);
     }
 
     public void deleteSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums)
-                MediaStoreHandler.deleteAlbumMedia(selectedAlbum,context);
+            MediaStoreHandler.deleteAlbumMedia(selectedAlbum, context);
         clearSelectedAlbums();
     }
 
-    public Album getSelectedAlbum(int index){
+    public Album getSelectedAlbum(int index) {
         return selectedAlbums.get(index);
     }
 
@@ -241,5 +244,30 @@ public class HandlingAlbums implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(selectedAlbums);
         }
+    }
+
+    public void InstallShortcutForSelectedAlbums(Context appCtx) {
+        for (Album selectedAlbum : selectedAlbums) {
+
+            Intent shortcutIntent;
+            shortcutIntent = new Intent(appCtx, SplashScreen.class);
+            shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
+            shortcutIntent.putExtra("albumID", selectedAlbum.ID);
+            shortcutIntent.putExtra("albumName", selectedAlbum.DisplayName);
+            shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            Intent addIntent = new Intent();
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.DisplayName);
+            // TODO: generate some icon for it
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(appCtx,
+                            R.mipmap.ic_launcher));
+
+            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            appCtx.sendBroadcast(addIntent);
+        }
+
     }
 }
