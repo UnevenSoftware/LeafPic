@@ -109,11 +109,6 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
 
   private SubtitleLayout subtitleLayout;
 
-  /*private Button videoButton;
-  private Button audioButton;
-  private Button textButton;
-  private Button retryButton;*/
-
   private DemoPlayer player;
   private boolean playerNeedsPrepare;
   private long playerPosition;
@@ -145,15 +140,20 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         onBackPressed();
       }
     });
-    getSupportActionBar().setTitle("LeafPic Player");
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
 
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-    int status_height = Measure.getStatusBarHeight(getResources());
-    toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+            .setDuration(0).start();
+//    mediaController
 
     /*
     mediaController.setBackgroundColor(ColorPalette.getTransparentColor(
@@ -492,6 +492,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         height == 0 ? 1 : (width * pixelWidthAspectRatio) / height);
   }
 
+  //region options
   private boolean haveTracks(int type) {
     return player != null && player.getTrackCount(type) > 0;
   }
@@ -612,6 +613,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     player.setSelectedTrack(type, item.getItemId() - ID_OFFSET);
     return true;
   }
+  //endregion
 
   boolean fullscreen = false;
 

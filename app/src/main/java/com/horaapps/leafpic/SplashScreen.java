@@ -14,10 +14,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PermissionUtils;
+import com.horaapps.leafpic.utils.StringUtils;
 
 /**
  * Created by dnld on 01/04/16.
@@ -26,7 +28,14 @@ public class SplashScreen extends ThemedActivity {
 
     public final int READ_EXTERNAL_STORAGE_ID = 12;
 
+    public final static int ALBUMS_PREFETCHED = 23;
+    public final static int PHOTS_PREFETCHED = 2;
+    public final static int PICK_INTENT = 213;
+    public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
+
     HandlingAlbums albums;
+    Album album;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +61,6 @@ public class SplashScreen extends ThemedActivity {
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
-        if (PermissionUtils.isDeviceInfoGranted(this)) {
-            new PrefetchData().execute();
-        } else {
-            String[] permissions = new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE };
-            PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
-        }
 
         RelativeLayout RelLay = (RelativeLayout) findViewById(R.id.Splah_Bg);
         RelLay.setBackgroundColor(getBackgroundColor());
@@ -69,6 +72,26 @@ public class SplashScreen extends ThemedActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setNavBarColor();
         setStatusBarColor();
+
+        if (PermissionUtils.isDeviceInfoGranted(this)) {
+            if (getIntent().getAction().equals(Intent.ACTION_MAIN))
+                new PrefetchAlbumsData().execute();
+            else if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+                Bundle data = getIntent().getExtras();
+                if (data != null) {
+                    String ab = data.getString("albumID");
+                    if (ab != null) {
+                        album = new Album(ab, SplashScreen.this);
+                        album.DisplayName = data.getString("albumName");
+                        new PrefetchPhotosData().execute();
+                    }
+                } else StringUtils.showToast(getApplicationContext(), "Album not found");
+            }
+
+        } else {
+            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+            PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
+        }
     }
 
     @Override
@@ -93,8 +116,8 @@ public class SplashScreen extends ThemedActivity {
             case READ_EXTERNAL_STORAGE_ID:
                 boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 if (granted)
-                    new PrefetchData().execute();
-                 else
+                    new PrefetchAlbumsData().execute();
+                else
                     Toast.makeText(SplashScreen.this, getString(R.string.storage_permission_denied), Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -102,7 +125,7 @@ public class SplashScreen extends ThemedActivity {
         }
     }
 
-    private class PrefetchData extends AsyncTask<Void, Void, Void> {
+    private class PrefetchAlbumsData extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
             albums.loadPreviewAlbums();
@@ -113,9 +136,30 @@ public class SplashScreen extends ThemedActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                Bundle b = new Bundle();
-                b.putParcelable("albums", albums);
-                i.putExtras(b);
+            Bundle b = new Bundle();
+            b.putParcelable("albums", albums);
+            b.putInt("content",ALBUMS_PREFETCHED);
+            i.putExtras(b);
+            startActivity(i);
+            finish();
+        }
+    }
+
+    private class PrefetchPhotosData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            album.updatePhotos();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            Intent i = new Intent(SplashScreen.this, MainActivity.class);
+            Bundle b = new Bundle();
+            b.putParcelable("album", album);
+            b.putInt("content", PHOTS_PREFETCHED);
+            i.putExtras(b);
             startActivity(i);
             finish();
         }
