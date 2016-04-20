@@ -198,6 +198,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
+                    android:visibility="gone"
                     android:orientation="vertical"
                     android:layout_below="@id/ll_detail_dialog"
                     >
