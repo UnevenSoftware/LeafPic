@@ -213,7 +213,6 @@ public class Album implements Parcelable {
 //            Log.d("SELECT", String.format("checking: %d, indexRightBeforeOrAfter: %d targetIndex: %d", indexNow, indexRightBeforeOrAfter, targetIndex));
             if (indexRightBeforeOrAfter == -1) {
                 indexRightBeforeOrAfter = indexNow;
-
             }
 
             if (indexNow > targetIndex) {
