@@ -127,6 +127,15 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://github.com/HoraApps/LeafPic/blob/master/LICENSE"));
+                startActivity(i);
+            }
+        });
+
     }
 
     public void setThemeOnChangeListener(){
@@ -149,6 +158,7 @@ public class AboutActivity extends ThemedActivity {
         //ABOUT APP
         IconicsImageView imgAAV = (IconicsImageView) findViewById(R.id.about_version_icon);
         IconicsImageView imgAALL = (IconicsImageView) findViewById(R.id.about_libs_icon);
+        IconicsImageView imgALicense = (IconicsImageView) findViewById(R.id.about_license_icon);
 
         //ABOUT AUTHOR
         IconicsImageView imgDonald = (IconicsImageView) findViewById(R.id.about_author_donald_icon);
@@ -167,6 +177,7 @@ public class AboutActivity extends ThemedActivity {
         imgSRate.setColor(color);
         imgSTranslate.setColor(color);
         imgSGitHub.setColor(color);
+        imgALicense.setColor(color);
 
         /** TextViews **/
         TextView txtAV = (TextView) findViewById(R.id.about_version_item);
@@ -176,6 +187,8 @@ public class AboutActivity extends ThemedActivity {
         TextView txtSRate = (TextView) findViewById(R.id.about_support_rate_item);
         TextView txtSTranslate = (TextView) findViewById(R.id.about_support_translate_item);
         TextView txtSGitHub = (TextView) findViewById(R.id.about_support_github_item);
+        TextView txtALicense = (TextView) findViewById(R.id.about_license_item);
+        TextView txtALicense_Sub = (TextView) findViewById(R.id.about_license_item_sub);
 
         color=getTextColor();
         txtAV.setTextColor(color);
@@ -185,6 +198,7 @@ public class AboutActivity extends ThemedActivity {
         txtSRate.setTextColor(color);
         txtSTranslate.setTextColor(color);
         txtSGitHub.setTextColor(color);
+        txtALicense.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtAV_Sub = (TextView) findViewById(R.id.about_version_item_sub);
@@ -205,6 +219,7 @@ public class AboutActivity extends ThemedActivity {
         txtSRate_Sub.setTextColor(color);
         txtSTranslate_Sub.setTextColor(color);
         txtSGitHub_Sub.setTextColor(color);
+        txtALicense_Sub.setTextColor(color);
 
     }
 }

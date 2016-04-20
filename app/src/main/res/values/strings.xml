@@ -137,6 +137,10 @@
     <!--ABOUT STRINGS-->
     <string name="about">About</string>
     <string name="about_version">Version</string>
+
+    <string name="about_license"> License</string>
+    <string name="about_license_sub">Check the license used on LeafPic.</string>
+
     <string name="about_library_license">Library License</string>
     <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
 
@@ -182,4 +186,5 @@
     <string name="error_drm_unknown">An unknown DRM error occurred</string>
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
     <string name="error_querying_decoders">Unable to query device decoders</string>
+
 </resources>
