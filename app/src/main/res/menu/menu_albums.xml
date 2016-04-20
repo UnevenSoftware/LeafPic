@@ -125,6 +125,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/affixPhoto"
+        android:title="@string/affix"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/settings"
         android:title="@string/settings"
         app:showAsAction="never"

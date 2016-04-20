@@ -26,12 +26,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -628,6 +630,7 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.select_all).setVisible(editmode);
         menu.findItem(R.id.delete_action).setVisible((albumsMode && editmode) || (!albumsMode));
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
+        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() == 2);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount()==1) || (!albumsMode && !editmode));
 
@@ -642,6 +645,14 @@ public class MainActivity extends ThemedActivity {
             menu.findItem(R.id.filter_menu).setVisible(!albumsMode);
             menu.findItem(R.id.search_action).setVisible(albumsMode);
         }
+    }
+
+    public void updateSwitchColor(SwitchCompat sw,int color){
+        if(sw.isChecked())
+            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        else
+            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
+        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -768,7 +779,7 @@ public class MainActivity extends ThemedActivity {
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                 intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
-                ArrayList<Uri> files = new ArrayList<Uri>();
+                final ArrayList<Uri> files = new ArrayList<Uri>();
 
                 for (Media f : album.selectedMedias)
                     files.add(f.getUri());
@@ -777,6 +788,54 @@ public class MainActivity extends ThemedActivity {
                 intent.setType(StringUtils.getGenericMIME(album.selectedMedias.get(0).MIME));
                 finishEditMode();
                 startActivity(intent);
+                break;
+
+            case  R.id.affixPhoto:
+                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(
+                        MainActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
+
+                final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
+                final TextView txt_Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
+                txt_Affix_title.setBackgroundColor(getPrimaryColor());
+                CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
+                cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+
+                /**ITEMS**/
+                final TextView txt_Affix_Vertical_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_title);
+                final TextView txt_Affix_Vertical_sub = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_sub);
+                final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
+                final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
+
+                txt_Affix_Vertical_title .setTextColor(getTextColor());
+                txt_Affix_Vertical_sub .setTextColor(getSubTextColor());
+                imgAffix.setColor(getIconColor());
+
+                /**SWITCH**/
+                swVertical.setChecked(false);
+                updateSwitchColor(swVertical,getAccentColor());
+
+                swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        updateSwitchColor(swVertical, getAccentColor());
+                    }
+                });
+
+                AffixDialog.setView(Affix_dialogLayout);
+                AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //TODO:COMING SOON
+                    }
+                });
+                AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AffixDialog.show();
                 break;
 
             case R.id.excludeAlbumButton:
