@@ -210,7 +210,7 @@ public class Album implements Parcelable {
         int indexNow;
         for (Media sm : selectedMedias) {
             indexNow = medias.indexOf(sm);
-            Log.d("SELECT", String.format("checking: %d, indexRightBeforeOrAfter: %d targetIndex: %d", indexNow, indexRightBeforeOrAfter, targetIndex));
+//            Log.d("SELECT", String.format("checking: %d, indexRightBeforeOrAfter: %d targetIndex: %d", indexNow, indexRightBeforeOrAfter, targetIndex));
             if (indexRightBeforeOrAfter == -1) {
                 indexRightBeforeOrAfter = indexNow;
 
