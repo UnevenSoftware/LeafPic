@@ -660,6 +660,8 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
+        //TODO: WILL BE IMPLEMENTED
+        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() >= 2 && album.getSelectedCount() <= 5);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -814,6 +816,57 @@ public class MainActivity extends ThemedActivity {
                 adapt.notifyDataSetChanged();
                 invalidateOptionsMenu();
                 break;
+            //TODO: WILL BE IMPLEMENTED
+            /*
+            case  R.id.affixPhoto:
+                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(
+                        MainActivity.this,
+                        isDarkTheme()
+                                ? R.style.AlertDialog_Dark
+                                : R.style.AlertDialog_Light);
+
+                final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
+                final TextView txt_Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
+                txt_Affix_title.setBackgroundColor(getPrimaryColor());
+                CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
+                cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+
+                //ITEMS
+                final TextView txt_Affix_Vertical_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_title);
+                final TextView txt_Affix_Vertical_sub = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_sub);
+                final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
+                final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
+
+                txt_Affix_Vertical_title .setTextColor(getTextColor());
+                txt_Affix_Vertical_sub .setTextColor(getSubTextColor());
+                imgAffix.setColor(getIconColor());
+
+                //SWITCH
+                swVertical.setChecked(false);
+                updateSwitchColor(swVertical,getAccentColor());
+
+                swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        updateSwitchColor(swVertical, getAccentColor());
+                    }
+                });
+
+                AffixDialog.setView(Affix_dialogLayout);
+                AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //TODO:COMING SOON
+                    }
+                });
+                AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AffixDialog.show();
+                break;
+                */
+
             case R.id.excludeAlbumButton:
 
                 final AlertDialog.Builder ExcludeDialog = new AlertDialog.Builder(
