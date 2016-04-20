@@ -163,6 +163,9 @@
     <string name="path">Path</string>
     <string name="type">Type</string>
     <string name="resolution">Resolution</string>
+    <string name="exif">EXIF</string>
+    <string name="device">Device</string>
+    <string name="location">Location</string>
 
     <!--DRAWER ITEMS -->
     <string name="local_folder">Local Folders</string>

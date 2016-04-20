@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -31,6 +32,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +56,7 @@ import com.yalantis.ucrop.UCrop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -504,6 +507,14 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
                 final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
                 final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
+                //EXIF
+                final TextView txtDevice = (TextView) Details_DialogLayout.findViewById(R.id.Device);
+                final TextView Device = (TextView) Details_DialogLayout.findViewById(R.id.Device_item);
+                final TextView txtEXIF = (TextView) Details_DialogLayout.findViewById(R.id.EXIF);
+                final TextView EXIF = (TextView) Details_DialogLayout.findViewById(R.id.EXIF_item);
+                final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.Location);
+                final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.Location_item);
+
 
                 Glide.with(this)
                         .load(album.getCurrentPhoto().Path)
@@ -524,16 +535,45 @@ public class PhotoPagerActivity extends ThemedActivity {
                 txtResolution.setTextColor(getTextColor());
                 txtType.setTextColor(getTextColor());
                 txtSize.setTextColor(getTextColor());
+                txtDevice.setTextColor(getTextColor());
+                txtEXIF.setTextColor(getTextColor());
+                txtLocation.setTextColor(getTextColor());
+
                 Data.setTextColor(getSubTextColor());
                 Path.setTextColor(getSubTextColor());
                 Resolution.setTextColor(getSubTextColor());
                 Type.setTextColor(getSubTextColor());
                 Size.setTextColor(getSubTextColor());
+                Device.setTextColor(getSubTextColor());
+                EXIF.setTextColor(getSubTextColor());
+                Location.setTextColor(getSubTextColor());
+
+
+                final
+                LinearLayout ll = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF);
+                try {
+                    ExifInterface exif = new ExifInterface(album.getCurrentPhoto().Path);
+                    Device.setText(exif.getAttribute(ExifInterface.TAG_MAKE)
+                            + " " + exif.getAttribute(ExifInterface.TAG_MODEL));
+                    EXIF.setText(
+                            "f/" + exif.getAttribute(ExifInterface.TAG_APERTURE)
+                            + " " + exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)
+                            + " " + exif.getAttribute(ExifInterface.TAG_FOCAL_LENGTH)
+                            + " ISO" + exif.getAttribute(ExifInterface.TAG_ISO));
+                    Location.setText(
+                            exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
+                            + " " + exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF)
+                            + ", "+ exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
+                            + " " + exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
+                } catch (IOException e){}
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
                 cv.setCardBackgroundColor(getCardBackgroundColor());
-
                 DetailsDialog.setView(Details_DialogLayout);
+                if (Device.getText().length()==0){
+                    ll.setVisibility(View.GONE);
+                }
+
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
