@@ -549,30 +549,33 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Location.setTextColor(getSubTextColor());
 
 
-                final
-                LinearLayout ll = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF);
-                try {
-                    ExifInterface exif = new ExifInterface(album.getCurrentPhoto().Path);
-                    Device.setText(exif.getAttribute(ExifInterface.TAG_MAKE)
-                            + " " + exif.getAttribute(ExifInterface.TAG_MODEL));
-                    EXIF.setText(
-                            "f/" + exif.getAttribute(ExifInterface.TAG_APERTURE)
-                            + " " + exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)
-                            + " " + exif.getAttribute(ExifInterface.TAG_FOCAL_LENGTH)
-                            + " ISO" + exif.getAttribute(ExifInterface.TAG_ISO));
-                    Location.setText(
-                            exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
-                            + " " + exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF)
-                            + ", "+ exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
-                            + " " + exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
-                } catch (IOException e){}
+                final LinearLayout ll = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF);
+                ExifInterface exif = null;
+                try { exif = new ExifInterface(album.getCurrentPhoto().Path);}
+                catch (IOException e){e.printStackTrace();}
+
+                if (exif.getAttribute(ExifInterface.TAG_MAKE) != null) {
+                    Device.setText(String.format("%s %s",
+                            exif.getAttribute(ExifInterface.TAG_MAKE),
+                            exif.getAttribute(ExifInterface.TAG_MODEL)));
+
+                    EXIF.setText(String.format("f/%s ISO-%s %ss",
+                            exif.getAttribute(ExifInterface.TAG_APERTURE),
+                            exif.getAttribute(ExifInterface.TAG_ISO),
+                            exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
+
+                    float[] output= new float[2];
+                    exif.getLatLong(output);
+                    //TODO Map at the top
+                    Location.setText(String.format("%f %f",
+                    output[0],output[1]));
+                    ll.setVisibility(View.VISIBLE);
+                }
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
                 cv.setCardBackgroundColor(getCardBackgroundColor());
                 DetailsDialog.setView(Details_DialogLayout);
-                if (Device.getText().length()==0){
-                    ll.setVisibility(View.GONE);
-                }
+
 
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
