@@ -116,10 +116,10 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_internal_player", isChecked);
                 editor.apply();
-                updateSwitchColor(swInternalBrowser);
+                updateSwitchColor(swInternalBrowser, getAccentColor());
             }
         });
-        updateSwitchColor(swInternalBrowser);
+        updateSwitchColor(swInternalBrowser, getAccentColor());
         /**** Switches ****/
 
         /*********** SW Delay Full Image ************/
@@ -131,10 +131,10 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_delay_full_image", isChecked);
                 editor.apply();
-                updateSwitchColor(swDelayFullImage);
+                updateSwitchColor(swDelayFullImage, getAccentColor());
             }
         });
-        updateSwitchColor(swDelayFullImage);
+        updateSwitchColor(swDelayFullImage, getAccentColor());
 
         /*********** SW Picture_orientation ************/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
@@ -145,10 +145,10 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_picture_orientation", isChecked);
                 editor.apply();
-                updateSwitchColor(swPictureOrientation);
+                updateSwitchColor(swPictureOrientation, getAccentColor());
             }
         });
-        updateSwitchColor(swPictureOrientation);
+        updateSwitchColor(swPictureOrientation, getAccentColor());
 
         /*********** SW MAX LUMINOSITA ************/
         swMaxLuminosita = (SwitchCompat) findViewById(R.id.set_max_luminosita);
@@ -159,10 +159,10 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_max_luminosita", isChecked);
                 editor.apply();
-                updateSwitchColor(swMaxLuminosita);
+                updateSwitchColor(swMaxLuminosita, getAccentColor());
             }
         });
-        updateSwitchColor(swMaxLuminosita);
+        updateSwitchColor(swMaxLuminosita, getAccentColor());
 
         /*********** SW TRASLUCENT STATUS BAR ****************/
         swStatusBar=(SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
@@ -175,10 +175,10 @@ public class SettingActivity extends ThemedActivity {
                 editor.apply();
                 updateTheme();
                 setStatusBarColor();
-                updateSwitchColor(swStatusBar);
+                updateSwitchColor(swStatusBar, getAccentColor());
             }
         });
-        updateSwitchColor(swStatusBar);
+        updateSwitchColor(swStatusBar, getAccentColor());
 
         /*********** SW DARK THEME ********************/
         swDarkTheme=(SwitchCompat) findViewById(R.id.SetDarkTheme);
@@ -189,13 +189,13 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_dark_theme", !isDarkTheme());
                 editor.apply();
-                updateSwitchColor(swDarkTheme);
+                updateSwitchColor(swDarkTheme, getAccentColor());
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
             }
         });
-        updateSwitchColor(swDarkTheme);
+        updateSwitchColor(swDarkTheme, getAccentColor());
 
         /*********** SW COLORED NAV BAR ****************/
         swNavBar=(SwitchCompat) findViewById(R.id.SetColoredNavBar);
@@ -207,7 +207,7 @@ public class SettingActivity extends ThemedActivity {
                 editor.putBoolean("nav_bar", !isNavigationBarColored());
                 editor.apply();
                 updateTheme();
-                updateSwitchColor(swNavBar);
+                updateSwitchColor(swNavBar, getAccentColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isNavigationBarColored())
                         getWindow().setNavigationBarColor(getPrimaryColor());
@@ -216,15 +216,7 @@ public class SettingActivity extends ThemedActivity {
                 }
             }
         });
-        updateSwitchColor(swNavBar);
-    }
-
-    public void updateSwitchColor(SwitchCompat sw){
-        if(sw.isChecked())
-            sw.getThumbDrawable().setColorFilter(getAccentColor(), PorterDuff.Mode.MULTIPLY);
-        else
-            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
-        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+        updateSwitchColor(swNavBar, getAccentColor());
     }
 
     public void updateSwitchColor(SwitchCompat sw,int color){
@@ -423,10 +415,10 @@ public class SettingActivity extends ThemedActivity {
         swApplyTheme_Viewer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                updateSwitchColor(swApplyTheme_Viewer);
+                updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
             }
         });
-        updateSwitchColor(swApplyTheme_Viewer);
+        updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
 
         /**COLOR PICK**/
         final LineColorPicker TrasparentCP = (LineColorPicker) CustomizeThird_dialogLayout.findViewById(R.id.pickerTransparent);

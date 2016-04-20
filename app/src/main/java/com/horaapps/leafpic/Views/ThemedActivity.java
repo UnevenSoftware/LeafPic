@@ -3,12 +3,14 @@ package com.horaapps.leafpic.Views;
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -112,6 +114,14 @@ public class ThemedActivity extends AppCompatActivity {
             else
                 getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
         }
+    }
+
+    public void updateSwitchColor(SwitchCompat sw, int color){
+        if(sw.isChecked())
+            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        else
+            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
+        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
