@@ -563,7 +563,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                     Location.setText(
                             exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
                             + " " + exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF)
-                            + ", "+ exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
+                            + ", "+ exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
                             + " " + exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
                 } catch (IOException e){}
 
