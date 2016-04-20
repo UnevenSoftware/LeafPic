@@ -631,7 +631,7 @@ public class MainActivity extends ThemedActivity {
 
         /** custom items **/
         menu.findItem(R.id.select_all).setVisible(editmode);
-        menu.findItem(R.id.installShortcut).setVisible(editmode);
+        menu.findItem(R.id.installShortcut).setVisible(albumsMode && editmode);
         menu.findItem(R.id.delete_action).setVisible((albumsMode && editmode) || (!albumsMode));
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
