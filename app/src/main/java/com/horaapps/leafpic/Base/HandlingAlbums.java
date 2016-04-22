@@ -9,7 +9,6 @@ import android.media.MediaScannerConnection;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
