@@ -2,6 +2,7 @@ package com.horaapps.leafpic.Base;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 
 /**
  * Created by dnld on 2/4/16.
@@ -11,7 +12,6 @@ public class AlbumSettings implements Parcelable {
     public String coverPath;
     public String columnSortingMode;
     public Boolean ascending;
-    String columnCount;
 
     public AlbumSettings(String cover, String SortingMode, Boolean asce) {
         coverPath = cover;
@@ -26,10 +26,8 @@ public class AlbumSettings implements Parcelable {
     }
 
     public String getSQLSortingMode() {
-        if (ascending)
-            return columnSortingMode + " ASC";
-        else
-            return columnSortingMode + " DESC";
+        columnSortingMode = columnSortingMode != null ? columnSortingMode : MediaStore.Images.ImageColumns.DATE_TAKEN;
+        return columnSortingMode + (ascending ? " ASC" : " DESC");
     }
 
     protected AlbumSettings(Parcel in) {
@@ -37,7 +35,6 @@ public class AlbumSettings implements Parcelable {
         columnSortingMode = in.readString();
         byte ascendingVal = in.readByte();
         ascending = ascendingVal == 0x02 ? null : ascendingVal != 0x00;
-        columnCount = in.readString();
     }
 
     @Override
@@ -54,7 +51,6 @@ public class AlbumSettings implements Parcelable {
         } else {
             dest.writeByte((byte) (ascending ? 0x01 : 0x00));
         }
-        dest.writeString(columnCount);
     }
 
     @SuppressWarnings("unused")

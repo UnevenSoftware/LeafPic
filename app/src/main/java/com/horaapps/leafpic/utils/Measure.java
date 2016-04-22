@@ -3,9 +3,14 @@ package com.horaapps.leafpic.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.os.Build;
+import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by dnld on 11/03/16.
@@ -26,6 +31,7 @@ public class Measure {
     }
 
     public static int getAlbumsColums(Context c){
+        //StringUtils.showToast(c, getRealScreenSize(c).x / Costants.ALBUM_CARD_WIDTH_test+"");
         int n = Math.round(getDensity(c) / Costants.ALBUM_CARD_WIDTH);
         return n < 2 ? 2 : n;
     }
@@ -36,6 +42,7 @@ public class Measure {
     }
 
     public static int getDensity(Context c){
+        //StringUtils.showToast(c,  (getScreenWidth(c) / c.getResources().getDisplayMetrics().densityDpi)+"");
         return Math.round((getScreenWidth(c) * c.getResources().getDisplayMetrics().density));
     }
 
@@ -46,11 +53,42 @@ public class Measure {
 
         return 0;
     }
-    public static int getNavBarHeight(Resources r) {
-        int resourceId = r.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0)
-            return r.getDimensionPixelSize(resourceId);
 
-        return 0;
+    public static int getNavBarHeight(Context ct){
+        return getNavigationBarSize(ct).y;
+    }
+
+    public static Point getNavigationBarSize(Context context) {
+        Point appUsableSize = getAppUsableScreenSize(context);
+        Point realScreenSize = getRealScreenSize(context);
+
+        // navigation bar on the right
+        if (appUsableSize.x < realScreenSize.x) {
+            return new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
+        }
+
+        // navigation bar at the bottom
+        if (appUsableSize.y < realScreenSize.y) {
+            return new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
+        }
+
+        // navigation bar is not present
+        return new Point();
+    }
+
+    public static Point getAppUsableScreenSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
+
+    public static Point getRealScreenSize(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+        return size;
     }
 }

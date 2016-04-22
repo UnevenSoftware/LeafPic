@@ -17,8 +17,6 @@ import com.horaapps.leafpic.utils.Measure;
  */
 public class FabScroll extends FloatingActionButton.Behavior {
 
-    int dimen;
-
     public FabScroll(Context context, AttributeSet attributeSet) {
         super();
     }
@@ -26,11 +24,10 @@ public class FabScroll extends FloatingActionButton.Behavior {
     @Override
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
+        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE)
             child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
-        } else {
-            child.animate().translationY(-Measure.getNavBarHeight(Resources.getSystem())).setInterpolator(new DecelerateInterpolator(2)).start();
-        }
+         else
+            child.animate().translationY(-Measure.getNavigationBarSize(coordinatorLayout.getContext()).y).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     @Override
