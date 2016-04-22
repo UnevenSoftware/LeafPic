@@ -226,6 +226,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
     }
 
 

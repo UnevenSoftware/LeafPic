@@ -904,8 +904,8 @@ public class MainActivity extends ThemedActivity {
 
                 cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Exclude_title.setBackgroundColor(getPrimaryColor());
-                txt_Exclude_title.setText(getString(R.string.delete));
-                txt_Exclude_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
+                txt_Exclude_title.setText(getString(R.string.exclude));
+                txt_Exclude_message.setText(R.string.exclude_album_message);
                 txt_Exclude_message.setTextColor(getTextColor());
                 ExcludeDialog.setView(Exclude_dialogLayout);
 
