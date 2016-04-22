@@ -122,8 +122,9 @@ public class Album implements Parcelable {
     }
 
     public String getSortingMode() {
-        if (settings.columnSortingMode != null) return settings.getSQLSortingMode();
-        else return MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
+        return settings.getSQLSortingMode();
+        /*if (settings.columnSortingMode != null) return settings.getSQLSortingMode();
+        else return MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";*/
     }
 
     public String getContentDescdription(Context c) {

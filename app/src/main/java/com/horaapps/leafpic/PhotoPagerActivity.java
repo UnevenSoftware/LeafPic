@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -189,6 +190,8 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     }
 
+
+
     public void setupUI() {
 
         /**** Theme ****/
@@ -223,6 +226,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
     }
 
 
@@ -548,11 +552,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                 EXIF.setTextColor(getSubTextColor());
                 Location.setTextColor(getSubTextColor());
 
+
                 final LinearLayout ll = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF);
                 ExifInterface exif = null;
-
-                try {  exif = new ExifInterface(album.getCurrentPhoto().Path); }
-                catch (IOException e) { e.printStackTrace(); }
+                try { exif = new ExifInterface(album.getCurrentPhoto().Path);}
+                catch (IOException e){e.printStackTrace();}
 
                 if (exif.getAttribute(ExifInterface.TAG_MAKE) != null) {
                     Device.setText(String.format("%s %s",
@@ -562,8 +566,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     EXIF.setText(String.format("f/%s ISO-%s %ss",
                             exif.getAttribute(ExifInterface.TAG_APERTURE),
                             exif.getAttribute(ExifInterface.TAG_ISO),
-                            exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)
-                    ));
+                            exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
+
                     float[] output= new float[2];
                     exif.getLatLong(output);
                     //TODO Map at the top
@@ -585,8 +589,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
-                        Uri uri = Uri.fromFile(new File(album.getCurrentPhoto().Path));
-                        UCrop uCrop = UCrop.of(uri, mDestinationUri);
+                        //Uri uri = Uri.fromFile(new File(album.getCurrentPhoto().Path));
+                        UCrop uCrop = UCrop.of(album.getCurrentPhoto().getUri(), mDestinationUri);
                         uCrop.withOptions(getUcropOptions());
                         uCrop.start(PhotoPagerActivity.this);
                     }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -27,6 +28,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -256,6 +258,27 @@ public class MainActivity extends ThemedActivity {
             photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
             mRecyclerView.addItemDecoration(photosDecoration);
         }
+
+        int status_height = Measure.getStatusBarHeight(getResources());
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+            mRecyclerView.setPadding(0, 0, 0, status_height);
+            fabCamera.setVisibility(View.GONE);
+        }
+        else {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
+
+            SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
+            mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(MainActivity.this));
+            fabCamera.animate().translationY(fabCamera.getHeight()*2).start();
+            fabCamera.setVisibility(View.VISIBLE);
+        }
     }
 
     public void displayPrefetchedData(Bundle data){
@@ -327,6 +350,7 @@ public class MainActivity extends ThemedActivity {
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+        fabCamera.animate().translationY(-Measure.getNavBarHeight(MainActivity.this)).setInterpolator(new DecelerateInterpolator(2)).start();
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,13 +364,11 @@ public class MainActivity extends ThemedActivity {
         });
 
         int status_height = Measure.getStatusBarHeight(getResources());
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
 
         SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
-        mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(getResources()));
+        mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(MainActivity.this));
 
         setRecentApp(getString(R.string.app_name));
     }
@@ -882,8 +904,8 @@ public class MainActivity extends ThemedActivity {
 
                 cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Exclude_title.setBackgroundColor(getPrimaryColor());
-                txt_Exclude_title.setText(getString(R.string.delete));
-                txt_Exclude_message.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
+                txt_Exclude_title.setText(getString(R.string.exclude));
+                txt_Exclude_message.setText(R.string.exclude_album_message);
                 txt_Exclude_message.setTextColor(getTextColor());
                 ExcludeDialog.setView(Exclude_dialogLayout);
 

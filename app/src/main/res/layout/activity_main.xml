@@ -62,18 +62,12 @@
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
             app:elevation="4dp"
-
-            app:layout_behavior=".Views.FABScrollBehavior"
-            android:visibility="gone"
+            app:layout_behavior=".Views.FabScroll"
             />
-        <!--
-
-        -->
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/drawer_items"
-        layout="@layout/drawer_albums_act"
-        />
+        layout="@layout/drawer_albums_act"/>
 </android.support.v4.widget.DrawerLayout>
 
 

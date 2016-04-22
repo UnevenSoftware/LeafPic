@@ -164,7 +164,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     //mediaController.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
     //mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
 
-    mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(getResources()));
+    mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
     //mediaController.setDrawingCacheBackgroundColor(getPrimaryColor());
     //mediaController.show();
 
@@ -239,7 +239,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
           toggleControlsVisibility();
         } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-          view.performClick();
+          //view.performClick();
         }
         return true;
       }
@@ -250,7 +250,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         return !(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_MENU) && mediaController.dispatchKeyEvent(event);
       }
     });
-    root.setBackgroundColor(getBackgroundColor());
+    root.setBackgroundColor(R.color.md_black_1000);
     shutterView = findViewById(R.id.shutter);
 
     videoFrame = (AspectRatioFrameLayout) findViewById(R.id.video_frame);
@@ -262,7 +262,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
 
     mediController_anchor = findViewById(R.id.media_player_anchor);
     mediaController.setAnchorView(mediController_anchor);
-    mediaController.setPaddingRelative(0,0,0,Measure.getNavBarHeight(getResources()));
+    mediaController.setPaddingRelative(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
     initUI();
 
     CookieHandler currentHandler = CookieHandler.getDefault();

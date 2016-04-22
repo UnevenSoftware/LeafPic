@@ -15,6 +15,12 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import de.psdev.licensesdialog.LicensesDialog;
+import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
+import de.psdev.licensesdialog.licenses.MITLicense;
+import de.psdev.licensesdialog.model.Notice;
+import de.psdev.licensesdialog.model.Notices;
+
 /**
  * Created by Jibo on 02/03/2016.
  */
@@ -136,6 +142,13 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        findViewById(R.id.ll_about_libs).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                licenseDialog();
+            }
+        });
+
     }
 
     public void setThemeOnChangeListener(){
@@ -221,5 +234,27 @@ public class AboutActivity extends ThemedActivity {
         txtSGitHub_Sub.setTextColor(color);
         txtALicense_Sub.setTextColor(color);
 
+    }
+
+    public void licenseDialog(){
+        final Notices notices = new Notices();
+        notices.addNotice(new Notice("Glide", "http://github.com/bumptech/glide", "Copyright 2014 Google, Inc. All rights reserved.", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("Ion", "http://github.com/koush/ion", "Copyright 2013 Koushik Dutta (2013)", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("Android-Iconics", "http://github.com/mikepenz/Android-Iconics", "Copyright 2016 Mike Penz", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("AppIntro", "http://github.com/PaoloRotolo/AppIntro", "Copyright 2015 Paolo Rotolo\n"
+                + "Copyright 2016 Maximilian Narr", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("uCrop", "http://github.com/Yalantis/uCrop", "Copyright 2016, Yalantis", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("ShiftColorPicker", "http://github.com/DASAR/ShiftColorPicker", "Copyright (c) 2015 Bogdasarov Bogdan", new MITLicense()));
+        notices.addNotice(new Notice("material-ripple", "http://github.com/balysv/material-ripple", "Copyright 2015 Balys Valentukevicius", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("PhotoView", "http://github.com/chrisbanes/PhotoView", "Copyright 2011, 2012 Chris Banes.", new ApacheSoftwareLicense20()));
+
+        new LicensesDialog.Builder(this)
+                .setNotices(notices)
+                .setIncludeOwnLicense(true)
+                .setThemeResourceId( isDarkTheme()
+                        ? R.style.AlertDialog_Dark
+                        : R.style.AlertDialog_Light)
+                .build()
+                .show();
     }
 }
