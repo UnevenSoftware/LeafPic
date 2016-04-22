@@ -627,6 +627,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         options.setToolbarColor(getPrimaryColor());
         options.setStatusBarColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
+        options.setFreeStyleCropEnabled(true);
 
         return options;
     }
