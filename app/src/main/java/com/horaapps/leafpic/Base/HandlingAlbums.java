@@ -3,6 +3,8 @@ package com.horaapps.leafpic.Base;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -260,11 +262,18 @@ public class HandlingAlbums implements Parcelable {
             Intent addIntent = new Intent();
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.DisplayName);
-            // TODO: generate some icon for it
+
+            File image = new File(selectedAlbum.getCoverAlbum().Path);
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, true);
+
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, scaledBitmap);
+            /*
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                     Intent.ShortcutIconResource.fromContext(appCtx,
-                            R.mipmap.ic_launcher));
-
+                           R.mipmap.ic_launcher));
+            */
             addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
             appCtx.sendBroadcast(addIntent);
         }
