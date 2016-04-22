@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -188,6 +189,8 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
 
     }
+
+
 
     public void setupUI() {
 
@@ -569,14 +572,13 @@ public class PhotoPagerActivity extends ThemedActivity {
                     exif.getLatLong(output);
                     //TODO Map at the top
                     Location.setText(String.format("%f %f",
-                    output[0],output[1]));
+                            output[0],output[1]));
                     ll.setVisibility(View.VISIBLE);
                 }
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
                 cv.setCardBackgroundColor(getCardBackgroundColor());
                 DetailsDialog.setView(Details_DialogLayout);
-
 
                 DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -587,8 +589,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
-                        Uri uri = Uri.fromFile(new File(album.getCurrentPhoto().Path));
-                        UCrop uCrop = UCrop.of(uri, mDestinationUri);
+                        //Uri uri = Uri.fromFile(new File(album.getCurrentPhoto().Path));
+                        UCrop uCrop = UCrop.of(album.getCurrentPhoto().getUri(), mDestinationUri);
                         uCrop.withOptions(getUcropOptions());
                         uCrop.start(PhotoPagerActivity.this);
                     }
