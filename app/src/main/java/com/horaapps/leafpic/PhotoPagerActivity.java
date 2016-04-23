@@ -197,15 +197,17 @@ public class PhotoPagerActivity extends ThemedActivity {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (!isApplyThemeOnImgAct())
-            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(isDarkTheme()
-                    ? ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000)
-                    : ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800), 175)));
+            toolbar.setBackgroundColor(ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
         else
             toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
-        if (!isDarkTheme())
-            toolbar.setPopupTheme(R.style.LightActionBarMenu);
+        switch (getBasicTheme()){
+            case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
+            case 2: toolbar.setPopupTheme(R.style.DarkActionBarMenu);break;
+            case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
+            default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
+        }
 
         setStatusBarColor();
         setNavBarColor();
@@ -367,11 +369,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.deletePhoto:
-                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(
-                        PhotoPagerActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
+                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
 
                 final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
@@ -428,11 +426,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.renamePhoto:
-                final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
-                        PhotoPagerActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
+                final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
 
                 final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
@@ -496,8 +490,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 String date = as.format(new Time(f.DateTaken));
 
                 /****** BEAUTIFUL DIALOG ****/
-                final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this,
-                        isDarkTheme() ? R.style.AlertDialog_Dark : R.style.AlertDialog_Light);
+                final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
 
                 final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
                 final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Size);

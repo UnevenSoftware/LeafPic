@@ -18,13 +18,16 @@
         <item name="android:popupBackground">@drawable/ic_empty</item>
     </style>
 
-
-    <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog">
-
+    <!--AMOLED DARK MENU THEME-->
+    <style name="AmoledDarkActionBarMenu" parent="Theme.AppCompat.Light">
+        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
     </style>
-    <style name="AlertDialogLight" parent="Theme.AppCompat.Light.Dialog">
 
+    <style name="MyApp.PopupMenu.DarkAmoled" parent="Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/ic_empty_amoled</item>
     </style>
+
+
 
     <style name="MyToolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:layout_width">fill_parent</item>
@@ -83,21 +86,24 @@
     <style name="AlertDialog_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/md_light_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_light_primary_text</item><!--TESTO-->
-        <item name="android:backgroundTint">@color/cardview_light_background</item>
     </style>
 
     <style name="AlertDialog_Dark" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
-        <!--<item name="android:background">@color/cardview_dark_background</item>SFONDO-->
-        <item name="android:backgroundTint">@color/cardview_dark_background</item>
+        <item name="android:background">@color/cardview_dark_background</item>
+    </style>
+
+    <style name="AlertDialog_Dark_Amoled" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
+        <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
+        <item name="android:background">@color/md_black_1000</item>
     </style>
 
     <!--LICENSE DIALOG-->
     <style name="LicenseDialog_Dark" parent="android:Theme.Dialog">
         <item name="android:textColor">@color/md_white_1000</item>
         <item name="android:background">@color/cardview_dark_background</item>
-        <item name="android:backgroundTint">@color/cardview_dark_background</item>
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
     </style>
 

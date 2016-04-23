@@ -34,13 +34,13 @@ public class SettingActivity extends ThemedActivity {
 
     Toolbar toolbar;
     SharedPreferences SP;
+    int BasicThemeValue;
 
     TextView txtGT;
     TextView txtTT;
     TextView txtPT;
     TextView txtVT;
 
-    SwitchCompat swDarkTheme;
     SwitchCompat swNavBar;
     SwitchCompat swStatusBar;
     SwitchCompat swMaxLuminosita;
@@ -69,6 +69,15 @@ public class SettingActivity extends ThemedActivity {
         pictureOrientation = SP.getBoolean("set_picture_orientation", false);
         delayfullimage = SP.getBoolean("set_delay_full_image", true);
         internalPlayer =  SP.getBoolean("set_internal_player", false);
+
+        //EXCLUDED ALBUMS INTENT*****************************************
+        LinearLayout ll_BT = (LinearLayout) findViewById(R.id.ll_basic_theme);
+        ll_BT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BasicThemeDialog();
+            }
+        });
 
         //PRIMARY COLOR PIKER*****************************************
         LinearLayout ll_PC = (LinearLayout) findViewById(R.id.ll_primaryColor);
@@ -180,23 +189,6 @@ public class SettingActivity extends ThemedActivity {
         });
         updateSwitchColor(swStatusBar, getAccentColor());
 
-        /*********** SW DARK THEME ********************/
-        swDarkTheme=(SwitchCompat) findViewById(R.id.SetDarkTheme);
-        swDarkTheme.setChecked(isDarkTheme());
-        swDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_dark_theme", !isDarkTheme());
-                editor.apply();
-                updateSwitchColor(swDarkTheme, getAccentColor());
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
-        });
-        updateSwitchColor(swDarkTheme, getAccentColor());
-
         /*********** SW COLORED NAV BAR ****************/
         swNavBar=(SwitchCompat) findViewById(R.id.SetColoredNavBar);
         swNavBar.setChecked(isNavigationBarColored());
@@ -227,12 +219,99 @@ public class SettingActivity extends ThemedActivity {
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
     }
 
-    public void PrimaryColorPikerDialogShow(){
-        final AlertDialog.Builder PrimaryPikerDialog;
+    public void BasicThemeDialog(){
+        final AlertDialog.Builder BasicThemeDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
 
-        if (isDarkTheme()) PrimaryPikerDialog = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Dark);
-        else PrimaryPikerDialog = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Light);
+        final View BasicTheme_dialogLayout = getLayoutInflater().inflate(R.layout.basic_theme_dialog, null);
+        final TextView BasicTheme_Dialog_Title = (TextView) BasicTheme_dialogLayout.findViewById(R.id.basic_theme_title);
+        final CardView BasicTheme_CV = (CardView) BasicTheme_dialogLayout.findViewById(R.id.basic_theme_card);
+
+        final LinearLayout ll_white = (LinearLayout) BasicTheme_dialogLayout.findViewById(R.id.ll_white_basic_theme);
+        final LinearLayout ll_dark = (LinearLayout) BasicTheme_dialogLayout.findViewById(R.id.ll_dark_basic_theme);
+        final LinearLayout ll_darkAMOLED = (LinearLayout) BasicTheme_dialogLayout.findViewById(R.id.ll_dark_amoled_basic_theme);
+
+        final IconicsImageView whiteSelect = (IconicsImageView) BasicTheme_dialogLayout.findViewById(R.id.white_basic_theme_select);
+        final IconicsImageView darkSelect = (IconicsImageView) BasicTheme_dialogLayout.findViewById(R.id.dark_basic_theme_select);
+        final IconicsImageView darkAmoledSelect = (IconicsImageView) BasicTheme_dialogLayout.findViewById(R.id.dark_amoled_basic_theme_select);
+
+        whiteSelect.setVisibility(View.INVISIBLE);
+        darkSelect.setVisibility(View.INVISIBLE);
+        darkAmoledSelect.setVisibility(View.VISIBLE);
+        switch (getBasicTheme()){
+            case 1:
+                whiteSelect.setVisibility(View.VISIBLE);
+                darkSelect.setVisibility(View.INVISIBLE);
+                darkAmoledSelect.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                whiteSelect.setVisibility(View.INVISIBLE);
+                darkSelect.setVisibility(View.VISIBLE);
+                darkAmoledSelect.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
+                whiteSelect.setVisibility(View.INVISIBLE);
+                darkSelect.setVisibility(View.INVISIBLE);
+                darkAmoledSelect.setVisibility(View.VISIBLE);
+                break;
+        }
+
+        /**SET OBJ THEME**/
+        BasicTheme_Dialog_Title.setBackgroundColor(getPrimaryColor());
+        BasicTheme_CV.setCardBackgroundColor(getCardBackgroundColor());
+
+        ll_white.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                whiteSelect.setVisibility(View.VISIBLE);
+                darkSelect.setVisibility(View.INVISIBLE);
+                darkAmoledSelect.setVisibility(View.INVISIBLE);
+                BasicThemeValue=1;
+            }
+        });
+        ll_dark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                whiteSelect.setVisibility(View.INVISIBLE);
+                darkSelect.setVisibility(View.VISIBLE);
+                darkAmoledSelect.setVisibility(View.INVISIBLE);
+                BasicThemeValue=2;
+            }
+        });
+        ll_darkAMOLED.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                whiteSelect.setVisibility(View.INVISIBLE);
+                darkSelect.setVisibility(View.INVISIBLE);
+                darkAmoledSelect.setVisibility(View.VISIBLE);
+                BasicThemeValue=3;
+            }
+        });
+        BasicThemeDialog.setView(BasicTheme_dialogLayout);
+        BasicThemeDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putInt("basic_theme", BasicThemeValue);
+                editor.apply();
+                dialog.cancel();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        BasicThemeDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                BasicThemeValue=getBasicTheme();
+            }
+        });
+        BasicThemeDialog.show();
+    }
+
+    public void PrimaryColorPikerDialogShow(){
+        final AlertDialog.Builder PrimaryPikerDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
 
         final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
         final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerPrimary);
@@ -333,13 +412,8 @@ public class SettingActivity extends ThemedActivity {
 
     public void AccentColorPikerDialogShow(){
 
-        final AlertDialog.Builder AccentPikerDialog;
-
+        final AlertDialog.Builder AccentPikerDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
-        if (isDarkTheme())
-            AccentPikerDialog = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Dark);
-        else
-            AccentPikerDialog = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Light);
 
         final View Accent_dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
         final LineColorPicker colorPicker = (LineColorPicker) Accent_dialogLayout.findViewById(R.id.pickerAccent);
@@ -388,13 +462,8 @@ public class SettingActivity extends ThemedActivity {
 
     public void CustomizePictureViewerDialog(){
 
-        final AlertDialog.Builder CustomizeViewer;
-
+        final AlertDialog.Builder CustomizeViewer = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
-        if (isDarkTheme())
-            CustomizeViewer = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Dark);
-        else
-            CustomizeViewer = new AlertDialog.Builder(SettingActivity.this, R.style.AlertDialog_Light);
 
         final View CustomizeThird_dialogLayout = getLayoutInflater().inflate(R.layout.third_act_theme_dialog, null);
         final TextView txtTitle = (TextView) CustomizeThird_dialogLayout.findViewById(R.id.third_act_theme_title);
@@ -467,7 +536,6 @@ public class SettingActivity extends ThemedActivity {
         txtVT.setTextColor(color);
 
         updateSwitchColor(swDelayFullImage, color);
-        updateSwitchColor(swDarkTheme, color);
         updateSwitchColor(swNavBar, color);
         updateSwitchColor(swStatusBar, color);
         updateSwitchColor(swMaxLuminosita, color);
@@ -544,7 +612,7 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgC3A = (IconicsImageView) findViewById(R.id.custom_3thAct_icon);
         IconicsImageView imgPC = (IconicsImageView) findViewById(R.id.PrimaryColor_Icon);
         IconicsImageView imgAC = (IconicsImageView) findViewById(R.id.accentColor_Icon);
-        IconicsImageView imgDT = (IconicsImageView) findViewById(R.id.DarkTheme_Icon);
+        IconicsImageView imgBT = (IconicsImageView) findViewById(R.id.basic_theme_icon);
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
         IconicsImageView imgIN = (IconicsImageView) findViewById(R.id.internal_player_Icon);
@@ -558,7 +626,7 @@ public class SettingActivity extends ThemedActivity {
         imgTSB.setColor(color);
         imgPC.setColor(color);
         imgAC.setColor(color);
-        imgDT.setColor(color);
+        imgBT.setColor(color);
         imgNB.setColor(color);
         imgOrient.setColor(color);
         imgEA.setColor(color);
@@ -571,7 +639,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtTSB = (TextView) findViewById(R.id.Traslucent_StatusBar_Item);
         TextView txtPC = (TextView) findViewById(R.id.PrimaryColor_Item);
         TextView txtAC = (TextView) findViewById(R.id.accentColor_Item);
-        TextView txtDT = (TextView) findViewById(R.id.DarkTheme_Item);
+        TextView txtBTI = (TextView) findViewById(R.id.basic_theme_item);
         TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
         TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
@@ -584,7 +652,7 @@ public class SettingActivity extends ThemedActivity {
         txtTSB.setTextColor(color);
         txtPC.setTextColor(color);
         txtAC.setTextColor(color);
-        txtDT.setTextColor(color);
+        txtBTI.setTextColor(color);
         txtNB.setTextColor(color);
         txtEAT.setTextColor(color);
         txtDelay.setTextColor(color);
@@ -597,7 +665,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtTSB_Sub = (TextView) findViewById(R.id.Traslucent_StatusBar_Item_Sub);
         TextView txtPC_Sub = (TextView) findViewById(R.id.PrimaryColor_Item_Sub);
         TextView txtAC_Sub = (TextView) findViewById(R.id.accentColor_Item_Sub);
-        TextView txtDT_Sub = (TextView) findViewById(R.id.DarkTheme_Item_Sub);
+        TextView txtBTI_Sub = (TextView) findViewById(R.id.basic_theme_item_sub);
         TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
         TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
@@ -612,7 +680,7 @@ public class SettingActivity extends ThemedActivity {
         txtTSB_Sub.setTextColor(color);
         txtPC_Sub.setTextColor(color);
         txtAC_Sub.setTextColor(color);
-        txtDT_Sub.setTextColor(color);
+        txtBTI_Sub.setTextColor(color);
         txtNB_Sub.setTextColor(color);
         txtEAT_Sub.setTextColor(color);
 
