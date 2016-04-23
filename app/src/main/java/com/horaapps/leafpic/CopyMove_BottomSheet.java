@@ -79,9 +79,12 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
 
         background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
         background.setBackgroundColor(ContextCompat.getColor(dialog.getContext(),
-                SP.getBoolean("set_dark_theme", false)
-                        ? R.color.md_dark_cards
-                        : R.color.md_light_cards));
+                SP.getInt("basic_theme", 1)==1
+                        ? R.color.md_light_cards
+                        : (SP.getInt("basic_theme", 1)==2
+                            ? R.color.md_dark_cards
+                            : R.color.md_black_1000))
+                );
 
         dialog.setContentView(contentView);
         CoordinatorLayout.LayoutParams layoutParams =
@@ -128,12 +131,13 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
             /**SET LAYOUT THEME**/
             SP = PreferenceManager.getDefaultSharedPreferences(getDialog().getContext());
             //getDialog().getContext()
-            int textColor= ContextCompat.getColor(getDialog().getContext(),  SP.getBoolean("set_dark_theme", false)
-                    ? R.color.md_grey_200
-                    : R.color.md_grey_800);
-            int subtextColor= ContextCompat.getColor(getDialog().getContext(),  SP.getBoolean("set_dark_theme", false)
-                    ? R.color.md_grey_400
-                    : R.color.md_grey_600);
+            int textColor= ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
+                    ? R.color.md_grey_800
+                    : R.color.md_grey_200);
+
+            int subtextColor= ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
+                    ? R.color.md_grey_600
+                    : R.color.md_grey_400);
 
             holder.album_name.setTextColor(textColor);
 
@@ -145,10 +149,9 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
                     + a.getContentDescdription(getDialog().getContext()) + "</font>"));
 
             holder.imgFolder.setColor(
-                    ContextCompat.getColor(getDialog().getContext(),
-                            SP.getBoolean("set_dark_theme", false)
-                                    ? R.color.md_dark_primary_icon
-                                    : R.color.md_light_primary_icon));
+                    ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
+                            ? R.color.md_light_primary_icon
+                            : R.color.md_dark_primary_icon));
         }
 
         public int getItemCount() {

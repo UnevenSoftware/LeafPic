@@ -79,9 +79,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                         ? new StringSignature(f.Path)
                         : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                 .centerCrop()
-                .placeholder(SP.getBoolean("set_dark_theme", false)
-                        ? R.drawable.ic_empty
-                        : R.drawable.ic_empty_white)
+                .placeholder(SP.getInt("basic_theme", 1)==1
+                        ? R.drawable.ic_empty_white
+                        : (SP.getInt("basic_theme", 1)==2
+                                ? R.drawable.ic_empty
+                                : R.drawable.ic_empty_amoled))
                 .animate(R.anim.fade_in)
                 .into(holder.picture);
 
@@ -99,20 +101,22 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
 
-        String textColor = SP.getBoolean("set_dark_theme", false) ? "#FAFAFA" : "#2b2b2b";
+        String textColor = SP.getInt("basic_theme", 1)!=1 ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            if (!SP.getBoolean("set_dark_theme", false)) textColor ="#FAFAFA";
+            if (SP.getInt("basic_theme", 1)==1 ) textColor ="#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.GONE);
 
-            if (SP.getBoolean("set_dark_theme", false))
+            if (SP.getInt("basic_theme", 1)==1)
+                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_light_cards));
+            else if (SP.getInt("basic_theme", 1)==2)
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
-            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_light_cards));
+            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_black_1000));
         }
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +

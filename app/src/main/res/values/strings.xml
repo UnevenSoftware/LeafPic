@@ -126,8 +126,11 @@
     <string name="primary_color_sub">The main color which is used in the UI.</string>
     <string name="accent_color">Accent Color</string>
     <string name="accent_color_sub">The secondary color which is used to tint widgets an UI details.</string>
-    <string name="dark_theme">Dark Theme</string>
-    <string name="dark_theme_sub">Apply a dark theme to the application.</string>
+    <string name="basic_theme">Basic Theme</string>
+    <string name="basic_theme_sub">Select a basic theme.</string>
+    <string name="white_basic_theme">White</string>
+    <string name="dark_basic_theme">Dark</string>
+    <string name="dark_amoled_basic_theme">Dark AMOLED</string>
     <string name="colored_navbar">Colored Navigation Bar</string>
     <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
     <string name="internal_player">Internal Video Player</string>

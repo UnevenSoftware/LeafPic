@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
@@ -271,8 +272,7 @@ public class HandlingAlbums implements Parcelable {
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, true);
-
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, scaledBitmap);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(scaledBitmap, 10));
             /*
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                     Intent.ShortcutIconResource.fromContext(appCtx,
@@ -281,6 +281,19 @@ public class HandlingAlbums implements Parcelable {
             addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
             appCtx.sendBroadcast(addIntent);
         }
-
+    }
+    private Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
+        Canvas canvas = new Canvas(bmpWithBorder);
+        /*canvas.drawColor(ContextCompat.getColor((context),
+                SP.getInt("basic_theme", 1)==1
+                        ? R.color.md_light_cards
+                        : (SP.getInt("basic_theme", 1)==2
+                        ? R.color.md_dark_cards
+                        : R.color.md_black_1000))
+                );*/
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(bmp, borderSize, borderSize, null);
+        return bmpWithBorder;
     }
 }
