@@ -26,6 +26,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     private int primaryColor;
     private int accentColor;
+    private int basicTheme;
     private boolean darkTheme;
     private boolean coloredNavBar;
     private boolean oscuredStatusBar;
@@ -44,10 +45,6 @@ public class ThemedActivity extends AppCompatActivity {
         return applyThemeImgAct;
     }
 
-    public boolean isDarkTheme() {
-        return darkTheme;
-    }
-
     public boolean isTransparencyZero() {
         return 255 - SP.getInt("set_alpha", 0) == 255;
     }
@@ -64,49 +61,107 @@ public class ThemedActivity extends AppCompatActivity {
         return accentColor;
     }
 
+    public int getBasicTheme(){ return  basicTheme; }
+
     //METHOD
     public int getBackgroundColor(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_dark_background
-                : R.color.md_light_background);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);
+        }
+        return color;
     }
 
     public int getInvertedBackgroundColor(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_light_background
-                : R.color.md_dark_background);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);
+        }
+        return color;
     }
 
     public int getTextColor(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_grey_200
-                : R.color.md_grey_800);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_800);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_800);
+        }
+        return color;
     }
 
     public int getSubTextColor(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_grey_400
-                : R.color.md_grey_600);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);
+        }
+        return color;
     }
 
     public int getCardBackgroundColor(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_dark_cards
-                : R.color.md_light_cards);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
+        }
+        return color;
     }
 
     public int getIconColor(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_dark_primary_icon
-                : R.color.md_light_primary_icon);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_primary_icon);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_primary_icon);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
+        }
+        return color;
     }
 
     public int getDrawerBackground(){
-        return ContextCompat.getColor(getApplicationContext(), isDarkTheme()
-                ? R.color.md_dark_cards
-                : R.color.md_light_cards);
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
+        }
+        return color;
     }
 
+    public int getDialogStyle(){
+        int style;
+        switch (getBasicTheme()){
+            case 1: style = R.style.AlertDialog_Light;break;
+            case 2: style = R.style.AlertDialog_Dark;break;
+            case 3: style = R.style.AlertDialog_Dark_Amoled;break;
+            default: style = R.style.AlertDialog_Light;break;
+        }
+        return style;
+    }
+
+    public int getDefaultThemeToolbarColor3th(){
+        int color;
+        switch (basicTheme){
+            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
+            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
+        }
+        return color;
+    }
 
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -121,7 +176,8 @@ public class ThemedActivity extends AppCompatActivity {
             sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
         else
             sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
-        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+        if(getBasicTheme()!=3)sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+        else sw.getTrackDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -153,7 +209,7 @@ public class ThemedActivity extends AppCompatActivity {
     public void updateTheme(){
         this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_indigo_500));//DEFAULT;
         this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500));//COLOR DEFAULT
-        darkTheme = SP.getBoolean("set_dark_theme", false);//DARK THEME DEFAULT
+        basicTheme = SP.getInt("basic_theme", 1);//WHITE DEFAULT
         coloredNavBar = SP. getBoolean("nav_bar", false);
         oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",true);
         applyThemeImgAct = SP.getBoolean("apply_theme_img_act", false);

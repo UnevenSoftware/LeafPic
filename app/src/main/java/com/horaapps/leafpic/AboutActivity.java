@@ -248,13 +248,33 @@ public class AboutActivity extends ThemedActivity {
         notices.addNotice(new Notice("material-ripple", "http://github.com/balysv/material-ripple", "Copyright 2015 Balys Valentukevicius", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("PhotoView", "http://github.com/chrisbanes/PhotoView", "Copyright 2011, 2012 Chris Banes.", new ApacheSoftwareLicense20()));
 
-        new LicensesDialog.Builder(this)
-                .setNotices(notices)
-                .setIncludeOwnLicense(true)
-                .setThemeResourceId( isDarkTheme()
-                        ? R.style.AlertDialog_Dark
-                        : R.style.AlertDialog_Light)
-                .build()
-                .show();
+        switch (getBasicTheme()){
+            case 1:
+                new LicensesDialog.Builder(this)
+                        .setNotices(notices)
+                        .setIncludeOwnLicense(true)
+                        .setThemeResourceId(R.style.AlertDialog_Light)
+                        .build()
+                        .show();
+                break;
+            case 2:
+                new LicensesDialog.Builder(this)
+                        .setNotices(notices)
+                        .setIncludeOwnLicense(true)
+                        .setThemeResourceId(R.style.AlertDialog_Dark)
+                        .build()
+                        .show();
+                break;
+            case 3:
+                new LicensesDialog.Builder(this)
+                        .setNotices(notices)
+                        .setIncludeOwnLicense(true)
+                        .setThemeResourceId(R.style.AlertDialog_Dark_Amoled)
+                        .build()
+                        .show();
+                break;
+        }
+
+
     }
 }

@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -28,7 +27,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -305,7 +303,12 @@ public class MainActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (!isDarkTheme())
+        switch (getBasicTheme()){
+            case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
+            //case 2: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
+            case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
+            default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
+        }
             toolbar.setPopupTheme(R.style.LightActionBarMenu);
         //TODO:FIX IT PLIS CUZ I KNOW U CAN
         /*else
@@ -502,11 +505,8 @@ public class MainActivity extends ThemedActivity {
     //endregion
 
     void CominqSoonDialog(String what) {
-        final AlertDialog.Builder CoomingSoonDialog = new AlertDialog.Builder(
-                MainActivity.this,
-                isDarkTheme()
-                        ? R.style.AlertDialog_Dark
-                        : R.style.AlertDialog_Light);
+        final AlertDialog.Builder CoomingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
         final View Exclude_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
         final TextView txt_Exclude_title = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_title);
         final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
@@ -891,11 +891,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.excludeAlbumButton:
 
-                final AlertDialog.Builder ExcludeDialog = new AlertDialog.Builder(
-                        MainActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
+                final AlertDialog.Builder ExcludeDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
                 final View Exclude_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView txt_Exclude_title = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_title);
@@ -930,12 +926,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.hideAlbumButton:
 
-                final AlertDialog.Builder HideDialog = new AlertDialog.Builder(
-                        MainActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
-
+                final AlertDialog.Builder HideDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
                 final View Hide_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView txt_Hide_title = (TextView) Hide_dialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView txt_Hide_message = (TextView) Hide_dialogLayout.findViewById(R.id.text_dialog_message);
@@ -1024,11 +1015,7 @@ public class MainActivity extends ThemedActivity {
                     }
                 }
 
-                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(
-                        MainActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
+                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
                 final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
@@ -1188,11 +1175,7 @@ public class MainActivity extends ThemedActivity {
                     }
                 }
 
-                final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(
-                        MainActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
+                final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
                 final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
