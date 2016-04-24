@@ -39,12 +39,43 @@
                         android:id="@+id/text_dialog_message"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="20dp"
-                        android:text=""
+                        android:paddingTop="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingLeft="20dp"
+                        android:text="null"
                         android:singleLine="false"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         />
                 </RelativeLayout>
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_checkbox_dialog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:weightSum="10"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:id="@+id/checkbox_text_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="null"
+                        android:textColor="@color/md_dark_primary_text"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:layout_weight="9"
+                        />
+                    <CheckBox
+                        android:id="@+id/checkbox_text_dialog_cb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

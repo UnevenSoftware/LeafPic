@@ -27,11 +27,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -73,7 +75,7 @@ public class MainActivity extends ThemedActivity {
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
     private SwipeRefreshLayout SwipeContainerRV;
-
+    boolean pickmode = false;
     boolean editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
     GridSpacingItemDecoration albumsDecoration;
@@ -280,14 +282,17 @@ public class MainActivity extends ThemedActivity {
     }
 
     public void displayPrefetchedData(Bundle data){
+
         try {
-            int content = data.getInt("content");
-            if (content==SplashScreen.ALBUMS_PREFETCHED) {
+            int content = data.getInt(SplashScreen.CONTENT);
+            if (content == SplashScreen.ALBUMS_PREFETCHED) {
                 albums = data.getParcelable("albums");
                 assert albums != null;
                 albums.setContext(MainActivity.this);
                 displayAlbums(false);
-            } else if (content==SplashScreen.PHOTS_PREFETCHED) {
+                pickmode=data.getBoolean(SplashScreen.PICK_MODE);
+                Log.wtf("asd",pickmode+"");
+            } else if (content == SplashScreen.PHOTS_PREFETCHED) {
                 album = data.getParcelable("album");
                 assert album != null;
                 album.setContext(MainActivity.this);
@@ -897,16 +902,26 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Exclude_title = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Exclude_Dialog = (CardView) Exclude_dialogLayout.findViewById(R.id.message_card);
+                final LinearLayout ll_Exclude_Sub = (LinearLayout) Exclude_dialogLayout.findViewById(R.id.ll_checkbox_dialog);
+                final TextView txt_Exclude_Submessage = (TextView) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog);
+                final CheckBox ckb_Exlude_sub = (CheckBox) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog_cb);
+
 
                 cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
                 txt_Exclude_title.setBackgroundColor(getPrimaryColor());
                 txt_Exclude_title.setText(getString(R.string.exclude));
                 txt_Exclude_message.setText(R.string.exclude_album_message);
                 txt_Exclude_message.setTextColor(getTextColor());
+
+                ll_Exclude_Sub.setVisibility(View.VISIBLE);
+                txt_Exclude_Submessage.setText(R.string.sub_exclude_album_message);
+                txt_Exclude_Submessage.setTextColor(getSubTextColor());
+
                 ExcludeDialog.setView(Exclude_dialogLayout);
 
                 ExcludeDialog.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //if (ckb_Exlude_sub.isChecked()){ }
                         if (albumsMode) {
                             albums.excludeSelectedAlbums();
                             adapt.notifyDataSetChanged();
