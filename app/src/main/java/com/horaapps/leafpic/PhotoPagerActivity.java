@@ -25,6 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,7 +111,6 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     public void initUI() {
 
-        ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_arrow_back)
@@ -188,6 +188,14 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
 
+        Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+    Log.wtf("asd",aa.getRotation()+"");
+        if (aa.getRotation() == 1) {
+            Configuration configuration = new Configuration();
+            configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            onConfigurationChanged(configuration);
+        }
+
     }
 
 
@@ -200,6 +208,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             toolbar.setBackgroundColor(ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
         else
             toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
+        ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
         switch (getBasicTheme()){
@@ -228,7 +237,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     }
 
 
@@ -259,6 +268,19 @@ public class PhotoPagerActivity extends ThemedActivity {
         menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_replay));
 
         return true;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+           params.setMargins(0,0,Measure.getNavigationBarSize(PhotoPagerActivity.this).x,0);
+        else
+            params.setMargins(0,0,0,0);
+
+        toolbar.setLayoutParams(params);
     }
 
     @Override
