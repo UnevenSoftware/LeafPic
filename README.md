@@ -2,8 +2,9 @@
 <!--<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="left" > </br></br></br></br>-->
 
 <img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="left" width="150" hspace="10" vspace="10">
-
 LeafPic is a fluid, material-designed alternative gallery. LeafPic is ad-free, open sourced under GPL v3. It is smaller than other apps but it doesn't miss any of the main features.
+
+LeafPic is available on F-Droid.
 
 [![F-Droid](https://f-droid.org/wiki/images/0/06/F-Droid-button_get-it-on.png)](https://f-droid.org/repository/browse/?fdid=com.horaapps.leafpic)
 
