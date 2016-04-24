@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -28,13 +27,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -47,7 +43,6 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.HandlingAlbums;
-import com.horaapps.leafpic.Base.HiddenFolders;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Base.MediaStoreHandler;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
@@ -79,7 +74,7 @@ public class MainActivity extends ThemedActivity {
     Toolbar toolbar;
     private SwipeRefreshLayout SwipeContainerRV;
 
-    boolean editmode = false, albumsMode = true, contentReady = false, pickmode = false, firstLaunch = true;
+    boolean editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
     GridSpacingItemDecoration albumsDecoration;
     GridSpacingItemDecoration photosDecoration;
@@ -106,11 +101,6 @@ public class MainActivity extends ThemedActivity {
         public void onClick(View v) {
             if (contentReady) {
                 TextView is = (TextView) v.findViewById(R.id.photo_path);
-                if (pickmode) {
-                    Log.wtf("asd","asdasdasdasd");
-                    setResult(RESULT_OK, new Intent().setData(album.medias.get(Integer.parseInt(is.getTag().toString())).getUri()));
-                    finish();
-                }
                 if (editmode) {
                     adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
                     invalidateOptionsMenu();
@@ -173,8 +163,6 @@ public class MainActivity extends ThemedActivity {
         initUI();
         setupUI();
         displayPrefetchedData(getIntent().getExtras());
-        //Log.w("asd",Environment.getExternalStorageDirectory().getAbsolutePath());
-       // new PrepareHiddenAlbumTask().execute();
     }
 
     @Override
@@ -199,11 +187,9 @@ public class MainActivity extends ThemedActivity {
         album = a;
         toolbar.setTitle(a.DisplayName);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        int nSpan = Measure.getPhotosColums(getApplicationContext());
         mRecyclerView.removeItemDecoration(albumsDecoration);
-        photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
         mRecyclerView.addItemDecoration(photosDecoration);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
         album.setContext(MainActivity.this);
 
         adapter = new PhotosAdapter(album.medias, MainActivity.this);
@@ -230,10 +216,9 @@ public class MainActivity extends ThemedActivity {
     public void displayAlbums(boolean reload) {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
-        int nSpan = Measure.getAlbumsColums(getApplicationContext());
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
         mRecyclerView.removeItemDecoration(photosDecoration);
-        albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
         mRecyclerView.addItemDecoration(albumsDecoration);
 
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
@@ -276,13 +261,18 @@ public class MainActivity extends ThemedActivity {
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
             mRecyclerView.setPadding(0, 0, 0, status_height);
             fabCamera.setVisibility(View.GONE);
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+        else {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
 
+            SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
             mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(MainActivity.this));
             fabCamera.animate().translationY(fabCamera.getHeight()*2).start();
             fabCamera.setVisibility(View.VISIBLE);
@@ -305,16 +295,7 @@ public class MainActivity extends ThemedActivity {
                 album.setContext(MainActivity.this);
                 openAlbum(album,false);
             }
-
             contentReady = true;
-            Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-            if (aa.getRotation() == 1) {
-                Configuration configuration = new Configuration();
-                configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
-                onConfigurationChanged(configuration);
-            }
-
         } catch (NullPointerException e) { e.printStackTrace(); }
     }
 
@@ -393,6 +374,7 @@ public class MainActivity extends ThemedActivity {
 
         SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
         mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(MainActivity.this));
+
         setRecentApp(getString(R.string.app_name));
     }
 
@@ -404,6 +386,7 @@ public class MainActivity extends ThemedActivity {
             else
                 getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
+            //getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), 110));
         }
     }
 
@@ -1299,34 +1282,6 @@ public class MainActivity extends ThemedActivity {
             contentReady = true;
             checkNothing();
             SwipeContainerRV.setRefreshing(false);
-        }
-    }
-
-    public class PrepareHiddenAlbumTask extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            //contentReady = false;
-            //SwipeContainerRV.setRefreshing(true);
-            Log.wtf("asd","---start----");
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            HiddenFolders asd = new HiddenFolders();
-            asd.getAlbums(Environment.getExternalStorageDirectory());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //adapt.updateDataset(albums.dispAlbums);
-            //contentReady = true;
-            //checkNothing();
-            //SwipeContainerRV.setRefreshing(false);
-            Log.wtf("asd","---end----");
-
         }
     }
 
