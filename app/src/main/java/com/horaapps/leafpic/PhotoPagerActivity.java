@@ -20,14 +20,18 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -45,6 +49,7 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Fragments.ImageFragment;
+import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -188,6 +193,14 @@ public class PhotoPagerActivity extends ThemedActivity {
             }
         });
 
+        Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+        if (aa.getRotation() == 1) {
+            Configuration configuration = new Configuration();
+            configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            onConfigurationChanged(configuration);
+        }
+
     }
 
 
@@ -228,7 +241,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     }
 
 
@@ -259,6 +272,19 @@ public class PhotoPagerActivity extends ThemedActivity {
         menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_replay));
 
         return true;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+           params.setMargins(0,0,Measure.getNavigationBarSize(PhotoPagerActivity.this).x,0);
+        else
+            params.setMargins(0,0,0,0);
+
+        toolbar.setLayoutParams(params);
     }
 
     @Override
