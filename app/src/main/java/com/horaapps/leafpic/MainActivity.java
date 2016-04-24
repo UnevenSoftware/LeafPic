@@ -2,7 +2,6 @@ package com.horaapps.leafpic;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -28,13 +27,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -191,11 +187,9 @@ public class MainActivity extends ThemedActivity {
         album = a;
         toolbar.setTitle(a.DisplayName);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        int nSpan = Measure.getPhotosColums(getApplicationContext());
         mRecyclerView.removeItemDecoration(albumsDecoration);
-        photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
         mRecyclerView.addItemDecoration(photosDecoration);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
         album.setContext(MainActivity.this);
 
         adapter = new PhotosAdapter(album.medias, MainActivity.this);
@@ -222,10 +216,9 @@ public class MainActivity extends ThemedActivity {
     public void displayAlbums(boolean reload) {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
-        int nSpan = Measure.getAlbumsColums(getApplicationContext());
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, nSpan));
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
         mRecyclerView.removeItemDecoration(photosDecoration);
-        albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
         mRecyclerView.addItemDecoration(albumsDecoration);
 
         adapt = new AlbumsAdapter(albums.dispAlbums, getApplicationContext());
@@ -268,13 +261,18 @@ public class MainActivity extends ThemedActivity {
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
             mRecyclerView.setPadding(0, 0, 0, status_height);
             fabCamera.setVisibility(View.GONE);
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+        else {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
 
+            SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
             mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(MainActivity.this));
             fabCamera.animate().translationY(fabCamera.getHeight()*2).start();
             fabCamera.setVisibility(View.VISIBLE);
@@ -283,12 +281,14 @@ public class MainActivity extends ThemedActivity {
 
     public void displayPrefetchedData(Bundle data){
         try {
-            int content = data.getInt("content");
+            int content = data.getInt(SplashScreen.CONTENT);
             if (content == SplashScreen.ALBUMS_PREFETCHED) {
                 albums = data.getParcelable("albums");
                 assert albums != null;
                 albums.setContext(MainActivity.this);
                 displayAlbums(false);
+                pickmode=data.getBoolean(SplashScreen.PICK_MODE);
+                Log.wtf("asd",pickmode+"");
             } else if (content == SplashScreen.PHOTS_PREFETCHED) {
                 album = data.getParcelable("album");
                 assert album != null;
@@ -296,14 +296,6 @@ public class MainActivity extends ThemedActivity {
                 openAlbum(album,false);
             }
             contentReady = true;
-            Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-            if (aa.getRotation() == 1) {
-                Configuration configuration = new Configuration();
-                configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
-                onConfigurationChanged(configuration);
-            }
-
         } catch (NullPointerException e) { e.printStackTrace(); }
     }
 
@@ -382,6 +374,7 @@ public class MainActivity extends ThemedActivity {
 
         SwipeContainerRV.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
         mRecyclerView.setPadding(0, 0, 0, status_height + Measure.getNavBarHeight(MainActivity.this));
+
         setRecentApp(getString(R.string.app_name));
     }
 
@@ -393,6 +386,7 @@ public class MainActivity extends ThemedActivity {
             else
                 getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
+            //getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), 110));
         }
     }
 

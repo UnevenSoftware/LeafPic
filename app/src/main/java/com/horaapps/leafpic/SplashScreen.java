@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,9 +29,12 @@ public class SplashScreen extends ThemedActivity {
 
     public final int READ_EXTERNAL_STORAGE_ID = 12;
 
+    public final static String CONTENT = "content";
+    public final static String PICK_MODE = "pick_mode";
+
     public final static int ALBUMS_PREFETCHED = 23;
     public final static int PHOTS_PREFETCHED = 2;
-    public final static int PICK_INTENT = 213;
+    public boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
     HandlingAlbums albums;
@@ -76,7 +80,12 @@ public class SplashScreen extends ThemedActivity {
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             if (getIntent().getAction().equals(Intent.ACTION_MAIN))
                 new PrefetchAlbumsData().execute();
-            else if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+            else if (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT)
+                    || getIntent().getAction().equals(Intent.ACTION_PICK)) {
+                PICK_INTENT = true;
+                Log.wtf("asd","pickmode");
+                new PrefetchAlbumsData().execute();
+            } else if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 Bundle data = getIntent().getExtras();
                 if (data != null) {
                     String ab = data.getString("albumID");
@@ -91,6 +100,12 @@ public class SplashScreen extends ThemedActivity {
         } else {
             String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
+        }
+
+        if (getIntent().getAction() != null &&
+                (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) ||
+                        getIntent().getAction().equals(Intent.ACTION_PICK))) {
+           PICK_INTENT = true;
         }
     }
 
@@ -138,7 +153,8 @@ public class SplashScreen extends ThemedActivity {
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
             b.putParcelable("albums", albums);
-            b.putInt("content",ALBUMS_PREFETCHED);
+            b.putInt(CONTENT, ALBUMS_PREFETCHED);
+            b.putBoolean(PICK_MODE, PICK_INTENT);
             i.putExtras(b);
             startActivity(i);
             finish();
@@ -158,7 +174,7 @@ public class SplashScreen extends ThemedActivity {
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
             b.putParcelable("album", album);
-            b.putInt("content", PHOTS_PREFETCHED);
+            b.putInt(CONTENT, PHOTS_PREFETCHED);
             i.putExtras(b);
             startActivity(i);
             finish();
