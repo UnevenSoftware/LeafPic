@@ -7,7 +7,11 @@ LeafPic is an ad-free, open-source and full material designed android alternativ
 
 [![F-Droid](https://f-droid.org/wiki/images/0/06/F-Droid-button_get-it-on.png)](https://f-droid.org/repository/browse/?fdid=com.horaapps.leafpic)
 
-##### Screenshot
+
+
+
+
+## Screenshot
 <div style="dispaly:flex;" >
 
 <img  src="screenshots/1.png" width="19%" >
