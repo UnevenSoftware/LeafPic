@@ -11,9 +11,9 @@ LeafPic is an ad-free, open-source and full material designed android alternativ
 
 
 
-## Screenshot
-<div style="dispaly:flex;" >
 
+<div style="dispaly:flex;" >
+## Screenshot
 <img  src="screenshots/1.png" width="19%" >
 <img style="margin-left:10px;" src="screenshots/2.png" width="19%" >
 <img style="margin-left:10px;" src="screenshots/3.png" width="19%" >
