@@ -1,13 +1,13 @@
 # LeafPic [![Crowdin](https://d322cqt584bo4o.cloudfront.net/leafpic/localized.svg)](https://crowdin.com/project/leafpic)
 <!--<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="left" > </br></br></br></br>-->
 
-<img src="app/src/main/res/drawable/ic_launcher.png" align="left" width="150" hspace="10" vspace="10">
+<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="left" width="150" hspace="10" vspace="10">
 
 LeafPic is an ad-free, open-source and full material designed android alternative gallery
 
 [![F-Droid](https://f-droid.org/wiki/images/0/06/F-Droid-button_get-it-on.png)](https://f-droid.org/repository/browse/?fdid=com.horaapps.leafpic)
 
-
+##### Screenshot
 <div style="dispaly:flex;" >
 
 <img  src="screenshots/1.png" width="19%" >
