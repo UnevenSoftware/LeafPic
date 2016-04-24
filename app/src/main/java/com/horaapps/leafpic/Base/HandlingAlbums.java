@@ -269,10 +269,12 @@ public class HandlingAlbums implements Parcelable {
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.DisplayName);
 
             File image = new File(selectedAlbum.getCoverAlbum().Path);
+
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, true);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(scaledBitmap, 10));
+            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);//,bmOptions
+            bitmap=getCorpedBitmap(bitmap);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, false);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(scaledBitmap, 5));
             /*
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                     Intent.ShortcutIconResource.fromContext(appCtx,
@@ -282,6 +284,7 @@ public class HandlingAlbums implements Parcelable {
             appCtx.sendBroadcast(addIntent);
         }
     }
+
     private Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
         Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
@@ -295,5 +298,28 @@ public class HandlingAlbums implements Parcelable {
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(bmp, borderSize, borderSize, null);
         return bmpWithBorder;
+    }
+
+    private Bitmap getCorpedBitmap(Bitmap srcBmp){
+        Bitmap dstBmp;
+        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+                    0,
+                    srcBmp.getHeight(),
+                    srcBmp.getHeight()
+            );
+        } else {
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                    srcBmp.getWidth(),
+                    srcBmp.getWidth()
+            );
+        }
+        return dstBmp;
     }
 }
