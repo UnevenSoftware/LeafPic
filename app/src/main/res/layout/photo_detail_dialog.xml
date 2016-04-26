@@ -278,24 +278,23 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-
-                    <!--MAP-->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_map"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <ImageView
-                            android:id="@+id/img_Map"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            />
-                    </LinearLayout>
-
-
                 </LinearLayout>
+                <!--MAP-->
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/ll_detail_dialog_EXIF"
+                    >
+                    <ImageView
+                        android:id="@+id/img_Map"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        />
+                </LinearLayout>
+
             </RelativeLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

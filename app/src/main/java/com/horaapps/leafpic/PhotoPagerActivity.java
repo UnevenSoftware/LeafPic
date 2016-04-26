@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
@@ -63,6 +64,7 @@ import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by dnld on 18/02/16.
@@ -522,7 +524,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
                 //final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
                 final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.media_details_title);
-                final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
 
                 final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
                 final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
@@ -536,7 +537,10 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView EXIF = (TextView) Details_DialogLayout.findViewById(R.id.EXIF_item);
                 final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.Location);
                 final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.Location_item);
-
+                //MAP
+                final LinearLayout llMap = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_map);
+                final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
+                final LinearLayout llLocation=(LinearLayout)Delete_dialogLayout.findViewById(R.id.ll_location);
                 /*
                 Glide.with(this)
                         .load(album.getCurrentPhoto().Path)
@@ -589,11 +593,33 @@ public class PhotoPagerActivity extends ThemedActivity {
                             exif.getAttribute(ExifInterface.TAG_ISO),
                             exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
 
-                    float[] output= new float[2];
+                    final float[] output= new float[2];
                     exif.getLatLong(output);
                     //TODO Map at the bottom
                     Location.setText(String.format("%f %f",
                             output[0], output[1]));
+
+                    if(output[0]!=0&&output[1]!=0) {
+                        String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=14&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
+                        Glide.with(this)
+                                .load(url)
+                                .asBitmap()
+                                .centerCrop()
+                                .priority(Priority.IMMEDIATE)
+                                .placeholder(R.drawable.ic_empty)
+                                .animate(R.anim.fade_in)
+                                .into(imgMap);
+                        imgMap.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", output[0], output[1]);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        llLocation.setVisibility(View.GONE);
+                        llMap.setVisibility(View.GONE);
+                    }
                     //VISIBLE YES
                     ll.setVisibility(View.VISIBLE);
 
