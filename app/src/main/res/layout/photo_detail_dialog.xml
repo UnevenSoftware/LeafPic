@@ -25,24 +25,26 @@
                     android:id="@+id/header_photo_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
+                    <!--
                     <ImageView
                         android:id="@+id/photo_details_preview"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:scaleType="centerCrop"
                         />
-                    <!--
-                    <TextView
-                        android:id="@+id/ph_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right"
-                        android:text="Media Details"
-                        android:padding="5dp"
-                        android:textColor="@color/md_white_1000"
-                        />
                     -->
+                    <TextView
+                        android:id="@+id/media_details_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/details"
+                        android:padding="24dp"
+                        android:textColor="@color/md_dark_primary_text"
+                        android:background="@color/md_red_500"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
+
                 </RelativeLayout>
 
                 <View
@@ -276,6 +278,21 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
+                </LinearLayout>
+                <!--MAP-->
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/ll_detail_dialog_EXIF"
+                    >
+                    <ImageView
+                        android:id="@+id/img_Map"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        />
                 </LinearLayout>
 
             </RelativeLayout>

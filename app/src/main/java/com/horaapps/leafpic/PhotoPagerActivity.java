@@ -20,18 +20,16 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -49,7 +47,6 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Fragments.ImageFragment;
-import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -67,6 +64,7 @@ import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by dnld on 18/02/16.
@@ -195,7 +193,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 
-        if (aa.getRotation() == 1) {
+        if (aa.getRotation() == Surface.ROTATION_90) {//1
             Configuration configuration = new Configuration();
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
@@ -217,9 +215,9 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         switch (getBasicTheme()){
             case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
-            case 2: toolbar.setPopupTheme(R.style.DarkActionBarMenu);break;
-            case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
-            default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
+            //case 2: toolbar.setPopupTheme(R.style.DarkActionBarMenu);break;
+            //case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
+            //default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
         }
 
         setStatusBarColor();
@@ -524,7 +522,9 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
                 final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Date);
                 final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
-                final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
+                //final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
+                final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.media_details_title);
+
                 final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
                 final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
                 final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
@@ -537,8 +537,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView EXIF = (TextView) Details_DialogLayout.findViewById(R.id.EXIF_item);
                 final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.Location);
                 final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.Location_item);
-
-
+                //MAP
+                final LinearLayout llMap = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_map);
+                final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
+                final LinearLayout llLocation=(LinearLayout)Delete_dialogLayout.findViewById(R.id.ll_location);
+                /*
                 Glide.with(this)
                         .load(album.getCurrentPhoto().Path)
                         .asBitmap()
@@ -546,6 +549,9 @@ public class PhotoPagerActivity extends ThemedActivity {
                         .priority(Priority.IMMEDIATE)
                         .placeholder(R.drawable.ic_empty)
                         .into(PhotoDetailsPreview);
+                */
+                //TITLE
+                txtTitle.setBackgroundColor(getPrimaryColor());
 
                 Size.setText(f.getHumanReadableSize());
                 Resolution.setText(f.getResolution());
@@ -587,12 +593,36 @@ public class PhotoPagerActivity extends ThemedActivity {
                             exif.getAttribute(ExifInterface.TAG_ISO),
                             exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
 
-                    float[] output= new float[2];
+                    final float[] output= new float[2];
                     exif.getLatLong(output);
-                    //TODO Map at the top
+                    //TODO Map at the bottom
                     Location.setText(String.format("%f %f",
-                            output[0],output[1]));
+                            output[0], output[1]));
+
+                    if(output[0]!=0&&output[1]!=0) {
+                        String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=14&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
+                        Glide.with(this)
+                                .load(url)
+                                .asBitmap()
+                                .centerCrop()
+                                .priority(Priority.IMMEDIATE)
+                                .placeholder(R.drawable.ic_empty)
+                                .animate(R.anim.fade_in)
+                                .into(imgMap);
+                        imgMap.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", output[0], output[1]);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        llLocation.setVisibility(View.GONE);
+                        llMap.setVisibility(View.GONE);
+                    }
+                    //VISIBLE YES
                     ll.setVisibility(View.VISIBLE);
+
                 }
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
