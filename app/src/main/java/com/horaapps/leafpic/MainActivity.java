@@ -334,10 +334,10 @@ public class MainActivity extends ThemedActivity {
         switch (getBasicTheme()){
             case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
             //case 2: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
-            case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
-            default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
+            //case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
+            //default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
         }
-            toolbar.setPopupTheme(R.style.LightActionBarMenu);
+        //toolbar.setPopupTheme(R.style.LightActionBarMenu);
         //TODO:FIX IT PLIS CUZ I KNOW U CAN
         /*else
             toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
