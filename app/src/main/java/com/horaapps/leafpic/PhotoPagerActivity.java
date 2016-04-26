@@ -41,6 +41,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
@@ -524,12 +526,12 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
                 //final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
                 final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.media_details_title);
-
                 final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
                 final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
                 final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
                 final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
                 final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
+
                 //EXIF
                 final TextView txtDevice = (TextView) Details_DialogLayout.findViewById(R.id.Device);
                 final TextView Device = (TextView) Details_DialogLayout.findViewById(R.id.Device_item);
@@ -541,16 +543,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final LinearLayout llMap = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_map);
                 final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
                 final LinearLayout llLocation =(LinearLayout) Details_DialogLayout.findViewById(R.id.ll_location);
-                /*
-                Glide.with(this)
-                        .load(album.getCurrentPhoto().Path)
-                        .asBitmap()
-                        .centerCrop()
-                        .priority(Priority.IMMEDIATE)
-                        .placeholder(R.drawable.ic_empty)
-                        .into(PhotoDetailsPreview);
-                */
-                //TITLE
                 txtTitle.setBackgroundColor(getPrimaryColor());
 
                 Size.setText(f.getHumanReadableSize());
@@ -595,34 +587,29 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                     final float[] output= new float[2];
                     exif.getLatLong(output);
-                    //TODO Map at the bottom
-                    Location.setText(String.format("%f %f",
-                            output[0], output[1]));
 
-                    if(output[0]!=0&&output[1]!=0) {
-                        String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=14&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
+                    if(output[0] != 0 && output[1] != 0) {
+                        String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
                         Glide.with(this)
                                 .load(url)
                                 .asBitmap()
                                 .centerCrop()
-                                .priority(Priority.IMMEDIATE)
-                                .placeholder(R.drawable.ic_empty)
+                                //.placeholder(R.drawable.ic_empty)
                                 .animate(R.anim.fade_in)
                                 .into(imgMap);
                         imgMap.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
-                                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", output[0], output[1]);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                                startActivity(intent);
+                                String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%f,%f", output[0], output[1]);
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
                             }
                         });
-                    } else {
-                        llLocation.setVisibility(View.GONE);
-                        llMap.setVisibility(View.GONE);
-                    }
-                    //VISIBLE YES
-                    ll.setVisibility(View.VISIBLE);
+                        Location.setText(String.format(Locale.getDefault(),"%f, %f",
+                                output[0], output[1]));
+                        llLocation.setVisibility(View.VISIBLE);
+                        llMap.setVisibility(View.VISIBLE);
 
+                    }
+                    ll.setVisibility(View.VISIBLE);
                 }
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
