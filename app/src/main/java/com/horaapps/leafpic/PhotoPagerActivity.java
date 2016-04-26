@@ -540,7 +540,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 //MAP
                 final LinearLayout llMap = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_map);
                 final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
-                final LinearLayout llLocation=(LinearLayout)Delete_dialogLayout.findViewById(R.id.ll_location);
+                final LinearLayout llLocation =(LinearLayout) Details_DialogLayout.findViewById(R.id.ll_location);
                 /*
                 Glide.with(this)
                         .load(album.getCurrentPhoto().Path)
