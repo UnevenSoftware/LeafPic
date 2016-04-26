@@ -46,6 +46,7 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Base.MediaFolders;
 import com.horaapps.leafpic.Base.MediaStoreHandler;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -67,6 +68,7 @@ public class MainActivity extends ThemedActivity {
     HandlingAlbums albums;// = new HandlingAlbums(MainActivity.this);
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
     Album album = new Album(MainActivity.this);
+    MediaFolders folders;
 
     RecyclerView mRecyclerView;
     AlbumsAdapter adapt;
@@ -146,12 +148,34 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
+    public class PrepareAlbumsIntenal extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(TAG, "onPreExecute: start");
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            //album.updatePhotos();
+            folders.getMediaAlbums();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.d(TAG, "onPostExecute: end");
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         albums = new HandlingAlbums(MainActivity.this);
-
+        folders=new MediaFolders();
+        //new PrepareAlbumsIntenal().execute();
         /*try {
             Bundle data = getIntent().getExtras();
             albums = data.getParcelable("albums");
@@ -291,7 +315,6 @@ public class MainActivity extends ThemedActivity {
                 albums.setContext(MainActivity.this);
                 displayAlbums(false);
                 pickmode=data.getBoolean(SplashScreen.PICK_MODE);
-                Log.wtf("asd",pickmode+"");
             } else if (content == SplashScreen.PHOTS_PREFETCHED) {
                 album = data.getParcelable("album");
                 assert album != null;
