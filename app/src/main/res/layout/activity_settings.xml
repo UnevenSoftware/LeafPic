@@ -51,7 +51,62 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         />
+                    <!-- AUTO UPDATE MEDIA -->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_auto_update_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
 
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/auto_update_media_Icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-update"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/auto_update_media_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/auto_update_media"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/auto_update_media_Item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/auto_update_media_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetAutoUpdateMedia"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
                     <!-- TRASLUCENT STATUS BAR-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
