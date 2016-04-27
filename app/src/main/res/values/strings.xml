@@ -136,6 +136,10 @@
     <string name="internal_player">Internal Video Player</string>
     <string name="internal_player_sub">Use embedded video player</string>
 
+    <!--DONATE STRINGS-->
+    <string name="donate_googleplay">Google Play</string>
+    <string name="donate_payppal">PayPal</string>
+
 
     <!--ABOUT STRINGS-->
     <string name="about">About</string>

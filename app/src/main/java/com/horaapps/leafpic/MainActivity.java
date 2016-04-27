@@ -492,6 +492,13 @@ public class MainActivity extends ThemedActivity {
         imgHidden.setColor(color);
 
         /****DRAWER CLICK LISTENER****/
+        findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DonateActivity.class);
+                startActivity(intent);
+            }
+        });
         findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -499,12 +506,7 @@ public class MainActivity extends ThemedActivity {
                 startActivity(intent);
             }
         });
-        findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CominqSoonDialog("Hidden");
-            }
-        });
+
         findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -513,13 +515,21 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
+
+
+
         findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
-
+        findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CominqSoonDialog("Hidden");
+            }
+        });
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
