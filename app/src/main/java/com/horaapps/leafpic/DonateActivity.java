@@ -58,7 +58,7 @@ public class DonateActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
-        toolbar.setTitle(getString(R.string.about));
+        toolbar.setTitle(getString(R.string.donate));
 
         /**** Status Bar ****/
         setStatusBarColor();
