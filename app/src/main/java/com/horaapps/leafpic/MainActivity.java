@@ -458,6 +458,7 @@ public class MainActivity extends ThemedActivity {
         TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
         TextView txtWall = (TextView) findViewById(R.id.Drawer_wallpapers_Item);
         TextView txtAbout = (TextView) findViewById(R.id.Drawer_About_Item);
+        TextView txtHidden = (TextView) findViewById(R.id.Drawer_hidden_Item);
 
         IconicsImageView imgDD = (IconicsImageView) findViewById(R.id.Drawer_Default_Icon);
         IconicsImageView imgWall = (IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon);
@@ -466,6 +467,7 @@ public class MainActivity extends ThemedActivity {
         IconicsImageView imgDDonate = (IconicsImageView) findViewById(R.id.Drawer_Donate_Icon);
         IconicsImageView imgDS = (IconicsImageView) findViewById(R.id.Drawer_Setting_Icon);
         IconicsImageView imgAbout = (IconicsImageView) findViewById(R.id.Drawer_About_Icon);
+        IconicsImageView imgHidden = (IconicsImageView) findViewById(R.id.Drawer_hidden_Icon);
 
         /**textViews Colors*/
         int color = getTextColor();
@@ -476,6 +478,7 @@ public class MainActivity extends ThemedActivity {
         txtDDonate.setTextColor(color);
         txtWall.setTextColor(color);
         txtAbout.setTextColor(color);
+        txtHidden.setTextColor(color);
 
         color = getIconColor();
 
@@ -486,8 +489,16 @@ public class MainActivity extends ThemedActivity {
         imgDS.setColor(color);
         imgWall.setColor(color);
         imgAbout.setColor(color);
+        imgHidden.setColor(color);
 
         /****DRAWER CLICK LISTENER****/
+        findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DonateActivity.class);
+                startActivity(intent);
+            }
+        });
         findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -495,6 +506,7 @@ public class MainActivity extends ThemedActivity {
                 startActivity(intent);
             }
         });
+
         findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -503,13 +515,21 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
+
+
+
         findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
-
+        findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CominqSoonDialog("Hidden");
+            }
+        });
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
