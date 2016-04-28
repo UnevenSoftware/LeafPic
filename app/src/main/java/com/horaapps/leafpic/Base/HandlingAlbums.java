@@ -70,7 +70,7 @@ public class HandlingAlbums implements Parcelable {
         context = c;
     }
 
-    public void loadPreviewAlbums() {
+    /*public void loadPreviewAlbums() {
         MediaStoreHandler as = new MediaStoreHandler(context);
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         dispAlbums = as.getMediaStoreAlbums(getSortingMode());
@@ -93,7 +93,7 @@ public class HandlingAlbums implements Parcelable {
             camera.DisplayName = context.getString(R.string.camera);
             dispAlbums.add(0, camera);
         }
-    }
+    }*/
 
     public String getColumnSortingMode() {
         SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
@@ -128,9 +128,9 @@ public class HandlingAlbums implements Parcelable {
                 + (SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
     }
 
-    public void loadExcludedAlbums() {
+    /*public void loadExcludedAlbums() {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        MediaStoreHandler as = new MediaStoreHandler(context);
+        //MediaStoreHandler as = new MediaStoreHandler(context);
         dispAlbums = h.getExcludedALbums();
 
         for (int i = 0; i < dispAlbums.size(); i++) {
@@ -165,7 +165,7 @@ public class HandlingAlbums implements Parcelable {
             dispAlbum.setSelcted(false);
 
         selectedAlbums.clear();
-    }
+    }*/
 
     public Album getAlbum(int p) {
         return dispAlbums.get(p);
@@ -180,11 +180,12 @@ public class HandlingAlbums implements Parcelable {
         dispAlbums.add(index, a);
     }
 
-    public void deleteSelectedAlbums(Context context) {
+    /*public void deleteSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums)
             MediaStoreHandler.deleteAlbumMedia(selectedAlbum, context);
         clearSelectedAlbums();
     }
+    */
 
     public Album getSelectedAlbum(int index) {
         return selectedAlbums.get(index);
@@ -194,7 +195,7 @@ public class HandlingAlbums implements Parcelable {
         MediaScannerConnection.scanFile(context, path, null, null);
     }
 
-    public void hideSelectedAlbums() {
+    /*public void hideSelectedAlbums() {
         for (Album selectedAlbum : selectedAlbums)
             hideAlbum(selectedAlbum);
         clearSelectedAlbums();
@@ -231,7 +232,7 @@ public class HandlingAlbums implements Parcelable {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.excludeAlbum(a.ID);
         dispAlbums.remove(a);
-    }
+    }*/
 
     @Override
     public int describeContents() {
@@ -254,7 +255,7 @@ public class HandlingAlbums implements Parcelable {
         }
     }
 
-    public void InstallShortcutForSelectedAlbums(Context appCtx) {
+    /*public void InstallShortcutForSelectedAlbums(Context appCtx) {
         for (Album selectedAlbum : selectedAlbums) {
 
             Intent shortcutIntent;
@@ -297,13 +298,6 @@ public class HandlingAlbums implements Parcelable {
     private Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
         Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
-        /*canvas.drawColor(ContextCompat.getColor((context),
-                SP.getInt("basic_theme", 1)==1
-                        ? R.color.md_light_cards
-                        : (SP.getInt("basic_theme", 1)==2
-                        ? R.color.md_dark_cards
-                        : R.color.md_black_1000))
-                );*/
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(bmp, borderSize, borderSize, null);
         return bmpWithBorder;
@@ -323,5 +317,5 @@ public class HandlingAlbums implements Parcelable {
             );
         }
         return dstBmp;
-    }
+    }*/
 }

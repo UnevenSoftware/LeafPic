@@ -2,11 +2,13 @@ package com.horaapps.leafpic.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.MediaStoreSignature;
+import com.horaapps.leafpic.Base.newMedia;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
@@ -29,14 +32,14 @@ import java.util.ArrayList;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {//implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate
 
-    ArrayList<Media> medias;
+    ArrayList<newMedia> medias;
     SharedPreferences SP;
 
     BitmapDrawable drawable;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<Media> ph ,Context context) {
+    public PhotosAdapter(ArrayList<newMedia> ph ,Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         switch (SP.getInt("basic_theme", 1)){
@@ -70,36 +73,50 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     }
 
 
-    public double aspectRatioForIndex(int index) {
-        Media f = medias.get(index);
-        if (index > medias.size()) return 1.0;
-        return f.width / (double) f.height;
-        // Return the aspect ratio of your image at the given index
-    }
-
     @Override
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
-        Media f = medias.get(position);
+        newMedia f = medias.get(position);
+        byte[] thumnail = f.getThumnail();
 
-        if (f.isImage() && f.isGif()) {
-            Ion.with(holder.imageView.getContext())
-                    .load(f.Path)
-                    .intoImageView(holder.imageView);
-            holder.gifIcon.setVisibility(View.VISIBLE);
-        } else {
-            holder.gifIcon.setVisibility(View.GONE);
-            Glide.with(holder.imageView.getContext())
-                    .load(f.Path)
+        if (thumnail != null) {
+            /*Glide.with(holder.imageView.getContext())
+                    .load(thumnail)
                     .asBitmap()
-                    .signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
+                    .centerCrop()
+                    .placeholder(drawable)
+                    // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                    .animate(R.anim.fade_in)
+                    .into(holder.imageView);*/
+            Log.wtf("asd","thumanil here!");
+            Glide.with(holder.imageView.getContext())
+                    .load(thumnail)
+                    .centerCrop()
+                    .animate(R.anim.fade_in)
+                    .into(holder.imageView);
+           // holder.imageView.setImageBitmap(thumnail);
+        } else {
+            Glide.with(holder.imageView.getContext())
+                    .load(f.getPath())
+                    .asBitmap()
+                    //.signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                     .centerCrop()
                     .placeholder(drawable)
                     // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
-            holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
         }
+
+        /*if (f.isImage() && f.isGif()) {
+            Ion.with(holder.imageView.getContext())
+                    .load(f.Path)
+                    .intoImageView(holder.imageView);
+            holder.gifIcon.setVisibility(View.VISIBLE);
+        } else {*/
+            holder.gifIcon.setVisibility(View.GONE);
+
+            //holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
+        //}
 
         holder.path.setTag(position);
 
@@ -128,7 +145,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataset(ArrayList<Media> asd) {
+    public void updateDataset(ArrayList<newMedia> asd) {
         medias = asd;
         notifyDataSetChanged();
     }

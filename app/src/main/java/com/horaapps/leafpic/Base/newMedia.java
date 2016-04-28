@@ -19,6 +19,11 @@ public class newMedia {
 
     String path = null;
     long dateModified = -1;
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     boolean selected = false;
 
     public newMedia(String path, long dateModified) {
@@ -26,15 +31,21 @@ public class newMedia {
         this.dateModified=dateModified;
     }
 
+    public newMedia(String path) {
+        this.path=path;
+    }
+
     public Uri getUri() {
         return Uri.fromFile(new File(path));
     }
 
-    public Bitmap getThumnail() throws IOException {
-        ExifInterface exif = new ExifInterface(getPath());
+    public byte[] getThumnail()  {
+        ExifInterface exif;
+        try { exif = new ExifInterface(getPath()); }
+        catch (IOException e) {  return null; }
         byte[] imageData = exif.getThumbnail();
         if (imageData != null)
-            return BitmapFactory.decodeByteArray(imageData,0,imageData.length);
+            return imageData;
         return null;
     }
 

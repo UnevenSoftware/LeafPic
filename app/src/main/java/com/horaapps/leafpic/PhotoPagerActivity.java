@@ -346,7 +346,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.copyAction:
-                final HandlingAlbums albums = new HandlingAlbums(PhotoPagerActivity.this);
+                /*final HandlingAlbums albums = new HandlingAlbums(PhotoPagerActivity.this);
                 albums.loadPreviewAlbums();
                 final CopyMove_BottomSheet bottomSheetDialogFragment = new CopyMove_BottomSheet();
                 bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
@@ -360,6 +360,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                     }
                 });
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                */
                 break;
 
 
@@ -428,7 +429,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.moveAction:
-                final HandlingAlbums handlingAlbums = new HandlingAlbums(PhotoPagerActivity.this);
+                /*final HandlingAlbums handlingAlbums = new HandlingAlbums(PhotoPagerActivity.this);
                 handlingAlbums.loadPreviewAlbums();
                 final CopyMove_BottomSheet sheetMove = new CopyMove_BottomSheet();
                 sheetMove.setAlbumArrayList(handlingAlbums.dispAlbums);
@@ -449,6 +450,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                     }
                 });
                 sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
+                */
                 break;
 
             case R.id.renamePhoto:

@@ -29,7 +29,7 @@ public class MediaStoreHandler {
         ArrayList<Album> list = new ArrayList<Album>();
 
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        ArrayList<String> excludedAlbums = h.getExcludedALbumsIDs();
+        ArrayList<String> excludedAlbums = new ArrayList<String>();//h.getExcludedALbumsIDs();
 
 
         String[] projection = new String[]{

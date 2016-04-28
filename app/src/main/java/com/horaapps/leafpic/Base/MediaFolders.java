@@ -28,26 +28,20 @@ public class MediaFolders {
         excludedfolders.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_MUSIC));
     }
 
-    public void getMediaAlbums() {
+    public ArrayList<newAlbum> getMediaAlbums() {
+        includedFolders = new ArrayList<newAlbum>();
+
         getAlbums(Environment.getExternalStorageDirectory());
-
         Collections.sort(includedFolders, albumsComapartors.getNameComapartor());
-        for (newAlbum includedFolder : includedFolders) {
-            Log.wtf(TAG,includedFolder.getPath());
-            includedFolder.loadLastPhoto();
 
-            try {
-                Log.d(TAG, "getMediaAlbums: " + includedFolder.media.get(0).getThumnail());
-            } catch (IOException e) {
-                //e.printStackTrace();
-            }
-            Log.w(TAG,"count: "+includedFolder.getCount());
+        for (newAlbum includedFolder : includedFolders) {
+            includedFolder.loadLastPhoto();
         }
+        return includedFolders;
 
     }
 
    public void getAlbums(File dir) {
-        //checkFolderValidity(dir);
         if (!excludedfolders.contains(dir)) {
            File[] children = dir.listFiles(new FoldersFileFilter());
            for (File temp : children) {
