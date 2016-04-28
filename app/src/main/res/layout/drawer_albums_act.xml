@@ -68,7 +68,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
-                        app:iiv_icon="gmd-photo"
+                        app:iiv_icon="gmd-folder"
                         />
                     <TextView
                         android:id="@+id/Drawer_Default_Item"
@@ -77,6 +77,42 @@
                         android:layout_marginStart="12dp"
                         android:padding="15dp"
                         android:text="@string/local_folder"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <!-- HIDDEN ALBUMS -->
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleAlpha="0.05"
+                app:mrl_rippleDelayClick="false"
+                >
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ll_drawer_hidden"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/Drawer_hidden_Icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        app:iiv_icon="gmd-folder-open"
+                        />
+                    <TextView
+                        android:id="@+id/Drawer_hidden_Item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:padding="15dp"
+                        android:text="@string/hidden_folder"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
@@ -103,7 +139,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
-                        app:iiv_icon="faw-thumb-tack"
+                        app:iiv_icon="faw-tag"
                         />
 
                     <TextView

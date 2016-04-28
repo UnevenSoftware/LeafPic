@@ -123,8 +123,8 @@ public class ThemedActivity extends AppCompatActivity {
         int color;
         switch (basicTheme){
             case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);break;
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_primary_icon);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_primary_icon);break;
+            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;//md_dark_primary_icon
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;//md_dark_primary_icon
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
         }
         return color;
