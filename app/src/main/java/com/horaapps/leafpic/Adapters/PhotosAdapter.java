@@ -43,9 +43,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         switch (SP.getInt("basic_theme", 1)){
-            case 1: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
             case 2: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));break;
             case 3: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));break;
+            case 1:
             default: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
         }
     }
@@ -80,43 +80,32 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         byte[] thumnail = f.getThumnail();
 
         if (thumnail != null) {
-            /*Glide.with(holder.imageView.getContext())
-                    .load(thumnail)
-                    .asBitmap()
-                    .centerCrop()
-                    .placeholder(drawable)
-                    // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                    .animate(R.anim.fade_in)
-                    .into(holder.imageView);*/
-            Log.wtf("asd","thumanil here!");
             Glide.with(holder.imageView.getContext())
                     .load(thumnail)
                     .centerCrop()
+                    .placeholder(drawable)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
-           // holder.imageView.setImageBitmap(thumnail);
         } else {
-            Glide.with(holder.imageView.getContext())
-                    .load(f.getPath())
-                    .asBitmap()
-                    //.signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
-                    .centerCrop()
-                    .placeholder(drawable)
-                    // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                    .animate(R.anim.fade_in)
-                    .into(holder.imageView);
+            if (f.isGif()) {
+                Ion.with(holder.imageView.getContext())
+                        .load(f.getPath())
+                        .intoImageView(holder.imageView);
+                holder.gifIcon.setVisibility(View.VISIBLE);
+            } else {
+                Glide.with(holder.imageView.getContext())
+                        .load(f.getPath())
+                        .asBitmap()
+                        .signature(new MediaStoreSignature(f.getMIME(), f.getDateModified(), f.getOrientation()))
+                        .centerCrop()
+                        .placeholder(drawable)
+                        //.placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
+                        .animate(R.anim.fade_in)
+                        .into(holder.imageView);
+                holder.gifIcon.setVisibility(View.GONE);
+                holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
+            }
         }
-
-        /*if (f.isImage() && f.isGif()) {
-            Ion.with(holder.imageView.getContext())
-                    .load(f.Path)
-                    .intoImageView(holder.imageView);
-            holder.gifIcon.setVisibility(View.VISIBLE);
-        } else {*/
-            holder.gifIcon.setVisibility(View.GONE);
-
-            //holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
-        //}
 
         holder.path.setTag(position);
 

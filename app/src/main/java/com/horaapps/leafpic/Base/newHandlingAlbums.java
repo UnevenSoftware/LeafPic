@@ -2,6 +2,7 @@ package com.horaapps.leafpic.Base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,14 +11,15 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.os.EnvironmentCompat;
 import android.util.Log;
 
+import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by dnld on 27/04/16.
@@ -27,11 +29,18 @@ public class newHandlingAlbums {
     public ArrayList<newAlbum> dispAlbums;
     private ArrayList<newAlbum> selectedAlbums;
 
+    CustomAlbumsHandler customAlbumsHandler;
+    private SharedPreferences SP;
+
     ArrayList<File> excludedfolders;
+    AlbumsComapartors albumsComapartors;
 
     public newHandlingAlbums(Context context) {
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        customAlbumsHandler = new CustomAlbumsHandler(context);
+
         excludedfolders = new ArrayList<File>();
-        loadExcudedFolders(context);
+        loadExcludedFolders(context);
         dispAlbums = new ArrayList<newAlbum>();
         selectedAlbums = new ArrayList<newAlbum>();
     }
@@ -39,6 +48,7 @@ public class newHandlingAlbums {
     public void loadPreviewAlbums() {
         dispAlbums = new ArrayList<newAlbum>();
         fetchRecursivelyFolder(Environment.getExternalStorageDirectory());
+        sortAlbums();
     }
 
     private void fetchRecursivelyFolder(File dir) {
@@ -53,7 +63,8 @@ public class newHandlingAlbums {
                     if (files.length > 0) {
                         //valid folder
                         newAlbum asd = new newAlbum(temp.getAbsolutePath(), temp.getName(), files.length);
-                        //TODO check for album cover
+                        asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
+
                         long lastMod = Long.MIN_VALUE;
                         File choice = null;
                         for (File file : files) {
@@ -63,7 +74,8 @@ public class newHandlingAlbums {
                             }
                         }
                         if (choice != null)
-                            asd.media.add(0, new newMedia(choice.getAbsolutePath(),choice.lastModified()));
+                            asd.media.add(0, new newMedia(choice.getAbsolutePath(), choice.lastModified()));
+
                         dispAlbums.add(asd);
                     }
                     fetchRecursivelyFolder(temp);
@@ -103,8 +115,10 @@ public class newHandlingAlbums {
         }
     }
 
-    public void loadExcudedFolders(Context context) {
+    public void loadExcludedFolders(Context context) {
         excludedfolders = new ArrayList<File>();
+        //forced excluded folder
+        excludedfolders.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
         CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
         excludedfolders.addAll(handler.getExcludedFolders());
     }
@@ -258,6 +272,43 @@ public class newHandlingAlbums {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.excludeAlbum(a.getPath());
         dispAlbums.remove(a);
+    }
+
+    public int getColumnSortingMode() {
+        return SP.getInt("column_sort", AlbumSettings.SORT_BY_DATE);
+    }
+
+    public boolean isAscending() {
+        return SP.getBoolean("ascending_mode", false);
+    }
+
+
+    public void setDefaultSortingMode(int column) {
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putInt("column_sort", column);
+        editor.apply();
+    }
+
+    public void setDefaultSortingAscending(Boolean ascending) {
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putBoolean("ascending_mode", ascending);
+        editor.apply();
+    }
+
+    public void sortAlbums() {
+        albumsComapartors = new AlbumsComapartors(isAscending());
+        switch (getColumnSortingMode()) {
+            case AlbumSettings.SORT_BY_NAME:
+                Collections.sort(dispAlbums, albumsComapartors.getNameComapartor());
+                break;
+            case AlbumSettings.SORT_BY_SIZE:
+                Collections.sort(dispAlbums, albumsComapartors.getSizeComapartor());
+                break;
+            case AlbumSettings.SORT_BY_DATE:
+            default:
+                Collections.sort(dispAlbums, albumsComapartors.getDateComapartor());
+                break;
+        }
     }
 
 }

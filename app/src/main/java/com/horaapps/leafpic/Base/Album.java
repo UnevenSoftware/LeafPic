@@ -110,9 +110,9 @@ public class Album implements Parcelable {
     }
 
     public void setDefaultSortingMode(String column) {
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        h.setAlbumSortingMode(ID, column);
-        settings.columnSortingMode = column;
+       // CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+       // h.setAlbumSortingMode(ID, column);
+       // settings.columnSortingMode = column;
     }
 
     public void setDefaultSortingAscending(Boolean ascending) {
@@ -122,7 +122,7 @@ public class Album implements Parcelable {
     }
 
     public String getSortingMode() {
-        return settings.getSQLSortingMode();
+        return null;//settings.getSQLSortingMode();
         /*if (settings.columnSortingMode != null) return settings.getSQLSortingMode();
         else return MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";*/
     }
@@ -137,21 +137,21 @@ public class Album implements Parcelable {
     /**
      * media stuff
      */
-    public boolean areFiltersActive() {
+   /* public boolean areFiltersActive() {
         return filter_photos != FILTER_ALL;
     }
 
     public void filterMedias(int filter) {
         filter_photos = filter;
         updatePhotos();
-    }
+    }*/
 
     public void updatePhotos() {
         MediaStoreHandler as = new MediaStoreHandler(context);
         medias = as.getAlbumPhotos(ID, getSortingMode(), filter_photos);
     }
 
-    public void clearSelectedPhotos() {
+   /* public void clearSelectedPhotos() {
         for (Media media : medias) {
             media.setSelected(false);
         }
@@ -161,6 +161,7 @@ public class Album implements Parcelable {
     public int getSelectedCount() {
         return selectedMedias.size();
     }
+    */
 
     public Media getCurrentPhoto() {
         return medias.get(getCurrentPhotoIndex());
@@ -185,7 +186,9 @@ public class Album implements Parcelable {
         current = n;
     }
 
-    public void selectAllPhotos() {
+
+    /*
+     public void selectAllPhotos() {
         for (int i = 0; i < medias.size(); i++)
             if (!medias.get(i).isSelected()) {
                 medias.get(i).setSelected(true);
@@ -203,14 +206,6 @@ public class Album implements Parcelable {
         }
         return index;
     }
-
-    /**
-     * On longpress, it finds the last or the first selected image before or after the targetIndex
-     * and selects them all.
-     *
-     * @param targetIndex
-     * @param adapter
-     */
     public void selectAllPhotosUpTo(int targetIndex, PhotosAdapter adapter) {
         int indexRightBeforeOrAfter = -1;
         int indexNow;
@@ -242,7 +237,7 @@ public class Album implements Parcelable {
             }
         }
 //        Log.d("SELECT", String.format("target: %d  indexRightBeforeOrAfter: %d", targetIndex, indexRightBeforeOrAfter));
-    }
+    }*/
 
     public boolean isSelected() {
         return selected;
@@ -316,7 +311,7 @@ public class Album implements Parcelable {
         }
     }
 
-    public void copySelectedPhotos(String folderPath) {
+    /*public void copySelectedPhotos(String folderPath) {
         for (Media media : selectedMedias)
             copyPhoto(media.Path, folderPath);
     }
@@ -341,7 +336,7 @@ public class Album implements Parcelable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
    /* public void movePhoto(String olderPath, String folderPath) {
         try {

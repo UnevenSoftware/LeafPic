@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 
 public class CustomAlbumsHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "CustomAlbums";
 
     private static final String TABLE_ALBUMS = "albums";
@@ -38,16 +38,14 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " +
                 TABLE_ALBUMS + "(" +
                 ALBUM_PATH + " TEXT," +
-                ALBUM_EXCLUDED + " TEXT," +
+                ALBUM_EXCLUDED + " INTEGER," +
                 ALBUM_COVER + " TEXT, " +
-                ALBUM_DEAFAULT_SORTMODE + " TEXT, " +
-                ALBUM_DEAFAULT_SORT_ASCENDING + " BOOLEAN, " +
+                ALBUM_DEAFAULT_SORTMODE + " INTEGER, " +
+                ALBUM_DEAFAULT_SORT_ASCENDING + " INTEGER, " +
                 ALBUM_COLUMN_COUNT + " TEXT)");
 
         db.execSQL("INSERT INTO "+TABLE_ALBUMS+" ("+ALBUM_PATH+","+ALBUM_EXCLUDED+")" +
-                "VALUES('"+Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"+"', 'true')");
-        db.execSQL("INSERT INTO "+TABLE_ALBUMS+" ("+ALBUM_PATH+","+ALBUM_EXCLUDED+")" +
-                "VALUES('"+Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_MUSIC+"', 'true')");
+                "VALUES('"+Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Environment.DIRECTORY_MUSIC+"', 1)");
     }
 
     @Override
@@ -59,7 +57,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     public ArrayList<File>  getExcludedFolders() {
         ArrayList<File> list = new ArrayList<File>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, ALBUM_EXCLUDED + "='true'", null, null, null, null);
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, ALBUM_EXCLUDED + "=1", null, null, null, null);
 
         if (cur.moveToFirst())
             do list.add(new File(cur.getString(0)));
@@ -72,14 +70,14 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
     public void clearAlbumExclude(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "='false' WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "=0 WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
         db.close();
     }
 
     public void excludeAlbum(String path) {
         checkAndCreateAlbum(path);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "='true' WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(path) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "=1 WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(path) + "'");
         db.close();
     }
 
@@ -89,7 +87,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + ALBUM_COVER + ", " + ALBUM_DEAFAULT_SORTMODE + ", " + ALBUM_DEAFAULT_SORT_ASCENDING + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'", null);
         if (cursor.moveToFirst())
-            s = new AlbumSettings(cursor.getString(0), cursor.getString(1), Boolean.valueOf(cursor.getString(2)));
+            s = new AlbumSettings(cursor.getString(0), cursor.getInt(1), (cursor.getInt(2) == 1));
         cursor.close();
         db.close();
         return s;
@@ -135,19 +133,19 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void setAlbumSortingMode(String id, String column) {
+    public void setAlbumSortingMode(String id, int column) {
         checkAndCreateAlbum(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_DEAFAULT_SORTMODE + "='" + column +
-                "' WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_DEAFAULT_SORTMODE + "=" + column +
+                " WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
         db.close();
     }
 
-    public void setAlbumSortingAscending(String id, Boolean asc) {
+    public void setAlbumSortingAscending(String id, boolean asc) {
         checkAndCreateAlbum(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_DEAFAULT_SORT_ASCENDING + "='" + String.valueOf(asc) +
-                "' WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_DEAFAULT_SORT_ASCENDING + "=" + (asc ? 1 : 0) +
+                " WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
         db.close();
     }
 }

@@ -12,9 +12,9 @@ import java.io.IOException;
  */
 public class StringUtils {
 
-    public static String getMimeType(String url) {
+    public static String getMimeType(String path) {
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        String extension = MimeTypeMap.getFileExtensionFromUrl(path);
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
