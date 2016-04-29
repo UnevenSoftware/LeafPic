@@ -13,8 +13,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
+import com.horaapps.leafpic.Base.newMedia;
 import com.koushikdutta.ion.Ion;
-import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.PhotoPagerActivity;
 
 import uk.co.senab.photoview.PhotoView;
@@ -27,9 +27,9 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 @SuppressWarnings("ResourceType")
 public class ImageFragment extends Fragment {
 
-    private Media img;
+    private newMedia img;
 
-    public static ImageFragment newInstance(Media asd) {
+    public static ImageFragment newInstance(newMedia asd) {
         ImageFragment fragmentFirst = new ImageFragment();
 
         Bundle args = new Bundle();
@@ -62,18 +62,18 @@ public class ImageFragment extends Fragment {
 
         if (SP.getBoolean("set_delay_full_image", true)) {
             Ion.with(getContext())
-                    .load(img.Path)
+                    .load(img.getPath())
                     .withBitmap()
                     .deepZoom()
                     .intoImageView(photoView);
         } else {
             Glide.with(getContext())
-                    .load(img.Path)
+                    .load(img.getPath())
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .skipMemoryCache(true)
                     .priority(Priority.HIGH)
-                    .signature(new MediaStoreSignature(img.MIME, img.DateModified, img.orientation))
+                    .signature(new MediaStoreSignature(img.getMIME(), img.getDateModified(), img.getOrientation()))
                             //.centerCrop()
                     .into(photoView);
         }

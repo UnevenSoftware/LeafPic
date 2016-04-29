@@ -20,10 +20,8 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.MediaStoreSignature;
-import com.bumptech.glide.signature.StringSignature;
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Base.newAlbum;
+import com.horaapps.leafpic.Base.newMedia;
 import com.horaapps.leafpic.R;
 
 import java.util.ArrayList;
@@ -33,12 +31,12 @@ import java.util.ArrayList;
  */
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
-    ArrayList<Album> albums;
+    ArrayList<newAlbum> albums;
     SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public AlbumsAdapter(ArrayList<Album> ph, Context ctx) {
+    public AlbumsAdapter(ArrayList<newAlbum> ph, Context ctx) {
         albums = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -62,22 +60,22 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
-        Album a = albums.get(position);
+        newAlbum a = albums.get(position);
         Context c = holder.picture.getContext();
-        Media f = a.getCoverAlbum();
+        newMedia f = a.getCoverAlbum();
         /*
         YoYo.with(Techniques.SlideInUp)
                 .duration(100)
                 .playOn(holder.cv);
         */
         Glide.with(c)
-                .load(f.Path)
+                .load(f.getPath())
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .priority(Priority.HIGH)
-                .signature(a.hasCustomCover()
+                /*.signature(a.hasCustomCover()
                         ? new StringSignature(f.Path)
-                        : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
+                        : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))*/
                 .centerCrop()
                 .placeholder(SP.getInt("basic_theme", 1)==1
                         ? R.drawable.ic_empty_white
@@ -118,8 +116,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
             else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_black_1000));
         }
-        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.getName() + "</font></i>"));
+        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
                 "color='" + textColor + "'> " +a.getContentDescdription(c) + "</font>"));
         // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }
@@ -132,7 +130,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataset(ArrayList<Album> asd) {
+    public void updateDataset(ArrayList<newAlbum> asd) {
         albums = asd;
         notifyDataSetChanged();
     }

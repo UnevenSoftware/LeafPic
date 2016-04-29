@@ -40,13 +40,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
-import com.horaapps.leafpic.Adapters.newAlbumsAdapter;
+import com.horaapps.leafpic.Adapters.AlbumsAdapter;
 
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.newAlbum;
-import com.horaapps.leafpic.Base.newHandlingAlbums;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.newMedia;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -69,11 +69,11 @@ public class MainActivity extends ThemedActivity {
     newAlbum album;// = new Album(MainActivity.this);
     SharedPreferences SP;
 
-    newHandlingAlbums albums;
+    HandlingAlbums albums;
     RecyclerView mRecyclerView;
     PhotosAdapter adapter;
 
-    newAlbumsAdapter adapt;
+    AlbumsAdapter adapt;
 
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
@@ -106,19 +106,16 @@ public class MainActivity extends ThemedActivity {
         @Override
         public void onClick(View v) {
             if (contentReady) {
-
                 TextView is = (TextView) v.findViewById(R.id.photo_path);
                 if (editmode) {
                     adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
                     invalidateOptionsMenu();
-                } /*else {
+                } else {
                     album.setCurrentPhotoIndex(Integer.parseInt(is.getTag().toString()));
                     Intent intent = new Intent(MainActivity.this, PhotoPagerActivity.class);
-                    Bundle b = new Bundle();
-                    //b.putParcelable("album", album);
-                    intent.putExtras(b);
+                    intent.setAction(PhotoPagerActivity.ACTION);
                     startActivity(intent);
-                }*/
+                }
             }
         }
     };
@@ -226,7 +223,7 @@ public class MainActivity extends ThemedActivity {
         mRecyclerView.removeItemDecoration(photosDecoration);
         mRecyclerView.addItemDecoration(albumsDecoration);
 
-        adapt = new newAlbumsAdapter(albums.dispAlbums, MainActivity.this);
+        adapt = new AlbumsAdapter(albums.dispAlbums, MainActivity.this);
         if (reload) new PrepareAlbumTask().execute();
 
         adapt.setOnClickListener(albumOnClickListener);
@@ -374,6 +371,7 @@ public class MainActivity extends ThemedActivity {
                 if (!albumsMode && album.areFiltersActive()) {
                     album.filterMedias(ImageFileFilter.FILTER_ALL);
                     adapter.updateDataset(album.media);
+                    checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
                 } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
@@ -653,9 +651,8 @@ public class MainActivity extends ThemedActivity {
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
-
-
         getMenuInflater().inflate(R.menu.menu_albums, menu);
 
         if (albumsMode) {
@@ -988,7 +985,7 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.copyAction:
-                final CopyMove_BottomSheet bottomSheetDialogFragment = new CopyMove_BottomSheet();
+                final SelectAlbumBottomSheet bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
@@ -1143,7 +1140,7 @@ public class MainActivity extends ThemedActivity {
                     }
                 }
 
-                final CopyMove_BottomSheet sheetMove = new CopyMove_BottomSheet();
+                final SelectAlbumBottomSheet sheetMove = new SelectAlbumBottomSheet();
                 sheetMove.setAlbumArrayList(albums.dispAlbums);
                 sheetMove.setTitle(getString(R.string.move_to));
                 sheetMove.setOnClickListener(new View.OnClickListener() {

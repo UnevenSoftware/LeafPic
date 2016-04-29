@@ -1,4 +1,4 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Base.deprecated;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -7,6 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.deprecated.Album;
+import com.horaapps.leafpic.Base.deprecated.AlbumMediaCount;
+import com.horaapps.leafpic.Base.deprecated.Media;
 
 import java.util.ArrayList;
 
@@ -66,7 +71,7 @@ public class MediaStoreHandler {
     }
 
 
-    public ArrayList<Media> getAlbumPhotos(String id, String sort,int filter) {
+    public ArrayList<Media> getAlbumPhotos(String id, String sort, int filter) {
         return getAlbumPhotos(id, -1, sort, filter);
     }
 

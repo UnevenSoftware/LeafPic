@@ -1,4 +1,4 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Base.deprecated;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,22 +1,17 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Base.deprecated;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.util.Log;
 
-import com.horaapps.leafpic.Adapters.PhotosAdapter;
+import com.horaapps.leafpic.Base.AlbumSettings;
+import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**

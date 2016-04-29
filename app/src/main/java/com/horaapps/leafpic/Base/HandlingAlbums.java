@@ -9,9 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
@@ -19,139 +19,125 @@ import com.horaapps.leafpic.SplashScreen;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collections;
 
+/**
+ * Created by dnld on 27/04/16.
+ */
+public class HandlingAlbums {
 
-public class HandlingAlbums implements Parcelable {
+    public ArrayList<newAlbum> dispAlbums;
+    private ArrayList<newAlbum> selectedAlbums;
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<HandlingAlbums> CREATOR = new Parcelable.Creator<HandlingAlbums>() {
-        @Override
-        public HandlingAlbums createFromParcel(Parcel in) {
-            return new HandlingAlbums(in);
-        }
-
-        @Override
-        public HandlingAlbums[] newArray(int size) {
-            return new HandlingAlbums[size];
-        }
-    };
-
+    CustomAlbumsHandler customAlbumsHandler;
     private SharedPreferences SP;
-    Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
-    public ArrayList<Album> dispAlbums;
 
-    private Context context;
-    private ArrayList<Album> selectedAlbums;
+    ArrayList<File> excludedfolders;
+    AlbumsComapartors albumsComapartors;
 
-    public HandlingAlbums(Context ctx) {
-        context = ctx;
-        dispAlbums = new ArrayList<Album>();
-        selectedAlbums = new ArrayList<Album>();
+    public HandlingAlbums(Context context) {
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        customAlbumsHandler = new CustomAlbumsHandler(context);
+
+        excludedfolders = new ArrayList<File>();
+        loadExcludedFolders(context);
+        dispAlbums = new ArrayList<newAlbum>();
+        selectedAlbums = new ArrayList<newAlbum>();
     }
 
-    protected HandlingAlbums(Parcel in) {
-        if (in.readByte() == 0x01) {
-            dispAlbums = new ArrayList<Album>();
-            in.readList(dispAlbums, Album.class.getClassLoader());
-        } else {
-            dispAlbums = null;
-        }
-        if (in.readByte() == 0x01) {
-            selectedAlbums = new ArrayList<Album>();
-            in.readList(selectedAlbums, Album.class.getClassLoader());
-        } else {
-            selectedAlbums = null;
-        }
+    public void loadPreviewAlbums() {
+        dispAlbums = new ArrayList<newAlbum>();
+        fetchRecursivelyFolder(Environment.getExternalStorageDirectory());
+        sortAlbums();
     }
 
-    public void setContext(Context c) {
-        context = c;
+    private void fetchRecursivelyFolder(File dir) {
+        //if (!excludedfolders.contains(dir)) {
+            File[] children = dir.listFiles(new FoldersFileFilter());
+            for (File temp : children) {
+                File nomedia = new File(temp, ".nomedia");
+                if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
+                    //not excluded/hidden folder
+
+                    File[] files = temp.listFiles(new ImageFileFilter());
+                    if (files.length > 0) {
+                        //valid folder
+                        newAlbum asd = new newAlbum(temp.getAbsolutePath(), temp.getName(), files.length);
+                        asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
+
+                        long lastMod = Long.MIN_VALUE;
+                        File choice = null;
+                        for (File file : files) {
+                            if (file.lastModified() > lastMod) {
+                                choice = file;
+                                lastMod = file.lastModified();
+                            }
+                        }
+                        if (choice != null)
+                            asd.media.add(0, new newMedia(choice.getAbsolutePath(), choice.lastModified()));
+
+                        dispAlbums.add(asd);
+                    }
+                    fetchRecursivelyFolder(temp);
+                }
+            }
+        //}
     }
 
-    /*public void loadPreviewAlbums() {
-        MediaStoreHandler as = new MediaStoreHandler(context);
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        dispAlbums = as.getMediaStoreAlbums(getSortingMode());
-
-        int cameraIndex = -1;
-
-        for (int i = 0; i < dispAlbums.size(); i++) {
-            dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
-            if (!dispAlbums.get(i).setPath())
-                dispAlbums.remove(dispAlbums.get(i));
-            else {
-                dispAlbums.get(i).setCoverPath(h.getPhotPrevieAlbum(dispAlbums.get(i).ID));
-                Matcher matcher = CAMERA_FOLDER_PATTERN.matcher(dispAlbums.get(i).Path);
-                if (matcher.find()) cameraIndex = i;
+    private void fetchRecursivelyHiddenFolder(File dir) {
+        if (!excludedfolders.contains(dir)) {
+            File[] folders = dir.listFiles(new FoldersFileFilter());
+            for (File temp : folders) {
+                File nomedia = new File(temp, ".nomedia");
+                if (nomedia.exists() || temp.isHidden()) {
+                    //hidden folder
+                    File[] files = temp.listFiles(new ImageFileFilter());
+                    if (files.length > 0) {
+                        //valid folder
+                        newAlbum asd = new newAlbum(temp.getAbsolutePath(), temp.getName(), files.length);
+                        //TODO check for album cover
+                        long lastMod = Long.MIN_VALUE;
+                        File choice = null;
+                        for (File file : files) {
+                            if (file.lastModified() > lastMod) {
+                                choice = file;
+                                lastMod = file.lastModified();
+                            }
+                        }
+                        if (choice != null) {
+                            asd.media.add(0, new newMedia(choice.getAbsolutePath(), choice.lastModified()));
+                            dispAlbums.add(asd);
+                        }
+                    }
+                    fetchRecursivelyFolder(temp);
+                } else fetchRecursivelyFolder(temp);
             }
         }
-
-        if (cameraIndex != -1) {
-            Album camera = dispAlbums.remove(cameraIndex);
-            camera.DisplayName = context.getString(R.string.camera);
-            dispAlbums.add(0, camera);
-        }
-    }*/
-
-    public String getColumnSortingMode() {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
-        return SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN);
     }
 
-    public boolean isAscending() {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
-        return SP.getBoolean("ascending_mode", false);
-    }
-
-    public void setDefaultSortingMode(String column) {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = SP.edit();
-        editor.putString("column_sort", column);
-        editor.apply();
-    }
-
-    public void setDefaultSortingAscending(Boolean ascending) {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = SP.edit();
-        editor.putBoolean("ascending_mode", ascending);
-        editor.apply();
-    }
-
-    public String getSortingMode() {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
-
-        return " " + SP.getString("column_sort", MediaStore.Images.ImageColumns.DATE_TAKEN)
-                + (SP.getBoolean("ascending_mode", false) ? " ASC" : " DESC");
-    }
-
-    /*public void loadExcludedAlbums() {
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        //MediaStoreHandler as = new MediaStoreHandler(context);
-        dispAlbums = h.getExcludedALbums();
-
-        for (int i = 0; i < dispAlbums.size(); i++) {
-            dispAlbums.get(i).medias = as.getFirstAlbumPhoto(dispAlbums.get(i).ID);
-            dispAlbums.get(i).setPath();
-        }
+    public void loadExcludedFolders(Context context) {
+        excludedfolders = new ArrayList<File>();
+        //forced excluded folder
+        excludedfolders.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
+        CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
+        excludedfolders.addAll(handler.getExcludedFolders());
     }
 
     public int toggleSelectAlbum(int index) {
         if (dispAlbums.get(index) != null) {
-            dispAlbums.get(index).setSelcted(!dispAlbums.get(index).isSelected());
+            dispAlbums.get(index).setSelected(!dispAlbums.get(index).isSelected());
             if (dispAlbums.get(index).isSelected()) selectedAlbums.add(dispAlbums.get(index));
             else selectedAlbums.remove(dispAlbums.get(index));
         }
         return index;
     }
 
+    public newAlbum getAlbum(int index){ return dispAlbums.get(index); }
+
     public void selectAllAlbums() {
-        for (Album dispAlbum : dispAlbums)
+        for (newAlbum dispAlbum : dispAlbums)
             if (!dispAlbum.isSelected()) {
-                dispAlbum.setSelcted(true);
+                dispAlbum.setSelected(true);
                 selectedAlbums.add(dispAlbum);
             }
     }
@@ -161,116 +147,28 @@ public class HandlingAlbums implements Parcelable {
     }
 
     public void clearSelectedAlbums() {
-        for (Album dispAlbum : dispAlbums)
-            dispAlbum.setSelcted(false);
+        for (newAlbum dispAlbum : dispAlbums)
+            dispAlbum.setSelected(false);
 
         selectedAlbums.clear();
-    }*/
-
-    public Album getAlbum(int p) {
-        return dispAlbums.get(p);
     }
 
-    public int getIndex(Album a) {
-        return dispAlbums.indexOf(a);
-    }
-
-    public void replaceAlbum(int index, Album a) {
-        dispAlbums.remove(index);
-        dispAlbums.add(index, a);
-    }
-
-    /*public void deleteSelectedAlbums(Context context) {
-        for (Album selectedAlbum : selectedAlbums)
-            MediaStoreHandler.deleteAlbumMedia(selectedAlbum, context);
-        clearSelectedAlbums();
-    }
-    */
-
-    public Album getSelectedAlbum(int index) {
-        return selectedAlbums.get(index);
-    }
-
-    public void scanFile(String[] path) {
-        MediaScannerConnection.scanFile(context, path, null, null);
-    }
-
-    /*public void hideSelectedAlbums() {
-        for (Album selectedAlbum : selectedAlbums)
-            hideAlbum(selectedAlbum);
-        clearSelectedAlbums();
-    }
-
-    public void hideAlbum(final Album a) {
-        hideAlbum(a.Path);
-        dispAlbums.remove(a);
-    }
-
-    public void hideAlbum(String path) {
-        File dirName = new File(path);
-        File file = new File(dirName, ".nomedia");
-        if (!file.exists()) {
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                out.flush();
-                out.close();
-                scanFile(new String[]{file.getAbsolutePath()});
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void excludeSelectedAlbums() {
-        for (Album selectedAlbum : selectedAlbums)
-            excludeAlbum(selectedAlbum);
-
-        clearSelectedAlbums();
-    }
-
-    public void excludeAlbum(Album a) {
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        h.excludeAlbum(a.ID);
-        dispAlbums.remove(a);
-    }*/
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (dispAlbums == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(dispAlbums);
-        }
-        if (selectedAlbums == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(selectedAlbums);
-        }
-    }
-
-    /*public void InstallShortcutForSelectedAlbums(Context appCtx) {
-        for (Album selectedAlbum : selectedAlbums) {
+    public void InstallShortcutForSelectedAlbums(Context appCtx) {
+        for (newAlbum selectedAlbum : selectedAlbums) {
 
             Intent shortcutIntent;
             shortcutIntent = new Intent(appCtx, SplashScreen.class);
             shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
-            shortcutIntent.putExtra("albumID", selectedAlbum.ID);
-            shortcutIntent.putExtra("albumName", selectedAlbum.DisplayName);
+            shortcutIntent.putExtra("albumPath", selectedAlbum.getPath());
+            shortcutIntent.putExtra("albumName", selectedAlbum.getName());
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             Intent addIntent = new Intent();
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.DisplayName);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.getName());
 
-            File image = new File(selectedAlbum.getCoverAlbum().Path);
+            File image = new File(selectedAlbum.getCoverAlbum().getPath());
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             Bitmap bitmap;
 
@@ -282,7 +180,7 @@ public class HandlingAlbums implements Parcelable {
                 bitmap = getCorpedBitmap(bitmap);
 
             } else {
-                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().Path,
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 bitmap = getCorpedBitmap(thumb);
             }
@@ -317,5 +215,100 @@ public class HandlingAlbums implements Parcelable {
             );
         }
         return dstBmp;
-    }*/
+    }
+    public void scanFile(Context context, String[] path) {   MediaScannerConnection.scanFile(context, path, null, null); }
+
+    public void hideAlbum(String path, Context context) {
+        File dirName = new File(path);
+        File file = new File(dirName, ".nomedia");
+        if (!file.exists()) {
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                out.flush();
+                out.close();
+                scanFile(context, new String[]{ file.getAbsolutePath() });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void hideAlbum(final newAlbum a, Context context) {
+        hideAlbum(a.getPath(), context);
+        dispAlbums.remove(a);
+    }
+
+    public void deleteSelectedAlbums(Context context) {
+        for (newAlbum selectedAlbum : selectedAlbums) {
+            int index = dispAlbums.indexOf(selectedAlbum);
+            deleteAlbum(selectedAlbum, context);
+            dispAlbums.remove(index);
+        }
+    }
+
+    public void deleteAlbum(newAlbum album, Context context) {
+        File[] files = new File(album.getPath()).listFiles(new ImageFileFilter());
+        for (File file : files) {
+            if (file.delete()){
+                scanFile(context, new String[]{ file.getAbsolutePath() });
+            }
+        }
+    }
+
+    public void hideSelectedAlbums(Context context) {
+        for (newAlbum selectedAlbum : selectedAlbums)
+            hideAlbum(selectedAlbum, context);
+        clearSelectedAlbums();
+    }
+
+    public void excludeSelectedAlbums(Context context) {
+        for (newAlbum selectedAlbum : selectedAlbums)
+            excludeAlbum(context, selectedAlbum);
+
+        clearSelectedAlbums();
+    }
+
+    public void excludeAlbum(Context context, newAlbum a) {
+        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+        h.excludeAlbum(a.getPath());
+        dispAlbums.remove(a);
+    }
+
+    public int getColumnSortingMode() {
+        return SP.getInt("column_sort", AlbumSettings.SORT_BY_DATE);
+    }
+
+    public boolean isAscending() {
+        return SP.getBoolean("ascending_mode", false);
+    }
+
+
+    public void setDefaultSortingMode(int column) {
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putInt("column_sort", column);
+        editor.apply();
+    }
+
+    public void setDefaultSortingAscending(Boolean ascending) {
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putBoolean("ascending_mode", ascending);
+        editor.apply();
+    }
+
+    public void sortAlbums() {
+        albumsComapartors = new AlbumsComapartors(isAscending());
+        switch (getColumnSortingMode()) {
+            case AlbumSettings.SORT_BY_NAME:
+                Collections.sort(dispAlbums, albumsComapartors.getNameComapartor());
+                break;
+            case AlbumSettings.SORT_BY_SIZE:
+                Collections.sort(dispAlbums, albumsComapartors.getSizeComapartor());
+                break;
+            case AlbumSettings.SORT_BY_DATE:
+            default:
+                Collections.sort(dispAlbums, albumsComapartors.getDateComapartor());
+                break;
+        }
+    }
+
 }

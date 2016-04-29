@@ -9,19 +9,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
-import com.horaapps.leafpic.Base.newHandlingAlbums;
+import com.horaapps.leafpic.Base.newAlbum;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PermissionUtils;
-import com.horaapps.leafpic.utils.StringUtils;
 
 /**
  * Created by dnld on 01/04/16.
@@ -38,9 +35,8 @@ public class SplashScreen extends ThemedActivity {
     public boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
-    newHandlingAlbums albums;
-    //HandlingAlbums albums;
-    Album album;
+    HandlingAlbums albums;
+    newAlbum album;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +59,7 @@ public class SplashScreen extends ThemedActivity {
             }
         */
 
-        albums = new newHandlingAlbums(getApplicationContext());//new HandlingAlbums(SplashScreen.this);
+        albums = new HandlingAlbums(getApplicationContext());//new HandlingAlbums(SplashScreen.this);
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
@@ -177,7 +173,7 @@ public class SplashScreen extends ThemedActivity {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
-            b.putParcelable("album", album);
+            ((MyApplication) getApplicationContext()).setCurrentAlbum(album);
             b.putInt(CONTENT, PHOTS_PREFETCHED);
             i.putExtras(b);
             startActivity(i);

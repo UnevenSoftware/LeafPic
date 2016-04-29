@@ -22,14 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.newAlbum;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
+public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     RecyclerView mRecyclerView;
     TextView Title;

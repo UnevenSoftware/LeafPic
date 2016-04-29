@@ -2,13 +2,11 @@ package com.horaapps.leafpic.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.horaapps.leafpic.Base.newMedia;
 import com.koushikdutta.ion.Ion;
-import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
 
 import java.util.ArrayList;

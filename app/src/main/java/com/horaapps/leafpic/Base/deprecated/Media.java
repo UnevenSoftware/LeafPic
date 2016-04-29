@@ -1,4 +1,4 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Base.deprecated;
 
 import android.content.ContentUris;
 import android.net.Uri;

@@ -62,12 +62,22 @@ public class newAlbum {
         this.count = count;
     }
 
+    public newAlbum(String mediaPath) {
+        File folder = new File(mediaPath).getParentFile();
+        media = new ArrayList<newMedia>();
+        selectedMedias = new ArrayList<newMedia>();
+        this.path = folder.getPath();
+        this.name = folder.getName();
+        updatePhotos();
+        setCurrentPhoto(mediaPath);
+    }
 
     public newAlbum(String path, String name) {
         media = new ArrayList<newMedia>();
         selectedMedias = new ArrayList<newMedia>();
         this.path = path;
         this.name = name;
+        updatePhotos();
     }
 
     public void updatePhotos() {
@@ -75,6 +85,7 @@ public class newAlbum {
         File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos));
         for (File image : images)
             media.add(0, new newMedia(image.getAbsolutePath(),image.lastModified()));
+        sortPhotos();
     }
 
     public void loadLastPhoto() {
@@ -97,6 +108,8 @@ public class newAlbum {
     public void setCurrentPhotoIndex(int index){ current = index; }
 
     public newMedia getCurrentMedia() { return getMedia(current); }
+
+    public int getCurrentMediaIndex() { return current; }
 
     public String getContentDescdription(Context c) {
         return c.getString(R.string.media);
@@ -132,6 +145,11 @@ public class newAlbum {
             h.setAlbumPhotPreview(getPath(), selectedMedias.get(0).getPath());
             settings.coverPath = selectedMedias.get(0).getPath();
         }
+    }
+
+    public void setCurrentPhoto(String path) {
+        for (int i = 0; i < media.size(); i++)
+            if (media.get(i).getPath().equals(path)) current = i;
     }
 
     public int getSelectedCount() {
