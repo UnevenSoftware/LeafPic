@@ -2,11 +2,13 @@ package com.horaapps.leafpic;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -70,7 +73,8 @@ import java.util.Locale;
 public class PhotoPagerActivity extends ThemedActivity {
 
     private static final String ISLOCKED_ARG = "isLocked";
-    public static final String ACTION = "android.intent.action.pagerAlbumMedia";
+    public static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
+    public static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
     HackyViewPager mViewPager;
     MediaPagerAdapter adapter;
@@ -91,17 +95,31 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
-        try {
-            if (getIntent().getAction().equals(ACTION)) { /*** Call from MainActivity */
+        try
+        {
+            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM))
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-            } else if (getIntent().getAction().equals(Intent.ACTION_VIEW) && getIntent().getData() != null) { /*** Call from android.View */
+            else if (getIntent().getAction().equals(Intent.ACTION_VIEW) && getIntent().getData() != null)
                 album = new newAlbum(getIntent().getData().getPath());
-            }
+            else if (getIntent().getAction().equals(ACTION_REVIEW) && getIntent().getData() != null)
+                album = new newAlbum(getRealPathFromURI(this, getIntent().getData()));
+
             initUI();
             setupUI();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index;
+            if (cursor != null) column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            else return null;
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally { if (cursor != null) cursor.close(); }
     }
 
     public void initUI() {

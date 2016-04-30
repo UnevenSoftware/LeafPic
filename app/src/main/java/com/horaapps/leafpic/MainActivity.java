@@ -113,7 +113,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setCurrentPhotoIndex(Integer.parseInt(is.getTag().toString()));
                     Intent intent = new Intent(MainActivity.this, PhotoPagerActivity.class);
-                    intent.setAction(PhotoPagerActivity.ACTION);
+                    intent.setAction(PhotoPagerActivity.ACTION_OPEN_ALBUM);
                     startActivity(intent);
                 }
             }
