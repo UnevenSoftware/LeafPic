@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.horaapps.leafpic.Base.newAlbum;
+import com.horaapps.leafpic.Base.Album;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     RecyclerView mRecyclerView;
     TextView Title;
     LinearLayout background;
-    ArrayList<newAlbum> albumArrayList;
+    ArrayList<Album> albumArrayList;
     SharedPreferences SP;
     View.OnClickListener onClickListener;
 
@@ -47,7 +47,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         this.onClickListener = onClickListener;
     }
 
-    public void setAlbumArrayList(ArrayList<newAlbum> albumArrayList){ this.albumArrayList = albumArrayList; }
+    public void setAlbumArrayList(ArrayList<Album> albumArrayList){ this.albumArrayList = albumArrayList; }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -123,7 +123,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         @Override
         public void onBindViewHolder(final BottomSheetAlbumsAdapter.ViewHolder holder, final int position) {
 
-            final newAlbum a = albumArrayList.get(position);
+            final Album a = albumArrayList.get(position);
             holder.album_name.setText(a.getName());
             holder.album_media_count.setText(String.format(Locale.getDefault(),"%d %s",a.getCount(),a.getContentDescdription(getDialog().getContext())));
             holder.album_name.setTag(position);

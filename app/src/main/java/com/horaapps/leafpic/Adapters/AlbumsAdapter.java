@@ -20,8 +20,8 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.horaapps.leafpic.Base.newAlbum;
-import com.horaapps.leafpic.Base.newMedia;
+import com.horaapps.leafpic.Base.Album;
+import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
 
 import java.util.ArrayList;
@@ -31,12 +31,12 @@ import java.util.ArrayList;
  */
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
-    ArrayList<newAlbum> albums;
+    ArrayList<Album> albums;
     SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public AlbumsAdapter(ArrayList<newAlbum> ph, Context ctx) {
+    public AlbumsAdapter(ArrayList<Album> ph, Context ctx) {
         albums = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -60,9 +60,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
-        newAlbum a = albums.get(position);
+        Album a = albums.get(position);
         Context c = holder.picture.getContext();
-        newMedia f = a.getCoverAlbum();
+        Media f = a.getCoverAlbum();
         /*
         YoYo.with(Techniques.SlideInUp)
                 .duration(100)
@@ -77,6 +77,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                         ? new StringSignature(f.Path)
                         : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))*/
                 .centerCrop()
+                .error(R.drawable.ic_error)
                 .placeholder(SP.getInt("basic_theme", 1)==1
                         ? R.drawable.ic_empty_white
                         : (SP.getInt("basic_theme", 1)==2
@@ -130,7 +131,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataset(ArrayList<newAlbum> asd) {
+    public void updateDataset(ArrayList<Album> asd) {
         albums = asd;
         notifyDataSetChanged();
     }

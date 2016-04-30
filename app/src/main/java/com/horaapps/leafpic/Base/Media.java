@@ -1,30 +1,48 @@
 package com.horaapps.leafpic.Base;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import com.koushikdutta.ion.bitmap.Exif;
+import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class newMedia implements Parcelable {
+public class Media implements Parcelable {
 
     String path = null;
     long dateModified = -1;
     String mime = null;
+
+    long size = 0;
+    boolean selected = false;
+
+    public Media() { }
+
+    public Media(String path, long dateModified) {
+        this.path=path;
+        this.dateModified=dateModified;
+        setMIME();
+    }
+
+    public Media(String path, long dateModified, long size) {
+        this.path = path;
+        this.dateModified = dateModified;
+        this.size = size;
+        setMIME();
+    }
+
+    public Media(String path) {
+        this.path = path;
+        setMIME();
+    }
 
     public String getMIME() {
         return mime;
@@ -39,18 +57,6 @@ public class newMedia implements Parcelable {
         this.selected = selected;
     }
 
-    boolean selected = false;
-
-    public newMedia(String path, long dateModified) {
-        this.path=path;
-        this.dateModified=dateModified;
-        setMIME();
-    }
-
-    public newMedia(String path) {
-        this.path = path;
-        setMIME();
-    }
     public boolean isGif() { return getPath().endsWith("gif"); }
 
     public boolean isImage() { return getMIME().startsWith("image"); }
@@ -71,10 +77,37 @@ public class newMedia implements Parcelable {
         return null;
     }
 
-    public int getOrientation() {ExifInterface exif;
+    public long getSize() {
+        return size;
+    }
+
+    public int getOrientation() {
+        ExifInterface exif;
         try { exif = new ExifInterface(getPath()); }
         catch (IOException e) {  return 0; }
         return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+    }
+
+    public int getWidth() { //TODO improve
+        ExifInterface exif;
+        try { exif = new ExifInterface(getPath()); }
+        catch (IOException e) {  return 0; }
+        return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH));
+    }
+
+    public int getHeight() { //TODO improve
+        ExifInterface exif;
+        try { exif = new ExifInterface(getPath()); }
+        catch (IOException e) {  return 0; }
+        return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH));
+    }
+
+    public String getResolution() {
+        return String.format(Locale.getDefault(), "%dx%d", getWidth(), getHeight());
+    }
+
+    public String getHumanReadableSize() {
+        return StringUtils.humanReadableByteCount(size, true);
     }
 
     public String getPath() {
@@ -89,10 +122,11 @@ public class newMedia implements Parcelable {
         return selected;
     }
 
-    protected newMedia(Parcel in) {
+    protected Media(Parcel in) {
         path = in.readString();
         dateModified = in.readLong();
         mime = in.readString();
+        size = in.readLong();
         selected = in.readByte() != 0x00;
     }
 
@@ -106,19 +140,20 @@ public class newMedia implements Parcelable {
         dest.writeString(path);
         dest.writeLong(dateModified);
         dest.writeString(mime);
+        dest.writeLong(size);
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<newMedia> CREATOR = new Parcelable.Creator<newMedia>() {
+    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
         @Override
-        public newMedia createFromParcel(Parcel in) {
-            return new newMedia(in);
+        public Media createFromParcel(Parcel in) {
+            return new Media(in);
         }
 
         @Override
-        public newMedia[] newArray(int size) {
-            return new newMedia[size];
+        public Media[] newArray(int size) {
+            return new Media[size];
         }
     };
 }

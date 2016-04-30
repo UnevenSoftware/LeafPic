@@ -9,15 +9,13 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.deprecated.Album;
-import com.horaapps.leafpic.Base.deprecated.AlbumMediaCount;
-import com.horaapps.leafpic.Base.deprecated.Media;
 
 import java.util.ArrayList;
 
 /**
  * Created by dnld on 12/31/15.
  */
+@Deprecated
 public class MediaStoreHandler {
 
     Context context;
@@ -30,8 +28,8 @@ public class MediaStoreHandler {
         context = ctx;
     }
 
-    public ArrayList<Album> getMediaStoreAlbums(String order) {
-        ArrayList<Album> list = new ArrayList<Album>();
+    public ArrayList<deprecatedAlbum> getMediaStoreAlbums(String order) {
+        ArrayList<deprecatedAlbum> list = new ArrayList<deprecatedAlbum>();
 
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         ArrayList<String> excludedAlbums = new ArrayList<String>();//h.getExcludedALbumsIDs();
@@ -57,11 +55,11 @@ public class MediaStoreHandler {
                 int idColumn = cur.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
                 int pathColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
                 do if (!excludedAlbums.contains(cur.getString(idColumn))){
-                    Album album = new Album(cur.getString(idColumn),
+                    deprecatedAlbum deprecatedAlbum = new deprecatedAlbum(cur.getString(idColumn),
                             cur.getString(pathColumn),
                             getAlbumPhotosCount(cur.getString(idColumn)));
-                    album.setCoverPath(h.getPhotPrevieAlbum(album.ID));
-                    list.add(album);
+                    deprecatedAlbum.setCoverPath(h.getPhotPrevieAlbum(deprecatedAlbum.ID));
+                    list.add(deprecatedAlbum);
                 }
                 while (cur.moveToNext());
             }
@@ -71,7 +69,7 @@ public class MediaStoreHandler {
     }
 
 
-    public ArrayList<Media> getAlbumPhotos(String id, String sort, int filter) {
+    public ArrayList<deprecatedMedia> getAlbumPhotos(String id, String sort, int filter) {
         return getAlbumPhotos(id, -1, sort, filter);
     }
 
@@ -99,8 +97,8 @@ public class MediaStoreHandler {
         return c;
     }
 
-    public ArrayList<Media> getFirstAlbumPhoto(String ID) {
-        return getAlbumPhotos(ID, 1, null, Album.FILTER_ALL);
+    public ArrayList<deprecatedMedia> getFirstAlbumPhoto(String ID) {
+        return getAlbumPhotos(ID, 1, null, deprecatedAlbum.FILTER_ALL);
     }
 
     public void getThumnails(){
@@ -130,7 +128,7 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
         cur.close();
     }
 
-    public static void deleteAlbumMedia(Album a, Context context1){
+    public static void deleteAlbumMedia(deprecatedAlbum a, Context context1){
         String[] projection = { MediaStore.Images.Media._ID };
 
         String selection = MediaStore.Files.FileColumns.PARENT + " = ?";
@@ -151,11 +149,11 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
 
     }
 
-    public ArrayList<Media> getAlbumPhotos(String ID, int n, String order, int filter) {
+    public ArrayList<deprecatedMedia> getAlbumPhotos(String ID, int n, String order, int filter) {
 
         String limit = n == -1 ? "" : " DESC LIMIT " + n;
         String orderStyle = order != null ? order : MediaStore.Images.Media.DATE_TAKEN;
-        ArrayList<Media> list = new ArrayList<Media>();
+        ArrayList<deprecatedMedia> list = new ArrayList<deprecatedMedia>();
 
         String[] projection = new String[]{
                 MediaStore.Images.Media._ID,
@@ -174,18 +172,18 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
 
         switch (filter){
 
-            case Album.FILTER_IMAGE:
+            case deprecatedAlbum.FILTER_IMAGE:
                 selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
                 break;
-            case Album.FILTER_VIDEO:
+            case deprecatedAlbum.FILTER_VIDEO:
                 selection = "( "+  MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + ID + "'";
                 break;
-            case Album.FILTER_GIF:
+            case deprecatedAlbum.FILTER_GIF:
                 selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and "
                         + MediaStore.Files.FileColumns.PARENT + "='" + ID + "' and "
                         + MediaStore.Images.Media.MIME_TYPE + "='image/gif'";
                 break;
-            case Album.FILTER_ALL:
+            case deprecatedAlbum.FILTER_ALL:
             default:
                 selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + " or " +
                         MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
@@ -221,7 +219,7 @@ Cursor s = MediaStore.Images.Thumbnails.query(context.getContentResolver(),image
                 int orientation = cur.getColumnIndex(
                         MediaStore.Images.Media.ORIENTATION);
                 do {
-                    list.add(new Media(
+                    list.add(new deprecatedMedia(
                             cur.getLong(idColumn),
                             cur.getString(pathColumn),
                             cur.getLong(dateColumn),

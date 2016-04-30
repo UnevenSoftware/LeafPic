@@ -3,7 +3,7 @@ package com.horaapps.leafpic;
 import android.app.Application;
 
 import com.horaapps.leafpic.Base.HandlingAlbums;
-import com.horaapps.leafpic.Base.newAlbum;
+import com.horaapps.leafpic.Base.Album;
 
 /**
  * Created by dnld on 28/04/16.
@@ -11,13 +11,13 @@ import com.horaapps.leafpic.Base.newAlbum;
 public class MyApplication extends Application {
 
     private HandlingAlbums albums;
-    private newAlbum currentAlbum;
+    private Album currentAlbum;
 
-    public newAlbum getCurrentAlbum() {
+    public Album getCurrentAlbum() {
         return currentAlbum;
     }
 
-    public void setCurrentAlbum(newAlbum currentAlbum) {
+    public void setCurrentAlbum(Album currentAlbum) {
         this.currentAlbum = currentAlbum;
     }
 

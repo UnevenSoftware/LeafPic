@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.horaapps.leafpic.Base.newMedia;
+import com.horaapps.leafpic.Base.Media;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.PhotoPagerActivity;
 
@@ -27,9 +27,9 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 @SuppressWarnings("ResourceType")
 public class ImageFragment extends Fragment {
 
-    private newMedia img;
+    private Media img;
 
-    public static ImageFragment newInstance(newMedia asd) {
+    public static ImageFragment newInstance(Media asd) {
         ImageFragment fragmentFirst = new ImageFragment();
 
         Bundle args = new Bundle();

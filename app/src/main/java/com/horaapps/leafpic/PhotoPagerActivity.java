@@ -45,8 +45,8 @@ import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.HandlingAlbums;
-import com.horaapps.leafpic.Base.newAlbum;
-import com.horaapps.leafpic.Base.newMedia;
+import com.horaapps.leafpic.Base.Album;
+import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -80,7 +80,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     MediaPagerAdapter adapter;
     SharedPreferences SP;
     RelativeLayout ActivityBackgorund;
-    newAlbum album;
+    Album album;
     Toolbar toolbar;
     boolean fullscreenmode;
 
@@ -100,9 +100,9 @@ public class PhotoPagerActivity extends ThemedActivity {
             if (getIntent().getAction().equals(ACTION_OPEN_ALBUM))
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
             else if (getIntent().getAction().equals(Intent.ACTION_VIEW) && getIntent().getData() != null)
-                album = new newAlbum(getIntent().getData().getPath());
+                album = new Album(getIntent().getData().getPath());
             else if (getIntent().getAction().equals(ACTION_REVIEW) && getIntent().getData() != null)
-                album = new newAlbum(getRealPathFromURI(this, getIntent().getData()));
+                album = new Album(getRealPathFromURI(this, getIntent().getData()));
 
             initUI();
             setupUI();
@@ -522,7 +522,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             case R.id.details:
                 /****DATA****/
-                final newMedia f = album.getCurrentMedia();
+                final Media f = album.getCurrentMedia();
                 DateFormat as = SimpleDateFormat.getDateTimeInstance();
                 String date = as.format(new Time(f.getDateModified()));
 
@@ -556,8 +556,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final LinearLayout llLocation =(LinearLayout) Details_DialogLayout.findViewById(R.id.ll_location);
                 txtTitle.setBackgroundColor(getPrimaryColor());
 
-                //Size.setText(f.getHumanReadableSize());
-                //Resolution.setText(f.getResolution());
+                Size.setText(f.getHumanReadableSize());
+                Resolution.setText(f.getResolution());
                 Data.setText(date);
                 Type.setText(f.getMIME());
                 Path.setText(f.getPath());
@@ -580,48 +580,47 @@ public class PhotoPagerActivity extends ThemedActivity {
                 EXIF.setTextColor(getSubTextColor());
                 Location.setTextColor(getSubTextColor());
 
-
                 final LinearLayout ll = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF);
-                ExifInterface exif = null;
-                try { exif = new ExifInterface(f.getPath());}
-                catch (IOException e){e.printStackTrace();}
 
-                if (exif.getAttribute(ExifInterface.TAG_MAKE) != null) {
-                    Device.setText(String.format("%s %s",
-                            exif.getAttribute(ExifInterface.TAG_MAKE),
-                            exif.getAttribute(ExifInterface.TAG_MODEL)));
+                try {
+                    ExifInterface exif = new ExifInterface(f.getPath());
+                    if (exif.getAttribute(ExifInterface.TAG_MAKE) != null) {
+                        Device.setText(String.format("%s %s",
+                                exif.getAttribute(ExifInterface.TAG_MAKE),
+                                exif.getAttribute(ExifInterface.TAG_MODEL)));
 
-                    EXIF.setText(String.format("f/%s ISO-%s %ss",
-                            exif.getAttribute(ExifInterface.TAG_APERTURE),
-                            exif.getAttribute(ExifInterface.TAG_ISO),
-                            exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
+                        EXIF.setText(String.format("f/%s ISO-%s %ss",
+                                exif.getAttribute(ExifInterface.TAG_APERTURE),
+                                exif.getAttribute(ExifInterface.TAG_ISO),
+                                exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
 
-                    final float[] output= new float[2];
-                    exif.getLatLong(output);
+                        final float[] output= new float[2];
+                        exif.getLatLong(output);
 
-                    if(output[0] != 0 && output[1] != 0) {
-                        String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
-                        Glide.with(this)
-                                .load(url)
-                                .asBitmap()
-                                .centerCrop()
-                                //.placeholder(R.drawable.ic_empty)
-                                .animate(R.anim.fade_in)
-                                .into(imgMap);
-                        imgMap.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%f,%f", output[0], output[1]);
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
-                            }
-                        });
-                        Location.setText(String.format(Locale.getDefault(),"%f, %f",
-                                output[0], output[1]));
-                        llLocation.setVisibility(View.VISIBLE);
-                        llMap.setVisibility(View.VISIBLE);
+                        if(output[0] != 0 && output[1] != 0) {
+                            String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
+                            Glide.with(this)
+                                    .load(url)
+                                    .asBitmap()
+                                    .centerCrop()
+                                    .animate(R.anim.fade_in)
+                                    .into(imgMap);
+                            imgMap.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%f,%f", output[0], output[1]);
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
+                                }
+                            });
+                            Location.setText(String.format(Locale.getDefault(),"%f, %f",
+                                    output[0], output[1]));
+                            llLocation.setVisibility(View.VISIBLE);
+                            llMap.setVisibility(View.VISIBLE);
 
+                        }
+                        ll.setVisibility(View.VISIBLE);
                     }
-                    ll.setVisibility(View.VISIBLE);
                 }
+                catch (IOException e){ e.printStackTrace(); }
 
                 CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
                 cv.setCardBackgroundColor(getCardBackgroundColor());

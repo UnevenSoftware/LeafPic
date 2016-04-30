@@ -11,9 +11,7 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 
-import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
 
 import java.io.File;
@@ -26,14 +24,14 @@ import java.util.Collections;
  */
 public class HandlingAlbums {
 
-    public ArrayList<newAlbum> dispAlbums;
-    private ArrayList<newAlbum> selectedAlbums;
+    public ArrayList<Album> dispAlbums;
+    private ArrayList<Album> selectedAlbums;
 
     CustomAlbumsHandler customAlbumsHandler;
     private SharedPreferences SP;
 
     ArrayList<File> excludedfolders;
-    AlbumsComapartors albumsComapartors;
+    AlbumsComparators albumsComparators;
 
     public HandlingAlbums(Context context) {
         SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
@@ -41,12 +39,12 @@ public class HandlingAlbums {
 
         excludedfolders = new ArrayList<File>();
         loadExcludedFolders(context);
-        dispAlbums = new ArrayList<newAlbum>();
-        selectedAlbums = new ArrayList<newAlbum>();
+        dispAlbums = new ArrayList<Album>();
+        selectedAlbums = new ArrayList<Album>();
     }
 
     public void loadPreviewAlbums() {
-        dispAlbums = new ArrayList<newAlbum>();
+        dispAlbums = new ArrayList<Album>();
         fetchRecursivelyFolder(Environment.getExternalStorageDirectory());
         sortAlbums();
     }
@@ -62,7 +60,7 @@ public class HandlingAlbums {
                     File[] files = temp.listFiles(new ImageFileFilter());
                     if (files.length > 0) {
                         //valid folder
-                        newAlbum asd = new newAlbum(temp.getAbsolutePath(), temp.getName(), files.length);
+                        Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
                         asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
 
                         long lastMod = Long.MIN_VALUE;
@@ -74,7 +72,7 @@ public class HandlingAlbums {
                             }
                         }
                         if (choice != null)
-                            asd.media.add(0, new newMedia(choice.getAbsolutePath(), choice.lastModified()));
+                            asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
 
                         dispAlbums.add(asd);
                     }
@@ -94,7 +92,7 @@ public class HandlingAlbums {
                     File[] files = temp.listFiles(new ImageFileFilter());
                     if (files.length > 0) {
                         //valid folder
-                        newAlbum asd = new newAlbum(temp.getAbsolutePath(), temp.getName(), files.length);
+                        Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
                         //TODO check for album cover
                         long lastMod = Long.MIN_VALUE;
                         File choice = null;
@@ -105,7 +103,7 @@ public class HandlingAlbums {
                             }
                         }
                         if (choice != null) {
-                            asd.media.add(0, new newMedia(choice.getAbsolutePath(), choice.lastModified()));
+                            asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
                             dispAlbums.add(asd);
                         }
                     }
@@ -132,10 +130,10 @@ public class HandlingAlbums {
         return index;
     }
 
-    public newAlbum getAlbum(int index){ return dispAlbums.get(index); }
+    public Album getAlbum(int index){ return dispAlbums.get(index); }
 
     public void selectAllAlbums() {
-        for (newAlbum dispAlbum : dispAlbums)
+        for (Album dispAlbum : dispAlbums)
             if (!dispAlbum.isSelected()) {
                 dispAlbum.setSelected(true);
                 selectedAlbums.add(dispAlbum);
@@ -147,14 +145,14 @@ public class HandlingAlbums {
     }
 
     public void clearSelectedAlbums() {
-        for (newAlbum dispAlbum : dispAlbums)
+        for (Album dispAlbum : dispAlbums)
             dispAlbum.setSelected(false);
 
         selectedAlbums.clear();
     }
 
     public void InstallShortcutForSelectedAlbums(Context appCtx) {
-        for (newAlbum selectedAlbum : selectedAlbums) {
+        for (Album selectedAlbum : selectedAlbums) {
 
             Intent shortcutIntent;
             shortcutIntent = new Intent(appCtx, SplashScreen.class);
@@ -233,20 +231,20 @@ public class HandlingAlbums {
         }
     }
 
-    public void hideAlbum(final newAlbum a, Context context) {
+    public void hideAlbum(final Album a, Context context) {
         hideAlbum(a.getPath(), context);
         dispAlbums.remove(a);
     }
 
     public void deleteSelectedAlbums(Context context) {
-        for (newAlbum selectedAlbum : selectedAlbums) {
+        for (Album selectedAlbum : selectedAlbums) {
             int index = dispAlbums.indexOf(selectedAlbum);
             deleteAlbum(selectedAlbum, context);
             dispAlbums.remove(index);
         }
     }
 
-    public void deleteAlbum(newAlbum album, Context context) {
+    public void deleteAlbum(Album album, Context context) {
         File[] files = new File(album.getPath()).listFiles(new ImageFileFilter());
         for (File file : files) {
             if (file.delete()){
@@ -256,19 +254,19 @@ public class HandlingAlbums {
     }
 
     public void hideSelectedAlbums(Context context) {
-        for (newAlbum selectedAlbum : selectedAlbums)
+        for (Album selectedAlbum : selectedAlbums)
             hideAlbum(selectedAlbum, context);
         clearSelectedAlbums();
     }
 
     public void excludeSelectedAlbums(Context context) {
-        for (newAlbum selectedAlbum : selectedAlbums)
+        for (Album selectedAlbum : selectedAlbums)
             excludeAlbum(context, selectedAlbum);
 
         clearSelectedAlbums();
     }
 
-    public void excludeAlbum(Context context, newAlbum a) {
+    public void excludeAlbum(Context context, Album a) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.excludeAlbum(a.getPath());
         dispAlbums.remove(a);
@@ -296,17 +294,17 @@ public class HandlingAlbums {
     }
 
     public void sortAlbums() {
-        albumsComapartors = new AlbumsComapartors(isAscending());
+        albumsComparators = new AlbumsComparators(isAscending());
         switch (getColumnSortingMode()) {
             case AlbumSettings.SORT_BY_NAME:
-                Collections.sort(dispAlbums, albumsComapartors.getNameComapartor());
+                Collections.sort(dispAlbums, albumsComparators.getNameComparator());
                 break;
             case AlbumSettings.SORT_BY_SIZE:
-                Collections.sort(dispAlbums, albumsComapartors.getSizeComapartor());
+                Collections.sort(dispAlbums, albumsComparators.getSizeComparator());
                 break;
             case AlbumSettings.SORT_BY_DATE:
             default:
-                Collections.sort(dispAlbums, albumsComapartors.getDateComapartor());
+                Collections.sort(dispAlbums, albumsComparators.getDateComparator());
                 break;
         }
     }

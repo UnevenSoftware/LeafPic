@@ -8,18 +8,19 @@ import android.provider.MediaStore;
 
 import com.horaapps.leafpic.utils.StringUtils;
 
-public class Media implements Parcelable {
+@Deprecated
+public class deprecatedMedia implements Parcelable {
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
+    public static final Parcelable.Creator<deprecatedMedia> CREATOR = new Parcelable.Creator<deprecatedMedia>() {
         @Override
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
+        public deprecatedMedia createFromParcel(Parcel in) {
+            return new deprecatedMedia(in);
         }
 
         @Override
-        public Media[] newArray(int size) {
-            return new Media[size];
+        public deprecatedMedia[] newArray(int size) {
+            return new deprecatedMedia[size];
         }
     };
 
@@ -35,11 +36,11 @@ public class Media implements Parcelable {
     public long size;
     boolean selected = false;
 
-    public Media(String path) {
+    public deprecatedMedia(String path) {
         Path = path;
     }
 
-    public Media(long id, String path, long dateTaken, long dateModified, String mime, int width, int height, int size, int orientation) {
+    public deprecatedMedia(long id, String path, long dateTaken, long dateModified, String mime, int width, int height, int size, int orientation) {
         ID = id;
         Path = path;
         DateTaken = dateTaken;
@@ -51,7 +52,7 @@ public class Media implements Parcelable {
         this.orientation = orientation;
     }
 
-    protected Media(Parcel in) {
+    protected deprecatedMedia(Parcel in) {
         ID = in.readLong();
         Path = in.readString();
         MIME = in.readString();

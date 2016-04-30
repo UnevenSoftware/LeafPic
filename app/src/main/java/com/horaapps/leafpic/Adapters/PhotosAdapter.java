@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.horaapps.leafpic.Base.newMedia;
+import com.horaapps.leafpic.Base.Media;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
 
@@ -29,14 +29,14 @@ import java.util.ArrayList;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {//implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate
 
-    ArrayList<newMedia> medias;
+    ArrayList<Media> medias;
     SharedPreferences SP;
 
     BitmapDrawable drawable;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<newMedia> ph ,Context context) {
+    public PhotosAdapter(ArrayList<Media> ph , Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         switch (SP.getInt("basic_theme", 1)){
@@ -73,7 +73,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
-        newMedia f = medias.get(position);
+        Media f = medias.get(position);
         byte[] thumnail = f.getThumnail();
 
         if (thumnail != null) {
@@ -131,7 +131,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataset(ArrayList<newMedia> asd) {
+    public void updateDataset(ArrayList<Media> asd) {
         medias = asd;
         notifyDataSetChanged();
     }

@@ -17,22 +17,23 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 12/11/15.
  */
-public class Album implements Parcelable {
+@Deprecated
+public class deprecatedAlbum implements Parcelable {
 
     public static final int FILTER_ALL = 45;
     public static final int FILTER_IMAGE = 55;
     public static final int FILTER_VIDEO = 75;
     public static final int FILTER_GIF = 555;
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
+    public static final Parcelable.Creator<deprecatedAlbum> CREATOR = new Parcelable.Creator<deprecatedAlbum>() {
         @Override
-        public Album createFromParcel(Parcel in) {
-            return new Album(in);
+        public deprecatedAlbum createFromParcel(Parcel in) {
+            return new deprecatedAlbum(in);
         }
 
         @Override
-        public Album[] newArray(int size) {
-            return new Album[size];
+        public deprecatedAlbum[] newArray(int size) {
+            return new deprecatedAlbum[size];
         }
     };
     public String ID = null;
@@ -40,33 +41,33 @@ public class Album implements Parcelable {
     public String Path = null;
     public AlbumSettings settings = new AlbumSettings();
     public AlbumMediaCount count = new AlbumMediaCount();
-    public ArrayList<Media> medias = new ArrayList<Media>();
-    public ArrayList<Media> selectedMedias = new ArrayList<Media>();
+    public ArrayList<deprecatedMedia> deprecatedMedias = new ArrayList<deprecatedMedia>();
+    public ArrayList<deprecatedMedia> selectedDeprecatedMedias = new ArrayList<deprecatedMedia>();
     Context context;
     private boolean selected = false;
     private int current = -1;
     private int filter_photos = FILTER_ALL;
 
-    public Album(String id, String name, AlbumMediaCount count) {
+    public deprecatedAlbum(String id, String name, AlbumMediaCount count) {
         ID = id;
         DisplayName = name;
         this.count = count;
     }
 
-    public Album(String id) {
+    public deprecatedAlbum(String id) {
         ID = id;
     }
 
-    public Album(String id, Context ctx) {
+    public deprecatedAlbum(String id, Context ctx) {
         ID = id;
         context = ctx;
     }
 
-    public Album(Context ctx) {
+    public deprecatedAlbum(Context ctx) {
         context = ctx;
     }
 
-    public Album(Context ctx, String photoPath) {
+    public deprecatedAlbum(Context ctx, String photoPath) {
         context = ctx;
         MediaStoreHandler as = new MediaStoreHandler(context);
         ID = as.getAlbumPhoto(photoPath);
@@ -79,17 +80,17 @@ public class Album implements Parcelable {
      * parcellable
      */
 
-    protected Album(Parcel in) {
+    protected deprecatedAlbum(Parcel in) {
         ID = in.readString();
         DisplayName = in.readString();
         Path = in.readString();
         settings = (AlbumSettings) in.readValue(AlbumSettings.class.getClassLoader());
         count = (AlbumMediaCount) in.readValue(AlbumMediaCount.class.getClassLoader());
         if (in.readByte() == 0x01) {
-            medias = new ArrayList<Media>();
-            in.readList(medias, Media.class.getClassLoader());
+            deprecatedMedias = new ArrayList<deprecatedMedia>();
+            in.readList(deprecatedMedias, deprecatedMedia.class.getClassLoader());
         } else {
-            medias = null;
+            deprecatedMedias = null;
         }
         current = in.readInt();
         filter_photos = in.readInt();
@@ -143,7 +144,7 @@ public class Album implements Parcelable {
 
     public void updatePhotos() {
         MediaStoreHandler as = new MediaStoreHandler(context);
-        medias = as.getAlbumPhotos(ID, getSortingMode(), filter_photos);
+        deprecatedMedias = as.getAlbumPhotos(ID, getSortingMode(), filter_photos);
     }
 
    /* public void clearSelectedPhotos() {
@@ -158,8 +159,8 @@ public class Album implements Parcelable {
     }
     */
 
-    public Media getCurrentPhoto() {
-        return medias.get(getCurrentPhotoIndex());
+    public deprecatedMedia getCurrentPhoto() {
+        return deprecatedMedias.get(getCurrentPhotoIndex());
     }
 
     public void setCurrentPhoto(String path) {
@@ -167,8 +168,8 @@ public class Album implements Parcelable {
     }
 
     int getPhotoIndex(String path) {
-        for (int i = 0; i < medias.size(); i++) {
-            if (medias.get(i).Path.equals(path)) return i;
+        for (int i = 0; i < deprecatedMedias.size(); i++) {
+            if (deprecatedMedias.get(i).Path.equals(path)) return i;
         }
         return -1;
     }
@@ -243,8 +244,8 @@ public class Album implements Parcelable {
     }
 
     public boolean setPath() {
-        if (medias.size() > 0) {
-            Path = StringUtils.getBucketPathbyImagePath(medias.get(0).Path);
+        if (deprecatedMedias.size() > 0) {
+            Path = StringUtils.getBucketPathbyImagePath(deprecatedMedias.get(0).Path);
             return true;
         }
         return false;
@@ -256,16 +257,16 @@ public class Album implements Parcelable {
 
     public String getPathCoverAlbum() {
         if (hasCustomCover()) return settings.coverPath;
-        if (medias.size() > 0) return "file://" + medias.get(0).Path;
+        if (deprecatedMedias.size() > 0) return "file://" + deprecatedMedias.get(0).Path;
         else return "drawable://" + R.drawable.ic_empty;
     }
 
-    public Media getCoverAlbum() {
+    public deprecatedMedia getCoverAlbum() {
         if (hasCustomCover())
-            return new Media(settings.coverPath);
-        if (medias.size() > 0)
-            return medias.get(0); //return also image info like date, orientation...
-        return new Media("drawable://" + R.drawable.ic_empty);
+            return new deprecatedMedia(settings.coverPath);
+        if (deprecatedMedias.size() > 0)
+            return deprecatedMedias.get(0); //return also image info like date, orientation...
+        return new deprecatedMedia("drawable://" + R.drawable.ic_empty);
     }
 
     public void setCoverPath(String path) {
@@ -273,10 +274,10 @@ public class Album implements Parcelable {
     }
 
     public void setSelectedPhotoAsPreview() {
-        if (selectedMedias.size() > 0) {
+        if (selectedDeprecatedMedias.size() > 0) {
             CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-            h.setAlbumPhotPreview(ID, selectedMedias.get(0).Path);
-            settings.coverPath = selectedMedias.get(0).Path;
+            h.setAlbumPhotPreview(ID, selectedDeprecatedMedias.get(0).Path);
+            settings.coverPath = selectedDeprecatedMedias.get(0).Path;
         }
     }
 
@@ -351,13 +352,13 @@ public void moveSelectedPhotos(String paths, String folderPath) {
     }
     */
 
-    public ArrayList<Media> getSelectedMedias() {
-        return selectedMedias;
+    public ArrayList<deprecatedMedia> getSelectedDeprecatedMedias() {
+        return selectedDeprecatedMedias;
     }
 
-    public void deletePhoto(Media a) {
+    public void deletePhoto(deprecatedMedia a) {
         context.getContentResolver().delete(a.getUri(), null, null);
-        medias.remove(a);
+        deprecatedMedias.remove(a);
     }
 
     public void scanFile(String[] path) {
@@ -381,11 +382,11 @@ public void moveSelectedPhotos(String paths, String folderPath) {
         dest.writeString(Path);
         dest.writeValue(settings);
         dest.writeValue(count);
-        if (medias == null) {
+        if (deprecatedMedias == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(medias);
+            dest.writeList(deprecatedMedias);
         }
         dest.writeInt(current);
         dest.writeInt(filter_photos);

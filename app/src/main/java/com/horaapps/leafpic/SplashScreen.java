@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.horaapps.leafpic.Base.HandlingAlbums;
-import com.horaapps.leafpic.Base.newAlbum;
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PermissionUtils;
@@ -36,7 +36,7 @@ public class SplashScreen extends ThemedActivity {
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
     HandlingAlbums albums;
-    newAlbum album;
+    Album album;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

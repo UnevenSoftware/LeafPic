@@ -6,6 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by dnld on 03/04/16.
  */
+@Deprecated
 public class AlbumMediaCount implements Parcelable {
     public int photos;
     public int videos;

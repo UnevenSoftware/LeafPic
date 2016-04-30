@@ -45,9 +45,9 @@ import com.horaapps.leafpic.Adapters.AlbumsAdapter;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.ImageFileFilter;
-import com.horaapps.leafpic.Base.newAlbum;
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
-import com.horaapps.leafpic.Base.newMedia;
+import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -66,7 +66,7 @@ public class MainActivity extends ThemedActivity {
     public static String TAG = "AlbumsAct";
 
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
-    newAlbum album;// = new Album(MainActivity.this);
+    Album album;
     SharedPreferences SP;
 
     HandlingAlbums albums;
@@ -180,10 +180,10 @@ public class MainActivity extends ThemedActivity {
         firstLaunch = false;
     }
 
-    public void openAlbum(newAlbum a) {
+    public void openAlbum(Album a) {
         openAlbum(a,true);
     }
-    public void openAlbum(newAlbum a, boolean reload) {
+    public void openAlbum(Album a, boolean reload) {
         album = a;
         ((MyApplication) getApplicationContext()).setCurrentAlbum(album);
         album.setSettings(getApplicationContext());
@@ -935,7 +935,7 @@ public class MainActivity extends ThemedActivity {
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
 
-                for (newMedia f : album.selectedMedias)
+                for (Media f : album.selectedMedias)
                     files.add(f.getUri());
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
