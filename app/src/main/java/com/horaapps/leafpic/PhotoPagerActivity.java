@@ -405,7 +405,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 cv_Delete_Dialog.setBackgroundColor(getCardBackgroundColor());
                 txt_Delete_title.setBackgroundColor(getPrimaryColor());
                 txt_Delete_title.setText(getString(R.string.delete));
-                txt_Delete_message.setText(R.string.delete_album_message);
+                txt_Delete_message.setText(R.string.delete_photo_message);
                 txt_Delete_message.setTextColor(getTextColor());
                 DeleteDialog.setView(Delete_dialogLayout);
 
