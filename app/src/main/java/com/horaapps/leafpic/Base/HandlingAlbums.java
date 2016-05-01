@@ -11,6 +11,7 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.horaapps.leafpic.SplashScreen;
 import com.horaapps.leafpic.utils.StringUtils;
@@ -98,8 +99,7 @@ public class HandlingAlbums {
         }
     }
 
-   /*
-    private void fetchRecursivelyHiddenFolder(File dir) {
+    /*private void fetchRecursivelyHiddenFolder(File dir) {
         File nomedia = new File(dir, ".nomedia");
         if (!excludedfolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
@@ -112,8 +112,8 @@ public class HandlingAlbums {
                 } else fetchRecursivelyFolder(temp);
             }
         }
-    }
-   */
+    }*/
+
     public void loadExcludedFolders(Context context) {
         excludedfolders = new ArrayList<File>();
         //forced excluded folder
