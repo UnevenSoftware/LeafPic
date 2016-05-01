@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.horaapps.leafpic.SplashScreen;
+import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +24,8 @@ import java.util.Collections;
  * Created by dnld on 27/04/16.
  */
 public class HandlingAlbums {
+
+    public final static String TAG = "HandlingAlbums";
 
     public ArrayList<Album> dispAlbums;
     private ArrayList<Album> selectedAlbums;
@@ -45,74 +48,72 @@ public class HandlingAlbums {
 
     public void loadPreviewAlbums() {
         dispAlbums = new ArrayList<Album>();
-        fetchRecursivelyFolder(Environment.getExternalStorageDirectory());
+        for (File storage : listStorages())
+            fetchRecursivelyFolder(storage);
+
         sortAlbums();
     }
 
+    public ArrayList<File> listStorages() {
+        ArrayList<File> roots = new ArrayList<File>();
+        roots.add(Environment.getExternalStorageDirectory());
+        String sdCard = System.getenv("SECONDARY_STORAGE");
+        if (sdCard != null) roots.add(new File(sdCard));
+        return roots;
+    }
+
     private void fetchRecursivelyFolder(File dir) {
-        //if (!excludedfolders.contains(dir)) {
+        if (!excludedfolders.contains(dir)) {
+            checkAndAddAlbum(dir);
             File[] children = dir.listFiles(new FoldersFileFilter());
             for (File temp : children) {
                 File nomedia = new File(temp, ".nomedia");
                 if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
                     //not excluded/hidden folder
-
-                    File[] files = temp.listFiles(new ImageFileFilter());
-                    if (files.length > 0) {
-                        //valid folder
-                        Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
-                        asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
-
-                        long lastMod = Long.MIN_VALUE;
-                        File choice = null;
-                        for (File file : files) {
-                            if (file.lastModified() > lastMod) {
-                                choice = file;
-                                lastMod = file.lastModified();
-                            }
-                        }
-                        if (choice != null)
-                            asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
-
-                        dispAlbums.add(asd);
-                    }
                     fetchRecursivelyFolder(temp);
                 }
             }
-        //}
+        }
     }
 
+    public void checkAndAddAlbum(File temp) {
+        File[] files = temp.listFiles(new ImageFileFilter());
+        if (files.length > 0) {
+            //valid folder
+            Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
+            asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
+
+            long lastMod = Long.MIN_VALUE;
+            File choice = null;
+            for (File file : files) {
+                if (file.lastModified() > lastMod) {
+                    choice = file;
+                    lastMod = file.lastModified();
+                }
+            }
+            if (choice != null)
+                asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
+
+            dispAlbums.add(asd);
+        }
+    }
+
+   /*
     private void fetchRecursivelyHiddenFolder(File dir) {
+        File nomedia = new File(dir, ".nomedia");
         if (!excludedfolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             for (File temp : folders) {
-                File nomedia = new File(temp, ".nomedia");
+                nomedia = new File(temp, ".nomedia");
                 if (nomedia.exists() || temp.isHidden()) {
                     //hidden folder
-                    File[] files = temp.listFiles(new ImageFileFilter());
-                    if (files.length > 0) {
-                        //valid folder
-                        Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
-                        //TODO check for album cover
-                        long lastMod = Long.MIN_VALUE;
-                        File choice = null;
-                        for (File file : files) {
-                            if (file.lastModified() > lastMod) {
-                                choice = file;
-                                lastMod = file.lastModified();
-                            }
-                        }
-                        if (choice != null) {
-                            asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
-                            dispAlbums.add(asd);
-                        }
-                    }
+
                     fetchRecursivelyFolder(temp);
                 } else fetchRecursivelyFolder(temp);
             }
         }
     }
-
+   */
     public void loadExcludedFolders(Context context) {
         excludedfolders = new ArrayList<File>();
         //forced excluded folder
@@ -167,21 +168,19 @@ public class HandlingAlbums {
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.getName());
 
             File image = new File(selectedAlbum.getCoverAlbum().getPath());
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             Bitmap bitmap;
 
-            if(image.toString().endsWith("jpg")
-                    || image.toString().endsWith("png")
-                    || image.toString().endsWith("jpeg")
-                    || image.toString().endsWith("gif")) {
-                bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);//,bmOptions
-                bitmap = getCorpedBitmap(bitmap);
+            String mime = StringUtils.getMimeType(image.getAbsolutePath());
 
-            } else {
+            if(mime.startsWith("image")) {
+                bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), new BitmapFactory.Options());
+                bitmap = getCropedBitmap(bitmap);
+
+            } else if(mime.startsWith("video")) {
                 Bitmap thumb = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
-                bitmap = getCorpedBitmap(thumb);
-            }
+                bitmap = getCropedBitmap(thumb);
+            } else return;
 
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, false);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(scaledBitmap, 5));
@@ -199,7 +198,7 @@ public class HandlingAlbums {
         return bmpWithBorder;
     }
 
-    private Bitmap getCorpedBitmap(Bitmap srcBmp){
+    private Bitmap getCropedBitmap(Bitmap srcBmp){
         Bitmap dstBmp;
         if (srcBmp.getWidth() >= srcBmp.getHeight()){
             dstBmp = Bitmap.createBitmap(srcBmp,

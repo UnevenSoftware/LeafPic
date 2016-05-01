@@ -8,9 +8,11 @@ import android.os.Parcelable;
  */
 @Deprecated
 public class AlbumMediaCount implements Parcelable {
+
     public int photos;
     public int videos;
-    public int getTotal(){ return photos+videos; }
+
+    public int getTotal() { return photos + videos; }
 
     public AlbumMediaCount(){ photos = videos = 0;}
 
