@@ -39,14 +39,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Adapters.AlbumsAdapter;
-
+import com.horaapps.leafpic.Adapters.PhotosAdapter;
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.ImageFileFilter;
-import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -392,16 +391,14 @@ public class MainActivity extends ThemedActivity {
 
     //region UI/GRAPHIC
     public void setupUI() {
+        //TODO: MUST BE FIXXED
         toolbar.setPopupTheme(getPopupToolbarStyle());
         toolbar.setBackgroundColor(getPrimaryColor());
-<<<<<<< HEAD
 
         /**** SWIPE TO REFRESH ****/
         SwipeContainerRV.setColorSchemeColors(getAccentColor());
         SwipeContainerRV.setProgressBackgroundColorSchemeColor(getBackgroundColor());
 
-=======
->>>>>>> origin/master
         setStatusBarColor();
         setNavBarColor();
 

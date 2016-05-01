@@ -53,7 +53,6 @@ public class AboutActivity extends ThemedActivity {
     }
 
     public void setTheme(){
-
         /**** ToolBar *****/
         toolbar.setBackgroundColor(getPrimaryColor());
         setSupportActionBar(toolbar);
@@ -85,7 +84,6 @@ public class AboutActivity extends ThemedActivity {
         txtSU.setTextColor(getAccentColor());
 
         /***** Buttons *****/
-
 
         setThemeOnChangeListener();
         ClickListeners();
@@ -133,6 +131,7 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +141,7 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        //Libs
         findViewById(R.id.ll_about_libs).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

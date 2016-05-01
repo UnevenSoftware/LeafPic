@@ -10,20 +10,20 @@
     </style>
 
     <!--DARK MENU THEME-->
-    <style name="DarkActionBarMenu" parent="Theme.AppCompat.Light">
+    <style name="DarkActionBarMenu" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
     </style>
 
-    <style name="MyApp.PopupMenu.Dark" parent="Widget.AppCompat.Light.ListPopupWindow">
+    <style name="MyApp.PopupMenu.Dark" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
     </style>
 
     <!--AMOLED DARK MENU THEME-->
-    <style name="AmoledDarkActionBarMenu" parent="Theme.AppCompat.Light">
+    <style name="AmoledDarkActionBarMenu" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
     </style>
 
-    <style name="MyApp.PopupMenu.DarkAmoled" parent="Widget.AppCompat.Light.ListPopupWindow">
+    <style name="MyApp.PopupMenu.DarkAmoled" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:popupBackground">@drawable/ic_empty_amoled</item>
     </style>
 
