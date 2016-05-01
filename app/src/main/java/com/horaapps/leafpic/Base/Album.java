@@ -304,6 +304,23 @@ public class Album {
         clearSelectedPhotos();
     }
 
+    public void renameAlbum(Context context, String newName) {
+        File dir = new File(StringUtils.getAlbumPathRenamed(getPath(), newName));
+        if (dir.mkdir() || dir.exists()) {
+            path = dir.getAbsolutePath();
+            name = newName;
+            for (int i = 0; i < media.size(); i++) {
+                File from = new File(media.get(i).getPath());
+                File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(media.get(i).getPath(), newName));
+                if (from.renameTo(to)) {
+                    MediaScannerConnection.scanFile(context,
+                            new String[]{from.getAbsolutePath(), to.getAbsolutePath()}, null, null);
+                    media.get(i).path = to.getAbsolutePath();
+                }
+            }
+        }
+    }
+
     public void scanFile(Context context, String[] path) {   MediaScannerConnection.scanFile(context, path, null, null); }
 
 }

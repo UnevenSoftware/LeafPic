@@ -228,13 +228,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
-        /*switch (getBasicTheme()){
-            case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
-            //case 2: toolbar.setPopupTheme(R.style.DarkActionBarMenu);break;
-            //case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
-            //default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
-        }*/
-
         setStatusBarColor();
         setNavBarColor();
 
