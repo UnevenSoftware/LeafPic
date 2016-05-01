@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -100,10 +101,14 @@ public class PhotoPagerActivity extends ThemedActivity {
         {
             if (getIntent().getAction().equals(ACTION_OPEN_ALBUM))
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-            else if (getIntent().getAction().equals(Intent.ACTION_VIEW) && getIntent().getData() != null)
-                album = new Album(getIntent().getData().getPath());
-            else if (getIntent().getAction().equals(ACTION_REVIEW) && getIntent().getData() != null)
-                album = new Album(getRealPathFromURI(this, getIntent().getData()));
+            else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
+                            && getIntent().getData() != null) {
+                if (getIntent().getData().getScheme().equals("file"))
+                    album = new Album(getIntent().getData().getPath());
+                else
+                    album = new Album(getRealPathFromURI(this, getIntent().getData()));
+            }
+
 
             initUI();
             setupUI();
@@ -114,7 +119,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index;
             if (cursor != null) column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             else return null;
