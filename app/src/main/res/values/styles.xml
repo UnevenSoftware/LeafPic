@@ -6,7 +6,7 @@
     </style>
 
     <style name="MyApp.PopupMenu.Light" parent="Widget.AppCompat.Light.ListPopupWindow">
-        <item name="android:popupBackground">@drawable/ic_empty_white</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_light_background</item>
     </style>
 
     <!--DARK MENU THEME-->
@@ -15,7 +15,7 @@
     </style>
 
     <style name="MyApp.PopupMenu.Dark" parent="Widget.AppCompat.Light.ListPopupWindow">
-        <item name="android:popupBackground">@drawable/ic_empty</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
     </style>
 
     <!--AMOLED DARK MENU THEME-->
@@ -70,19 +70,19 @@
     <style name="AlertDialog_Dark" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
-        <item name="android:background">@color/cardview_dark_background</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
     </style>
 
     <style name="AlertDialog_Dark_Amoled" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
-        <item name="android:background">@color/md_black_1000</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/md_black_1000</item>
     </style>
 
     <!--LICENSE DIALOG-->
     <style name="LicenseDialog_Dark" parent="android:Theme.Dialog">
         <item name="android:textColor">@color/md_white_1000</item>
-        <item name="android:background">@color/cardview_dark_background</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
     </style>
 

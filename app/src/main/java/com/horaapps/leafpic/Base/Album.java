@@ -2,6 +2,7 @@ package com.horaapps.leafpic.Base;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.R;
@@ -25,7 +26,7 @@ public class Album {
     int count = -1;
     boolean selected = false;
 
-    private int filter_photos = ImageFileFilter.FILTER_ALL;
+    private int filter_photos;// = ImageFileFilter.FILTER_ALL;
     public AlbumSettings settings = new AlbumSettings();
     MediaComparators mediaComparators;
 
@@ -171,6 +172,32 @@ public class Album {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.setAlbumSortingMode(getPath(), column);
         settings.columnSortingMode = column;
+    }
+
+    public void renameCurrentMedia(Context context, String newName) {
+        try {
+            File from = new File(getCurrentMedia().getPath());
+            File to = new File(StringUtils.getPhotoPathRenamed(getCurrentMedia().getPath(), newName));
+            if (from.renameTo(to)) {
+                scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
+                getCurrentMedia().path = to.getAbsolutePath();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int moveCurrentPhoto(Context context, String newName) {
+        try {
+            File from = new File(getCurrentMedia().getPath());
+            File to = new File(StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), newName));
+            if (from.renameTo(to)) {
+                scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
+                getCurrentMedia().path = to.getAbsolutePath();
+                media.remove(getCurrentMediaIndex());
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return getCurrentMediaIndex();
     }
 
     public void setDefaultSortingAscending(Context context, Boolean ascending) {
