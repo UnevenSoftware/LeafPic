@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -77,6 +79,9 @@ public class MainActivity extends ThemedActivity {
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
+
+    SelectAlbumBottomSheet bottomSheetDialogFragment;
+
     private SwipeRefreshLayout SwipeContainerRV;
     boolean pickmode = false;
     boolean editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
@@ -966,7 +971,7 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.copyAction:
-                final SelectAlbumBottomSheet bottomSheetDialogFragment = new SelectAlbumBottomSheet();
+                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
@@ -1102,8 +1107,7 @@ public class MainActivity extends ThemedActivity {
                                 File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
 
                                 if (from.renameTo(to)) {
-                                    MediaScannerConnection.scanFile(
-                                            getApplicationContext(),
+                                    MediaScannerConnection.scanFile(getApplicationContext(),
                                             new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
                                     album.media.remove(album.selectedMedias.get(i));
                                 }
@@ -1114,6 +1118,8 @@ public class MainActivity extends ThemedActivity {
 
                     @Override
                     protected void onPostExecute(Void result) {
+                        if (album.media.size() == 0)
+                            displayAlbums();
                         adapter.updateDataset(album.media);
                         finishEditMode();
                         invalidateOptionsMenu();
@@ -1121,94 +1127,21 @@ public class MainActivity extends ThemedActivity {
                     }
                 }
 
-                final SelectAlbumBottomSheet sheetMove = new SelectAlbumBottomSheet();
-                sheetMove.setAlbumArrayList(albums.dispAlbums);
-                sheetMove.setTitle(getString(R.string.move_to));
-                sheetMove.setOnClickListener(new View.OnClickListener() {
+                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
+                bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
                         new MovePhotos().execute(albums.getAlbum(index).getPath());
-                        sheetMove.dismiss();
+                        bottomSheetDialogFragment.dismiss();
                     }
                 });
-                sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
+                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
                return true;
 
-           /* case R.id.renameAlbum:
-                class ReanameAlbum extends AsyncTask<String, Integer, Integer> {
-
-                    @Override
-                    protected void onPreExecute() {
-                        SwipeContainerRV.setRefreshing(true);
-                        super.onPreExecute();
-                    }
-
-                    @Override
-                    protected Integer doInBackground(String... arg0) {
-                        int res = -1;
-                        try {
-                            if (albumsMode) {
-                                album = albums.getSelectedAlbum(0);
-                                res = albums.getIndex(album);
-                                album.setContext(MainActivity.this);
-                                album.updatePhotos();
-                            }
-
-                            File dir = new File(StringUtils.getAlbumPathRenamed(album.Path, arg0[0]));
-                            if (dir.mkdir()) {
-                                album.Path = dir.getAbsolutePath();
-                                album.DisplayName = arg0[0];
-                                for (int i = 0; i < album.medias.size(); i++) {
-                                    final int albums = i;
-                                    File from = new File(album.medias.get(i).Path);
-                                    File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(album.medias.get(i).Path, arg0[0]));
-
-                                    if (from.renameTo(to)) {
-                                        MediaScannerConnection.scanFile(
-                                                getApplicationContext(),
-                                                new String[]{to.getAbsolutePath()}, null,
-                                                new MediaScannerConnection.OnScanCompletedListener() {
-                                                    @Override
-                                                    public void onScanCompleted(String path, Uri uri) {
-                                                        getContentResolver().delete(album.medias.get(albums).getUri(), null, null);
-                                                        album.medias.get(albums).ID = StringUtils.getID(uri + "");
-                                                        album.medias.get(albums).Path = path;
-                                                        if (albums == 0) {
-                                                            MediaStoreHandler h = new MediaStoreHandler(MainActivity.this);
-                                                            album.ID = h.getAlbumPhoto(path);
-                                                        }
-                                                    }
-                                                });
-                                    }
-                                }
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return res;
-                    }
-
-
-                    @Override
-                    protected void onPostExecute(Integer result) {
-                        if (albumsMode) {
-                            if (result != -1) {
-                                albums.replaceAlbum(result, album);
-                                adapt.notifyItemChanged(result);
-                            }
-
-                            albums.clearSelectedAlbums();
-                            adapt.notifyDataSetChanged();
-                        } else {
-                            toolbar.setTitle(album.DisplayName);
-                            adapter.notifyDataSetChanged();
-                        }
-                        invalidateOptionsMenu();
-                        SwipeContainerRV.setRefreshing(false);
-                    }
-                }
+            case R.id.renameAlbum:
 
                 final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
@@ -1222,7 +1155,7 @@ public class MainActivity extends ThemedActivity {
                 title.setText(getString(R.string.rename_album));
                 txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
                 txt_edit.setTextColor(getTextColor());
-                txt_edit.setText(albumsMode ? albums.getSelectedAlbum(0).DisplayName : album.DisplayName);
+                txt_edit.setText(albumsMode ? albums.getSelectedAlbum(0).getName() : album.getName());
                 RenameDialog.setView(Rename_dialogLayout);
 
                 RenameDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -1235,9 +1168,16 @@ public class MainActivity extends ThemedActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (txt_edit.length() != 0) {
 
-                            new ReanameAlbum().execute(txt_edit.getText().toString());
-                            //onResume();
-
+                            if (albumsMode){
+                                int index = albums.dispAlbums.indexOf(albums.getSelectedAlbum(0));
+                                albums.getAlbum(index).updatePhotos();
+                                albums.getAlbum(index).renameAlbum(getApplicationContext(), txt_edit.getText().toString());
+                                adapt.notifyItemChanged(index);
+                            } else {
+                                album.renameAlbum(getApplicationContext(), txt_edit.getText().toString());
+                                toolbar.setTitle(album.getName());
+                                adapter.notifyDataSetChanged();
+                            }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
 
@@ -1245,8 +1185,7 @@ public class MainActivity extends ThemedActivity {
                 });
                 RenameDialog.show();
                 txt_edit.requestFocus();
-                break;
-                return true;*/
+                return true;
 
             case R.id.clear_album_preview:
                 if (!albumsMode) {

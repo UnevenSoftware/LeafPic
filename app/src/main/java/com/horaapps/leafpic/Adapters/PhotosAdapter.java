@@ -21,13 +21,12 @@ import com.horaapps.leafpic.R;
 
 import java.util.ArrayList;
 
-//import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 /**
  * Created by dnld on 1/7/16.
  */
 
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {//implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate
+public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
     ArrayList<Media> medias;
     SharedPreferences SP;
@@ -100,10 +99,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                         .animate(R.anim.fade_in)
                         .into(holder.imageView);
                 holder.gifIcon.setVisibility(View.GONE);
-                holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
             }
         }
 
+        holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
         holder.path.setTag(position);
 
         if (f.isSelected()) {
@@ -115,7 +114,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.imageView.clearColorFilter();
             holder.imageView.setPadding(0,0,0,0);
         }
-
     }
 
     @Override
