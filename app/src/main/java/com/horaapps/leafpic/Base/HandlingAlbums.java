@@ -308,4 +308,5 @@ public class HandlingAlbums {
         }
     }
 
+    public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
 }
