@@ -328,7 +328,8 @@ public class MainActivity extends ThemedActivity {
 
         /**** SWIPE TO REFRESH ****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        SwipeContainerRV.setColorSchemeResources(R.color.accent_blue);
+        SwipeContainerRV.setColorSchemeColors(getAccentColor());
+        SwipeContainerRV.setProgressBackgroundColorSchemeColor(getBackgroundColor());
         SwipeContainerRV.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -408,9 +409,9 @@ public class MainActivity extends ThemedActivity {
 
         toolbar.setBackgroundColor(getPrimaryColor());
 
-        //TODO:FIX IT PLIS CUZ I KNOW U CAN
-        /*else
-            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
+        /**** SWIPE TO REFRESH ****/
+        SwipeContainerRV.setColorSchemeColors(getAccentColor());
+        SwipeContainerRV.setProgressBackgroundColorSchemeColor(getBackgroundColor());
 
         setStatusBarColor();
         setNavBarColor();
