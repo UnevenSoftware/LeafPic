@@ -72,7 +72,6 @@ public class MainActivity extends ThemedActivity {
     HandlingAlbums albums;
     RecyclerView mRecyclerView;
     PhotosAdapter adapter;
-
     AlbumsAdapter adapt;
 
     FloatingActionButton fabCamera;
@@ -308,16 +307,6 @@ public class MainActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        switch (getBasicTheme()){
-            case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
-            //case 2: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
-            //case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
-            //default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
-        }
-        //toolbar.setPopupTheme(R.style.LightActionBarMenu);
-        //TODO:FIX IT PLIS CUZ I KNOW U CAN
-        /*else
-            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
         /**** RECYCLER VIEW ****/
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_albums);
         mRecyclerView.setHasFixedSize(true);
@@ -402,16 +391,8 @@ public class MainActivity extends ThemedActivity {
 
     //region UI/GRAPHIC
     public void setupUI() {
-
-        //toolbar.setPopupTheme(isDarkTheme() ? R.style.MyDarkToolbarStyle : R.style.MyLightToolbarStyle);
-        //setSupportActionBar(toolbar);
-
+        toolbar.setPopupTheme(getPopupToolbarStyle());
         toolbar.setBackgroundColor(getPrimaryColor());
-
-        //TODO:FIX IT PLIS CUZ I KNOW U CAN
-        /*else
-            toolbar.setPopupTheme(R.style.DarkActionBarMenu);*/
-
         setStatusBarColor();
         setNavBarColor();
 
@@ -1154,7 +1135,7 @@ public class MainActivity extends ThemedActivity {
                 sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
                return true;
 
-            /*case R.id.renameAlbum:
+           /* case R.id.renameAlbum:
                 class ReanameAlbum extends AsyncTask<String, Integer, Integer> {
 
                     @Override
@@ -1265,7 +1246,8 @@ public class MainActivity extends ThemedActivity {
                 RenameDialog.show();
                 txt_edit.requestFocus();
                 break;
-*/
+                return true;*/
+
             case R.id.clear_album_preview:
                 if (!albumsMode) {
                     CustomAlbumsHandler as = new CustomAlbumsHandler(getApplicationContext());

@@ -81,6 +81,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     SharedPreferences SP;
     RelativeLayout ActivityBackgorund;
     Album album;
+    HandlingAlbums albums;
     Toolbar toolbar;
     boolean fullscreenmode;
 
@@ -222,15 +223,17 @@ public class PhotoPagerActivity extends ThemedActivity {
         else
             toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
 
+        toolbar.setPopupTheme(getPopupToolbarStyle());
+
         ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         ActivityBackgorund.setBackgroundColor(getBackgroundColor());
 
-        switch (getBasicTheme()){
+        /*switch (getBasicTheme()){
             case 1: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
             //case 2: toolbar.setPopupTheme(R.style.DarkActionBarMenu);break;
             //case 3: toolbar.setPopupTheme(R.style.AmoledDarkActionBarMenu);break;
             //default: toolbar.setPopupTheme(R.style.LightActionBarMenu);break;
-        }
+        }*/
 
         setStatusBarColor();
         setNavBarColor();
@@ -356,7 +359,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.copyAction:
-                final HandlingAlbums albums = ((MyApplication) getApplicationContext()).getAlbums();
+                albums = ((MyApplication) getApplicationContext()).getAlbums();
                 final SelectAlbumBottomSheet bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
@@ -437,29 +440,28 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.moveAction:
-               /*
-                final HandlingAlbums albumsa = ((MyApplication) getApplicationContext()).getAlbums();
+
+                albums = ((MyApplication) getApplicationContext()).getAlbums();
                 final SelectAlbumBottomSheet sheetMove = new SelectAlbumBottomSheet();
-                sheetMove.setAlbumArrayList(albumsa.dispAlbums);
+                sheetMove.setAlbumArrayList(albums.dispAlbums);
                 sheetMove.setTitle(getString(R.string.move_to));
                 sheetMove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
-                        album.moveCurentPhoto(albumsa.getAlbum(index).getPath());
-                        album.media.remove(album.getCurrentMediaIndex());
+                        album.moveCurrentPhoto(getApplicationContext(), albums.getAlbum(index).getPath());
                         if (album.media.size() == 0) {
                             startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
                             finish();
                         }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.medias.size());
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
                         sheetMove.dismiss();
                     }
                 });
                 sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
-                */
-                break;
+
+                return true;
 
             case R.id.renamePhoto:
                 final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
@@ -485,29 +487,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 RenameDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        /*if (txt_edit.length() != 0) {
-                            try {
-                                File from = new File(album.getCurrentPhoto().Path);
-                                File to = new File(StringUtils.getPhotoPathRenamed(album.getCurrentPhoto().Path, txt_edit.getText().toString()));
-                                if (from.renameTo(to)) {
-                                    MediaScannerConnection.scanFile(
-                                            getApplicationContext(),
-                                            new String[]{to.getAbsolutePath()}, null,
-                                            new MediaScannerConnection.OnScanCompletedListener() {
-                                                @Override
-                                                public void onScanCompleted(String path, Uri uri) {
-                                                    getContentResolver().delete(album.getCurrentPhoto().getUri(), null, null);
-                                                    album.getCurrentPhoto().ID = StringUtils.getID(uri + "");
-                                                    album.getCurrentPhoto().Path = path;
-                                                }
-                                            });
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        if (txt_edit.length() != 0) {
+                            album.renameCurrentMedia(getApplicationContext(), txt_edit.getText().toString());
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
-                            */
+
                     }
                 });
                 RenameDialog.show();
