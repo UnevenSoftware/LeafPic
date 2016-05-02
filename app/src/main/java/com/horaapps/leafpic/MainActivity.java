@@ -68,39 +68,36 @@ public class MainActivity extends ThemedActivity {
     public static String TAG = "AlbumsAct";
 
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
-    Album album;
     SharedPreferences SP;
 
     HandlingAlbums albums;
+    Album album;
+
     RecyclerView mRecyclerView;
     PhotosAdapter adapter;
     AlbumsAdapter adapt;
+    GridSpacingItemDecoration albumsDecoration;
+    GridSpacingItemDecoration photosDecoration;
 
     FloatingActionButton fabCamera;
     DrawerLayout mDrawerLayout;
     Toolbar toolbar;
-
     SelectAlbumBottomSheet bottomSheetDialogFragment;
-
     private SwipeRefreshLayout SwipeContainerRV;
-    boolean pickmode = false;
-    boolean editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
-    GridSpacingItemDecoration albumsDecoration;
-    GridSpacingItemDecoration photosDecoration;
+    boolean pickmode = false, editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
     View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            TextView is = (TextView) v.findViewById(R.id.photo_path);
-
+            int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
             if (!editmode) {
                 // If it is the first long press
-                adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
+                adapter.notifyItemChanged(album.toggleSelectPhoto(index));
                 editmode = true;
-            } else {
-                album.selectAllPhotosUpTo(Integer.parseInt(is.getTag().toString()), adapter);
-            }
+            } else
+                album.selectAllPhotosUpTo(index, adapter);
+
             invalidateOptionsMenu();
             return true;
         }
@@ -110,15 +107,20 @@ public class MainActivity extends ThemedActivity {
         @Override
         public void onClick(View v) {
             if (contentReady) {
-                TextView is = (TextView) v.findViewById(R.id.photo_path);
-                if (editmode) {
-                    adapter.notifyItemChanged(album.toggleSelectPhoto(Integer.parseInt(is.getTag().toString())));
-                    invalidateOptionsMenu();
+                int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+                if (!pickmode) {
+                    if (editmode) {
+                        adapter.notifyItemChanged(album.toggleSelectPhoto(index));
+                        invalidateOptionsMenu();
+                    } else {
+                        album.setCurrentPhotoIndex(index);
+                        Intent intent = new Intent(MainActivity.this, PhotoPagerActivity.class);
+                        intent.setAction(PhotoPagerActivity.ACTION_OPEN_ALBUM);
+                        startActivity(intent);
+                    }
                 } else {
-                    album.setCurrentPhotoIndex(Integer.parseInt(is.getTag().toString()));
-                    Intent intent = new Intent(MainActivity.this, PhotoPagerActivity.class);
-                    intent.setAction(PhotoPagerActivity.ACTION_OPEN_ALBUM);
-                    startActivity(intent);
+                    setResult(RESULT_OK, new Intent().setData(album.getMedia(index).getUri()));
+                    finish();
                 }
             }
         }
@@ -127,8 +129,10 @@ public class MainActivity extends ThemedActivity {
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            TextView a = (TextView) v.findViewById(R.id.album_name);
-            adapt.notifyItemChanged(albums.toggleSelectAlbum(Integer.parseInt(a.getTag().toString())));
+            int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
+
+            //TextView a = (TextView) v.findViewById(R.id.album_name);
+            adapt.notifyItemChanged(albums.toggleSelectAlbum(index));
             editmode = true;
             invalidateOptionsMenu();
             return true;
@@ -139,13 +143,13 @@ public class MainActivity extends ThemedActivity {
         @Override
         public void onClick(View v) {
             if (contentReady) {
-                TextView a = (TextView) v.findViewById(R.id.album_name);
+                int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
                 if (editmode) {
-                    adapt.notifyItemChanged(albums.toggleSelectAlbum(Integer.parseInt(a.getTag().toString())));
+                    adapt.notifyItemChanged(albums.toggleSelectAlbum(index));
                     invalidateOptionsMenu();
                 } else {
-                    openAlbum(albums.getAlbum(Integer.parseInt(a.getTag().toString())));
-                    setRecentApp(albums.getAlbum(Integer.parseInt(a.getTag().toString())).getName());
+                    openAlbum(albums.getAlbum(index));
+                    setRecentApp(albums.getAlbum(index).getName());
                 }
             }
         }
@@ -193,6 +197,8 @@ public class MainActivity extends ThemedActivity {
         album.setSettings(getApplicationContext());
         toolbar.setTitle(a.getName());
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+        mDrawerLayout.setEnabled(false);
+
         mRecyclerView.removeItemDecoration(albumsDecoration);
         mRecyclerView.addItemDecoration(photosDecoration);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
@@ -222,6 +228,7 @@ public class MainActivity extends ThemedActivity {
 
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
+        mDrawerLayout.setEnabled(true);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
         mRecyclerView.removeItemDecoration(photosDecoration);
@@ -294,12 +301,18 @@ public class MainActivity extends ThemedActivity {
             if (content == SplashScreen.ALBUMS_PREFETCHED) {
                 albums = ((MyApplication) getApplicationContext()).getAlbums();
                 displayAlbums(false);
-                pickmode=data.getBoolean(SplashScreen.PICK_MODE);
+                pickmode = data.getBoolean(SplashScreen.PICK_MODE);
             } else if (content == SplashScreen.PHOTS_PREFETCHED) {
-                /*album = data.getParcelable("album");
-                assert album != null;
-                album.setContext(MainActivity.this);
-                openAlbum(album,false);*/
+                album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        albums = new HandlingAlbums(getApplicationContext());
+                        albums.loadPreviewAlbums();
+                    }
+                }).start();
+
+                openAlbum(album,false);
             }
             contentReady = true;
         } catch (NullPointerException e) { e.printStackTrace(); }

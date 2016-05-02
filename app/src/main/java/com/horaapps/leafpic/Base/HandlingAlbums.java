@@ -159,7 +159,6 @@ public class HandlingAlbums {
             shortcutIntent = new Intent(appCtx, SplashScreen.class);
             shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
             shortcutIntent.putExtra("albumPath", selectedAlbum.getPath());
-            shortcutIntent.putExtra("albumName", selectedAlbum.getName());
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
