@@ -119,7 +119,8 @@
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
-            <!-- SECRETS ALBUMS -->
+            <!-- TAGS ALBUMS -->
+            <!--
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -154,8 +155,9 @@
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
-
-            <!-- MOMENTS -->
+            -->
+            <!-- TIMELINE -->
+            <!--
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -189,6 +191,7 @@
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+            -->
 
             <!-- WALLPAPERS -->
             <com.balysv.materialripple.MaterialRippleLayout

@@ -1,8 +1,6 @@
 package com.horaapps.leafpic;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.CustomTabService;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -33,6 +32,9 @@ public class AboutActivity extends ThemedActivity {
     TextView txtAT;
     TextView txtSU;
 
+    /**** CustomTabService*/
+    CustomTabService cts;
+
     /**** Buttons ***/
 
     @Override
@@ -44,6 +46,8 @@ public class AboutActivity extends ThemedActivity {
         txtAT = (TextView) findViewById(R.id.about_authors_title);
         txtSU = (TextView) findViewById(R.id.about_support_title);
         setNavBarColor();
+        cts=new CustomTabService(AboutActivity.this,getPrimaryColor());
+        cts.Inizialize();
     }
 
     @Override
@@ -95,58 +99,42 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_support_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/HoraApps/LeafPic"));
-                startActivity(i);
+                //Intent i = new Intent(Intent.ACTION_VIEW);
+                //i.setData(Uri.parse("https://github.com/HoraApps/LeafPic"));
+                //startActivity(i);
+                cts.LaunchUrl("https://github.com/HoraApps/LeafPic");
+
             }
         });
 
         //Crowdin
         findViewById(R.id.ll_about_support_translate).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://crowdin.com/project/leafpic"));
-                startActivity(i);
-            }
+            public void onClick(View v) {cts.LaunchUrl("https://crowdin.com/project/leafpic");}
         });
 
         //Donald
         findViewById(R.id.ll_donald).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/DNLDsht"));
-                startActivity(i);
-            }
+            public void onClick(View v) {cts.LaunchUrl("https://github.com/DNLDsht");}
         });
 
         //Gilbert
         findViewById(R.id.ll_gilbert).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/Mow3l"));
-                startActivity(i);
-            }
+            public void onClick(View v) {cts.LaunchUrl("https://github.com/Mow3l");}
         });
 
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/HoraApps/LeafPic/blob/master/LICENSE"));
-                startActivity(i);
-            }
+            public void onClick(View v) {cts.LaunchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
         });
 
         //Libs
         findViewById(R.id.ll_about_libs).setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                licenseDialog();
-            }
+            public void onClick(View v) {licenseDialog();}
         });
 
     }
