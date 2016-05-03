@@ -149,7 +149,7 @@ public class SplashScreen extends ThemedActivity {
     private class PrefetchAlbumsData extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums();
+            albums.loadPreviewAlbums(false);
             return null;
         }
 

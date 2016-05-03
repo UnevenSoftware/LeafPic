@@ -85,7 +85,7 @@ public class MainActivity extends ThemedActivity {
     SelectAlbumBottomSheet bottomSheetDialogFragment;
     private SwipeRefreshLayout SwipeContainerRV;
 
-    boolean pickmode = false, editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
+    boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
     View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
         @Override
@@ -197,7 +197,7 @@ public class MainActivity extends ThemedActivity {
         album.setSettings(getApplicationContext());
         toolbar.setTitle(a.getName());
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        mDrawerLayout.setEnabled(false);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         mRecyclerView.removeItemDecoration(albumsDecoration);
         mRecyclerView.addItemDecoration(photosDecoration);
@@ -228,7 +228,7 @@ public class MainActivity extends ThemedActivity {
 
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
-        mDrawerLayout.setEnabled(true);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
         mRecyclerView.removeItemDecoration(photosDecoration);
@@ -308,7 +308,7 @@ public class MainActivity extends ThemedActivity {
                     @Override
                     public void run() {
                         albums = new HandlingAlbums(getApplicationContext());
-                        albums.loadPreviewAlbums();
+                        albums.loadPreviewAlbums(false);//TODO check if is hidden
                     }
                 }).start();
 
@@ -498,19 +498,20 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
-
-
-
         findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.closeDrawer(Gravity.LEFT);
+                hidden = false;
+                mDrawerLayout.closeDrawer(Gravity.START);
+                new PrepareAlbumTask().execute();
             }
         });
         findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CominqSoonDialog("Hidden");
+                hidden = true;
+                mDrawerLayout.closeDrawer(Gravity.START);
+                new PrepareAlbumTask().execute();
             }
         });
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
@@ -684,7 +685,7 @@ public class MainActivity extends ThemedActivity {
                     break;
             }
         }
-
+        menu.findItem(R.id.hideAlbumButton).setTitle(hidden ?  getString(R.string.unhide) : getString(R.string.hide));
         menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
         menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
@@ -1256,7 +1257,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums();
+            albums.loadPreviewAlbums(hidden);
             return null;
         }
 
