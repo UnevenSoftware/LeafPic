@@ -47,10 +47,14 @@ public class HandlingAlbums {
         selectedAlbums = new ArrayList<Album>();
     }
 
-    public void loadPreviewAlbums() {
+    public void loadPreviewAlbums(boolean hidden) {
         dispAlbums = new ArrayList<Album>();
-        for (File storage : listStorages())
-            fetchRecursivelyFolder(storage);
+        if (hidden)
+            for (File storage : listStorages())
+                fetchRecursivelyHiddenFolder(storage);
+        else
+            for (File storage : listStorages())
+                fetchRecursivelyFolder(storage);
 
         sortAlbums();
     }
@@ -77,6 +81,19 @@ public class HandlingAlbums {
         }
     }
 
+    private void fetchRecursivelyHiddenFolder(File dir) {
+        if (!excludedfolders.contains(dir)) {
+            File[] folders = dir.listFiles(new FoldersFileFilter());
+            for (File temp : folders) {
+                File nomedia = new File(temp, ".nomedia");
+                if (!excludedfolders.contains(temp) && nomedia.exists()) {
+                    checkAndAddAlbum(temp);
+                }
+                fetchRecursivelyHiddenFolder(temp);
+            }
+        }
+    }
+
     public void checkAndAddAlbum(File temp) {
         File[] files = temp.listFiles(new ImageFileFilter());
         if (files.length > 0) {
@@ -99,20 +116,7 @@ public class HandlingAlbums {
         }
     }
 
-    /*private void fetchRecursivelyHiddenFolder(File dir) {
-        File nomedia = new File(dir, ".nomedia");
-        if (!excludedfolders.contains(dir)) {
-            File[] folders = dir.listFiles(new FoldersFileFilter());
-            for (File temp : folders) {
-                nomedia = new File(temp, ".nomedia");
-                if (nomedia.exists() || temp.isHidden()) {
-                    //hidden folder
 
-                    fetchRecursivelyFolder(temp);
-                } else fetchRecursivelyFolder(temp);
-            }
-        }
-    }*/
 
     public void loadExcludedFolders(Context context) {
         excludedfolders = new ArrayList<File>();
@@ -159,7 +163,6 @@ public class HandlingAlbums {
             shortcutIntent = new Intent(appCtx, SplashScreen.class);
             shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
             shortcutIntent.putExtra("albumPath", selectedAlbum.getPath());
-            shortcutIntent.putExtra("albumName", selectedAlbum.getName());
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -174,16 +177,12 @@ public class HandlingAlbums {
 
             if(mime.startsWith("image")) {
                 bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), new BitmapFactory.Options());
-                bitmap = getCropedBitmap(bitmap);
-
             } else if(mime.startsWith("video")) {
-                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().getPath(),
+                bitmap = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
-                bitmap = getCropedBitmap(thumb);
             } else return;
-
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, false);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(scaledBitmap, 5));
+            bitmap = Bitmap.createScaledBitmap(getCropedBitmap(bitmap), 128, 128, false);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(bitmap, 5));
 
             addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
             appCtx.sendBroadcast(addIntent);
@@ -229,9 +228,33 @@ public class HandlingAlbums {
             }
         }
     }
+    public void hideSelectedAlbums(Context context) {
+        for (Album selectedAlbum : selectedAlbums)
+            hideAlbum(selectedAlbum, context);
+        clearSelectedAlbums();
+    }
 
     public void hideAlbum(final Album a, Context context) {
         hideAlbum(a.getPath(), context);
+        dispAlbums.remove(a);
+    }
+
+    public void unHideAlbum(String path, Context context) {
+        File dirName = new File(path);
+        File file = new File(dirName, ".nomedia");
+        if (file.exists()) {
+            if (file.delete())
+                scanFile(context, new String[]{ file.getAbsolutePath() });
+        }
+    }
+    public void unHideSelectedAlbums(Context context) {
+        for (Album selectedAlbum : selectedAlbums)
+            unHideAlbum(selectedAlbum, context);
+        clearSelectedAlbums();
+    }
+
+    public void unHideAlbum(final Album a, Context context) {
+        unHideAlbum(a.getPath(), context);
         dispAlbums.remove(a);
     }
 
@@ -252,11 +275,7 @@ public class HandlingAlbums {
         }
     }
 
-    public void hideSelectedAlbums(Context context) {
-        for (Album selectedAlbum : selectedAlbums)
-            hideAlbum(selectedAlbum, context);
-        clearSelectedAlbums();
-    }
+
 
     public void excludeSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums)

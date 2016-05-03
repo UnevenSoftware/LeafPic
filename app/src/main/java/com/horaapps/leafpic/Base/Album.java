@@ -77,7 +77,7 @@ public class Album {
         selectedMedias = new ArrayList<Media>();
         this.path = path;
         this.name = name;
-        updatePhotos();
+        //updatePhotos();
     }
 
     public void updatePhotos() {

@@ -21,8 +21,63 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <!-- HEADER
+            <android.support.v7.widget.CardView
+                android:id="@+id/donate_header_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardElevation="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_donate_header_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="15dp"
+                        android:weightSum="10"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/donate_header_icon_title"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="faw-heart"
+                            />
+                        <TextView
+                            android:id="@+id/donate_header_item_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/thank_you"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            android:layout_weight="8"
+                            android:textStyle="bold"
+                            />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/donate_header_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:text="@string/donate_header_text"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            -->
 
             <!--DONATE GOOGLE PLAY-->
             <android.support.v7.widget.CardView
@@ -132,6 +187,61 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
+            <!--DONATE BITCOIN -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/donate_bitcoin_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardElevation="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!--TITLE-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_donate_bitcoin_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="15dp"
+                        android:weightSum="10"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/donate_bitcoin_icon_title"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="faw-btc"
+                            />
+                        <TextView
+                            android:id="@+id/donate_bitcoin_item_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/donate_bitcoin"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            android:layout_weight="8"
+                            android:textStyle="bold"
+                            />
+                    </LinearLayout>
+                    <!--OBJECT-->
+                    <TextView
+                        android:id="@+id/donate_bitcoin_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="15dp"
+                        android:gravity="center_horizontal"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:text="1J42jRWz1kSosSssoUyJLnkTd85N2tngPU"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
     </ScrollView>
