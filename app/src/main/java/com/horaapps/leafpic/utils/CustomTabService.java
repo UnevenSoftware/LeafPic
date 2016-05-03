@@ -2,9 +2,7 @@ package com.horaapps.leafpic.utils;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
@@ -12,12 +10,10 @@ import android.support.customtabs.CustomTabsSession;
 
 
 public class CustomTabService {
-    final String CUSTOM_TAB_PACKAGE_NAME = "com.horaapps.leafpic";
     CustomTabsClient mCustomTabsClient;
     CustomTabsSession mCustomTabsSession;
     CustomTabsServiceConnection mCustomTabsServiceConnection;
     CustomTabsIntent mCustomTabsIntent;
-    SharedPreferences SP;
 
     Activity activity;
     int color;
@@ -27,9 +23,6 @@ public class CustomTabService {
     }
 
     public void Inizialize() {
-        //CUSTOM TAB
-        SP = PreferenceManager.getDefaultSharedPreferences(activity);
-
         mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
@@ -42,7 +35,7 @@ public class CustomTabService {
                 mCustomTabsClient= null;
             }
         };
-        CustomTabsClient.bindCustomTabsService(activity, CUSTOM_TAB_PACKAGE_NAME, mCustomTabsServiceConnection);
+        CustomTabsClient.bindCustomTabsService(activity, activity.getPackageName(), mCustomTabsServiceConnection);
         mCustomTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
                 .setShowTitle(true)
                 .setToolbarColor(color)
