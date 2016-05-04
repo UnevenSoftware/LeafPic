@@ -11,7 +11,7 @@
     >
 
     <com.mikepenz.iconics.view.IconicsImageView
-        android:id="@+id/bottom_sheet_folder_icon"
+        android:id="@+id/folder_icon_bottom_sheet_item"
         android:layout_height="20dp"
         android:layout_width="0dp"
         android:layout_gravity="center_vertical"
@@ -26,7 +26,7 @@
         android:layout_weight="8"
         >
         <TextView
-            android:id="@+id/Bottom_Sheet_Title_Item"
+            android:id="@+id/title_bottom_sheet_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
@@ -34,7 +34,7 @@
             android:textSize="16sp"
             />
         <TextView
-            android:id="@+id/Bottom_Sheet_Count_Item"
+            android:id="@+id/count_bottom_sheet_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""

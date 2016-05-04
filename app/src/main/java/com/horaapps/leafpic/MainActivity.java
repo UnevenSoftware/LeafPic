@@ -896,7 +896,7 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Exclude_title = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Exclude_Dialog = (CardView) Exclude_dialogLayout.findViewById(R.id.message_card);
-                final LinearLayout ll_Exclude_Sub = (LinearLayout) Exclude_dialogLayout.findViewById(R.id.ll_checkbox_dialog);
+                //final LinearLayout ll_Exclude_Sub = (LinearLayout) Exclude_dialogLayout.findViewById(R.id.ll_checkbox_dialog);
                 //final TextView txt_Exclude_Submessage = (TextView) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog);
                 //final CheckBox ckb_Exlude_sub = (CheckBox) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog_cb);
 
@@ -991,13 +991,13 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.copyAction:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
-                        album.copySelectedPhotos(getApplicationContext(), albums.getAlbum(index).getPath());
+                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                        album.copySelectedPhotos(getApplicationContext(), path);
                         finishEditMode();
                         bottomSheetDialogFragment.dismiss();
                     }
@@ -1147,13 +1147,13 @@ public class MainActivity extends ThemedActivity {
                 }
 
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
-                        new MovePhotos().execute(albums.getAlbum(index).getPath());
+                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                        new MovePhotos().execute(path);
                         bottomSheetDialogFragment.dismiss();
                     }
                 });

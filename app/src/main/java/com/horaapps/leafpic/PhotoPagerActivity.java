@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -82,7 +81,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     SharedPreferences SP;
     RelativeLayout ActivityBackgorund;
     Album album;
-    HandlingAlbums albums;
+    SelectAlbumBottomSheet bottomSheetDialogFragment;
     Toolbar toolbar;
     boolean fullscreenmode;
 
@@ -357,15 +356,15 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.copyAction:
-                albums = ((MyApplication) getApplicationContext()).getAlbums();
-                final SelectAlbumBottomSheet bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+
+                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
+                bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
-                        album.copyPhoto(getApplicationContext(), album.getCurrentMedia().getPath(), albums.getAlbum(index).getPath());
+                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                        album.copyPhoto(getApplicationContext(), album.getCurrentMedia().getPath(), path);
                         bottomSheetDialogFragment.dismiss();
                     }
                 });
@@ -438,26 +437,25 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.moveAction:
-
-                albums = ((MyApplication) getApplicationContext()).getAlbums();
-                final SelectAlbumBottomSheet sheetMove = new SelectAlbumBottomSheet();
-                sheetMove.setAlbumArrayList(albums.dispAlbums);
-                sheetMove.setTitle(getString(R.string.move_to));
-                sheetMove.setOnClickListener(new View.OnClickListener() {
+                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
+                bottomSheetDialogFragment.setCurrentPath(album.getPath());
+                bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
+                bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int index = Integer.parseInt(v.findViewById(R.id.Bottom_Sheet_Title_Item).getTag().toString());
-                        album.moveCurrentPhoto(getApplicationContext(), albums.getAlbum(index).getPath());
+                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                        album.moveCurrentPhoto(getApplicationContext(), path);
+
                         if (album.media.size() == 0) {
                             startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
                             finish();
                         }
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
-                        sheetMove.dismiss();
+                        bottomSheetDialogFragment.dismiss();
                     }
                 });
-                sheetMove.show(getSupportFragmentManager(), sheetMove.getTag());
+                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 
                 return true;
 

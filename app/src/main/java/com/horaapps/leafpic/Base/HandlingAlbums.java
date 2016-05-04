@@ -67,6 +67,51 @@ public class HandlingAlbums {
         return roots;
     }
 
+    public ArrayList<Album> getValidFolders(boolean hidden) {
+        ArrayList<Album> folders = new ArrayList<Album>();
+        if (hidden)
+            for (File storage : listStorages())
+                fetchRecursivelyHiddenFolder(storage, folders);
+        else
+            for (File storage : listStorages())
+                fetchRecursivelyFolder(storage, folders);
+
+        return folders;
+    }
+
+    private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders) {
+        if (!excludedfolders.contains(dir)) {
+            File[] listFiles = dir.listFiles(new ImageFileFilter());
+            if (listFiles.length > 0)
+                folders.add(new Album(dir.getAbsolutePath(), dir.getName(), listFiles.length));
+
+            File[] children = dir.listFiles(new FoldersFileFilter());
+            for (File temp : children) {
+                File nomedia = new File(temp, ".nomedia");
+                if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
+                    /*File[] files = temp.listFiles(new ImageFileFilter());
+                    if (files.length > 0)
+                        folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));*/
+                    fetchRecursivelyFolder(temp, folders);
+                }
+            }
+        }
+    }
+
+    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders) {
+        if (!excludedfolders.contains(dir)) {
+            File[] asdf = dir.listFiles(new FoldersFileFilter());
+            for (File temp : asdf) {
+                File nomedia = new File(temp, ".nomedia");
+                if (!excludedfolders.contains(temp) && nomedia.exists()) {
+                    File[] files = temp.listFiles(new ImageFileFilter());
+                    if (files.length > 0)
+                        folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
+                }
+                fetchRecursivelyHiddenFolder(temp, folders);
+            }
+        }
+    }
     private void fetchRecursivelyFolder(File dir) {
         if (!excludedfolders.contains(dir)) {
             checkAndAddAlbum(dir);
