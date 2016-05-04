@@ -155,13 +155,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getPopupToolbarStyle(){
         int style;
         switch (getBasicTheme()){
-            case 2:
-            case 3:
-                style = R.style.DarkActionBarMenu;
-                break;
-            case 1:
-            default:
-                style = R.style.LightActionBarMenu;
+            case 2: style = R.style.DarkActionBarMenu;break;
+            case 3: style = R.style.AmoledDarkActionBarMenu;break;
+            case 1: default: style = R.style.LightActionBarMenu;
         }
         return style;
     }

@@ -29,26 +29,23 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Adapters.AlbumsAdapter;
-
+import com.horaapps.leafpic.Adapters.PhotosAdapter;
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.ImageFileFilter;
-import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -335,7 +332,8 @@ public class MainActivity extends ThemedActivity {
 
         /**** SWIPE TO REFRESH ****/
         SwipeContainerRV = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        SwipeContainerRV.setColorSchemeResources(R.color.accent_blue);
+        SwipeContainerRV.setColorSchemeColors(getAccentColor());
+        SwipeContainerRV.setProgressBackgroundColorSchemeColor(getBackgroundColor());
         SwipeContainerRV.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -409,8 +407,14 @@ public class MainActivity extends ThemedActivity {
 
     //region UI/GRAPHIC
     public void setupUI() {
+        //TODO: MUST BE FIXXED
         toolbar.setPopupTheme(getPopupToolbarStyle());
         toolbar.setBackgroundColor(getPrimaryColor());
+
+        /**** SWIPE TO REFRESH ****/
+        SwipeContainerRV.setColorSchemeColors(getAccentColor());
+        SwipeContainerRV.setProgressBackgroundColorSchemeColor(getBackgroundColor());
+
         setStatusBarColor();
         setNavBarColor();
 
@@ -430,13 +434,12 @@ public class MainActivity extends ThemedActivity {
         DrawerScroll.setBackgroundColor(getDrawerBackground());//getBackgroundColor()
 
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);
-        DrawerDivider2.setBackgroundColor(ColorPalette.getTransparentColor(
-                ContextCompat.getColor(MainActivity.this, R.color.md_black_1000), 150));
+        DrawerDivider2.setBackgroundColor(getIconColor());
 
         /** drawer items **/
         TextView txtDD = (TextView) findViewById(R.id.Drawer_Default_Item);
-        TextView txtDH = (TextView) findViewById(R.id.Drawer_Tags_Item);
-        TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
+        //TextView txtDH = (TextView) findViewById(R.id.Drawer_Tags_Item);
+        //TextView txtDMoments = (TextView) findViewById(R.id.Drawer_Moments_Item);
         TextView txtDS = (TextView) findViewById(R.id.Drawer_Setting_Item);
         TextView txtDDonate = (TextView) findViewById(R.id.Drawer_Donate_Item);
         TextView txtWall = (TextView) findViewById(R.id.Drawer_wallpapers_Item);
@@ -445,8 +448,8 @@ public class MainActivity extends ThemedActivity {
 
         IconicsImageView imgDD = (IconicsImageView) findViewById(R.id.Drawer_Default_Icon);
         IconicsImageView imgWall = (IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon);
-        IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Tags_Icon);
-        IconicsImageView imgDMoments = (IconicsImageView) findViewById(R.id.Drawer_Moments_Icon);
+        //IconicsImageView imgDH = (IconicsImageView) findViewById(R.id.Drawer_Tags_Icon);
+        //IconicsImageView imgDMoments = (IconicsImageView) findViewById(R.id.Drawer_Moments_Icon);
         IconicsImageView imgDDonate = (IconicsImageView) findViewById(R.id.Drawer_Donate_Icon);
         IconicsImageView imgDS = (IconicsImageView) findViewById(R.id.Drawer_Setting_Icon);
         IconicsImageView imgAbout = (IconicsImageView) findViewById(R.id.Drawer_About_Icon);
@@ -455,8 +458,8 @@ public class MainActivity extends ThemedActivity {
         /**textViews Colors*/
         int color = getTextColor();
         txtDD.setTextColor(color);
-        txtDH.setTextColor(color);
-        txtDMoments.setTextColor(color);
+        //txtDH.setTextColor(color);
+        //txtDMoments.setTextColor(color);
         txtDS.setTextColor(color);
         txtDDonate.setTextColor(color);
         txtWall.setTextColor(color);
@@ -467,8 +470,8 @@ public class MainActivity extends ThemedActivity {
 
         imgDD.setColor(color);
         imgDDonate.setColor(color);
-        imgDH.setColor(color);
-        imgDMoments.setColor(color);
+        //imgDH.setColor(color);
+        //imgDMoments.setColor(color);
         imgDS.setColor(color);
         imgWall.setColor(color);
         imgAbout.setColor(color);
@@ -502,7 +505,7 @@ public class MainActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 hidden = false;
-                mDrawerLayout.closeDrawer(Gravity.START);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 new PrepareAlbumTask().execute();
             }
         });
@@ -510,10 +513,11 @@ public class MainActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 hidden = true;
-                mDrawerLayout.closeDrawer(Gravity.START);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 new PrepareAlbumTask().execute();
             }
         });
+        /*
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -527,6 +531,7 @@ public class MainActivity extends ThemedActivity {
                 CominqSoonDialog("Tags");
             }
         });
+        */
         findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -536,7 +541,7 @@ public class MainActivity extends ThemedActivity {
     }
     //endregion
 
-    void CominqSoonDialog(String what) {
+    void CominqSoonDialog(String dialogTitle) {
         final AlertDialog.Builder CoomingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
         final View Exclude_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
@@ -546,7 +551,7 @@ public class MainActivity extends ThemedActivity {
 
         cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
         txt_Exclude_title.setBackgroundColor(getPrimaryColor());
-        txt_Exclude_title.setText(what);
+        txt_Exclude_title.setText(dialogTitle);
         txt_Exclude_message.setText("Coming Soon!");
         txt_Exclude_message.setTextColor(getTextColor());
         CoomingSoonDialog.setView(Exclude_dialogLayout);
@@ -892,8 +897,8 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Exclude_message = (TextView) Exclude_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Exclude_Dialog = (CardView) Exclude_dialogLayout.findViewById(R.id.message_card);
                 final LinearLayout ll_Exclude_Sub = (LinearLayout) Exclude_dialogLayout.findViewById(R.id.ll_checkbox_dialog);
-                final TextView txt_Exclude_Submessage = (TextView) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog);
-                final CheckBox ckb_Exlude_sub = (CheckBox) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog_cb);
+                //final TextView txt_Exclude_Submessage = (TextView) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog);
+                //final CheckBox ckb_Exlude_sub = (CheckBox) Exclude_dialogLayout.findViewById(R.id.checkbox_text_dialog_cb);
 
 
                 cv_Exclude_Dialog.setCardBackgroundColor(getCardBackgroundColor());
@@ -902,9 +907,9 @@ public class MainActivity extends ThemedActivity {
                 txt_Exclude_message.setText(R.string.exclude_album_message);
                 txt_Exclude_message.setTextColor(getTextColor());
 
-                ll_Exclude_Sub.setVisibility(View.VISIBLE);
-                txt_Exclude_Submessage.setText(R.string.sub_exclude_album_message);
-                txt_Exclude_Submessage.setTextColor(getSubTextColor());
+                //ll_Exclude_Sub.setVisibility(View.VISIBLE);
+                //txt_Exclude_Submessage.setText(R.string.sub_exclude_album_message);
+                //txt_Exclude_Submessage.setTextColor(getSubTextColor());
 
                 ExcludeDialog.setView(Exclude_dialogLayout);
 

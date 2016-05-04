@@ -54,6 +54,8 @@
     <string name="set_preview">Set as preview</string>
     <string name="clear_preview">Clear preview</string>
 
+    <string name="new_folder">New Folder</string>
+
     <!--DIALOG MESAGES-->
     <string name="hide_album_message">Are you sure you want to hide this album?
         (it will create the .nomedia file in the folder and if there are others media them wont be
@@ -195,7 +197,7 @@
     <string name="off">off</string>
 
     <!-- ERRORS -->
-    <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
+    <string name="error_drm_not_supported">Protected content is supported on Android 4.3 or later</string>
     <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
     <string name="error_drm_unknown">An unknown DRM error occurred</string>
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>

@@ -10,20 +10,20 @@
     </style>
 
     <!--DARK MENU THEME-->
-    <style name="DarkActionBarMenu" parent="Theme.AppCompat.Light">
+    <style name="DarkActionBarMenu" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
     </style>
 
-    <style name="MyApp.PopupMenu.Dark" parent="Widget.AppCompat.Light.ListPopupWindow">
+    <style name="MyApp.PopupMenu.Dark" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
     </style>
 
     <!--AMOLED DARK MENU THEME-->
-    <style name="AmoledDarkActionBarMenu" parent="Theme.AppCompat.Light">
+    <style name="AmoledDarkActionBarMenu" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
     </style>
 
-    <style name="MyApp.PopupMenu.DarkAmoled" parent="Widget.AppCompat.Light.ListPopupWindow">
+    <style name="MyApp.PopupMenu.DarkAmoled" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:popupBackground">@drawable/ic_empty_amoled</item>
     </style>
 
@@ -54,26 +54,6 @@
         <item name="rippleColor">@android:color/white</item>
     </style>
 
-    <style name="fab2">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">4dp</item>
-        <item name="borderWidth">0dp</item>
-        <item name="elevation">50dp</item>
-        <item name="pressedTranslationZ">12dp</item>
-        <item name="rippleColor">@android:color/white</item>
-    </style>
-
-    <style name="fabAddFolder">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">4dp</item>
-        <item name="borderWidth">0dp</item>
-        <item name="elevation">50dp</item>
-        <item name="pressedTranslationZ">12dp</item>
-        <item name="rippleColor">@android:color/white</item>
-    </style>
-
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -82,7 +62,6 @@
     </style>
 
     <!--DIALOG THEME-->
-
     <style name="AlertDialog_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/md_light_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_light_primary_text</item><!--TESTO-->
