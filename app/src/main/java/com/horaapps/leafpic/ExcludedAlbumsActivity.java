@@ -1,6 +1,9 @@
 package com.horaapps.leafpic;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +16,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -26,31 +31,29 @@ import java.util.ArrayList;
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
+    HandlingAlbums albums = new HandlingAlbums(ExcludedAlbumsActivity.this);
     CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
-    ArrayList<File> albums = new ArrayList<File>();
+    RecyclerView mRecyclerView;
+    RelativeLayout rl_ea;
+    Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
 
-        albums = h.getExcludedFolders();
-        checkNothing(albums);
+        albums.loadExcludedAlbums();
+        checkNothing(albums.dispAlbums);
         initUI();
     }
 
-    public void checkNothing(ArrayList<File> asd){
+    public void checkNothing(ArrayList<Album> asd){
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
         a.setTextColor(getTextColor());
         a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
     public void initUI(){
-
-        RecyclerView mRecyclerView;
-        RelativeLayout rl_ea;
-        Toolbar toolbar;
-
         /** TOOLBAR **/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,7 +63,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.excluded_albums);
         mRecyclerView.setHasFixedSize(true);
 
-        mRecyclerView.setAdapter(new ExcludedAlbumsAdapter());
+        mRecyclerView.setAdapter(new ExcludedAlbumsAdapter(albums.dispAlbums, ExcludedAlbumsActivity.this));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setBackgroundColor(getBackgroundColor());
@@ -83,6 +86,20 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
     private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
 
+        ArrayList<Album> albums;
+        SharedPreferences SP;
+
+        public int getIndex(String id) {
+            for (int i = 0; i < albums.size(); i++)
+                    if (albums.get(i).ID.equals(id)) return i;
+            return -1;
+        }
+
+        public ExcludedAlbumsAdapter(ArrayList<Album> ph, Context ctx){
+            albums = ph;
+            SP = PreferenceManager.getDefaultSharedPreferences(ctx);
+        }
+
         private View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,11 +109,19 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                     h.clearAlbumExclude(ID);
                     albums.remove(pos);
                     notifyItemRemoved(pos);
+                    /*TODO: IT CRASH WITH RIPPLE EFFECT
+                    MaterialRippleLayout.on(v)
+                            .rippleOverlay(true)
+                            .rippleAlpha(0.2f)
+                            .rippleColor(0xFF585858)
+                            .rippleHover(true)
+                            .rippleDuration(1)
+                            .create();
+                            */
                     checkNothing(albums);
                 }
             }
         };
-
         public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_card, parent, false);
             v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
@@ -113,9 +138,10 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
         @Override
         public void onBindViewHolder(final ExcludedAlbumsAdapter.ViewHolder holder, final int position) {
-            File a = albums.get(position);
-            holder.album_path.setText(a.getAbsolutePath());
-            holder.album_name.setText(a.getName());
+            final Album a = albums.get(position);
+            Context c = holder.album_path.getContext();//picture
+            holder.album_path.setText(a.Path);
+            holder.album_name.setText(StringUtils.getBucketNamebyBucketPath(a.Path));
 
             /**SET LAYOUT THEME**/
             holder.album_name.setTextColor(getTextColor());
@@ -124,19 +150,12 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
             holder.imgUnExclude.setColor(getIconColor());
             holder.card_layout.setBackgroundColor(getCardBackgroundColor());
 
-            holder.imgUnExclude.setTag(a.getAbsolutePath());
+            holder.imgUnExclude.setTag(a.ID);
         }
 
         public int getItemCount() {
             return albums.size();
         }
-
-        public int getIndex(String id) {
-            for (int i = 0; i < albums.size(); i++)
-                if (albums.get(i).getAbsolutePath().equals(id)) return i;
-            return -1;
-        }
-
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             LinearLayout card_layout;

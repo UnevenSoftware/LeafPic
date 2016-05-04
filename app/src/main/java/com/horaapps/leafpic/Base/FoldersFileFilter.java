@@ -10,6 +10,11 @@ public class FoldersFileFilter implements FileFilter {
 
     @Override
     public boolean accept(File pathname) {
+        /*if (pathname.isDirectory()) {
+            String[] medias = pathname.list(new ImageFileFilter());
+            return medias.length > 0;
+        }
+        return false;*/
         return pathname.isDirectory();
     }
 }

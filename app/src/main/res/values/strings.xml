@@ -12,7 +12,6 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="hide">Hide</string>
-    <string name="unhide">Unhide</string>
     <string name="ok_action">OK</string>
     <string name="rename_photo_action">Rename photo</string>
     <string name="drawer_open">Open navigation drawer</string>
@@ -99,8 +98,6 @@
     <string name="settings">Settings</string>
 
     <string name="general">General</string>
-    <string name="auto_update_media">Auto update media</string>
-    <string name="auto_update_media_sub">You should disable in case of huge number of images.</string>
     <string name="traslucent_statusbar">Translucent Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Excluded Albums</string>
@@ -136,12 +133,6 @@
     <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
     <string name="internal_player">Internal Video Player</string>
     <string name="internal_player_sub">Use embedded video player</string>
-
-    <!--DONATE STRINGS-->
-    <string name="donate_googleplay">Google Play</string>
-    <string name="donate_payppal">PayPal</string>
-    <string name="donate_bitcoin">Bitcoin</string>
-
 
 
     <!--ABOUT STRINGS-->
@@ -179,7 +170,6 @@
 
     <!--DRAWER ITEMS -->
     <string name="local_folder">Local Folders</string>
-    <string name="hidden_folder">Hidden Folders</string>
     <string name="tags">Tags</string>
     <string name="timeline">Timeline</string>
     <string name="wallpapers">Wallpapers</string>
@@ -201,11 +191,5 @@
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
     <string name="error_querying_decoders">Unable to query device decoders</string>
     <string name="install_shortcut">Install shortcut</string>
-    <string name="thank_you">Thank you!</string>
-    <string name="donate_header_text">Dou you like this application?\n
-    Support it\'s development sending donations to developers.\n
-    We are two students developer.
-    </string>
-    <string name="address_copied">Address copied to clipboard</string>
 
 </resources>

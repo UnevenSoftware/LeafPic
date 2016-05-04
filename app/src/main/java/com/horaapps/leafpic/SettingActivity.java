@@ -47,7 +47,6 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swPictureOrientation;
     SwitchCompat swDelayFullImage;
     SwitchCompat swInternalBrowser;
-    SwitchCompat swAutoUpdate;
 
 
     boolean maxLuminosita, pictureOrientation, delayfullimage,internalPlayer;
@@ -131,20 +130,6 @@ public class SettingActivity extends ThemedActivity {
         });
         updateSwitchColor(swInternalBrowser, getAccentColor());
         /**** Switches ****/
-
-        /*********** SW AUTO UPDATE MEDIA ************/
-        swAutoUpdate = (SwitchCompat) findViewById(R.id.SetAutoUpdateMedia);
-        swAutoUpdate.setChecked(SP.getBoolean("auto_update_media", true));
-        swAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("auto_update_media", isChecked);
-                editor.apply();
-                updateSwitchColor(swAutoUpdate, getAccentColor());
-            }
-        });
-        updateSwitchColor(swAutoUpdate, getAccentColor());
 
         /*********** SW Delay Full Image ************/
         swDelayFullImage = (SwitchCompat) findViewById(R.id.set_full_resolution);
@@ -556,7 +541,6 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swMaxLuminosita, color);
         updateSwitchColor(swPictureOrientation, color);
         updateSwitchColor(swInternalBrowser, color);
-        updateSwitchColor(swAutoUpdate, color);
     }
 
     @Override
@@ -632,7 +616,6 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
         IconicsImageView imgIN = (IconicsImageView) findViewById(R.id.internal_player_Icon);
-        IconicsImageView imgAUM = (IconicsImageView) findViewById(R.id.auto_update_media_Icon);
 
 
         color = getIconColor();
@@ -647,7 +630,6 @@ public class SettingActivity extends ThemedActivity {
         imgNB.setColor(color);
         imgOrient.setColor(color);
         imgEA.setColor(color);
-        imgAUM.setColor(color);
 
         /** TextViews **/
         TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
@@ -661,7 +643,6 @@ public class SettingActivity extends ThemedActivity {
         TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
         TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
-        TextView txtAUM = (TextView) findViewById(R.id.auto_update_media_Item);
 
         color=getTextColor();
         txtInt.setTextColor(color);
@@ -675,7 +656,6 @@ public class SettingActivity extends ThemedActivity {
         txtNB.setTextColor(color);
         txtEAT.setTextColor(color);
         txtDelay.setTextColor(color);
-        txtAUM.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
@@ -689,7 +669,6 @@ public class SettingActivity extends ThemedActivity {
         TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
         TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
-        TextView txtAUM_Sub = (TextView) findViewById(R.id.auto_update_media_Item_sub);
 
 
         color=getSubTextColor();
@@ -704,7 +683,6 @@ public class SettingActivity extends ThemedActivity {
         txtBTI_Sub.setTextColor(color);
         txtNB_Sub.setTextColor(color);
         txtEAT_Sub.setTextColor(color);
-        txtAUM_Sub.setTextColor(color);
 
     }
 }

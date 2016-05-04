@@ -26,9 +26,8 @@ import com.horaapps.leafpic.Base.Album;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
+public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
 
     RecyclerView mRecyclerView;
     TextView Title;
@@ -66,7 +65,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         View contentView = View.inflate(getContext(), R.layout.copy_move_bottom_sheet, null);
         mRecyclerView = (RecyclerView) contentView.findViewById(R.id.rv_modal_dialog_albums);
-        mRecyclerView.setAdapter(new BottomSheetAlbumsAdapter(onClickListener));
+        mRecyclerView.setAdapter(new BottomSheetAlbumsAdapter(albumArrayList, onClickListener));
         mRecyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 1));
 
         /**SET UP DIALOG THEME**/
@@ -99,10 +98,12 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
      class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
 
 
+         ArrayList<Album> albums;
          private View.OnClickListener listener;
 
-         public BottomSheetAlbumsAdapter( View.OnClickListener lis){
+         public BottomSheetAlbumsAdapter(ArrayList<Album> ph, View.OnClickListener lis){
             listener=lis;
+            albums = ph;
          }
 
         public BottomSheetAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -122,10 +123,9 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(final BottomSheetAlbumsAdapter.ViewHolder holder, final int position) {
-
-            final Album a = albumArrayList.get(position);
-            holder.album_name.setText(a.getName());
-            holder.album_media_count.setText(String.format(Locale.getDefault(),"%d %s",a.getCount(),a.getContentDescdription(getDialog().getContext())));
+            final Album a = albums.get(position);
+            holder.album_name.setText(a.DisplayName);
+            holder.album_media_count.setText(a.getImagesCount()+ a.getContentDescdription(getDialog().getContext()));
             holder.album_name.setTag(position);
 
             /**SET LAYOUT THEME**/
@@ -145,7 +145,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
                     ContextCompat.getColor(getDialog().getContext(), R.color.md_light_blue_500))));
 
             holder.album_media_count.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>"
-                    + a.getCount() + "</font></b>" + "<font " + "color='" + subtextColor + "'> "
+                    + a.getImagesCount() + "</font></b>" + "<font " + "color='" + subtextColor + "'> "
                     + a.getContentDescdription(getDialog().getContext()) + "</font>"));
 
             holder.imgFolder.setColor(
@@ -155,7 +155,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         }
 
         public int getItemCount() {
-            return albumArrayList.size();
+            return albums.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

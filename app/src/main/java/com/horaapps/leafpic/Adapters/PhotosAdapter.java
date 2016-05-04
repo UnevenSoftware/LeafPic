@@ -15,18 +15,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.horaapps.leafpic.Base.Media;
 import com.koushikdutta.ion.Ion;
+import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
 
 import java.util.ArrayList;
 
+//import com.fivehundredpx.greedolayout.GreedoLayoutSizeCalculator;
 
 /**
  * Created by dnld on 1/7/16.
  */
 
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
+public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {//implements GreedoLayoutSizeCalculator.SizeCalculatorDelegate
 
     ArrayList<Media> medias;
     SharedPreferences SP;
@@ -35,13 +36,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<Media> ph , Context context) {
+    public PhotosAdapter(ArrayList<Media> ph ,Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         switch (SP.getInt("basic_theme", 1)){
+            case 1: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
             case 2: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));break;
             case 3: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));break;
-            case 1:
             default: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
         }
     }
@@ -69,40 +70,37 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     }
 
 
+    public double aspectRatioForIndex(int index) {
+        Media f = medias.get(index);
+        if (index > medias.size()) return 1.0;
+        return f.width / (double) f.height;
+        // Return the aspect ratio of your image at the given index
+    }
+
     @Override
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
-        byte[] thumnail = f.getThumnail();
 
-        if (thumnail != null) {
+        if (f.isImage() && f.isGif()) {
+            Ion.with(holder.imageView.getContext())
+                    .load(f.Path)
+                    .intoImageView(holder.imageView);
+            holder.gifIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.gifIcon.setVisibility(View.GONE);
             Glide.with(holder.imageView.getContext())
-                    .load(thumnail)
+                    .load(f.Path)
+                    .asBitmap()
+                    .signature(new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
                     .centerCrop()
                     .placeholder(drawable)
+                    // .placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
-        } else {
-            if (f.isGif()) {
-                Ion.with(holder.imageView.getContext())
-                        .load(f.getPath())
-                        .intoImageView(holder.imageView);
-                holder.gifIcon.setVisibility(View.VISIBLE);
-            } else {
-                Glide.with(holder.imageView.getContext())
-                        .load(f.getPath())
-                        .asBitmap()
-                        .signature(new MediaStoreSignature(f.getMIME(), f.getDateModified(), f.getOrientation()))
-                        .centerCrop()
-                        .placeholder(drawable)
-                        //.placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
-                        .animate(R.anim.fade_in)
-                        .into(holder.imageView);
-                holder.gifIcon.setVisibility(View.GONE);
-            }
+            holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
         }
 
-        holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
         holder.path.setTag(position);
 
         if (f.isSelected()) {
@@ -114,6 +112,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.imageView.clearColorFilter();
             holder.imageView.setPadding(0,0,0,0);
         }
+
     }
 
     @Override

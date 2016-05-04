@@ -13,8 +13,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.horaapps.leafpic.Base.Media;
 import com.koushikdutta.ion.Ion;
+import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.PhotoPagerActivity;
 
 import uk.co.senab.photoview.PhotoView;
@@ -62,18 +62,18 @@ public class ImageFragment extends Fragment {
 
         if (SP.getBoolean("set_delay_full_image", true)) {
             Ion.with(getContext())
-                    .load(img.getPath())
+                    .load(img.Path)
                     .withBitmap()
                     .deepZoom()
                     .intoImageView(photoView);
         } else {
             Glide.with(getContext())
-                    .load(img.getPath())
+                    .load(img.Path)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .skipMemoryCache(true)
                     .priority(Priority.HIGH)
-                    .signature(new MediaStoreSignature(img.getMIME(), img.getDateModified(), img.getOrientation()))
+                    .signature(new MediaStoreSignature(img.MIME, img.DateModified, img.orientation))
                             //.centerCrop()
                     .into(photoView);
         }

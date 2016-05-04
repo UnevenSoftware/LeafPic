@@ -9,40 +9,8 @@ import java.io.FilenameFilter;
  */
 public class ImageFileFilter implements FilenameFilter
 {
-
-    public final static int FILTER_ALL = 0;
-    public final static int FILTER_IMAGES = 1;
-    public final static int FILTER_GIFS = 2;
-    public final static int FILTER_VIDEO = 3;
-
-    public static String[] allExtensions = new String[] { "jpg", "png", "gif", "jpeg", "bmp", "mp4" };
-    public static String[] imagesExtensions = new String[] { "jpg", "png", /*"gif",*/ "jpeg", "bmp" };
-    public static String[] videoExtensions = new String[] { "mp4" };
-    public static String[] gifsExtensions = new String[] { "gif"} ;
-
-    private String[] okFileExtensions = allExtensions;
-
-    public ImageFileFilter(int filter) {
-        switch (filter) {
-            case FILTER_IMAGES:
-                okFileExtensions = imagesExtensions;
-                break;
-            case FILTER_VIDEO:
-                okFileExtensions = videoExtensions;
-                break;
-            case FILTER_GIFS:
-                okFileExtensions = gifsExtensions;
-                break;
-            case FILTER_ALL:
-                 default:
-                okFileExtensions = allExtensions;
-                break;
-        }
-    }
-
-    public ImageFileFilter() {
-        okFileExtensions = allExtensions;
-    }
+    private final String[] okFileExtensions =
+            new String[] { "jpg", "png", "gif", "jpeg", "bmp", "mp4" };
 
     @Override
     public boolean accept(File dir, String filename) {
