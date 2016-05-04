@@ -7,13 +7,21 @@ import android.provider.MediaStore;
 /**
  * Created by dnld on 2/4/16.
  */
-public class AlbumSettings implements Parcelable {
+public class AlbumSettings {
+
+    /*public final static String SORT_BY_NAME = "sortByName";
+    public final static String SORT_BY_DATE = "sortByDate";
+    public final static String SORT_BY_SIZE = "sortBySize";*/
+
+    public final static int SORT_BY_NAME = 3;
+    public final static int SORT_BY_DATE = 0;
+    public final static int SORT_BY_SIZE = 1;
 
     public String coverPath;
-    public String columnSortingMode;
-    public Boolean ascending;
+    public int columnSortingMode;
+    public boolean ascending;
 
-    public AlbumSettings(String cover, String SortingMode, Boolean asce) {
+    public AlbumSettings(String cover, int SortingMode, boolean asce) {
         coverPath = cover;
         columnSortingMode = SortingMode;
         ascending = asce;
@@ -21,48 +29,13 @@ public class AlbumSettings implements Parcelable {
 
     public AlbumSettings() {
         coverPath = null;
-        columnSortingMode = null;
+        columnSortingMode = 0;
         ascending = false;
     }
 
-    public String getSQLSortingMode() {
+    /*public String getSQLSortingMode() {
         columnSortingMode = columnSortingMode != null ? columnSortingMode : MediaStore.Images.ImageColumns.DATE_TAKEN;
         return columnSortingMode + (ascending ? " ASC" : " DESC");
-    }
+    }*/
 
-    protected AlbumSettings(Parcel in) {
-        coverPath = in.readString();
-        columnSortingMode = in.readString();
-        byte ascendingVal = in.readByte();
-        ascending = ascendingVal == 0x02 ? null : ascendingVal != 0x00;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(coverPath);
-        dest.writeString(columnSortingMode);
-        if (ascending == null) {
-            dest.writeByte((byte) (0x02));
-        } else {
-            dest.writeByte((byte) (ascending ? 0x01 : 0x00));
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<AlbumSettings> CREATOR = new Parcelable.Creator<AlbumSettings>() {
-        @Override
-        public AlbumSettings createFromParcel(Parcel in) {
-            return new AlbumSettings(in);
-        }
-
-        @Override
-        public AlbumSettings[] newArray(int size) {
-            return new AlbumSettings[size];
-        }
-    };
 }

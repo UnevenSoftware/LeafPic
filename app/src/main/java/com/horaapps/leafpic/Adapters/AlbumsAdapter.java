@@ -20,8 +20,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.MediaStoreSignature;
-import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
@@ -71,14 +69,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .playOn(holder.cv);
         */
         Glide.with(c)
-                .load(f.Path)
+                .load(f.getPath())
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .priority(Priority.HIGH)
-                .signature(a.hasCustomCover()
+                /*.signature(a.hasCustomCover()
                         ? new StringSignature(f.Path)
-                        : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))
+                        : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))*/
                 .centerCrop()
+                .error(R.drawable.ic_error)
                 .placeholder(SP.getInt("basic_theme", 1)==1
                         ? R.drawable.ic_empty_white
                         : (SP.getInt("basic_theme", 1)==2
@@ -118,8 +117,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
             else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_black_1000));
         }
-        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.DisplayName + "</font></i>"));
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getImagesCount() + "</font></b>" + "<font " +
+        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.getName() + "</font></i>"));
+        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
                 "color='" + textColor + "'> " +a.getContentDescdription(c) + "</font>"));
         // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }

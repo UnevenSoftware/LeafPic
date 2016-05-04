@@ -15,12 +15,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PermissionUtils;
 import com.horaapps.leafpic.utils.StringUtils;
+
+import java.io.File;
 
 /**
  * Created by dnld on 01/04/16.
@@ -28,6 +30,7 @@ import com.horaapps.leafpic.utils.StringUtils;
 public class SplashScreen extends ThemedActivity {
 
     public final int READ_EXTERNAL_STORAGE_ID = 12;
+    static final int PICK_MEDIA_REQUEST = 44;
 
     public final static String CONTENT = "content";
     public final static String PICK_MODE = "pick_mode";
@@ -61,7 +64,7 @@ public class SplashScreen extends ThemedActivity {
             }
         */
 
-        albums = new HandlingAlbums(SplashScreen.this);
+        albums = new HandlingAlbums(getApplicationContext());
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
@@ -83,15 +86,14 @@ public class SplashScreen extends ThemedActivity {
             else if (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT)
                     || getIntent().getAction().equals(Intent.ACTION_PICK)) {
                 PICK_INTENT = true;
-                Log.wtf("asd","pickmode");
                 new PrefetchAlbumsData().execute();
             } else if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 Bundle data = getIntent().getExtras();
                 if (data != null) {
-                    String ab = data.getString("albumID");
+                    String ab = data.getString("albumPath");
                     if (ab != null) {
-                        album = new Album(ab, SplashScreen.this);
-                        album.DisplayName = data.getString("albumName");
+                        File dir = new File(ab);
+                        album = new Album(dir.getAbsolutePath(),dir.getName());
                         new PrefetchPhotosData().execute();
                     }
                 } else StringUtils.showToast(getApplicationContext(), "Album not found");
@@ -101,11 +103,15 @@ public class SplashScreen extends ThemedActivity {
             String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
         }
+    }
 
-        if (getIntent().getAction() != null &&
-                (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) ||
-                        getIntent().getAction().equals(Intent.ACTION_PICK))) {
-           PICK_INTENT = true;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_MEDIA_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK, data);
+                finish();
+            }
         }
     }
 
@@ -143,21 +149,25 @@ public class SplashScreen extends ThemedActivity {
     private class PrefetchAlbumsData extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums();
+            albums.loadPreviewAlbums(false);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            ((MyApplication) getApplicationContext()).setAlbums(albums);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
-            b.putParcelable("albums", albums);
             b.putInt(CONTENT, ALBUMS_PREFETCHED);
             b.putBoolean(PICK_MODE, PICK_INTENT);
             i.putExtras(b);
-            startActivity(i);
-            finish();
+            if (PICK_INTENT)
+                startActivityForResult(i, PICK_MEDIA_REQUEST);
+            else {
+                startActivity(i);
+                finish();
+            }
         }
     }
 
@@ -173,7 +183,7 @@ public class SplashScreen extends ThemedActivity {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
-            b.putParcelable("album", album);
+            ((MyApplication) getApplicationContext()).setCurrentAlbum(album);
             b.putInt(CONTENT, PHOTS_PREFETCHED);
             i.putExtras(b);
             startActivity(i);
