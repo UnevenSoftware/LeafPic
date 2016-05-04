@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.horaapps.leafpic.Base.Album;
@@ -32,6 +33,11 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     RecyclerView mRecyclerView;
     TextView Title;
+    LinearLayout llTitleBottomSheet;
+    TextView txtNewFolder;
+    IconicsImageView imgHiddenDefault;
+    boolean hidden=false;
+    IconicsImageView imgNewFolder;
     LinearLayout background;
     ArrayList<Album> albumArrayList;
     SharedPreferences SP;
@@ -72,11 +78,54 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         /**SET UP DIALOG THEME**/
         SP = PreferenceManager.getDefaultSharedPreferences(dialog.getContext());
 
-        Title=(TextView) contentView.findViewById(R.id.bottom_sheet_title);
-        Title.setText(title);
-        Title.setBackgroundColor(SP.getInt("accent_color",
+        //llTitleBottomSheet=(LinearLayout) contentView.findViewById(R.id.ll_bottom_sheet_title);
+        contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("accent_color",
                 ContextCompat.getColor(dialog.getContext(), R.color.md_light_blue_500)));
+
+        Title = (TextView) contentView.findViewById(R.id.bottom_sheet_title);
+        Title.setText(title);
         Title.setTextColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
+
+        //TODO:WILL BE REPLACED WITH EXPANDABLE VIEW
+        imgHiddenDefault=(IconicsImageView) contentView.findViewById(R.id.Load_Hidden_Icon);
+        imgHiddenDefault.setColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
+
+        contentView.findViewById(R.id.Load_Hidden_Icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!hidden) {
+                    imgHiddenDefault.setIcon("gmd-folder");
+                    //LOAD HIDDEN
+                } else {
+                    imgHiddenDefault.setIcon("gmd-folder-open");
+                    //LOAD VISIBLE
+                }
+                imgHiddenDefault.setColor(ContextCompat.getColor(getContext(),R.color.md_white_1000));
+                hidden=!hidden;
+                Toast.makeText(getContext(),"Hidden: "+hidden,Toast.LENGTH_SHORT).show();
+            }
+        });
+        //TODO: END TODO
+
+        txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
+        txtNewFolder.setTextColor(
+                ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
+                    ? R.color.md_grey_800
+                    : R.color.md_grey_200));
+
+        imgNewFolder = (IconicsImageView) contentView.findViewById(R.id.Create_New_Folder_Icon);
+        imgNewFolder.setColor(
+                ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
+                        ? R.color.md_light_primary_icon
+                        : R.color.md_dark_primary_icon));
+
+        //newFolder = (LinearLayout) contentView.findViewById(R.id.ll_Create_New_Folder);
+        contentView.findViewById(R.id.ll_Create_New_Folder).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newFolderDialog();
+            }
+        });
 
         background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
         background.setBackgroundColor(ContextCompat.getColor(dialog.getContext(),
@@ -96,12 +145,14 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         }
     }
 
-     class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
+    private void newFolderDialog(){
+        Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
+    }
 
+    class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
 
-         private View.OnClickListener listener;
-
-         public BottomSheetAlbumsAdapter( View.OnClickListener lis){
+        private View.OnClickListener listener;
+        public BottomSheetAlbumsAdapter( View.OnClickListener lis){
             listener=lis;
          }
 
