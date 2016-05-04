@@ -44,7 +44,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     IconicsImageView imgNewFolder;
     LinearLayout background;
-    ArrayList<Album> albumArrayList;
+    ArrayList<Album> albumArrayList= new ArrayList<Album>();
     SharedPreferences SP;
     View.OnClickListener onClickListener;
 
@@ -145,6 +145,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
+        new PrepareAlbumTask().execute();
     }
 
     private void newFolderDialog(){
