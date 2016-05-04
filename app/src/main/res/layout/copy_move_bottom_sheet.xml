@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:orientation="vertical"
-                    android:layout_weight="9"
+                    android:layout_weight="8"
                     >
                         <TextView
                             android:id="@+id/bottom_sheet_title"
@@ -43,14 +43,24 @@
                             android:textStyle="bold"
                             />
                 </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/spinner_loading"
+                    android:layout_height="25dp"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:indeterminateTint="@color/md_white_1000"
+
+                    />
                 <com.mikepenz.iconics.view.IconicsImageView
-                    android:id="@+id/Load_Hidden_Icon"
+                    android:id="@+id/toggle_hidden_icon"
                     android:layout_height="20dp"
                     android:layout_width="0dp"
                     android:layout_gravity="center_vertical"
                     android:clickable="true"
                     android:layout_weight="1"
-                    app:iiv_icon="gmd-folder-open"
+                    app:iiv_icon="gmd-folder"
+                    app:iiv_color="@color/md_white_1000"
                     />
         </LinearLayout>
         <com.balysv.materialripple.MaterialRippleLayout
@@ -58,16 +68,16 @@
             android:layout_height="wrap_content"
             app:mrl_rippleAlpha="0.05"
             app:mrl_rippleDelayClick="false"
-            android:elevation="5dp"
+            android:elevation="60dp"
             >
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/ll_Create_New_Folder"
+                    android:id="@+id/ll_create_new_folder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
+                    android:paddingBottom="10dp"
                     android:weightSum="10"
                     >
                         <com.mikepenz.iconics.view.IconicsImageView
