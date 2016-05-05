@@ -44,6 +44,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     IconicsImageView imgNewFolder;
     LinearLayout background;
+    LinearLayout llNewFolder;
     ArrayList<Album> albumArrayList= new ArrayList<Album>();
     SharedPreferences SP;
     View.OnClickListener onClickListener;
@@ -110,6 +111,8 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
+
+
         txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
         txtNewFolder.setTextColor(
                 ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
@@ -121,8 +124,8 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
                 ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
                         ? R.color.md_light_primary_icon
                         : R.color.md_dark_primary_icon));
-
-        contentView.findViewById(R.id.ll_create_new_folder).setOnClickListener(new View.OnClickListener() {
+        llNewFolder = (LinearLayout) contentView.findViewById(R.id.ll_create_new_folder);
+        llNewFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newFolderDialog();
@@ -145,6 +148,8 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
+
+        llNewFolder.setVisibility(View.GONE);
         new PrepareAlbumTask().execute();
     }
 
@@ -162,16 +167,17 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            hidden = !hidden;
             albumArrayList = albums.getValidFolders(hidden);
+            hidden = !hidden;
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.INVISIBLE);
             adapter.notifyDataSetChanged();
             imgHiddenDefault.setIcon(hidden ? "gmd-folder-open" : "gmd-folder");
+            llNewFolder.setVisibility(View.VISIBLE);
         }
     }
 

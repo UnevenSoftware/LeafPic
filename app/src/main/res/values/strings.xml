@@ -107,6 +107,10 @@
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Excluded Albums</string>
     <string name="excluded_albums_sub">Restore the excluded albums.</string>
+    <string name="protect_hidden">Protect Hidden</string>
+    <string name="protect_hidden_sub">Set up a password to protect your hidden folder.</string>
+    <string name="protect_hidden_messagge">Set up a password to protect your hidden folder. Note: If you forget your password you need to clear application data.</string>
+    <string name="clear_password">Clear Password</string>
 
     <string name="picture_viewer">Picture Viewer</string>
     <string name="picture_viewer_theme">Picture Viewer Theme</string>
