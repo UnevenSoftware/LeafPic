@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- HEADER
+
             <android.support.v7.widget.CardView
                 android:id="@+id/donate_header_card"
                 android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:layout_marginBottom="10dp"
                 app:cardElevation="5dp"
                 >
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -66,18 +66,18 @@
                             />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/donate_header_item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="15dp"
-                        android:text="@string/donate_header_text"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
+                </LinearLayout>-->
+
+                <TextView
+                    android:id="@+id/donate_header_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/donate_header_text"
+                    android:textColor="@color/md_dark_background"
+                    android:textSize="16sp"
+                    />
             </android.support.v7.widget.CardView>
-            -->
 
             <!--DONATE GOOGLE PLAY-->
             <android.support.v7.widget.CardView

@@ -428,7 +428,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                             startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
                             finish();
                         }
-                        adapter.notifyDataSetChanged();
+                        mediaAdapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.medias.size());
                     */
                     }
