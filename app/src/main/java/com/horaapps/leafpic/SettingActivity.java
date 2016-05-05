@@ -14,9 +14,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -77,6 +80,15 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 BasicThemeDialog();
+            }
+        });
+
+        //PROTECT HIDDEN*****************************************
+        LinearLayout ll_PH = (LinearLayout) findViewById(R.id.ll_protect_hidden);
+        ll_PH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProtectHiddenDialog();
             }
         });
 
@@ -232,6 +244,55 @@ public class SettingActivity extends ThemedActivity {
         else
             sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+    }
+
+    public void ProtectHiddenDialog(){
+        final AlertDialog.Builder ProtectDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
+
+        final View ProtectDialogLayout = getLayoutInflater().inflate(R.layout.protect_hidden_dialog, null);
+        final LinearLayout titleBackground = (LinearLayout) ProtectDialogLayout.findViewById(R.id.ll_protect_hidden_title_dialog);
+        final CardView cvProtectDialog = (CardView) ProtectDialogLayout.findViewById(R.id.protect_hidden_card);
+        final EditText etPassword = (EditText) ProtectDialogLayout.findViewById(R.id.protect_hidden_edit_txt);
+        final TextView dialogMessage = (TextView) ProtectDialogLayout.findViewById(R.id.protect_hidden_message_dialog);
+        final Button btnClearPassword = (Button) ProtectDialogLayout.findViewById(R.id.protect_hidden_clear_password_dialog);
+
+        //titleBackground.setBackgroundColor(SP.getInt("accent_color",
+        //        ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500)));
+        titleBackground.setBackgroundColor(getAccentColor());
+
+        cvProtectDialog.setBackgroundColor(getCardBackgroundColor());
+        dialogMessage.setTextColor(getTextColor());
+
+        btnClearPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putString("password_hidden", "");
+                editor.apply();
+                Toast.makeText(getApplicationContext(),"The password was cleaned!",Toast.LENGTH_SHORT);
+            }
+        });
+
+
+        ProtectDialog.setView(ProtectDialogLayout);
+        ProtectDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = SP.edit();
+                if (etPassword.getText().toString().equals("")) {
+                    editor.putString("password_hidden", etPassword.getText().toString());
+                    editor.apply();
+                }
+                dialog.cancel();
+            }
+        });
+        ProtectDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        ProtectDialog.show();
     }
 
     public void BasicThemeDialog(){
@@ -633,6 +694,7 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
         IconicsImageView imgIN = (IconicsImageView) findViewById(R.id.internal_player_Icon);
         IconicsImageView imgAUM = (IconicsImageView) findViewById(R.id.auto_update_media_Icon);
+        IconicsImageView imgPH = (IconicsImageView) findViewById(R.id.protect_hidden_icon);
 
 
         color = getIconColor();
@@ -648,6 +710,7 @@ public class SettingActivity extends ThemedActivity {
         imgOrient.setColor(color);
         imgEA.setColor(color);
         imgAUM.setColor(color);
+        imgPH.setColor(color);
 
         /** TextViews **/
         TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
@@ -662,6 +725,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
         TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
         TextView txtAUM = (TextView) findViewById(R.id.auto_update_media_Item);
+        TextView txtPH = (TextView) findViewById(R.id.protect_hidden_item_title);
 
         color=getTextColor();
         txtInt.setTextColor(color);
@@ -676,6 +740,7 @@ public class SettingActivity extends ThemedActivity {
         txtEAT.setTextColor(color);
         txtDelay.setTextColor(color);
         txtAUM.setTextColor(color);
+        txtPH.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
@@ -690,6 +755,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
         TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
         TextView txtAUM_Sub = (TextView) findViewById(R.id.auto_update_media_Item_sub);
+        TextView txtPH_Sub = (TextView) findViewById(R.id.protect_hidden_item_sub);
 
 
         color=getSubTextColor();
@@ -705,6 +771,7 @@ public class SettingActivity extends ThemedActivity {
         txtNB_Sub.setTextColor(color);
         txtEAT_Sub.setTextColor(color);
         txtAUM_Sub.setTextColor(color);
+        txtPH_Sub.setTextColor(color);
 
     }
 }
