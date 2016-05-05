@@ -151,7 +151,6 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -900,7 +899,6 @@ public class MainActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
 
                 final AlertDialog.Builder excludeDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
                 final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
@@ -939,7 +937,6 @@ public class MainActivity extends ThemedActivity {
                 intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
-
                 for (Media f : album.selectedMedias)
                     files.add(f.getUri());
 
@@ -994,6 +991,8 @@ public class MainActivity extends ThemedActivity {
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setHidden(hidden);
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1153,6 +1152,8 @@ public class MainActivity extends ThemedActivity {
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
+                bottomSheetDialogFragment.setHidden(hidden);
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1167,7 +1168,6 @@ public class MainActivity extends ThemedActivity {
             case R.id.renameAlbum:
 
                 final AlertDialog.Builder renameDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
                 final View renameDialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView textViewRenameTitle = (TextView) renameDialogLayout.findViewById(R.id.rename_title);
                 final EditText editText = (EditText) renameDialogLayout.findViewById(R.id.dialog_txt);
@@ -1270,8 +1270,6 @@ public class MainActivity extends ThemedActivity {
             contentReady = true;
             checkNothing();
             toggleRecyclersVisibilty(true);
-            //recyclerViewAlbums.setVisibility(View.VISIBLE);
-            //recyclerViewMedia.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -1296,8 +1294,6 @@ public class MainActivity extends ThemedActivity {
             mediaAdapter.updateDataset(album.media);
             contentReady = true;
             checkNothing();
-            //recyclerViewAlbums.setVisibility(View.GONE);
-            //recyclerViewMedia.setVisibility(View.VISIBLE);
             toggleRecyclersVisibilty(false);
             swipeRefreshLayout.setRefreshing(false);
         }
