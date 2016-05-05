@@ -187,7 +187,10 @@ public class MainActivity extends ThemedActivity {
         firstLaunch = false;
     }
 
-    public void openAlbum(Album a) {  openAlbum(a, true); }
+    public void openAlbum(Album a) {
+        openAlbum(a, true);
+        recyclerViewMedia.smoothScrollToPosition(0);
+    }
 
     public void openAlbum(Album a, boolean reload) {
         album = a;
@@ -240,6 +243,7 @@ public class MainActivity extends ThemedActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int nSpan;
+
         if (albumsMode) {
             nSpan = Measure.getAlbumsColums(MainActivity.this);
             recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
@@ -274,7 +278,7 @@ public class MainActivity extends ThemedActivity {
             swipeRefreshLayout.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
             recyclerViewAlbums.setPadding(0, 0, 0, status_height + navBarHeight);
             recyclerViewMedia.setPadding(0, 0, 0, status_height + navBarHeight);
-            fabCamera.animate().translationY(fabCamera.getHeight()*2).start();
+            fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
             fabCamera.setVisibility(View.VISIBLE);
         }
     }
