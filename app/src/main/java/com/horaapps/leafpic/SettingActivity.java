@@ -261,12 +261,16 @@ public class SettingActivity extends ThemedActivity {
         final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
         final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
 
-        passwordDialogTitle.setBackgroundColor(getAccentColor());
+        passwordDialogTitle.setBackgroundColor(getPrimaryColor());
         passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
 
+        /*
         editxtPassword.setTextColor(getAccentColor());
         editxtPassword.setHintTextColor(getAccentColor());
         editxtPassword.setBackgroundColor(getBackgroundColor());
+        */
+        editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        editxtPassword.setTextColor(getTextColor());
 
         passwordDialog.setView(PasswordDialogLayout);
         passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
@@ -314,12 +318,16 @@ public class SettingActivity extends ThemedActivity {
 
 
         /*** SETING DIALOG THEME ***/
-        securityDialogTitle.setBackgroundColor(getAccentColor());
+        securityDialogTitle.setBackgroundColor(getPrimaryColor());
         securityDialogCard.setBackgroundColor(getCardBackgroundColor());
 
+        /*
         eTxtPasswordSecurity.setTextColor(getAccentColor());
         eTxtPasswordSecurity.setHintTextColor(getAccentColor());
         eTxtPasswordSecurity.setBackgroundColor(getBackgroundColor());
+        */
+        eTxtPasswordSecurity.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        eTxtPasswordSecurity.setTextColor(getTextColor());
         eTxtPasswordSecurity.setText(SP.getString("password_value", ""));
 
         /*ICONS*/

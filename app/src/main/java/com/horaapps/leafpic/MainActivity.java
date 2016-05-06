@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.horaapps.leafpic.Adapters.AlbumsAdapter;
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
@@ -51,6 +52,7 @@ import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.Measure;
+import com.horaapps.leafpic.utils.SecurityUtils;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -66,6 +68,7 @@ public class MainActivity extends ThemedActivity {
 
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
     SharedPreferences SP;
+    SecurityUtils securityObj;
 
     HandlingAlbums albums;
     RecyclerView recyclerViewAlbums;
@@ -161,6 +164,7 @@ public class MainActivity extends ThemedActivity {
         album = new Album();
         albumsMode = true;
         editmode = false;
+        securityObj= new SecurityUtils(MainActivity.this);
 
         initUI();
         setupUI();
@@ -441,6 +445,8 @@ public class MainActivity extends ThemedActivity {
         setDrawerTheme();
         recyclerViewAlbums.setBackgroundColor(getBackgroundColor());
         recyclerViewMedia.setBackgroundColor(getBackgroundColor());
+
+        securityObj.updateSecuritySetting();
     }
 
     public void setDrawerTheme() {
@@ -532,9 +538,44 @@ public class MainActivity extends ThemedActivity {
         findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hidden = true;
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                new PrepareAlbumTask().execute();
+                if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnHidden()){
+                    final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                    final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
+                    final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
+                    final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
+                    final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
+
+                    passwordDialogTitle.setBackgroundColor(getPrimaryColor());
+                    passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
+
+                    editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+                    editxtPassword.setTextColor(getTextColor());
+
+                    passwordDialog.setView(PasswordDialogLayout);
+                    passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (securityObj.checkPassword(editxtPassword.getText().toString())){
+                                hidden = true;
+                                mDrawerLayout.closeDrawer(GravityCompat.START);
+                                new PrepareAlbumTask().execute();
+                                dialog.cancel();
+                            } else {
+                                Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    passwordDialog.show();
+                } else {
+                    hidden = true;
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    new PrepareAlbumTask().execute();
+                }
             }
         });
         /*
@@ -1246,8 +1287,7 @@ public class MainActivity extends ThemedActivity {
 
         }
     }
-
-
+    
     private void toggleRecyclersVisibilty(boolean albumsMode){
             recyclerViewAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
             recyclerViewMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
