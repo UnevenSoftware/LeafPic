@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 /**
  * Created by Jibo on 06/05/2016.
  */
-public class SecurityActivity {
+public class SecurityUtils {
     SharedPreferences SP;
     boolean activeSecurity;
     boolean passwordOnDelete;
@@ -15,7 +15,7 @@ public class SecurityActivity {
     String passwordValue;
 
     Context context;
-    public SecurityActivity(Context c){
+    public SecurityUtils(Context c){
         this.context = c;
         updateSecuritySetting();
     }
@@ -25,9 +25,7 @@ public class SecurityActivity {
     public boolean isPasswordOnDelete(){return passwordOnDelete;}
 
     public boolean checkPassword(String pass){
-        if (isActiveSecurity() && pass.equals(passwordValue))
-            return true;
-        else return false;
+        return (isActiveSecurity() && pass.equals(passwordValue));
     }
 
     public void updateSecuritySetting(){

@@ -18,7 +18,7 @@ public class CustomTabService {
     Activity activity;
     int color;
 
-    public CustomTabService (Activity act, int c){
+    public CustomTabService (Activity act, int c) {
         this.activity = act;
         this.color = c;
         init();
