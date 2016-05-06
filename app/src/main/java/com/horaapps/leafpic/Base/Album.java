@@ -294,6 +294,11 @@ public class Album {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+    public void deleteCurrentMedia(Context context) {
+        deleteMedia(context, media.get(getCurrentMediaIndex()));
+        media.remove(getCurrentMediaIndex());
+    }
+
     public void deleteMedia(Context context, Media media) {
         File file = new File(media.getPath());
         if (file.delete())

@@ -28,7 +28,7 @@ public class AboutActivity extends ThemedActivity {
     Toolbar toolbar;
 
     /**** Title Cards ***/
-    TextView txtLP;//LEAFPIC
+    TextView txtLP;
     TextView txtAT;
     TextView txtSU;
 
@@ -46,8 +46,7 @@ public class AboutActivity extends ThemedActivity {
         txtAT = (TextView) findViewById(R.id.about_authors_title);
         txtSU = (TextView) findViewById(R.id.about_support_title);
         setNavBarColor();
-        cts=new CustomTabService(AboutActivity.this,getPrimaryColor());
-        cts.Inizialize();
+        cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
     }
 
     @Override
@@ -102,7 +101,7 @@ public class AboutActivity extends ThemedActivity {
                 //Intent i = new Intent(Intent.ACTION_VIEW);
                 //i.setData(Uri.parse("https://github.com/HoraApps/LeafPic"));
                 //startActivity(i);
-                cts.LaunchUrl("https://github.com/HoraApps/LeafPic");
+                cts.launchUrl("https://github.com/HoraApps/LeafPic");
 
             }
         });
@@ -110,25 +109,25 @@ public class AboutActivity extends ThemedActivity {
         //Crowdin
         findViewById(R.id.ll_about_support_translate).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {cts.LaunchUrl("https://crowdin.com/project/leafpic");}
+            public void onClick(View v) { cts.launchUrl("https://crowdin.com/project/leafpic");}
         });
 
         //Donald
         findViewById(R.id.ll_donald).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {cts.LaunchUrl("https://github.com/DNLDsht");}
+            public void onClick(View v) { cts.launchUrl("https://github.com/DNLDsht");}
         });
 
         //Gilbert
         findViewById(R.id.ll_gilbert).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {cts.LaunchUrl("https://github.com/Mow3l");}
+            public void onClick(View v) { cts.launchUrl("https://github.com/Mow3l");}
         });
 
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {cts.LaunchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
+            public void onClick(View v) { cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
         });
 
         //Libs

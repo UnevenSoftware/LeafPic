@@ -157,7 +157,7 @@ public class MainActivity extends ThemedActivity {
         setContentView(R.layout.activity_main);
 
         SP = PreferenceManager.getDefaultSharedPreferences(this);
-        albums = new HandlingAlbums();
+        albums = new HandlingAlbums(getApplicationContext());
         album = new Album();
         albumsMode = true;
         editmode = false;
@@ -284,28 +284,32 @@ public class MainActivity extends ThemedActivity {
     }
 
     public void displayPreFetchedData(Bundle data){
-
         try {
-            int content = data.getInt(SplashScreen.CONTENT);
-            if (content == SplashScreen.ALBUMS_PREFETCHED) {
-                albums = ((MyApplication) getApplicationContext()).getAlbums();
-                displayAlbums(false);
-                pickmode = data.getBoolean(SplashScreen.PICK_MODE);
-                albumsAdapter.updateDataset(albums.dispAlbums);
-                toggleRecyclersVisibilty(true);
-            } else if (content == SplashScreen.PHOTS_PREFETCHED) {
-                album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        albums = new HandlingAlbums(getApplicationContext());
-                        albums.loadPreviewAlbums(false);//TODO check if is hidden
-                    }
-                }).start();
-                openAlbum(album,false);
-                mediaAdapter.updateDataset(album.media);
-                toggleRecyclersVisibilty(false);
+            if (data!=null) {
+                int content = data.getInt(SplashScreen.CONTENT);
+                if (content == SplashScreen.ALBUMS_PREFETCHED) {
+                    albums = ((MyApplication) getApplicationContext()).getAlbums();
+                    displayAlbums(false);
+                    pickmode = data.getBoolean(SplashScreen.PICK_MODE);
+                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    toggleRecyclersVisibilty(true);
+                } else if (content == SplashScreen.PHOTS_PREFETCHED) {
+                    album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            albums = new HandlingAlbums(getApplicationContext());
+                            albums.loadPreviewAlbums(false);//TODO check if is hidden
+                        }
+                    }).start();
+                    openAlbum(album, false);
+                    mediaAdapter.updateDataset(album.media);
+                    toggleRecyclersVisibilty(false);
 
+                }
+            } else {
+                albums = new HandlingAlbums(getApplicationContext());
+                displayAlbums(true);
             }
             contentReady = true;
         } catch (NullPointerException e) { e.printStackTrace(); }
@@ -788,7 +792,6 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.hideAlbumButton:
-                //TODO unhide!
                 final AlertDialog.Builder hideDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
                 final View dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView textViewTitle = (TextView) dialogLayout.findViewById(R.id.text_dialog_title);
@@ -801,7 +804,7 @@ public class MainActivity extends ThemedActivity {
                 textViewMessage.setText(hidden ? R.string.unhide_album_message : R.string.hide_album_message);
                 textViewMessage.setTextColor(getTextColor());
                 hideDialog.setView(dialogLayout);
-                hideDialog.setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
+                hideDialog.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
                             if (hidden)
@@ -812,10 +815,11 @@ public class MainActivity extends ThemedActivity {
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
-                            //if(hidden)
-
-                            albums.hideAlbum(album.getPath(), getApplicationContext());
-                            displayAlbums();
+                            if(hidden)
+                                albums.unHideAlbum(album.getPath(), getApplicationContext());
+                            else
+                                albums.hideAlbum(album.getPath(), getApplicationContext());
+                            displayAlbums(true);
                         }
                     }
                 });
@@ -829,7 +833,7 @@ public class MainActivity extends ThemedActivity {
                                 invalidateOptionsMenu();
                             } else {
                                 customAlbumsHandler.excludeAlbum(album.getPath());
-                                displayAlbums();
+                                displayAlbums(true);
                             }
                         }
                     });

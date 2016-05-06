@@ -2,9 +2,7 @@ package com.horaapps.leafpic;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.CustomTabService;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -30,6 +29,7 @@ public class DonateActivity extends ThemedActivity {
     TextView txtPP;
     TextView txtBT;
     IconicsImageView imageViewGift;
+    CustomTabService cts;
 
     /**** Buttons ***/
 
@@ -44,6 +44,7 @@ public class DonateActivity extends ThemedActivity {
         imageViewGift = (IconicsImageView) findViewById(R.id.donate_header_icon);
 
         setNavBarColor();
+        cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
     }
 
     @Override
@@ -85,13 +86,8 @@ public class DonateActivity extends ThemedActivity {
         txtBT.setTextColor(getAccentColor());
 
         /***** Buttons *****/
-
         setThemeOnChangeListener();
     }
-
-
-
-
 
     public void setThemeOnChangeListener(){
 
@@ -131,24 +127,21 @@ public class DonateActivity extends ThemedActivity {
         TextView txtBT_CS = (TextView) findViewById(R.id.donate_bitcoin_item);
         TextView txtHD_CS = (TextView) findViewById(R.id.donate_header_item);
 
-        color=getTextColor();
+        color = getTextColor();
         txtGP_CS.setTextColor(color);
         txtPP_CS.setTextColor(color);
         txtBT_CS.setTextColor(color);
         txtHD_CS.setTextColor(color);
 
 
-        txtPP_CS.setOnLongClickListener(new View.OnLongClickListener() {
+        /** ACTIONS **/
+        findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://www.paypal.me/DonaldShtjefni"));
-                startActivity(i);
-                return true;
+            public void onClick(View v) {
+                cts.launchUrl("https://www.paypal.me/HoraApps");
             }
         });
 
-        /** ACTIONS **/
         txtBT_CS.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
