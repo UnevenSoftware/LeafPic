@@ -25,10 +25,9 @@ public class SecurityActivity {
     public boolean isPasswordOnDelete(){return passwordOnDelete;}
 
     public boolean checkPassword(String pass){
-        if (isActiveSecurity() && pass.equals(passwordValue)){
+        if (isActiveSecurity() && pass.equals(passwordValue))
             return true;
-        } else
-            return false;
+        else return false;
     }
 
     public void updateSecuritySetting(){
