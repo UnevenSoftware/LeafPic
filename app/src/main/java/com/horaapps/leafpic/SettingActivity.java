@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.SecurityActivity;
+import com.horaapps.leafpic.utils.SecurityUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -43,7 +43,7 @@ public class SettingActivity extends ThemedActivity {
     TextView txtTT;
     TextView txtPT;
     TextView txtVT;
-    SecurityActivity securityObj;
+    SecurityUtils securityObj;
 
     SwitchCompat swNavBar;
     SwitchCompat swStatusBar;
@@ -63,7 +63,7 @@ public class SettingActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceManager.getDefaultSharedPreferences(this);
 
-        securityObj= new SecurityActivity(SettingActivity.this);
+        securityObj = new SecurityUtils(SettingActivity.this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
@@ -92,10 +92,10 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 if(!securityObj.isActiveSecurity())
-                    SecurityDialog();
+                    securityDialog();
                 else {
-                    PasswordDialog();
-                    //SecurityDialog();
+                    askPasswordDialog();
+                    //securityDialog();
                 }
             }
         });
@@ -254,7 +254,7 @@ public class SettingActivity extends ThemedActivity {
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
     }
 
-    public void PasswordDialog(){
+    public void askPasswordDialog() {
         final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
         final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
@@ -272,7 +272,7 @@ public class SettingActivity extends ThemedActivity {
         passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (securityObj.checkPassword(editxtPassword.getText().toString())){
-                    SecurityDialog();
+                    securityDialog();
                     dialog.cancel();
                 } else
                     Toast.makeText(passwordDialog.getContext(),R.string.wrong_password,Toast.LENGTH_SHORT).show();
@@ -285,8 +285,7 @@ public class SettingActivity extends ThemedActivity {
         passwordDialog.show();
     }
 
-    public void SecurityDialog(){
-
+    public void securityDialog(){
 
         final AlertDialog.Builder securityDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
@@ -386,6 +385,7 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swApplySecurityDelete, getAccentColor());
 
         securityDialog.setView(SecurityDialogLayout);
+
         securityDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if(swActiveSecurity.isChecked()) {
