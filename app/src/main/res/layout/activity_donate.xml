@@ -23,8 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-
             <android.support.v7.widget.CardView
                 android:id="@+id/donate_header_card"
                 android:layout_width="match_parent"
@@ -37,23 +35,46 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:orientation="vertical">
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/donate_header_icon"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        app:iiv_icon="faw-gift"
-                        />
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_app_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/donate_header_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="faw-gift"
+                            />
+                        <TextView
+                            android:id="@+id/team_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/md_dark_background"
+                            android:text="@string/team_name"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_weight="8"
+                            android:layout_gravity="center_vertical"
+                            />
+
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/donate_header_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/donate_header_text"
-                        android:paddingTop="10dp"
+                        android:padding="15dp"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         />
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -68,54 +89,56 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="10"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
                     <!--TITLE-->
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/donate_googleplay_icon_title"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
-                        app:iiv_icon="faw-google-wallet"
-                        />
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_donate_googleplay_title"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:padding="15dp"
                         android:layout_weight="8"
                         >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/donate_googleplay_icon_title"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="faw-google-wallet"
+                            />
                         <TextView
                             android:id="@+id/donate_googleplay_item_title"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/donate_googleplay"
                             android:textColor="@color/md_dark_background"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            />
-
-                        <TextView
-                            android:id="@+id/donate_googleplay_item"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="@string/google_takes"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="15sp"
-                            />
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="@string/donate"
+                            android:layout_weight="6"
                             />
                     </LinearLayout>
-                    <!--OBJECT-->
 
+                    <!--OBJECT-->
+                    <TextView
+                        android:id="@+id/donate_googleplay_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="15dp"
+                        android:paddingLeft="15dp"
+                        android:text="@string/google_takes"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="15sp"
+                        />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:layout_margin="15dp"
+                        android:layout_gravity="right"
+                        android:text="@string/donate"
+                        />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -130,8 +153,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="10"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_donate_paypal_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="15dp"
+                        android:layout_weight="8"
+                        >
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/donate_paypal_icon_title"
                         android:layout_width="0dp"
@@ -140,48 +171,40 @@
                         android:layout_weight="2"
                         app:iiv_icon="faw-paypal"
                         />
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_donate_paypal_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="15dp"
-                        android:layout_weight="8"
-                        >
 
                         <TextView
                             android:id="@+id/donate_paypal_item_title"
                             android:layout_width="wrap_content"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:text="@string/donate_payppal"
                             android:textColor="@color/md_dark_background"
                             android:textSize="18sp"
-                            android:layout_weight="8"
+                            android:layout_weight="6"
                             android:textStyle="bold"
                             />
-
-                        <TextView
-                            android:id="@+id/donate_paypal_item"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="@string/paypal_text"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="14sp"
-                            />
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:id="@+id/button_donate_paypal"
-                            android:text="@string/donate"
-                            />
-
                     </LinearLayout>
                     <!--OBJECT-->
-
+                    <TextView
+                        android:id="@+id/donate_paypal_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/paypal_text"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="14sp"
+                        android:paddingRight="15dp"
+                        android:paddingLeft="15dp"
+                        />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:layout_margin="15dp"
+                        android:layout_gravity="right"
+                        android:id="@+id/button_donate_paypal"
+                        android:text="@string/donate"
+                        />
                 </LinearLayout>
+
             </android.support.v7.widget.CardView>
 
             <!--DONATE BITCOIN -->
@@ -225,15 +248,16 @@
                             android:textStyle="bold"
                             />
                     </LinearLayout>
-                    <!--OBJECT-->
+                    <!--OBJECT
+                    1J42jRWz1kSosSssoUyJLnkTd85N2tngPU
+                    -->
                     <TextView
                         android:id="@+id/donate_bitcoin_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="15dp"
-                        android:gravity="center_horizontal"
                         android:background="?android:attr/selectableItemBackground"
-                        android:text="1J42jRWz1kSosSssoUyJLnkTd85N2tngPU"
+                        android:text="Cooming Soon!"
                         android:textColor="@color/md_dark_background"
                         android:textSize="14sp"
                         />

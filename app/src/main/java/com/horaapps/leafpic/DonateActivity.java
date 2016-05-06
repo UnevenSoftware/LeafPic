@@ -25,6 +25,8 @@ public class DonateActivity extends ThemedActivity {
     Toolbar toolbar;
 
     /**** Title Cards ***/
+    TextView txtHoraApps;
+    TextView txtDonateHead;
     TextView txtGP;
     TextView txtPP;
     TextView txtBT;
@@ -38,10 +40,12 @@ public class DonateActivity extends ThemedActivity {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        txtHoraApps = (TextView) findViewById(R.id.team_name);
+        txtDonateHead = (TextView) findViewById(R.id.donate_header_item);
+        imageViewGift = (IconicsImageView) findViewById(R.id.donate_header_icon);
         txtGP = (TextView) findViewById(R.id.donate_googleplay_item_title);
         txtPP = (TextView) findViewById(R.id.donate_paypal_item_title);
         txtBT = (TextView) findViewById(R.id.donate_bitcoin_item_title);
-        imageViewGift = (IconicsImageView) findViewById(R.id.donate_header_icon);
 
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
@@ -81,6 +85,7 @@ public class DonateActivity extends ThemedActivity {
         setRecentApp(getString(R.string.donate));
 
         /**** Title Cards ***/
+        txtHoraApps.setTextColor(getAccentColor());
         txtGP.setTextColor(getAccentColor());
         txtPP.setTextColor(getAccentColor());
         txtBT.setTextColor(getAccentColor());
@@ -132,6 +137,7 @@ public class DonateActivity extends ThemedActivity {
         txtPP_CS.setTextColor(color);
         txtBT_CS.setTextColor(color);
         txtHD_CS.setTextColor(color);
+        txtDonateHead.setTextColor(color);
 
 
         /** ACTIONS **/

@@ -2,6 +2,7 @@
 
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
+    <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
     <string name="welcome_slide_sub">Color-Full Material Designed Gallery!</string>
 
@@ -91,6 +92,7 @@
     <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
     <string name="insert_a_name">Insert something</string>
     <string name="nothing_changed">Nothing changed!</string>
+    <string name="install_shortcut">Install shortcut</string>
 
 
     <!--SETTINGS PREFERENCES-->
@@ -159,6 +161,16 @@
     <string name="donate_googleplay">Google Play Store</string>
     <string name="donate_payppal">PayPal</string>
     <string name="donate_bitcoin">Bitcoin</string>
+    <string name="donate_header_text">We are a small independent team that worked with love on LeafPic ❤,
+        if you enjoy our work support the development.
+    </string>
+
+    <string name="thank_you">Thank you!</string>
+    <string name="address_copied">Address copied to clipboard</string>
+    <string name="coming_soon">Coming Soon!</string>
+    <string name="google_takes">Google takes 30% off every donation. (Cooming Soon!)</string>
+    <string name="paypal_text">PayPal.Me allow you to send us money in seconds without charges, PayPal.me takes 4% of donations and a part of donations like 0.35 Euro </string>
+
 
 
 
@@ -218,14 +230,5 @@
     <string name="error_drm_unknown">An unknown DRM error occurred</string>
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
     <string name="error_querying_decoders">Unable to query device decoders</string>
-    <string name="install_shortcut">Install shortcut</string>
-    <string name="thank_you">Thank you!</string>
-    <string name="donate_header_text">We are a small independent team that worked with love on LeafPic ❤,
-        if you enjoy our work support development?
-    </string>
-    <string name="address_copied">Address copied to clipboard</string>
-    <string name="coming_soon">Coming Soon!</string>
-    <string name="google_takes">Google takes 30% off every donation.</string>
-    <string name="paypal_text">PayPal.Me allow you to send us money in seconds without charges</string>
 
 </resources>
