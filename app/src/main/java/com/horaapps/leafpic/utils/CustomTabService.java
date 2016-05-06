@@ -17,12 +17,14 @@ public class CustomTabService {
 
     Activity activity;
     int color;
+
     public CustomTabService (Activity act, int c){
         this.activity = act;
         this.color = c;
+        init();
     }
 
-    public void Inizialize() {
+    private void init() {
         mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
@@ -42,7 +44,7 @@ public class CustomTabService {
                 .build();
     }
 
-    public void LaunchUrl(String Url){
+    public void launchUrl(String Url){
         mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
     }
 }

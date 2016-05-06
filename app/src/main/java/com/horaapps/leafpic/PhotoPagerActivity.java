@@ -423,18 +423,18 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 DeleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        /*album.deleteCurrentPhoto();
-                        if (album.medias.size() == 0) {
+                        album.deleteCurrentMedia(getApplicationContext());
+                        if (album.media.size() == 0) {
                             startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
                             finish();
                         }
-                        mediaAdapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.medias.size());
-                    */
+                        adapter.notifyDataSetChanged();
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+
                     }
                 });
                 DeleteDialog.show();
-                break;
+                return true;
 
             case R.id.moveAction:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();

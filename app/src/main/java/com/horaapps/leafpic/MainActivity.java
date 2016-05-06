@@ -157,7 +157,7 @@ public class MainActivity extends ThemedActivity {
         setContentView(R.layout.activity_main);
 
         SP = PreferenceManager.getDefaultSharedPreferences(this);
-        albums = new HandlingAlbums();
+        albums = new HandlingAlbums(getApplicationContext());
         album = new Album();
         albumsMode = true;
         editmode = false;
@@ -284,28 +284,32 @@ public class MainActivity extends ThemedActivity {
     }
 
     public void displayPreFetchedData(Bundle data){
-
         try {
-            int content = data.getInt(SplashScreen.CONTENT);
-            if (content == SplashScreen.ALBUMS_PREFETCHED) {
-                albums = ((MyApplication) getApplicationContext()).getAlbums();
-                displayAlbums(false);
-                pickmode = data.getBoolean(SplashScreen.PICK_MODE);
-                albumsAdapter.updateDataset(albums.dispAlbums);
-                toggleRecyclersVisibilty(true);
-            } else if (content == SplashScreen.PHOTS_PREFETCHED) {
-                album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        albums = new HandlingAlbums(getApplicationContext());
-                        albums.loadPreviewAlbums(false);//TODO check if is hidden
-                    }
-                }).start();
-                openAlbum(album,false);
-                mediaAdapter.updateDataset(album.media);
-                toggleRecyclersVisibilty(false);
+            if (data!=null) {
+                int content = data.getInt(SplashScreen.CONTENT);
+                if (content == SplashScreen.ALBUMS_PREFETCHED) {
+                    albums = ((MyApplication) getApplicationContext()).getAlbums();
+                    displayAlbums(false);
+                    pickmode = data.getBoolean(SplashScreen.PICK_MODE);
+                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    toggleRecyclersVisibilty(true);
+                } else if (content == SplashScreen.PHOTS_PREFETCHED) {
+                    album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            albums = new HandlingAlbums(getApplicationContext());
+                            albums.loadPreviewAlbums(false);//TODO check if is hidden
+                        }
+                    }).start();
+                    openAlbum(album, false);
+                    mediaAdapter.updateDataset(album.media);
+                    toggleRecyclersVisibilty(false);
 
+                }
+            } else {
+                albums = new HandlingAlbums(getApplicationContext());
+                displayAlbums(true);
             }
             contentReady = true;
         } catch (NullPointerException e) { e.printStackTrace(); }
