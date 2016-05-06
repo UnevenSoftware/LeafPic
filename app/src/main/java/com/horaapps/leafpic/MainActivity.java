@@ -788,7 +788,6 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.hideAlbumButton:
-                //TODO unhide!
                 final AlertDialog.Builder hideDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
                 final View dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView textViewTitle = (TextView) dialogLayout.findViewById(R.id.text_dialog_title);
@@ -801,7 +800,7 @@ public class MainActivity extends ThemedActivity {
                 textViewMessage.setText(hidden ? R.string.unhide_album_message : R.string.hide_album_message);
                 textViewMessage.setTextColor(getTextColor());
                 hideDialog.setView(dialogLayout);
-                hideDialog.setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
+                hideDialog.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
                             if (hidden)
@@ -812,10 +811,11 @@ public class MainActivity extends ThemedActivity {
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
-                            //if(hidden)
-
-                            albums.hideAlbum(album.getPath(), getApplicationContext());
-                            displayAlbums();
+                            if(hidden)
+                                albums.unHideAlbum(album.getPath(), getApplicationContext());
+                            else
+                                albums.hideAlbum(album.getPath(), getApplicationContext());
+                            displayAlbums(true);
                         }
                     }
                 });
@@ -829,7 +829,7 @@ public class MainActivity extends ThemedActivity {
                                 invalidateOptionsMenu();
                             } else {
                                 customAlbumsHandler.excludeAlbum(album.getPath());
-                                displayAlbums();
+                                displayAlbums(true);
                             }
                         }
                     });
