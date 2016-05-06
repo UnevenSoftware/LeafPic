@@ -6,6 +6,7 @@ package com.horaapps.leafpic;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -19,22 +20,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.horaapps.leafpic.Base.Album;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
+public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     RecyclerView mRecyclerView;
-    TextView Title;
+    TextView textViewTitle;
+    TextView txtNewFolder;
+    IconicsImageView imgHiddenDefault;
+    ProgressBar progressBar;
+    boolean hidden = false;
+    HandlingAlbums albums;
+
+    IconicsImageView imgNewFolder;
     LinearLayout background;
-    ArrayList<Album> albumArrayList;
+    ArrayList<Album> albumArrayList= new ArrayList<Album>();
     SharedPreferences SP;
     View.OnClickListener onClickListener;
+
+    public void setCurrentPath(String currentPath) {
+        this.currentPath = currentPath;
+    }
+
+    String currentPath;
+
+    BottomSheetAlbumsAdapter adapter;
 
     public void setTitle(String title) {
         this.title = title;
@@ -45,8 +65,6 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
-
-    public void setAlbumArrayList(ArrayList<Album> albumArrayList){ this.albumArrayList = albumArrayList; }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -63,19 +81,53 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
+        albums = new HandlingAlbums(getContext());
         View contentView = View.inflate(getContext(), R.layout.copy_move_bottom_sheet, null);
         mRecyclerView = (RecyclerView) contentView.findViewById(R.id.rv_modal_dialog_albums);
-        mRecyclerView.setAdapter(new BottomSheetAlbumsAdapter(albumArrayList, onClickListener));
+        adapter = new BottomSheetAlbumsAdapter(onClickListener);
+        mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 1));
 
         /**SET UP DIALOG THEME**/
         SP = PreferenceManager.getDefaultSharedPreferences(dialog.getContext());
 
-        Title=(TextView) contentView.findViewById(R.id.bottom_sheet_title);
-        Title.setText(title);
-        Title.setBackgroundColor(SP.getInt("accent_color",
+        contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("accent_color",
                 ContextCompat.getColor(dialog.getContext(), R.color.md_light_blue_500)));
-        Title.setTextColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
+
+        textViewTitle = (TextView) contentView.findViewById(R.id.bottom_sheet_title);
+        progressBar = (ProgressBar) contentView.findViewById(R.id.spinner_loading);
+        textViewTitle.setText(title);
+        textViewTitle.setTextColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
+
+        //TODO:WILL BE REPLACED WITH EXPANDABLE VIEW
+        imgHiddenDefault = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
+        imgHiddenDefault.setColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
+
+        imgHiddenDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PrepareAlbumTask().execute();
+            }
+        });
+
+        txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
+        txtNewFolder.setTextColor(
+                ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
+                    ? R.color.md_grey_800
+                    : R.color.md_grey_200));
+
+        imgNewFolder = (IconicsImageView) contentView.findViewById(R.id.Create_New_Folder_Icon);
+        imgNewFolder.setColor(
+                ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
+                        ? R.color.md_light_primary_icon
+                        : R.color.md_dark_primary_icon));
+
+        contentView.findViewById(R.id.ll_create_new_folder).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newFolderDialog();
+            }
+        });
 
         background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
         background.setBackgroundColor(ContextCompat.getColor(dialog.getContext(),
@@ -93,17 +145,41 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
+        new PrepareAlbumTask().execute();
     }
 
-     class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
+    private void newFolderDialog(){
+        Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
+    }
 
+    class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 
-         ArrayList<Album> albums;
-         private View.OnClickListener listener;
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
 
-         public BottomSheetAlbumsAdapter(ArrayList<Album> ph, View.OnClickListener lis){
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            hidden = !hidden;
+            albumArrayList = albums.getValidFolders(hidden);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressBar.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+            imgHiddenDefault.setIcon(hidden ? "gmd-folder-open" : "gmd-folder");
+        }
+    }
+
+    class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
+
+        private View.OnClickListener listener;
+        public BottomSheetAlbumsAdapter( View.OnClickListener lis){
             listener=lis;
-            albums = ph;
          }
 
         public BottomSheetAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -123,10 +199,11 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(final BottomSheetAlbumsAdapter.ViewHolder holder, final int position) {
-            final Album a = albums.get(position);
-            holder.album_name.setText(a.DisplayName);
-            holder.album_media_count.setText(a.getImagesCount()+ a.getContentDescdription(getDialog().getContext()));
-            holder.album_name.setTag(position);
+
+            final Album a = albumArrayList.get(position);
+            holder.album_name.setText(a.getName());
+            holder.album_media_count.setText(String.format(Locale.getDefault(),"%d %s",a.getCount(),a.getContentDescdription(getDialog().getContext())));
+            holder.album_name.setTag(a.getPath());
 
             /**SET LAYOUT THEME**/
             SP = PreferenceManager.getDefaultSharedPreferences(getDialog().getContext());
@@ -145,7 +222,7 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
                     ContextCompat.getColor(getDialog().getContext(), R.color.md_light_blue_500))));
 
             holder.album_media_count.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>"
-                    + a.getImagesCount() + "</font></b>" + "<font " + "color='" + subtextColor + "'> "
+                    + a.getCount() + "</font></b>" + "<font " + "color='" + subtextColor + "'> "
                     + a.getContentDescdription(getDialog().getContext()) + "</font>"));
 
             holder.imgFolder.setColor(
@@ -155,7 +232,7 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
         }
 
         public int getItemCount() {
-            return albums.size();
+            return albumArrayList.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -164,9 +241,9 @@ public class CopyMove_BottomSheet extends BottomSheetDialogFragment {
             IconicsImageView imgFolder;
             public ViewHolder(View itemView) {
                 super(itemView);
-                album_name = (TextView) itemView.findViewById(R.id.Bottom_Sheet_Title_Item);
-                album_media_count = (TextView) itemView.findViewById(R.id.Bottom_Sheet_Count_Item);
-                imgFolder = (IconicsImageView) itemView.findViewById(R.id.bottom_sheet_folder_icon);
+                album_name = (TextView) itemView.findViewById(R.id.title_bottom_sheet_item);
+                album_media_count = (TextView) itemView.findViewById(R.id.count_bottom_sheet_item);
+                imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon_bottom_sheet_item);
             }
         }
     }

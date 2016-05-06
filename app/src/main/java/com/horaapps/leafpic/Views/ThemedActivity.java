@@ -67,9 +67,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getBackgroundColor(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case 1:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);
         }
         return color;
@@ -78,9 +78,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getInvertedBackgroundColor(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
+            case 1:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);
         }
         return color;
@@ -89,9 +89,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getTextColor(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_800);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
+            case 1:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_800);
         }
         return color;
@@ -100,9 +100,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getSubTextColor(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
+            case 1:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);
         }
         return color;
@@ -111,9 +111,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getCardBackgroundColor(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case 1:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
         }
         return color;
@@ -122,9 +122,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getIconColor(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);break;
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_primary_icon);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_primary_icon);break;
+            case 2:
+            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;//md_dark_primary_icon
+            case 1:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
         }
         return color;
@@ -133,10 +133,10 @@ public class ThemedActivity extends AppCompatActivity {
     public int getDrawerBackground(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
+            case 1:
+            default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
         }
         return color;
     }
@@ -144,10 +144,20 @@ public class ThemedActivity extends AppCompatActivity {
     public int getDialogStyle(){
         int style;
         switch (getBasicTheme()){
-            case 1: style = R.style.AlertDialog_Light;break;
             case 2: style = R.style.AlertDialog_Dark;break;
             case 3: style = R.style.AlertDialog_Dark_Amoled;break;
-            default: style = R.style.AlertDialog_Light;break;
+            case 1:
+            default: style = R.style.AlertDialog_Light;
+        }
+        return style;
+    }
+
+    public int getPopupToolbarStyle(){
+        int style;
+        switch (getBasicTheme()){
+            case 2: style = R.style.DarkActionBarMenu;break;
+            case 3: style = R.style.AmoledDarkActionBarMenu;break;
+            case 1: default: style = R.style.LightActionBarMenu;
         }
         return style;
     }
@@ -155,10 +165,12 @@ public class ThemedActivity extends AppCompatActivity {
     public int getDefaultThemeToolbarColor3th(){
         int color;
         switch (basicTheme){
-            case 1:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
             case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
             case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
+            case 1:
+            default:
+                //TODO cambia questo colore plis
+                color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
         }
         return color;
     }

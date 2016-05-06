@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_album_modal_dialog"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+        <!--
         <TextView
             android:id="@+id/bottom_sheet_title"
             android:layout_width="match_parent"
@@ -16,6 +17,94 @@
             android:textSize="18sp"
             android:textStyle="bold"
             />
+        -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ll_bottom_sheet_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="24dp"
+            android:weightSum="10"
+            >
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_weight="8"
+                    >
+                        <TextView
+                            android:id="@+id/bottom_sheet_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TitleBottomSheet"
+                            android:textColor="@color/md_dark_primary_text"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            />
+                </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/spinner_loading"
+                    android:layout_height="25dp"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:indeterminateTint="@color/md_white_1000"
+
+                    />
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:id="@+id/toggle_hidden_icon"
+                    android:layout_height="20dp"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:layout_weight="1"
+                    app:iiv_icon="gmd-folder"
+                    app:iiv_color="@color/md_white_1000"
+                    />
+        </LinearLayout>
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mrl_rippleAlpha="0.05"
+            app:mrl_rippleDelayClick="false"
+            android:elevation="60dp"
+            >
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/ll_create_new_folder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="10dp"
+                    android:weightSum="10"
+                    >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Create_New_Folder_Icon"
+                            android:layout_height="20dp"
+                            android:layout_width="0dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-create-new-folder"
+                            />
+                        <LinearLayout
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:orientation="vertical"
+                            android:layout_weight="8"
+                            >
+                                <TextView
+                                    android:id="@+id/Create_New_Folder_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/new_folder"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                        </LinearLayout>
+                </LinearLayout>
+        </com.balysv.materialripple.MaterialRippleLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_modal_dialog_albums"
             android:layout_width="match_parent"

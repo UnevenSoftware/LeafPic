@@ -1,4 +1,4 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Base.deprecated;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,10 +6,13 @@ import android.os.Parcelable;
 /**
  * Created by dnld on 03/04/16.
  */
+@Deprecated
 public class AlbumMediaCount implements Parcelable {
+
     public int photos;
     public int videos;
-    public int getTotal(){ return photos+videos; }
+
+    public int getTotal() { return photos + videos; }
 
     public AlbumMediaCount(){ photos = videos = 0;}
 
