@@ -296,6 +296,7 @@ public class SettingActivity extends ThemedActivity {
         final View SecurityDialogLayout = getLayoutInflater().inflate(R.layout.security_dialog, null);
         final TextView securityDialogTitle = (TextView) SecurityDialogLayout.findViewById(R.id.security_title_dialog);
         final CardView securityDialogCard = (CardView) SecurityDialogLayout.findViewById(R.id.security_dialog_card);
+        final LinearLayout llbody = (LinearLayout) SecurityDialogLayout.findViewById(R.id.ll_security_dialog_body);
 
         final IconicsImageView imgActiveSecurity = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.active_security_icon);
         final TextView txtActiveSecurity = (TextView) SecurityDialogLayout.findViewById(R.id.active_security_item_title);
@@ -344,10 +345,15 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("active_security", isChecked);
                 editor.apply();
+
+
+                securityObj.updateSecuritySetting();
                 updateSwitchColor(swActiveSecurity, getAccentColor());
+                llbody.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
         updateSwitchColor(swActiveSecurity, getAccentColor());
+        llbody.setVisibility(swActiveSecurity.isChecked() ? View.VISIBLE : View.GONE);
 
         /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
         swApplySecurityHidden.setChecked(securityObj.isPasswordOnHidden());
@@ -382,24 +388,28 @@ public class SettingActivity extends ThemedActivity {
         securityDialog.setView(SecurityDialogLayout);
         securityDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if(eTxtPasswordSecurity.length()>3) {
-                    SharedPreferences.Editor editor = SP.edit();
-                    editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
-                    editor.apply();
-                    securityObj.updateSecuritySetting();
-                    if (securityObj.isActiveSecurity())
-                        Toast.makeText(getApplicationContext(), R.string.remeber_password_message, Toast.LENGTH_SHORT).show();
-                    dialog.cancel();
-                } else
-                    Toast.makeText(securityDialog.getContext(),R.string.error_password_lenght,Toast.LENGTH_SHORT).show();
+                if(swActiveSecurity.isChecked()) {
+                    if (eTxtPasswordSecurity.length() > 3) {
+                        SharedPreferences.Editor editor = SP.edit();
+                        editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
+                        editor.apply();
+                        securityObj.updateSecuritySetting();
+                        if (securityObj.isActiveSecurity())
+                            Toast.makeText(getApplicationContext(), R.string.remeber_password_message, Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    } else
+                        Toast.makeText(securityDialog.getContext(), R.string.error_password_lenght, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(securityDialog.getContext(), R.string.error_security_disabled, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         securityDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (changedActiveSecurity) {
+                if (changedActiveSecurity != securityObj.isActiveSecurity()) {
                     SharedPreferences.Editor editor = SP.edit();
-                    editor.putBoolean("active_security", !changedActiveSecurity);
+                    editor.putBoolean("active_security", changedActiveSecurity);
                     editor.apply();
                     securityObj.updateSecuritySetting();
                 }

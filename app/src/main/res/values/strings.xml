@@ -112,7 +112,7 @@
     <string name="fingerprint">Finger print</string>
     <string name="clear_password">Clear Password</string>
     <string name="error_password_lenght">The minimum password lenght is 4 character</string>
-
+    <string name="error_security_disabled">Security is disabled</string>
 
     <!-- SETTINGS -->
     <string name="settings">Settings</string>
