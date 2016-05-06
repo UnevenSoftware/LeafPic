@@ -94,6 +94,7 @@
                 <action android:name="android.intent.action.albumPhoto" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -104,6 +105,7 @@
                 <action android:name="com.android.camera.action.REVIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*"/>
+                <data android:mimeType="video/*"/>
             </intent-filter>
 
         </activity>

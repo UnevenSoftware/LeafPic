@@ -797,35 +797,43 @@ public class MainActivity extends ThemedActivity {
 
                 cardView.setCardBackgroundColor(getCardBackgroundColor());
                 textViewTitle.setBackgroundColor(getPrimaryColor());
-                textViewTitle.setText(getString(R.string.hide));
-                textViewMessage.setText(R.string.hide_album_message);
+                textViewTitle.setText(getString(hidden ? R.string.unhide : R.string.hide));
+                textViewMessage.setText(hidden ? R.string.unhide_album_message : R.string.hide_album_message);
                 textViewMessage.setTextColor(getTextColor());
                 hideDialog.setView(dialogLayout);
                 hideDialog.setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
-                            albums.hideSelectedAlbums(getApplicationContext());
+                            if (hidden)
+                                albums.unHideSelectedAlbums(getApplicationContext());
+                            else
+                                albums.hideSelectedAlbums(getApplicationContext());
+
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
-                            albums.hideAlbum(album.getPath(),getApplicationContext());
+                            //if(hidden)
+
+                            albums.hideAlbum(album.getPath(), getApplicationContext());
                             displayAlbums();
                         }
                     }
                 });
-                hideDialog.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (albumsMode) {
-                            albums.excludeSelectedAlbums(getApplicationContext());
-                            albumsAdapter.notifyDataSetChanged();
-                            invalidateOptionsMenu();
-                        } else {
-                            customAlbumsHandler.excludeAlbum(album.getPath());
-                            displayAlbums();
+                if (!hidden) {
+                    hideDialog.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (albumsMode) {
+                                albums.excludeSelectedAlbums(getApplicationContext());
+                                albumsAdapter.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            } else {
+                                customAlbumsHandler.excludeAlbum(album.getPath());
+                                displayAlbums();
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 hideDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }

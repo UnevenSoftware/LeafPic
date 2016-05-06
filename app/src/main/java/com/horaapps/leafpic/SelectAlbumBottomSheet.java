@@ -50,7 +50,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     IconicsImageView imgNewFolder;
     LinearLayout background;
     LinearLayout llNewFolder;
-    ArrayList<Album> albumArrayList = null;// new ArrayList<Album>();
+    ArrayList<Album> albumArrayList = null;
     SharedPreferences SP;
     View.OnClickListener onClickListener;
 

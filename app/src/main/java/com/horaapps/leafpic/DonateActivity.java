@@ -29,6 +29,7 @@ public class DonateActivity extends ThemedActivity {
     TextView txtGP;
     TextView txtPP;
     TextView txtBT;
+    IconicsImageView imageViewGift;
 
     /**** Buttons ***/
 
@@ -40,6 +41,8 @@ public class DonateActivity extends ThemedActivity {
         txtGP = (TextView) findViewById(R.id.donate_googleplay_item_title);
         txtPP = (TextView) findViewById(R.id.donate_paypal_item_title);
         txtBT = (TextView) findViewById(R.id.donate_bitcoin_item_title);
+        imageViewGift = (IconicsImageView) findViewById(R.id.donate_header_icon);
+
         setNavBarColor();
     }
 
@@ -119,6 +122,7 @@ public class DonateActivity extends ThemedActivity {
         imgGP.setColor(color);
         imgPP.setColor(color);
         imgBT.setColor(color);
+        imageViewGift.setColor(color);
 
 
         /** TextViews **/
