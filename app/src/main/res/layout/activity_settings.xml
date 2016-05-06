@@ -224,7 +224,7 @@
                         app:mrl_rippleDelayClick="false">
                         <LinearLayout
                             xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_protect_hidden"
+                            android:id="@+id/ll_security"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
@@ -234,7 +234,7 @@
                             >
 
                             <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/protect_hidden_icon"
+                                android:id="@+id/security_icon"
                                 android:layout_width="0dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
@@ -249,18 +249,18 @@
                                 android:paddingRight="5dp"
                                 >
                                 <TextView
-                                    android:id="@+id/protect_hidden_item_title"
+                                    android:id="@+id/security_item_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/protect_hidden"
+                                    android:text="@string/security"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
                                     />
                                 <TextView
-                                    android:id="@+id/protect_hidden_item_sub"
+                                    android:id="@+id/security_item_sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/protect_hidden_sub"
+                                    android:text="@string/security_sub"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
                                     />
