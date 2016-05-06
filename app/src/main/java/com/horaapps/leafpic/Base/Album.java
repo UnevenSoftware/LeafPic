@@ -53,6 +53,10 @@ public class Album {
     public ArrayList<Media> media = new ArrayList<Media>();
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
 
+    public Album() {
+        media = new ArrayList<Media>();
+        selectedMedias = new ArrayList<Media>();
+    }
 
     public Album(String path, String name, int count) {
         media = new ArrayList<Media>();

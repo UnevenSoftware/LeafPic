@@ -100,12 +100,15 @@ public class DonateActivity extends ThemedActivity {
         CardView cvGP = (CardView) findViewById(R.id.donate_googleplay_card);
         CardView cvPP = (CardView) findViewById(R.id.donate_paypal_card);
         CardView cvBT = (CardView) findViewById(R.id.donate_bitcoin_card);
+        CardView cvHD = (CardView) findViewById(R.id.donate_header_card);
 
 
         int color = getCardBackgroundColor();
         cvGP.setCardBackgroundColor(color);
         cvPP.setCardBackgroundColor(color);
         cvBT.setCardBackgroundColor(color);
+        cvHD.setCardBackgroundColor(color);
+
         /** Icons **/
         //ABOUT APP
         IconicsImageView imgGP = (IconicsImageView) findViewById(R.id.donate_googleplay_icon_title);
@@ -122,11 +125,13 @@ public class DonateActivity extends ThemedActivity {
         TextView txtGP_CS = (TextView) findViewById(R.id.donate_googleplay_item);
         TextView txtPP_CS = (TextView) findViewById(R.id.donate_paypal_item);
         TextView txtBT_CS = (TextView) findViewById(R.id.donate_bitcoin_item);
+        TextView txtHD_CS = (TextView) findViewById(R.id.donate_header_item);
 
         color=getTextColor();
         txtGP_CS.setTextColor(color);
         txtPP_CS.setTextColor(color);
         txtBT_CS.setTextColor(color);
+        txtHD_CS.setTextColor(color);
 
 
         txtPP_CS.setOnLongClickListener(new View.OnLongClickListener() {

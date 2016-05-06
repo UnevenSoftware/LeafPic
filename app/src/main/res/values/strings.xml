@@ -210,10 +210,11 @@
     <string name="error_querying_decoders">Unable to query device decoders</string>
     <string name="install_shortcut">Install shortcut</string>
     <string name="thank_you">Thank you!</string>
-    <string name="donate_header_text">Dou you like this application?\n
-    Support it\'s development sending donations to developers.\n
-    We are two students developer.
+    <string name="donate_header_text">We are a small independent team that worked with love on LeafPic ❤,
+        donations help us to offer that ad-free and to support further development.
+
     </string>
     <string name="address_copied">Address copied to clipboard</string>
+    <string name="coming_soon">Coming Soon!</string>
 
 </resources>

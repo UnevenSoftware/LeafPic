@@ -54,7 +54,6 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     }
 
     String currentPath;
-
     BottomSheetAlbumsAdapter adapter;
 
     public void setTitle(String title) {
@@ -111,8 +110,6 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-
-
         txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
         txtNewFolder.setTextColor(
                 ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
@@ -153,7 +150,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         new PrepareAlbumTask().execute();
     }
 
-    private void newFolderDialog(){
+    private void newFolderDialog() {
         Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
     }
 

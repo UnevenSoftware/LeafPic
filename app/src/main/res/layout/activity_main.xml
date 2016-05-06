@@ -35,6 +35,15 @@
                         android:layout_gravity="center_horizontal"
                         android:scrollbars="vertical"
                         android:clipToPadding="false"
+
+                        />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/grid_photos"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:scrollbars="vertical"
+                        android:clipToPadding="false"
                         />
                     <TextView
                         android:layout_width="match_parent"
