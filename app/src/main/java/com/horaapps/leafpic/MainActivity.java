@@ -151,7 +151,6 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,7 +187,10 @@ public class MainActivity extends ThemedActivity {
         firstLaunch = false;
     }
 
-    public void openAlbum(Album a) {  openAlbum(a, true); }
+    public void openAlbum(Album a) {
+        openAlbum(a, true);
+        recyclerViewMedia.smoothScrollToPosition(0);
+    }
 
     public void openAlbum(Album a, boolean reload) {
         album = a;
@@ -241,6 +243,7 @@ public class MainActivity extends ThemedActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int nSpan;
+
         if (albumsMode) {
             nSpan = Measure.getAlbumsColums(MainActivity.this);
             recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
@@ -275,7 +278,7 @@ public class MainActivity extends ThemedActivity {
             swipeRefreshLayout.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
             recyclerViewAlbums.setPadding(0, 0, 0, status_height + navBarHeight);
             recyclerViewMedia.setPadding(0, 0, 0, status_height + navBarHeight);
-            fabCamera.animate().translationY(fabCamera.getHeight()*2).start();
+            fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
             fabCamera.setVisibility(View.VISIBLE);
         }
     }
@@ -794,35 +797,43 @@ public class MainActivity extends ThemedActivity {
 
                 cardView.setCardBackgroundColor(getCardBackgroundColor());
                 textViewTitle.setBackgroundColor(getPrimaryColor());
-                textViewTitle.setText(getString(R.string.hide));
-                textViewMessage.setText(R.string.hide_album_message);
+                textViewTitle.setText(getString(hidden ? R.string.unhide : R.string.hide));
+                textViewMessage.setText(hidden ? R.string.unhide_album_message : R.string.hide_album_message);
                 textViewMessage.setTextColor(getTextColor());
                 hideDialog.setView(dialogLayout);
                 hideDialog.setPositiveButton(this.getString(R.string.hide), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
-                            albums.hideSelectedAlbums(getApplicationContext());
+                            if (hidden)
+                                albums.unHideSelectedAlbums(getApplicationContext());
+                            else
+                                albums.hideSelectedAlbums(getApplicationContext());
+
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
-                            albums.hideAlbum(album.getPath(),getApplicationContext());
+                            //if(hidden)
+
+                            albums.hideAlbum(album.getPath(), getApplicationContext());
                             displayAlbums();
                         }
                     }
                 });
-                hideDialog.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (albumsMode) {
-                            albums.excludeSelectedAlbums(getApplicationContext());
-                            albumsAdapter.notifyDataSetChanged();
-                            invalidateOptionsMenu();
-                        } else {
-                            customAlbumsHandler.excludeAlbum(album.getPath());
-                            displayAlbums();
+                if (!hidden) {
+                    hideDialog.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (albumsMode) {
+                                albums.excludeSelectedAlbums(getApplicationContext());
+                                albumsAdapter.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            } else {
+                                customAlbumsHandler.excludeAlbum(album.getPath());
+                                displayAlbums();
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 hideDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -900,7 +911,6 @@ public class MainActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
 
                 final AlertDialog.Builder excludeDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
                 final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
                 final TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
@@ -939,7 +949,6 @@ public class MainActivity extends ThemedActivity {
                 intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
                 ArrayList<Uri> files = new ArrayList<Uri>();
-
                 for (Media f : album.selectedMedias)
                     files.add(f.getUri());
 
@@ -994,6 +1003,8 @@ public class MainActivity extends ThemedActivity {
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setHidden(hidden);
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1153,6 +1164,8 @@ public class MainActivity extends ThemedActivity {
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
+                bottomSheetDialogFragment.setHidden(hidden);
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1167,7 +1180,6 @@ public class MainActivity extends ThemedActivity {
             case R.id.renameAlbum:
 
                 final AlertDialog.Builder renameDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
                 final View renameDialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
                 final TextView textViewRenameTitle = (TextView) renameDialogLayout.findViewById(R.id.rename_title);
                 final EditText editText = (EditText) renameDialogLayout.findViewById(R.id.dialog_txt);
@@ -1270,8 +1282,6 @@ public class MainActivity extends ThemedActivity {
             contentReady = true;
             checkNothing();
             toggleRecyclersVisibilty(true);
-            //recyclerViewAlbums.setVisibility(View.VISIBLE);
-            //recyclerViewMedia.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -1296,8 +1306,6 @@ public class MainActivity extends ThemedActivity {
             mediaAdapter.updateDataset(album.media);
             contentReady = true;
             checkNothing();
-            //recyclerViewAlbums.setVisibility(View.GONE);
-            //recyclerViewMedia.setVisibility(View.VISIBLE);
             toggleRecyclersVisibilty(false);
             swipeRefreshLayout.setRefreshing(false);
         }

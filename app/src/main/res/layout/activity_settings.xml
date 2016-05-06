@@ -555,7 +555,7 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
-                            app:iiv_icon="gmd-brightness-high" />
+                            app:iiv_icon="gmd-settings-brightness" />
 
 
                         <LinearLayout
