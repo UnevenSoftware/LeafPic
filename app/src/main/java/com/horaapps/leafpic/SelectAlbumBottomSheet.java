@@ -39,12 +39,18 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     TextView txtNewFolder;
     IconicsImageView imgHiddenDefault;
     ProgressBar progressBar;
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
     boolean hidden = false;
     HandlingAlbums albums;
 
     IconicsImageView imgNewFolder;
     LinearLayout background;
-    ArrayList<Album> albumArrayList= new ArrayList<Album>();
+    LinearLayout llNewFolder;
+    ArrayList<Album> albumArrayList = null;
     SharedPreferences SP;
     View.OnClickListener onClickListener;
 
@@ -52,8 +58,9 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         this.currentPath = currentPath;
     }
 
-    String currentPath;
+    public void setAlbumArrayList(ArrayList<Album> albumArrayList){ this.albumArrayList = albumArrayList; }
 
+    String currentPath;
     BottomSheetAlbumsAdapter adapter;
 
     public void setTitle(String title) {
@@ -106,7 +113,8 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         imgHiddenDefault.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new PrepareAlbumTask().execute();
+                hidden = !hidden;
+                new ToggleAlbumsTask().execute(hidden);
             }
         });
 
@@ -121,8 +129,8 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
                 ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
                         ? R.color.md_light_primary_icon
                         : R.color.md_dark_primary_icon));
-
-        contentView.findViewById(R.id.ll_create_new_folder).setOnClickListener(new View.OnClickListener() {
+        llNewFolder = (LinearLayout) contentView.findViewById(R.id.ll_create_new_folder);
+        llNewFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newFolderDialog();
@@ -145,14 +153,24 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
-        new PrepareAlbumTask().execute();
+
+        llNewFolder.setVisibility(View.GONE);
+        if (albumArrayList == null) {
+            albumArrayList = new ArrayList<Album>();
+            new ToggleAlbumsTask().execute(hidden);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+            adapter.notifyDataSetChanged();
+            imgHiddenDefault.setIcon(hidden ? "gmd-folder-open" : "gmd-folder");
+            llNewFolder.setVisibility(View.VISIBLE);
+        }
     }
 
-    private void newFolderDialog(){
+    private void newFolderDialog() {
         Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
     }
 
-    class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
+    class ToggleAlbumsTask extends AsyncTask<Boolean, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -161,17 +179,17 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         }
 
         @Override
-        protected Void doInBackground(Void... arg0) {
-            hidden = !hidden;
-            albumArrayList = albums.getValidFolders(hidden);
+        protected Void doInBackground(Boolean... arg0) {
+            albumArrayList = albums.getValidFolders(arg0[0]);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.INVISIBLE);
             adapter.notifyDataSetChanged();
             imgHiddenDefault.setIcon(hidden ? "gmd-folder-open" : "gmd-folder");
+            llNewFolder.setVisibility(View.VISIBLE);
         }
     }
 

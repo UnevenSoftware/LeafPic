@@ -15,11 +15,14 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.SecurityUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -40,6 +43,7 @@ public class SettingActivity extends ThemedActivity {
     TextView txtTT;
     TextView txtPT;
     TextView txtVT;
+    SecurityUtils securityObj;
 
     SwitchCompat swNavBar;
     SwitchCompat swStatusBar;
@@ -49,7 +53,6 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swInternalBrowser;
     SwitchCompat swAutoUpdate;
 
-
     boolean maxLuminosita, pictureOrientation, delayfullimage,internalPlayer;
 
     @Override
@@ -58,6 +61,8 @@ public class SettingActivity extends ThemedActivity {
         setContentView(R.layout.activity_settings);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceManager.getDefaultSharedPreferences(this);
+
+        securityObj = new SecurityUtils(SettingActivity.this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
@@ -77,6 +82,20 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 BasicThemeDialog();
+            }
+        });
+
+        //SECURITY*****************************************
+        LinearLayout ll_SR = (LinearLayout) findViewById(R.id.ll_security);
+        ll_SR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!securityObj.isActiveSecurity())
+                    securityDialog();
+                else {
+                    askPasswordDialog();
+                    //securityDialog();
+                }
             }
         });
 
@@ -232,6 +251,178 @@ public class SettingActivity extends ThemedActivity {
         else
             sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+    }
+
+    public void askPasswordDialog() {
+        final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
+        final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
+        final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
+        final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
+
+        passwordDialogTitle.setBackgroundColor(getPrimaryColor());
+        passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
+
+        /*
+        editxtPassword.setTextColor(getAccentColor());
+        editxtPassword.setHintTextColor(getAccentColor());
+        editxtPassword.setBackgroundColor(getBackgroundColor());
+        */
+        editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        editxtPassword.setTextColor(getTextColor());
+
+        passwordDialog.setView(PasswordDialogLayout);
+        passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (securityObj.checkPassword(editxtPassword.getText().toString())){
+                    securityDialog();
+                    dialog.cancel();
+                } else
+                    Toast.makeText(passwordDialog.getContext(),R.string.wrong_password,Toast.LENGTH_SHORT).show();
+            }
+        });
+        passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {dialog.cancel();}
+        });
+        passwordDialog.show();
+    }
+
+    public void securityDialog(){
+
+        final AlertDialog.Builder securityDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
+
+        final boolean changedActiveSecurity=securityObj.isActiveSecurity();
+
+        final View SecurityDialogLayout = getLayoutInflater().inflate(R.layout.security_dialog, null);
+        final TextView securityDialogTitle = (TextView) SecurityDialogLayout.findViewById(R.id.security_title_dialog);
+        final CardView securityDialogCard = (CardView) SecurityDialogLayout.findViewById(R.id.security_dialog_card);
+        final LinearLayout llbody = (LinearLayout) SecurityDialogLayout.findViewById(R.id.ll_security_dialog_body);
+
+        final IconicsImageView imgActiveSecurity = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.active_security_icon);
+        final TextView txtActiveSecurity = (TextView) SecurityDialogLayout.findViewById(R.id.active_security_item_title);
+        final SwitchCompat swActiveSecurity = (SwitchCompat) SecurityDialogLayout.findViewById(R.id.active_security_switch);
+
+        final EditText eTxtPasswordSecurity = (EditText) SecurityDialogLayout.findViewById(R.id.security_password_edittxt);
+
+        final TextView txtApplySecurity = (TextView) SecurityDialogLayout.findViewById(R.id.security_body_apply_on);
+        final IconicsImageView imgApplySecurityHidden = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.security_body_apply_hidden_icon);
+        final TextView txtApplySecurityHidden = (TextView) SecurityDialogLayout.findViewById(R.id.security_body_apply_hidden_title);
+        final SwitchCompat swApplySecurityHidden = (SwitchCompat) SecurityDialogLayout.findViewById(R.id.security_body_apply_hidden_switch);
+
+        final IconicsImageView imgApplySecurityDelete = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.security_body_apply_delete_icon);
+        final TextView txtApplySecurityDelete = (TextView) SecurityDialogLayout.findViewById(R.id.security_body_apply_delete_title);
+        final SwitchCompat swApplySecurityDelete = (SwitchCompat) SecurityDialogLayout.findViewById(R.id.security_body_apply_delete_switch);
+
+
+        /*** SETING DIALOG THEME ***/
+        securityDialogTitle.setBackgroundColor(getPrimaryColor());
+        securityDialogCard.setBackgroundColor(getCardBackgroundColor());
+
+        /*
+        eTxtPasswordSecurity.setTextColor(getAccentColor());
+        eTxtPasswordSecurity.setHintTextColor(getAccentColor());
+        eTxtPasswordSecurity.setBackgroundColor(getBackgroundColor());
+        */
+        eTxtPasswordSecurity.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        eTxtPasswordSecurity.setTextColor(getTextColor());
+        eTxtPasswordSecurity.setText(SP.getString("password_value", ""));
+
+        /*ICONS*/
+        int color = getIconColor();
+        imgActiveSecurity.setColor(color);
+        imgApplySecurityHidden.setColor(color);
+        imgApplySecurityDelete.setColor(color);
+
+        /*TEXTVIEWS*/
+        color=getTextColor();
+        txtActiveSecurity.setTextColor(color);
+        txtApplySecurity.setTextColor(color);
+        txtApplySecurityHidden.setTextColor(color);
+        txtApplySecurityDelete.setTextColor(color);
+
+        /** - SWITCHS - **/
+        /** - ACTIVE SECURITY - **/
+        swActiveSecurity.setChecked(securityObj.isActiveSecurity());
+        swActiveSecurity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("active_security", isChecked);
+                editor.apply();
+
+
+                securityObj.updateSecuritySetting();
+                updateSwitchColor(swActiveSecurity, getAccentColor());
+                llbody.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            }
+        });
+        updateSwitchColor(swActiveSecurity, getAccentColor());
+        llbody.setVisibility(swActiveSecurity.isChecked() ? View.VISIBLE : View.GONE);
+
+        /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
+        swApplySecurityHidden.setChecked(securityObj.isPasswordOnHidden());
+        swApplySecurityHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("password_on_hidden", isChecked);
+                editor.apply();
+
+                securityObj.updateSecuritySetting();
+                updateSwitchColor(swApplySecurityHidden, getAccentColor());
+            }
+        });
+        updateSwitchColor(swApplySecurityHidden, getAccentColor());
+
+        /**ACTIVE SECURITY ON DELETE ACTION**/
+        swApplySecurityDelete.setChecked(securityObj.isPasswordOnDelete());
+        swApplySecurityDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("password_on_delete", isChecked);
+                editor.apply();
+
+                securityObj.updateSecuritySetting();
+                updateSwitchColor(swApplySecurityDelete, getAccentColor());
+            }
+        });
+        updateSwitchColor(swApplySecurityDelete, getAccentColor());
+
+        securityDialog.setView(SecurityDialogLayout);
+
+        securityDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if(swActiveSecurity.isChecked()) {
+                    if (eTxtPasswordSecurity.length() > 3) {
+                        if (!securityObj.checkPassword(eTxtPasswordSecurity.getText().toString())) {
+                            SharedPreferences.Editor editor = SP.edit();
+                            editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
+                            editor.apply();
+                            securityObj.updateSecuritySetting();
+                            Toast.makeText(getApplicationContext(), R.string.remeber_password_message, Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    } else
+                        Toast.makeText(securityDialog.getContext(), R.string.error_password_lenght, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        securityDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (changedActiveSecurity != securityObj.isActiveSecurity()) {
+                    SharedPreferences.Editor editor = SP.edit();
+                    editor.putBoolean("active_security", changedActiveSecurity);
+                    editor.apply();
+                    securityObj.updateSecuritySetting();
+                }
+                dialog.cancel();
+            }
+        });
+        securityDialog.show();
     }
 
     public void BasicThemeDialog(){
@@ -633,6 +824,7 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
         IconicsImageView imgIN = (IconicsImageView) findViewById(R.id.internal_player_Icon);
         IconicsImageView imgAUM = (IconicsImageView) findViewById(R.id.auto_update_media_Icon);
+        IconicsImageView imgSR = (IconicsImageView) findViewById(R.id.security_icon);
 
 
         color = getIconColor();
@@ -648,6 +840,7 @@ public class SettingActivity extends ThemedActivity {
         imgOrient.setColor(color);
         imgEA.setColor(color);
         imgAUM.setColor(color);
+        imgSR.setColor(color);
 
         /** TextViews **/
         TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
@@ -662,6 +855,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
         TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
         TextView txtAUM = (TextView) findViewById(R.id.auto_update_media_Item);
+        TextView txtSR = (TextView) findViewById(R.id.security_item_title);
 
         color=getTextColor();
         txtInt.setTextColor(color);
@@ -676,6 +870,7 @@ public class SettingActivity extends ThemedActivity {
         txtEAT.setTextColor(color);
         txtDelay.setTextColor(color);
         txtAUM.setTextColor(color);
+        txtSR.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
@@ -690,6 +885,7 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
         TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
         TextView txtAUM_Sub = (TextView) findViewById(R.id.auto_update_media_Item_sub);
+        TextView txtSR_Sub = (TextView) findViewById(R.id.security_item_sub);
 
 
         color=getSubTextColor();
@@ -705,6 +901,7 @@ public class SettingActivity extends ThemedActivity {
         txtNB_Sub.setTextColor(color);
         txtEAT_Sub.setTextColor(color);
         txtAUM_Sub.setTextColor(color);
+        txtSR_Sub.setTextColor(color);
 
     }
 }

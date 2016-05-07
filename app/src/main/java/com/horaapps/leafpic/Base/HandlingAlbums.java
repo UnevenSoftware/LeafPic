@@ -37,6 +37,12 @@ public class HandlingAlbums {
     ArrayList<File> excludedfolders;
     AlbumsComparators albumsComparators;
 
+    public HandlingAlbums() {
+        excludedfolders = new ArrayList<File>();
+        dispAlbums = new ArrayList<Album>();
+        selectedAlbums = new ArrayList<Album>();
+    }
+
     public HandlingAlbums(Context context) {
         SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
         customAlbumsHandler = new CustomAlbumsHandler(context);
@@ -201,7 +207,7 @@ public class HandlingAlbums {
         selectedAlbums.clear();
     }
 
-    public void InstallShortcutForSelectedAlbums(Context appCtx) {
+    public void installShortcutForSelectedAlbums(Context appCtx) {
         for (Album selectedAlbum : selectedAlbums) {
 
             Intent shortcutIntent;

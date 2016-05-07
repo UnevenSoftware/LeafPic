@@ -2,9 +2,7 @@ package com.horaapps.leafpic;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.CustomTabService;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -26,9 +25,13 @@ public class DonateActivity extends ThemedActivity {
     Toolbar toolbar;
 
     /**** Title Cards ***/
+    TextView txtHoraApps;
+    TextView txtDonateHead;
     TextView txtGP;
     TextView txtPP;
     TextView txtBT;
+    IconicsImageView imageViewGift;
+    CustomTabService cts;
 
     /**** Buttons ***/
 
@@ -37,10 +40,15 @@ public class DonateActivity extends ThemedActivity {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        txtHoraApps = (TextView) findViewById(R.id.team_name);
+        txtDonateHead = (TextView) findViewById(R.id.donate_header_item);
+        imageViewGift = (IconicsImageView) findViewById(R.id.donate_header_icon);
         txtGP = (TextView) findViewById(R.id.donate_googleplay_item_title);
         txtPP = (TextView) findViewById(R.id.donate_paypal_item_title);
         txtBT = (TextView) findViewById(R.id.donate_bitcoin_item_title);
+
         setNavBarColor();
+        cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
     }
 
     @Override
@@ -77,18 +85,14 @@ public class DonateActivity extends ThemedActivity {
         setRecentApp(getString(R.string.donate));
 
         /**** Title Cards ***/
+        txtHoraApps.setTextColor(getAccentColor());
         txtGP.setTextColor(getAccentColor());
         txtPP.setTextColor(getAccentColor());
         txtBT.setTextColor(getAccentColor());
 
         /***** Buttons *****/
-
         setThemeOnChangeListener();
     }
-
-
-
-
 
     public void setThemeOnChangeListener(){
 
@@ -100,12 +104,15 @@ public class DonateActivity extends ThemedActivity {
         CardView cvGP = (CardView) findViewById(R.id.donate_googleplay_card);
         CardView cvPP = (CardView) findViewById(R.id.donate_paypal_card);
         CardView cvBT = (CardView) findViewById(R.id.donate_bitcoin_card);
+        CardView cvHD = (CardView) findViewById(R.id.donate_header_card);
 
 
         int color = getCardBackgroundColor();
         cvGP.setCardBackgroundColor(color);
         cvPP.setCardBackgroundColor(color);
         cvBT.setCardBackgroundColor(color);
+        cvHD.setCardBackgroundColor(color);
+
         /** Icons **/
         //ABOUT APP
         IconicsImageView imgGP = (IconicsImageView) findViewById(R.id.donate_googleplay_icon_title);
@@ -116,30 +123,31 @@ public class DonateActivity extends ThemedActivity {
         imgGP.setColor(color);
         imgPP.setColor(color);
         imgBT.setColor(color);
+        imageViewGift.setColor(color);
 
 
         /** TextViews **/
         TextView txtGP_CS = (TextView) findViewById(R.id.donate_googleplay_item);
         TextView txtPP_CS = (TextView) findViewById(R.id.donate_paypal_item);
         TextView txtBT_CS = (TextView) findViewById(R.id.donate_bitcoin_item);
+        TextView txtHD_CS = (TextView) findViewById(R.id.donate_header_item);
 
-        color=getTextColor();
+        color = getTextColor();
         txtGP_CS.setTextColor(color);
         txtPP_CS.setTextColor(color);
         txtBT_CS.setTextColor(color);
+        txtHD_CS.setTextColor(color);
+        txtDonateHead.setTextColor(color);
 
 
-        txtPP_CS.setOnLongClickListener(new View.OnLongClickListener() {
+        /** ACTIONS **/
+        findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://www.paypal.me/DonaldShtjefni"));
-                startActivity(i);
-                return true;
+            public void onClick(View v) {
+                cts.launchUrl("https://www.paypal.me/HoraApps");
             }
         });
 
-        /** ACTIONS **/
         txtBT_CS.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

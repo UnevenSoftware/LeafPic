@@ -215,6 +215,58 @@
                             </LinearLayout>
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!-- PASSWORD HIDDEN ALBUM-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_security"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/security_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-lock"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                android:paddingRight="5dp"
+                                >
+                                <TextView
+                                    android:id="@+id/security_item_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/security"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/security_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/security_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -503,7 +555,7 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
-                            app:iiv_icon="gmd-brightness-high" />
+                            app:iiv_icon="gmd-settings-brightness" />
 
 
                         <LinearLayout

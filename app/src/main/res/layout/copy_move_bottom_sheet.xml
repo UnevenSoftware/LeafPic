@@ -50,7 +50,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:indeterminateTint="@color/md_white_1000"
-
                     />
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/toggle_hidden_icon"

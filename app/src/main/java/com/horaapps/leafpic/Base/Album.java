@@ -53,6 +53,10 @@ public class Album {
     public ArrayList<Media> media = new ArrayList<Media>();
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
 
+    public Album() {
+        media = new ArrayList<Media>();
+        selectedMedias = new ArrayList<Media>();
+    }
 
     public Album(String path, String name, int count) {
         media = new ArrayList<Media>();
@@ -288,6 +292,11 @@ public class Album {
 
             scanFile(context, new String[]{to.getAbsolutePath()});
         } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    public void deleteCurrentMedia(Context context) {
+        deleteMedia(context, media.get(getCurrentMediaIndex()));
+        media.remove(getCurrentMediaIndex());
     }
 
     public void deleteMedia(Context context, Media media) {

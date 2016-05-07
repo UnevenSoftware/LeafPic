@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
@@ -52,6 +53,7 @@ import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.Measure;
+import com.horaapps.leafpic.utils.SecurityUtils;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -82,6 +84,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     RelativeLayout ActivityBackgorund;
     Album album;
     SelectAlbumBottomSheet bottomSheetDialogFragment;
+    SecurityUtils securityObj;
     Toolbar toolbar;
     boolean fullscreenmode;
 
@@ -93,6 +96,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
+        securityObj= new SecurityUtils(PhotoPagerActivity.this);
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -235,6 +239,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
 
+        securityObj.updateSecuritySetting();
 
         /**** Settings ****/
 
@@ -423,18 +428,53 @@ public class PhotoPagerActivity extends ThemedActivity {
                 });
                 DeleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        /*album.deleteCurrentPhoto();
-                        if (album.medias.size() == 0) {
-                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                            finish();
+                        if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
+                            final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                            final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
+                            final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
+                            final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
+                            final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
+
+                            passwordDialogTitle.setBackgroundColor(getPrimaryColor());
+                            passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
+
+                            editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+                            editxtPassword.setTextColor(getTextColor());
+
+                            passwordDialog.setView(PasswordDialogLayout);
+                            passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (securityObj.checkPassword(editxtPassword.getText().toString())) {
+                                        album.deleteCurrentMedia(getApplicationContext());
+                                        if (album.media.size() == 0) {
+                                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
+                                            finish();
+                                        }
+                                        adapter.notifyDataSetChanged();
+                                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+                                    } else {
+                                        Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {}});
+                            passwordDialog.show();
+                        } else {
+
+                            album.deleteCurrentMedia(getApplicationContext());
+                            if (album.media.size() == 0) {
+                                startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
+                                finish();
+                            }
+                            adapter.notifyDataSetChanged();
+                            toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
                         }
-                        adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.medias.size());
-                    */
                     }
                 });
                 DeleteDialog.show();
-                break;
+                return true;
 
             case R.id.moveAction:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
