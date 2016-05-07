@@ -68,8 +68,8 @@
     <string name="delete_album_message">Are you sure you want to delete selected album?</string>
     <string name="delete_photos_message">Are you sure you want to delete selected medias?</string>
     <string name="delete_photo_message">Are you sure you want to delete this media?</string>
-    <string name="exclude_album_message">Are you sure you want to exclude that album?\nYou can restore it going to Settings!</string>
-    <string name="sub_exclude_album_message">Exclude also subFloders?</string>
+    <string name="exclude_album_message">Are you sure you want to exclude that album?
+        \nYou can restore it in the settings section</string>
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>
@@ -93,7 +93,6 @@
     <string name="nothing_changed">Nothing changed!</string>
     <string name="install_shortcut">Install shortcut</string>
 
-
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">General Setting</string>
     <string name="folder">Folder</string>
@@ -106,12 +105,11 @@
     <string name="security">Security</string>
     <string name="active_security">Use password</string>
     <string name="security_sub">Set up a password to protect your media.</string>
-    <string name="remeber_password_message">Note: If you forget your password you need to clear application data.</string>
+    <string name="remeber_password_message">Note: password changed if you forget it you have to clear application data.</string>
     <string name="apply_password_on">Apply password on</string>
     <string name="fingerprint">Finger print</string>
     <string name="clear_password">Clear Password</string>
     <string name="error_password_lenght">The minimum password length is 4 character</string>
-    <string name="error_security_disabled">Security is disabled</string>
 
     <!-- SETTINGS -->
     <string name="settings">Settings</string>
@@ -145,7 +143,7 @@
     <string name="primary_color">Primary Color</string>
     <string name="primary_color_sub">The main color which is used in the UI.</string>
     <string name="accent_color">Accent Color</string>
-    <string name="accent_color_sub">The secondary color which is used to tint widgets an UI details.</string>
+    <string name="accent_color_sub">The secondary color which is used to tint widgets and UI details.</string>
     <string name="basic_theme">Basic Theme</string>
     <string name="basic_theme_sub">Select a basic theme.</string>
     <string name="white_basic_theme">White</string>
@@ -160,8 +158,9 @@
     <string name="donate_googleplay">Google Play Store</string>
     <string name="donate_payppal">PayPal</string>
     <string name="donate_bitcoin">Bitcoin</string>
-    <string name="donate_header_text">We are a small independent team that worked with love on LeafPic ❤,
-        if you enjoy our work support the development.
+    <string name="donate_header_text">
+        Hi,\nWe are a small independent team which worked with love on LeafPic ❤,
+        this is our first app, so we have a lot to learn by your feedback. If you enjoy our work you can show us your appreciation by donating.\nWith your help we can make this project even better or start new cool ones.
     </string>
 
     <string name="thank_you">Thank you!</string>

@@ -53,7 +53,6 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swInternalBrowser;
     SwitchCompat swAutoUpdate;
 
-
     boolean maxLuminosita, pictureOrientation, delayfullimage,internalPlayer;
 
     @Override
@@ -398,17 +397,16 @@ public class SettingActivity extends ThemedActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if(swActiveSecurity.isChecked()) {
                     if (eTxtPasswordSecurity.length() > 3) {
-                        SharedPreferences.Editor editor = SP.edit();
-                        editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
-                        editor.apply();
-                        securityObj.updateSecuritySetting();
-                        if (securityObj.isActiveSecurity())
+                        if (!securityObj.checkPassword(eTxtPasswordSecurity.getText().toString())) {
+                            SharedPreferences.Editor editor = SP.edit();
+                            editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
+                            editor.apply();
+                            securityObj.updateSecuritySetting();
                             Toast.makeText(getApplicationContext(), R.string.remeber_password_message, Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
+                            dialog.cancel();
+                        }
                     } else
                         Toast.makeText(securityDialog.getContext(), R.string.error_password_lenght, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(securityDialog.getContext(), R.string.error_security_disabled, Toast.LENGTH_SHORT).show();
                 }
             }
         });
