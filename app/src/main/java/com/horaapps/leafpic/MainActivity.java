@@ -1287,7 +1287,7 @@ public class MainActivity extends ThemedActivity {
 
         }
     }
-    
+
     private void toggleRecyclersVisibilty(boolean albumsMode){
             recyclerViewAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
             recyclerViewMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
