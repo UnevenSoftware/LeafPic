@@ -143,8 +143,9 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:hint="Password"
+                    android:gravity="center_horizontal"
+                    android:maxLength="8"
+                    android:hint="@string/type_password"
                     android:singleLine="true"
                     android:inputType="numberPassword" />
                 <TextView

@@ -538,7 +538,7 @@ public class MainActivity extends ThemedActivity {
         findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnHidden()){
+                if (securityObj.isActiveSecurity() && securityObj.isPasswordOnHidden()){
                     final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
                     final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
                     final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
@@ -559,9 +559,8 @@ public class MainActivity extends ThemedActivity {
                                 mDrawerLayout.closeDrawer(GravityCompat.START);
                                 new PrepareAlbumTask().execute();
                                 dialog.cancel();
-                            } else {
+                            } else
                                 Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                            }
                         }
                     });
                     passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -578,6 +577,7 @@ public class MainActivity extends ThemedActivity {
                 }
             }
         });
+
         /*
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -965,9 +965,8 @@ public class MainActivity extends ThemedActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (securityObj.checkPassword(editxtPassword.getText().toString())) {
                                         new DeletePhotos().execute();
-                                    } else {
+                                    } else
                                         Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                    }
                                 }
                             });
                             passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
