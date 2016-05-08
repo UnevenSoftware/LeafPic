@@ -224,7 +224,7 @@ public class ThemedActivity extends AppCompatActivity {
         basicTheme = SP.getInt("basic_theme", 1);//WHITE DEFAULT
         coloredNavBar = SP. getBoolean("nav_bar", false);
         oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",true);
-        applyThemeImgAct = SP.getBoolean("apply_theme_img_act", false);
+        applyThemeImgAct = SP.getBoolean("apply_theme_img_act", true);
     }
 
 

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -28,11 +30,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -59,6 +64,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 
@@ -785,8 +793,8 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
-        //TODO: WILL BE IMPLEMENTED
-        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() >= 2 && album.getSelectedCount() <= 5);
+        //TODO: WILL BE IMPLEMENTED********************************************************************************************************************************************************************************
+        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() == 2);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1142,15 +1150,11 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             //region Affix
-            /*
+
             //TODO: WILL BE IMPLEMENTED
 
             case  R.id.affixPhoto:
-                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(
-                        MainActivity.this,
-                        isDarkTheme()
-                                ? R.style.AlertDialog_Dark
-                                : R.style.AlertDialog_Light);
+                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
 
                 final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
                 final TextView txt_Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
@@ -1182,7 +1186,53 @@ public class MainActivity extends ThemedActivity {
                 AffixDialog.setView(Affix_dialogLayout);
                 AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO:COMING SOON
+                        Bitmap c=album.selectedMedias.get(0).getBitmap();
+                        Bitmap s=album.selectedMedias.get(1).getBitmap();
+                        Bitmap cs = null;
+
+                        int width, height = 0;
+
+                        /*FOR VERTICAL
+                        if(c.getWidth() > s.getWidth()) {
+                            width = c.getWidth();
+                            height = c.getHeight() + s.getHeight();
+                        } else {
+                            width = s.getWidth();
+                            height = c.getHeight() + s.getHeight();
+                        }
+                        */
+                        /**FOR HORZIONTAL**/
+                        if(c.getHeight() > s.getHeight()) {
+                            width = c.getWidth()+s.getWidth();
+                            height = c.getHeight();
+                        } else {
+                            width = s.getWidth() + c.getWidth();
+                            height = s.getHeight();
+                        }
+                        /****/
+                        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                        Canvas comboImage = new Canvas(cs);
+
+                        /*VERTICAL
+                        comboImage.drawBitmap(c, 0f, 0f, null);
+                        comboImage.drawBitmap(s, 0f, c.getHeight(), null);
+                        */
+
+                        comboImage.drawBitmap(c, 0f, 0f, null);
+                        comboImage.drawBitmap(s,  c.getWidth(), 0f, null);
+
+                        // this is an extra bit I added, just incase you want to save the new image somewhere and then return the location
+                        String tmpImg = String.valueOf(System.currentTimeMillis()) + ".png";
+
+                        OutputStream os = null;
+                        try {
+                          os = new FileOutputStream(album.selectedMedias.get(0).getPath() + tmpImg);
+                          cs.compress(Bitmap.CompressFormat.PNG, 100, os);
+                        } catch(IOException e) {
+                          Log.e("combineImages", "problem combining images", e);
+                        }
+
+
                     }
                 });
                 AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -1191,8 +1241,8 @@ public class MainActivity extends ThemedActivity {
                     }
                 });
                 AffixDialog.show();
-                break;
-                */
+                return true;
+
             //endregion
 
             case R.id.moveAction:
