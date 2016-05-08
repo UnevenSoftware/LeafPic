@@ -413,7 +413,7 @@ public class MainActivity extends ThemedActivity {
         swipeRefreshLayout.animate().translationY(statusBarHeight).setInterpolator(new DecelerateInterpolator()).start();
 
         recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
-        recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+        recyclerViewMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
         setRecentApp(getString(R.string.app_name));
     }
 
