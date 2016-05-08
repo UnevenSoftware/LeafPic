@@ -29,9 +29,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -415,6 +418,14 @@ public class MainActivity extends ThemedActivity {
         recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
         recyclerViewMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
         setRecentApp(getString(R.string.app_name));
+
+        Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+        if (aa.getRotation() == Surface.ROTATION_90) {//1
+            Configuration configuration = new Configuration();
+            configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            onConfigurationChanged(configuration);
+        }
     }
 
     @Override
