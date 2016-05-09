@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -28,13 +29,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -50,6 +54,7 @@ import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.AffixMedia;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.SecurityUtils;
@@ -786,7 +791,7 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
         //TODO: WILL BE IMPLEMENTED********************************************************************************************************************************************************************************
-        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() == 2);
+        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1142,18 +1147,19 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             //region Affix
-
             //TODO: WILL BE IMPLEMENTED
-
-            /*
             case  R.id.affixPhoto:
-                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
 
+                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
                 final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
-                final TextView txt_Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
-                txt_Affix_title.setBackgroundColor(getPrimaryColor());
+                final LinearLayout ll_Affix_title = (LinearLayout) Affix_dialogLayout.findViewById(R.id.ll_affix_title);
+                final ProgressBar progressBar = (ProgressBar) Affix_dialogLayout.findViewById(R.id.affix_spinner_loading);
+                ll_Affix_title.setBackgroundColor(getPrimaryColor());
                 CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
                 cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+                progressBar.setVisibility(View.INVISIBLE);
+
+
 
                 //ITEMS
                 final TextView txt_Affix_Vertical_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_title);
@@ -1176,56 +1182,44 @@ public class MainActivity extends ThemedActivity {
                     }
                 });
 
+
+                //Affixing On Background//
+                class affixMedia extends AsyncTask<String, Integer, Void> {
+                    @Override
+                    protected void onPreExecute() {
+                        swipeRefreshLayout.setRefreshing(true);
+                        super.onPreExecute();
+                    }
+
+                    @Override
+                    protected Void doInBackground(String... arg0) {
+                        ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
+                        for (int i=0; i<album.getSelectedCount();i++){
+                            bitmapArray.add(album.selectedMedias.get(i).getBitmap());
+                        }
+                        AffixMedia.AffixBitmapList(
+                                getApplicationContext(),
+                                bitmapArray,
+                                swVertical.isChecked(),
+                                album.selectedMedias.get(0).getPath());
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        swipeRefreshLayout.setRefreshing(false);
+                        editmode = false;
+                        album.clearSelectedPhotos();
+                        //mediaAdapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                        new PreparePhotosTask().execute();
+                    }
+                }
+                //Dialog Buttons
                 AffixDialog.setView(Affix_dialogLayout);
                 AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Bitmap c=album.selectedMedias.get(0).getBitmap();
-                        Bitmap s=album.selectedMedias.get(1).getBitmap();
-                        Bitmap cs = null;
-
-                        int width, height = 0;
-
-                        //FOR VERTICAL
-                        if(c.getWidth() > s.getWidth()) {
-                            //width = c.getWidth();
-                            //height = c.getHeight() + s.getHeight();
-                        } else {
-                            //width = s.getWidth();
-                            //height = c.getHeight() + s.getHeight();
-                        }
-
-                        //FOR HORZIONTAL
-                        if(c.getHeight() > s.getHeight()) {
-                            width = c.getWidth()+s.getWidth();
-                            height = c.getHeight();
-                        } else {
-                            width = s.getWidth() + c.getWidth();
-                            height = s.getHeight();
-                        }
-
-                        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                        Canvas comboImage = new Canvas(cs);
-
-                        //VERTICAL
-                        //comboImage.drawBitmap(c, 0f, 0f, null);
-                        //comboImage.drawBitmap(s, 0f, c.getHeight(), null);
-
-
-                        comboImage.drawBitmap(c, 0f, 0f, null);
-                        comboImage.drawBitmap(s,  c.getWidth(), 0f, null);
-
-                        // this is an extra bit I added, just incase you want to save the new image somewhere and then return the location
-                        String tmpImg = String.valueOf(System.currentTimeMillis()) + ".png";
-
-                        OutputStream os = null;
-                        try {
-                          os = new FileOutputStream(album.selectedMedias.get(0).getPath() + tmpImg);
-                          cs.compress(Bitmap.CompressFormat.PNG, 100, os);
-                        } catch(IOException e) {
-                          Log.e("combineImages", "problem combining images", e);
-                        }
-
-
+                        new affixMedia().execute();
                     }
                 });
                 AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -1235,7 +1229,6 @@ public class MainActivity extends ThemedActivity {
                 });
                 AffixDialog.show();
                 return true;
-                */
             //endregion
 
             case R.id.moveAction:
