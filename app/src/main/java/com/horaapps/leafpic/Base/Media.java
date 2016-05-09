@@ -84,8 +84,18 @@ public class Media implements Parcelable {
     public int getOrientation() {
         ExifInterface exif;
         try { exif = new ExifInterface(getPath()); }
-        catch (IOException e) {  return 0; }
-        return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+        catch (IOException ex) { return 0; }
+        if (exif != null) {
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation != -1) {
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90: return  90;
+                    case ExifInterface.ORIENTATION_ROTATE_180: return  180;
+                    case ExifInterface.ORIENTATION_ROTATE_270: return  270;
+                }
+            }
+        }
+        return 0;
     }
 
     public int getWidth() { //TODO improve

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.horaapps.leafpic.Views.SquareRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     >
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/selected_icon"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:elevation="10dp"
         android:visibility="gone"
         app:iiv_color="@color/md_white_1000"
@@ -21,9 +24,10 @@
         android:id="@+id/type_icon"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_gravity="bottom|start"
         android:layout_marginBottom="1dp"
         android:layout_marginStart="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:elevation="10dp"
         android:visibility="gone"
         app:iiv_color="@color/md_white_1000"
@@ -34,9 +38,9 @@
         android:id="@+id/video_indicator"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_gravity="center_vertical|center_horizontal"
         android:elevation="10dp"
         android:visibility="gone"
+        android:layout_centerInParent="true"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-play-circle-filled"
         tools:targetApi="lollipop" />
@@ -53,4 +57,4 @@
         android:scaleType="centerCrop"
         android:background="?attr/selectableItemBackground"
     />
-</FrameLayout>
+</com.horaapps.leafpic.Views.SquareRelativeLayout>

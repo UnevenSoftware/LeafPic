@@ -345,6 +345,7 @@ public class MainActivity extends ThemedActivity {
 
         albumsAdapter = new AlbumsAdapter(albums.dispAlbums, MainActivity.this);
         recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
+
         albumsAdapter.setOnClickListener(albumOnClickListener);
         albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
         recyclerViewAlbums.setAdapter(albumsAdapter);
