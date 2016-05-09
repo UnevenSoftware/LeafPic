@@ -159,8 +159,10 @@
     <string name="donate_payppal">PayPal</string>
     <string name="donate_bitcoin">Bitcoin</string>
     <string name="donate_header_text">
-        Hi,\nWe are a small independent team which worked with love on LeafPic ❤,
-        this is our first app, so we have a lot to learn by your feedback. If you enjoy our work you can show us your appreciation by donating.\nWith your help we can make this project even better or start new cool ones.
+        Hi,\nWe are a small independent team which work with love on LeafPic ❤,
+        this is our first app, so we have a lot to learn by your feedback.
+        If you enjoy our work you can show us your appreciation by donating.
+        \nWith your help we can make this project even better or start new cool ones.
     </string>
 
     <string name="thank_you">Thank you!</string>
