@@ -29,6 +29,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,7 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.ExternalStorage;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
@@ -171,6 +173,12 @@ public class MainActivity extends ThemedActivity {
 
         initUI();
         setupUI();
+
+        /*ArrayList<File> externalLocations = ExternalStorage.getAllStorageLocations();
+        for (File externalLocation : externalLocations) {
+            StringUtils.showToast(getApplicationContext(),externalLocation.getAbsolutePath());
+            Log.wtf(TAG,externalLocation.getAbsolutePath());
+        }*/
 
         displayPreFetchedData(getIntent().getExtras());
     }
