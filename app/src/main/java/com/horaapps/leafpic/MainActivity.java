@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -30,14 +28,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -64,9 +59,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 
@@ -794,7 +786,7 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
         //TODO: WILL BE IMPLEMENTED********************************************************************************************************************************************************************************
-        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() == 2);
+        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() == 2);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1153,6 +1145,7 @@ public class MainActivity extends ThemedActivity {
 
             //TODO: WILL BE IMPLEMENTED
 
+            /*
             case  R.id.affixPhoto:
                 final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
 
@@ -1192,16 +1185,16 @@ public class MainActivity extends ThemedActivity {
 
                         int width, height = 0;
 
-                        /*FOR VERTICAL
+                        //FOR VERTICAL
                         if(c.getWidth() > s.getWidth()) {
-                            width = c.getWidth();
-                            height = c.getHeight() + s.getHeight();
+                            //width = c.getWidth();
+                            //height = c.getHeight() + s.getHeight();
                         } else {
-                            width = s.getWidth();
-                            height = c.getHeight() + s.getHeight();
+                            //width = s.getWidth();
+                            //height = c.getHeight() + s.getHeight();
                         }
-                        */
-                        /**FOR HORZIONTAL**/
+
+                        //FOR HORZIONTAL
                         if(c.getHeight() > s.getHeight()) {
                             width = c.getWidth()+s.getWidth();
                             height = c.getHeight();
@@ -1209,14 +1202,14 @@ public class MainActivity extends ThemedActivity {
                             width = s.getWidth() + c.getWidth();
                             height = s.getHeight();
                         }
-                        /****/
+
                         cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         Canvas comboImage = new Canvas(cs);
 
-                        /*VERTICAL
-                        comboImage.drawBitmap(c, 0f, 0f, null);
-                        comboImage.drawBitmap(s, 0f, c.getHeight(), null);
-                        */
+                        //VERTICAL
+                        //comboImage.drawBitmap(c, 0f, 0f, null);
+                        //comboImage.drawBitmap(s, 0f, c.getHeight(), null);
+
 
                         comboImage.drawBitmap(c, 0f, 0f, null);
                         comboImage.drawBitmap(s,  c.getWidth(), 0f, null);
@@ -1242,7 +1235,7 @@ public class MainActivity extends ThemedActivity {
                 });
                 AffixDialog.show();
                 return true;
-
+                */
             //endregion
 
             case R.id.moveAction:
