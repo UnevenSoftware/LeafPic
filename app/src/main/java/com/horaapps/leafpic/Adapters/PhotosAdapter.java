@@ -40,7 +40,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         switch (SP.getInt("basic_theme", 1)){
             case 2: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));break;
-            case 3: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));break;
+            case 3: drawable = null ;break;
             case 1: default: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
         }
     }

@@ -1,3 +1,5 @@
+/crowdin-cli.jar
+/crowdin.yaml
 .gradle
 # User-specific configurations
 /.directory

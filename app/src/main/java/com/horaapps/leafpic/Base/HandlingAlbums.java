@@ -37,12 +37,6 @@ public class HandlingAlbums {
     ArrayList<File> excludedfolders;
     AlbumsComparators albumsComparators;
 
-    public HandlingAlbums() {
-        excludedfolders = new ArrayList<File>();
-        dispAlbums = new ArrayList<Album>();
-        selectedAlbums = new ArrayList<Album>();
-    }
-
     public HandlingAlbums(Context context) {
         SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
         customAlbumsHandler = new CustomAlbumsHandler(context);
@@ -88,17 +82,19 @@ public class HandlingAlbums {
     private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders) {
         if (!excludedfolders.contains(dir)) {
             File[] listFiles = dir.listFiles(new ImageFileFilter());
-            if (listFiles.length > 0)
+            if (listFiles != null && listFiles.length > 0)
                 folders.add(new Album(dir.getAbsolutePath(), dir.getName(), listFiles.length));
 
             File[] children = dir.listFiles(new FoldersFileFilter());
-            for (File temp : children) {
-                File nomedia = new File(temp, ".nomedia");
-                if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
+            if (children != null) {
+                for (File temp : children) {
+                    File nomedia = new File(temp, ".nomedia");
+                    if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
                     /*File[] files = temp.listFiles(new ImageFileFilter());
                     if (files.length > 0)
                         folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));*/
-                    fetchRecursivelyFolder(temp, folders);
+                        fetchRecursivelyFolder(temp, folders);
+                    }
                 }
             }
         }
@@ -107,14 +103,16 @@ public class HandlingAlbums {
     private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders) {
         if (!excludedfolders.contains(dir)) {
             File[] asdf = dir.listFiles(new FoldersFileFilter());
-            for (File temp : asdf) {
-                File nomedia = new File(temp, ".nomedia");
-                if (!excludedfolders.contains(temp) && nomedia.exists()) {
-                    File[] files = temp.listFiles(new ImageFileFilter());
-                    if (files.length > 0)
-                        folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
+            if (asdf !=null) {
+                for (File temp : asdf) {
+                    File nomedia = new File(temp, ".nomedia");
+                    if (!excludedfolders.contains(temp) && nomedia.exists()) {
+                        File[] files = temp.listFiles(new ImageFileFilter());
+                        if (files != null && files.length > 0)
+                            folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
+                    }
+                    fetchRecursivelyHiddenFolder(temp, folders);
                 }
-                fetchRecursivelyHiddenFolder(temp, folders);
             }
         }
     }
@@ -122,11 +120,13 @@ public class HandlingAlbums {
         if (!excludedfolders.contains(dir)) {
             checkAndAddAlbum(dir);
             File[] children = dir.listFiles(new FoldersFileFilter());
-            for (File temp : children) {
-                File nomedia = new File(temp, ".nomedia");
-                if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
-                    //not excluded/hidden folder
-                    fetchRecursivelyFolder(temp);
+            if (children != null) {
+                for (File temp : children) {
+                    File nomedia = new File(temp, ".nomedia");
+                    if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
+                        //not excluded/hidden folder
+                        fetchRecursivelyFolder(temp);
+                    }
                 }
             }
         }
@@ -135,19 +135,21 @@ public class HandlingAlbums {
     private void fetchRecursivelyHiddenFolder(File dir) {
         if (!excludedfolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
-            for (File temp : folders) {
-                File nomedia = new File(temp, ".nomedia");
-                if (!excludedfolders.contains(temp) && nomedia.exists()) {
-                    checkAndAddAlbum(temp);
+            if (folders != null) {
+                for (File temp : folders) {
+                    File nomedia = new File(temp, ".nomedia");
+                    if (!excludedfolders.contains(temp) && nomedia.exists()) {
+                        checkAndAddAlbum(temp);
+                    }
+                    fetchRecursivelyHiddenFolder(temp);
                 }
-                fetchRecursivelyHiddenFolder(temp);
             }
         }
     }
 
     public void checkAndAddAlbum(File temp) {
         File[] files = temp.listFiles(new ImageFileFilter());
-        if (files.length > 0) {
+        if (files != null && files.length > 0) {
             //valid folder
             Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
             asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));

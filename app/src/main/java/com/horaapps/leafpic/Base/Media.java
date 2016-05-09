@@ -1,5 +1,7 @@
 package com.horaapps.leafpic.Base;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
@@ -84,8 +86,18 @@ public class Media implements Parcelable {
     public int getOrientation() {
         ExifInterface exif;
         try { exif = new ExifInterface(getPath()); }
-        catch (IOException e) {  return 0; }
-        return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+        catch (IOException ex) { return 0; }
+        if (exif != null) {
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation != -1) {
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90: return  90;
+                    case ExifInterface.ORIENTATION_ROTATE_180: return  180;
+                    case ExifInterface.ORIENTATION_ROTATE_270: return  270;
+                }
+            }
+        }
+        return 0;
     }
 
     public int getWidth() { //TODO improve
@@ -120,6 +132,46 @@ public class Media implements Parcelable {
 
     public boolean isSelected() {
         return selected;
+    }
+
+    public Bitmap getBitmap(){
+        /*
+        Bitmap bm = null;
+        InputStream is = null;
+        BufferedInputStream bis = null;
+        try {
+            URLConnection conn = new URL(path).openConnection();
+            conn.connect();
+            is = conn.getInputStream();
+            bis = new BufferedInputStream(is, 8192);
+            bm = BitmapFactory.decodeStream(bis);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bm;
+        */
+        //File sd = Environment.getExternalStorageDirectory();
+        //File image = new File(sd+path, getName);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(path,bmOptions);
+        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
+        return bitmap;
     }
 
     protected Media(Parcel in) {

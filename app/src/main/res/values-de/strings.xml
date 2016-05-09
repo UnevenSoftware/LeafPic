@@ -3,6 +3,7 @@
 <resources>
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
+    <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">Willkommen bei LeafPic!</string>
     <string name="welcome_slide_sub">Farbenfrohe Material-Design Bildergalerie!</string>
     <!-- ACTIONS -->
@@ -12,6 +13,7 @@
     <string name="cancel">Abbrechen</string>
     <string name="delete">Löschen</string>
     <string name="hide">Ausblenden</string>
+    <string name="unhide">Wieder anzeigen</string>
     <string name="ok_action">OK</string>
     <string name="rename_photo_action">Foto umbenennen</string>
     <string name="drawer_open">Navigationsübersicht öffnen</string>
@@ -28,7 +30,7 @@
     <string name="date">Datum</string>
     <string name="size">Größe</string>
     <string name="ascending">Aufsteigend</string>
-    <string name="select_all">Alle Auswählen</string>
+    <string name="select_all">Alle auswählen</string>
     <string name="clear_selected">Auswahl aufheben</string>
     <string name="share">Teilen</string>
     <string name="rotate">Rotieren</string>
@@ -47,12 +49,15 @@
     <string name="open_with">Öffnen mit</string>
     <string name="upload">Hochladen</string>
     <string name="set_preview">Als Vorschau auswählen</string>
-    <string name="clear_preview">Vorschau entfernen</string>
+    <string name="clear_preview">Albumvorschau auf zuletzt gemachtes Bild zurücksetzen</string>
+    <string name="new_folder">Neuer Ordner</string>
     <!--DIALOG MESAGES-->
-  <string name="hide_album_message">Sind Sie sicher das Sie dieses Album verstecken möchten?
-(Dadurch wird eine Datei mit dem Namen .nomedia in dem Ordner des Albums erstellt. Dies kann dazu führen das andere Medien in diesem Ordner von dieser und anderer Anwendungen nicht mehr angezeigt werden können. Die Ausschließen Option stellt eine Alternative da, die kein solches Verhalten zeigt.)</string>
-    <string name="delete_album_message">Sind Sie sicher das Sie den ganzen Ordner des Albums löschen wollen?</string>
-    <string name="delete_photos_message">Sind Sie sicher das Sie alle ausgewählten Medien löschen wollen?</string>
+  <string name="hide_album_message">Sind Sie sicher, dass Sie dieses Album verstecken möchten?
+(Dadurch wird eine Datei mit dem Namen .nomedia in dem Ordner des Albums erstellt. Dies kann dazu führen, dass andere Medien in diesem Ordner von dieser und anderer Anwendungen nicht mehr angezeigt werden können. Die Ausschließen-Option ist eine Alternative, die dieses Verhalten nicht zeigt.)    </string>
+  <string name="unhide_album_message">Sind Sie sicher das das Sie das Album wieder anzeigen wollen?
+        (Medien werden dann auch in anderen Apps wieder angezeigt!)    </string>
+    <string name="delete_album_message">Sind Sie sicher, dass Sie den ganzen Ordner des Albums löschen wollen?</string>
+    <string name="delete_photos_message">Sind Sie sicher, dass Sie alle ausgewählten Medien löschen wollen?</string>
     <string name="delete_photo_message">Sind Sie sicher das Sie diese Medien löschen wollen?</string>
   <string name="exclude_album_message">
 Sind Sie sicher das Sie dieses Album ausschließen/verstecken wollen?
@@ -66,20 +71,37 @@ In den Einstellungen können Sie diese Aktion rückgängig machen.</string>
     <string name="search_menu">Suchen</string>
     <string name="full_resolution">Volle Auflösung</string>
     <string name="of">von</string>
+    <!-- AFFIX -->
+    <string name="affix">Affix</string>
+    <string name="affix_vertical">Affix Vertical</string>
+    <string name="affix_vertical_sub">Affix horizontal by default!</string>
     <!-- RANDOM -->
-    <string name="done">done!</string>
+    <string name="done">Fertig!</string>
     <string name="there_is_nothing_to_show">Es gibt nichts was angezeigt werden könnte!</string>
     <string name="insert_a_name">Etwas eingeben</string>
     <string name="nothing_changed">Nichts hat sich geändert!</string>
+    <string name="install_shortcut">Verknüpfung installieren</string>
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">Allgemeine Einstellungen</string>
-    <string name="security">Sicherheit</string>
     <string name="folder">Ordner</string>
     <string name="color_palette">Farbpalette</string>
     <string name="app_intro_skip">Einführung übersprungen!</string>
+    <!-- SECURITY-->
+    <string name="type_password">Passwort eingeben</string>
+    <string name="wrong_password">Falsches Passwort</string>
+    <string name="security">Sicherheit</string>
+    <string name="active_security">Passwort verwenden</string>
+    <string name="security_sub">Ein Passwort setzen um die Medien vor unbefugten Zugriff zu schützen.</string>
+    <string name="remeber_password_message">Wenn Sie vergessen haben das Passwort zu ändern müssen Sie es durch das Löschen der Anwendungsdaten zurücksetzen.</string>
+    <string name="apply_password_on">Passwort anwenden auf</string>
+    <string name="fingerprint">Fingerabdruck</string>
+    <string name="clear_password">Passwort löschen</string>
+    <string name="error_password_lenght">Die minimale Passwortlänge beträgt 4 Zeichen</string>
     <!-- SETTINGS -->
     <string name="settings">Einstellungen</string>
     <string name="general">Allgemein</string>
+    <string name="auto_update_media">Medien automatisch aktualisieren</string>
+    <string name="auto_update_media_sub">Deaktivieren Sie diese Option falls Sie viele große Bilder haben.</string>
     <string name="traslucent_statusbar">Transparente Statusleiste</string>
     <string name="traslucent_statusbar_sub">Eine dunklere Primärfarbe in der Benachrichtigungsleiste verwenden.</string>
     <string name="excluded_albums">Ausgeschlossene Alben</string>
@@ -89,47 +111,68 @@ In den Einstellungen können Sie diese Aktion rückgängig machen.</string>
     <string name="custom_3thAct">Bildbetrachter anpassen</string>
     <string name="custom_3thAct_sub">Theme auf den Bildbetrachter anwenden.</string>
     <string name="max_brightness">Hohe Helligkeit</string>
-    <string name="max_brightness_sub">Hohe Helligkeit beim Betrachten von Medien.</string>
+    <string name="max_brightness_sub">Maximale Helligkeit beim Betrachten von Medien.</string>
     <string name="picture_orientation">Bildausrichtung</string>
     <string name="picture_orientation_sub">Bildausrichtung automatisch ändern</string>
     <string name="apply_theme">Thema anwenden</string>
     <string name="apply_theme_sub">Benutzerdefinierte Farbe im Bildbetrachter verwenden.</string>
     <string name="transparency">Transparenz</string>
     <string name="transparency_sub">Den Grad der Transparenz einstellen</string>
-    <string name="delay_load_full_size_image">Delay load full-size image</string>
-    <string name="load_full_image_when_zoom_in">Load full image when zoom in</string>
+    <string name="delay_load_full_size_image">Bild in voller Auflösung mit Verzögerung laden</string>
+    <string name="load_full_image_when_zoom_in">Lade das Bild, beim Zoomen, in voller Auflösung</string>
     <string name="theme">Theme</string>
     <string name="primary_color">Primärfarbe</string>
     <string name="primary_color_sub">Die Primärfarbe der Benutzeroberfläche.</string>
     <string name="accent_color">Sekundärfarbe</string>
     <string name="accent_color_sub">Die Sekundärfarbe mit welcher Widgets und Details der Benutzeroberfläche hervorgehoben werden.</string>
-    <string name="dark_theme">Dunkles Theme</string>
-    <string name="dark_theme_sub">Ein dunkles Theme für die Anwendung verwenden.</string>
+    <string name="basic_theme">Grundlegende Theme</string>
+    <string name="basic_theme_sub">Grundlegende Theme auswählen.</string>
+    <string name="white_basic_theme">Weiß</string>
+    <string name="dark_basic_theme">Schwarz</string>
+    <string name="dark_amoled_basic_theme">Dunkles AMOLED</string>
     <string name="colored_navbar">Farbige Navigationsleiste</string>
     <string name="colored_navbar_sub">Navigationsleiste mit der Primärfarbe einfärben.</string>
-    <string name="internal_player">Internal Video Player</string>
-    <string name="internal_player_sub">Use embedded video player</string>
+    <string name="internal_player">Verwende den internen Video-Player</string>
+    <string name="internal_player_sub">Verwende den eingebetteten Video-Player</string>
+    <!--DONATE STRINGS-->
+    <string name="donate_googleplay">Google Play Store</string>
+    <string name="donate_payppal">PayPal</string>
+    <string name="donate_bitcoin">Bitcoin</string>
+  <string name="donate_header_text">
+Hallo.\nWir sind ein kleines unabhängiges Team das mit viel Liebe ❤ an LeafPic arbeitet. Dies ist unsere erste App und wir hoffen eine  Menge durch die Rückmeldungen zu lernen. Falls Ihnen unsere Arbeit gefällt würden wir uns über eine Spende freuen.\nMit Ihrer Hilfe können wir diese App noch besser machen und weitere Projekte starten.    </string>
+    <string name="thank_you">Vielen Dank!</string>
+    <string name="address_copied">Adresse wurde in die Zwischenablage kopiert</string>
+    <string name="coming_soon">Bald verfügbar!</string>
+    <string name="google_takes">Google kriegt 30% von jeder Spende (Bald verfügbar!)</string>
+  <string name="paypal_text">PayPal.Me ermöglicht Ihnen uns Geld ohne zusätzliche Gebühren zu senden.
+        Sollten Sie eine Kreditkarte verwenden erhebt PayPal eine Gebühr von 4% der Überweisung und eine standard Gebühr von 0,35€ </string>
     <!--ABOUT STRINGS-->
     <string name="about">Über</string>
     <string name="about_version">Version</string>
+    <string name="about_license"> Lizenz</string>
+    <string name="about_license_sub">LeafPics Lizenz einsehen.</string>
     <string name="about_library_license">Bibliothekslizenz</string>
     <string name="about_library_license_sub">Von LeafPic verwendete Drittanbieter-Bibliotheken.</string>
     <string name="about_authors">Autoren</string>
-    <string name="about_author_donald_sub">Hauptentwickler, Designer</string>
-    <string name="about_author_gilbert_sub">Hauptdesigner, Entwickler</string>
+    <string name="about_author_donald_sub">Hauptentwickler</string>
+    <string name="about_author_gilbert_sub">Hauptdesigner</string>
     <string name="about_support">Unterstütze die Entwicklung</string>
     <string name="about_support_translate">Übersetzen</string>
-    <string name="about_support_translate_sub">Helfe uns LeafPic in weitere Sprachen zu übersetzen.</string>
+    <string name="about_support_translate_sub">Hilf uns LeafPic in weitere Sprachen zu übersetzen.</string>
     <string name="about_support_rate">Bewerte</string>
     <string name="about_support_rate_sub">Bewerte uns positiv falls du LeafPic magst.</string>
     <string name="about_support_github">GitHub</string>
-    <string name="about_support_github_sub">Forke das Repository und pushe Änderungen oder teile uns weitere Probleme mit.</string>
+    <string name="about_support_github_sub">Forke das Repository und pushe Änderungen oder teile uns Probleme oder Verbesserungswünsche in Form von Issues mit.</string>
     <!--PHOTO DETAILS-->
     <string name="path">Pfad</string>
     <string name="type">Typ</string>
     <string name="resolution">Auflösung</string>
+    <string name="exif">EXIF</string>
+    <string name="device">Gerät</string>
+    <string name="location">Standort</string>
     <!--DRAWER ITEMS -->
     <string name="local_folder">Lokale Ordner</string>
+    <string name="hidden_folder">Versteckte Ordner</string>
     <string name="tags">Schlagworte</string>
     <string name="timeline">Zeitleiste</string>
     <string name="wallpapers">Hintergrundbilder</string>
@@ -143,7 +186,7 @@ In den Einstellungen können Sie diese Aktion rückgängig machen.</string>
     <string name="off">[aus]</string>
     <!-- ERRORS -->
     <string name="error_drm_not_supported">Geschützter Inhalt kann unter API Level 18 nicht angezeigt werden</string>
-    <string name="error_drm_unsupported_scheme">Dieses Gerät unterstützt das leider benötigte DRM (Digital Restrictions Management) nicht</string>
+    <string name="error_drm_unsupported_scheme">Dieses Gerät unterstützt das benötigte DRM (Digital Restrictions Management) nicht</string>
     <string name="error_drm_unknown">Ein unbekannter DRM-Fehler ist aufgetreten</string>
     <string name="storage_permission_denied">Zugriffsberechtigung auf den Speicher verweigert! Bilder können folglich nicht angezeigt werden.</string>
     <string name="error_querying_decoders">Vom Gerät unterstützte Decoder können nicht abgefragt werden</string>
