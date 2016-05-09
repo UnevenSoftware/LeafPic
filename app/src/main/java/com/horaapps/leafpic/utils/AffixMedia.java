@@ -24,7 +24,7 @@ public class AffixMedia {
             unionBitmap = Bitmap.createBitmap(getBitmapsWidth(bitmapArray),getMaxBitmapHeight(bitmapArray), Bitmap.Config.ARGB_8888);
         }
         Canvas comboImage = new Canvas(unionBitmap);
-        comboImage = combineBitmap(comboImage,bitmapArray,vertical);
+        /*comboImage = */combineBitmap(comboImage,bitmapArray,vertical);
         saveFile(unionBitmap, path);
     }
 

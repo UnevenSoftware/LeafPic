@@ -153,7 +153,7 @@ public class SettingActivity extends ThemedActivity {
 
         /*********** SW AUTO UPDATE MEDIA ************/
         swAutoUpdate = (SwitchCompat) findViewById(R.id.SetAutoUpdateMedia);
-        swAutoUpdate.setChecked(SP.getBoolean("auto_update_media", true));
+        swAutoUpdate.setChecked(SP.getBoolean("auto_update_media", false));
         swAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

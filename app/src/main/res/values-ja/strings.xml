@@ -3,8 +3,9 @@
 <resources>
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
-    <string name="welcome_slide_title">LeafPic へようこそ!</string>
-    <string name="welcome_slide_sub">カラフルなマテリアルデザインのギャラリー!</string>
+    <string name="team_name">HoraApps</string>
+    <string name="welcome_slide_title">LeafPicへようこそ！</string>
+    <string name="welcome_slide_sub">カラフルなマテリアルデザインのギャラリー！</string>
     <!-- ACTIONS -->
     <string name="sort">並べ替え</string>
     <string name="camera">カメラ</string>
@@ -12,12 +13,13 @@
     <string name="cancel">キャンセル</string>
     <string name="delete">削除</string>
     <string name="hide">非表示</string>
+    <string name="unhide">表示する</string>
     <string name="ok_action">OK</string>
-    <string name="rename_photo_action">写真の名前を変更</string>
+    <string name="rename_photo_action">画像の名前を変更</string>
     <string name="drawer_open">ナビゲーションドロワーを開く</string>
     <string name="drawer_close">ナビゲーションドロワーを閉じる</string>
     <string name="refresh">更新</string>
-    <string name="sent_to_action">…へ送信</string>
+    <string name="sent_to_action">共有先を選択</string>
     <string name="filter_menu_title">フィルター</string>
     <string name="all">すべて</string>
     <string name="videos">ビデオ</string>
@@ -32,107 +34,149 @@
     <string name="clear_selected">選択をクリア</string>
     <string name="share">共有</string>
     <string name="rotate">回転</string>
-    <string name="rotate_right_90">右 90° 回転</string>
-    <string name="rotate_left_90">左 90° 回転</string>
-    <string name="rotate_180">180° 回転</string>
+    <string name="rotate_right_90">右に90°回転</string>
+    <string name="rotate_left_90">左に90°回転</string>
+    <string name="rotate_180">180°回転</string>
     <string name="copy_to">コピー</string>
     <string name="move_to">移動</string>
-    <string name="use_as">として使用</string>
+    <string name="use_as">登録先を選択</string>
     <string name="edit">編集</string>
     <string name="rename">名前の変更</string>
     <string name="rename_album">アルバムの名前を変更</string>
     <string name="details">詳細</string>
     <string name="more">さらに表示</string>
-    <string name="edit_with">…で編集</string>
-    <string name="open_with">…で開く</string>
+    <string name="edit_with">別のアプリで編集</string>
+    <string name="open_with">別のアプリで開く</string>
     <string name="upload">アップロード</string>
     <string name="set_preview">プレビューに設定</string>
     <string name="clear_preview">プレビューをクリア</string>
+    <string name="new_folder">新しいフォルダー</string>
     <!--DIALOG MESAGES-->
-  <string name="hide_album_message">このアルバムを非表示にしてもよろしいですか?
-    (フォルダーに .nomedia ファイルを作成します。他のメディアがある場合に、他のアプリから
-    利用できなくなります! 代わりに除外オプションを使用してください)
+  <string name="hide_album_message">このアルバムを非表示にしてもよろしいですか？
+(フォルダー内に .nomedia ファイルを作成します。他のメディアがある場合でも、他のアプリから利用できなくなります。他のアプリで利用する場合は、代わりに除外オプションを使用してください)
     </string>
-    <string name="delete_album_message">選択したアルバムを削除してもよろしいですか?</string>
-    <string name="delete_photos_message">選択したメディアを削除してもよろしいですか?</string>
-    <string name="delete_photo_message">このメディアを削除してもよろしいですか?</string>
+  <string name="unhide_album_message">このアルバムを表示してもよろしいですか?
+    (メディアが他のアプリでも利用できるようになります!)
+    </string>
+    <string name="delete_album_message">選択したアルバムを削除してもよろしいですか？</string>
+    <string name="delete_photos_message">選択したメディアを削除してもよろしいですか？</string>
+    <string name="delete_photo_message">このメディアを削除してもよろしいですか？</string>
   <string name="exclude_album_message">
-そのアルバムを除外してもよろしいですか?\n
-設定で元に戻すことができます!
+そのアルバムを除外してもよろしいですか？\n
+除外した後でも設定で元に戻すことができます。
     </string>
     <!-- ITEMS -->
-    <string name="singular_photo">写真</string>
-    <string name="plural_photos">写真</string>
+    <string name="singular_photo">画像</string>
+    <string name="plural_photos">画像</string>
     <string name="video_player">ビデオプレーヤー</string>
     <string name="media">メディア</string>
-    <string name="send_to">…へ送信</string>
+    <string name="send_to">共有先を選択</string>
     <string name="search_menu">検索</string>
     <string name="full_resolution">フル解像度</string>
     <string name="of">/</string>
+    <!-- AFFIX -->
+    <string name="affix">貼付</string>
+    <string name="affix_vertical">縦に貼付</string>
+    <string name="affix_vertical_sub">デフォルトでは横に貼付します!</string>
     <!-- RANDOM -->
-    <string name="done">done!</string>
-    <string name="there_is_nothing_to_show">表示する対象がありません!</string>
+    <string name="done">完了しました！</string>
+    <string name="there_is_nothing_to_show">表示する対象がありません。</string>
     <string name="insert_a_name">挿入</string>
-    <string name="nothing_changed">何も変更されていません!</string>
+    <string name="nothing_changed">何も変更されていません。</string>
+    <string name="install_shortcut">ショートカットのインストール</string>
     <!--SETTINGS PREFERENCES-->
-    <string name="general_setting">全般設定</string>
-    <string name="security">セキュリティ</string>
+    <string name="general_setting">全般的な設定</string>
     <string name="folder">フォルダー</string>
-    <string name="color_palette">カラー パレット</string>
-    <string name="app_intro_skip">紹介をスキップしました!</string>
+    <string name="color_palette">カラーパレット</string>
+    <string name="app_intro_skip">紹介をスキップしました。</string>
+    <!-- SECURITY-->
+    <string name="type_password">パスワードを入力してください</string>
+    <string name="wrong_password">パスワードが正しくありません</string>
+    <string name="security">セキュリティ</string>
+    <string name="active_security">パスワードを使用する</string>
+    <string name="security_sub">メディアを保護するためにパスワードを設定します。</string>
+    <string name="remeber_password_message">注: 変更したパスワードを忘れた場合、アプリケーション データをクリアする必要があります。</string>
+    <string name="apply_password_on">パスワードを適用</string>
+    <string name="fingerprint">フィンガープリント</string>
+    <string name="clear_password">パスワードをクリア</string>
+    <string name="error_password_lenght">パスワードの最小長は 4 文字です</string>
     <!-- SETTINGS -->
     <string name="settings">設定</string>
     <string name="general">全般</string>
-    <string name="traslucent_statusbar">半透明のステータス バー</string>
-    <string name="traslucent_statusbar_sub">通知バーに暗いプライマリー色を適用します。</string>
+    <string name="auto_update_media">メディアの自動更新</string>
+    <string name="auto_update_media_sub">画像の数が膨大な場合は、無効にする必要があります。</string>
+    <string name="traslucent_statusbar">半透明のステータスバー</string>
+    <string name="traslucent_statusbar_sub">通知バーに暗い優先色を適用します。</string>
     <string name="excluded_albums">除外されたアルバム</string>
     <string name="excluded_albums_sub">除外されたアルバムを元に戻します。</string>
     <string name="picture_viewer">画像ビューアー</string>
     <string name="picture_viewer_theme">画像ビューアーのテーマ</string>
     <string name="custom_3thAct">ビューアーをカスタマイズ</string>
-    <string name="custom_3thAct_sub">画像ビューアーにテーマを適用します。</string>
+    <string name="custom_3thAct_sub">画像ビューアーにテーマを適用します</string>
     <string name="max_brightness">高輝度</string>
-    <string name="max_brightness_sub">メディアを表示する時の最大輝度。</string>
+    <string name="max_brightness_sub">メディアを表示する時に画面の明るさを最大にします</string>
     <string name="picture_orientation">画像の向き</string>
     <string name="picture_orientation_sub">センサーを使用して向きを更新します</string>
     <string name="apply_theme">テーマを適用</string>
-    <string name="apply_theme_sub">画像ビューアーにユーザー設定の色を適用します。</string>
+    <string name="apply_theme_sub">画像ビューアーにユーザー設定の色を適用します</string>
     <string name="transparency">透過</string>
-    <string name="transparency_sub">透過度のグレードを設定します</string>
-    <string name="delay_load_full_size_image">Delay load full-size image</string>
-    <string name="load_full_image_when_zoom_in">ズームインの時にフル画像を読み込む</string>
+    <string name="transparency_sub">透過度を設定します</string>
+    <string name="delay_load_full_size_image">表示時に画像の全体を読み込む</string>
+    <string name="load_full_image_when_zoom_in">拡大した際に画像の全体を読み込みます</string>
     <string name="theme">テーマ</string>
-    <string name="primary_color">プライマリー色</string>
-    <string name="primary_color_sub">UI で使用される主な色。</string>
+    <string name="primary_color">優先色</string>
+    <string name="primary_color_sub">アプリで使用される優先色を設定します</string>
     <string name="accent_color">アクセント色</string>
-    <string name="accent_color_sub">UI 詳細のウィジェットの着色に使用される 2 番目の色。</string>
-    <string name="dark_theme">ダークテーマ</string>
-    <string name="dark_theme_sub">ダークテーマをアプリケーションに適用します。</string>
-    <string name="colored_navbar">色のナビゲーション バー</string>
-    <string name="colored_navbar_sub">ナビゲーション バーにプライマリー色を適用します。</string>
+    <string name="accent_color_sub">アプリ内の詳細メニューに使用されるアクセント色を設定します</string>
+    <string name="basic_theme">基本テーマ</string>
+    <string name="basic_theme_sub">基本テーマを選択します。</string>
+    <string name="white_basic_theme">ホワイト</string>
+    <string name="dark_basic_theme">ダーク</string>
+    <string name="dark_amoled_basic_theme">ダーク AMOLED</string>
+    <string name="colored_navbar">ナビゲーションバーにも色を適用</string>
+    <string name="colored_navbar_sub">ナビゲーションバーに優先色を適用します</string>
     <string name="internal_player">内蔵ビデオプレーヤー</string>
-    <string name="internal_player_sub">組み込みのビデオプレーヤーを使用します。</string>
+    <string name="internal_player_sub">アプリ内蔵のビデオプレーヤーを使用します</string>
+    <!--DONATE STRINGS-->
+    <string name="donate_googleplay">Google Play ストア</string>
+    <string name="donate_payppal">PayPal</string>
+    <string name="donate_bitcoin">Bitcoin</string>
+  <string name="donate_header_text">
+こんにちは!\n私たちは LeafPic ❤ の愛で協力している小規模な独立したチームです。
+これは私たちの最初のアプリなので、あなたのフィードバックによって学ぶことが多いのです。私たちの成果をお楽しみいただけた場合は、私たちにあなたの感謝を寄贈で示していただけませんでしょうか。 \nあなたのご支援により、このプロジェクトをより良いものにすること、また新しいクールなものを始めることができます。    </string>
+    <string name="thank_you">ありがとうございます!</string>
+    <string name="address_copied">アドレスをクリップボードにコピーしました</string>
+    <string name="coming_soon">もうしばらくです!</string>
+    <string name="google_takes">Google はすべての寄付について 30% 受け取ります。 (もうしばらくです!)</string>
+  <string name="paypal_text">PayPal.Me は、手数料なしですぐに私たちにお金を送ることができます。
+クレジット カードを使用する場合、PayPal は、寄付の 4% と標準手数料 0.35€ を受け取ります。 </string>
     <!--ABOUT STRINGS-->
-    <string name="about">アプリについて</string>
+    <string name="about">このアプリについて</string>
     <string name="about_version">バージョン</string>
-    <string name="about_library_license">ライブラリー ライセンス</string>
-    <string name="about_library_license_sub">LeafPic で使用される第三者ライブラリーを確認してください。</string>
+    <string name="about_license"> ライセンス</string>
+    <string name="about_license_sub">LeafPic で使用しているライセンスを確認してください。</string>
+    <string name="about_library_license">ライブラリのライセンス</string>
+    <string name="about_library_license_sub">LeafPicで使用されている第三者のライブラリを確認します</string>
     <string name="about_authors">作者</string>
     <string name="about_author_donald_sub">主要プログラマー、デザイナー</string>
     <string name="about_author_gilbert_sub">主要デザイナー、プログラマー</string>
-    <string name="about_support">開発をサポート</string>
+    <string name="about_support">開発をサポートする</string>
     <string name="about_support_translate">翻訳</string>
-    <string name="about_support_translate_sub">LeafPic を多くの言語に翻訳する支援をしてください。</string>
+    <string name="about_support_translate_sub">LeafPicを多くの言語に翻訳する支援をしてください</string>
     <string name="about_support_rate">評価</string>
-    <string name="about_support_rate_sub">LeafPic を気に入っていただけた場合、肯定的な評価を残してください。</string>
+    <string name="about_support_rate_sub">LeafPicを気に入っていただけたら、ぜひ評価してください。</string>
     <string name="about_support_github">GitHub</string>
-    <string name="about_support_github_sub">リポジトリをフォークして変更をプッシュ、または新しい問題を提出してください。</string>
+    <string name="about_support_github_sub">リポジトリをフォークして変更をプッシュ、または新しい問題を登録してください。</string>
     <!--PHOTO DETAILS-->
     <string name="path">パス</string>
     <string name="type">タイプ</string>
     <string name="resolution">解像度</string>
+    <string name="exif">EXIF</string>
+    <string name="device">デバイス</string>
+    <string name="location">場所</string>
     <!--DRAWER ITEMS -->
-    <string name="local_folder">ローカル フォルダー</string>
+    <string name="local_folder">ローカルフォルダー</string>
+    <string name="hidden_folder">隠しフォルダー</string>
     <string name="tags">タグ</string>
     <string name="timeline">タイムライン</string>
     <string name="wallpapers">壁紙</string>
@@ -145,9 +189,9 @@
     <string name="retry">再試行</string>
     <string name="off">オフ</string>
     <!-- ERRORS -->
-    <string name="error_drm_not_supported">API レベル 18 未満で保護されたコンテンツはサポートされていません</string>
-    <string name="error_drm_unsupported_scheme">このデバイスは、必要な DRM スキームをサポートしません</string>
-    <string name="error_drm_unknown">不明な DRM エラーが発生しました</string>
-    <string name="storage_permission_denied">ストレージにアクセスするアクセス許可が拒否されました!\n 画像を取得できません!</string>
-    <string name="error_querying_decoders">デバイスのデコーダーを問い合わせできません</string>
+    <string name="error_drm_not_supported">APIレベル18未満で保護されたコンテンツはサポートされていません</string>
+    <string name="error_drm_unsupported_scheme">このデバイスは、必要なDRMスキームをサポートしていません</string>
+    <string name="error_drm_unknown">不明なDRMエラーが発生しました</string>
+    <string name="storage_permission_denied">ストレージにアクセスが拒否されました。\n 画像を取得できません。</string>
+    <string name="error_querying_decoders">デバイスのデコーダーについての詳細が取得できません</string>
 </resources>

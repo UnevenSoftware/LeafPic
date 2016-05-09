@@ -193,7 +193,7 @@ public class MainActivity extends ThemedActivity {
         super.onResume();
         setupUI();
 
-        if (SP.getBoolean("auto_update_media", true)) {
+        if (SP.getBoolean("auto_update_media", false)) {
             if (albumsMode) {
                 albums.clearSelectedAlbums();
                 if (!firstLaunch) new PrepareAlbumTask().execute();
@@ -231,7 +231,7 @@ public class MainActivity extends ThemedActivity {
     }
 
     public void displayAlbums() {
-        if (SP.getBoolean("auto_update_media", true))
+        if (SP.getBoolean("auto_update_media", false))
             displayAlbums(true);
         else {
             displayAlbums(false);
@@ -810,8 +810,8 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
-        //TODO: WILL BE IMPLEMENTED********************************************************************************************************************************************************************************
-        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
+        //TODO: WILL BE IMPLEMENTED
+        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
 

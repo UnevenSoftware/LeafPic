@@ -3,6 +3,7 @@
 <resources>
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
+    <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">Bienvenue sur LeafPic !</string>
     <string name="welcome_slide_sub">Galerie Material Design colorée !</string>
     <!-- ACTIONS -->
@@ -12,6 +13,7 @@
     <string name="cancel">Annuler</string>
     <string name="delete">Supprimer</string>
     <string name="hide">Masquer</string>
+    <string name="unhide">Unhide</string>
     <string name="ok_action">OK</string>
     <string name="rename_photo_action">Renommer photo</string>
     <string name="drawer_open">Ouvrir le volet de navigation</string>
@@ -48,10 +50,14 @@
     <string name="upload">Téléverser</string>
     <string name="set_preview">Définir comme aperçu</string>
     <string name="clear_preview">Effacer l\'aperçu</string>
+    <string name="new_folder">New Folder</string>
     <!--DIALOG MESAGES-->
   <string name="hide_album_message">Êtes-vous sûr de vouloir masquer cette album ?
         (cela créera un fichier .nomedia dans le dossier et s\'il y a d\'autres médias, ils ne seront pas
         disponibles depuis d\'autres applications aussi ! Utiliser l\'option Exclure à la place)
+    </string>
+  <string name="unhide_album_message">Are you sure you want to unhide this album?
+        (media will be available also for other apps!)
     </string>
     <string name="delete_album_message">Êtes-vous sûr de vouloir supprimer l\'album sélectionné ?</string>
     <string name="delete_photos_message">Êtes-vous sûr de vouloir supprimer les médias sélectionnés ?</string>
@@ -69,20 +75,37 @@
     <string name="search_menu">Rechercher</string>
     <string name="full_resolution">Résolution haute</string>
     <string name="of">sur</string>
+    <!-- AFFIX -->
+    <string name="affix">Affix</string>
+    <string name="affix_vertical">Affix Vertical</string>
+    <string name="affix_vertical_sub">Affix horizontal by default!</string>
     <!-- RANDOM -->
-    <string name="done">done!</string>
+    <string name="done">terminé !</string>
     <string name="there_is_nothing_to_show">Rien à afficher !</string>
     <string name="insert_a_name">Entrez un nom</string>
     <string name="nothing_changed">Rien de nouveau !</string>
+    <string name="install_shortcut">Install shortcut</string>
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">Paramètres généraux</string>
-    <string name="security">Sécurité</string>
     <string name="folder">Dossier</string>
     <string name="color_palette">Palette couleurs</string>
     <string name="app_intro_skip">Introduction ignorée !</string>
+    <!-- SECURITY-->
+    <string name="type_password">Insert password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="security">Sécurité</string>
+    <string name="active_security">Use password</string>
+    <string name="security_sub">Set up a password to protect your media.</string>
+    <string name="remeber_password_message">Note: password changed if you forget it you have to clear application data.</string>
+    <string name="apply_password_on">Apply password on</string>
+    <string name="fingerprint">Finger print</string>
+    <string name="clear_password">Clear Password</string>
+    <string name="error_password_lenght">The minimum password length is 4 character</string>
     <!-- SETTINGS -->
     <string name="settings">Paramètres</string>
     <string name="general">Général</string>
+    <string name="auto_update_media">Auto update media</string>
+    <string name="auto_update_media_sub">You should disable in case of huge number of images.</string>
     <string name="traslucent_statusbar">Barre d\'état transparente</string>
     <string name="traslucent_statusbar_sub">Appliquer une couleur principale plus sombre sur la barre d\'état</string>
     <string name="excluded_albums">Albums exclus</string>
@@ -99,27 +122,46 @@
     <string name="apply_theme_sub">Appliquer la couleur personnalisée sur la visionneuse d\'images</string>
     <string name="transparency">Transparence</string>
     <string name="transparency_sub">Définir le degré de transparence</string>
-    <string name="delay_load_full_size_image">Delay load full-size image</string>
-    <string name="load_full_image_when_zoom_in">Load full image when zoom in</string>
+    <string name="delay_load_full_size_image">Délai de chargement</string>
+    <string name="load_full_image_when_zoom_in">Charger l\'image complète lors d\'un zoom avant</string>
     <string name="theme">Thème</string>
     <string name="primary_color">Couleur principale</string>
     <string name="primary_color_sub">La couleur la plus utilisée dans l\'interface</string>
     <string name="accent_color">Couleur secondaire</string>
     <string name="accent_color_sub">La couleur utilisée pour colorer les widgets et les détails de l\'interface</string>
-    <string name="dark_theme">Thème sombre</string>
-    <string name="dark_theme_sub">Appliquer un thème sombre à l\'application</string>
+    <string name="basic_theme">Basic Theme</string>
+    <string name="basic_theme_sub">Select a basic theme.</string>
+    <string name="white_basic_theme">White</string>
+    <string name="dark_basic_theme">Dark</string>
+    <string name="dark_amoled_basic_theme">Dark AMOLED</string>
     <string name="colored_navbar">Barre de navigation colorée</string>
     <string name="colored_navbar_sub">Appliquer la couleur principale à la barre de navigation</string>
-    <string name="internal_player">Internal Video Player</string>
-    <string name="internal_player_sub">Use embedded video player</string>
+    <string name="internal_player">Lecteur vidéo interne</string>
+    <string name="internal_player_sub">Utiliser le lecteur vidéo intégré</string>
+    <!--DONATE STRINGS-->
+    <string name="donate_googleplay">Google Play Store</string>
+    <string name="donate_payppal">PayPal</string>
+    <string name="donate_bitcoin">Bitcoin</string>
+  <string name="donate_header_text">
+        Hi,\nWe are a small independent team which worked with love on LeafPic ❤,
+        this is our first app, so we have a lot to learn by your feedback. If you enjoy our work you can show us your appreciation by donating.\nWith your help we can make this project even better or start new cool ones.
+    </string>
+    <string name="thank_you">Thank you!</string>
+    <string name="address_copied">Address copied to clipboard</string>
+    <string name="coming_soon">Coming Soon!</string>
+    <string name="google_takes">Google takes 30% off every donation. (Cooming Soon!)</string>
+  <string name="paypal_text">PayPal.Me allow you to send us money in seconds without charges,
+        if you use a credit card PayPal takes 4% of donations and a standard fee 0.35€ </string>
     <!--ABOUT STRINGS-->
     <string name="about">À propos</string>
     <string name="about_version">Version</string>
+    <string name="about_license"> License</string>
+    <string name="about_license_sub">Check the license used on LeafPic.</string>
     <string name="about_library_license">Licence de bibliothèque</string>
     <string name="about_library_license_sub">Vérifier les bibliothèques tierces utilisées sur LeafPic</string>
     <string name="about_authors">Auteurs</string>
-    <string name="about_author_donald_sub">Programmeur, concepteur principal</string>
-    <string name="about_author_gilbert_sub">Concepteur, programmeur principal</string>
+    <string name="about_author_donald_sub">Développeur principal</string>
+    <string name="about_author_gilbert_sub">Concepteur principal</string>
     <string name="about_support">Soutenir le développement</string>
     <string name="about_support_translate">Traduire</string>
     <string name="about_support_translate_sub">Aidez-nous à traduire LeafPic en plusieurs langues</string>
@@ -131,8 +173,12 @@
     <string name="path">Chemin</string>
     <string name="type">Type</string>
     <string name="resolution">Résolution</string>
+    <string name="exif">EXIF</string>
+    <string name="device">Device</string>
+    <string name="location">Location</string>
     <!--DRAWER ITEMS -->
     <string name="local_folder">Dossiers locaux</string>
+    <string name="hidden_folder">Hidden Folders</string>
     <string name="tags">Mots-clés</string>
     <string name="timeline">Chronologie</string>
     <string name="wallpapers">Fonds d\'écran</string>
