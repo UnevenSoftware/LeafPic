@@ -48,8 +48,9 @@ public class ExternalStorage {
     /**
      * @return A map of all storage locations available
      */
-    public static Map<String, File> getAllStorageLocations() {
-        Map<String, File> map = new HashMap<String, File>(10);
+    public static ArrayList<File> getAllStorageLocations() {
+        //Map<String, File> map = new HashMap<String, File>(10);
+        ArrayList<File> roots = new ArrayList<File>();
 
         List<String> mMounts = new ArrayList<String>(10);
         List<String> mVold = new ArrayList<String>(10);
@@ -98,7 +99,6 @@ public class ExternalStorage {
             e.printStackTrace();
         }
 
-
         for (int i = 0; i < mMounts.size(); i++) {
             String mount = mMounts.get(i);
             if (!mVold.contains(mount))
@@ -120,23 +120,24 @@ public class ExternalStorage {
                 }
                 hash += "]";
                 if(!mountHash.contains(hash)){
-                    String key = SD_CARD + "_" + map.size();
+                    /*String key = SD_CARD + "_" + map.size();
                     if (map.size() == 0) {
                         key = SD_CARD;
                     } else if (map.size() == 1) {
                         key = EXTERNAL_SD_CARD;
-                    }
+                    }*/
                     mountHash.add(hash);
-                    map.put(key, root);
+                    roots.add(root);
+                    //map.put(key, root);
                 }
             }
         }
 
         mMounts.clear();
 
-        if(map.isEmpty()){
+        /*if(map.isEmpty()){
             map.put(SD_CARD, Environment.getExternalStorageDirectory());
-        }
-        return map;
+        }*/
+        return roots;
     }
 }
