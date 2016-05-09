@@ -31,9 +31,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -49,6 +53,7 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.ExternalStorage;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
@@ -174,6 +179,12 @@ public class MainActivity extends ThemedActivity {
         initUI();
         setupUI();
 
+        /*ArrayList<File> externalLocations = ExternalStorage.getAllStorageLocations();
+        for (File externalLocation : externalLocations) {
+            StringUtils.showToast(getApplicationContext(),externalLocation.getAbsolutePath());
+            Log.wtf(TAG,externalLocation.getAbsolutePath());
+        }*/
+
         displayPreFetchedData(getIntent().getExtras());
     }
 
@@ -182,7 +193,7 @@ public class MainActivity extends ThemedActivity {
         super.onResume();
         setupUI();
 
-        if (SP.getBoolean("auto_update_media", true)) {
+        if (SP.getBoolean("auto_update_media", false)) {
             if (albumsMode) {
                 albums.clearSelectedAlbums();
                 if (!firstLaunch) new PrepareAlbumTask().execute();
@@ -220,7 +231,7 @@ public class MainActivity extends ThemedActivity {
     }
 
     public void displayAlbums() {
-        if (SP.getBoolean("auto_update_media", true))
+        if (SP.getBoolean("auto_update_media", false))
             displayAlbums(true);
         else {
             displayAlbums(false);
@@ -347,6 +358,7 @@ public class MainActivity extends ThemedActivity {
 
         albumsAdapter = new AlbumsAdapter(albums.dispAlbums, MainActivity.this);
         recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
+
         albumsAdapter.setOnClickListener(albumOnClickListener);
         albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
         recyclerViewAlbums.setAdapter(albumsAdapter);
@@ -420,6 +432,14 @@ public class MainActivity extends ThemedActivity {
         recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
         recyclerViewMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
         setRecentApp(getString(R.string.app_name));
+
+        Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+        if (aa.getRotation() == Surface.ROTATION_90) {//1
+            Configuration configuration = new Configuration();
+            configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            onConfigurationChanged(configuration);
+        }
     }
 
     @Override
@@ -790,8 +810,8 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
-        //TODO: WILL BE IMPLEMENTED********************************************************************************************************************************************************************************
-        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
+        //TODO: WILL BE IMPLEMENTED
+        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
 

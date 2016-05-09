@@ -165,7 +165,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         }
-        else if ("downloads".equals(uri.getAuthority())) { //download from chrome dev workarround
+        else if ("downloads".equals(uri.getAuthority())) { //download from chrome dev workaround
             String[] seg = uri.toString().split("/");
             final String id = seg[seg.length - 1];
             final Uri contentUri = ContentUris.withAppendedId(

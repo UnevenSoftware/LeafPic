@@ -3,6 +3,7 @@
 <resources>
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
+    <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">Bem-vindo ao LeafPic!</string>
     <string name="welcome_slide_sub">Galeria projetada com material colorido!</string>
     <!-- ACTIONS -->
@@ -12,6 +13,7 @@
     <string name="cancel">Cancelar</string>
     <string name="delete">Excluir</string>
     <string name="hide">Ocultar</string>
+    <string name="unhide">Unhide</string>
     <string name="ok_action">OK</string>
     <string name="rename_photo_action">Renomear foto</string>
     <string name="drawer_open">Abrir painel de navegação</string>
@@ -48,10 +50,14 @@
     <string name="upload">Enviar</string>
     <string name="set_preview">Definir como previsão</string>
     <string name="clear_preview">Limpar previsão</string>
+    <string name="new_folder">New Folder</string>
     <!--DIALOG MESAGES-->
   <string name="hide_album_message">Deseja realmente ocultar este álbum?
         (será criado um arquivo .nomedia na pasta e, se houver outras mídias, elas também não
         ficarão disponíveis a partir de outros aplicativos! Em vez disso use a opção Eliminar)
+    </string>
+  <string name="unhide_album_message">Are you sure you want to unhide this album?
+        (media will be available also for other apps!)
     </string>
     <string name="delete_album_message">Deseja realmente excluir o álbum selecionado?</string>
     <string name="delete_photos_message">Deseja realmente excluir as mídias selecionadas?</string>
@@ -69,20 +75,37 @@ Deseja realmente eliminar este álbum?\n
     <string name="search_menu">procurar</string>
     <string name="full_resolution">Resolução completa</string>
     <string name="of">de</string>
+    <!-- AFFIX -->
+    <string name="affix">Affix</string>
+    <string name="affix_vertical">Affix Vertical</string>
+    <string name="affix_vertical_sub">Affix horizontal by default!</string>
     <!-- RANDOM -->
-    <string name="done">done!</string>
+    <string name="done">concluído!</string>
     <string name="there_is_nothing_to_show">Não há nada para mostrar!</string>
     <string name="insert_a_name">Digite algo</string>
     <string name="nothing_changed">Nada foi alterado!</string>
+    <string name="install_shortcut">Install shortcut</string>
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">Configuração geral</string>
-    <string name="security">Segurança</string>
     <string name="folder">Pasta</string>
     <string name="color_palette">Paleta de cores</string>
     <string name="app_intro_skip">Introdução ignorada!</string>
+    <!-- SECURITY-->
+    <string name="type_password">Insert password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="security">Segurança</string>
+    <string name="active_security">Use password</string>
+    <string name="security_sub">Set up a password to protect your media.</string>
+    <string name="remeber_password_message">Note: password changed if you forget it you have to clear application data.</string>
+    <string name="apply_password_on">Apply password on</string>
+    <string name="fingerprint">Finger print</string>
+    <string name="clear_password">Clear Password</string>
+    <string name="error_password_lenght">The minimum password length is 4 character</string>
     <!-- SETTINGS -->
     <string name="settings">Configurações</string>
     <string name="general">Geral</string>
+    <string name="auto_update_media">Auto update media</string>
+    <string name="auto_update_media_sub">You should disable in case of huge number of images.</string>
     <string name="traslucent_statusbar">Barra de status translúcida</string>
     <string name="traslucent_statusbar_sub">Aplica uma cor primária mais escura na barra de notificação.</string>
     <string name="excluded_albums">Álbuns eliminados</string>
@@ -99,22 +122,41 @@ Deseja realmente eliminar este álbum?\n
     <string name="apply_theme_sub">Aplica a cor personalizada no visualizador de fotos.</string>
     <string name="transparency">Transparência</string>
     <string name="transparency_sub">Definir a grade de transparência</string>
-    <string name="delay_load_full_size_image">Delay load full-size image</string>
-    <string name="load_full_image_when_zoom_in">Load full image when zoom in</string>
+    <string name="delay_load_full_size_image">Aguardar a carga da imagem completa</string>
+    <string name="load_full_image_when_zoom_in">Carrega a imagem completa ao ampliar</string>
     <string name="theme">Tema</string>
     <string name="primary_color">Cor principal</string>
     <string name="primary_color_sub">A cor principal a ser usada na interface.</string>
     <string name="accent_color">Cor dos detalhes</string>
     <string name="accent_color_sub">A cor secundária a ser usada nos elementos dos detalhes da interface.</string>
-    <string name="dark_theme">Tema escuro</string>
-    <string name="dark_theme_sub">Aplica um tema escuro ao aplicativo.</string>
+    <string name="basic_theme">Basic Theme</string>
+    <string name="basic_theme_sub">Select a basic theme.</string>
+    <string name="white_basic_theme">White</string>
+    <string name="dark_basic_theme">Dark</string>
+    <string name="dark_amoled_basic_theme">Dark AMOLED</string>
     <string name="colored_navbar">Barra de navegação colorida</string>
     <string name="colored_navbar_sub">Aplica a cor primária na barra de navegação.</string>
-    <string name="internal_player">Internal Video Player</string>
-    <string name="internal_player_sub">Use embedded video player</string>
+    <string name="internal_player">Reprodutor de vídeo interno</string>
+    <string name="internal_player_sub">Usar o reprodutor de vídeo interno</string>
+    <!--DONATE STRINGS-->
+    <string name="donate_googleplay">Google Play Store</string>
+    <string name="donate_payppal">PayPal</string>
+    <string name="donate_bitcoin">Bitcoin</string>
+  <string name="donate_header_text">
+        Hi,\nWe are a small independent team which worked with love on LeafPic ❤,
+        this is our first app, so we have a lot to learn by your feedback. If you enjoy our work you can show us your appreciation by donating.\nWith your help we can make this project even better or start new cool ones.
+    </string>
+    <string name="thank_you">Thank you!</string>
+    <string name="address_copied">Address copied to clipboard</string>
+    <string name="coming_soon">Coming Soon!</string>
+    <string name="google_takes">Google takes 30% off every donation. (Cooming Soon!)</string>
+  <string name="paypal_text">PayPal.Me allow you to send us money in seconds without charges,
+        if you use a credit card PayPal takes 4% of donations and a standard fee 0.35€ </string>
     <!--ABOUT STRINGS-->
     <string name="about">Sobre</string>
     <string name="about_version">Versão</string>
+    <string name="about_license"> License</string>
+    <string name="about_license_sub">Check the license used on LeafPic.</string>
     <string name="about_library_license">Licença da biblioteca</string>
     <string name="about_library_license_sub">Verifica as bibliotecas de terceiros usadas no LeafPic.</string>
     <string name="about_authors">Autores</string>
@@ -131,8 +173,12 @@ Deseja realmente eliminar este álbum?\n
     <string name="path">Caminho</string>
     <string name="type">Tipo</string>
     <string name="resolution">Resolução</string>
+    <string name="exif">EXIF</string>
+    <string name="device">Device</string>
+    <string name="location">Location</string>
     <!--DRAWER ITEMS -->
     <string name="local_folder">Pastas locais</string>
+    <string name="hidden_folder">Hidden Folders</string>
     <string name="tags">Etiquetas</string>
     <string name="timeline">Linha do tempo</string>
     <string name="wallpapers">Papéis de parede</string>
