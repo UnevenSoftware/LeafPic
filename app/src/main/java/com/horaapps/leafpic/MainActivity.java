@@ -1202,26 +1202,22 @@ public class MainActivity extends ThemedActivity {
 
                 //Affixing On Background//
                 class affixMedia extends AsyncTask<String, Integer, Void> {
+                    AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        swipeRefreshLayout.setRefreshing(true);
-                        //ProgressDialog(getString(R.string.affix), getString(R.string.affixing_text));
+                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affixing_text));
+                        dialog.show();
                         super.onPreExecute();
                     }
 
                     @Override
                     protected Void doInBackground(String... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-                        boolean affix=true;
-                        int index=0;
-                        do {
-                            if(!album.selectedMedias.get(index).isVideo())
-                                bitmapArray.add(album.selectedMedias.get(index).getBitmap());
-                            else affix=false;
-                            index++;
-                        } while (affix && index<album.getSelectedCount());
-
-                        if (affix) {
+                        for (int i=0;i<album.getSelectedCount();i++){
+                            if(!album.selectedMedias.get(i).isVideo())
+                                bitmapArray.add(album.selectedMedias.get(i).getBitmap());
+                        }
+                        if (bitmapArray.size()>1) {
                             AffixMedia.AffixBitmapList(
                                     getApplicationContext(),
                                     bitmapArray,
@@ -1237,12 +1233,9 @@ public class MainActivity extends ThemedActivity {
                     }
                     @Override
                     protected void onPostExecute(Void result) {
-                        swipeRefreshLayout.setRefreshing(false);
                         editmode = false;
                         album.clearSelectedPhotos();
-                        //progressDialog.setCancelable(true);
-                        //progressDialog.dismiss();
-                        //mediaAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                         invalidateOptionsMenu();
                         new PreparePhotosTask().execute();
                     }
@@ -1394,7 +1387,8 @@ public class MainActivity extends ThemedActivity {
         }
     }
     public AlertDialog.Builder progressDialog;
-    public void ProgressDialog(String dialogTitle, String dialogText){
+
+    public AlertDialog ProgressDialog(String dialogTitle, String dialogText){
         progressDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
         View progress_dialogLayout = getLayoutInflater().inflate(R.layout.progress_dialog, null);
         TextView progress_title = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_title);
@@ -1404,17 +1398,14 @@ public class MainActivity extends ThemedActivity {
 
         progress_title.setBackgroundColor(getPrimaryColor());
         cv_affixProgress_Dialog.setCardBackgroundColor(getCardBackgroundColor());
-        //Drawable drawable = progress.getProgressDrawable();
-        //drawable.setColorFilter(new LightingColorFilter(0xFF000000, getIconColor()));
+        progress.getIndeterminateDrawable().setColorFilter(getPrimaryColor(), android.graphics.PorterDuff.Mode.SRC_ATOP);
 
         progress_title.setText(dialogTitle);
         progress_text.setText(dialogText);
 
         progressDialog.setCancelable(false);
         progressDialog.setView(progress_dialogLayout);
-        progressDialog.show();
-
-
+        return progressDialog.create();
     }
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
