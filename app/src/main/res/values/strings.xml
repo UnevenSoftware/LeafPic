@@ -85,6 +85,9 @@
     <string name="affix">Affix</string>
     <string name="affix_vertical">Affix Vertical</string>
     <string name="affix_vertical_sub">Affix horizontal by default!</string>
+    <string name="affixing_text">Affixing your media, please wait...</string>
+    <string name="affix_error">Cant affix video media, you must select minimum 2 images.</string>
+
 
     <!-- RANDOM -->
     <string name="done">done!</string>

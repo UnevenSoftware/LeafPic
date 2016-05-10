@@ -772,7 +772,7 @@ public class MainActivity extends ThemedActivity {
                     break;
             }
         }
-        menu.findItem(R.id.hideAlbumButton).setTitle(hidden ?  getString(R.string.unhide) : getString(R.string.hide));
+        menu.findItem(R.id.hideAlbumButton).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
         menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
         menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
@@ -808,8 +808,8 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
-        //TODO: WILL BE IMPLEMENTED
-        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
+        //TODO: WILL BE IMPLEMENTED**************************************************************************************************************************************************************************************
+        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1165,7 +1165,6 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             //region Affix
-            //TODO: WILL BE IMPLEMENTED
             case  R.id.affixPhoto:
 
                 final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
@@ -1203,32 +1202,40 @@ public class MainActivity extends ThemedActivity {
 
                 //Affixing On Background//
                 class affixMedia extends AsyncTask<String, Integer, Void> {
+                    AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        swipeRefreshLayout.setRefreshing(true);
+                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affixing_text));
+                        dialog.show();
                         super.onPreExecute();
                     }
 
                     @Override
                     protected Void doInBackground(String... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-                        for (int i=0; i<album.getSelectedCount();i++){
-                            bitmapArray.add(album.selectedMedias.get(i).getBitmap());
+                        for (int i=0;i<album.getSelectedCount();i++){
+                            if(!album.selectedMedias.get(i).isVideo())
+                                bitmapArray.add(album.selectedMedias.get(i).getBitmap());
                         }
-                        AffixMedia.AffixBitmapList(
-                                getApplicationContext(),
-                                bitmapArray,
-                                swVertical.isChecked(),
-                                album.selectedMedias.get(0).getPath());
+                        if (bitmapArray.size()>1) {
+                            AffixMedia.AffixBitmapList(
+                                    getApplicationContext(),
+                                    bitmapArray,
+                                    swVertical.isChecked(),
+                                    album.selectedMedias.get(0).getPath());
+                        } else {
+                            runOnUiThread(new Runnable(){
+                                @Override
+                                public void run(){ Toast.makeText(getApplicationContext(),R.string.affix_error,Toast.LENGTH_SHORT).show(); }
+                            });
+                        }
                         return null;
                     }
-
                     @Override
                     protected void onPostExecute(Void result) {
-                        swipeRefreshLayout.setRefreshing(false);
                         editmode = false;
                         album.clearSelectedPhotos();
-                        //mediaAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                         invalidateOptionsMenu();
                         new PreparePhotosTask().execute();
                     }
@@ -1236,15 +1243,9 @@ public class MainActivity extends ThemedActivity {
                 //Dialog Buttons
                 AffixDialog.setView(Affix_dialogLayout);
                 AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        new affixMedia().execute();
-                    }
-                });
+                    public void onClick(DialogInterface dialog, int id) {new affixMedia().execute();}});
                 AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+                    public void onClick(DialogInterface dialog, int id) {}});
                 AffixDialog.show();
                 return true;
             //endregion
@@ -1279,6 +1280,7 @@ public class MainActivity extends ThemedActivity {
                     protected void onPostExecute(Void result) {
                         if (album.media.size() == 0)
                             displayAlbums();
+
                         mediaAdapter.updateDataset(album.media);
                         finishEditMode();
                         invalidateOptionsMenu();
@@ -1383,6 +1385,27 @@ public class MainActivity extends ThemedActivity {
             displayAlbums();
             setRecentApp(getString(R.string.app_name));
         }
+    }
+    public AlertDialog.Builder progressDialog;
+
+    public AlertDialog ProgressDialog(String dialogTitle, String dialogText){
+        progressDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
+        View progress_dialogLayout = getLayoutInflater().inflate(R.layout.progress_dialog, null);
+        TextView progress_title = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_title);
+        TextView progress_text = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_text);
+        ProgressBar progress = (ProgressBar) progress_dialogLayout.findViewById(R.id.progress_dialog_loading);
+        CardView cv_affixProgress_Dialog = (CardView) progress_dialogLayout.findViewById(R.id.progress_dialog_card);
+
+        progress_title.setBackgroundColor(getPrimaryColor());
+        cv_affixProgress_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+        progress.getIndeterminateDrawable().setColorFilter(getPrimaryColor(), android.graphics.PorterDuff.Mode.SRC_ATOP);
+
+        progress_title.setText(dialogTitle);
+        progress_text.setText(dialogText);
+
+        progressDialog.setCancelable(false);
+        progressDialog.setView(progress_dialogLayout);
+        return progressDialog.create();
     }
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
