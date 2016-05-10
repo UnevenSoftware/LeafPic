@@ -317,7 +317,7 @@ public class MainActivity extends ThemedActivity {
                         @Override
                         public void run() {
                             albums = new HandlingAlbums(getApplicationContext());
-                            albums.loadPreviewAlbums(false);//TODO check if is hidden
+                            albums.loadPreviewAlbums(getApplicationContext(), false);//TODO check if is hidden
                         }
                     }).start();
                     openAlbum(album, false);
@@ -1114,7 +1114,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.name_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
@@ -1127,7 +1127,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.date_taken_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_DATE);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
@@ -1140,7 +1140,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.size_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
 
                 } else {
@@ -1154,7 +1154,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.ascending_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingAscending(!item.isChecked());
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
@@ -1419,7 +1419,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums(hidden);
+            albums.loadPreviewAlbums(getApplicationContext(),hidden);
             return null;
         }
 
