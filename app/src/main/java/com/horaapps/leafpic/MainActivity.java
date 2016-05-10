@@ -31,7 +31,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +52,6 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.ExternalStorage;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
@@ -319,7 +317,7 @@ public class MainActivity extends ThemedActivity {
                         @Override
                         public void run() {
                             albums = new HandlingAlbums(getApplicationContext());
-                            albums.loadPreviewAlbums(false);//TODO check if is hidden
+                            albums.loadPreviewAlbums(getApplicationContext(), false);//TODO check if is hidden
                         }
                     }).start();
                     openAlbum(album, false);
@@ -1116,7 +1114,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.name_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
@@ -1129,7 +1127,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.date_taken_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_DATE);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
@@ -1142,7 +1140,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.size_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
 
                 } else {
@@ -1156,7 +1154,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.ascending_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingAscending(!item.isChecked());
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
@@ -1398,7 +1396,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums(hidden);
+            albums.loadPreviewAlbums(getApplicationContext(),hidden);
             return null;
         }
 
