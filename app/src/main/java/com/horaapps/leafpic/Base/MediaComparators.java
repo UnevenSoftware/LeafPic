@@ -16,8 +16,8 @@ public class MediaComparators {
         return new Comparator<Media>(){
             public int compare(Media f1, Media f2) {
                 return ascending
-                        ? Long.compare(f1.getDateModified(), f2.getDateModified())
-                        : Long.compare(f2.getDateModified(), f1.getDateModified());
+                        ? Long.compare(f1.getDate(), f2.getDate())
+                        : Long.compare(f2.getDate(), f1.getDate());
 
             }
         };

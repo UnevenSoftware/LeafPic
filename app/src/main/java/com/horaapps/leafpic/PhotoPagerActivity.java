@@ -48,7 +48,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
-import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Fragments.ImageFragment;
@@ -70,6 +69,7 @@ import java.nio.channels.FileChannel;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -165,7 +165,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         }
-        else if ("downloads".equals(uri.getAuthority())) { //download from chrome dev workaround
+        else if ("downloads".equals(uri.getAuthority())) { //download for chrome-dev workaround
             String[] seg = uri.toString().split("/");
             final String id = seg[seg.length - 1];
             final Uri contentUri = ContentUris.withAppendedId(
@@ -652,8 +652,6 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.details:
                 /****DATA****/
                 final Media f = album.getCurrentMedia();
-                DateFormat as = SimpleDateFormat.getDateTimeInstance();
-                String date = as.format(new Time(f.getDateModified()));
 
                 /****** BEAUTIFUL DIALOG ****/
                 final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
@@ -663,6 +661,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Type);
                 final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
                 final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Date);
+                final TextView DateTaken = (TextView) Details_DialogLayout.findViewById(R.id.photo_date_taken);
                 final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
                 //final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
                 final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.media_details_title);
@@ -670,6 +669,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
                 final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
                 final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
+                final TextView txtDateTaken = (TextView) Details_DialogLayout.findViewById(R.id.date_taken);
+
                 final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
 
                 //EXIF
@@ -680,14 +681,13 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.Location);
                 final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.Location_item);
                 //MAP
-                final LinearLayout llMap = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_map);
                 final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
-                final LinearLayout llLocation =(LinearLayout) Details_DialogLayout.findViewById(R.id.ll_location);
+
                 txtTitle.setBackgroundColor(getPrimaryColor());
 
                 Size.setText(f.getHumanReadableSize());
                 Resolution.setText(f.getResolution());
-                Data.setText(date);
+                Data.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(f.getDateModified())));
                 Type.setText(f.getMIME());
                 Path.setText(f.getPath());
 
@@ -699,8 +699,10 @@ public class PhotoPagerActivity extends ThemedActivity {
                 txtDevice.setTextColor(getTextColor());
                 txtEXIF.setTextColor(getTextColor());
                 txtLocation.setTextColor(getTextColor());
+                txtDateTaken.setTextColor(getTextColor());
 
                 Data.setTextColor(getSubTextColor());
+                DateTaken.setTextColor(getSubTextColor());
                 Path.setTextColor(getSubTextColor());
                 Resolution.setTextColor(getSubTextColor());
                 Type.setTextColor(getSubTextColor());
@@ -708,8 +710,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 Device.setTextColor(getSubTextColor());
                 EXIF.setTextColor(getSubTextColor());
                 Location.setTextColor(getSubTextColor());
-
-                final LinearLayout ll = (LinearLayout) Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF);
 
                 try {
                     ExifInterface exif = new ExifInterface(f.getPath());
@@ -742,11 +742,16 @@ public class PhotoPagerActivity extends ThemedActivity {
                             });
                             Location.setText(String.format(Locale.getDefault(),"%f, %f",
                                     output[0], output[1]));
-                            llLocation.setVisibility(View.VISIBLE);
-                            llMap.setVisibility(View.VISIBLE);
+                            Details_DialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
+                            Details_DialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
 
                         }
-                        ll.setVisibility(View.VISIBLE);
+                        Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF).setVisibility(View.VISIBLE);
+                    }
+                    long dateTake;
+                    if ((dateTake = f.getDateEXIF())!=-1) {
+                        DateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
+                        Details_DialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
                     }
                 }
                 catch (IOException e){ e.printStackTrace(); }
@@ -755,18 +760,13 @@ public class PhotoPagerActivity extends ThemedActivity {
                 cv.setCardBackgroundColor(getCardBackgroundColor());
                 DetailsDialog.setView(Details_DialogLayout);
 
-                DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+                DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), null);
 
-                DetailsDialog.setNeutralButton(this.getString(R.string.edit), new DialogInterface.OnClickListener() {
+                DetailsDialog.setNeutralButton(getString(R.string.fix_date), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
-                        UCrop uCrop = UCrop.of(f.getUri(), mDestinationUri);
-                        uCrop.withOptions(getUcropOptions());
-                        uCrop.start(PhotoPagerActivity.this);
+                        if (!album.getCurrentMedia().fixDate())
+                            Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -863,7 +863,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
                 fullscreenmode = true;
-                ChangeBackGroundColor();
+                changeBackGroundColor();
             }
         });
     }
@@ -887,12 +887,12 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 fullscreenmode = false;
-                ChangeBackGroundColor();
+                changeBackGroundColor();
             }
         });
     }
 
-    public void ChangeBackGroundColor() {
+    public void changeBackGroundColor() {
         int colorTo;
         int colorFrom;
         if (fullscreenmode) {

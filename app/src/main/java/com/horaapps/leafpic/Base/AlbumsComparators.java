@@ -16,8 +16,8 @@ public class AlbumsComparators {
         return new Comparator<Album>(){
             public int compare(Album f1, Album f2) {
                 return ascending
-                        ? Long.compare(f1.getMedia(0).getDateModified(),f2.getMedia(0).getDateModified())
-                        : Long.compare(f2.getMedia(0).getDateModified(),f1.getMedia(0).getDateModified());
+                        ? Long.compare(f1.getMedia(0).getDate(),f2.getMedia(0).getDate())
+                        : Long.compare(f2.getMedia(0).getDate(),f1.getMedia(0).getDate());
 
             }
         };
