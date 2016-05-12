@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class AffixMedia {
 
-    public static void AffixBitmapList(Context ctx, ArrayList<Bitmap> bitmapArray, boolean vertical, String path){
+    public static void AffixBitmapList(Context ctx, ArrayList<Bitmap> bitmapArray, boolean vertical, String path, String format){
 
         Bitmap unionBitmap = null;
         if (vertical){
@@ -25,7 +25,7 @@ public class AffixMedia {
         }
         Canvas comboImage = new Canvas(unionBitmap);
         combineBitmap(comboImage,bitmapArray,vertical);
-        saveFile(unionBitmap, path);
+        saveFile(unionBitmap, path, format);
     }
 
     public static Canvas combineBitmap(Canvas cs, ArrayList<Bitmap> bpmList, boolean vertical){
@@ -50,8 +50,8 @@ public class AffixMedia {
         }
     }
 
-    public static void saveFile(Bitmap bmp, String path){
-        String tmpImg = String.valueOf(System.currentTimeMillis()) + ".png";
+    public static void saveFile(Bitmap bmp, String path, String format){
+        String tmpImg = String.valueOf(System.currentTimeMillis()) + "." + format;
         OutputStream os = null;
         try {
             os = new FileOutputStream(path + tmpImg);
