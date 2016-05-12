@@ -3,8 +3,10 @@ package com.horaapps.leafpic.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,17 +17,18 @@ import java.util.ArrayList;
  */
 public class AffixMedia {
 
-    public static void AffixBitmapList(Context ctx, ArrayList<Bitmap> bitmapArray, boolean vertical, String path, String format){
+    public static final String DIRECTORY_NAME = "AffixedPictures";
 
-        Bitmap unionBitmap = null;
-        if (vertical){
+    public static void AffixBitmapList(Context ctx, ArrayList<Bitmap> bitmapArray, boolean vertical, String folderPath, String format){
+
+        Bitmap unionBitmap;
+        if (vertical)
             unionBitmap = Bitmap.createBitmap(getMaxBitmapWidth(bitmapArray),getBitmapsHeight(bitmapArray), Bitmap.Config.ARGB_8888);
-        } else {
+        else
             unionBitmap = Bitmap.createBitmap(getBitmapsWidth(bitmapArray),getMaxBitmapHeight(bitmapArray), Bitmap.Config.ARGB_8888);
-        }
         Canvas comboImage = new Canvas(unionBitmap);
         combineBitmap(comboImage,bitmapArray,vertical);
-        saveFile(unionBitmap, path, format);
+        saveFile(unionBitmap, folderPath, format);
     }
 
     public static Canvas combineBitmap(Canvas cs, ArrayList<Bitmap> bpmList, boolean vertical){
@@ -50,20 +53,22 @@ public class AffixMedia {
         }
     }
 
-    public static void saveFile(Bitmap bmp, String path, String format){
+    public static void saveFile(Bitmap bmp, String folderPath, String format){
         String tmpImg = String.valueOf(System.currentTimeMillis()) + "." + format;
-        OutputStream os = null;
+        Log .wtf("asd",folderPath+'/'+tmpImg);
         try {
-            os = new FileOutputStream(path + tmpImg);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, os);
+            File f= new File(folderPath+'/'+tmpImg);
+            if (f.createNewFile()) {
+                OutputStream os = new FileOutputStream(folderPath + '/' + tmpImg);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, os);
+            }
         } catch(IOException e) {
             Log.e("combineImages", "problem combining images", e);
         }
     }
 
     public static int getMaxBitmapWidth(ArrayList<Bitmap> bpmHeightArray){
-        int width=0;
-        width = bpmHeightArray.get(0).getWidth();
+        int width = bpmHeightArray.get(0).getWidth();
         for (int i=1;i<bpmHeightArray.size();i++){
             if(width<bpmHeightArray.get(i).getWidth())
                 width=bpmHeightArray.get(i).getWidth();
@@ -80,8 +85,7 @@ public class AffixMedia {
     }
 
     public static int getMaxBitmapHeight(ArrayList<Bitmap> bpmHeightArray){
-        int height=0;
-        height = bpmHeightArray.get(0).getHeight();
+        int height = bpmHeightArray.get(0).getHeight();
         for (int i=1;i<bpmHeightArray.size();i++){
             if(height<bpmHeightArray.get(i).getHeight())
                 height=bpmHeightArray.get(i).getHeight();
@@ -95,6 +99,13 @@ public class AffixMedia {
             height+=bpmHeightArray.get(i).getHeight();
         }
         return height;
+    }
+
+    public static String getDefaultDirectoryPath() {
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/"+DIRECTORY_NAME);
+        if (!dir.exists())
+            dir.mkdir();
+        return dir.getAbsolutePath();
     }
 
 }
