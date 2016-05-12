@@ -31,6 +31,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -207,7 +208,7 @@ public class MainActivity extends ThemedActivity {
 
     public void openAlbum(Album a) {
         openAlbum(a, true);
-        recyclerViewMedia.smoothScrollToPosition(0);
+        //recyclerViewMedia.smoothScrollToPosition(0);
     }
 
     public void openAlbum(Album a, boolean reload) {
@@ -234,8 +235,9 @@ public class MainActivity extends ThemedActivity {
         else {
             displayAlbums(false);
             albumsAdapter.updateDataset(albums.dispAlbums);
-            recyclerViewAlbums.setVisibility(View.VISIBLE);
-            recyclerViewMedia.setVisibility(View.GONE);
+            toggleRecyclersVisibilty(true);
+            //recyclerViewAlbums.setVisibility(View.VISIBLE);
+            //recyclerViewMedia.setVisibility(View.GONE);
         }
     }
 
@@ -253,6 +255,8 @@ public class MainActivity extends ThemedActivity {
         albumsMode = true;
         editmode = false;
         invalidateOptionsMenu();
+        mediaAdapter.updateDataset(new ArrayList<Media>());
+       // recyclerViewMedia.removeAllViewsInLayout();
 
     }
 
@@ -640,10 +644,7 @@ public class MainActivity extends ThemedActivity {
         dialogMessage.setText(R.string.coming_soon);
         dialogMessage.setTextColor(getTextColor());
         comingSoonDialog.setView(dialogLayout);
-        comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
+        comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), null);
         comingSoonDialog.show();
     }
 
@@ -1412,8 +1413,9 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            contentReady = false;
             swipeRefreshLayout.setRefreshing(true);
+            contentReady = false;
+            toggleRecyclersVisibilty(true);
             super.onPreExecute();
         }
 
@@ -1428,7 +1430,6 @@ public class MainActivity extends ThemedActivity {
             albumsAdapter.updateDataset(albums.dispAlbums);
             contentReady = true;
             checkNothing();
-            toggleRecyclersVisibilty(true);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -1437,8 +1438,9 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            contentReady = false;
             swipeRefreshLayout.setRefreshing(true);
+            contentReady = false;
+            toggleRecyclersVisibilty(false);
             super.onPreExecute();
         }
 
@@ -1453,7 +1455,6 @@ public class MainActivity extends ThemedActivity {
             mediaAdapter.updateDataset(album.media);
             contentReady = true;
             checkNothing();
-            toggleRecyclersVisibilty(false);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

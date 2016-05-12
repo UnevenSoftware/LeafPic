@@ -40,7 +40,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,8 +65,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -657,31 +654,31 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
 
                 final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
-                final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Size);
-                final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Type);
-                final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Resolution);
-                final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Date);
-                final TextView DateTaken = (TextView) Details_DialogLayout.findViewById(R.id.photo_date_taken);
-                final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.Photo_Path);
+                final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.photo_size);
+                final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.photo_type);
+                final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.photo_resolution);
+                final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.photo_date);
+                final TextView DateTaken = (TextView) Details_DialogLayout.findViewById(R.id.date_taken);
+                final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.photo_path);
                 //final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
-                final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.media_details_title);
-                final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.Size);
-                final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.Type);
-                final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.Resolution);
-                final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.Date);
-                final TextView txtDateTaken = (TextView) Details_DialogLayout.findViewById(R.id.date_taken);
+                final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.details_title);
+                final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.label_size);
+                final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.label_type);
+                final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.label_resolution);
+                final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.label_date);
+                final TextView txtDateTaken = (TextView) Details_DialogLayout.findViewById(R.id.label_date_taken);
 
-                final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.Path);
+                final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.label_path);
 
                 //EXIF
-                final TextView txtDevice = (TextView) Details_DialogLayout.findViewById(R.id.Device);
-                final TextView Device = (TextView) Details_DialogLayout.findViewById(R.id.Device_item);
-                final TextView txtEXIF = (TextView) Details_DialogLayout.findViewById(R.id.EXIF);
-                final TextView EXIF = (TextView) Details_DialogLayout.findViewById(R.id.EXIF_item);
-                final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.Location);
-                final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.Location_item);
+                final TextView txtDevice = (TextView) Details_DialogLayout.findViewById(R.id.label_device);
+                final TextView Device = (TextView) Details_DialogLayout.findViewById(R.id.photo_device);
+                final TextView txtEXIF = (TextView) Details_DialogLayout.findViewById(R.id.label_exif);
+                final TextView EXIF = (TextView) Details_DialogLayout.findViewById(R.id.photo_exif);
+                final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.label_location);
+                final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.photo_location);
                 //MAP
-                final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.img_Map);
+                final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.photo_map);
 
                 txtTitle.setBackgroundColor(getPrimaryColor());
 
@@ -724,10 +721,10 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
 
                         final float[] output= new float[2];
-                        exif.getLatLong(output);
+                        if(exif.getLatLong(output)) {
 
-                        if(output[0] != 0 && output[1] != 0) {
                             String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
+                            //url = "https://api.mapbox.com/v4/mapbox.dark/-76.9,38.9,5/1000x1000.png";
                             Glide.with(this)
                                     .load(url)
                                     .asBitmap()
@@ -740,13 +737,14 @@ public class PhotoPagerActivity extends ThemedActivity {
                                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
                                 }
                             });
+
                             Location.setText(String.format(Locale.getDefault(),"%f, %f",
                                     output[0], output[1]));
                             Details_DialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
                             Details_DialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
 
                         }
-                        Details_DialogLayout.findViewById(R.id.ll_detail_dialog_EXIF).setVisibility(View.VISIBLE);
+                        Details_DialogLayout.findViewById(R.id.ll_exif).setVisibility(View.VISIBLE);
                     }
                     long dateTake;
                     if ((dateTake = f.getDateEXIF())!=-1) {

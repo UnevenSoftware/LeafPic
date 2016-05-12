@@ -26,6 +26,10 @@ public class Album {
     int count = -1;
     boolean selected = false;
 
+    public int getFilterMedia() {
+        return filter_photos;
+    }
+
     private int filter_photos;// = ImageFileFilter.FILTER_ALL;
     public AlbumSettings settings = new AlbumSettings();
     MediaComparators mediaComparators;
@@ -90,6 +94,17 @@ public class Album {
         for (File image : images)
             media.add(0, new Media(image.getAbsolutePath(), image.lastModified(), image.length()));
         sortPhotos();
+    }
+
+    public void updatePhotos(PhotosAdapter adapter) {
+        media = new ArrayList<Media>();
+        File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos));
+        for (int i = 0; i < images.length; i++) {
+            media.add(0, new Media(images[i].getAbsolutePath(), images[i].lastModified(), images[i].length()));
+            adapter.notifyItemInserted(i);
+        }
+        sortPhotos();
+        adapter.notifyDataSetChanged();
     }
 
     public void setSelected(boolean selected) {
