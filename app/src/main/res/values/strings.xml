@@ -236,5 +236,7 @@
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
     <string name="error_querying_decoders">Unable to query device decoders</string>
     <string name="unable_to_fix_date">Unable to fix date</string>
+    <string name="save_here">Save in this album</string>
+    <string name="the_affixed_image_will_be_saved_in_this_album">The affixed image will be saved in this album</string>
 
 </resources>

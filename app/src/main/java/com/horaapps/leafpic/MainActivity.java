@@ -1185,23 +1185,31 @@ public class MainActivity extends ThemedActivity {
                 final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
                 final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
 
+                final TextView labelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_title);
+                final TextView subLabelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_sub);
+                final SwitchCompat swSaveHere = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.save_here_switch);
+                final IconicsImageView imgSaveHere = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.save_here_icon);
+
                 final TextView txtAffixFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_title);
                 final Spinner cmbFormat = (Spinner) Affix_dialogLayout.findViewById(R.id.affix_format_spinner);
                 final IconicsImageView imgFormat = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_format_icon);
 
                 txt_Affix_Vertical_title .setTextColor(getTextColor());
+                subLabelSaveHere.setTextColor(getSubTextColor());
+                imgSaveHere.setColor(getIconColor());
+
+                labelSaveHere.setTextColor(getTextColor());
                 txt_Affix_Vertical_sub .setTextColor(getSubTextColor());
                 imgAffix.setColor(getIconColor());
+
 
                 txtAffixFormat.setTextColor(getTextColor());
                 imgFormat.setColor(getIconColor());
 
                 //TODO:SPINNER MUST BE REPLACED OR STYLED WELL
-                String[] array_spinner=new String[2];
-                array_spinner[0]="png";
-                array_spinner[1]="jpg";
-                ArrayAdapter adapter = new ArrayAdapter(this,
-                     android.R.layout.simple_spinner_dropdown_item, array_spinner);
+
+                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),
+                     android.R.layout.simple_spinner_dropdown_item, new String[]{ "png", "jpg" });
                 cmbFormat.setAdapter(adapter);
                 //String s =cmbFormat.getSelectedItem().toString();
                 //cmbFormat.setPopupBackgroundResource(R.drawable.ic_empty_white);
@@ -1210,6 +1218,8 @@ public class MainActivity extends ThemedActivity {
                 //SWITCH
                 swVertical.setChecked(false);
                 updateSwitchColor(swVertical,getAccentColor());
+                swSaveHere.setChecked(false);
+                updateSwitchColor(swSaveHere,getAccentColor());
 
                 swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -1241,9 +1251,8 @@ public class MainActivity extends ThemedActivity {
                                     getApplicationContext(),
                                     bitmapArray,
                                     swVertical.isChecked(),
-                                    album.selectedMedias.get(0).getPath(),//TODO:MUST BE REPLACED
-                                    cmbFormat.getSelectedItem().toString()
-                                    );
+                                    swSaveHere.isChecked() ? album.getPath() : AffixMedia.getDefaultDirectoryPath(),
+                                    cmbFormat.getSelectedItem().toString());
                         } else {
                             runOnUiThread(new Runnable(){
                                 @Override
@@ -1258,7 +1267,7 @@ public class MainActivity extends ThemedActivity {
                         album.clearSelectedPhotos();
                         dialog.dismiss();
                         invalidateOptionsMenu();
-                        new PreparePhotosTask().execute();
+                        //new PreparePhotosTask().execute();
                     }
                 }
                 //Dialog Buttons
