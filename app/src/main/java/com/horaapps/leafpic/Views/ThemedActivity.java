@@ -2,6 +2,7 @@ package com.horaapps.leafpic.Views;
 
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
@@ -173,6 +174,18 @@ public class ThemedActivity extends AppCompatActivity {
                 color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
         }
         return color;
+    }
+
+    public ColorStateList getRadioButtonColor(){
+        ColorStateList colorStateList = new ColorStateList(
+                new int[][]{
+                        new int[]{-android.R.attr.state_enabled}, //disabled
+                        new int[]{android.R.attr.state_enabled} //enabled
+                }, new int[] {
+                        getTextColor() //disabled
+                        ,getAccentColor() //enabled
+                });
+        return colorStateList;
     }
 
     public void setNavBarColor() {

@@ -107,7 +107,7 @@
                                 android:id="@+id/save_here_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/save_here"
+                                android:text="@string/affix_save_here"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"
                                 />
@@ -115,7 +115,7 @@
                                 android:id="@+id/save_here_sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/the_affixed_image_will_be_saved_in_this_album"
+                                android:text="@string/affix_save_here_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="14sp"
                                 />
@@ -152,13 +152,59 @@
                         <TextView
                             android:id="@+id/affix_format_title"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:text="@string/affix_format"
+                            android:layout_weight="4"
+                            android:layout_gravity="center_vertical"
                             android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
+                            android:textSize="16sp"/>
+
+                        <!--
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="4"
                             android:gravity="center_vertical"
-                            />
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/affix_format_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/affix_format"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+
+                                />
+                            <TextView
+                                android:id="@+id/affix_format_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/affix_format_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                        -->
+                        <RadioGroup
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:paddingRight="5dp"
+                            android:orientation="horizontal"
+                            android:id="@+id/radio_format" >
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:id="@+id/radio_jpg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="JPG"
+                                android:checked="true" />
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:id="@+id/radio_png"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PNG" />
+                        </RadioGroup>
+                        <!--
                         <Spinner
                             android:id="@+id/affix_format_spinner"
                             android:layout_width="0dp"
@@ -167,6 +213,7 @@
                             android:gravity="center"
                             android:paddingRight="5dp"
                             />
+                            -->
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

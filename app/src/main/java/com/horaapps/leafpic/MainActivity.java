@@ -31,7 +31,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,14 +38,13 @@ import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1191,7 +1189,10 @@ public class MainActivity extends ThemedActivity {
                 final IconicsImageView imgSaveHere = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.save_here_icon);
 
                 final TextView txtAffixFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_title);
-                final Spinner cmbFormat = (Spinner) Affix_dialogLayout.findViewById(R.id.affix_format_spinner);
+                //final Spinner cmbFormat = (Spinner) Affix_dialogLayout.findViewById(R.id.affix_format_spinner);
+                //final RadioGroup radioFormatGroup = (RadioGroup) Affix_dialogLayout.findViewById(R.id.radio_format);
+                final RadioButton radio_jpg = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_jpg);
+                final RadioButton radio_png = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_png);
                 final IconicsImageView imgFormat = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_format_icon);
 
                 txt_Affix_Vertical_title .setTextColor(getTextColor());
@@ -1208,11 +1209,13 @@ public class MainActivity extends ThemedActivity {
 
                 //TODO:SPINNER MUST BE REPLACED OR STYLED WELL
 
-                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),
-                     android.R.layout.simple_spinner_dropdown_item, new String[]{ "png", "jpg" });
-                cmbFormat.setAdapter(adapter);
+                //ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),
+                //     android.R.layout.simple_spinner_dropdown_item, new String[]{ "png", "jpg" });
+                //cmbFormat.setAdapter(adapter);
                 //String s =cmbFormat.getSelectedItem().toString();
                 //cmbFormat.setPopupBackgroundResource(R.drawable.ic_empty_white);
+                radio_jpg.setButtonTintList(getRadioButtonColor());
+                radio_png.setButtonTintList(getRadioButtonColor());
 
 
                 //SWITCH
@@ -1228,13 +1231,19 @@ public class MainActivity extends ThemedActivity {
                     }
                 });
 
+                swSaveHere.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        updateSwitchColor(swSaveHere, getAccentColor());
+                    }
+                });
 
                 //Affixing On Background//
                 class affixMedia extends AsyncTask<String, Integer, Void> {
                     AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affixing_text));
+                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affix_text));
                         dialog.show();
                         super.onPreExecute();
                     }
@@ -1246,13 +1255,14 @@ public class MainActivity extends ThemedActivity {
                             if(!album.selectedMedias.get(i).isVideo())
                                 bitmapArray.add(album.selectedMedias.get(i).getBitmap());
                         }
+
                         if (bitmapArray.size()>1) {
                             AffixMedia.AffixBitmapList(
                                     getApplicationContext(),
                                     bitmapArray,
                                     swVertical.isChecked(),
                                     swSaveHere.isChecked() ? album.getPath() : AffixMedia.getDefaultDirectoryPath(),
-                                    cmbFormat.getSelectedItem().toString());
+                                    radio_jpg.isChecked() ? "jpg" : "png"/*,cmbFormat.getSelectedItem().toString()*/);
                         } else {
                             runOnUiThread(new Runnable(){
                                 @Override
