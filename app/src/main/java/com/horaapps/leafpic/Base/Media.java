@@ -53,6 +53,9 @@ public class Media implements Parcelable {
     public void setMIME() {
         String extension = path.substring(path.lastIndexOf('.')+1);
         mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        if (mime == null) {
+            mime = "custom";
+        }
     }
 
     public void setSelected(boolean selected) {
@@ -64,6 +67,7 @@ public class Media implements Parcelable {
     public boolean isImage() { return getMIME().startsWith("image"); }
 
     public boolean isVideo() { return getMIME().startsWith("video"); }
+
 
     public Uri getUri() {
         return Uri.fromFile(new File(path));
