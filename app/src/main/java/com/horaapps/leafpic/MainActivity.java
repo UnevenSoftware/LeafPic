@@ -39,12 +39,14 @@ import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1170,12 +1172,10 @@ public class MainActivity extends ThemedActivity {
 
                 final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
                 final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
-                final LinearLayout ll_Affix_title = (LinearLayout) Affix_dialogLayout.findViewById(R.id.ll_affix_title);
-                final ProgressBar progressBar = (ProgressBar) Affix_dialogLayout.findViewById(R.id.affix_spinner_loading);
-                ll_Affix_title.setBackgroundColor(getPrimaryColor());
+                final TextView Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
+                Affix_title.setBackgroundColor(getPrimaryColor());
                 CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
                 cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
-                progressBar.setVisibility(View.INVISIBLE);
 
 
 
@@ -1185,9 +1185,27 @@ public class MainActivity extends ThemedActivity {
                 final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
                 final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
 
+                final TextView txtAffixFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_title);
+                final Spinner cmbFormat = (Spinner) Affix_dialogLayout.findViewById(R.id.affix_format_spinner);
+                final IconicsImageView imgFormat = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_format_icon);
+
                 txt_Affix_Vertical_title .setTextColor(getTextColor());
                 txt_Affix_Vertical_sub .setTextColor(getSubTextColor());
                 imgAffix.setColor(getIconColor());
+
+                txtAffixFormat.setTextColor(getTextColor());
+                imgFormat.setColor(getIconColor());
+
+                //TODO:SPINNER MUST BE REPLACED OR STYLED WELL
+                String[] array_spinner=new String[2];
+                array_spinner[0]="png";
+                array_spinner[1]="jpg";
+                ArrayAdapter adapter = new ArrayAdapter(this,
+                     android.R.layout.simple_spinner_dropdown_item, array_spinner);
+                cmbFormat.setAdapter(adapter);
+                //String s =cmbFormat.getSelectedItem().toString();
+                //cmbFormat.setPopupBackgroundResource(R.drawable.ic_empty_white);
+
 
                 //SWITCH
                 swVertical.setChecked(false);
@@ -1223,7 +1241,9 @@ public class MainActivity extends ThemedActivity {
                                     getApplicationContext(),
                                     bitmapArray,
                                     swVertical.isChecked(),
-                                    album.selectedMedias.get(0).getPath());
+                                    album.selectedMedias.get(0).getPath(),//TODO:MUST BE REPLACED
+                                    cmbFormat.getSelectedItem().toString()
+                                    );
                         } else {
                             runOnUiThread(new Runnable(){
                                 @Override
@@ -1403,6 +1423,7 @@ public class MainActivity extends ThemedActivity {
 
         progress_title.setText(dialogTitle);
         progress_text.setText(dialogText);
+        progress_text.setTextColor(getTextColor());
 
         progressDialog.setCancelable(false);
         progressDialog.setView(progress_dialogLayout);
