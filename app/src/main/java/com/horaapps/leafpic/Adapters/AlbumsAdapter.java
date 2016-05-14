@@ -20,7 +20,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
@@ -64,13 +63,19 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Album a = albums.get(position);
         Context c = holder.picture.getContext();
         Media f = a.getCoverAlbum();
-
+        /*
+        YoYo.with(Techniques.SlideInUp)
+                .duration(100)
+                .playOn(holder.cv);
+        */
         Glide.with(c)
                 .load(f.getPath())
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .priority(Priority.HIGH)
-                .signature(new StringSignature(f.getPath() +"-"+ f.getDateModified()))
+                /*.signature(a.hasCustomCover()
+                        ? new StringSignature(f.Path)
+                        : new MediaStoreSignature(f.MIME, f.DateModified, f.orientation))*/
                 .centerCrop()
                 .error(R.drawable.ic_error)
                 .placeholder(SP.getInt("basic_theme", 1)==1

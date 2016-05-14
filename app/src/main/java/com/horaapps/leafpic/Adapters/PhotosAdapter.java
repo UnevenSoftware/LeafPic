@@ -14,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Media;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
@@ -80,7 +78,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             Glide.with(holder.imageView.getContext())
                     .load(thumnail)
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .placeholder(drawable)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
@@ -94,9 +91,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                 Glide.with(holder.imageView.getContext())
                         .load(f.getPath())
                         .asBitmap()
-                        .signature(new StringSignature(f.getPath() +"-"+ f.getDateModified()))
+                        .signature(new MediaStoreSignature(f.getMIME(), f.getDateModified(), f.getOrientation()))
                         .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .placeholder(drawable)
                         //.placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                         .animate(R.anim.fade_in)

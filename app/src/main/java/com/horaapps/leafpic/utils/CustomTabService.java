@@ -28,7 +28,7 @@ public class CustomTabService {
         mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
-                mCustomTabsClient = customTabsClient;
+                mCustomTabsClient= customTabsClient;
                 mCustomTabsClient.warmup(0L);
                 mCustomTabsSession = mCustomTabsClient.newSession(null);
             }

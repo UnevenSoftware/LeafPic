@@ -17,8 +17,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Measure {
 
-    public static final String TAG = "Measure";
-
     public static int pxToDp(int dp, Context c) {
         DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
         return Math.round(dp * (displayMetrics.ydpi / DisplayMetrics.DENSITY_DEFAULT));
@@ -92,12 +90,5 @@ public class Measure {
         Point size = new Point();
         display.getRealSize(size);
         return size;
-    }
-
-    public static int rotateBy(int current, int degres){
-        int rotation = current + degres;
-        if (rotation > 359) rotation -=360;
-        if (rotation < 0) rotation +=360;
-        return rotation;
     }
 }

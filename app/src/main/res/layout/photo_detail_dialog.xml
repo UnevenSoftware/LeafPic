@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:mapbox="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -34,7 +34,7 @@
                         />
                     -->
                     <TextView
-                        android:id="@+id/details_title"
+                        android:id="@+id/media_details_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/details"
@@ -48,7 +48,7 @@
                 </RelativeLayout>
 
                 <View
-                    android:id="@+id/card_divider"
+                    android:id="@+id/photo_details_card_divider"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_below="@id/header_photo_details"
@@ -68,24 +68,24 @@
                     <!--PATH-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_path"
+                        android:id="@+id/LL_PATH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
                         <TextView
-                            android:id="@+id/label_path"
+                            android:id="@+id/Path"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/path"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_path"
+                            android:id="@+id/Photo_Path"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
@@ -100,119 +100,93 @@
 
                         >
                         <TextView
-                            android:id="@+id/label_type"
+                            android:id="@+id/Type"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/type"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_type"
+                            android:id="@+id/Photo_Type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
                     <!--Resolution-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_resolution"
+                        android:id="@+id/ll_Resolution"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
 
                         >
                         <TextView
-                            android:id="@+id/label_resolution"
+                            android:id="@+id/Resolution"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/resolution"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_resolution"
+                            android:id="@+id/Photo_Resolution"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
                     <!--Size-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_size"
+                        android:id="@+id/ll_Size"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
 
                         >
                         <TextView
-                            android:id="@+id/label_size"
+                            android:id="@+id/Size"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/size"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_size"
+                            android:id="@+id/Photo_Size"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
-                            android:textSize="16sp"
-                            />
-                    </LinearLayout>
-                    <!--DATE-->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-
-                        >
-                        <TextView
-                            android:id="@+id/label_date"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:text="@string/date"
-                            android:textStyle="bold"
-                            />
-                        <TextView
-                            android:id="@+id/photo_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
                     <!--DATE TAKEN-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_date_taken"
+                        android:id="@+id/ll_Date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:orientation="horizontal"
 
                         >
                         <TextView
-                            android:id="@+id/label_date_taken"
+                            android:id="@+id/Date"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:text="@string/date_taken"
+                            android:gravity="right"
+                            android:text="@string/date"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/date_taken"
+                            android:id="@+id/Photo_Date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
@@ -220,7 +194,7 @@
                 <!--EXIF-->
 
                 <LinearLayout
-                    android:id="@+id/ll_exif"
+                    android:id="@+id/ll_detail_dialog_EXIF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -233,24 +207,24 @@
                     <!--Device-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_device"
+                        android:id="@+id/ll_Device"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
                         <TextView
-                            android:id="@+id/label_device"
+                            android:id="@+id/Device"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/camera"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_device"
+                            android:id="@+id/Device_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
@@ -258,24 +232,24 @@
                     <!--EXIF-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_camera_details"
+                        android:id="@+id/ll_EXIF"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
                         <TextView
-                            android:id="@+id/label_exif"
+                            android:id="@+id/EXIF"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/exif"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_exif"
+                            android:id="@+id/EXIF_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
@@ -290,18 +264,18 @@
                         android:visibility="gone"
                         >
                         <TextView
-                            android:id="@+id/label_location"
+                            android:id="@+id/Location"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="right"
                             android:text="@string/location"
                             android:textStyle="bold"
                             />
                         <TextView
-                            android:id="@+id/photo_location"
+                            android:id="@+id/Location_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
+                            android:paddingLeft="10dp"
                             android:textSize="16sp"
                             />
                     </LinearLayout>
@@ -314,10 +288,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:visibility="gone"
-                    android:layout_below="@id/ll_exif"
+                    android:layout_below="@id/ll_detail_dialog_EXIF"
                     >
                     <ImageView
-                        android:id="@+id/photo_map"
+                        android:id="@+id/img_Map"
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
                         />

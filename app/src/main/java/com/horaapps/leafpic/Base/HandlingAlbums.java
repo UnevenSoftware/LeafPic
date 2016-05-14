@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
 import com.horaapps.leafpic.utils.StringUtils;
 
@@ -21,8 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by dnld on 27/04/16.
@@ -30,15 +27,12 @@ import java.util.regex.Pattern;
 public class HandlingAlbums {
 
     public final static String TAG = "HandlingAlbums";
-    Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
 
     public ArrayList<Album> dispAlbums;
     private ArrayList<Album> selectedAlbums;
 
     CustomAlbumsHandler customAlbumsHandler;
     private SharedPreferences SP;
-
-    int indexCamera = -1;
 
     ArrayList<File> excludedfolders;
     AlbumsComparators albumsComparators;
@@ -53,8 +47,7 @@ public class HandlingAlbums {
         selectedAlbums = new ArrayList<Album>();
     }
 
-    public void loadPreviewAlbums(Context context, boolean hidden) {
-        clearCameraIndex();
+    public void loadPreviewAlbums(boolean hidden) {
         dispAlbums = new ArrayList<Album>();
         if (hidden)
             for (File storage : listStorages())
@@ -63,12 +56,7 @@ public class HandlingAlbums {
             for (File storage : listStorages())
                 fetchRecursivelyFolder(storage);
 
-        sortAlbums(context);
-
-    }
-
-    public void clearCameraIndex() {
-        indexCamera = -1;
+        sortAlbums();
     }
 
     public ArrayList<File> listStorages() {
@@ -102,6 +90,9 @@ public class HandlingAlbums {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
+                    /*File[] files = temp.listFiles(new ImageFileFilter());
+                    if (files.length > 0)
+                        folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));*/
                         fetchRecursivelyFolder(temp, folders);
                     }
                 }
@@ -373,9 +364,8 @@ public class HandlingAlbums {
         editor.apply();
     }
 
-    public void sortAlbums(final Context context) {
+    public void sortAlbums() {
         albumsComparators = new AlbumsComparators(isAscending());
-
         switch (getColumnSortingMode()) {
             case AlbumSettings.SORT_BY_NAME:
                 Collections.sort(dispAlbums, albumsComparators.getNameComparator());
@@ -388,26 +378,6 @@ public class HandlingAlbums {
                 Collections.sort(dispAlbums, albumsComparators.getDateComparator());
                 break;
         }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clearCameraIndex();
-                for (int i = 0; i < dispAlbums.size(); i++) {
-                    Matcher matcher = CAMERA_FOLDER_PATTERN.matcher(dispAlbums.get(i).getPath());
-                    if (matcher.find()) indexCamera = i;
-                }
-                if (indexCamera != -1)
-                {
-                    Album camera = dispAlbums.remove(indexCamera);
-
-                    camera.name = context.getString(R.string.camera);
-                    dispAlbums.add(0, camera);
-                }
-            }
-        }).start();
-
-
     }
 
     public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
