@@ -1,6 +1,7 @@
 package com.horaapps.leafpic.Fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -13,10 +14,21 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.signature.MediaStoreSignature;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.utils.Measure;
+import com.koushikdutta.async.future.Cancellable;
+import com.koushikdutta.async.future.Future;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.PhotoPagerActivity;
+import com.koushikdutta.ion.future.ImageViewFuture;
+
+import java.util.concurrent.ExecutionException;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -60,6 +72,8 @@ public class ImageFragment extends Fragment {
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
         PhotoView photoView = new PhotoView(getContext());
+        final SubsamplingScaleImageView imageView =  new SubsamplingScaleImageView(getContext());
+        final ImageView imag =  new ImageView(getContext());
 
         if (SP.getBoolean("set_delay_full_image", true)) {
             Ion.with(getContext())
@@ -67,31 +81,41 @@ public class ImageFragment extends Fragment {
                     .withBitmap()
                     .deepZoom()
                     .intoImageView(photoView);
-        } else {
-            Glide.with(getContext())
-                    .load(img.getPath())
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .skipMemoryCache(true)
-                    .priority(Priority.HIGH)
-                    .signature(new MediaStoreSignature(img.getMIME(), img.getDateModified(), img.getOrientation()))
-                            //.centerCrop()
-                    .into(photoView);
-        }
-        photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-            @Override
-            public void onPhotoTap(View view, float x, float y) {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
-            }
 
-            @Override
-            public void onOutsidePhotoTap() {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
-            }
-        });
-        photoView.setZoomTransitionDuration(375);
-        photoView.setScaleLevels(1.0F, 3.5F, 6.0F);//TODO improve
-        return photoView;
+            photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                @Override
+                public void onPhotoTap(View view, float x, float y) {
+                    ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                }
+
+                @Override
+                public void onOutsidePhotoTap() {
+                    ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                }
+            });
+            photoView.setZoomTransitionDuration(375);
+            photoView.setScaleLevels(1.0F, 4.5F, 10.0F);//TODO improve
+
+            Ion.with(getContext())
+                    .load(img.getPath())
+                    .withBitmap()
+                    .deepZoom()
+                    .intoImageView(photoView);
+
+            return photoView;
+
+        } else {
+
+            imageView.setImage(ImageSource.uri(img.getUri()).tilingEnabled());
+            imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                }
+            });
+            return imageView;
+        }
     }
 
     @Override
@@ -111,11 +135,23 @@ public class ImageFragment extends Fragment {
     }*/
 
     public void rotatePicture(int rotation) {
-        PhotoView photoView = (PhotoView) getView();
-        if (photoView!=null){
-            photoView.setRotationBy(rotation);
-            //photoView.refreshDrawableState();
-            photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        View view = getView();
+        if (view.getClass().equals(SubsamplingScaleImageView.class)) {
+            int orienatation = Measure.rotateBy(img.getOrientation(),rotation);
+            if(img.setOrientation(orienatation))
+                ((SubsamplingScaleImageView) view).setOrientation(orienatation);
+        } else {
+
+                int orienatation = Measure.rotateBy(img.getOrientation(),rotation);
+            //((ImageView) view).setRotation(orienatation);
+               ((PhotoView) view).setRotationBy(rotation);
+                if (orienatation==0)
+                    ((PhotoView) view).setMinimumScale(1.0F);
+                else
+                    ((PhotoView) view).setMinimumScale(0.65F);
+                //photoView.setRotationBy(rotation);
+                //photoView.refreshDrawableState();
+                //photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
     }
 }
