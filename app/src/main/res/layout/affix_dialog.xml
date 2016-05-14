@@ -16,7 +16,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <!--
                 <TextView
                     android:id="@+id/affix_title"
                     android:layout_width="match_parent"
@@ -27,42 +26,6 @@
                     android:textColor="@color/md_dark_primary_text"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-                -->
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/ll_affix_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="24dp"
-                    android:weightSum="10"
-                    >
-                    <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:orientation="vertical"
-                        android:layout_weight="9"
-                        >
-                        <TextView
-                            android:id="@+id/bottom_sheet_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/affix"
-                            android:textColor="@color/md_dark_primary_text"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            />
-                    </LinearLayout>
-                    <ProgressBar
-                        android:id="@+id/affix_spinner_loading"
-                        android:layout_height="25dp"
-                        android:layout_width="0dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:indeterminateTint="@color/md_white_1000"
-                        />
-                </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,6 +78,93 @@
                             android:button="@null"
                             android:gravity="center"
                             android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
+
+                    <!--VERTICAL-->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_save_here"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="15dp"
+                        android:weightSum="10">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/save_here_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-photo-album" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/save_here_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/save_here"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/save_here_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/the_affixed_image_will_be_saved_in_this_album"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/save_here_switch"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
+
+                    <!--COMBOBOX SPINNER-->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_affix_format"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="15dp"
+                        android:weightSum="10">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/affix_format_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-image" />
+                        <TextView
+                            android:id="@+id/affix_format_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/affix_format"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            android:layout_weight="4"
+                            android:gravity="center_vertical"
+                            />
+                        <Spinner
+                            android:id="@+id/affix_format_spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:gravity="center"
                             android:paddingRight="5dp"
                             />
                     </LinearLayout>

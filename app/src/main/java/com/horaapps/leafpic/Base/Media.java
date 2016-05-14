@@ -6,12 +6,17 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.Time;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -95,13 +100,31 @@ public class Media implements Parcelable {
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
             if (orientation != -1) {
                 switch (orientation) {
-                    case ExifInterface.ORIENTATION_ROTATE_90: return  90;
-                    case ExifInterface.ORIENTATION_ROTATE_180: return  180;
-                    case ExifInterface.ORIENTATION_ROTATE_270: return  270;
+                    case ExifInterface.ORIENTATION_ROTATE_90: return 90;
+                    case ExifInterface.ORIENTATION_ROTATE_180: return 180;
+                    case ExifInterface.ORIENTATION_ROTATE_270: return 270;
                 }
             }
         }
         return 0;
+    }
+
+    public boolean setOrientation(int orientation){
+        int asd;
+        ExifInterface exif;
+        try { exif = new ExifInterface(getPath()); }
+        catch (IOException ex) { return false; }
+        switch (orientation) {
+            case 90: asd = ExifInterface.ORIENTATION_ROTATE_90; break;
+            case 180: asd = ExifInterface.ORIENTATION_ROTATE_180; break;
+            case 270: asd = ExifInterface.ORIENTATION_ROTATE_270; break;
+            case 0: asd = 1; break;
+            default: return false;
+        }
+        exif.setAttribute(ExifInterface.TAG_ORIENTATION,asd+"");
+        try {  exif.saveAttributes(); }
+        catch (IOException e) {  return false;}
+        return true;
     }
 
     public int getWidth() { //TODO improve
@@ -118,6 +141,31 @@ public class Media implements Parcelable {
         return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH));
     }
 
+    public long getDateEXIF() {
+        ExifInterface exif;
+        Date date;
+        try { exif = new ExifInterface(getPath()); }
+        catch (IOException e) {  return -1; }
+        try {
+            date = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(exif.getAttribute(ExifInterface.TAG_DATETIME));
+        }
+        catch (ParseException e) { return -1; }
+        catch (NullPointerException e) { return -1; }
+        return date.getTime();
+    }
+
+    public boolean fixDate(){
+        long newDate = getDateEXIF();
+        if (newDate != -1){
+            File f = new File(getPath());
+            if (f.setLastModified(newDate)) {
+                dateModified = newDate;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getResolution() {
         return String.format(Locale.getDefault(), "%dx%d", getWidth(), getHeight());
     }
@@ -130,6 +178,11 @@ public class Media implements Parcelable {
         return path;
     }
 
+    public long getDate() {
+        long exifDate = getDateEXIF();
+        return exifDate != -1 ? exifDate : dateModified;
+    }
+
     public long getDateModified() {
         return dateModified;
     }
@@ -139,39 +192,6 @@ public class Media implements Parcelable {
     }
 
     public Bitmap getBitmap(){
-        /*
-        Bitmap bm = null;
-        InputStream is = null;
-        BufferedInputStream bis = null;
-        try {
-            URLConnection conn = new URL(path).openConnection();
-            conn.connect();
-            is = conn.getInputStream();
-            bis = new BufferedInputStream(is, 8192);
-            bm = BitmapFactory.decodeStream(bis);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return bm;
-        */
-        //File sd = Environment.getExternalStorageDirectory();
-        //File image = new File(sd+path, getName);
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(path,bmOptions);
         bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);

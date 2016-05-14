@@ -39,12 +39,14 @@ import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +55,6 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.ExternalStorage;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
@@ -209,7 +210,7 @@ public class MainActivity extends ThemedActivity {
 
     public void openAlbum(Album a) {
         openAlbum(a, true);
-        recyclerViewMedia.smoothScrollToPosition(0);
+        //recyclerViewMedia.smoothScrollToPosition(0);
     }
 
     public void openAlbum(Album a, boolean reload) {
@@ -236,8 +237,9 @@ public class MainActivity extends ThemedActivity {
         else {
             displayAlbums(false);
             albumsAdapter.updateDataset(albums.dispAlbums);
-            recyclerViewAlbums.setVisibility(View.VISIBLE);
-            recyclerViewMedia.setVisibility(View.GONE);
+            toggleRecyclersVisibilty(true);
+            //recyclerViewAlbums.setVisibility(View.VISIBLE);
+            //recyclerViewMedia.setVisibility(View.GONE);
         }
     }
 
@@ -255,6 +257,8 @@ public class MainActivity extends ThemedActivity {
         albumsMode = true;
         editmode = false;
         invalidateOptionsMenu();
+        mediaAdapter.updateDataset(new ArrayList<Media>());
+       // recyclerViewMedia.removeAllViewsInLayout();
 
     }
 
@@ -319,7 +323,7 @@ public class MainActivity extends ThemedActivity {
                         @Override
                         public void run() {
                             albums = new HandlingAlbums(getApplicationContext());
-                            albums.loadPreviewAlbums(false);//TODO check if is hidden
+                            albums.loadPreviewAlbums(getApplicationContext(), false);//TODO check if is hidden
                         }
                     }).start();
                     openAlbum(album, false);
@@ -642,10 +646,7 @@ public class MainActivity extends ThemedActivity {
         dialogMessage.setText(R.string.coming_soon);
         dialogMessage.setTextColor(getTextColor());
         comingSoonDialog.setView(dialogLayout);
-        comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
+        comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), null);
         comingSoonDialog.show();
     }
 
@@ -774,7 +775,7 @@ public class MainActivity extends ThemedActivity {
                     break;
             }
         }
-        menu.findItem(R.id.hideAlbumButton).setTitle(hidden ?  getString(R.string.unhide) : getString(R.string.hide));
+        menu.findItem(R.id.hideAlbumButton).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
         menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
         menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
@@ -810,8 +811,8 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
-        //TODO: WILL BE IMPLEMENTED
-        //menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
+        //TODO: WILL BE IMPLEMENTED**************************************************************************************************************************************************************************************
+        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1116,7 +1117,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.name_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
@@ -1129,7 +1130,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.date_taken_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_DATE);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
@@ -1142,7 +1143,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.size_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
 
                 } else {
@@ -1156,7 +1157,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.ascending_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingAscending(!item.isChecked());
-                    albums.sortAlbums();
+                    albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
@@ -1167,17 +1168,14 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             //region Affix
-            //TODO: WILL BE IMPLEMENTED
             case  R.id.affixPhoto:
 
                 final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
                 final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
-                final LinearLayout ll_Affix_title = (LinearLayout) Affix_dialogLayout.findViewById(R.id.ll_affix_title);
-                final ProgressBar progressBar = (ProgressBar) Affix_dialogLayout.findViewById(R.id.affix_spinner_loading);
-                ll_Affix_title.setBackgroundColor(getPrimaryColor());
+                final TextView Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
+                Affix_title.setBackgroundColor(getPrimaryColor());
                 CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
                 cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
-                progressBar.setVisibility(View.INVISIBLE);
 
 
 
@@ -1187,13 +1185,41 @@ public class MainActivity extends ThemedActivity {
                 final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
                 final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
 
+                final TextView labelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_title);
+                final TextView subLabelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_sub);
+                final SwitchCompat swSaveHere = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.save_here_switch);
+                final IconicsImageView imgSaveHere = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.save_here_icon);
+
+                final TextView txtAffixFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_title);
+                final Spinner cmbFormat = (Spinner) Affix_dialogLayout.findViewById(R.id.affix_format_spinner);
+                final IconicsImageView imgFormat = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_format_icon);
+
                 txt_Affix_Vertical_title .setTextColor(getTextColor());
+                subLabelSaveHere.setTextColor(getSubTextColor());
+                imgSaveHere.setColor(getIconColor());
+
+                labelSaveHere.setTextColor(getTextColor());
                 txt_Affix_Vertical_sub .setTextColor(getSubTextColor());
                 imgAffix.setColor(getIconColor());
+
+
+                txtAffixFormat.setTextColor(getTextColor());
+                imgFormat.setColor(getIconColor());
+
+                //TODO:SPINNER MUST BE REPLACED OR STYLED WELL
+
+                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),
+                     android.R.layout.simple_spinner_dropdown_item, new String[]{ "png", "jpg" });
+                cmbFormat.setAdapter(adapter);
+                //String s =cmbFormat.getSelectedItem().toString();
+                //cmbFormat.setPopupBackgroundResource(R.drawable.ic_empty_white);
+
 
                 //SWITCH
                 swVertical.setChecked(false);
                 updateSwitchColor(swVertical,getAccentColor());
+                swSaveHere.setChecked(false);
+                updateSwitchColor(swSaveHere,getAccentColor());
 
                 swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -1205,48 +1231,51 @@ public class MainActivity extends ThemedActivity {
 
                 //Affixing On Background//
                 class affixMedia extends AsyncTask<String, Integer, Void> {
+                    AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        swipeRefreshLayout.setRefreshing(true);
+                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affixing_text));
+                        dialog.show();
                         super.onPreExecute();
                     }
 
                     @Override
                     protected Void doInBackground(String... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-                        for (int i=0; i<album.getSelectedCount();i++){
-                            bitmapArray.add(album.selectedMedias.get(i).getBitmap());
+                        for (int i=0;i<album.getSelectedCount();i++){
+                            if(!album.selectedMedias.get(i).isVideo())
+                                bitmapArray.add(album.selectedMedias.get(i).getBitmap());
                         }
-                        AffixMedia.AffixBitmapList(
-                                getApplicationContext(),
-                                bitmapArray,
-                                swVertical.isChecked(),
-                                album.selectedMedias.get(0).getPath());
+                        if (bitmapArray.size()>1) {
+                            AffixMedia.AffixBitmapList(
+                                    getApplicationContext(),
+                                    bitmapArray,
+                                    swVertical.isChecked(),
+                                    swSaveHere.isChecked() ? album.getPath() : AffixMedia.getDefaultDirectoryPath(),
+                                    cmbFormat.getSelectedItem().toString());
+                        } else {
+                            runOnUiThread(new Runnable(){
+                                @Override
+                                public void run(){ Toast.makeText(getApplicationContext(),R.string.affix_error,Toast.LENGTH_SHORT).show(); }
+                            });
+                        }
                         return null;
                     }
-
                     @Override
                     protected void onPostExecute(Void result) {
-                        swipeRefreshLayout.setRefreshing(false);
                         editmode = false;
                         album.clearSelectedPhotos();
-                        //mediaAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                         invalidateOptionsMenu();
-                        new PreparePhotosTask().execute();
+                        //new PreparePhotosTask().execute();
                     }
                 }
                 //Dialog Buttons
                 AffixDialog.setView(Affix_dialogLayout);
                 AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        new affixMedia().execute();
-                    }
-                });
+                    public void onClick(DialogInterface dialog, int id) {new affixMedia().execute();}});
                 AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+                    public void onClick(DialogInterface dialog, int id) {}});
                 AffixDialog.show();
                 return true;
             //endregion
@@ -1281,6 +1310,7 @@ public class MainActivity extends ThemedActivity {
                     protected void onPostExecute(Void result) {
                         if (album.media.size() == 0)
                             displayAlbums();
+
                         mediaAdapter.updateDataset(album.media);
                         finishEditMode();
                         invalidateOptionsMenu();
@@ -1386,19 +1416,42 @@ public class MainActivity extends ThemedActivity {
             setRecentApp(getString(R.string.app_name));
         }
     }
+    public AlertDialog.Builder progressDialog;
+
+    public AlertDialog ProgressDialog(String dialogTitle, String dialogText){
+        progressDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
+        View progress_dialogLayout = getLayoutInflater().inflate(R.layout.progress_dialog, null);
+        TextView progress_title = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_title);
+        TextView progress_text = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_text);
+        ProgressBar progress = (ProgressBar) progress_dialogLayout.findViewById(R.id.progress_dialog_loading);
+        CardView cv_affixProgress_Dialog = (CardView) progress_dialogLayout.findViewById(R.id.progress_dialog_card);
+
+        progress_title.setBackgroundColor(getPrimaryColor());
+        cv_affixProgress_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+        progress.getIndeterminateDrawable().setColorFilter(getPrimaryColor(), android.graphics.PorterDuff.Mode.SRC_ATOP);
+
+        progress_title.setText(dialogTitle);
+        progress_text.setText(dialogText);
+        progress_text.setTextColor(getTextColor());
+
+        progressDialog.setCancelable(false);
+        progressDialog.setView(progress_dialogLayout);
+        return progressDialog.create();
+    }
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
-            contentReady = false;
             swipeRefreshLayout.setRefreshing(true);
+            contentReady = false;
+            toggleRecyclersVisibilty(true);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums(hidden);
+            albums.loadPreviewAlbums(getApplicationContext(),hidden);
             return null;
         }
 
@@ -1407,7 +1460,6 @@ public class MainActivity extends ThemedActivity {
             albumsAdapter.updateDataset(albums.dispAlbums);
             contentReady = true;
             checkNothing();
-            toggleRecyclersVisibilty(true);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -1416,8 +1468,9 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPreExecute() {
-            contentReady = false;
             swipeRefreshLayout.setRefreshing(true);
+            contentReady = false;
+            toggleRecyclersVisibilty(false);
             super.onPreExecute();
         }
 
@@ -1432,7 +1485,6 @@ public class MainActivity extends ThemedActivity {
             mediaAdapter.updateDataset(album.media);
             contentReady = true;
             checkNothing();
-            toggleRecyclersVisibilty(false);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
