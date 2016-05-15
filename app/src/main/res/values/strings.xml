@@ -87,9 +87,9 @@
     <!-- AFFIX -->
     <string name="affix">Affix</string>
     <string name="affix_vertical">Affix Vertical</string>
-    <string name="affix_vertical_sub">Affix horiazontal by default.</string>
+    <string name="affix_vertical_sub">Set the orientation, horizontal by default.</string>
     <string name="affix_save_here">Save in this album</string>
-    <string name="affix_save_here_sub">The affixed image will be saved in this album</string>
+    <string name="affix_save_here_sub">The result will be saved in this album</string>
     <string name="affix_format">Image format</string>
     <string name="affix_format_sub">Available formats</string>
     <string name="affix_text">Affixing your media, please wait&#8230;</string>

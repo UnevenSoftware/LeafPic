@@ -78,7 +78,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:gravity="end"
-                            android:text="@string/folderPath"
+                            android:text="@string/path"
                             android:textStyle="bold"
                             />
                         <TextView
