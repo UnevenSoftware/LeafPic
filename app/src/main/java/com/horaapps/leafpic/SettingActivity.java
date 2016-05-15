@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,8 @@ public class SettingActivity extends ThemedActivity {
 
     boolean maxLuminosita, pictureOrientation, delayfullimage,internalPlayer;
 
+    ScrollView scr;
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -68,6 +71,8 @@ public class SettingActivity extends ThemedActivity {
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
         txtVT = (TextView) findViewById(R.id.video_setting_title);
+
+        scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
 
 
         setNavBarColor();
@@ -788,6 +793,8 @@ public class SettingActivity extends ThemedActivity {
         txtPT.setTextColor(getAccentColor());
         txtVT.setTextColor(getAccentColor());
 
+
+        setScrollViewColor(scr);
 
         setThemeOnChangeListener();
     }

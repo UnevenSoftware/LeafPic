@@ -6,17 +6,24 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.view.View;
+import android.widget.ScrollView;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Created by dnld on 23/02/16.
@@ -228,6 +235,33 @@ public class ThemedActivity extends AppCompatActivity {
                 getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
             else
                 getWindow().setStatusBarColor(getPrimaryColor());
+        }
+    }
+
+    protected void setScrollViewColor(ScrollView scr){
+        try
+        {
+            Field mScrollCacheField = View.class.getDeclaredField("mScrollCache");
+            mScrollCacheField.setAccessible(true);
+            Object mScrollCache = mScrollCacheField.get(scr); // scr is your Scroll View
+
+            Field scrollBarField = mScrollCache.getClass().getDeclaredField("scrollBar");
+            scrollBarField.setAccessible(true);
+            Object scrollBar = scrollBarField.get(mScrollCache);
+
+            Method method = scrollBar.getClass().getDeclaredMethod("setVerticalThumbDrawable", Drawable.class);
+            method.setAccessible(true);
+
+            // Set your drawable here.
+            //Bitmap myBitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
+            //myBitmap.setPixel(0, 0, getPrimaryColor());
+
+            ColorDrawable ColorDraw = new ColorDrawable(getPrimaryColor());
+            method.invoke(scrollBar, ColorDraw);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

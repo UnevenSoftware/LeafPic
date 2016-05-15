@@ -6,6 +6,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -37,6 +38,9 @@ public class AboutActivity extends ThemedActivity {
 
     /**** Buttons ***/
 
+    /**** Scroll View*/
+    ScrollView scr;
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -47,6 +51,7 @@ public class AboutActivity extends ThemedActivity {
         txtSU = (TextView) findViewById(R.id.about_support_title);
         setNavBarColor();
         cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
+        scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
     }
 
     @Override
@@ -87,6 +92,9 @@ public class AboutActivity extends ThemedActivity {
         txtSU.setTextColor(getAccentColor());
 
         /***** Buttons *****/
+
+        /***** ScrolView *****/
+        setScrollViewColor(scr);
 
         setThemeOnChangeListener();
         ClickListeners();

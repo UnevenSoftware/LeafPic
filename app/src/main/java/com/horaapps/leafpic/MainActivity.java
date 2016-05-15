@@ -95,6 +95,8 @@ public class MainActivity extends ThemedActivity {
     SelectAlbumBottomSheet bottomSheetDialogFragment;
     SwipeRefreshLayout swipeRefreshLayout;
 
+    ScrollView drawerScr;
+
     boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
     View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
@@ -174,6 +176,8 @@ public class MainActivity extends ThemedActivity {
         albumsMode = true;
         editmode = false;
         securityObj= new SecurityUtils(MainActivity.this);
+
+        drawerScr = (ScrollView) findViewById(R.id.drawer_scrollbar);
 
         initUI();
         setupUI();
@@ -388,8 +392,8 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
-
         /**** DRAWER ****/
+        setScrollViewColor(drawerScr);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
                 mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -483,7 +487,7 @@ public class MainActivity extends ThemedActivity {
         LinearLayout DrawerBody = (LinearLayout) findViewById(R.id.Drawer_Body);
         DrawerBody.setBackgroundColor(getDrawerBackground());//getBackgroundColor()
 
-        ScrollView DrawerScroll = (ScrollView) findViewById(R.id.Drawer_Body_Scroll);
+        ScrollView DrawerScroll = (ScrollView) findViewById(R.id.drawer_scrollbar);
         DrawerScroll.setBackgroundColor(getDrawerBackground());//getBackgroundColor()
 
         View DrawerDivider2 = findViewById(R.id.Drawer_Body_Divider);

@@ -18,6 +18,8 @@
         />
 
     <ScrollView
+        android:id="@+id/settingAct_scrollView"
+        android:scrollbarSize="4dip"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

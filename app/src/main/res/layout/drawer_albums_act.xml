@@ -9,7 +9,8 @@
     android:orientation="vertical">
 
     <ScrollView
-        android:id="@+id/Drawer_Body_Scroll"
+        android:id="@+id/drawer_scrollbar"
+        android:scrollbarSize="4dip"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
