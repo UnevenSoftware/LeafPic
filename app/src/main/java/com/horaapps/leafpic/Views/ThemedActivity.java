@@ -205,11 +205,11 @@ public class ThemedActivity extends AppCompatActivity {
 
     public void updateSwitchColor(SwitchCompat sw, int color){
         if(sw.isChecked())
-            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
         else
-            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
-        if(getBasicTheme()!=3)sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-        else sw.getTrackDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.MULTIPLY);
+            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);
+        if(getBasicTheme()!=3)sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.SRC_IN);
+        else sw.getTrackDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.SRC_IN);
     }
 
     @Override

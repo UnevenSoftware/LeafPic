@@ -33,6 +33,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,8 +46,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +64,7 @@ import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.AffixMedia;
+import com.horaapps.leafpic.utils.AffixOptions;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.SecurityUtils;
@@ -71,6 +75,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class MainActivity extends ThemedActivity {
@@ -1186,11 +1191,10 @@ public class MainActivity extends ThemedActivity {
                 final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
                 final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
                 final TextView Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
-                Affix_title.setBackgroundColor(getPrimaryColor());
                 CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
+
+                Affix_title.setBackgroundColor(getPrimaryColor());
                 cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
-
-
 
                 //ITEMS
                 final TextView txt_Affix_Vertical_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_title);
@@ -1200,38 +1204,65 @@ public class MainActivity extends ThemedActivity {
 
                 final TextView labelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_title);
                 final TextView subLabelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_sub);
+
                 final SwitchCompat swSaveHere = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.save_here_switch);
                 final IconicsImageView imgSaveHere = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.save_here_icon);
 
-                final TextView txtAffixFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_title);
-                //final Spinner cmbFormat = (Spinner) Affix_dialogLayout.findViewById(R.id.affix_format_spinner);
-                //final RadioGroup radioFormatGroup = (RadioGroup) Affix_dialogLayout.findViewById(R.id.radio_format);
-                final RadioButton radio_jpg = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_jpg);
+                final TextView txtCompressionTitle = (TextView) Affix_dialogLayout.findViewById(R.id.compression_settings_title);
+                final TextView txtFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_sub);
+                final TextView txtQuality = (TextView) Affix_dialogLayout.findViewById(R.id.affix_quality_sub);
+                final SeekBar seekQuality = (SeekBar) Affix_dialogLayout.findViewById(R.id
+                        .seek_bar_quality);
+
+                final RadioGroup radioFormatGroup = (RadioGroup) Affix_dialogLayout.findViewById(R.id.radio_format);
+                final RadioButton radio_jpg = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_jpeg);
                 final RadioButton radio_png = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_png);
                 final IconicsImageView imgFormat = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_format_icon);
-
+                final RadioButton radio_webp = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_webp);
                 txt_Affix_Vertical_title .setTextColor(getTextColor());
                 subLabelSaveHere.setTextColor(getSubTextColor());
                 imgSaveHere.setColor(getIconColor());
 
                 labelSaveHere.setTextColor(getTextColor());
-                txt_Affix_Vertical_sub .setTextColor(getSubTextColor());
-                imgAffix.setColor(getIconColor());
+                txt_Affix_Vertical_sub.setTextColor(getSubTextColor());
+                txtFormat.setTextColor(getSubTextColor());
+                txtCompressionTitle.setTextColor(getTextColor());
+                txtQuality.setTextColor(getSubTextColor());
 
-
-                txtAffixFormat.setTextColor(getTextColor());
                 imgFormat.setColor(getIconColor());
+                imgAffix.setColor(getIconColor());
+                seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
+                seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
 
-                //TODO:SPINNER MUST BE REPLACED OR STYLED WELL
+                seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        txtQuality.setText(Html.fromHtml(
+                                String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
+                    }
 
-                //ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(),
-                //     android.R.layout.simple_spinner_dropdown_item, new String[]{ "png", "jpg" });
-                //cmbFormat.setAdapter(adapter);
-                //String s =cmbFormat.getSelectedItem().toString();
-                //cmbFormat.setPopupBackgroundResource(R.drawable.ic_empty_white);
-                radio_jpg.setButtonTintList(getRadioButtonColor());
-                radio_png.setButtonTintList(getRadioButtonColor());
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
 
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+
+                seekQuality.setProgress(90); //DEFAULT
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    radio_jpg.setButtonTintList(getRadioButtonColor());
+                    radio_png.setButtonTintList(getRadioButtonColor());
+                    radio_webp.setButtonTintList(getRadioButtonColor());
+                    radio_jpg.setTextColor(getTextColor());
+                    radio_png.setTextColor(getTextColor());
+                    radio_webp.setTextColor(getTextColor());
+                }
 
                 //SWITCH
                 swVertical.setChecked(false);
@@ -1272,12 +1303,25 @@ public class MainActivity extends ThemedActivity {
                         }
 
                         if (bitmapArray.size()>1) {
-                            AffixMedia.AffixBitmapList(
-                                    getApplicationContext(),
-                                    bitmapArray,
-                                    swVertical.isChecked(),
+
+                            Bitmap.CompressFormat compressFormat;
+                            switch (radioFormatGroup.getCheckedRadioButtonId()) {
+                                case R.id.radio_jpeg: default:
+                                    compressFormat = Bitmap.CompressFormat.JPEG; break;
+                                case R.id.radio_png:
+                                    compressFormat = Bitmap.CompressFormat.PNG; break;
+                                case R.id.radio_webp:
+                                    compressFormat = Bitmap.CompressFormat.WEBP; break;
+                            }
+
+                            AffixOptions options = new AffixOptions(
                                     swSaveHere.isChecked() ? album.getPath() : AffixMedia.getDefaultDirectoryPath(),
-                                    radio_jpg.isChecked() ? "jpg" : "png"/*,cmbFormat.getSelectedItem().toString()*/);
+                                    compressFormat,
+                                    seekQuality.getProgress(),
+                                    swVertical.isChecked());
+
+                            AffixMedia.AffixBitmapList(getApplicationContext(), bitmapArray, options);
+
                         } else {
                             runOnUiThread(new Runnable(){
                                 @Override
@@ -1292,6 +1336,7 @@ public class MainActivity extends ThemedActivity {
                         album.clearSelectedPhotos();
                         dialog.dismiss();
                         invalidateOptionsMenu();
+                        mediaAdapter.notifyDataSetChanged();
                         //new PreparePhotosTask().execute();
                     }
                 }

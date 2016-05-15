@@ -43,7 +43,7 @@
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/affix_vertical_icon"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-compare" />
@@ -82,7 +82,7 @@
                             />
                     </LinearLayout>
 
-                    <!--VERTICAL-->
+                    <!--SAVEHERE-->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_save_here"
                         android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
-                            app:iiv_icon="gmd-photo-album" />
+                            app:iiv_icon="gmd-photo-library" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -146,74 +146,77 @@
                             android:id="@+id/affix_format_icon"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
+                            android:layout_gravity="top|center_horizontal"
                             android:layout_weight="2"
-                            app:iiv_icon="gmd-image" />
-                        <TextView
-                            android:id="@+id/affix_format_title"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/affix_format"
-                            android:layout_weight="4"
-                            android:layout_gravity="center_vertical"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"/>
+                            app:iiv_icon="gmd-dns" />
 
-                        <!--
+
+
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="4"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-                            <TextView
-                                android:id="@+id/affix_format_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/affix_format"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-
-                                />
-                            <TextView
-                                android:id="@+id/affix_format_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/affix_format_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                        -->
-                        <RadioGroup
-                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:paddingRight="5dp"
-                            android:orientation="horizontal"
+                            android:layout_weight="7"
+                            android:layout_width="0dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/compression_settings_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/compression_settings"
+                                android:paddingBottom="5dp"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"/>
+
+
+                        <TextView
+                            android:id="@+id/affix_format_sub"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/affix_format_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:textSize="14sp"
+                            android:paddingBottom="4dp"
+                            />
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="4dp"
                             android:id="@+id/radio_format" >
                             <android.support.v7.widget.AppCompatRadioButton
-                                android:id="@+id/radio_jpg"
+                                android:id="@+id/radio_jpeg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="JPG"
+                                android:text="JPEG"
                                 android:checked="true" />
                             <android.support.v7.widget.AppCompatRadioButton
                                 android:id="@+id/radio_png"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="PNG" />
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:id="@+id/radio_webp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="WebP" />
                         </RadioGroup>
-                        <!--
-                        <Spinner
-                            android:id="@+id/affix_format_spinner"
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/affix_quality_sub"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="center"
-                            android:paddingRight="5dp"
+                            android:text="Quality 90"
+                            android:textColor="@color/md_grey_400"
+                            android:paddingBottom="3dp"
+                            android:textSize="14sp"
                             />
-                            -->
+                        <SeekBar
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:id="@+id/seek_bar_quality"
+                            />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
