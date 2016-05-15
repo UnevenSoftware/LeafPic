@@ -594,6 +594,7 @@ public class SettingActivity extends ThemedActivity {
                 editor.apply();
                 updateTheme();
                 setNavBarColor();
+                setScrollViewColor(scr);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTraslucentStatusBar()) {
                         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
@@ -800,6 +801,8 @@ public class SettingActivity extends ThemedActivity {
     }
 
     public void setThemeOnChangeListener(){
+
+        setScrollViewColor(scr);
 
         /** BackGround **/
         LinearLayout bg = (LinearLayout) findViewById(R.id.setting_background);

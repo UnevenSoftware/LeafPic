@@ -34,6 +34,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
                         android:scrollbars="vertical"
+                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                         android:clipToPadding="false"
 
                         />
@@ -43,6 +44,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
                         android:scrollbars="vertical"
+                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                         android:clipToPadding="false"
                         />
                     <TextView

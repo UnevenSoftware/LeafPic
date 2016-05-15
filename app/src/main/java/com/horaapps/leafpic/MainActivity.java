@@ -8,7 +8,9 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -96,6 +98,7 @@ public class MainActivity extends ThemedActivity {
     SwipeRefreshLayout swipeRefreshLayout;
 
     ScrollView drawerScr;
+    Drawable drawableScrollBar;
 
     boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
 
@@ -178,6 +181,7 @@ public class MainActivity extends ThemedActivity {
         securityObj= new SecurityUtils(MainActivity.this);
 
         drawerScr = (ScrollView) findViewById(R.id.drawer_scrollbar);
+        drawableScrollBar = getResources().getDrawable( R.drawable.ic_scrollbar);
 
         initUI();
         setupUI();
@@ -392,8 +396,9 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
+
+
         /**** DRAWER ****/
-        setScrollViewColor(drawerScr);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
                 mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -476,6 +481,13 @@ public class MainActivity extends ThemedActivity {
         setDrawerTheme();
         recyclerViewAlbums.setBackgroundColor(getBackgroundColor());
         recyclerViewMedia.setBackgroundColor(getBackgroundColor());
+
+        /**** DRAWER ****/
+        setScrollViewColor(drawerScr);
+
+        /**** recyclers drawable *****/
+        //drawableScrollBar = getResources().getDrawable( R.drawable.ic_scrollbar);
+        drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
 
         securityObj.updateSecuritySetting();
     }
@@ -813,7 +825,6 @@ public class MainActivity extends ThemedActivity {
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
-        //TODO: WILL BE IMPLEMENTED**************************************************************************************************************************************************************************************
         menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && album.getSelectedCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
