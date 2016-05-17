@@ -183,7 +183,8 @@ public class SplashScreen extends ThemedActivity {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
-            ((MyApplication) getApplicationContext()).setCurrentAlbum(album);
+            ((MyApplication) getApplicationContext())
+                    .setAlbums(new HandlingAlbums(SplashScreen.this, album));
             b.putInt(CONTENT, PHOTS_PREFETCHED);
             i.putExtras(b);
             startActivity(i);

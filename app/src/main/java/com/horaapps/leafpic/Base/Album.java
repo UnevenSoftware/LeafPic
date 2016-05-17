@@ -143,6 +143,10 @@ public class Album {
         settings.coverPath = path;
     }
 
+    public boolean isHidden() {
+        return new File(getPath(), ".nomedia").exists();
+    }
+
     public Media getCoverAlbum() {
         if (hasCustomCover())
             return new Media(settings.coverPath);

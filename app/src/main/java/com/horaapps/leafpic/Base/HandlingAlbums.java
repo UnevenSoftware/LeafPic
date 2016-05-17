@@ -39,6 +39,7 @@ public class HandlingAlbums {
     private SharedPreferences SP;
 
     int indexCamera = -1;
+    int current = -1;
 
     ArrayList<File> excludedfolders;
     AlbumsComparators albumsComparators;
@@ -53,6 +54,19 @@ public class HandlingAlbums {
         selectedAlbums = new ArrayList<Album>();
     }
 
+    public HandlingAlbums(Context context, Album current) {
+        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        customAlbumsHandler = new CustomAlbumsHandler(context);
+        excludedfolders = new ArrayList<File>();
+        loadExcludedFolders(context);
+        dispAlbums = new ArrayList<Album>();
+        dispAlbums.add(0, current);
+        setCurrentAlbumIndex(0);
+        selectedAlbums = new ArrayList<Album>();
+
+    }
+
+
     public void loadPreviewAlbums(Context context, boolean hidden) {
         clearCameraIndex();
         dispAlbums = new ArrayList<Album>();
@@ -65,6 +79,14 @@ public class HandlingAlbums {
 
         sortAlbums(context);
 
+    }
+
+    public void setCurrentAlbumIndex(int index) {
+        current = index;
+    }
+
+    public Album getCurrentAlbum() {
+        return dispAlbums.get(current);
     }
 
     public void clearCameraIndex() {
@@ -336,8 +358,6 @@ public class HandlingAlbums {
             }
         }
     }
-
-
 
     public void excludeSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums)
