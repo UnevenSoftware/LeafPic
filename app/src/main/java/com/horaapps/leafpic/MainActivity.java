@@ -106,7 +106,7 @@ public class MainActivity extends ThemedActivity {
     ScrollView drawerScr;
     Drawable drawableScrollBar;
 
-    boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, contentReady = false, firstLaunch = true;
+    boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, firstLaunch = true;
 
     View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
         @Override
@@ -127,7 +127,6 @@ public class MainActivity extends ThemedActivity {
     View.OnClickListener photosOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (contentReady) {
                 int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
                 if (!pickmode) {
                     if (editmode) {
@@ -143,7 +142,7 @@ public class MainActivity extends ThemedActivity {
                     setResult(RESULT_OK, new Intent().setData(album.getMedia(index).getUri()));
                     finish();
                 }
-            }
+
         }
     };
 
@@ -161,16 +160,14 @@ public class MainActivity extends ThemedActivity {
     private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (contentReady) {
-                int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
-                if (editmode) {
-                    albumsAdapter.notifyItemChanged(albums.toggleSelectAlbum(index));
-                    invalidateOptionsMenu();
-                } else {
-                    albums.setCurrentAlbumIndex(index);
-                    displayCurrentAlbumMedia(true);
-                    setRecentApp(albums.getCurrentAlbum().getName());
-                }
+            int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
+            if (editmode) {
+                albumsAdapter.notifyItemChanged(albums.toggleSelectAlbum(index));
+                invalidateOptionsMenu();
+            } else {
+                albums.setCurrentAlbumIndex(index);
+                displayCurrentAlbumMedia(true);
+                setRecentApp(albums.getCurrentAlbum().getName());
             }
         }
     };
@@ -268,6 +265,7 @@ public class MainActivity extends ThemedActivity {
         editmode = false;
         invalidateOptionsMenu();
         mediaAdapter.updateDataset(new ArrayList<Media>());
+        recyclerViewMedia.scrollToPosition(0);
     }
 
 
@@ -344,7 +342,6 @@ public class MainActivity extends ThemedActivity {
                 albums = new HandlingAlbums(getApplicationContext());
                 displayAlbums(true);
             }
-            contentReady = true;
         } catch (NullPointerException e) { e.printStackTrace(); }
 
     }
@@ -936,7 +933,6 @@ public class MainActivity extends ThemedActivity {
                     @Override
                     protected void onPreExecute() {
                         swipeRefreshLayout.setRefreshing(true);
-                        contentReady = false;
                         super.onPreExecute();
                     }
 
@@ -966,7 +962,6 @@ public class MainActivity extends ThemedActivity {
                             else
                                 mediaAdapter.updateDataset(album.media);
                         }
-                        contentReady = true;
                         invalidateOptionsMenu();
                         checkNothing();
                         swipeRefreshLayout.setRefreshing(false);
@@ -1516,7 +1511,6 @@ public class MainActivity extends ThemedActivity {
         @Override
         protected void onPreExecute() {
             swipeRefreshLayout.setRefreshing(true);
-            contentReady = false;
             toggleRecyclersVisibilty(true);
             super.onPreExecute();
         }
@@ -1530,7 +1524,6 @@ public class MainActivity extends ThemedActivity {
         @Override
         protected void onPostExecute(Void result) {
             albumsAdapter.updateDataset(albums.dispAlbums);
-            contentReady = true;
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -1541,7 +1534,6 @@ public class MainActivity extends ThemedActivity {
         @Override
         protected void onPreExecute() {
             swipeRefreshLayout.setRefreshing(true);
-            contentReady = false;
             toggleRecyclersVisibilty(false);
             super.onPreExecute();
         }
@@ -1555,7 +1547,6 @@ public class MainActivity extends ThemedActivity {
         @Override
         protected void onPostExecute(Void result) {
             mediaAdapter.updateDataset(album.media);
-            contentReady = true;
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
         }

@@ -220,7 +220,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
             final Album a = albumArrayList.get(position);
             holder.album_name.setText(a.getName());
-            holder.album_media_count.setText(String.format(Locale.getDefault(),"%d %s",a.getCount(),a.getContentDescdription(getDialog().getContext())));
+            holder.album_media_count.setText(String.format(Locale.getDefault(),"%d %s",a.getCount(),a.getContentDescription(getDialog().getContext())));
             holder.album_name.setTag(a.getPath());
 
             /**SET LAYOUT THEME**/
@@ -241,7 +241,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
             holder.album_media_count.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>"
                     + a.getCount() + "</font></b>" + "<font " + "color='" + subtextColor + "'> "
-                    + a.getContentDescdription(getDialog().getContext()) + "</font>"));
+                    + a.getContentDescription(getDialog().getContext()) + "</font>"));
 
             holder.imgFolder.setColor(
                     ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
