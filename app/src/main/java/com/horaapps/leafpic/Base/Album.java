@@ -3,6 +3,7 @@ package com.horaapps.leafpic.Base;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.util.Log;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.R;
@@ -65,10 +66,11 @@ public class Album {
     }
 
     public void updatePhotos() {
-        media = new ArrayList<Media>();
+        ArrayList<Media> mediaArrayList = new ArrayList<Media>();
         File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos));
         for (File image : images)
-            media.add(0, new Media(image.getAbsolutePath(), image.lastModified(), image.length()));
+            mediaArrayList.add(0, new Media(image.getAbsolutePath(), image.lastModified(), image.length()));
+        media = mediaArrayList;
         sortPhotos();
         setCount(media.size());
     }

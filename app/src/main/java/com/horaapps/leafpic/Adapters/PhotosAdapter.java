@@ -40,7 +40,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public PhotosAdapter(ArrayList<Media> ph , Context context) {
         medias = ph;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
-        switch (SP.getInt("basic_theme", 1)){
+        updatePlaceholder(context, SP.getInt("basic_theme", 1));
+    }
+
+    public void updatePlaceholder(Context context, int theme) {
+        switch (theme){
             case 2: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));break;
             case 3: drawable = null ;break;
             case 1: default: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
@@ -132,7 +136,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataset(ArrayList<Media> asd) {
+    public void updateDataSet(ArrayList<Media> asd) {
         medias = asd;
         notifyDataSetChanged();
     }
