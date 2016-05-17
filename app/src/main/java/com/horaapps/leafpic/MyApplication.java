@@ -11,16 +11,10 @@ import com.horaapps.leafpic.Base.Album;
 public class MyApplication extends Application {
 
     private HandlingAlbums albums;
-    private Album currentAlbum;
 
     public Album getCurrentAlbum() {
-        return currentAlbum;
+        return albums.getCurrentAlbum();
     }
-
-    public void setCurrentAlbum(Album currentAlbum) {
-        this.currentAlbum = currentAlbum;
-    }
-
 
     public HandlingAlbums getAlbums() {
         return albums;

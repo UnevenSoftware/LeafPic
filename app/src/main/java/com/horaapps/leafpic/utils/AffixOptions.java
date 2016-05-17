@@ -10,8 +10,7 @@ public class AffixOptions {
     /**
      * Specifies the known formats a bitmap can be compressed into
      */
-
-
+    
     String folderPath = null;
     Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
     int quality = 90;
