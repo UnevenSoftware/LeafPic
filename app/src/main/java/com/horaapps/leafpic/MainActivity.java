@@ -1202,6 +1202,7 @@ public class MainActivity extends ThemedActivity {
                 final TextView txt_Affix_Vertical_sub = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_sub);
                 final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
                 final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
+                final IconicsImageView imgQuality = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_quality_icon);
 
                 final TextView labelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_title);
                 final TextView subLabelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_sub);
@@ -1211,9 +1212,8 @@ public class MainActivity extends ThemedActivity {
 
                 final TextView txtCompressionTitle = (TextView) Affix_dialogLayout.findViewById(R.id.compression_settings_title);
                 final TextView txtFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_sub);
-                final TextView txtQuality = (TextView) Affix_dialogLayout.findViewById(R.id.affix_quality_sub);
-                final SeekBar seekQuality = (SeekBar) Affix_dialogLayout.findViewById(R.id
-                        .seek_bar_quality);
+                final TextView txtQuality = (TextView) Affix_dialogLayout.findViewById(R.id.affix_quality_title);
+                final SeekBar seekQuality = (SeekBar) Affix_dialogLayout.findViewById(R.id.seek_bar_quality);
 
                 final RadioGroup radioFormatGroup = (RadioGroup) Affix_dialogLayout.findViewById(R.id.radio_format);
                 final RadioButton radio_jpg = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_jpeg);
@@ -1230,6 +1230,7 @@ public class MainActivity extends ThemedActivity {
                 txtCompressionTitle.setTextColor(getTextColor());
                 txtQuality.setTextColor(getSubTextColor());
 
+                imgQuality.setColor(getIconColor());
                 imgFormat.setColor(getIconColor());
                 imgAffix.setColor(getIconColor());
                 seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));

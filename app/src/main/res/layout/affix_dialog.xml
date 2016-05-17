@@ -133,7 +133,7 @@
                             />
                     </LinearLayout>
 
-                    <!--COMBOBOX SPINNER-->
+                    <!--FORMAT-->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_affix_format"
                         android:layout_width="match_parent"
@@ -149,75 +149,93 @@
                             android:layout_gravity="top|center_horizontal"
                             android:layout_weight="2"
                             app:iiv_icon="gmd-dns" />
-
-
-
                         <LinearLayout
                             android:layout_height="wrap_content"
-                            android:layout_weight="7"
+                            android:layout_weight="8"
                             android:layout_width="0dp"
                             android:orientation="vertical">
-
                             <TextView
                                 android:id="@+id/compression_settings_title"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/compression_settings"
-                                android:paddingBottom="5dp"
                                 android:layout_gravity="center_vertical"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="16sp"/>
-
-
-                        <TextView
-                            android:id="@+id/affix_format_sub"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/affix_format_sub"
-                            android:textColor="@color/md_grey_400"
-                            android:textSize="14sp"
-                            android:paddingBottom="4dp"
-                            />
-                        <RadioGroup
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingBottom="4dp"
-                            android:id="@+id/radio_format" >
-                            <android.support.v7.widget.AppCompatRadioButton
-                                android:id="@+id/radio_jpeg"
-                                android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/affix_format_sub"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="JPEG"
-                                android:checked="true" />
-                            <android.support.v7.widget.AppCompatRadioButton
-                                android:id="@+id/radio_png"
-                                android:layout_width="wrap_content"
+                                android:text="@string/affix_format_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                            <RadioGroup
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="PNG" />
-                            <android.support.v7.widget.AppCompatRadioButton
-                                android:id="@+id/radio_webp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="WebP" />
-                        </RadioGroup>
-                        <TextView
-                            android:id="@+id/affix_quality_sub"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Quality 90"
-                            android:textColor="@color/md_grey_400"
-                            android:paddingBottom="3dp"
-                            android:textSize="14sp"
-                            />
-                        <SeekBar
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:id="@+id/seek_bar_quality"
-                            />
+                                android:paddingTop="4dp"
+                                android:orientation="horizontal"
+                                android:id="@+id/radio_format">
+                                <android.support.v7.widget.AppCompatRadioButton
+                                    android:id="@+id/radio_jpeg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="JPEG"
+                                    android:checked="true" />
+                                <android.support.v7.widget.AppCompatRadioButton
+                                    android:id="@+id/radio_png"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PNG" />
+                                <android.support.v7.widget.AppCompatRadioButton
+                                    android:id="@+id/radio_webp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="WebP" />
+                            </RadioGroup>
                         </LinearLayout>
                     </LinearLayout>
+
+                    <!--QUALITY-->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_affix_quality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="4dp"
+                        android:weightSum="10">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/affix_quality_icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-high-quality" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:paddingRight="15dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/affix_quality_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Quality 90"
+                                android:textColor="@color/md_grey_400"
+                                android:paddingBottom="3dp"
+                                android:textSize="14sp"
+                                />
+                            <SeekBar
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:max="100"
+                                android:id="@+id/seek_bar_quality"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
     </android.support.v7.widget.CardView>
