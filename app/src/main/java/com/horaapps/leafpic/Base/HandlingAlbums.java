@@ -69,14 +69,14 @@ public class HandlingAlbums {
 
     public void loadPreviewAlbums(Context context, boolean hidden) {
         clearCameraIndex();
-        dispAlbums = new ArrayList<Album>();
+        ArrayList<Album> albumArrayList = new ArrayList<Album>();
         if (hidden)
             for (File storage : listStorages())
-                fetchRecursivelyHiddenFolder(storage);
+                fetchRecursivelyHiddenFolder(storage, albumArrayList);
         else
             for (File storage : listStorages())
-                fetchRecursivelyFolder(storage);
-
+                fetchRecursivelyFolder(storage, albumArrayList);
+        dispAlbums = albumArrayList;
         sortAlbums(context);
 
     }
@@ -105,15 +105,15 @@ public class HandlingAlbums {
         ArrayList<Album> folders = new ArrayList<Album>();
         if (hidden)
             for (File storage : listStorages())
-                fetchRecursivelyHiddenFolder(storage, folders);
+                fetchRecursivelyHiddenFolder(storage, folders, false);
         else
             for (File storage : listStorages())
-                fetchRecursivelyFolder(storage, folders);
+                fetchRecursivelyFolder(storage, folders, false);
 
         return folders;
     }
 
-    private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders) {
+    private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders, boolean asd) {
         if (!excludedfolders.contains(dir)) {
             File[] listFiles = dir.listFiles(new ImageFileFilter());
             if (listFiles != null && listFiles.length > 0)
@@ -124,14 +124,14 @@ public class HandlingAlbums {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
-                        fetchRecursivelyFolder(temp, folders);
+                        fetchRecursivelyFolder(temp, folders, asd);
                     }
                 }
             }
         }
     }
 
-    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders) {
+    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders, boolean asd) {
         if (!excludedfolders.contains(dir)) {
             File[] asdf = dir.listFiles(new FoldersFileFilter());
             if (asdf !=null) {
@@ -142,43 +142,43 @@ public class HandlingAlbums {
                         if (files != null && files.length > 0)
                             folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
                     }
-                    fetchRecursivelyHiddenFolder(temp, folders);
+                    fetchRecursivelyHiddenFolder(temp, folders, asd);
                 }
             }
         }
     }
-    private void fetchRecursivelyFolder(File dir) {
+    private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList) {
         if (!excludedfolders.contains(dir)) {
-            checkAndAddAlbum(dir);
+            checkAndAddAlbum(dir, albumArrayList);
             File[] children = dir.listFiles(new FoldersFileFilter());
             if (children != null) {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
                         //not excluded/hidden folder
-                        fetchRecursivelyFolder(temp);
+                        fetchRecursivelyFolder(temp, albumArrayList);
                     }
                 }
             }
         }
     }
 
-    private void fetchRecursivelyHiddenFolder(File dir) {
+    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> albumArrayList) {
         if (!excludedfolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             if (folders != null) {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && nomedia.exists()) {
-                        checkAndAddAlbum(temp);
+                        checkAndAddAlbum(temp, albumArrayList);
                     }
-                    fetchRecursivelyHiddenFolder(temp);
+                    fetchRecursivelyHiddenFolder(temp, albumArrayList);
                 }
             }
         }
     }
 
-    public void checkAndAddAlbum(File temp) {
+    public void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList) {
         File[] files = temp.listFiles(new ImageFileFilter());
         if (files != null && files.length > 0) {
             //valid folder
@@ -196,11 +196,9 @@ public class HandlingAlbums {
             if (choice != null)
                 asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
 
-            dispAlbums.add(asd);
+            albumArrayList.add(asd);
         }
     }
-
-
 
     public void loadExcludedFolders(Context context) {
         excludedfolders = new ArrayList<File>();
@@ -393,21 +391,39 @@ public class HandlingAlbums {
         editor.apply();
     }
 
-    public void sortAlbums(final Context context) {
+    public void sortAlbums(final Context context, ArrayList<Album> albumArrayList) {
         albumsComparators = new AlbumsComparators(isAscending());
 
         switch (getColumnSortingMode()) {
             case AlbumSettings.SORT_BY_NAME:
-                Collections.sort(dispAlbums, albumsComparators.getNameComparator());
+                Collections.sort(albumArrayList, albumsComparators.getNameComparator());
                 break;
             case AlbumSettings.SORT_BY_SIZE:
-                Collections.sort(dispAlbums, albumsComparators.getSizeComparator());
+                Collections.sort(albumArrayList, albumsComparators.getSizeComparator());
                 break;
             case AlbumSettings.SORT_BY_DATE:
             default:
-                Collections.sort(dispAlbums, albumsComparators.getDateComparator());
+                Collections.sort(albumArrayList, albumsComparators.getDateComparator());
                 break;
         }
+
+    }
+
+        public void sortAlbums(final Context context) {
+            albumsComparators = new AlbumsComparators(isAscending());
+
+            switch (getColumnSortingMode()) {
+                case AlbumSettings.SORT_BY_NAME:
+                    Collections.sort(dispAlbums, albumsComparators.getNameComparator());
+                    break;
+                case AlbumSettings.SORT_BY_SIZE:
+                    Collections.sort(dispAlbums, albumsComparators.getSizeComparator());
+                    break;
+                case AlbumSettings.SORT_BY_DATE:
+                default:
+                    Collections.sort(dispAlbums, albumsComparators.getDateComparator());
+                    break;
+            }
 
         new Thread(new Runnable() {
             @Override

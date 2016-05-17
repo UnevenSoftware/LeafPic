@@ -24,7 +24,7 @@
         android:text="LeafPic"
         android:textColor="@color/md_white_1000"
         android:textSize="50sp"
-        android:layout_margin="25dp"
+        android:layout_marginBottom="25dp"
          />
 
     <!--

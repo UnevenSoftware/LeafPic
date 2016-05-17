@@ -34,7 +34,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -205,8 +204,8 @@ public class MainActivity extends ThemedActivity {
         albums.clearSelectedAlbums();
         album.clearSelectedPhotos();
         if (SP.getBoolean("auto_update_media", false)) {
-            if (albumsMode && !firstLaunch) new PrepareAlbumTask().execute();
-             else new PreparePhotosTask().execute();
+            if (albumsMode) { if (!firstLaunch) new PrepareAlbumTask().execute(); }
+            else new PreparePhotosTask().execute();
         } else {
             albumsAdapter.notifyDataSetChanged();
             mediaAdapter.notifyDataSetChanged();
@@ -225,9 +224,7 @@ public class MainActivity extends ThemedActivity {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         if (reload) {
             //display available medias before reload
-            mediaAdapter.updateDataset(album.media);
-            Log.wtf("asd",""+album.media.size());
-
+            mediaAdapter.updateDataSet(album.media);
             new PreparePhotosTask().execute();
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -256,6 +253,7 @@ public class MainActivity extends ThemedActivity {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         if (reload) new PrepareAlbumTask().execute();
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { mDrawerLayout.openDrawer(GravityCompat.START); }
@@ -264,7 +262,7 @@ public class MainActivity extends ThemedActivity {
         albumsMode = true;
         editmode = false;
         invalidateOptionsMenu();
-        mediaAdapter.updateDataset(new ArrayList<Media>());
+        mediaAdapter.updateDataSet(new ArrayList<Media>());
         recyclerViewMedia.scrollToPosition(0);
     }
 
@@ -275,13 +273,13 @@ public class MainActivity extends ThemedActivity {
         int nSpan;
 
         if (albumsMode) {
-            nSpan = Measure.getAlbumsColums(MainActivity.this);
+            nSpan = Measure.getAlbumsColumns(MainActivity.this);
             recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
             recyclerViewAlbums.removeItemDecoration(albumsDecoration);
             albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
             recyclerViewAlbums.addItemDecoration(albumsDecoration);
         } else {
-            nSpan = Measure.getPhotosColums(MainActivity.this);
+            nSpan = Measure.getPhotosColumns(MainActivity.this);
             recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, nSpan));
             recyclerViewMedia.removeItemDecoration(photosDecoration);
             photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
@@ -334,7 +332,7 @@ public class MainActivity extends ThemedActivity {
                         }
                     }).start();
                     displayCurrentAlbumMedia(false);
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                     toggleRecyclersVisibilty(false);
 
                 }
@@ -360,21 +358,21 @@ public class MainActivity extends ThemedActivity {
         recyclerViewMedia.setHasFixedSize(true);
         recyclerViewMedia.setItemAnimator(new DefaultItemAnimator());
 
-        albumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColums(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
-        photosDecoration = new GridSpacingItemDecoration(Measure.getPhotosColums(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
+        albumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
+        photosDecoration = new GridSpacingItemDecoration(Measure.getPhotosColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
 
         recyclerViewAlbums.addItemDecoration(albumsDecoration);
         recyclerViewMedia.addItemDecoration(photosDecoration);
 
         albumsAdapter = new AlbumsAdapter(albums.dispAlbums, MainActivity.this);
-        recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColums(getApplicationContext())));
+        recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColumns(getApplicationContext())));
 
         albumsAdapter.setOnClickListener(albumOnClickListener);
         albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
         recyclerViewAlbums.setAdapter(albumsAdapter);
 
         mediaAdapter = new PhotosAdapter(album.media, MainActivity.this);
-        recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColums(getApplicationContext())));
+        recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColumns(getApplicationContext())));
         mediaAdapter.setOnClickListener(photosOnClickListener);
         mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
         recyclerViewMedia.setAdapter(mediaAdapter);
@@ -425,7 +423,7 @@ public class MainActivity extends ThemedActivity {
             public void onClick(View v) {
                 if (!albumsMode && album.areFiltersActive()) {
                     album.filterMedias(ImageFileFilter.FILTER_ALL);
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
@@ -484,6 +482,7 @@ public class MainActivity extends ThemedActivity {
         setDrawerTheme();
         recyclerViewAlbums.setBackgroundColor(getBackgroundColor());
         recyclerViewMedia.setBackgroundColor(getBackgroundColor());
+        mediaAdapter.updatePlaceholder(getApplicationContext(), getBasicTheme());
 
         /**** DRAWER ****/
         setScrollViewColor(drawerScr);
@@ -960,7 +959,7 @@ public class MainActivity extends ThemedActivity {
                             if (album.media.size() == 0)
                                 displayAlbums();
                             else
-                                mediaAdapter.updateDataset(album.media);
+                                mediaAdapter.updateDataSet(album.media);
                         }
                         invalidateOptionsMenu();
                         checkNothing();
@@ -1072,7 +1071,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.all_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_ALL);
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
                     //TODO improve
@@ -1083,7 +1082,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.video_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_VIDEO);
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1093,7 +1092,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.image_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_IMAGES);
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1103,7 +1102,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.gifs_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_GIFS);
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1136,7 +1135,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
                     album.sortPhotos();
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                 }
                 item.setChecked(true);
                 return true;
@@ -1149,7 +1148,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                 }
                 item.setChecked(true);
                 return true;
@@ -1163,7 +1162,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                 }
                 item.setChecked(true);
                 return true;
@@ -1176,7 +1175,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
                     album.sortPhotos();
-                    mediaAdapter.updateDataset(album.media);
+                    mediaAdapter.updateDataSet(album.media);
                 }
                 item.setChecked(!item.isChecked());
                 return true;
@@ -1378,7 +1377,7 @@ public class MainActivity extends ThemedActivity {
                         if (album.media.size() == 0)
                             displayAlbums();
 
-                        mediaAdapter.updateDataset(album.media);
+                        mediaAdapter.updateDataSet(album.media);
                         finishEditMode();
                         invalidateOptionsMenu();
                         swipeRefreshLayout.setRefreshing(false);
@@ -1517,7 +1516,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums(getApplicationContext(),hidden);
+            albums.loadPreviewAlbums(getApplicationContext(), hidden);
             return null;
         }
 
@@ -1546,7 +1545,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            mediaAdapter.updateDataset(album.media);
+            mediaAdapter.updateDataSet(album.media);
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
         }

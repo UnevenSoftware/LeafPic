@@ -32,19 +32,20 @@ public class Measure {
         return size.x;
     }
 
-    public static int getAlbumsColums(Context c){
+    public static int getAlbumsColumns(Context c) {
         //StringUtils.showToast(c, getRealScreenSize(c).x / Costants.ALBUM_CARD_WIDTH_test+"");
         int n = Math.round(getDensity(c) / Costants.ALBUM_CARD_WIDTH);
         return n < 2 ? 2 : n;
     }
 
-    public static int getPhotosColums(Context c){
+    public static int getPhotosColumns(Context c){
         int n = Math.round(getDensity(c)/ Costants.PHOTO_CARD_WIDTH);
         return n < 3 ? 3 : n;
     }
 
     public static int getDensity(Context c){
-        //StringUtils.showToast(c,  (getScreenWidth(c) / c.getResources().getDisplayMetrics().densityDpi)+"");
+        Log.wtf("width:px",getScreenWidth(c)+"");
+        Log.wtf("width:dp",pxToDp(getScreenWidth(c), c)+"");
         return Math.round((getScreenWidth(c) * c.getResources().getDisplayMetrics().density));
     }
 
