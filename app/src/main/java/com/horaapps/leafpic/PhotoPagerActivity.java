@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
+import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.Media;
@@ -332,10 +333,10 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (!isApplyThemeOnImgAct())
-            toolbar.setBackgroundColor(ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
-        else
-            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
+        toolbar.setBackgroundColor(
+                isApplyThemeOnImgAct()
+                        ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
+                        : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
 
@@ -450,6 +451,15 @@ public class PhotoPagerActivity extends ThemedActivity {
         album.scanFile(getApplicationContext(), new String[]{album.getCurrentMedia().getPath()});
     }
 
+    public void displayAlbums(boolean reload) {
+        Intent i = new Intent(PhotoPagerActivity.this, MainActivity.class);
+        Bundle b = new Bundle();
+        b.putInt(SplashScreen.CONTENT, SplashScreen.ALBUMS_PREFETCHED);
+        if (!reload) i.putExtras(b);
+        startActivity(i);
+        finish();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -553,8 +563,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                                     if (securityObj.checkPassword(editxtPassword.getText().toString())) {
                                         album.deleteCurrentMedia(getApplicationContext());
                                         if (album.media.size() == 0) {
-                                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                                            finish();
+                                            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                                            displayAlbums(false);
                                         }
                                         adapter.notifyDataSetChanged();
                                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
@@ -571,8 +581,8 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                             album.deleteCurrentMedia(getApplicationContext());
                             if (album.media.size() == 0) {
-                                startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                                finish();
+                                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                                displayAlbums(false);
                             }
                             adapter.notifyDataSetChanged();
                             toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
@@ -593,8 +603,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                         album.moveCurrentPhoto(getApplicationContext(), path);
 
                         if (album.media.size() == 0) {
-                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                            finish();
+                            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                            displayAlbums(false);
                         }
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());

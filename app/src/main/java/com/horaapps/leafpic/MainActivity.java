@@ -956,8 +956,11 @@ public class MainActivity extends ThemedActivity {
                             albums.clearSelectedAlbums();
                             albumsAdapter.notifyDataSetChanged();
                         } else {
-                            if (album.media.size() == 0)
+                            if (album.media.size() == 0) {
+                                albums.removeCurrentAlbum();
+                                albumsAdapter.notifyDataSetChanged();
                                 displayAlbums();
+                            }
                             else
                                 mediaAdapter.updateDataSet(album.media);
                         }
@@ -1374,8 +1377,11 @@ public class MainActivity extends ThemedActivity {
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        if (album.media.size() == 0)
+                        if (album.media.size() == 0) {
+                            albums.removeCurrentAlbum();
+                            albumsAdapter.notifyDataSetChanged();
                             displayAlbums();
+                        }
 
                         mediaAdapter.updateDataSet(album.media);
                         finishEditMode();

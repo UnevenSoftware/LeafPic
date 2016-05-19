@@ -16,6 +16,8 @@ public class MyApplication extends Application {
         return albums.getCurrentAlbum();
     }
 
+    public void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
+
     public HandlingAlbums getAlbums() {
         return albums;
     }

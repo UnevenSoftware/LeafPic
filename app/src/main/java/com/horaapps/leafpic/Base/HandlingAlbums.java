@@ -227,6 +227,8 @@ public class HandlingAlbums {
             }
     }
 
+    public void removeCurrentAlbum(){ dispAlbums.remove(current); }
+
     public int getSelectedCount() {
         return selectedAlbums.size();
     }
