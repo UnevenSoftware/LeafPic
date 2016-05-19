@@ -34,6 +34,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,9 +67,10 @@ import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.AffixMedia;
 import com.horaapps.leafpic.utils.AffixOptions;
+import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.Measure;
-import com.horaapps.leafpic.utils.SecurityUtils;
+import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -84,7 +87,7 @@ public class MainActivity extends ThemedActivity {
 
     CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
     SharedPreferences SP;
-    SecurityUtils securityObj;
+    SecurityHelper securityObj;
 
     HandlingAlbums albums;
     RecyclerView recyclerViewAlbums;
@@ -181,7 +184,7 @@ public class MainActivity extends ThemedActivity {
         album = new Album();
         albumsMode = true;
         editmode = false;
-        securityObj= new SecurityUtils(MainActivity.this);
+        securityObj= new SecurityHelper(MainActivity.this);
 
 
 
@@ -432,7 +435,7 @@ public class MainActivity extends ThemedActivity {
         });
 
         drawerScr = (ScrollView) findViewById(R.id.drawer_scrollbar);
-        drawableScrollBar = getResources().getDrawable( R.drawable.ic_scrollbar);
+        drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
 
         int statusBarHeight = Measure.getStatusBarHeight(getResources()),
             navBarHeight = Measure.getNavBarHeight(MainActivity.this);
@@ -584,7 +587,31 @@ public class MainActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 if (securityObj.isActiveSecurity() && securityObj.isPasswordOnHidden()){
-                    final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+                    AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder
+                            (MainActivity.this, getDialogStyle());
+                    final EditText editTextPassword = new EditText(getApplicationContext());
+                    AlertDialog passwordDialog =
+                            securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder, editTextPassword);
+
+                    passwordDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (securityObj.checkPassword(editTextPassword.getText().toString())){
+                                hidden = true;
+                                mDrawerLayout.closeDrawer(GravityCompat.START);
+                                new PrepareAlbumTask().execute();
+                                dialog.cancel();
+                            } else
+                                Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                        }});
+                    passwordDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) { } });
+                    passwordDialog.show();
+
+                    /*final AlertDialog.Builder passwordDialog = new AlertDialog.Builder
+                            (MainActivity.this, getDialogStyle());
                     final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
                     final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
                     final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
@@ -614,7 +641,7 @@ public class MainActivity extends ThemedActivity {
                             dialog.cancel();
                         }
                     });
-                    passwordDialog.show();
+                    passwordDialog.show();*/
                 } else {
                     hidden = true;
                     mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -1407,46 +1434,35 @@ public class MainActivity extends ThemedActivity {
                return true;
 
             case R.id.renameAlbum:
+                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                final EditText editTextNewName = new EditText(getApplicationContext());
+                editTextNewName.setText(albumsMode ? albums.getSelectedAlbum(0).getName() : album.getName());
 
-                final AlertDialog.Builder renameDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                final View renameDialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
-                final TextView textViewRenameTitle = (TextView) renameDialogLayout.findViewById(R.id.rename_title);
-                final EditText editText = (EditText) renameDialogLayout.findViewById(R.id.dialog_txt);
-                CardView cv_Rename_Dialog = (CardView) renameDialogLayout.findViewById(R.id.rename_card);
+                AlertDialog renameDialog =
+                        AlertDialogsHelper.getInsertTextDialog(
+                                this,renameDialogBuilder, editTextNewName, getString(R.string.rename_album));
 
-                cv_Rename_Dialog.setCardBackgroundColor(getCardBackgroundColor());
-                textViewRenameTitle.setBackgroundColor(getPrimaryColor());
-                textViewRenameTitle.setText(getString(R.string.rename_album));
-                editText.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-                editText.setTextColor(getTextColor());
-                editText.setText(albumsMode ? albums.getSelectedAlbum(0).getName() : album.getName());
-                renameDialog.setView(renameDialogLayout);
-
-                renameDialog.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { dialog.cancel(); }
-                });
-                renameDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (editText.length() != 0) {
-
+                        if (editTextNewName.length() != 0) {
                             if (albumsMode){
                                 int index = albums.dispAlbums.indexOf(albums.getSelectedAlbum(0));
                                 albums.getAlbum(index).updatePhotos();
-                                albums.getAlbum(index).renameAlbum(getApplicationContext(), editText.getText().toString());
+                                albums.getAlbum(index).renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
                                 albumsAdapter.notifyItemChanged(index);
                             } else {
-                                album.renameAlbum(getApplicationContext(), editText.getText().toString());
+                                album.renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
                                 toolbar.setTitle(album.getName());
                                 mediaAdapter.notifyDataSetChanged();
                             }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
-
-                    }
-                });
+                    }});
+                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { } });
                 renameDialog.show();
-                editText.requestFocus();
                 return true;
 
             case R.id.clear_album_preview:

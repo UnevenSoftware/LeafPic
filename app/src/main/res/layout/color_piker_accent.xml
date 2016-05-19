@@ -33,7 +33,7 @@
                     android:textStyle="bold" />
 
                 <RelativeLayout
-                    android:id="@+id/body3"
+                    android:id="@+id/container_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
