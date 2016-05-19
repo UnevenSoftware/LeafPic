@@ -73,11 +73,11 @@ public class SplashScreen extends ThemedActivity {
 //        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Metrica-Regular.otf"));
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
-        logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
-        logo.setTextColor(getSubTextColor());
+        //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
+        logo.setTextColor(getTextColor());
 
-        ImageView imgLogo = (ImageView) findViewById(R.id.imgLogo);
-        imgLogo.setImageResource(R.drawable.leafpic_big);
+        //ImageView imgLogo = (ImageView) findViewById(R.id.imgLogo);
+        //imgLogo.setImageResource(R.drawable.leafpic_big);
 
         RelativeLayout RelLay = (RelativeLayout) findViewById(R.id.Splah_Bg);
         RelLay.setBackgroundColor(getBackgroundColor());
