@@ -16,10 +16,10 @@ public class ImageFileFilter implements FilenameFilter
     public final static int FILTER_VIDEO = 3;
 
     public static String[] allExtensions =
-            new String[] { "jpg", "png", "jpe", "gif", "jpeg", "bmp", "webp", "mp4" };
+            new String[] { "jpg", "png", "jpe", "gif", "jpeg", "bmp", "webp", "mp4", "mkv", "webm", "avi" };
     public static String[] imagesExtensions =
             new String[] { "jpg", "png", "jpe", "jpeg", "bmp", "webp" };
-    public static String[] videoExtensions = new String[] { "mp4" };
+    public static String[] videoExtensions = new String[] { "mp4", "mkv", "webm", "avi" };
     public static String[] gifsExtensions = new String[] { "gif"} ;
 
     private String[] okFileExtensions = allExtensions;

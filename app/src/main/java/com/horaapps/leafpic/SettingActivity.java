@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.SecurityUtils;
+import com.horaapps.leafpic.utils.SecurityHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -44,7 +44,7 @@ public class SettingActivity extends ThemedActivity {
     TextView txtTT;
     TextView txtPT;
     TextView txtVT;
-    SecurityUtils securityObj;
+    SecurityHelper securityObj;
 
     SwitchCompat swNavBar;
     SwitchCompat swStatusBar;
@@ -65,7 +65,7 @@ public class SettingActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceManager.getDefaultSharedPreferences(this);
 
-        securityObj = new SecurityUtils(SettingActivity.this);
+        securityObj = new SecurityHelper(SettingActivity.this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);

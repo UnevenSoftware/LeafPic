@@ -13,7 +13,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,13 +46,13 @@ import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.Measure;
-import com.horaapps.leafpic.utils.SecurityUtils;
+import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -63,11 +61,7 @@ import com.yalantis.ucrop.UCrop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by dnld on 18/02/16.
@@ -84,7 +78,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     RelativeLayout ActivityBackgorund;
     Album album;
     SelectAlbumBottomSheet bottomSheetDialogFragment;
-    SecurityUtils securityObj;
+    SecurityHelper securityObj;
     Toolbar toolbar;
     boolean fullscreenmode;
 
@@ -96,7 +90,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(PhotoPagerActivity.this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
-        securityObj= new SecurityUtils(PhotoPagerActivity.this);
+        securityObj= new SecurityHelper(PhotoPagerActivity.this);
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -332,10 +326,10 @@ public class PhotoPagerActivity extends ThemedActivity {
 
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (!isApplyThemeOnImgAct())
-            toolbar.setBackgroundColor(ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
-        else
-            toolbar.setBackgroundColor((ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())));
+        toolbar.setBackgroundColor(
+                isApplyThemeOnImgAct()
+                        ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
+                        : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
 
@@ -450,6 +444,15 @@ public class PhotoPagerActivity extends ThemedActivity {
         album.scanFile(getApplicationContext(), new String[]{album.getCurrentMedia().getPath()});
     }
 
+    public void displayAlbums(boolean reload) {
+        Intent i = new Intent(PhotoPagerActivity.this, MainActivity.class);
+        Bundle b = new Bundle();
+        b.putInt(SplashScreen.CONTENT, SplashScreen.ALBUMS_PREFETCHED);
+        if (!reload) i.putExtras(b);
+        startActivity(i);
+        finish();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -553,8 +556,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                                     if (securityObj.checkPassword(editxtPassword.getText().toString())) {
                                         album.deleteCurrentMedia(getApplicationContext());
                                         if (album.media.size() == 0) {
-                                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                                            finish();
+                                            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                                            displayAlbums(false);
                                         }
                                         adapter.notifyDataSetChanged();
                                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
@@ -571,8 +574,8 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                             album.deleteCurrentMedia(getApplicationContext());
                             if (album.media.size() == 0) {
-                                startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                                finish();
+                                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                                displayAlbums(false);
                             }
                             adapter.notifyDataSetChanged();
                             toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
@@ -593,8 +596,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                         album.moveCurrentPhoto(getApplicationContext(), path);
 
                         if (album.media.size() == 0) {
-                            startActivity(new Intent(PhotoPagerActivity.this, MainActivity.class));
-                            finish();
+                            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                            displayAlbums(false);
                         }
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
@@ -606,37 +609,26 @@ public class PhotoPagerActivity extends ThemedActivity {
                 return true;
 
             case R.id.renamePhoto:
-                final AlertDialog.Builder RenameDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                final EditText editTextNewName = new EditText(getApplicationContext());
+                editTextNewName.setText(StringUtils.getPhotoNamebyPath(album.getCurrentMedia().getPath()));
 
-                final View Rename_dialogLayout = getLayoutInflater().inflate(R.layout.rename_dialog, null);
-                final TextView title = (TextView) Rename_dialogLayout.findViewById(R.id.rename_title);
-                final EditText txt_edit = (EditText) Rename_dialogLayout.findViewById(R.id.dialog_txt);
-                CardView cv_Rename_Dialog = (CardView) Rename_dialogLayout.findViewById(R.id.rename_card);
+                AlertDialog renameDialog =
+                        AlertDialogsHelper.getInsertTextDialog(
+                        this,renameDialogBuilder, editTextNewName, getString(R.string.rename_photo_action));
 
-                cv_Rename_Dialog.setBackgroundColor(getCardBackgroundColor());
-                title.setBackgroundColor(getPrimaryColor());
-                title.setText(getString(R.string.rename_photo_action));
-                txt_edit.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-                txt_edit.setTextColor(getTextColor());
-                txt_edit.setText(StringUtils.getPhotoNamebyPath(album.getCurrentMedia().getPath()));
-
-                RenameDialog.setView(Rename_dialogLayout);
-                RenameDialog.setNeutralButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                RenameDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (txt_edit.length() != 0) {
-                            album.renameCurrentMedia(getApplicationContext(), txt_edit.getText().toString());
-                        } else
+                        if (editTextNewName.length() != 0)
+                            album.renameCurrentMedia(getApplicationContext(), editTextNewName.getText().toString());
+                         else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
-
-                    }
-                });
-                RenameDialog.show();
+                    }});
+                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { } });
+                renameDialog.show();
                 break;
 
             case R.id.advanced_photo_edit:
@@ -647,128 +639,22 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.details:
-                /****DATA****/
-                final Media f = album.getCurrentMedia();
+                AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                AlertDialog detailsDialog =
+                         AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,album.getCurrentMedia());
 
-                /****** BEAUTIFUL DIALOG ****/
-                final AlertDialog.Builder DetailsDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
-
-                final View Details_DialogLayout = getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
-                final TextView Size = (TextView) Details_DialogLayout.findViewById(R.id.photo_size);
-                final TextView Type = (TextView) Details_DialogLayout.findViewById(R.id.photo_type);
-                final TextView Resolution = (TextView) Details_DialogLayout.findViewById(R.id.photo_resolution);
-                final TextView Data = (TextView) Details_DialogLayout.findViewById(R.id.photo_date);
-                final TextView DateTaken = (TextView) Details_DialogLayout.findViewById(R.id.date_taken);
-                final TextView Path = (TextView) Details_DialogLayout.findViewById(R.id.photo_path);
-                //final ImageView PhotoDetailsPreview = (ImageView) Details_DialogLayout.findViewById(R.id.photo_details_preview);
-                final TextView txtTitle = (TextView) Details_DialogLayout.findViewById(R.id.details_title);
-                final TextView txtSize = (TextView) Details_DialogLayout.findViewById(R.id.label_size);
-                final TextView txtType = (TextView) Details_DialogLayout.findViewById(R.id.label_type);
-                final TextView txtResolution = (TextView) Details_DialogLayout.findViewById(R.id.label_resolution);
-                final TextView txtData = (TextView) Details_DialogLayout.findViewById(R.id.label_date);
-                final TextView txtDateTaken = (TextView) Details_DialogLayout.findViewById(R.id.label_date_taken);
-
-                final TextView txtPath = (TextView) Details_DialogLayout.findViewById(R.id.label_path);
-
-                //EXIF
-                final TextView txtDevice = (TextView) Details_DialogLayout.findViewById(R.id.label_device);
-                final TextView Device = (TextView) Details_DialogLayout.findViewById(R.id.photo_device);
-                final TextView txtEXIF = (TextView) Details_DialogLayout.findViewById(R.id.label_exif);
-                final TextView EXIF = (TextView) Details_DialogLayout.findViewById(R.id.photo_exif);
-                final TextView txtLocation = (TextView) Details_DialogLayout.findViewById(R.id.label_location);
-                final TextView Location = (TextView) Details_DialogLayout.findViewById(R.id.photo_location);
-                //MAP
-                final ImageView imgMap = (ImageView) Details_DialogLayout.findViewById(R.id.photo_map);
-
-                txtTitle.setBackgroundColor(getPrimaryColor());
-
-                Size.setText(f.getHumanReadableSize());
-                Resolution.setText(f.getResolution());
-                Data.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(f.getDateModified())));
-                Type.setText(f.getMIME());
-                Path.setText(f.getPath());
-
-                txtData.setTextColor(getTextColor());
-                txtPath.setTextColor(getTextColor());
-                txtResolution.setTextColor(getTextColor());
-                txtType.setTextColor(getTextColor());
-                txtSize.setTextColor(getTextColor());
-                txtDevice.setTextColor(getTextColor());
-                txtEXIF.setTextColor(getTextColor());
-                txtLocation.setTextColor(getTextColor());
-                txtDateTaken.setTextColor(getTextColor());
-
-                Data.setTextColor(getSubTextColor());
-                DateTaken.setTextColor(getSubTextColor());
-                Path.setTextColor(getSubTextColor());
-                Resolution.setTextColor(getSubTextColor());
-                Type.setTextColor(getSubTextColor());
-                Size.setTextColor(getSubTextColor());
-                Device.setTextColor(getSubTextColor());
-                EXIF.setTextColor(getSubTextColor());
-                Location.setTextColor(getSubTextColor());
-
-                try {
-                    ExifInterface exif = new ExifInterface(f.getPath());
-                    if (exif.getAttribute(ExifInterface.TAG_MAKE) != null) {
-                        Device.setText(String.format("%s %s",
-                                exif.getAttribute(ExifInterface.TAG_MAKE),
-                                exif.getAttribute(ExifInterface.TAG_MODEL)));
-
-                        EXIF.setText(String.format("f/%s ISO-%s %ss",
-                                exif.getAttribute(ExifInterface.TAG_APERTURE),
-                                exif.getAttribute(ExifInterface.TAG_ISO),
-                                exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
-
-                        final float[] output= new float[2];
-                        if(exif.getLatLong(output)) {
-
-                            String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
-                            //url = "https://api.mapbox.com/v4/mapbox.dark/-76.9,38.9,5/1000x1000.png";
-                            Glide.with(this)
-                                    .load(url)
-                                    .asBitmap()
-                                    .centerCrop()
-                                    .animate(R.anim.fade_in)
-                                    .into(imgMap);
-                            imgMap.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%f,%f", output[0], output[1]);
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
-                                }
-                            });
-
-                            Location.setText(String.format(Locale.getDefault(),"%f, %f",
-                                    output[0], output[1]));
-                            Details_DialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
-                            Details_DialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
-
-                        }
-                        Details_DialogLayout.findViewById(R.id.ll_exif).setVisibility(View.VISIBLE);
-                    }
-                    long dateTake;
-                    if ((dateTake = f.getDateEXIF())!=-1) {
-                        DateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
-                        Details_DialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
-                    }
-                }
-                catch (IOException e){ e.printStackTrace(); }
-
-                CardView cv = (CardView) Details_DialogLayout.findViewById(R.id.photo_details_card);
-                cv.setCardBackgroundColor(getCardBackgroundColor());
-                DetailsDialog.setView(Details_DialogLayout);
-
-                DetailsDialog.setPositiveButton(this.getString(R.string.ok_action), null);
-
-                DetailsDialog.setNeutralButton(getString(R.string.fix_date), new DialogInterface.OnClickListener() {
+                detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
+                        .ok_action), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { }});
+                detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!album.getCurrentMedia().fixDate())
                             Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                DetailsDialog.show();
+                detailsDialog.show();
                 break;
 
             case R.id.setting:

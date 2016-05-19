@@ -125,8 +125,12 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   public void initUI(){
 
     toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setBackgroundColor(ColorPalette.getTransparentColor(
-            ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
+
+      toolbar.setBackgroundColor(
+              isApplyThemeOnImgAct()
+              ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
+              : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
+
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(
             new IconicsDrawable(this)
@@ -153,24 +157,9 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
             .setDuration(0).start();
-//    mediaController
-
-    /*
-    mediaController.setBackgroundColor(ColorPalette.getTransparentColor(
-            ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
-    mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(
-            ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
-    */
-    //mediaController.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
-    //mediController_anchor.setBackgroundColor(ColorPalette.getTransparentColor(getPrimaryColor(),100));
-
     mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
-    //mediaController.setDrawingCacheBackgroundColor(getPrimaryColor());
-    //mediaController.show();
 
-    /*mediaController.animate().translationY(Measure.getNavBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-            .setDuration(240).start();*/
-
+surfaceView.setBackgroundColor(getBackgroundColor());
     setStatusBarColor();
     setNavBarColor();
     setRecentApp(getString(R.string.app_name));
@@ -213,16 +202,28 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   @Override
   public void setNavBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-              ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
+      if (isApplyThemeOnImgAct())
+        if (isNavigationBarColored())
+          getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+        else
+          getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
+      else
+        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
     }
   }
+
 
   @Override
   protected void setStatusBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-              ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 100));
+      if (isApplyThemeOnImgAct())
+        if (isTraslucentStatusBar() && isTransparencyZero())
+          getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+        else
+          getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+      else
+        getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
+                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
     }
   }
 
