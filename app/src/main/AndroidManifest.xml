@@ -129,6 +129,15 @@
         </activity>
 
         <activity
+            android:name=".SecurityActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SECURITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".DonateActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>

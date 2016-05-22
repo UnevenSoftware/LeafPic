@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ScrollView;
 
 import com.horaapps.leafpic.R;
@@ -30,12 +32,15 @@ import java.lang.reflect.Method;
  */
 public class ThemedActivity extends AppCompatActivity {
 
+    public static final int DARK_THEME = 2;
+    public static final int LIGHT_THEME = 1;
+    public static final int AMOLED_THEME = 3;
+
     SharedPreferences SP;
 
     private int primaryColor;
     private int accentColor;
     private int basicTheme;
-    private boolean darkTheme;
     private boolean coloredNavBar;
     private boolean oscuredStatusBar;
     private boolean applyThemeImgAct; //TASPARENCY
@@ -75,9 +80,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getBackgroundColor(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case 1:
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);
         }
         return color;
@@ -86,9 +91,10 @@ public class ThemedActivity extends AppCompatActivity {
     public int getInvertedBackgroundColor(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
-            case 1:
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color
+                    .md_light_background);break;
+            case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);
         }
         return color;
@@ -97,9 +103,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getTextColor(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
-            case 1:
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
+            case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_800);
         }
         return color;
@@ -108,9 +114,10 @@ public class ThemedActivity extends AppCompatActivity {
     public int getSubTextColor(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
-            case 1:
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);
+                break;
+            case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);
         }
         return color;
@@ -119,10 +126,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getCardBackgroundColor(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case 1:
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case LIGHT_THEME:default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
         }
         return color;
     }
@@ -130,10 +136,8 @@ public class ThemedActivity extends AppCompatActivity {
     public int getIconColor(){
         int color;
         switch (basicTheme){
-            case 2:
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;//md_dark_primary_icon
-            case 1:
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
+            case DARK_THEME:case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;
+            case LIGHT_THEME:default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
         }
         return color;
     }
@@ -141,9 +145,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getDrawerBackground(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case 1:
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
+            case LIGHT_THEME:
             default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
         }
         return color;
@@ -152,10 +156,9 @@ public class ThemedActivity extends AppCompatActivity {
     public int getDialogStyle(){
         int style;
         switch (getBasicTheme()){
-            case 2: style = R.style.AlertDialog_Dark;break;
-            case 3: style = R.style.AlertDialog_Dark_Amoled;break;
-            case 1:
-            default: style = R.style.AlertDialog_Light;
+            case DARK_THEME: style = R.style.AlertDialog_Dark;break;
+            case AMOLED_THEME: style = R.style.AlertDialog_Dark_Amoled;break;
+            case LIGHT_THEME: default: style = R.style.AlertDialog_Light;
         }
         return style;
     }
@@ -163,36 +166,31 @@ public class ThemedActivity extends AppCompatActivity {
     public int getPopupToolbarStyle(){
         int style;
         switch (getBasicTheme()){
-            case 2: style = R.style.DarkActionBarMenu;break;
-            case 3: style = R.style.AmoledDarkActionBarMenu;break;
-            case 1: default: style = R.style.LightActionBarMenu;
+            case DARK_THEME: style = R.style.DarkActionBarMenu;break;
+            case AMOLED_THEME: style = R.style.AmoledDarkActionBarMenu;break;
+            case LIGHT_THEME: default: style = R.style.LightActionBarMenu;
         }
         return style;
     }
 
+
+
     public int getDefaultThemeToolbarColor3th(){
         int color;
         switch (basicTheme){
-            case 2:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case 3:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
-            case 1:
-            default:
-                //TODO cambia questo colore plis
-                color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
+            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000); break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
+            case LIGHT_THEME: default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
         }
         return color;
     }
 
     public ColorStateList getRadioButtonColor(){
-        ColorStateList colorStateList = new ColorStateList(
+        return new ColorStateList(
                 new int[][]{
-                        new int[]{-android.R.attr.state_enabled}, //disabled
-                        new int[]{android.R.attr.state_enabled} //enabled
-                }, new int[] {
-                        getTextColor() //disabled
-                        ,getAccentColor() //enabled
-                });
-        return colorStateList;
+                        new int[]{ -android.R.attr.state_enabled }, //disabled
+                        new int[]{ android.R.attr.state_enabled } //enabled
+                }, new int[] { getTextColor(), getAccentColor() });
     }
 
     public void setNavBarColor() {
@@ -204,12 +202,28 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void updateSwitchColor(SwitchCompat sw, int color){
-        if(sw.isChecked())
-            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        /*if(sw.isChecked()) sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        else sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);*/
+        sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getTextColor(), PorterDuff.Mode.MULTIPLY);
+        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+
+        /*if(getBasicTheme()!=3)sw.getTrackDrawable().setColorFilter(getBackgroundColor(),
+                PorterDuff.Mode.SRC_IN);
+        else sw.getTrackDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.SRC_IN);*/
+    }
+
+    public void updateCheckBoxColor(AppCompatCheckBox sw, int color){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            sw.getButtonDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        }
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(sw.isChecked())
+                sw.getButtonDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
         else
-            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);
-        if(getBasicTheme()!=3)sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.SRC_IN);
-        else sw.getTrackDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.SRC_IN);
+            sw.getButtonDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);
+        if(getBasicTheme()!=3)sw.getButtonDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.SRC_IN);
+        else sw.getButtonDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.SRC_IN);
+        }*/
     }
 
     @Override
