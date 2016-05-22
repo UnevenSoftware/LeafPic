@@ -250,13 +250,13 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swNavBar, getAccentColor());
     }
 
-    public void updateSwitchColor(SwitchCompat sw,int color){
+    /*public void updateSwitchColor(SwitchCompat sw,int color){
         if(sw.isChecked())
             sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
         else
             sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
         sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-    }
+    }*/
 
     public void askPasswordDialog() {
         final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
@@ -280,7 +280,8 @@ public class SettingActivity extends ThemedActivity {
         passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (securityObj.checkPassword(editxtPassword.getText().toString())){
-                    securityDialog();
+                    startActivity(new Intent(getApplicationContext(),SecurityActivity.class));
+                    //securityDialog();
                     dialog.cancel();
                 } else
                     Toast.makeText(passwordDialog.getContext(),R.string.wrong_password,Toast.LENGTH_SHORT).show();
@@ -298,9 +299,10 @@ public class SettingActivity extends ThemedActivity {
         final AlertDialog.Builder securityDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
 
-        final boolean changedActiveSecurity=securityObj.isActiveSecurity();
+        final boolean changedActiveSecurity = securityObj.isActiveSecurity();
 
         final View SecurityDialogLayout = getLayoutInflater().inflate(R.layout.security_dialog, null);
+
         final TextView securityDialogTitle = (TextView) SecurityDialogLayout.findViewById(R.id.security_title_dialog);
         final CardView securityDialogCard = (CardView) SecurityDialogLayout.findViewById(R.id.security_dialog_card);
         final LinearLayout llbody = (LinearLayout) SecurityDialogLayout.findViewById(R.id.ll_security_dialog_body);
