@@ -161,7 +161,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         } else {
             progressBar.setVisibility(View.INVISIBLE);
             adapter.notifyDataSetChanged();
-            imgHiddenDefault.setIcon(hidden ? "gmd-folder-open" : "gmd-folder");
+            imgHiddenDefault.setIcon(hidden ? "gmd-folder" : "faw-low-vision");
             llNewFolder.setVisibility(View.VISIBLE);
         }
     }
@@ -188,7 +188,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         protected void onPostExecute(Void result) {
             progressBar.setVisibility(View.INVISIBLE);
             adapter.notifyDataSetChanged();
-            imgHiddenDefault.setIcon(hidden ? "gmd-folder-open" : "gmd-folder");
+            imgHiddenDefault.setIcon(hidden ? "gmd-folder" : "faw-low-vision");
             llNewFolder.setVisibility(View.VISIBLE);
         }
     }

@@ -1,19 +1,21 @@
 package com.horaapps.leafpic;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.SecurityHelper;
@@ -30,7 +32,9 @@ public class SecurityActivity extends ThemedActivity {
     LinearLayout llroot;
     SharedPreferences SP;
     SecurityHelper securityObj;
-
+    SwitchCompat swActiveSecurity;
+    SwitchCompat swApplySecurityDelete;
+    SwitchCompat swApplySecurityHidden;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +46,9 @@ public class SecurityActivity extends ThemedActivity {
         llroot = (LinearLayout) findViewById(R.id.root);
 
 
-        final SwitchCompat swApplySecurityDelete = (SwitchCompat) findViewById(R.id
-                .security_body_apply_delete_switch);
-        final SwitchCompat swActiveSecurity = (SwitchCompat) findViewById(R.id.active_security_switch);
-        final SwitchCompat swApplySecurityHidden = (SwitchCompat) findViewById(R.id.security_body_apply_hidden_switch);
+        swApplySecurityDelete = (SwitchCompat) findViewById(R.id.security_body_apply_delete_switch);
+        swActiveSecurity = (SwitchCompat) findViewById(R.id.active_security_switch);
+        swApplySecurityHidden = (SwitchCompat) findViewById(R.id.security_body_apply_hidden_switch);
 
         /** - SWITCHS - **/
         /** - ACTIVE SECURITY - **/
@@ -54,13 +57,21 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("active_security", isChecked);
-                editor.apply();
+                /*editor.putBoolean("active_security", isChecked);
+                editor.apply();*/
 
 
                 securityObj.updateSecuritySetting();
                 updateSwitchColor(swActiveSecurity, getAccentColor());
                 llbody.setEnabled(swActiveSecurity.isChecked());
+                if (isChecked)
+                    setPasswordDialog();
+                else {
+                    editor.putString("password_value","");
+                    editor.putBoolean("active_security", false);
+                    editor.apply();
+                    toggleEnabledChild(false);
+                }
                 //llbody.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
@@ -97,11 +108,78 @@ public class SecurityActivity extends ThemedActivity {
             }
         });
         updateSwitchColor(swApplySecurityDelete, getAccentColor());
-
-
-        EditText eTxtPasswordSecurity = (EditText) findViewById(R.id.security_password_edittxt);
-
         setupUI();
+    }
+
+    public void setPasswordDialog() {
+        final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SecurityActivity.this,
+                getDialogStyle());
+        final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.set_password_dialog, null);
+        final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
+        final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
+        final EditText editTextPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
+        final EditText editTextConfirmPassword = (EditText) PasswordDialogLayout.findViewById(R.id.confirm_password_edittxt);
+
+        passwordDialogTitle.setBackgroundColor(getPrimaryColor());
+        passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
+
+
+        editTextPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        editTextPassword.setTextColor(getTextColor());
+        editTextPassword.setHintTextColor(getSubTextColor());
+        setCursorDrawableColor(editTextPassword, getTextColor());
+        editTextConfirmPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        editTextConfirmPassword.setTextColor(getTextColor());
+        editTextConfirmPassword.setHintTextColor(getSubTextColor());
+        setCursorDrawableColor(editTextConfirmPassword, getTextColor());
+        passwordDialog.setView(PasswordDialogLayout);
+
+        AlertDialog dialog = passwordDialog.create();
+
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = SP.edit();
+                swActiveSecurity.setChecked(false);
+                editor.putBoolean("active_security", false);
+                editor.apply();
+            }
+        });
+
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean changed;
+                SharedPreferences.Editor editor = SP.edit();
+                if (editTextPassword.length() > 3) {
+                    if (editTextPassword.getText().toString().equals(editTextConfirmPassword.getText().toString())) {
+
+                        editor.putString("password_value", editTextPassword.getText().toString());
+                        editor.apply();
+                        securityObj.updateSecuritySetting();
+                        Toast.makeText(getApplicationContext(), R.string.remember_password_message, Toast.LENGTH_SHORT).show();
+                        changed = true;
+                    } else {
+                        Toast.makeText(SecurityActivity.this, "password doesn't match", Toast.LENGTH_SHORT).show();
+                        changed = false;
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.error_password_length, Toast.LENGTH_SHORT).show();
+                    changed = false;
+                }
+                swActiveSecurity.setChecked(changed);
+                editor.putBoolean("active_security", changed);
+                editor.apply();
+                toggleEnabledChild(changed);
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void toggleEnabledChild(boolean enable) {
+       swApplySecurityDelete.setEnabled(enable);
+        swApplySecurityHidden.setEnabled(enable);
     }
 
     public void setupUI() {
@@ -129,8 +207,9 @@ public class SecurityActivity extends ThemedActivity {
         TextView txtApplySecurityHidden = (TextView) findViewById(R.id.security_body_apply_hidden_title);
         IconicsImageView imgApplySecurityDelete = (IconicsImageView) findViewById(R.id.security_body_apply_delete_icon);
         TextView txtApplySecurityDelete = (TextView) findViewById(R.id.security_body_apply_delete_title);
-
+        CardView securityDialogCard = (CardView) findViewById(R.id.security_dialog_card);
         llroot.setBackgroundColor(getBackgroundColor());
+        securityDialogCard.setCardBackgroundColor(getCardBackgroundColor());
 
         /*ICONS*/
         int color = getIconColor();

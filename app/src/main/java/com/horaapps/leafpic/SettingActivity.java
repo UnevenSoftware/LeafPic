@@ -96,11 +96,10 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 if(!securityObj.isActiveSecurity())
-                    securityDialog();
-                else {
+                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
+                else
                     askPasswordDialog();
-                    //securityDialog();
-                }
+
             }
         });
 
@@ -268,29 +267,19 @@ public class SettingActivity extends ThemedActivity {
         passwordDialogTitle.setBackgroundColor(getPrimaryColor());
         passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
 
-        /*
-        editxtPassword.setTextColor(getAccentColor());
-        editxtPassword.setHintTextColor(getAccentColor());
-        editxtPassword.setBackgroundColor(getBackgroundColor());
-        */
         editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editxtPassword.setTextColor(getTextColor());
 
         passwordDialog.setView(PasswordDialogLayout);
         passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (securityObj.checkPassword(editxtPassword.getText().toString())){
+                if (securityObj.checkPassword(editxtPassword.getText().toString()))
                     startActivity(new Intent(getApplicationContext(),SecurityActivity.class));
-                    //securityDialog();
-                    dialog.cancel();
-                } else
+                else
                     Toast.makeText(passwordDialog.getContext(),R.string.wrong_password,Toast.LENGTH_SHORT).show();
             }
         });
-        passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {dialog.cancel();}
-        });
+        passwordDialog.setNegativeButton(getString(R.string.cancel), null);
         passwordDialog.show();
     }
 
@@ -409,11 +398,11 @@ public class SettingActivity extends ThemedActivity {
                             editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
                             editor.apply();
                             securityObj.updateSecuritySetting();
-                            Toast.makeText(getApplicationContext(), R.string.remeber_password_message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.remember_password_message, Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     } else
-                        Toast.makeText(securityDialog.getContext(), R.string.error_password_lenght, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(securityDialog.getContext(), R.string.error_password_length, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -762,6 +751,7 @@ public class SettingActivity extends ThemedActivity {
     public void onPostResume() {
         super.onPostResume();
         setTheme();
+        securityObj.updateSecuritySetting();
     }
 
     public void setTheme(){

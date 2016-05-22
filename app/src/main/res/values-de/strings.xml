@@ -92,11 +92,11 @@ In den Einstellungen können Sie diese Aktion rückgängig machen.</string>
     <string name="security">Sicherheit</string>
     <string name="active_security">Passwort verwenden</string>
     <string name="security_sub">Ein Passwort setzen um die Medien vor unbefugten Zugriff zu schützen.</string>
-    <string name="remeber_password_message">Wenn Sie vergessen haben das Passwort zu ändern müssen Sie es durch das Löschen der Anwendungsdaten zurücksetzen.</string>
+    <string name="remember_password_message">Wenn Sie vergessen haben das Passwort zu ändern müssen Sie es durch das Löschen der Anwendungsdaten zurücksetzen.</string>
     <string name="apply_password_on">Passwort anwenden auf</string>
     <string name="fingerprint">Fingerabdruck</string>
     <string name="clear_password">Passwort löschen</string>
-    <string name="error_password_lenght">Die minimale Passwortlänge beträgt 4 Zeichen</string>
+    <string name="error_password_length">Die minimale Passwortlänge beträgt 4 Zeichen</string>
     <!-- SETTINGS -->
     <string name="settings">Einstellungen</string>
     <string name="general">Allgemein</string>

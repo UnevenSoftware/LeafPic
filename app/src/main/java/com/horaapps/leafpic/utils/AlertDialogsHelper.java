@@ -36,28 +36,6 @@ import java.util.Locale;
  */
 public class AlertDialogsHelper {
 
-    public static void setCursorDrawableColor( EditText editText, int color) {
-        try {
-            Field fCursorDrawableRes =
-                    TextView.class.getDeclaredField("mCursorDrawableRes");
-            fCursorDrawableRes.setAccessible(true);
-            int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
-            Field fEditor = TextView.class.getDeclaredField("mEditor");
-            fEditor.setAccessible(true);
-            Object editor = fEditor.get(editText);
-            Class<?> clazz = editor.getClass();
-            Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
-            fCursorDrawable.setAccessible(true);
-
-            Drawable[] drawables = new Drawable[2];
-            drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-            drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            fCursorDrawable.set(editor, drawables);
-        } catch (final Throwable ignored) {  }
-    }
-
     public static  AlertDialog getInsertTextDialog(final ThemedActivity activity, AlertDialog
             .Builder dialogBuilder , EditText editText, String title) {
         View renameDialogLayout = activity.getLayoutInflater().inflate(R.layout.insert_text_dialog, null);
@@ -67,9 +45,8 @@ public class AlertDialogsHelper {
         cardViewRename.setBackgroundColor(activity.getCardBackgroundColor());
         textViewTitle.setBackgroundColor(activity.getPrimaryColor());
         textViewTitle.setText(title);
-        setCursorDrawableColor(editText, activity.getTextColor());
-        FrameLayout.LayoutParams layoutParams =
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ThemedActivity.setCursorDrawableColor(editText, activity.getTextColor());
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         editText.setLayoutParams(layoutParams);
         editText.setSingleLine(true);
         editText.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_IN);

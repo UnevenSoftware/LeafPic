@@ -105,7 +105,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
-                        app:iiv_icon="gmd-folder-open"
+                        app:iiv_icon="faw-low-vision"
                         />
                     <TextView
                         android:id="@+id/Drawer_hidden_Item"

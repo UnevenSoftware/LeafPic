@@ -96,11 +96,11 @@ Opravdu chcete vyloučit toto album? \n Můžete jej obnovit v nastavení!    </
     <string name="security">Zabezpečení</string>
     <string name="active_security">Použít heslo</string>
     <string name="security_sub">Nastavte heslo pro ochranu svých médií.</string>
-    <string name="remeber_password_message">Note: password changed if you forget it you have to clear application data.</string>
+    <string name="remember_password_message">Note: password changed if you forget it you have to clear application data.</string>
     <string name="apply_password_on">Použít heslo pro</string>
     <string name="fingerprint">Otisk</string>
     <string name="clear_password">Smazat heslo</string>
-    <string name="error_password_lenght">Minimální délka hesla je 4 znaky</string>
+    <string name="error_password_length">Minimální délka hesla je 4 znaky</string>
     <!-- SETTINGS -->
     <string name="settings">Nastavení</string>
     <string name="general">Obecné</string>
