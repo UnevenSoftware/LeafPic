@@ -58,7 +58,7 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:2.1.7'
     compile 'com.mikepenz:iconics-core:2.5.5@aar'
     compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
-    compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.6.0.1@aar'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.yalantis:ucrop:1.5.0'
     compile(group: 'uz.shift', name: 'colorpicker', version: '0.5', ext: 'aar')

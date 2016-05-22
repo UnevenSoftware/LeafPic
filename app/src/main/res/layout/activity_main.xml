@@ -77,7 +77,7 @@
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/drawer_items"
-        layout="@layout/drawer_albums_act"/>
+        layout="@layout/drawer_main_activity"/>
 </android.support.v4.widget.DrawerLayout>
 
 

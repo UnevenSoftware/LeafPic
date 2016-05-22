@@ -130,7 +130,8 @@
 
         <activity
             android:name=".SecurityActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:label="@string/security">
             <intent-filter>
                 <action android:name="android.intent.action.SECURITY" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -94,11 +94,11 @@ Ayarlara giderek yeniden düzenleyebilirsin!</string>
     <string name="security">Güvenlik</string>
     <string name="active_security">Güvenlik şifresi kullan</string>
     <string name="security_sub">Medyanızı korumak için bir şifre ayarlayın.</string>
-    <string name="remeber_password_message">Note: password changed if you forget it you have to clear application data.</string>
+    <string name="remember_password_message">Note: password changed if you forget it you have to clear application data.</string>
     <string name="apply_password_on">Apply password on</string>
     <string name="fingerprint">Parmak izi</string>
     <string name="clear_password">Parolayı temizle</string>
-    <string name="error_password_lenght">En kısa şifre uzunluğu 4 karakterdir</string>
+    <string name="error_password_length">En kısa şifre uzunluğu 4 karakterdir</string>
     <!-- SETTINGS -->
     <string name="settings">Ayalarlar</string>
     <string name="general">Genel</string>

@@ -111,16 +111,21 @@
     <string name="app_intro_skip">Introduction Skipped!</string>
 
     <!-- SECURITY-->
-    <string name="type_password">Insert password</string>
-    <string name="wrong_password">Wrong password</string>
     <string name="security">Security</string>
-    <string name="active_security">Use password</string>
+    <string name="active_security">Access by password</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="wrong_password">Wrong password</string>
+
+    <string name="type_password">Insert password</string>
     <string name="security_sub">Set up a password to protect your media.</string>
-    <string name="remeber_password_message">Note: password changed if you forget it you have to clear application data.</string>
-    <string name="apply_password_on">Apply password on</string>
+    <string name="remember_password_message">Note: password changed if you forget it you have to clear application data.</string>
+
+    <string name="apply_password_on">Use password for</string>
+
     <string name="fingerprint">Finger print</string>
     <string name="clear_password">Clear Password</string>
-    <string name="error_password_lenght">The minimum password length is 4 character</string>
+    <string name="error_password_length">The minimum password length is 4 character</string>
 
     <!-- SETTINGS -->
     <string name="settings">Settings</string>

@@ -43,7 +43,6 @@ public class SecurityHelper {
     }
 
     public void updateSecuritySetting(){
-
         this.SP = PreferenceManager.getDefaultSharedPreferences(context);
         this.activeSecurity = SP.getBoolean("active_security", false);
         this.passwordOnDelete = SP.getBoolean("password_on_delete", false);

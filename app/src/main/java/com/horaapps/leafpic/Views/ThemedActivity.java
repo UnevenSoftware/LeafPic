@@ -17,7 +17,9 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -277,6 +279,28 @@ public class ThemedActivity extends AppCompatActivity {
         {
             e.printStackTrace();
         }
+    }
+
+    public static void setCursorDrawableColor(EditText editText, int color) {
+        try {
+            Field fCursorDrawableRes =
+                    TextView.class.getDeclaredField("mCursorDrawableRes");
+            fCursorDrawableRes.setAccessible(true);
+            int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
+            Field fEditor = TextView.class.getDeclaredField("mEditor");
+            fEditor.setAccessible(true);
+            Object editor = fEditor.get(editText);
+            Class<?> clazz = editor.getClass();
+            Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+            fCursorDrawable.setAccessible(true);
+
+            Drawable[] drawables = new Drawable[2];
+            drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+            drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            fCursorDrawable.set(editor, drawables);
+        } catch (final Throwable ignored) {  }
     }
 
     public void updateTheme(){

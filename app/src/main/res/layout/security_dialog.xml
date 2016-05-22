@@ -179,7 +179,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2"
-                        app:iiv_icon="gmd-folder-open"
+                        app:iiv_icon="faw-low-vision"
                         />
                     <LinearLayout
                         android:layout_width="0dp"
