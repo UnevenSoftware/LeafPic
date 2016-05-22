@@ -1,9 +1,6 @@
 package com.horaapps.leafpic.utils;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
@@ -16,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Base.Media;
@@ -83,6 +80,42 @@ public class AlertDialogsHelper {
 
         dialogBuilder.setView(renameDialogLayout);
         return dialogBuilder.create();
+    }
+
+    public static AlertDialog getTextDialog(final ThemedActivity activity, AlertDialog.Builder textDialogBuilder, String title, String Message){
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.text_dialog, null);
+
+        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.text_dialog_title);
+        TextView dialogMessage = (TextView) dialogLayout.findViewById(R.id.text_dialog_message);
+        CardView cardView = (CardView) dialogLayout.findViewById(R.id.message_card);
+
+        cardView.setCardBackgroundColor(activity.getCardBackgroundColor());
+        dialogTitle.setBackgroundColor(activity.getPrimaryColor());
+        dialogTitle.setText(title);
+        dialogMessage.setText(Message);
+        dialogMessage.setTextColor(activity.getTextColor());
+        textDialogBuilder.setView(dialogLayout);
+        return textDialogBuilder.create();
+    }
+
+    public static AlertDialog getProgressDialog(final ThemedActivity activity, AlertDialog.Builder progressDialog, String title, String Message){
+        View progress_dialogLayout = activity.getLayoutInflater().inflate(R.layout.progress_dialog, null);
+        TextView progress_title = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_title);
+        TextView progress_text = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_text);
+        ProgressBar progress = (ProgressBar) progress_dialogLayout.findViewById(R.id.progress_dialog_loading);
+        CardView cv_affixProgress_Dialog = (CardView) progress_dialogLayout.findViewById(R.id.progress_dialog_card);
+
+        progress_title.setBackgroundColor(activity.getPrimaryColor());
+        cv_affixProgress_Dialog.setCardBackgroundColor(activity.getCardBackgroundColor());
+        progress.getIndeterminateDrawable().setColorFilter(activity.getPrimaryColor(), android.graphics.PorterDuff.Mode.SRC_ATOP);
+
+        progress_title.setText(title);
+        progress_text.setText(Message);
+        progress_text.setTextColor(activity.getTextColor());
+
+        progressDialog.setCancelable(false);
+        progressDialog.setView(progress_dialogLayout);
+        return progressDialog.create();
     }
 
     public static AlertDialog getDetailsDialog(final ThemedActivity activity, AlertDialog.Builder detailsDialogBuilder, Media f) {
@@ -190,4 +223,6 @@ public class AlertDialogsHelper {
         return detailsDialogBuilder.create();
 
     }
+
+
 }

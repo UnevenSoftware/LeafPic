@@ -34,8 +34,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +44,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -676,19 +673,8 @@ public class MainActivity extends ThemedActivity {
 
 
     void ComingSoonDialog(String title) {
-        final AlertDialog.Builder comingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-        final View dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
-
-        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.text_dialog_title);
-        final TextView dialogMessage = (TextView) dialogLayout.findViewById(R.id.text_dialog_message);
-        CardView cardView = (CardView) dialogLayout.findViewById(R.id.message_card);
-
-        cardView.setCardBackgroundColor(getCardBackgroundColor());
-        dialogTitle.setBackgroundColor(getPrimaryColor());
-        dialogTitle.setText(title);
-        dialogMessage.setText(R.string.coming_soon);
-        dialogMessage.setTextColor(getTextColor());
-        comingSoonDialog.setView(dialogLayout);
+        AlertDialog.Builder comingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+        AlertDialogsHelper.getTextDialog(this, comingSoonDialog, title, getString(R.string.coming_soon));
         comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), null);
         comingSoonDialog.show();
     }
@@ -1000,19 +986,8 @@ public class MainActivity extends ThemedActivity {
                     }
                 }
 
-                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-                final View deleteDialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
-                final TextView textViewDeleteTitle = (TextView) deleteDialogLayout.findViewById(R.id.text_dialog_title);
-                final TextView textViewDeleteMessage = (TextView) deleteDialogLayout.findViewById(R.id.text_dialog_message);
-                CardView cardViewDelete = (CardView) deleteDialogLayout.findViewById(R.id.message_card);
-
-                cardViewDelete.setCardBackgroundColor(getCardBackgroundColor());
-                textViewDeleteTitle.setBackgroundColor(getPrimaryColor());
-                textViewDeleteTitle.setText(getString(R.string.delete));
-                textViewDeleteMessage.setText(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message);
-                textViewDeleteMessage.setTextColor(getTextColor());
-                deleteDialog.setView(deleteDialogLayout);
+                AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                AlertDialogsHelper.getTextDialog(this, deleteDialog, getString(R.string.delete), getString(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message));
 
                 deleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {}});
@@ -1510,27 +1485,11 @@ public class MainActivity extends ThemedActivity {
             }
         }
     }
-    public AlertDialog.Builder progressDialog;
 
+    public AlertDialog.Builder progressDialog;
     public AlertDialog ProgressDialog(String dialogTitle, String dialogText){
         progressDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
-        View progress_dialogLayout = getLayoutInflater().inflate(R.layout.progress_dialog, null);
-        TextView progress_title = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_title);
-        TextView progress_text = (TextView) progress_dialogLayout.findViewById(R.id.progress_dialog_text);
-        ProgressBar progress = (ProgressBar) progress_dialogLayout.findViewById(R.id.progress_dialog_loading);
-        CardView cv_affixProgress_Dialog = (CardView) progress_dialogLayout.findViewById(R.id.progress_dialog_card);
-
-        progress_title.setBackgroundColor(getPrimaryColor());
-        cv_affixProgress_Dialog.setCardBackgroundColor(getCardBackgroundColor());
-        progress.getIndeterminateDrawable().setColorFilter(getPrimaryColor(), android.graphics.PorterDuff.Mode.SRC_ATOP);
-
-        progress_title.setText(dialogTitle);
-        progress_text.setText(dialogText);
-        progress_text.setTextColor(getTextColor());
-
-        progressDialog.setCancelable(false);
-        progressDialog.setView(progress_dialogLayout);
-        return progressDialog.create();
+        return AlertDialogsHelper.getProgressDialog(this, progressDialog, dialogTitle, dialogText);
     }
 
     public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
