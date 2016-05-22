@@ -770,9 +770,14 @@ public class MainActivity extends ThemedActivity {
 
     private void finishEditMode() {
         editmode = false;
+        if (albumsMode) {
+            albums.clearSelectedAlbums();
+            albumsAdapter.notifyDataSetChanged();
+        } else {
+            album.clearSelectedPhotos();
+            mediaAdapter.notifyDataSetChanged();
+        }
         invalidateOptionsMenu();
-        album.clearSelectedPhotos();
-        mediaAdapter.notifyDataSetChanged();
     }
 
     public void checkNothing() {
@@ -895,9 +900,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.installShortcut:
                 albums.installShortcutForSelectedAlbums(this.getApplicationContext());
-                albums.clearSelectedAlbums();
-                albumsAdapter.notifyDataSetChanged();
-                invalidateOptionsMenu();
+                finishEditMode();
                 return true;
 
             case R.id.hideAlbumButton:
@@ -1495,13 +1498,16 @@ public class MainActivity extends ThemedActivity {
 
     @Override
     public void onBackPressed() {
-        if (albumsMode) {
-            if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            else finish();
-        } else {
-            displayAlbums();
-            setRecentApp(getString(R.string.app_name));
+        if (editmode) finishEditMode();
+        else {
+            if (albumsMode) {
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                else finish();
+            } else {
+                displayAlbums();
+                setRecentApp(getString(R.string.app_name));
+            }
         }
     }
     public AlertDialog.Builder progressDialog;
