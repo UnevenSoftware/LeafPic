@@ -2,10 +2,8 @@ package com.horaapps.leafpic.utils;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -97,7 +95,7 @@ public class AlertDialogsHelper {
 
     public static AlertDialog getDetailsDialog(final ThemedActivity activity, AlertDialog.Builder detailsDialogBuilder, Media f) {
         /****** BEAUTIFUL DIALOG ****/
-        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.photo_detail_dialog, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.detail_dialog, null);
         TextView Size = (TextView) dialogLayout.findViewById(R.id.photo_size);
         TextView Type = (TextView) dialogLayout.findViewById(R.id.photo_type);
         TextView Resolution = (TextView) dialogLayout.findViewById(R.id.photo_resolution);
@@ -115,6 +113,10 @@ public class AlertDialogsHelper {
         TextView Device = (TextView) dialogLayout.findViewById(R.id.photo_device);
         TextView txtEXIF = (TextView) dialogLayout.findViewById(R.id.label_exif);
         TextView EXIF = (TextView) dialogLayout.findViewById(R.id.photo_exif);
+
+        TextView txtOrientation = (TextView) dialogLayout.findViewById(R.id.label_orientation);
+        TextView Orientation = (TextView) dialogLayout.findViewById(R.id.orientation_exif);
+
         TextView txtLocation = (TextView) dialogLayout.findViewById(R.id.label_location);
         TextView Location = (TextView) dialogLayout.findViewById(R.id.photo_location);
         ImageView imgMap = (ImageView) dialogLayout.findViewById(R.id.photo_map);
@@ -136,6 +138,7 @@ public class AlertDialogsHelper {
         txtEXIF.setTextColor(activity.getTextColor());
         txtLocation.setTextColor(activity.getTextColor());
         txtDateTaken.setTextColor(activity.getTextColor());
+        txtOrientation.setTextColor(activity.getTextColor());
 
         Data.setTextColor(activity.getSubTextColor());
         DateTaken.setTextColor(activity.getSubTextColor());
@@ -146,6 +149,7 @@ public class AlertDialogsHelper {
         Device.setTextColor(activity.getSubTextColor());
         EXIF.setTextColor(activity.getSubTextColor());
         Location.setTextColor(activity.getSubTextColor());
+        Orientation.setTextColor(activity.getSubTextColor());
 
         try {
             ExifInterface exif = new ExifInterface(f.getPath());
@@ -158,6 +162,13 @@ public class AlertDialogsHelper {
                         exif.getAttribute(ExifInterface.TAG_APERTURE),
                         exif.getAttribute(ExifInterface.TAG_ISO),
                         exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
+
+                switch (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+                    case ExifInterface.ORIENTATION_ROTATE_270: Orientation.setText("270");break;
+                    case ExifInterface.ORIENTATION_ROTATE_180: Orientation.setText("180");break;
+                    case ExifInterface.ORIENTATION_ROTATE_90: Orientation.setText("90");break;
+                    case ExifInterface.ORIENTATION_NORMAL: Orientation.setText("0");break;
+                }
 
                 final float[] output= new float[2];
                 if(exif.getLatLong(output)) {
