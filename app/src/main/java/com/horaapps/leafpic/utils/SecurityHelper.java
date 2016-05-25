@@ -2,7 +2,9 @@ package com.horaapps.leafpic.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.horaapps.leafpic.R;
+import com.horaapps.leafpic.SecurityActivity;
 import com.horaapps.leafpic.Views.ThemedActivity;
 
 /**
@@ -50,13 +53,22 @@ public class SecurityHelper {
         this.passwordValue = SP.getString("password_value", "");
     }
 
-    public AlertDialog getInsertPasswordDialog(final ThemedActivity activity, AlertDialog
-            .Builder dialogBuilder, EditText editText){
-        editText.setGravity(Gravity.CENTER_HORIZONTAL);
-        editText.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType
-                .TYPE_NUMBER_VARIATION_PASSWORD);
-        editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        return AlertDialogsHelper.getInsertTextDialog(activity,dialogBuilder,
-                editText, activity.getString(R.string.type_password));
+    public EditText getInsertPasswordDialog(final ThemedActivity activity, AlertDialog.Builder passwordDialog){
+
+        final View PasswordDialogLayout = activity.getLayoutInflater().inflate(R.layout
+                .password_dialog, null);
+        final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
+        final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
+        final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
+
+        passwordDialogTitle.setBackgroundColor(activity.getPrimaryColor());
+        passwordDialogCard.setBackgroundColor(activity.getCardBackgroundColor());
+        ThemedActivity.setCursorDrawableColor(editxtPassword, activity.getTextColor());
+        editxtPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
+        editxtPassword.setTextColor(activity.getTextColor());
+
+        passwordDialog.setView(PasswordDialogLayout);
+
+        return editxtPassword;
     }
 }

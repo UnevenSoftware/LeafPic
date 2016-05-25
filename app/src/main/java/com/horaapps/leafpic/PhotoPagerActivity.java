@@ -453,6 +453,16 @@ public class PhotoPagerActivity extends ThemedActivity {
         finish();
     }
 
+    private void deleteCurrentMedia() {
+        album.deleteCurrentMedia(getApplicationContext());
+        if (album.media.size() == 0) {
+            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+            displayAlbums(false);
+        }
+        adapter.notifyDataSetChanged();
+        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -517,9 +527,13 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.deletePhoto:
-                final AlertDialog.Builder DeleteDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
 
-                final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+                AlertDialogsHelper.getTextDialog(PhotoPagerActivity.this,deleteDialog,
+                        getString(R.string.delete), getString(R.string.delete_photo_message));
+
+               /* final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout
+                    .text_dialog, null);
                 final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView txt_Delete_message = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cv_Delete_Dialog = (CardView) Delete_dialogLayout.findViewById(R.id.message_card);
@@ -529,31 +543,23 @@ public class PhotoPagerActivity extends ThemedActivity {
                 txt_Delete_title.setText(getString(R.string.delete));
                 txt_Delete_message.setText(R.string.delete_photo_message);
                 txt_Delete_message.setTextColor(getTextColor());
-                DeleteDialog.setView(Delete_dialogLayout);
+                DeleteDialog.setView(Delete_dialogLayout);*/
 
-                DeleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                deleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-                DeleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
-                            final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
-                            final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
-                            final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
-                            final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
-                            final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
 
-                            passwordDialogTitle.setBackgroundColor(getPrimaryColor());
-                            passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
+                            final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                            final EditText editTextPassword = securityObj.getInsertPasswordDialog
+                                    (PhotoPagerActivity.this, passwordDialogBuilder);
 
-                            editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-                            editxtPassword.setTextColor(getTextColor());
-
-                            passwordDialog.setView(PasswordDialogLayout);
-                            passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                            passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if (securityObj.checkPassword(editxtPassword.getText().toString())) {
+                                    if (securityObj.checkPassword(editTextPassword.getText().toString())) {
                                         album.deleteCurrentMedia(getApplicationContext());
                                         if (album.media.size() == 0) {
                                             ((MyApplication) getApplicationContext()).removeCurrentAlbum();
@@ -562,27 +568,32 @@ public class PhotoPagerActivity extends ThemedActivity {
                                         adapter.notifyDataSetChanged();
                                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
                                     } else {
-                                        Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
-                            passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {}});
+                            passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+                            final AlertDialog passwordDialog = passwordDialogBuilder.create();
                             passwordDialog.show();
-                        } else {
-
-                            album.deleteCurrentMedia(getApplicationContext());
-                            if (album.media.size() == 0) {
-                                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
-                                displayAlbums(false);
-                            }
-                            adapter.notifyDataSetChanged();
-                            toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
-                        }
+                            passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
+                                    .OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (securityObj.checkPassword(editTextPassword.getText().toString())){
+                                        deleteCurrentMedia();
+                                        passwordDialog.dismiss();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                        editTextPassword.getText().clear();
+                                        editTextPassword.requestFocus();
+                                    }
+                                }
+                            });
+                        } else
+                            deleteCurrentMedia();
                     }
                 });
-                DeleteDialog.show();
+                deleteDialog.show();
                 return true;
 
             case R.id.moveAction:
