@@ -219,6 +219,7 @@
     <string name="resolution">Resolution</string>
     <string name="exif">EXIF</string>
     <string name="device">Device</string>
+    <string name="orientation">Orientation</string>
     <string name="location">Location</string>
 
     <!--DRAWER ITEMS -->
