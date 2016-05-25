@@ -1,5 +1,6 @@
 package com.horaapps.leafpic;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -77,7 +78,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 
 
@@ -174,6 +177,42 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
+
+    public static HashSet<String> getExternalMounts() {
+        final HashSet<String> out = new HashSet<String>();
+        String reg = "(?i).*vold.*(vfat|ntfs|exfat|fat32|ext3|ext4).*rw.*";
+        String s = "";
+        try {
+            final Process process = new ProcessBuilder().command("mount")
+                    .redirectErrorStream(true).start();
+            process.waitFor();
+            final InputStream is = process.getInputStream();
+            final byte[] buffer = new byte[1024];
+            while (is.read(buffer) != -1) {
+                s = s + new String(buffer);
+            }
+            is.close();
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+
+        // parse output
+        final String[] lines = s.split("\n");
+        for (String line : lines) {
+            if (!line.toLowerCase(Locale.US).contains("asec")) {
+                if (line.matches(reg)) {
+                    String[] parts = line.split(" ");
+                    for (String part : parts) {
+                        if (part.startsWith("/"))
+                            if (!part.toLowerCase(Locale.US).contains("vold"))
+                                out.add(part);
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,16 +225,8 @@ public class MainActivity extends ThemedActivity {
         editmode = false;
         securityObj= new SecurityHelper(MainActivity.this);
 
-
-
         initUI();
         setupUI();
-
-        /*ArrayList<File> externalLocations = ExternalStorage.getAllStorageLocations();
-        for (File externalLocation : externalLocations) {
-            StringUtils.showToast(getApplicationContext(),externalLocation.getAbsolutePath());
-            Log.wtf(TAG,externalLocation.getAbsolutePath());
-        }*/
 
         displayPreFetchedData(getIntent().getExtras());
     }

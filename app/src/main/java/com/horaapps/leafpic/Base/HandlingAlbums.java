@@ -19,8 +19,11 @@ import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,11 +73,12 @@ public class HandlingAlbums {
     public void loadPreviewAlbums(Context context, boolean hidden) {
         clearCameraIndex();
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
+        HashSet<File> roots = listStorages();
         if (hidden)
-            for (File storage : listStorages())
+            for (File storage : roots)
                 fetchRecursivelyHiddenFolder(storage, albumArrayList);
         else
-            for (File storage : listStorages())
+            for (File storage : roots)
                 fetchRecursivelyFolder(storage, albumArrayList);
         dispAlbums = albumArrayList;
         sortAlbums(context);
@@ -93,12 +97,56 @@ public class HandlingAlbums {
         indexCamera = -1;
     }
 
-    public ArrayList<File> listStorages() {
-        ArrayList<File> roots = new ArrayList<File>();
+    public HashSet<File> listStorages() {
+        HashSet<File> roots = new HashSet<File>();
         roots.add(Environment.getExternalStorageDirectory());
+        //Log.wtf(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
+
+
+        /*for (String mount : getExternalMounts()) {
+            File mas = new File(mount);
+            if (mas.canRead())
+                roots.add(mas);
+        }*/
+
         String sdCard = System.getenv("SECONDARY_STORAGE");
         if (sdCard != null) roots.add(new File(sdCard));
         return roots;
+    }
+
+    public static HashSet<String> getExternalMounts() {
+        final HashSet<String> out = new HashSet<String>();
+        String reg = "(?i).*vold.*(vfat|ntfs|exfat|fat32|ext3|ext4).*rw.*";
+        String s = "";
+        try {
+            final Process process = new ProcessBuilder().command("mount")
+                    .redirectErrorStream(true).start();
+            process.waitFor();
+            final InputStream is = process.getInputStream();
+            final byte[] buffer = new byte[1024];
+            while (is.read(buffer) != -1) {
+                s = s + new String(buffer);
+            }
+            is.close();
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+
+        // parse output
+        final String[] lines = s.split("\n");
+        for (String line : lines) {
+            if (!line.toLowerCase(Locale.US).contains("asec")) {
+                if (line.matches(reg)) {
+                    String[] parts = line.split(" ");
+                    for (String part : parts) {
+                        if (part.startsWith("/"))
+                            if (!part.toLowerCase(Locale.US).contains("vold"))
+                                out.add(part);
+                    }
+                }
+            }
+        }
+        return out;
     }
 
     public ArrayList<Album> getValidFolders(boolean hidden) {
