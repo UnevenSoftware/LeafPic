@@ -249,176 +249,33 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swNavBar, getAccentColor());
     }
 
-    /*public void updateSwitchColor(SwitchCompat sw,int color){
-        if(sw.isChecked())
-            sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
-        else
-            sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.MULTIPLY);
-        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-    }*/
-
     public void askPasswordDialog() {
-        final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
-        final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
-        final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
-        final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
-        final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
-
-        passwordDialogTitle.setBackgroundColor(getPrimaryColor());
-        passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
-
-        editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-        editxtPassword.setTextColor(getTextColor());
-
-        passwordDialog.setView(PasswordDialogLayout);
-        passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+        final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingActivity.this,passwordDialogBuilder);
+        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (securityObj.checkPassword(editxtPassword.getText().toString()))
-                    startActivity(new Intent(getApplicationContext(),SecurityActivity.class));
-                else
-                    Toast.makeText(passwordDialog.getContext(),R.string.wrong_password,Toast.LENGTH_SHORT).show();
+
             }
         });
-        passwordDialog.setNegativeButton(getString(R.string.cancel), null);
+
+        AlertDialog passwordDialog = passwordDialogBuilder.create();
         passwordDialog.show();
-    }
 
-    public void securityDialog(){
-
-        final AlertDialog.Builder securityDialog = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
-        SP = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
-
-        final boolean changedActiveSecurity = securityObj.isActiveSecurity();
-
-        final View SecurityDialogLayout = getLayoutInflater().inflate(R.layout.security_dialog, null);
-
-        final TextView securityDialogTitle = (TextView) SecurityDialogLayout.findViewById(R.id.security_title_dialog);
-        final CardView securityDialogCard = (CardView) SecurityDialogLayout.findViewById(R.id.security_dialog_card);
-        final LinearLayout llbody = (LinearLayout) SecurityDialogLayout.findViewById(R.id.ll_security_dialog_body);
-
-        final IconicsImageView imgActiveSecurity = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.active_security_icon);
-        final TextView txtActiveSecurity = (TextView) SecurityDialogLayout.findViewById(R.id.active_security_item_title);
-        final SwitchCompat swActiveSecurity = (SwitchCompat) SecurityDialogLayout.findViewById(R.id.active_security_switch);
-
-        final EditText eTxtPasswordSecurity = (EditText) SecurityDialogLayout.findViewById(R.id.security_password_edittxt);
-
-        final TextView txtApplySecurity = (TextView) SecurityDialogLayout.findViewById(R.id.security_body_apply_on);
-        final IconicsImageView imgApplySecurityHidden = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.security_body_apply_hidden_icon);
-        final TextView txtApplySecurityHidden = (TextView) SecurityDialogLayout.findViewById(R.id.security_body_apply_hidden_title);
-        final SwitchCompat swApplySecurityHidden = (SwitchCompat) SecurityDialogLayout.findViewById(R.id.security_body_apply_hidden_switch);
-
-        final IconicsImageView imgApplySecurityDelete = (IconicsImageView) SecurityDialogLayout.findViewById(R.id.security_body_apply_delete_icon);
-        final TextView txtApplySecurityDelete = (TextView) SecurityDialogLayout.findViewById(R.id.security_body_apply_delete_title);
-        final SwitchCompat swApplySecurityDelete = (SwitchCompat) SecurityDialogLayout.findViewById(R.id.security_body_apply_delete_switch);
-
-
-        /*** SETING DIALOG THEME ***/
-        securityDialogTitle.setBackgroundColor(getPrimaryColor());
-        securityDialogCard.setBackgroundColor(getCardBackgroundColor());
-
-        /*
-        eTxtPasswordSecurity.setTextColor(getAccentColor());
-        eTxtPasswordSecurity.setHintTextColor(getAccentColor());
-        eTxtPasswordSecurity.setBackgroundColor(getBackgroundColor());
-        */
-        eTxtPasswordSecurity.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-        eTxtPasswordSecurity.setTextColor(getTextColor());
-        eTxtPasswordSecurity.setText(SP.getString("password_value", ""));
-
-        /*ICONS*/
-        int color = getIconColor();
-        imgActiveSecurity.setColor(color);
-        imgApplySecurityHidden.setColor(color);
-        imgApplySecurityDelete.setColor(color);
-
-        /*TEXTVIEWS*/
-        color=getTextColor();
-        txtActiveSecurity.setTextColor(color);
-        txtApplySecurity.setTextColor(color);
-        txtApplySecurityHidden.setTextColor(color);
-        txtApplySecurityDelete.setTextColor(color);
-
-        /** - SWITCHS - **/
-        /** - ACTIVE SECURITY - **/
-        swActiveSecurity.setChecked(securityObj.isActiveSecurity());
-        swActiveSecurity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
+                .OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("active_security", isChecked);
-                editor.apply();
-
-
-                securityObj.updateSecuritySetting();
-                updateSwitchColor(swActiveSecurity, getAccentColor());
-                llbody.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-            }
-        });
-        updateSwitchColor(swActiveSecurity, getAccentColor());
-        llbody.setVisibility(swActiveSecurity.isChecked() ? View.VISIBLE : View.GONE);
-
-        /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
-        swApplySecurityHidden.setChecked(securityObj.isPasswordOnHidden());
-        swApplySecurityHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("password_on_hidden", isChecked);
-                editor.apply();
-
-                securityObj.updateSecuritySetting();
-                updateSwitchColor(swApplySecurityHidden, getAccentColor());
-            }
-        });
-        updateSwitchColor(swApplySecurityHidden, getAccentColor());
-
-        /**ACTIVE SECURITY ON DELETE ACTION**/
-        swApplySecurityDelete.setChecked(securityObj.isPasswordOnDelete());
-        swApplySecurityDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("password_on_delete", isChecked);
-                editor.apply();
-
-                securityObj.updateSecuritySetting();
-                updateSwitchColor(swApplySecurityDelete, getAccentColor());
-            }
-        });
-        updateSwitchColor(swApplySecurityDelete, getAccentColor());
-
-        securityDialog.setView(SecurityDialogLayout);
-
-        securityDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if(swActiveSecurity.isChecked()) {
-                    if (eTxtPasswordSecurity.length() > 3) {
-                        if (!securityObj.checkPassword(eTxtPasswordSecurity.getText().toString())) {
-                            SharedPreferences.Editor editor = SP.edit();
-                            editor.putString("password_value", eTxtPasswordSecurity.getText().toString());
-                            editor.apply();
-                            securityObj.updateSecuritySetting();
-                            Toast.makeText(getApplicationContext(), R.string.remember_password_message, Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
-                        }
-                    } else
-                        Toast.makeText(securityDialog.getContext(), R.string.error_password_length, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                if (securityObj.checkPassword(editTextPassword.getText().toString()))
+                    startActivity(new Intent(getApplicationContext(),SecurityActivity.class));
+                else {
+                    Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                    editTextPassword.getText().clear();
+                    editTextPassword.requestFocus();
                 }
             }
         });
-        securityDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (changedActiveSecurity != securityObj.isActiveSecurity()) {
-                    SharedPreferences.Editor editor = SP.edit();
-                    editor.putBoolean("active_security", changedActiveSecurity);
-                    editor.apply();
-                    securityObj.updateSecuritySetting();
-                }
-                dialog.cancel();
-            }
-        });
-        securityDialog.show();
     }
 
     public void BasicThemeDialog(){

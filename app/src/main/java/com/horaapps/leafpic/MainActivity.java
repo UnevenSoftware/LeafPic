@@ -1,5 +1,6 @@
 package com.horaapps.leafpic;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,7 +75,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 
 
@@ -171,6 +174,42 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
+
+    public static HashSet<String> getExternalMounts() {
+        final HashSet<String> out = new HashSet<String>();
+        String reg = "(?i).*vold.*(vfat|ntfs|exfat|fat32|ext3|ext4).*rw.*";
+        String s = "";
+        try {
+            final Process process = new ProcessBuilder().command("mount")
+                    .redirectErrorStream(true).start();
+            process.waitFor();
+            final InputStream is = process.getInputStream();
+            final byte[] buffer = new byte[1024];
+            while (is.read(buffer) != -1) {
+                s = s + new String(buffer);
+            }
+            is.close();
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+
+        // parse output
+        final String[] lines = s.split("\n");
+        for (String line : lines) {
+            if (!line.toLowerCase(Locale.US).contains("asec")) {
+                if (line.matches(reg)) {
+                    String[] parts = line.split(" ");
+                    for (String part : parts) {
+                        if (part.startsWith("/"))
+                            if (!part.toLowerCase(Locale.US).contains("vold"))
+                                out.add(part);
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,16 +222,8 @@ public class MainActivity extends ThemedActivity {
         editmode = false;
         securityObj= new SecurityHelper(MainActivity.this);
 
-
-
         initUI();
         setupUI();
-
-        /*ArrayList<File> externalLocations = ExternalStorage.getAllStorageLocations();
-        for (File externalLocation : externalLocations) {
-            StringUtils.showToast(getApplicationContext(),externalLocation.getAbsolutePath());
-            Log.wtf(TAG,externalLocation.getAbsolutePath());
-        }*/
 
         displayPreFetchedData(getIntent().getExtras());
     }
@@ -585,60 +616,37 @@ public class MainActivity extends ThemedActivity {
             public void onClick(View v) {
                 if (securityObj.isActiveSecurity() && securityObj.isPasswordOnHidden()){
 
-                    AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder
-                            (MainActivity.this, getDialogStyle());
-                    final EditText editTextPassword = new EditText(getApplicationContext());
-                    AlertDialog passwordDialog =
-                            securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder, editTextPassword);
+                    AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder (MainActivity.this, getDialogStyle());
 
-                    passwordDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                        @Override
+                    final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder);
+
+                    passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+
+                    final AlertDialog passwordDialog = passwordDialogBuilder.create();
+                    passwordDialog.show();
+
+                    passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
+                            .OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             if (securityObj.checkPassword(editTextPassword.getText().toString())){
                                 hidden = true;
                                 mDrawerLayout.closeDrawer(GravityCompat.START);
                                 new PrepareAlbumTask().execute();
-                                dialog.cancel();
-                            } else
+                                passwordDialog.dismiss();
+                            } else {
                                 Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                        }});
-                    passwordDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) { } });
-                    passwordDialog.show();
-
-                    /*final AlertDialog.Builder passwordDialog = new AlertDialog.Builder
-                            (MainActivity.this, getDialogStyle());
-                    final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
-                    final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
-                    final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
-                    final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
-
-                    passwordDialogTitle.setBackgroundColor(getPrimaryColor());
-                    passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
-
-                    editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-                    editxtPassword.setTextColor(getTextColor());
-
-                    passwordDialog.setView(PasswordDialogLayout);
-                    passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (securityObj.checkPassword(editxtPassword.getText().toString())){
-                                hidden = true;
-                                mDrawerLayout.closeDrawer(GravityCompat.START);
-                                new PrepareAlbumTask().execute();
-                                dialog.cancel();
-                            } else
-                                Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                editTextPassword.getText().clear();
+                                editTextPassword.requestFocus();
+                            }
                         }
                     });
-                    passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    passwordDialog.show();*/
                 } else {
                     hidden = true;
                     mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -995,31 +1003,31 @@ public class MainActivity extends ThemedActivity {
                 deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
-                            final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                            final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.password_dialog, null);
-                            final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
-                            final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
-                            final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
+                            final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
-                            passwordDialogTitle.setBackgroundColor(getPrimaryColor());
-                            passwordDialogCard.setBackgroundColor(getCardBackgroundColor());
 
-                            editxtPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
-                            editxtPassword.setTextColor(getTextColor());
-
-                            passwordDialog.setView(PasswordDialogLayout);
-                            passwordDialog.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                            final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this,passwordDialogBuilder);
+                            passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if (securityObj.checkPassword(editxtPassword.getText().toString())) {
-                                        new DeletePhotos().execute();
-                                    } else
-                                        Toast.makeText(passwordDialog.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+
                                 }
                             });
-                            passwordDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {}});
+                            passwordDialogBuilder.setNegativeButton(getString(R.string.cancel),null);
+                            AlertDialog passwordDialog = passwordDialogBuilder.create();
                             passwordDialog.show();
+                            passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
+                                    .OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (securityObj.checkPassword(editTextPassword.getText().toString())) {
+                                        new DeletePhotos().execute();
+                                    } else{
+                                        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                        editTextPassword.getText().clear();
+                                        editTextPassword.requestFocus();
+                                    }
+                                }
+                            });
                         } else new DeletePhotos().execute();
                     }
                 });

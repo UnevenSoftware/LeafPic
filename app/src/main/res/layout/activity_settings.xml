@@ -109,62 +109,6 @@
                             android:paddingRight="5dp"
                             />
                     </LinearLayout>
-                    <!-- TRASLUCENT STATUS BAR-->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_TraslucentStatusBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="15dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/Traslucent_StatusBar_Icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-web-asset"
-                            />
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:orientation="vertical"
-                            >
-                            <TextView
-                                android:id="@+id/Traslucent_StatusBar_Item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/traslucent_statusbar"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-                                />
-                            <TextView
-                                android:id="@+id/Traslucent_StatusBar_Item_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/traslucent_statusbar_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
-                            </LinearLayout>
-                        <android.support.v7.widget.SwitchCompat
-                            android:id="@+id/SetTraslucentStatusBar"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-
-                            android:background="?android:selectableItemBackground"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:hapticFeedbackEnabled="true"
-                            android:paddingRight="5dp"
-                            />
-                    </LinearLayout>
 
                     <!-- EXCLUDED ALBUM-->
                     <com.balysv.materialripple.MaterialRippleLayout
@@ -218,7 +162,7 @@
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
 
-                    <!-- PASSWORD HIDDEN ALBUM-->
+                    <!-- SECURITY -->
                     <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -241,7 +185,7 @@
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
-                                app:iiv_icon="gmd-lock"
+                                app:iiv_icon="faw-user-secret"
                                 />
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -426,7 +370,7 @@
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="2"
-                                app:iiv_icon="gmd-colorize"
+                                app:iiv_icon="cmd-format-color-fill"
                                 />
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -455,6 +399,118 @@
                             </LinearLayout>
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!-- APPLY THEME ON 3TH ACT -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false"
+                        >
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_custom_thirdAct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/custom_3thAct_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="faw-paint-brush"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/custom_3thAct_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
+                                    android:text="@string/custom_3thAct"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/custom_3thAct_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="5dp"
+                                    android:text="@string/custom_3thAct_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!-- TRASLUCENT STATUS BAR-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_TraslucentStatusBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Traslucent_StatusBar_Icon"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="2"
+                            app:iiv_icon="gmd-web-asset"
+                            />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/Traslucent_StatusBar_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/traslucent_statusbar"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/Traslucent_StatusBar_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/traslucent_statusbar_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/SetTraslucentStatusBar"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+
+                            android:background="?android:selectableItemBackground"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:hapticFeedbackEnabled="true"
+                            android:paddingRight="5dp"
+                            />
+                    </LinearLayout>
+
                     <!--COLORED NAV BAR-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -653,61 +709,6 @@
                             android:hapticFeedbackEnabled="true"
                             android:paddingRight="5dp" />
                     </LinearLayout>
-
-
-                     <!-- APPLY THEME ON 3TH ACT -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false"
-                        >
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_custom_thirdAct"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="15dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/custom_3thAct_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="gmd-brush"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/custom_3thAct_title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingRight="5dp"
-                                    android:text="@string/custom_3thAct"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/custom_3thAct_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingRight="5dp"
-                                    android:text="@string/custom_3thAct_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
 
                     <!-- FULL resolution -->
                     <com.balysv.materialripple.MaterialRippleLayout

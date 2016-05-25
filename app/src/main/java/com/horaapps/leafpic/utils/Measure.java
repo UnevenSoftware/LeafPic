@@ -34,6 +34,7 @@ public class Measure {
 
     public static int getAlbumsColumns(Context c) {
         //StringUtils.showToast(c, getRealScreenSize(c).x / Costants.ALBUM_CARD_WIDTH_test+"");
+        //Log.wtf("width:dp",pxToDp(getScreenWidth(c), c)+"");
         int n = Math.round(getDensity(c) / Costants.ALBUM_CARD_WIDTH);
         return n < 2 ? 2 : n;
     }
@@ -44,8 +45,6 @@ public class Measure {
     }
 
     public static int getDensity(Context c){
-        Log.wtf("width:px",getScreenWidth(c)+"");
-        Log.wtf("width:dp",pxToDp(getScreenWidth(c), c)+"");
         return Math.round((getScreenWidth(c) * c.getResources().getDisplayMetrics().density));
     }
 
