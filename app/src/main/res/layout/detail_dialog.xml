@@ -165,6 +165,31 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
+                    <!--ORIENTATION-->
+                    <!--TODO: MUST TEST WITH IMG WITH LOCATION-->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_orientation_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:id="@+id/label_orientation"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="@string/orientation"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/orientation_exif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
                     <!--DATE-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -279,32 +304,7 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                    <!--ORIENTATION-->
-                    <!--TODO: MUST TEST WITH IMG WITH LOCATION-->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_orientation_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        >
-                        <TextView
-                            android:id="@+id/label_orientation"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:text="@string/orientation"
-                            android:textStyle="bold"
-                            />
-                        <TextView
-                            android:id="@+id/orientation_exif"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="10dp"
-                            android:textSize="16sp"
-                            />
-                    </LinearLayout>
+
                     <!--LOCATION-->
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"

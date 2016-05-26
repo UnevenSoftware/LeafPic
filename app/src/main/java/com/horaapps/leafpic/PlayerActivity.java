@@ -185,6 +185,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
       case R.id.action_settings:
         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
         return true;
+
       case R.id.rotate_layout:
         int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
         if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270)
@@ -201,13 +202,10 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   @Override
   public void setNavBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (isApplyThemeOnImgAct())
-        if (isNavigationBarColored())
-          getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
-        else
-          getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
+      if (isNavigationBarColored())
+        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
       else
-        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
+        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
     }
   }
 
@@ -215,24 +213,19 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   @Override
   protected void setStatusBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (isApplyThemeOnImgAct())
-        if (isTraslucentStatusBar() && isTransparencyZero())
-          getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
-        else
-          getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
+      if (isTraslucentStatusBar() && isTransparencyZero())
+        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
       else
-        getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
+        getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
     }
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     setContentView(R.layout.activity_player);
-    FrameLayout root = (FrameLayout) findViewById(R.id.root);
 
+    FrameLayout root = (FrameLayout) findViewById(R.id.root);
     root.setOnTouchListener(new OnTouchListener() {
       @Override
       public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -256,7 +249,6 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
 
     shutterView = findViewById(R.id.shutter);
 
-
     videoFrame = (AspectRatioFrameLayout) findViewById(R.id.video_frame);
     surfaceView = (SurfaceView) findViewById(R.id.surface_view);
     surfaceView.getHolder().addCallback(this);
@@ -270,13 +262,12 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     initUI();
 
     CookieHandler currentHandler = CookieHandler.getDefault();
-    if (currentHandler != defaultCookieManager) {
+    if (currentHandler != defaultCookieManager)
       CookieHandler.setDefault(defaultCookieManager);
-    }
+
 
     audioCapabilitiesReceiver = new AudioCapabilitiesReceiver(this, this);
     audioCapabilitiesReceiver.register();
-
   }
 
   @Override
@@ -298,10 +289,9 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
       if (!maybeRequestPermission()) {
         preparePlayer(true);
       }
-    } else {
+    } else
       player.setBackgrounded(false);
-    }
-    //showControls();
+
   }
 
   @Override

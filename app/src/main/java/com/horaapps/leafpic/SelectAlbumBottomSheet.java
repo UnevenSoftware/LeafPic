@@ -7,18 +7,21 @@ package com.horaapps.leafpic;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -138,7 +141,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         llNewFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newFolderDialog();
+                //newFolderDialog();
             }
         });
 
@@ -182,15 +185,17 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     private void newFolderDialog() {
         Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
 
-        /*
+
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         curFolder=root;
         ListDir(curFolder);
-        Dialog dialog= new Dialog(getContext());
+
+        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext(),
+                R.style.AlertDialog_Light);
+
+        Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_explorer);
         dialog.setTitle("Dialog Explorer");
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
 
         textFolder = (TextView) dialog.findViewById(R.id.folder);
         btnUP = (Button) dialog.findViewById(R.id.up);
@@ -202,6 +207,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         });
 
         dialog_ListView = (ListView) dialog.findViewById(R.id.folder_list);
+
         dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -214,10 +220,11 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
                 }
             }
         });
-        */
+
     }
 
     void ListDir(File f){
+
         if(f.equals(root)){
             btnUP.setEnabled(false);
         } else {

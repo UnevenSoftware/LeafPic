@@ -163,17 +163,16 @@ public class AlertDialogsHelper {
                         exif.getAttribute(ExifInterface.TAG_ISO),
                         exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
 
-                switch (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
-                    case ExifInterface.ORIENTATION_ROTATE_270: Orientation.setText("270");break;
-                    case ExifInterface.ORIENTATION_ROTATE_180: Orientation.setText("180");break;
-                    case ExifInterface.ORIENTATION_ROTATE_90: Orientation.setText("90");break;
-                    case ExifInterface.ORIENTATION_NORMAL: Orientation.setText("0");break;
-                }
+
+                Orientation.setText(String.format(Locale.getDefault(), "%d", f.getOrientation()));
 
                 final float[] output= new float[2];
                 if(exif.getLatLong(output)) {
 
                     String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
+
+                    url = "http://staticmap.openstreetmap.de/staticmap.php?center=" + output[0] +
+                            "," + output[1] + "&zoom=15&size=700x700&maptype=osmarenderer";
                     //url = "https://api.mapbox.com/v4/mapbox.dark/-76.9,38.9,5/1000x1000.png";
                     Glide.with(activity.getApplicationContext())
                             .load(url)

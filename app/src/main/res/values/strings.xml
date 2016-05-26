@@ -249,6 +249,7 @@
     <string name="error_querying_decoders">Unable to query device decoders</string>
     <string name="unable_to_fix_date">Unable to fix date</string>
     <string name="compression_settings">Compression settings</string>
+    <string name="include_video">Include Video</string>
 
 
 </resources>

@@ -184,7 +184,7 @@ public class SplashScreen extends ThemedActivity {
     private class PrefetchPhotosData extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... arg0) {
-            album.updatePhotos();
+            album.updatePhotos(getApplicationContext());
             return null;
         }
 

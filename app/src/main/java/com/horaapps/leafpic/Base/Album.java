@@ -1,11 +1,14 @@
 package com.horaapps.leafpic.Base;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
+import com.horaapps.leafpic.MyApplication;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.StringUtils;
 
@@ -28,6 +31,7 @@ public class Album {
     boolean selected = false;
     private int filter_photos;
     public AlbumSettings settings = new AlbumSettings();
+    SharedPreferences SP;
     MediaComparators mediaComparators;
     int current = -1;
 
@@ -47,13 +51,13 @@ public class Album {
         this.count = count;
     }
 
-    public Album(String mediaPath) {
+    public Album(Context context, String mediaPath) {
         File folder = new File(mediaPath).getParentFile();
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
         this.path = folder.getPath();
         this.name = folder.getName();
-        updatePhotos();
+        updatePhotos(context);
         setCurrentPhoto(mediaPath);
     }
 
@@ -65,9 +69,10 @@ public class Album {
         //updatePhotos();
     }
 
-    public void updatePhotos() {
+    public void updatePhotos(Context context) {
+        SP = PreferenceManager.getDefaultSharedPreferences(context);
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-        File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos));
+        File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos, SP.getBoolean("set_include_video",true)));
         for (File image : images)
             mediaArrayList.add(0, new Media(image.getAbsolutePath(), image.lastModified(), image.length()));
         media = mediaArrayList;
@@ -90,9 +95,9 @@ public class Album {
         return filter_photos != ImageFileFilter.FILTER_ALL;
     }
 
-    public void filterMedias(int filter) {
+    public void filterMedias(Context context, int filter) {
         filter_photos = filter;
-        updatePhotos();
+        updatePhotos(context);
     }
 
     public void setSettings(Context context) {

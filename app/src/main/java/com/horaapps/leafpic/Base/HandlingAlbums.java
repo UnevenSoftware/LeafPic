@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -37,18 +38,20 @@ public class HandlingAlbums {
 
     public ArrayList<Album> dispAlbums;
     private ArrayList<Album> selectedAlbums;
+    boolean includeVideo = true;
 
     CustomAlbumsHandler customAlbumsHandler;
     private SharedPreferences SP;
 
     int indexCamera = -1;
     int current = -1;
+    boolean hidden;
 
     ArrayList<File> excludedfolders;
     AlbumsComparators albumsComparators;
 
     public HandlingAlbums(Context context) {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = PreferenceManager.getDefaultSharedPreferences(context);
         customAlbumsHandler = new CustomAlbumsHandler(context);
 
         excludedfolders = new ArrayList<File>();
@@ -58,7 +61,7 @@ public class HandlingAlbums {
     }
 
     public HandlingAlbums(Context context, Album current) {
-        SP = context.getSharedPreferences("albums-sort", Context.MODE_PRIVATE);
+        SP = PreferenceManager.getDefaultSharedPreferences(context);
         customAlbumsHandler = new CustomAlbumsHandler(context);
         excludedfolders = new ArrayList<File>();
         loadExcludedFolders(context);
@@ -71,7 +74,9 @@ public class HandlingAlbums {
 
 
     public void loadPreviewAlbums(Context context, boolean hidden) {
+        this.hidden = hidden;
         clearCameraIndex();
+        includeVideo = SP.getBoolean("set_include_video", true);
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
         HashSet<File> roots = listStorages();
         if (hidden)
@@ -101,7 +106,6 @@ public class HandlingAlbums {
         HashSet<File> roots = new HashSet<File>();
         roots.add(Environment.getExternalStorageDirectory());
         //Log.wtf(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
-
 
         /*for (String mount : getExternalMounts()) {
             File mas = new File(mount);
@@ -227,7 +231,7 @@ public class HandlingAlbums {
     }
 
     public void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList) {
-        File[] files = temp.listFiles(new ImageFileFilter());
+        File[] files = temp.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
             Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
@@ -497,4 +501,8 @@ public class HandlingAlbums {
     }
 
     public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
+
+    public void loadPreviewAlbums(Context applicationContext) {
+        loadPreviewAlbums(applicationContext, hidden);
+    }
 }
