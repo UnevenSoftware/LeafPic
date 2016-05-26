@@ -1,5 +1,6 @@
 package com.horaapps.leafpic;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.provider.DocumentFile;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,6 +36,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +69,7 @@ import com.horaapps.leafpic.utils.AffixMedia;
 import com.horaapps.leafpic.utils.AffixOptions;
 import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
@@ -75,6 +79,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
@@ -451,13 +456,19 @@ public class MainActivity extends ThemedActivity {
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!albumsMode && album.areFiltersActive()) {
+                /*if (!albumsMode && album.areFiltersActive()) {
                     album.filterMedias(ImageFileFilter.FILTER_ALL);
                     mediaAdapter.updateDataSet(album.media);
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-                } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+                } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));*/
+
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
+                }
+
             }
         });
 
@@ -481,6 +492,31 @@ public class MainActivity extends ThemedActivity {
             Configuration configuration = new Configuration();
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (resultCode == RESULT_OK) {
+            Uri treeUri = resultData.getData();
+            //ContentResolver.getPersistedUriPermissions()
+            getContentResolver().takePersistableUriPermission(treeUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            DocumentFile pickedDir = DocumentFile.fromTreeUri(this, treeUri);
+            String path = ContentHelper.getPath(getApplicationContext(),pickedDir.getUri());
+            StringUtils.showToast(getApplicationContext(), path+"");
+            //Log.wtf(TAG,path);
+            // List all existing files inside picked directory
+            for (DocumentFile file : pickedDir.listFiles()) {
+                StringUtils.showToast(getApplicationContext(),file.getName());
+                Log.d(TAG, "Found file " + file.getName() + " with size " + file.length());
+            }
+
+            // Create a new file and write into it
+            /*DocumentFile newFile = pickedDir.createFile("text/plain", "My Novel");
+            OutputStream out = getContentResolver().openOutputStream(newFile.getUri());
+            out.write("A long time ago...".getBytes());
+            out.close();*/
         }
     }
 

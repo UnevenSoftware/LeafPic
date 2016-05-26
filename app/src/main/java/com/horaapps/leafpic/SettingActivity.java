@@ -3,11 +3,12 @@ package com.horaapps.leafpic;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.SecurityHelper;
+import com.horaapps.leafpic.utils.StringUtils;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -58,6 +61,8 @@ public class SettingActivity extends ThemedActivity {
 
     ScrollView scr;
 
+    FloatingActionButton fabMoreThemeOptions;
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -65,6 +70,22 @@ public class SettingActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceManager.getDefaultSharedPreferences(this);
 
+        fabMoreThemeOptions = (FloatingActionButton) findViewById(R.id.fab_more_theme_options);
+
+        fabMoreThemeOptions.setBackgroundTintList(ColorStateList.valueOf(getSubTextColor()));
+        fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_drop_down).color(Color.WHITE));
+        fabMoreThemeOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //StringUtils.showToast(getApplicationContext(),"yo!");
+                LinearLayout llMoreOptions = (LinearLayout) findViewById(R.id.ll_more_options_theme);
+                boolean visible = llMoreOptions.getVisibility() == View.VISIBLE;
+                llMoreOptions.setVisibility(visible ? View.GONE : View.VISIBLE);
+                fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this).icon
+                        (FontAwesome.Icon.faw_arrow_down).color(Color.WHITE));
+
+            }
+        });
         securityObj = new SecurityHelper(SettingActivity.this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
