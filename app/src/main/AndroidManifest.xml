@@ -16,7 +16,7 @@
 
         <activity
             android:name=".PlayerActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize"
             android:label="@string/video_player"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.NoActionBar">

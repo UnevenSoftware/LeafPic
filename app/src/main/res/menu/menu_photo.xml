@@ -5,25 +5,25 @@
     tools:context=".PhotoPagerActivity"
 >
     <item
-        android:id="@+id/shareButton"
+        android:id="@+id/action_share"
         android:orderInCategory="0"
         android:title="@string/share"
         app:showAsAction="always"
     />
     <item
-        android:id="@+id/deletePhoto"
+        android:id="@+id/action_delete"
         android:orderInCategory="1"
         android:title="@string/delete"
         app:showAsAction="always"
         />
     <group android:id="@+id/only_photos_otions">
         <item
-            android:id="@+id/edit_photo"
+            android:id="@+id/action_edit"
             android:title="@string/edit"
             app:showAsAction="never"
             />
         <item
-            android:id="@+id/rotatePhoto"
+            android:id="@+id/action_rotate"
             android:orderInCategory="2"
             android:title="@string/rotate"
             app:showAsAction="always">
@@ -40,28 +40,28 @@
             </menu>
         </item>
         <item
-            android:id="@+id/useAsIntent"
+            android:id="@+id/action_use_as"
             android:title="@string/use_as"
             app:showAsAction="never"
             />
     </group>
 
     <item
-        android:id="@+id/copyAction"
+        android:id="@+id/action_copy"
         android:title="@string/copy_to"
         app:showAsAction="never" />
     <item
-        android:id="@+id/moveAction"
+        android:id="@+id/action_move"
         android:title="@string/move_to"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/renamePhoto"
+        android:id="@+id/action_rename"
         android:title="@string/rename"
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/details"
+        android:id="@+id/action_details"
         android:title="@string/details"
         app:showAsAction="never"
         />
@@ -70,18 +70,19 @@
         app:showAsAction="never">
         <menu>
             <item
-                android:id="@+id/advanced_photo_edit"
+                android:id="@+id/action_edit_with"
                 android:title="@string/edit_with"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/open_with"
+                android:id="@+id/action_open_with"
                 android:title="@string/open_with"
                 app:showAsAction="never" />
             <item
                 android:title="@string/upload"
+                android:visible="false"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/setting"
+                android:id="@+id/action_settings"
                 android:title="@string/settings"
                 app:showAsAction="never" />
         </menu>

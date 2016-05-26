@@ -79,11 +79,11 @@
             app:showAsAction="ifRoom" />
 
         <item
-            android:id="@+id/copyAction"
+            android:id="@+id/action_copy"
             android:title="@string/copy_to"
             app:showAsAction="never" />
         <item
-            android:id="@+id/moveAction"
+            android:id="@+id/action_move"
             android:title="@string/move_to"
             app:showAsAction="never" />
 
