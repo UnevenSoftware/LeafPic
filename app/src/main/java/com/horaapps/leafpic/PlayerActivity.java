@@ -19,8 +19,8 @@ import android.Manifest.permission;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,17 +32,17 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
-import android.view.accessibility.CaptioningManager;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
-import android.widget.PopupMenu;
-import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 
 import com.google.android.exoplayer.AspectRatioFrameLayout;
@@ -50,7 +50,6 @@ import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecTrackRenderer.DecoderInitializationException;
 import com.google.android.exoplayer.MediaCodecUtil.DecoderQueryException;
-import com.google.android.exoplayer.MediaFormat;
 import com.google.android.exoplayer.audio.AudioCapabilities;
 import com.google.android.exoplayer.audio.AudioCapabilitiesReceiver;
 
@@ -59,30 +58,25 @@ import com.google.android.exoplayer.metadata.id3.GeobFrame;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
 import com.google.android.exoplayer.metadata.id3.PrivFrame;
 import com.google.android.exoplayer.metadata.id3.TxxxFrame;
-import com.google.android.exoplayer.text.CaptionStyleCompat;
-import com.google.android.exoplayer.text.Cue;
-import com.google.android.exoplayer.text.SubtitleLayout;
-import com.google.android.exoplayer.util.MimeTypes;
 import com.google.android.exoplayer.util.Util;
+import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.player.DemoPlayer;
 import com.horaapps.leafpic.player.ExtractorRendererBuilder;
 import com.horaapps.leafpic.player.HlsRendererBuilder;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
-import java.util.Locale;
 
 
 public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Callback,
-    DemoPlayer.Listener, DemoPlayer.CaptionListener, DemoPlayer.Id3MetadataListener,
-    AudioCapabilitiesReceiver.Listener {
+    DemoPlayer.Listener, DemoPlayer.Id3MetadataListener, AudioCapabilitiesReceiver.Listener {
 
   // For use within demo app code.
   public static final String CONTENT_TYPE_EXTRA = "content_type";
@@ -91,8 +85,6 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   private static final String CONTENT_EXT_EXTRA = "type";
 
   private static final String TAG = "PlayerActivity";
-  private static final int MENU_GROUP_TRACKS = 1;
-  private static final int ID_OFFSET = 2;
 
   private static final CookieManager defaultCookieManager;
   static {
@@ -101,18 +93,14 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   }
 
   private MediaController mediaController;
-  //private View debugRootView;
   View mediController_anchor;
   private View shutterView;
   private AspectRatioFrameLayout videoFrame;
   private SurfaceView surfaceView;
 
-  private SubtitleLayout subtitleLayout;
-
   private DemoPlayer player;
   private boolean playerNeedsPrepare;
   private long playerPosition;
-  private boolean enableBackgroundAudio;
 
   private Uri contentUri;
   private int contentType;
@@ -120,24 +108,19 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   private AudioCapabilitiesReceiver audioCapabilitiesReceiver;
   Toolbar toolbar;
 
+  boolean fullscreen = false;
+
   // Activity lifecycle
 
   public void initUI(){
 
-    toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-      toolbar.setBackgroundColor(
-              isApplyThemeOnImgAct()
-              ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
-              : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
+    toolbar.setBackgroundColor(
+            isApplyThemeOnImgAct()
+            ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
+            : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(
-            new IconicsDrawable(this)
-                    .icon(GoogleMaterial.Icon.gmd_arrow_back)
-                    .color(Color.WHITE)
-                    .sizeDp(19));
-
+    toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -147,7 +130,6 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
-
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -155,11 +137,19 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                     | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
+    getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
+            (new View.OnSystemUiVisibilityChangeListener() {
+              @Override
+              public void onSystemUiVisibilityChange(int visibility) {
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showControls();
+                else hideControls();
+              }
+            });
     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
             .setDuration(0).start();
     mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
 
-surfaceView.setBackgroundColor(getBackgroundColor());
     setStatusBarColor();
     setNavBarColor();
     setRecentApp(getString(R.string.app_name));
@@ -169,34 +159,43 @@ surfaceView.setBackgroundColor(getBackgroundColor());
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_video, menu);
+
+    menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+    menu.findItem(R.id.rotate_layout).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_screen_rotation));
     return true;
   }
 
   @Override
   public boolean onPrepareOptionsMenu(final Menu menu) {
-
-    menu.findItem(R.id.video_stuff).setVisible(haveTracks(DemoPlayer.TYPE_VIDEO));
-    menu.findItem(R.id.audio_stuff).setVisible(haveTracks(DemoPlayer.TYPE_AUDIO));
-    menu.findItem(R.id.video_stuff).setVisible(haveTracks(DemoPlayer.TYPE_TEXT));
     return super.onPrepareOptionsMenu(menu);
-
   }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.video_stuff:
-        showVideoPopup(toolbar);
-        break;
-      case R.id.audio_stuff:
-        showAudioPopup(toolbar);
-        break;
-      case R.id.text_stuff:
-        showTextPopup(toolbar);
-        break;
+
+      case R.id.action_share:
+        Intent share = new Intent(Intent.ACTION_SEND);
+        Media m = new Media(ContentHelper.getPath(getApplicationContext() ,getIntent().getData()));
+        share.setType(m.getMIME());
+        share.putExtra(Intent.EXTRA_STREAM, getIntent().getData());
+        startActivity(Intent.createChooser(share, getString(R.string.send_to)));
+        return true;
+
+      case R.id.action_settings:
+        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+        return true;
+      case R.id.rotate_layout:
+        int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
+        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270)
+          setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        showControls();
+        return true;
+
       default:
         return super.onOptionsItemSelected(item);
     }
-    return true;
   }
 
   @Override
@@ -208,7 +207,7 @@ surfaceView.setBackgroundColor(getBackgroundColor());
         else
           getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
       else
-        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
+        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
     }
   }
 
@@ -223,7 +222,7 @@ surfaceView.setBackgroundColor(getBackgroundColor());
           getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
       else
         getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
+                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
     }
   }
 
@@ -232,7 +231,7 @@ surfaceView.setBackgroundColor(getBackgroundColor());
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_player);
-    View root = findViewById(R.id.root);
+    FrameLayout root = (FrameLayout) findViewById(R.id.root);
 
     root.setOnTouchListener(new OnTouchListener() {
       @Override
@@ -245,25 +244,29 @@ surfaceView.setBackgroundColor(getBackgroundColor());
         return true;
       }
     });
+
     root.setOnKeyListener(new OnKeyListener() {
       @Override
       public boolean onKey(View v, int keyCode, KeyEvent event) {
         return !(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_MENU) && mediaController.dispatchKeyEvent(event);
       }
     });
+
     root.setBackgroundColor(R.color.md_black_1000);
+
     shutterView = findViewById(R.id.shutter);
+
 
     videoFrame = (AspectRatioFrameLayout) findViewById(R.id.video_frame);
     surfaceView = (SurfaceView) findViewById(R.id.surface_view);
     surfaceView.getHolder().addCallback(this);
-    subtitleLayout = (SubtitleLayout) findViewById(R.id.subtitles);
 
     mediaController = new KeyCompatibleMediaController(this);
 
     mediController_anchor = findViewById(R.id.media_player_anchor);
     mediaController.setAnchorView(mediController_anchor);
     mediaController.setPaddingRelative(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
     initUI();
 
     CookieHandler currentHandler = CookieHandler.getDefault();
@@ -290,7 +293,7 @@ surfaceView.setBackgroundColor(getBackgroundColor());
     contentUri = intent.getData();
     contentType = intent.getIntExtra(CONTENT_TYPE_EXTRA,
             inferContentType(contentUri, intent.getStringExtra(CONTENT_EXT_EXTRA)));
-    configureSubtitleView();
+
     if (player == null) {
       if (!maybeRequestPermission()) {
         preparePlayer(true);
@@ -298,16 +301,13 @@ surfaceView.setBackgroundColor(getBackgroundColor());
     } else {
       player.setBackgrounded(false);
     }
+    //showControls();
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    if (!enableBackgroundAudio) {
-      releasePlayer();
-    } else {
-      player.setBackgrounded(true);
-    }
+    releasePlayer();
     shutterView.setVisibility(View.VISIBLE);
   }
 
@@ -394,7 +394,7 @@ surfaceView.setBackgroundColor(getBackgroundColor());
     if (player == null) {
       player = new DemoPlayer(getRendererBuilder());
       player.addListener(this);
-      player.setCaptionListener(this);
+      //player.setCaptionListener(this);
       player.setMetadataListener(this);
       player.seekTo(playerPosition);
       playerNeedsPrepare = true;
@@ -424,6 +424,7 @@ surfaceView.setBackgroundColor(getBackgroundColor());
     if (playbackState == ExoPlayer.STATE_ENDED) {
       showControls();
     }
+
     String text = "playWhenReady=" + playWhenReady + ", playbackState=";
     switch(playbackState) {
       case ExoPlayer.STATE_BUFFERING:
@@ -493,170 +494,46 @@ surfaceView.setBackgroundColor(getBackgroundColor());
         height == 0 ? 1 : (width * pixelWidthAspectRatio) / height);
   }
 
-  //region options
-  private boolean haveTracks(int type) {
-    return player != null && player.getTrackCount(type) > 0;
-  }
-
-  public void showVideoPopup(View v) {
-    PopupMenu popup = new PopupMenu(this, v);
-    configurePopupWithTracks(popup, null, DemoPlayer.TYPE_VIDEO);
-    popup.show();
-  }
-
-  public void showAudioPopup(View v) {
-    PopupMenu popup = new PopupMenu(this, v);
-    Menu menu = popup.getMenu();
-    menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.enable_background_audio);
-    final MenuItem backgroundAudioItem = menu.findItem(0);
-    backgroundAudioItem.setCheckable(true);
-    backgroundAudioItem.setChecked(enableBackgroundAudio);
-    OnMenuItemClickListener clickListener = new OnMenuItemClickListener() {
-      @Override
-      public boolean onMenuItemClick(MenuItem item) {
-        if (item == backgroundAudioItem) {
-          enableBackgroundAudio = !item.isChecked();
-          return true;
-        }
-        return false;
-      }
-    };
-    configurePopupWithTracks(popup, clickListener, DemoPlayer.TYPE_AUDIO);
-    popup.show();
-  }
-
-  public void showTextPopup(View v) {
-    PopupMenu popup = new PopupMenu(this, v);
-    configurePopupWithTracks(popup, null, DemoPlayer.TYPE_TEXT);
-    popup.show();
-  }
-
-  private void configurePopupWithTracks(PopupMenu popup,
-      final OnMenuItemClickListener customActionClickListener,
-      final int trackType) {
-    if (player == null) {
-      return;
-    }
-    int trackCount = player.getTrackCount(trackType);
-    if (trackCount == 0) {
-      return;
-    }
-    popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-      @Override
-      public boolean onMenuItemClick(MenuItem item) {
-        return (customActionClickListener != null
-            && customActionClickListener.onMenuItemClick(item))
-            || onTrackItemClick(item, trackType);
-      }
-    });
-    Menu menu = popup.getMenu();
-    // ID_OFFSET ensures we avoid clashing with Menu.NONE (which equals 0).
-    menu.add(MENU_GROUP_TRACKS, DemoPlayer.TRACK_DISABLED + ID_OFFSET, Menu.NONE, R.string.off);
-    for (int i = 0; i < trackCount; i++) {
-      menu.add(MENU_GROUP_TRACKS, i + ID_OFFSET, Menu.NONE,
-          buildTrackName(player.getTrackFormat(trackType, i)));
-    }
-    menu.setGroupCheckable(MENU_GROUP_TRACKS, true, true);
-    menu.findItem(player.getSelectedTrack(trackType) + ID_OFFSET).setChecked(true);
-  }
-
-  private static String buildTrackName(MediaFormat format) {
-    if (format.adaptive) {
-      return "auto";
-    }
-    String trackName;
-    if (MimeTypes.isVideo(format.mimeType)) {
-      trackName = joinWithSeparator(joinWithSeparator(buildResolutionString(format),
-          buildBitrateString(format)), buildTrackIdString(format));
-    } else if (MimeTypes.isAudio(format.mimeType)) {
-      trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
-          buildAudioPropertyString(format)), buildBitrateString(format)),
-          buildTrackIdString(format));
-    } else {
-      trackName = joinWithSeparator(joinWithSeparator(buildLanguageString(format),
-          buildBitrateString(format)), buildTrackIdString(format));
-    }
-    return trackName.length() == 0 ? "unknown" : trackName;
-  }
-
-  private static String buildResolutionString(MediaFormat format) {
-    return format.width == MediaFormat.NO_VALUE || format.height == MediaFormat.NO_VALUE
-        ? "" : format.width + "x" + format.height;
-  }
-
-  private static String buildAudioPropertyString(MediaFormat format) {
-    return format.channelCount == MediaFormat.NO_VALUE || format.sampleRate == MediaFormat.NO_VALUE
-        ? "" : format.channelCount + "ch, " + format.sampleRate + "Hz";
-  }
-
-  private static String buildLanguageString(MediaFormat format) {
-    return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? ""
-        : format.language;
-  }
-
-  private static String buildBitrateString(MediaFormat format) {
-    return format.bitrate == MediaFormat.NO_VALUE ? ""
-        : String.format(Locale.US, "%.2fMbit", format.bitrate / 1000000f);
-  }
-
-  private static String joinWithSeparator(String first, String second) {
-    return first.length() == 0 ? second : (second.length() == 0 ? first : first + ", " + second);
-  }
-
-  private static String buildTrackIdString(MediaFormat format) {
-    return format.trackId == null ? "" : " (" + format.trackId + ")";
-  }
-
-  private boolean onTrackItemClick(MenuItem item, int type) {
-    if (player == null || item.getGroupId() != MENU_GROUP_TRACKS) {
-      return false;
-    }
-    player.setSelectedTrack(type, item.getItemId() - ID_OFFSET);
-    return true;
-  }
-  //endregion
-
-  boolean fullscreen = false;
-
   private void toggleControlsVisibility()  {
-    if (fullscreen) {
-      /*mediController_anchor.animate().translationY(0).setInterpolator(new DecelerateInterpolator())
-              .setDuration(240).start();*/
-      mediaController.hide();
-          toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
-                  .setDuration(200).start();
-
-      getWindow().getDecorView().setSystemUiVisibility(
-              View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                      | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                      | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                      | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                      | View.SYSTEM_UI_FLAG_IMMERSIVE);
-      fullscreen=false;
-    } else {
-      showControls();
-    }
+      if (fullscreen) showControls();
+      else hideControls();
   }
 
-  private void showControls() {
-    fullscreen=true;
-    mediaController.show();
-    /*mediController_anchor.animate().translationY(Measure.getNavBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-            .setDuration(240).start();*/
-    toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-            .setDuration(240).start();
+  private void hideControls() {
+    mediaController.hide();
+    toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+            .setDuration(200).start();
+
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    fullscreen=true;
   }
 
-  // DemoPlayer.CaptionListener implementation
+  private void showControls() {
+    int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
+    if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) { //Landscape
+      getWindow().getDecorView().setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                      | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+      mediaController.setPaddingRelative(0,0,0,0);
+    } else {
+      getWindow().getDecorView().setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                      | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+      mediaController.setPaddingRelative(0,0,0, Measure.getNavBarHeight(getApplicationContext()));
+    }
 
-  @Override
-  public void onCues(List<Cue> cues) {
-    subtitleLayout.setCues(cues);
+    fullscreen = false;
+    mediaController.show();
+    toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+            .setDuration(240).start();
+
   }
 
   // DemoPlayer.MetadataListener implementation
@@ -700,34 +577,6 @@ surfaceView.setBackgroundColor(getBackgroundColor());
     if (player != null) {
       player.blockingClearSurface();
     }
-  }
-
-  private void configureSubtitleView() {
-    CaptionStyleCompat style;
-    float fontScale;
-    if (Util.SDK_INT >= 19) {
-      style = getUserCaptionStyleV19();
-      fontScale = getUserCaptionFontScaleV19();
-    } else {
-      style = CaptionStyleCompat.DEFAULT;
-      fontScale = 1.0f;
-    }
-    subtitleLayout.setStyle(style);
-    subtitleLayout.setFractionalTextSize(SubtitleLayout.DEFAULT_TEXT_SIZE_FRACTION * fontScale);
-  }
-
-  @TargetApi(19)
-  private float getUserCaptionFontScaleV19() {
-    CaptioningManager captioningManager =
-        (CaptioningManager) getSystemService(Context.CAPTIONING_SERVICE);
-    return captioningManager.getFontScale();
-  }
-
-  @TargetApi(19)
-  private CaptionStyleCompat getUserCaptionStyleV19() {
-    CaptioningManager captioningManager =
-        (CaptioningManager) getSystemService(Context.CAPTIONING_SERVICE);
-    return CaptionStyleCompat.createFromCaptionStyle(captioningManager.getUserStyle());
   }
 
   /**

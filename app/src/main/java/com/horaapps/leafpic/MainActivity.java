@@ -1,6 +1,5 @@
 package com.horaapps.leafpic;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -1015,19 +1014,7 @@ public class MainActivity extends ThemedActivity {
                             passwordDialogBuilder.setNegativeButton(getString(R.string.cancel),null);
                             AlertDialog passwordDialog = passwordDialogBuilder.create();
                             passwordDialog.show();
-                            passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
-                                    .OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (securityObj.checkPassword(editTextPassword.getText().toString())) {
-                                        new DeletePhotos().execute();
-                                    } else{
-                                        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                        editTextPassword.getText().clear();
-                                        editTextPassword.requestFocus();
-                                    }
-                                }
-                            });
+                            
                         } else new DeletePhotos().execute();
                     }
                 });
@@ -1125,7 +1112,7 @@ public class MainActivity extends ThemedActivity {
                 }
                 return true;
 
-            case R.id.copyAction:
+            case R.id.action_copy:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
@@ -1362,7 +1349,7 @@ public class MainActivity extends ThemedActivity {
                 return true;
             //endregion
 
-            case R.id.moveAction:
+            case R.id.action_move:
                 class MovePhotos extends AsyncTask<String, Void, Void> {
 
                     @Override

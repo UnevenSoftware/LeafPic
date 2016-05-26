@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    android:focusable="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:keepScreenOn="true">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/root"
+             android:focusable="true"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:backgroundTint="@color/md_black_1000"
+             android:keepScreenOn="true"
+             tools:targetApi="lollipop">
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
-        android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true"
         />
 
-  <com.google.android.exoplayer.AspectRatioFrameLayout android:id="@+id/video_frame"
+  <com.google.android.exoplayer.AspectRatioFrameLayout
+      android:id="@+id/video_frame"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center">
@@ -25,11 +28,7 @@
     <View android:id="@+id/shutter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"/>
-
-    <com.google.android.exoplayer.text.SubtitleLayout android:id="@+id/subtitles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        />
 
   </com.google.android.exoplayer.AspectRatioFrameLayout>
 
@@ -39,45 +38,5 @@
         android:id="@+id/media_player_anchor"
         android:layout_gravity="bottom"
         />
-<!--
-  <LinearLayout
-      android:background="#88000000"
-      android:id="@+id/controls_root"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:visibility="gone">
 
-      <Button android:id="@+id/video_controls"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/video"
-          style="@style/DemoButton"
-          android:visibility="gone"
-          android:onClick="showVideoPopup"/>
-
-      <Button android:id="@+id/audio_controls"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/audio"
-          style="@style/DemoButton"
-          android:visibility="gone"
-          android:onClick="showAudioPopup"/>
-
-      <Button android:id="@+id/text_controls"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/text"
-          style="@style/DemoButton"
-          android:visibility="gone"
-          android:onClick="showTextPopup"/>
-
-      <Button android:id="@+id/retry_button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/retry"
-          android:visibility="gone"
-          style="@style/DemoButton"/>
-
-    </LinearLayout>-->
 </FrameLayout>
