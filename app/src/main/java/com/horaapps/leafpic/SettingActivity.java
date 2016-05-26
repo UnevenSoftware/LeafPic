@@ -56,8 +56,9 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swDelayFullImage;
     SwitchCompat swInternalBrowser;
     SwitchCompat swAutoUpdate;
+    SwitchCompat swIncludeVideo;
 
-    boolean maxLuminosita, pictureOrientation, delayfullimage,internalPlayer;
+    boolean maxLuminosita, pictureOrientation, delayfullimage, internalPlayer, includeVideo;
 
     ScrollView scr;
 
@@ -101,6 +102,8 @@ public class SettingActivity extends ThemedActivity {
         pictureOrientation = SP.getBoolean("set_picture_orientation", false);
         delayfullimage = SP.getBoolean("set_delay_full_image", true);
         internalPlayer =  SP.getBoolean("set_internal_player", false);
+        includeVideo = SP.getBoolean("set_include_video", true);
+
 
         //EXCLUDED ALBUMS INTENT*****************************************
         LinearLayout ll_BT = (LinearLayout) findViewById(R.id.ll_basic_theme);
@@ -170,10 +173,32 @@ public class SettingActivity extends ThemedActivity {
                 SharedPreferences.Editor editor = SP.edit();
                 editor.putBoolean("set_internal_player", isChecked);
                 editor.apply();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MyApplication) getApplicationContext()).updateAlbums();
+                    }
+                }).start();
+
                 updateSwitchColor(swInternalBrowser, getAccentColor());
             }
         });
         updateSwitchColor(swInternalBrowser, getAccentColor());
+
+        /*********** SW INCLUDE VIDEO ************/
+        swIncludeVideo = (SwitchCompat) findViewById(R.id.set_include_video);
+        swIncludeVideo.setChecked(includeVideo);
+        swIncludeVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("set_include_video", isChecked);
+                editor.apply();
+                updateSwitchColor(swIncludeVideo, getAccentColor());
+            }
+        });
+        updateSwitchColor(swIncludeVideo, getAccentColor());
         /**** Switches ****/
 
         /*********** SW AUTO UPDATE MEDIA ************/
@@ -703,6 +728,7 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgNB = (IconicsImageView) findViewById(R.id.NavBar_Icon);
         IconicsImageView imgEA = (IconicsImageView) findViewById(R.id.Excluded_Album_Icon);
         IconicsImageView imgIN = (IconicsImageView) findViewById(R.id.internal_player_Icon);
+        IconicsImageView imgIV = (IconicsImageView) findViewById(R.id.internal_include_video);
         IconicsImageView imgAUM = (IconicsImageView) findViewById(R.id.auto_update_media_Icon);
         IconicsImageView imgSR = (IconicsImageView) findViewById(R.id.security_icon);
 
@@ -721,6 +747,7 @@ public class SettingActivity extends ThemedActivity {
         imgEA.setColor(color);
         imgAUM.setColor(color);
         imgSR.setColor(color);
+        imgIV.setColor(color);
 
         /** TextViews **/
         TextView txtMax = (TextView) findViewById(R.id.max_luminosita_Item);
@@ -734,6 +761,8 @@ public class SettingActivity extends ThemedActivity {
         TextView txtNB = (TextView) findViewById(R.id.NavBar_Item);
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
         TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
+        TextView txtIV = (TextView) findViewById(R.id.include_video_Item);
+
         TextView txtAUM = (TextView) findViewById(R.id.auto_update_media_Item);
         TextView txtSR = (TextView) findViewById(R.id.security_item_title);
 
@@ -751,6 +780,7 @@ public class SettingActivity extends ThemedActivity {
         txtDelay.setTextColor(color);
         txtAUM.setTextColor(color);
         txtSR.setTextColor(color);
+        txtIV.setTextColor(color);
 
         /** Sub Text Views**/
         TextView txtMax_Sub = (TextView) findViewById(R.id.max_luminosita_Item_Sub);
@@ -764,11 +794,13 @@ public class SettingActivity extends ThemedActivity {
         TextView txtNB_Sub = (TextView) findViewById(R.id.NavBar_Item_Sub);
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
         TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
+        TextView txtIV_Sub = (TextView) findViewById(R.id.include_video_Item_Sub);
+
         TextView txtAUM_Sub = (TextView) findViewById(R.id.auto_update_media_Item_sub);
         TextView txtSR_Sub = (TextView) findViewById(R.id.security_item_sub);
 
 
-        color=getSubTextColor();
+        color = getSubTextColor();
         txtInt_Sub.setTextColor(color);
         txtDelay_Sub.setTextColor(color);
         txtMax_Sub.setTextColor(color);
@@ -782,6 +814,7 @@ public class SettingActivity extends ThemedActivity {
         txtEAT_Sub.setTextColor(color);
         txtAUM_Sub.setTextColor(color);
         txtSR_Sub.setTextColor(color);
+        txtIV_Sub.setTextColor(color);
 
     }
 }

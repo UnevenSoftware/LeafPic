@@ -92,8 +92,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
             else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
                             && getIntent().getData() != null) {
-                album = new Album(ContentHelper.getPath(getApplicationContext(), getIntent()
-                        .getData()));
+                album = new Album(getApplicationContext(), ContentHelper.getPath(getApplicationContext(), getIntent().getData()));
             }
 
             initUI();

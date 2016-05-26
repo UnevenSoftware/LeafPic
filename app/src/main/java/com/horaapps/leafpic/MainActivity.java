@@ -1109,7 +1109,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.all_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(ImageFileFilter.FILTER_ALL);
+                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_ALL);
                     mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
@@ -1120,7 +1120,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.video_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(ImageFileFilter.FILTER_VIDEO);
+                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_VIDEO);
                     mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
@@ -1130,7 +1130,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.image_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(ImageFileFilter.FILTER_IMAGES);
+                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_IMAGES);
                     mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
@@ -1140,7 +1140,7 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.gifs_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(ImageFileFilter.FILTER_GIFS);
+                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_GIFS);
                     mediaAdapter.updateDataSet(album.media);
                     item.setChecked(true);
                     checkNothing();
@@ -1457,7 +1457,7 @@ public class MainActivity extends ThemedActivity {
                         if (editTextNewName.length() != 0) {
                             if (albumsMode){
                                 int index = albums.dispAlbums.indexOf(albums.getSelectedAlbum(0));
-                                albums.getAlbum(index).updatePhotos();
+                                albums.getAlbum(index).updatePhotos(getApplicationContext());
                                 albums.getAlbum(index).renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
                                 albumsAdapter.notifyItemChanged(index);
                             } else {
@@ -1557,7 +1557,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            album.updatePhotos();
+            album.updatePhotos(getApplicationContext());
             return null;
         }
 
