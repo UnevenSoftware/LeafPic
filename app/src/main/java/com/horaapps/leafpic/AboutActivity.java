@@ -211,6 +211,7 @@ public class AboutActivity extends ThemedActivity {
         /** TextViews **/
         //TextView txtAV = (TextView) findViewById(R.id.about_version_item);
         TextView txtAL = (TextView) findViewById(R.id.about_libs_item);
+        TextView txtLDesc = (TextView) findViewById(R.id.about_app_light_description);
         TextView txtDName = (TextView) findViewById(R.id.about_author_donald_item);
         TextView txtGName = (TextView) findViewById(R.id.about_author_gilbert_item);
         TextView txtSRate = (TextView) findViewById(R.id.about_support_rate_item);
@@ -221,6 +222,7 @@ public class AboutActivity extends ThemedActivity {
 
         color=getTextColor();
         //txtAV.setTextColor(color);
+        txtLDesc.setTextColor(color);
         txtAL.setTextColor(color);
         txtDName.setTextColor(color);
         txtGName.setTextColor(color);

@@ -19,7 +19,10 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +32,9 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
@@ -166,9 +171,74 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         }
     }
 
+
+    Button btnUP;
+    TextView textFolder;
+    ListView dialog_ListView;
+    File root;
+    File curFolder;
+    private List<String> fileList = new ArrayList<String>();
+
     private void newFolderDialog() {
         Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
+
+        /*
+        root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        curFolder=root;
+        ListDir(curFolder);
+        Dialog dialog= new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_explorer);
+        dialog.setTitle("Dialog Explorer");
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        textFolder = (TextView) dialog.findViewById(R.id.folder);
+        btnUP = (Button) dialog.findViewById(R.id.up);
+        btnUP.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                ListDir(curFolder.getParentFile());
+            }
+        });
+
+        dialog_ListView = (ListView) dialog.findViewById(R.id.folder_list);
+        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File selected=new File(fileList.get(position));
+                if(selected.isDirectory()){
+                    ListDir(selected);
+                } else {
+                    Toast.makeText(getContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT).show();
+                    //dialog.dismiss();
+                }
+            }
+        });
+        */
     }
+
+    void ListDir(File f){
+        if(f.equals(root)){
+            btnUP.setEnabled(false);
+        } else {
+            btnUP.setEnabled(true);
+        }
+
+        curFolder=f;
+        textFolder.setText(f.getPath());
+
+        File[] files = f.listFiles();
+        fileList.clear();
+
+        for (File file : files)
+            fileList.add(file.getPath());
+
+        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1, fileList);
+        dialog_ListView.setAdapter(directoryList);
+    }
+
+
 
     class ToggleAlbumsTask extends AsyncTask<Boolean, Integer, Void> {
 
