@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -204,14 +203,8 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void updateSwitchColor(SwitchCompat sw, int color){
-        /*if(sw.isChecked()) sw.getThumbDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        else sw.getThumbDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);*/
-        sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getTextColor(), PorterDuff.Mode.MULTIPLY);
-        sw.getTrackDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-
-        /*if(getBasicTheme()!=3)sw.getTrackDrawable().setColorFilter(getBackgroundColor(),
-                PorterDuff.Mode.SRC_IN);
-        else sw.getTrackDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.SRC_IN);*/
+        sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getSubTextColor(), PorterDuff.Mode.MULTIPLY);
+        sw.getTrackDrawable().setColorFilter(sw.isChecked() ? ColorPalette.getTransparentColor(color,100): getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
     }
 
     public void updateCheckBoxColor(AppCompatCheckBox sw, int color){

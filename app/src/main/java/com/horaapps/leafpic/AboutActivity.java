@@ -32,6 +32,7 @@ public class AboutActivity extends ThemedActivity {
     TextView txtLP;
     TextView txtAT;
     TextView txtSU;
+    TextView txtLI;
 
     /**** CustomTabService*/
     CustomTabService cts;
@@ -49,6 +50,7 @@ public class AboutActivity extends ThemedActivity {
         txtLP = (TextView) findViewById(R.id.about_app_title);
         txtAT = (TextView) findViewById(R.id.about_authors_title);
         txtSU = (TextView) findViewById(R.id.about_support_title);
+        txtLI = (TextView) findViewById(R.id.about_license_title);
         setNavBarColor();
         cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
@@ -90,8 +92,13 @@ public class AboutActivity extends ThemedActivity {
         txtAT.setTextColor(getAccentColor());
         txtLP.setTextColor(getAccentColor());
         txtSU.setTextColor(getAccentColor());
+        txtLI.setTextColor(getAccentColor());
 
         /***** Buttons *****/
+
+        /***** Views *****/
+        View authorDivider = findViewById(R.id.author_view_divider);
+        authorDivider.setBackgroundColor(getSubTextColor());
 
         /***** ScrolView *****/
         setScrollViewColor(scr);
@@ -120,14 +127,26 @@ public class AboutActivity extends ThemedActivity {
             public void onClick(View v) { cts.launchUrl("https://crowdin.com/project/leafpic");}
         });
 
-        //Donald
-        findViewById(R.id.ll_donald).setOnClickListener(new View.OnClickListener() {
+        /*** Donald Shtjefni ***/
+        //G+
+        findViewById(R.id.ll_donald_googleplus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { cts.launchUrl("https://plus.google.com/103359244653769120543/about");}
+        });
+        //Github
+        findViewById(R.id.ll_donald_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/DNLDsht");}
         });
 
-        //Gilbert
-        findViewById(R.id.ll_gilbert).setOnClickListener(new View.OnClickListener() {
+        /*** Gilbert Ndresaj ***/
+        //Github
+        findViewById(R.id.ll_gilbert_googleplus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { cts.launchUrl("https://plus.google.com/118430643662868782426/about");}
+        });
+        //Github
+        findViewById(R.id.ll_gilbert_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/Mow3l");}
         });
@@ -156,15 +175,17 @@ public class AboutActivity extends ThemedActivity {
         CardView cvApp = (CardView) findViewById(R.id.about_app_card);
         CardView cvAuthor = (CardView) findViewById(R.id.about_authors_card);
         CardView cvSupport = (CardView) findViewById(R.id.about_support_card);
+        CardView cvLicense = (CardView) findViewById(R.id.about_license_card);
 
         int color = getCardBackgroundColor();
         cvApp.setCardBackgroundColor(color);
         cvAuthor.setCardBackgroundColor(color);
         cvSupport.setCardBackgroundColor(color);
+        cvLicense.setCardBackgroundColor(color);
 
         /** Icons **/
         //ABOUT APP
-        IconicsImageView imgAAV = (IconicsImageView) findViewById(R.id.about_version_icon);
+        //IconicsImageView imgAAV = (IconicsImageView) findViewById(R.id.about_version_icon);
         IconicsImageView imgAALL = (IconicsImageView) findViewById(R.id.about_libs_icon);
         IconicsImageView imgALicense = (IconicsImageView) findViewById(R.id.about_license_icon);
 
@@ -178,7 +199,7 @@ public class AboutActivity extends ThemedActivity {
         IconicsImageView imgSGitHub = (IconicsImageView) findViewById(R.id.about_support_github_icon);
 
         color = getIconColor();
-        imgAAV.setColor(color);
+        //imgAAV.setColor(color);
         imgAALL.setColor(color);
         imgDonald.setColor(color);
         imgGilbert.setColor(color);
@@ -188,7 +209,7 @@ public class AboutActivity extends ThemedActivity {
         imgALicense.setColor(color);
 
         /** TextViews **/
-        TextView txtAV = (TextView) findViewById(R.id.about_version_item);
+        //TextView txtAV = (TextView) findViewById(R.id.about_version_item);
         TextView txtAL = (TextView) findViewById(R.id.about_libs_item);
         TextView txtDName = (TextView) findViewById(R.id.about_author_donald_item);
         TextView txtGName = (TextView) findViewById(R.id.about_author_gilbert_item);
@@ -199,7 +220,7 @@ public class AboutActivity extends ThemedActivity {
         TextView txtALicense_Sub = (TextView) findViewById(R.id.about_license_item_sub);
 
         color=getTextColor();
-        txtAV.setTextColor(color);
+        //txtAV.setTextColor(color);
         txtAL.setTextColor(color);
         txtDName.setTextColor(color);
         txtGName.setTextColor(color);
