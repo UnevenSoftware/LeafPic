@@ -2,9 +2,11 @@
 
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
+    <string name="app_light_description">A colourfull material gallery.</string>
     <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
     <string name="welcome_slide_sub">Color-Full Material Designed Gallery!</string>
+    <string name="made_with_love_by">Made with love by</string>
 
     <!-- ACTIONS -->
     <string name="sort">Sort</string>

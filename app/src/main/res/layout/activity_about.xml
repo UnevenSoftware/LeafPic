@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--ABOUT APP-->
+            <!--ABOUT APP REDESIGN-->
             <android.support.v7.widget.CardView
                 android:id="@+id/about_app_card"
                 android:layout_width="match_parent"
@@ -40,183 +40,52 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                        <!--ABOUT APP TITLE-->
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_app_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="2"
-                                android:padding="4dp"
-                                android:src="@mipmap/ic_launcher"
-                                />
-                            <TextView
-                                android:id="@+id/about_app_title"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/md_dark_background"
-                                android:text="@string/app_name"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
-                                android:layout_weight="8"
-                                android:layout_gravity="center_vertical"
-                                />
-                        </LinearLayout>
 
-                    <!-- VERSION ABOUT APP-->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_version"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
-                        android:weightSum="10"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_version_icon"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            app:iiv_icon="gmd-info"
-                            />
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:orientation="vertical"
-                            >
-                            <TextView
-                                android:id="@+id/about_version_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_version"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-                                />
-                            <TextView
-                                android:id="@+id/about_version_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="1.0"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
-                            </LinearLayout>
-                    </LinearLayout>
-                    <!-- LICENSE -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:src="@mipmap/ic_launcher"
+                        />
+                    <TextView
+                        android:id="@+id/about_app_title"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_license"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="15dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_license_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="gmd-insert-drive-file"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_license_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_license"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_license_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_license_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-                    <!-- LICENSE LIBRARY -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
+                        android:textColor="@color/md_dark_primary_text"
+                        android:text="LeafPic Gallery"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/about_app_light_description"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_libs"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="15dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_libs_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="gmd-insert-drive-file"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_libs_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_library_license"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_libs_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_library_license_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                        android:text="@string/app_light_description"
+                        android:textColor="@color/md_dark_primary_text"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/about_version_item_sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="v1.0"
+                        android:textColor="@color/md_grey_400"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:paddingTop="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingBottom="15dp"
+                        />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <!--ABOUT AUTOR-->
+            <!--MADE VITH LOVE BY-->
             <android.support.v7.widget.CardView
                 android:id="@+id/about_authors_card"
                 android:layout_width="match_parent"
@@ -235,12 +104,11 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="@string/about_authors"
+                        android:text="@string/made_with_love_by"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         />
-
                     <!--DONALD SHTJEFTNI -->
                     <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
@@ -268,7 +136,7 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="5"
+                                android:layout_weight="8"
                                 android:orientation="vertical"
                                 >
                                 <TextView
@@ -308,8 +176,107 @@
                                 app:iiv_icon="faw-github"
                                 />
                             </LinearLayout>
-
                     </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!--DONALD LINKS / GOOGLE PLUS -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_donald_googleplus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_author_donald_googleplus_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="faw-google"
+                                app:iiv_color="@color/md_red_500"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_author_donald_googleplus_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="GOOGLE +"
+                                    android:textColor="@color/md_red_500"
+                                    android:textSize="16sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+                    <!--DONALD LINKS / GITHUB -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_donald_github"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_author_donald_github_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="faw-github"
+                                app:iiv_color="@color/md_blue_500"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_author_donaldt_github_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="GITHUB"
+                                    android:textColor="@color/md_blue_500"
+                                    android:textSize="16sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+
+                    <View
+                        android:id="@+id/author_view_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:padding="5dp"
+                        />
+
 
                     <!--GILBERT NDRESAJ -->
                     <com.balysv.materialripple.MaterialRippleLayout
@@ -323,7 +290,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingBottom="15dp"
+                            android:paddingBottom="8dp"
                             android:paddingTop="8dp"
                             android:weightSum="10"
                             >
@@ -338,7 +305,7 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="6"
+                                android:layout_weight="8"
                                 android:orientation="vertical"
                                 >
                                 <TextView
@@ -361,6 +328,90 @@
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
 
+                    <!--GILBERT LINKS / GOOGLE PLUS -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_gilbert_googleplus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_author_gilbert_googleplus_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="faw-google"
+                                app:iiv_color="@color/md_red_500"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_author_gilbert_googleplus_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="GOOGLE +"
+                                    android:textColor="@color/md_red_500"
+                                    android:textSize="16sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+                    <!--GILBERT LINKS / GITHUB -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_gilbert_github"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_author_gilbert_github_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="faw-github"
+                                app:iiv_color="@color/md_blue_500"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_author_gilbert_github_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="GITHUB"
+                                    android:textColor="@color/md_blue_500"
+                                    android:textSize="16sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -539,6 +590,131 @@
                     </com.balysv.materialripple.MaterialRippleLayout>
 
                 </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <!--APP LICENSES-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_license_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/about_license_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="15dp"
+                        android:text="@string/about_license"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        />
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_license"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_license_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-insert-drive-file"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_license_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_license"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_license_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_license_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_libs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="8dp"
+                            android:weightSum="10"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_libs_icon"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                app:iiv_icon="gmd-insert-drive-file"
+                                />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="8"
+                                android:orientation="vertical"
+                                >
+                                <TextView
+                                    android:id="@+id/about_libs_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_library_license"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_libs_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_library_license_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+               </LinearLayout>
+
             </android.support.v7.widget.CardView>
 
         </LinearLayout>
