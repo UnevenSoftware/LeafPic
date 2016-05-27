@@ -63,6 +63,7 @@ public class SettingActivity extends ThemedActivity {
     ScrollView scr;
 
     FloatingActionButton fabMoreThemeOptions;
+    FloatingActionButton fabMoreGeneralOptions;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -72,21 +73,38 @@ public class SettingActivity extends ThemedActivity {
         SP = PreferenceManager.getDefaultSharedPreferences(this);
 
         fabMoreThemeOptions = (FloatingActionButton) findViewById(R.id.fab_more_theme_options);
+        fabMoreGeneralOptions = (FloatingActionButton) findViewById(R.id.fab_more_general_options);
+        fabMoreGeneralOptions.setBackgroundTintList(ColorStateList.valueOf(getSubTextColor()));
+        fabMoreGeneralOptions.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_up)
+                .sizeDp(16).color(getCardBackgroundColor()));
+
+        fabMoreGeneralOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout llMoreOptions = (LinearLayout) findViewById(R.id.ll_more_options_general);
+                boolean visible = llMoreOptions.getVisibility() == View.VISIBLE;
+                llMoreOptions.setVisibility(visible ? View.GONE : View.VISIBLE);
+                fabMoreGeneralOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
+                        .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_up : GoogleMaterial.Icon.gmd_keyboard_arrow_down)
+                        .sizeDp(16).color(getCardBackgroundColor()));
+
+            }
+        });
 
         fabMoreThemeOptions.setBackgroundTintList(ColorStateList.valueOf(getSubTextColor()));
         fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down)
-                .sizeDp(12).color(getCardBackgroundColor()));
+                .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_up)
+                .sizeDp(16).color(getCardBackgroundColor()));
         fabMoreThemeOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //StringUtils.showToast(getApplicationContext(),"yo!");
                 LinearLayout llMoreOptions = (LinearLayout) findViewById(R.id.ll_more_options_theme);
                 boolean visible = llMoreOptions.getVisibility() == View.VISIBLE;
                 llMoreOptions.setVisibility(visible ? View.GONE : View.VISIBLE);
                 fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
-                                .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_down : GoogleMaterial.Icon.gmd_keyboard_arrow_up)
-                                .sizeDp(12).color(getCardBackgroundColor()));
+                                .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_up : GoogleMaterial.Icon.gmd_keyboard_arrow_down)
+                                .sizeDp(16).color(getCardBackgroundColor()));
 
             }
         });
@@ -722,7 +740,6 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgOrient = (IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon);
         IconicsImageView imgMax = (IconicsImageView) findViewById(R.id.ll_switch_max_luminosita_icon);
         IconicsImageView imgDelay = (IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon);
-
         IconicsImageView imgTSB = (IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon);
         IconicsImageView imgC3A = (IconicsImageView) findViewById(R.id.custom_3thAct_icon);
         IconicsImageView imgPC = (IconicsImageView) findViewById(R.id.PrimaryColor_Icon);
@@ -734,10 +751,13 @@ public class SettingActivity extends ThemedActivity {
         IconicsImageView imgIV = (IconicsImageView) findViewById(R.id.internal_include_video);
         IconicsImageView imgAUM = (IconicsImageView) findViewById(R.id.auto_update_media_Icon);
         IconicsImageView imgSR = (IconicsImageView) findViewById(R.id.security_icon);
-
+        IconicsImageView imgFAB = (IconicsImageView) findViewById(R.id.fab_options_icon);
+        IconicsImageView imgMAP = (IconicsImageView) findViewById(R.id.map_provider_icon);
 
         color = getIconColor();
+        imgFAB.setColor(color);
         imgMax.setColor(color);
+        imgMAP.setColor(color);
         imgIN.setColor(color);
         imgDelay.setColor(color);
         imgC3A.setColor(color);
@@ -765,12 +785,15 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT = (TextView) findViewById(R.id.Excluded_Album_Item_Title);
         TextView txtInt = (TextView) findViewById(R.id.internal_player_Item);
         TextView txtIV = (TextView) findViewById(R.id.include_video_Item);
-
         TextView txtAUM = (TextView) findViewById(R.id.auto_update_media_Item);
         TextView txtSR = (TextView) findViewById(R.id.security_item_title);
+        TextView txtFAB = (TextView) findViewById(R.id.fab_options_item_title);
+        TextView txtMAP = (TextView) findViewById(R.id.map_provider_item_title);
 
         color=getTextColor();
         txtInt.setTextColor(color);
+        txtFAB.setTextColor(color);
+        txtMAP.setTextColor(color);
         txtMax.setTextColor(color);
         txtOrient.setTextColor(color);
         txtC3AT.setTextColor(color);
@@ -798,13 +821,15 @@ public class SettingActivity extends ThemedActivity {
         TextView txtEAT_Sub = (TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub);
         TextView txtInt_Sub = (TextView) findViewById(R.id.internal_player_Item_Sub);
         TextView txtIV_Sub = (TextView) findViewById(R.id.include_video_Item_Sub);
-
         TextView txtAUM_Sub = (TextView) findViewById(R.id.auto_update_media_Item_sub);
         TextView txtSR_Sub = (TextView) findViewById(R.id.security_item_sub);
-
+        TextView txtFAB_Sub = (TextView) findViewById(R.id.fab_options_item_sub);
+        TextView txtMAP_Sub = (TextView) findViewById(R.id.map_provider_item_sub);
 
         color = getSubTextColor();
         txtInt_Sub.setTextColor(color);
+        txtFAB_Sub.setTextColor(color);
+        txtMAP_Sub.setTextColor(color);
         txtDelay_Sub.setTextColor(color);
         txtMax_Sub.setTextColor(color);
         txtOrient_Sub.setTextColor(color);
