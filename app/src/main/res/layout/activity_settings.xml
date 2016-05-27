@@ -463,7 +463,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/ll_more_options_theme"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:orientation="vertical">
                             <!-- TRASLUCENT STATUS BAR-->
                             <LinearLayout
@@ -584,14 +584,14 @@
 
                 </android.support.v7.widget.CardView>
                 <android.support.design.widget.FloatingActionButton
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
                     style="@style/fab_expand"
                     android:id="@+id/fab_more_theme_options"
                     android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginTop="11dp"
-                    android:visibility="gone"
+                    android:layout_marginTop="12dp"
+                    android:scaleType="center"
                     android:layout_marginBottom="0dp"
                     app:elevation="5dp"
                     />

@@ -74,7 +74,9 @@ public class SettingActivity extends ThemedActivity {
         fabMoreThemeOptions = (FloatingActionButton) findViewById(R.id.fab_more_theme_options);
 
         fabMoreThemeOptions.setBackgroundTintList(ColorStateList.valueOf(getSubTextColor()));
-        fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_arrow_drop_down).color(Color.WHITE));
+        fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down)
+                .sizeDp(12).color(getCardBackgroundColor()));
         fabMoreThemeOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,8 +84,9 @@ public class SettingActivity extends ThemedActivity {
                 LinearLayout llMoreOptions = (LinearLayout) findViewById(R.id.ll_more_options_theme);
                 boolean visible = llMoreOptions.getVisibility() == View.VISIBLE;
                 llMoreOptions.setVisibility(visible ? View.GONE : View.VISIBLE);
-                fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this).icon
-                        (FontAwesome.Icon.faw_arrow_down).color(Color.WHITE));
+                fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
+                                .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_down : GoogleMaterial.Icon.gmd_keyboard_arrow_up)
+                                .sizeDp(12).color(getCardBackgroundColor()));
 
             }
         });
