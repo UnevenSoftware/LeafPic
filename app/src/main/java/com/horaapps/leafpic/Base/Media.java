@@ -58,6 +58,7 @@ public class Media implements Parcelable {
     public void setMIME() {
         String extension = path.substring(path.lastIndexOf('.')+1);
         mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        if(mime == null) mime= "custom";
     }
 
     public void setSelected(boolean selected) {

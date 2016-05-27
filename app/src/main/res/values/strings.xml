@@ -250,6 +250,10 @@
     <string name="unable_to_fix_date">Unable to fix date</string>
     <string name="compression_settings">Compression settings</string>
     <string name="include_video">Include Video</string>
+    <string name="fab_options">FAB options</string>
+    <string name="fab_options_sub">Chose when display the floating button</string>
+    <string name="map_provider">Map Provider</string>
+    <string name="map_provider_sub">Chose the source of maps</string>
 
 
 </resources>
