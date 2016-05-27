@@ -270,12 +270,14 @@
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
 
-                    <!-- ADVANCED OPTIONS -->
+                    <!-- ADVANCED OPTIONS
+                    android:visibility="gone"
+                    -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/ll_more_options_general"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:orientation="vertical">
 
                         <!-- MAPS PROVIDER-->
@@ -332,7 +334,12 @@
 
                     </LinearLayout>
             </android.support.v7.widget.CardView>
+
+
+                <!--TODO: I WILL DO IT LATER-->
+
                 <android.support.design.widget.FloatingActionButton
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     style="@style/fab_expand"
@@ -344,6 +351,7 @@
                     android:layout_marginBottom="0dp"
                     app:elevation="5dp"
                     />
+
             </FrameLayout>
 
             <FrameLayout
@@ -589,11 +597,14 @@
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>
 
+                        <!--ADVANCED SETTING
+                        android:visibility="gone"
+                        -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/ll_more_options_theme"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:orientation="vertical">
                             <!-- TRASLUCENT STATUS BAR-->
                             <LinearLayout
@@ -712,7 +723,11 @@
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+
+                 <!--TODO: I WILL WORK ON IT LATER-->
+
                 <android.support.design.widget.FloatingActionButton
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     style="@style/fab_expand"
@@ -724,6 +739,8 @@
                     android:layout_marginBottom="0dp"
                     app:elevation="5dp"
                     />
+
+
             </FrameLayout>
 
 
