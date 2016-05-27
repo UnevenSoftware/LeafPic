@@ -4,41 +4,154 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    >
+    <!--
+    <TextView
+        android:id="@+id/explorer_title_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        android:text="@string/new_folder"
+        android:background="@color/md_black_1000"
+        android:textColor="@color/md_dark_primary_text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+    -->
+    <!--TITLE-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ll_explorer_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="24dp"
+        android:weightSum="12"
+        >
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_weight="8"
+            >
+            <!--
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            -->
+            <TextView
+                android:singleLine="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_dark_primary_text"
+                android:id="@+id/current_path"
+                android:textSize="18sp"
+                android:text="/"
+                android:ellipsize="start"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                />
+        </LinearLayout>
 
         <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/folder_icon"
+            android:id="@+id/directory_up"
+            app:iiv_icon="gmd-keyboard-arrow-up"
+            android:layout_height="15dp"
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            app:iiv_color="@color/md_white_1000"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+        
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/toggle_create_new_folder_icon"
             android:layout_height="20dp"
-            android:layout_width="20dp"
-            android:layout_gravity="start"
-            android:visibility="gone"
-            app:iiv_icon="gmd-keyboard-arrow-up"/>
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            app:iiv_icon="gmd-create-new-folder"
+            app:iiv_color="@color/md_white_1000"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+    </LinearLayout>
+
+    <!--NEW FOLDER EDIT TEXT-->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:id="@+id/new_folder_layout"
+        android:visibility="gone"
+        >
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/folder"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:layout_gravity="center"
+            app:iiv_icon="gmd-folder"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+        <EditText
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/folder_name_edit_text"
+            android:text="folder_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+    </LinearLayout>
+
+    <!--PATH LAYOUT-->
+    <!--
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:weightSum="10"
         >
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/directory_up"
             android:layout_height="15dp"
-            android:layout_width="15dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
-            app:iiv_icon="gmd-keyboard-arrow-up"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/current_path"
-            android:text="/"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
+            app:iiv_icon="gmd-keyboard-arrow-up"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             />
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_weight="8"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/current_path"
+                android:text="/"
+                />
+        </LinearLayout>
+
     </LinearLayout>
+    -->
 
     <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/folder_list"
-            >
-        </ListView>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/folder_list"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
+        >
+    </ListView>
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.horaapps.leafpic;
 
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.provider.DocumentFile;
@@ -43,11 +41,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -65,7 +63,6 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.FoldersFileFilter;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
@@ -85,7 +82,6 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -505,45 +501,104 @@ public class MainActivity extends ThemedActivity {
     ArrayAdapter<String> directoryList;
 
     private void newFolderDialog() {
-        //Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
-
-
         final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-
         directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-                .simple_list_item_1, Arrays.asList(curFolder.list()));
+                .simple_list_item_1, Arrays.asList(curFolder.list())){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view!=null){
+                    TextView text = (TextView) view.findViewById(android.R.id.text1);
+                    text.setTextColor(getTextColor());
+                }
+                return view;
+            }
+        };
 
-        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogExplorer = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+        final ListView dialogExplorerListView;
+        View dialogExplorerLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
+
+        final TextView textViewCurrentPath = (TextView) dialogExplorerLayout.findViewById(R.id.current_path);
+        textViewCurrentPath.setTextColor(getTextColor());
+
+        final LinearLayout linearLayoutTitle = (LinearLayout) dialogExplorerLayout.findViewById(R.id.ll_explorer_dialog_title);
+        linearLayoutTitle.setBackgroundColor(getPrimaryColor());
+
+        final LinearLayout linearCreateNewFolder = (LinearLayout) dialogExplorerLayout.findViewById(R.id.new_folder_layout);
+        IconicsImageView imgFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder);
+        imgFolder.setColor(getIconColor());
+
+        final EditText editTextFolderName = (EditText) dialogExplorerLayout.findViewById(R.id.folder_name_edit_text);
+
+
+
 
         IconicsImageView btnUP;
-        final ListView dialog_ListView;
-
-        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
-
-        final TextView textViewCurrentPath = (TextView) dialogLayout.findViewById(R.id.current_path);
-        btnUP = (IconicsImageView) dialogLayout.findViewById(R.id.directory_up);
+        btnUP = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.directory_up);
         btnUP.setColor(getIconColor());
-        ((IconicsImageView) dialogLayout.findViewById(R.id.folder_icon)).setColor(getIconColor());
-        dialog_ListView = (ListView) dialogLayout.findViewById(R.id.folder_list);
+
+        IconicsImageView newFolder;
+        newFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.toggle_create_new_folder_icon);
+
+        newFolder.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                linearCreateNewFolder.setVisibility(linearCreateNewFolder.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
+            }
+        });
+
+
+
+        //((IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder_icon)).setColor(getIconColor());
+
+        dialogExplorerListView = (ListView) dialogExplorerLayout.findViewById(R.id.folder_list);
         btnUP.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 File current = new File(textViewCurrentPath.getText().toString());
                 Log.wtf(TAG,current.getAbsolutePath());
-                if(current.isDirectory()) {
+                if(current.isDirectory() && !(textViewCurrentPath.getText().toString().equals("/")) ) {
                     directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-                            .simple_list_item_1, HandlingAlbums.getSubFolders(current.getParentFile()));
+                            .simple_list_item_1, HandlingAlbums.getSubFolders(current.getParentFile())){
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            if (view!=null){
+                                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                                text.setTextColor(getTextColor());
+                            }
+                            return view;
+                        }
+                    };
                     textViewCurrentPath.setText(current.getParentFile().getAbsolutePath());
-                    dialog_ListView.setAdapter(directoryList);
+                    dialogExplorerListView.setAdapter(directoryList);
                 }
             }
         });
-        deleteDialog.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+        dialogExplorer.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String path = textViewCurrentPath.getText().toString();
-                Toast.makeText(MainActivity.this, path, Toast.LENGTH_SHORT).show();
+                if(linearCreateNewFolder.getVisibility()==View.VISIBLE && !editTextFolderName.getText().equals("")) {
+                    File folder = new File(textViewCurrentPath.getText().toString() +
+                            File.separator + editTextFolderName.getText().toString());
+                    boolean success = true;
+                    if (!folder.exists()) {
+                        success = folder.mkdir();
+                    }
+                    if (success) {
+                        // Do something
+                    } else {
+                        Toast.makeText(MainActivity.this, "Folder Already Exist!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //String path = textViewCurrentPath.getText().toString();
+                //Toast.makeText(MainActivity.this, path, Toast.LENGTH_SHORT).show();
             }
+        });
+        dialogExplorer.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
         });
 
         /*deleteDialog.setNeutralButton(R.string.new_folder, new DialogInterface.OnClickListener() {
@@ -554,45 +609,49 @@ public class MainActivity extends ThemedActivity {
             }
         });*/
 
-
-        dialog_ListView.setAdapter(directoryList);
+        dialogExplorerListView.setAdapter(directoryList);
         textViewCurrentPath.setText(curFolder.getAbsolutePath());
-        deleteDialog.setView(dialogLayout);
+        dialogExplorer.setView(dialogExplorerLayout);
 
-        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        dialogExplorerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 File selected = new File(textViewCurrentPath.getText()+"/"+ directoryList.getItem(position));
 
                 Log.wtf("asd",selected.isDirectory()+ " - " + selected.getAbsolutePath());
                 if(selected.isDirectory()){
                 directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-                        .simple_list_item_1, HandlingAlbums.getSubFolders(selected));
+                        .simple_list_item_1, HandlingAlbums.getSubFolders(selected)) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        if (view!=null){
+                            TextView text = (TextView) view.findViewById(android.R.id.text1);
+                            text.setTextColor(getTextColor());
+                        }
+                        return view;
+                    }
+                };
                 textViewCurrentPath.setText(selected.getAbsolutePath());
-                dialog_ListView.setAdapter(directoryList);
+                dialogExplorerListView.setAdapter(directoryList);
                 } else {
-                    Toast.makeText(getApplicationContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(getApplicationContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT).show();
                     //dialog.dismiss();
                 }
             }
         });
-
-        deleteDialog.show();
+        dialogExplorer.show();
 
 
     }
     void ListDir(File f){
-
         /*if(f.equals(root)){
             btnUP.setEnabled(false);
         } else {
             btnUP.setEnabled(true);
         }*/
-
         /*curFolder=f;
         textFolder.setText(f.getPath());
-
         File[] files = f.listFiles();
         fileList.clear();
 

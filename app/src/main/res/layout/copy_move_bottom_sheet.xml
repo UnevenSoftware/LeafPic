@@ -57,6 +57,7 @@
                     android:layout_width="0dp"
                     android:layout_gravity="center_vertical"
                     android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_weight="1"
                     app:iiv_icon="gmd-folder"
                     app:iiv_color="@color/md_white_1000"

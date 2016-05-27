@@ -12,7 +12,6 @@ import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
@@ -21,11 +20,9 @@ import com.horaapps.leafpic.utils.StringUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -204,7 +201,8 @@ public class HandlingAlbums {
 
     public static ArrayList<String> getSubFolders(File dir) {
         ArrayList<String> array = new ArrayList<String>();
-        File[] children = dir.listFiles(new FoldersFileFilter());
+        //File[] children = dir.listFiles(new FoldersFileFilter());
+        File[] children = dir.listFiles();
         if (children != null)
             for (File child : children)
                 array.add(child.getName());
