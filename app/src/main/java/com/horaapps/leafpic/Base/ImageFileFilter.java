@@ -87,7 +87,7 @@ public class ImageFileFilter implements FilenameFilter
     @Override
     public boolean accept(File dir, String filename) {
         for (String extension : extensions)
-            if (filename.endsWith(extension))
+            if (filename.toLowerCase().endsWith(extension))
                 return true;
         return false;
     }

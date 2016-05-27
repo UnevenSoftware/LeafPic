@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp">
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/folder_icon"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:layout_gravity="start"
+            android:visibility="gone"
+            app:iiv_icon="gmd-keyboard-arrow-up"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -12,28 +20,25 @@
         android:layout_margin="10dp"
         >
         <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/folder_icon_bottom_sheet_item"
-            android:layout_height="20dp"
-            android:layout_width="20dp"
+            android:id="@+id/directory_up"
+            android:layout_height="15dp"
+            android:layout_width="15dp"
             android:layout_gravity="center"
-            app:iiv_icon="gmd-folder"/>
-        <Button
+            android:layout_marginEnd="10dp"
+            app:iiv_icon="gmd-keyboard-arrow-up"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/up"
-            android:text="Parent Folder"
+            android:id="@+id/current_path"
+            android:text="/"
             />
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/folder"
-        android:text="folder"
-        />
+
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/folder_list"
-        >
-    </ListView>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/folder_list"
+            >
+        </ListView>
+
 </LinearLayout>
