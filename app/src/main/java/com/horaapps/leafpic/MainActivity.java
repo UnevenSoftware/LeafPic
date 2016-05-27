@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -44,9 +45,13 @@ import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -60,6 +65,7 @@ import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.FoldersFileFilter;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
@@ -81,6 +87,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -465,9 +472,10 @@ public class MainActivity extends ThemedActivity {
                 } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));*/
 
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+               /* if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
-                }
+                }*/
+                newFolderDialog();
 
             }
         });
@@ -494,7 +502,108 @@ public class MainActivity extends ThemedActivity {
             onConfigurationChanged(configuration);
         }
     }
+    ArrayAdapter<String> directoryList;
 
+    private void newFolderDialog() {
+        //Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
+
+
+        final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+
+        directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
+                .simple_list_item_1, Arrays.asList(curFolder.list()));
+
+        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+        IconicsImageView btnUP;
+        final ListView dialog_ListView;
+
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
+
+        final TextView textViewCurrentPath = (TextView) dialogLayout.findViewById(R.id.current_path);
+        btnUP = (IconicsImageView) dialogLayout.findViewById(R.id.directory_up);
+        btnUP.setColor(getIconColor());
+        ((IconicsImageView) dialogLayout.findViewById(R.id.folder_icon)).setColor(getIconColor());
+        dialog_ListView = (ListView) dialogLayout.findViewById(R.id.folder_list);
+        btnUP.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                File current = new File(textViewCurrentPath.getText().toString());
+                Log.wtf(TAG,current.getAbsolutePath());
+                if(current.isDirectory()) {
+                    directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
+                            .simple_list_item_1, HandlingAlbums.getSubFolders(current.getParentFile()));
+                    textViewCurrentPath.setText(current.getParentFile().getAbsolutePath());
+                    dialog_ListView.setAdapter(directoryList);
+                }
+            }
+        });
+        deleteDialog.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String path = textViewCurrentPath.getText().toString();
+                Toast.makeText(MainActivity.this, path, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        /*deleteDialog.setNeutralButton(R.string.new_folder, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String path = textViewCurrentPath.getText().toString();
+                Toast.makeText(MainActivity.this, "new folder", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+
+        dialog_ListView.setAdapter(directoryList);
+        textViewCurrentPath.setText(curFolder.getAbsolutePath());
+        deleteDialog.setView(dialogLayout);
+
+        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File selected = new File(textViewCurrentPath.getText()+"/"+ directoryList.getItem(position));
+
+                Log.wtf("asd",selected.isDirectory()+ " - " + selected.getAbsolutePath());
+                if(selected.isDirectory()){
+                directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
+                        .simple_list_item_1, HandlingAlbums.getSubFolders(selected));
+                textViewCurrentPath.setText(selected.getAbsolutePath());
+                dialog_ListView.setAdapter(directoryList);
+                } else {
+                    Toast.makeText(getApplicationContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT)
+                            .show();
+                    //dialog.dismiss();
+                }
+            }
+        });
+
+        deleteDialog.show();
+
+
+    }
+    void ListDir(File f){
+
+        /*if(f.equals(root)){
+            btnUP.setEnabled(false);
+        } else {
+            btnUP.setEnabled(true);
+        }*/
+
+        /*curFolder=f;
+        textFolder.setText(f.getPath());
+
+        File[] files = f.listFiles();
+        fileList.clear();
+
+        for (File file : files)
+            fileList.add(file.getPath());
+            */
+
+       /* ArrayAdapter<String> directoryList = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1, fileList);
+        dialog_ListView.setAdapter(directoryList);§*/
+    }
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (resultCode == RESULT_OK) {
             Uri treeUri = resultData.getData();

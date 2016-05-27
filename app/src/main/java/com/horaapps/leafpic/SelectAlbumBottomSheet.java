@@ -5,6 +5,7 @@ package com.horaapps.leafpic;
  */
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -18,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -182,67 +185,85 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     File curFolder;
     private List<String> fileList = new ArrayList<String>();
 
+    ArrayAdapter<String> directoryList;
+
     private void newFolderDialog() {
-        Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
 
 
-        root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-        curFolder=root;
-        ListDir(curFolder);
+        /*final File curFolder = new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath());
 
-        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext(),
-                R.style.AlertDialog_Light);
+        directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
+                .simple_list_item_1, Arrays.asList(curFolder.list()));
 
-        Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_explorer);
-        dialog.setTitle("Dialog Explorer");
+        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
-        textFolder = (TextView) dialog.findViewById(R.id.folder);
-        btnUP = (Button) dialog.findViewById(R.id.up);
+        IconicsImageView btnUP;
+        final ListView dialog_ListView;
+
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
+
+        final TextView textViewCurrentPath = (TextView) dialogLayout.findViewById(R.id.current_path);
+        btnUP = (IconicsImageView) dialogLayout.findViewById(R.id.directory_up);
+        btnUP.setColor(getIconColor());
+        ((IconicsImageView) dialogLayout.findViewById(R.id.folder_icon)).setColor(getIconColor());
+        dialog_ListView = (ListView) dialogLayout.findViewById(R.id.folder_list);
         btnUP.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                ListDir(curFolder.getParentFile());
+                File current = new File(textViewCurrentPath.getText().toString());
+                Log.wtf(TAG,current.getAbsolutePath());
+                if(current.isDirectory()) {
+                    directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
+                            .simple_list_item_1, HandlingAlbums.getSubFolders(current.getParentFile()));
+                    textViewCurrentPath.setText(current.getParentFile().getAbsolutePath());
+                    dialog_ListView.setAdapter(directoryList);
+                }
+            }
+        });
+        deleteDialog.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String path = textViewCurrentPath.getText().toString();
+                Toast.makeText(getContext(),"asd", Toast.LENGTH_SHORT).show();
             }
         });
 
-        dialog_ListView = (ListView) dialog.findViewById(R.id.folder_list);
+        /*deleteDialog.setNeutralButton(R.string.new_folder, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String path = textViewCurrentPath.getText().toString();
+                Toast.makeText(MainActivity.this, "new folder", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+
+        /*dialog_ListView.setAdapter(directoryList);
+        textViewCurrentPath.setText(curFolder.getAbsolutePath());
+        deleteDialog.setView(dialogLayout);
 
         dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File selected=new File(fileList.get(position));
+                File selected = new File(textViewCurrentPath.getText()+"/"+ directoryList.getItem(position));
+
+                Log.wtf("asd",selected.isDirectory()+ " - " + selected.getAbsolutePath());
                 if(selected.isDirectory()){
-                    ListDir(selected);
+                    directoryList = new ArrayAdapter<String>(getContext(), android.R.layout
+                            .simple_list_item_1, HandlingAlbums.getSubFolders(selected));
+                    textViewCurrentPath.setText(selected.getAbsolutePath());
+                    dialog_ListView.setAdapter(directoryList);
                 } else {
-                    Toast.makeText(getContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT).show();
-                    //dialog.dismiss();
+                    Toast.makeText(getContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
         });
 
-    }
+        deleteDialog.show();*/
 
-    void ListDir(File f){
 
-        if(f.equals(root)){
-            btnUP.setEnabled(false);
-        } else {
-            btnUP.setEnabled(true);
-        }
-
-        curFolder=f;
-        textFolder.setText(f.getPath());
-
-        File[] files = f.listFiles();
-        fileList.clear();
-
-        for (File file : files)
-            fileList.add(file.getPath());
-
-        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, fileList);
-        dialog_ListView.setAdapter(directoryList);
     }
 
 

@@ -399,23 +399,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 AlertDialogsHelper.getTextDialog(PhotoPagerActivity.this,deleteDialog,
                         getString(R.string.delete), getString(R.string.delete_photo_message));
 
-               /* final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout
-                    .text_dialog, null);
-                final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
-                final TextView txt_Delete_message = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_message);
-                CardView cv_Delete_Dialog = (CardView) Delete_dialogLayout.findViewById(R.id.message_card);
-
-                cv_Delete_Dialog.setBackgroundColor(getCardBackgroundColor());
-                txt_Delete_title.setBackgroundColor(getPrimaryColor());
-                txt_Delete_title.setText(getString(R.string.delete));
-                txt_Delete_message.setText(R.string.delete_photo_message);
-                txt_Delete_message.setTextColor(getTextColor());
-                DeleteDialog.setView(Delete_dialogLayout);*/
-
-                deleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
+                deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
                 deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
@@ -434,9 +418,9 @@ public class PhotoPagerActivity extends ThemedActivity {
                                         }
                                         adapter.notifyDataSetChanged();
                                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
-                                    } else {
+                                    } else
                                         Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                    }
+
                                 }
                             });
                             passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
