@@ -1,7 +1,7 @@
 # LeafPic [![Crowdin](https://d322cqt584bo4o.cloudfront.net/leafpic/localized.svg)](https://crowdin.com/project/leafpic)
 <!--<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="left" > </br></br></br></br>-->
 
-<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" align="left" width="150" hspace="10" vspace="10">
+<img src="app\src\main\res\drawable\leaf_pic.png" align="left" width="150" hspace="10" vspace="10">
 LeafPic is a fluid, material-designed alternative gallery. LeafPic is ad-free, open sourced under GPL v3. It is smaller than other apps but it doesn't miss any of the main features.
 
 LeafPic is available on F-Droid.
