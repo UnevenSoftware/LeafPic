@@ -9,10 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +18,6 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.PermissionUtils;
 import com.horaapps.leafpic.utils.StringUtils;
 
@@ -70,18 +66,17 @@ public class SplashScreen extends ThemedActivity {
         albums = new HandlingAlbums(getApplicationContext());
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
-//        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Metrica-Regular.otf"));
+        //logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Metrica-Regular.otf"));
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
         //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
-        logo.setTextColor(getTextColor());
+        logo.setTextColor(getSubTextColor());
 
-        //ImageView imgLogo = (ImageView) findViewById(R.id.imgLogo);
-        //imgLogo.setImageResource(R.drawable.leafpic_big);
+
 
         RelativeLayout RelLay = (RelativeLayout) findViewById(R.id.Splah_Bg);
         RelLay.setBackgroundColor(getBackgroundColor());
-        //logo.setTextColor(getInvertedBackgroundColor());
+
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE

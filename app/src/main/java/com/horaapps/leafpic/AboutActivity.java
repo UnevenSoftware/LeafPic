@@ -33,6 +33,7 @@ public class AboutActivity extends ThemedActivity {
     TextView txtAT;
     TextView txtSU;
     TextView txtLI;
+    TextView txtST;
 
     /**** CustomTabService*/
     CustomTabService cts;
@@ -51,6 +52,7 @@ public class AboutActivity extends ThemedActivity {
         txtAT = (TextView) findViewById(R.id.about_authors_title);
         txtSU = (TextView) findViewById(R.id.about_support_title);
         txtLI = (TextView) findViewById(R.id.about_license_title);
+        txtST = (TextView) findViewById(R.id.about_special_thanks_title);
         setNavBarColor();
         cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
@@ -93,6 +95,7 @@ public class AboutActivity extends ThemedActivity {
         txtLP.setTextColor(getAccentColor());
         txtSU.setTextColor(getAccentColor());
         txtLI.setTextColor(getAccentColor());
+        txtST.setTextColor(getAccentColor());
 
         /***** Buttons *****/
 
@@ -151,6 +154,23 @@ public class AboutActivity extends ThemedActivity {
             public void onClick(View v) { cts.launchUrl("https://github.com/Mow3l");}
         });
 
+
+
+        /*** SPECIAL THANKS ***/
+        /*** Patryk Goworowski ***/
+        //G+
+        findViewById(R.id.ll_patryk_goworowski_googleplus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { cts.launchUrl("https://plus.google.com/109304801957014561872/about");}
+        });
+        //Twitter
+        findViewById(R.id.ll_patryk_goworowski_twitter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { cts.launchUrl("https://twitter.com/socko_pack");}
+        });
+
+
+
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,12 +196,14 @@ public class AboutActivity extends ThemedActivity {
         CardView cvAuthor = (CardView) findViewById(R.id.about_authors_card);
         CardView cvSupport = (CardView) findViewById(R.id.about_support_card);
         CardView cvLicense = (CardView) findViewById(R.id.about_license_card);
+        CardView cvSpecialThanks = (CardView) findViewById(R.id.about_special_thanks_card);
 
         int color = getCardBackgroundColor();
         cvApp.setCardBackgroundColor(color);
         cvAuthor.setCardBackgroundColor(color);
         cvSupport.setCardBackgroundColor(color);
         cvLicense.setCardBackgroundColor(color);
+        cvSpecialThanks.setBackgroundColor(color);
 
         /** Icons **/
         //ABOUT APP
@@ -193,6 +215,9 @@ public class AboutActivity extends ThemedActivity {
         IconicsImageView imgDonald = (IconicsImageView) findViewById(R.id.about_author_donald_icon);
         IconicsImageView imgGilbert = (IconicsImageView) findViewById(R.id.about_author_gilbert_icon);
 
+        //SPECIAL THANKS
+        IconicsImageView imgPatryk = (IconicsImageView) findViewById(R.id.about_patryk_goworowski_icon);
+
         //ABOUT SUPPORT
         IconicsImageView imgSRate = (IconicsImageView) findViewById(R.id.about_support_translate_icon);
         IconicsImageView imgSTranslate = (IconicsImageView) findViewById(R.id.about_support_rate_icon);
@@ -203,10 +228,12 @@ public class AboutActivity extends ThemedActivity {
         imgAALL.setColor(color);
         imgDonald.setColor(color);
         imgGilbert.setColor(color);
+        imgPatryk.setColor(color);
         imgSRate.setColor(color);
         imgSTranslate.setColor(color);
         imgSGitHub.setColor(color);
         imgALicense.setColor(color);
+
 
         /** TextViews **/
         //TextView txtAV = (TextView) findViewById(R.id.about_version_item);
@@ -214,6 +241,7 @@ public class AboutActivity extends ThemedActivity {
         TextView txtLDesc = (TextView) findViewById(R.id.about_app_light_description);
         TextView txtDName = (TextView) findViewById(R.id.about_author_donald_item);
         TextView txtGName = (TextView) findViewById(R.id.about_author_gilbert_item);
+        TextView txtPatrykName = (TextView) findViewById(R.id.about_patryk_goworowski_item);
         TextView txtSRate = (TextView) findViewById(R.id.about_support_rate_item);
         TextView txtSTranslate = (TextView) findViewById(R.id.about_support_translate_item);
         TextView txtSGitHub = (TextView) findViewById(R.id.about_support_github_item);
@@ -226,6 +254,7 @@ public class AboutActivity extends ThemedActivity {
         txtAL.setTextColor(color);
         txtDName.setTextColor(color);
         txtGName.setTextColor(color);
+        txtPatrykName.setTextColor(color);
         txtSRate.setTextColor(color);
         txtSTranslate.setTextColor(color);
         txtSGitHub.setTextColor(color);
@@ -236,6 +265,7 @@ public class AboutActivity extends ThemedActivity {
         TextView txtAL_Sub = (TextView) findViewById(R.id.about_libs_item_sub);
         TextView txtDName_Sub = (TextView) findViewById(R.id.about_author_donald_item_sub);
         TextView txtGName_Sub = (TextView) findViewById(R.id.about_author_gilbert_item_sub);
+        TextView txtPatrykName_Sub = (TextView) findViewById(R.id.about_patryk_goworowski_item_sub);
         TextView txtSRate_Sub = (TextView) findViewById(R.id.about_support_rate_item_sub);
         TextView txtSTranslate_Sub = (TextView) findViewById(R.id.about_support_translate_item_sub);
         TextView txtSGitHub_Sub = (TextView) findViewById(R.id.about_support_github_item_sub);
@@ -247,6 +277,7 @@ public class AboutActivity extends ThemedActivity {
         txtAL_Sub.setTextColor(color);
         txtDName_Sub.setTextColor(color);
         txtGName_Sub.setTextColor(color);
+        txtPatrykName_Sub.setTextColor(color);
         txtSRate_Sub.setTextColor(color);
         txtSTranslate_Sub.setTextColor(color);
         txtSGitHub_Sub.setTextColor(color);

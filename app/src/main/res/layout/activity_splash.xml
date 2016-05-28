@@ -6,31 +6,34 @@
     android:layout_height="match_parent"
     >
 
-    <!--
-    <ImageView
-        android:id="@+id/imgLogo"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_centerInParent="true"
-        android:paddingBottom="50dp"
-        />
+        >
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/leaf_pic"
+            />
 
 
-    <TextView
-        android:id="@+id/txtLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imgLogo"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="LeafPic"
-        android:textColor="@color/md_white_1000"
-        android:textSize="50sp"
-        android:layout_marginBottom="25dp"
+        <TextView
+            android:id="@+id/txtLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="LeafPic"
+            android:paddingTop="40dp"
+            android:textColor="@color/md_white_1000"
+            android:textSize="50sp"
          />
+    </LinearLayout>
 
-    -->
 
+    <!--
     <TextView
         android:id="@+id/txtLogo"
         android:layout_width="wrap_content"
@@ -41,5 +44,5 @@
         android:textSize="60sp"
         android:layout_marginBottom="25dp"
         />
-
+     -->
 </RelativeLayout>

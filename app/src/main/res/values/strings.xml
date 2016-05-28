@@ -205,6 +205,10 @@
     <string name="about_author_gilbert_sub">Major Designer</string>
     <string name="about_googleplus" translatable="false">Google+</string>
 
+    <string name="about_special_thnaks">Special thanks</string>
+    <string name="about_special_thnaks_patryk_goworowski">Patryk Goworowski</string>
+    <string name="about_special_thnaks_patryk_goworowski_sub">For the awesome material launcher icon.</string>
+
     <string name="about_support">Support Development</string>
     <string name="about_support_translate">Translate</string>
     <string name="about_support_translate_sub">Help us to translate LeafPic in more languages.</string>
