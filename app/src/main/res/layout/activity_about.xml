@@ -160,105 +160,49 @@
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
 
-                    <!--DONALD LINKS / GOOGLE PLUS -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <!--DONALD LINKS  -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_donald_googleplus"
-                            android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        >
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_author_donald_googleplus_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="faw-google"
-                                app:iiv_color="@color/md_red_500"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1">
+                            <TextView
+                                android:id="@+id/about_author_donald_googleplus_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_author_donald_googleplus_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="GOOGLE +"
-                                    android:textColor="@color/md_red_500"
-                                    android:textSize="16sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-                    <!--DONALD LINKS / GITHUB -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_donald_github"
-                            android:layout_width="match_parent"
+                                android:text="GOOGLE +"
+                                android:textColor="@color/md_red_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_author_donald_github_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="faw-github"
-                                app:iiv_color="@color/md_blue_500"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <TextView
+                                android:id="@+id/about_author_donaldt_github_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_author_donaldt_github_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="GITHUB"
-                                    android:textColor="@color/md_blue_500"
-                                    android:textSize="16sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-
-
-                    <View
-                        android:id="@+id/author_view_divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:padding="5dp"
-                        />
-
+                                android:text="TWITTER"
+                                android:textColor="@color/md_blue_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
                     <!--GILBERT NDRESAJ -->
                     <com.balysv.materialripple.MaterialRippleLayout
@@ -309,109 +253,52 @@
                             </LinearLayout>
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
-
-                    <!--GILBERT LINKS / GOOGLE PLUS -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <!--GILBERT LINKS / -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_gilbert_googleplus"
-                            android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        >
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_author_gilbert_googleplus_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="faw-google"
-                                app:iiv_color="@color/md_red_500"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1">
+                            <TextView
+                                android:id="@+id/about_author_gilbert_googleplus_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_author_gilbert_googleplus_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="GOOGLE +"
-                                    android:textColor="@color/md_red_500"
-                                    android:textSize="16sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-                    <!--GILBERT LINKS / GITHUB -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_gilbert_github"
-                            android:layout_width="match_parent"
+                                android:text="GOOGLE +"
+                                android:textColor="@color/md_red_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="15dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_author_gilbert_github_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="faw-github"
-                                app:iiv_color="@color/md_blue_500"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <TextView
+                                android:id="@+id/about_author_gilbert_github_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_author_gilbert_github_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="GITHUB"
-                                    android:textColor="@color/md_blue_500"
-                                    android:textSize="16sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-                </LinearLayout>
+                                android:text="TWITTER"
+                                android:textColor="@color/md_blue_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
 
-            </android.support.v7.widget.CardView>
 
-            <!--SPECIAL THANKS-->
-            <android.support.v7.widget.CardView
-                android:id="@+id/about_special_thanks_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="5dp"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
                     <TextView
                         android:id="@+id/about_special_thanks_title"
                         android:layout_width="match_parent"
@@ -473,94 +360,71 @@
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
 
-                    <!--PATRYK GOWOROWSKI LINKS / GOOGLE PLUS -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <!--PATRYK GOWOROWSKI LINKS / -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_patryk_goworowski_googleplus"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_patryk_goworowski_googleplus_icon"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="faw-google"
-                                app:iiv_color="@color/md_red_500"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_patryk_goworowski_googleplus_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="GOOGLE +"
-                                    android:textColor="@color/md_red_500"
-                                    android:textSize="16sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-                    <!--PATRYK GOWOROWSKI LINKS / TWITTER -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false"
-                        android:paddingBottom="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
                         >
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_patryk_goworowski_twitter"
-                            android:layout_width="match_parent"
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:weightSum="10"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_patryk_goworowski_twitter"
-                                android:layout_width="0dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="2"
-                                app:iiv_icon="faw-twitter"
-                                app:iiv_color="@color/md_blue_500"
-                                />
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1">
+                            <TextView
+                                android:id="@+id/about_patryk_goworowski_googleplus_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="8"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:id="@+id/about_patryk_goworowski_twitter_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="TWITTER"
-                                    android:textColor="@color/md_blue_500"
-                                    android:textSize="16sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                                android:text="GOOGLE +"
+                                android:textColor="@color/md_red_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1"
+                            >
+                            <TextView
+                                android:id="@+id/about_patryk_goworowski_twitter_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TWITTER"
+                                android:textColor="@color/md_blue_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
+            <!--SPECIAL THANKS
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_special_thanks_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            -->
 
             <!--SUPPORT APP-->
             <android.support.v7.widget.CardView

@@ -99,9 +99,6 @@ public class AboutActivity extends ThemedActivity {
 
         /***** Buttons *****/
 
-        /***** Views *****/
-        View authorDivider = findViewById(R.id.author_view_divider);
-        authorDivider.setBackgroundColor(getSubTextColor());
 
         /***** ScrolView *****/
         setScrollViewColor(scr);
@@ -132,24 +129,24 @@ public class AboutActivity extends ThemedActivity {
 
         /*** Donald Shtjefni ***/
         //G+
-        findViewById(R.id.ll_donald_googleplus).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.about_author_donald_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://plus.google.com/103359244653769120543/about");}
         });
         //Github
-        findViewById(R.id.ll_donald_github).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.about_author_donaldt_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/DNLDsht");}
         });
 
         /*** Gilbert Ndresaj ***/
         //Github
-        findViewById(R.id.ll_gilbert_googleplus).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.about_author_gilbert_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://plus.google.com/118430643662868782426/about");}
         });
         //Github
-        findViewById(R.id.ll_gilbert_github).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.about_author_gilbert_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/Mow3l");}
         });
@@ -159,15 +156,17 @@ public class AboutActivity extends ThemedActivity {
         /*** SPECIAL THANKS ***/
         /*** Patryk Goworowski ***/
         //G+
-        findViewById(R.id.ll_patryk_goworowski_googleplus).setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.about_patryk_goworowski_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://plus.google.com/109304801957014561872/about");}
         });
         //Twitter
-        findViewById(R.id.ll_patryk_goworowski_twitter).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.about_patryk_goworowski_twitter_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://twitter.com/socko_pack");}
         });
+
 
 
 
@@ -196,14 +195,14 @@ public class AboutActivity extends ThemedActivity {
         CardView cvAuthor = (CardView) findViewById(R.id.about_authors_card);
         CardView cvSupport = (CardView) findViewById(R.id.about_support_card);
         CardView cvLicense = (CardView) findViewById(R.id.about_license_card);
-        CardView cvSpecialThanks = (CardView) findViewById(R.id.about_special_thanks_card);
+        //CardView cvSpecialThanks = (CardView) findViewById(R.id.about_special_thanks_card);
 
         int color = getCardBackgroundColor();
         cvApp.setCardBackgroundColor(color);
         cvAuthor.setCardBackgroundColor(color);
         cvSupport.setCardBackgroundColor(color);
         cvLicense.setCardBackgroundColor(color);
-        cvSpecialThanks.setBackgroundColor(color);
+        //cvSpecialThanks.setBackgroundColor(color);
 
         /** Icons **/
         //ABOUT APP
