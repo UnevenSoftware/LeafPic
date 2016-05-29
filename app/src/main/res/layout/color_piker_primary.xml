@@ -41,7 +41,7 @@
 
                         <uz.shift.colorpicker.LineColorPicker
                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/pickerPrimary"
+                            android:id="@+id/color_picker_primary"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             app:orientation="horizontal"
@@ -49,7 +49,7 @@
 
                         <uz.shift.colorpicker.LineColorPicker
                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/pickerPrimary2"
+                            android:id="@+id/color_picker_primary_2"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             app:orientation="horizontal"

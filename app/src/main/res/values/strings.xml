@@ -204,11 +204,13 @@
     <string name="about_author_donald_sub">Major Developer</string>
     <string name="about_author_gilbert_sub">Major Designer</string>
     <string name="about_googleplus" translatable="false">Google+</string>
-    <string name="about_send_mail">SEND MAIL</string>
+    <string name="send_via">send via&#8230;</string>
+    <string name="send_email">SEND EMAIL</string>
+
     <string name="send_mail_error">There are no email clients installed.</string>
 
     <string name="about_special_thnaks">Special thanks</string>
-    <string name="about_special_thnaks_patryk_goworowski">Patryk Goworowski</string>
+
     <string name="about_special_thnaks_patryk_goworowski_sub">For the awesome material launcher icon.</string>
 
     <string name="about_support">Support Development</string>
@@ -260,6 +262,7 @@
     <string name="fab_options_sub">Chose when display the floating button</string>
     <string name="map_provider">Map Provider</string>
     <string name="map_provider_sub">Chose the source of maps</string>
+    <string name="insert_something">Insert something!</string>
 
 
 </resources>

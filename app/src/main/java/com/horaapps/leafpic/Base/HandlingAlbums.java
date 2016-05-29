@@ -240,6 +240,10 @@ public class HandlingAlbums {
         }
     }
 
+    public ArrayList<File> getExcludedfolders() {
+        return excludedfolders;
+    }
+
     public void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList) {
         File[] files = temp.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
@@ -431,7 +435,13 @@ public class HandlingAlbums {
     public void excludeAlbum(Context context, Album a) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.excludeAlbum(a.getPath());
+        excludedfolders.add(new File(a.getPath()));
         dispAlbums.remove(a);
+    }
+
+    public void unExcludeAlbum(Context c, File dirPath) {
+        customAlbumsHandler.clearAlbumExclude(dirPath.getAbsolutePath());
+        excludedfolders.remove(dirPath);
     }
 
     public int getColumnSortingMode() {

@@ -121,11 +121,7 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_support_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent i = new Intent(Intent.ACTION_VIEW);
-                //i.setData(Uri.parse("https://github.com/HoraApps/LeafPic"));
-                //startActivity(i);
                 cts.launchUrl("https://github.com/HoraApps/LeafPic");
-
             }
         });
 
@@ -152,11 +148,9 @@ public class AboutActivity extends ThemedActivity {
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"barbanish@gmail.com"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "LeafPic QUESTION!");
-                i.putExtra(Intent.EXTRA_TEXT   , "");
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"dnld.sht@gmail.com"});
                 try {
-                    startActivity(Intent.createChooser(i, getString(R.string.about_send_mail).toString().toLowerCase()+"..."));
+                    startActivity(Intent.createChooser(i, getString(R.string.send_via)));
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
                 }
@@ -181,16 +175,13 @@ public class AboutActivity extends ThemedActivity {
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
                 i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"jibo95@gmail.com"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "LeafPic QUESTION!");
-                i.putExtra(Intent.EXTRA_TEXT   , "");
                 try {
-                    startActivity(Intent.createChooser(i, getString(R.string.about_send_mail).toString().toLowerCase()+"..."));
+                    startActivity(Intent.createChooser(i, getString(R.string.send_via)));
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
 
         /*** SPECIAL THANKS ***/
@@ -206,9 +197,6 @@ public class AboutActivity extends ThemedActivity {
             @Override
             public void onClick(View v) { cts.launchUrl("https://twitter.com/socko_pack");}
         });
-
-
-
 
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
