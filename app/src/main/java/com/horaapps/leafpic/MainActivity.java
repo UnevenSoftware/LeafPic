@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.provider.DocumentFile;
@@ -81,10 +82,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
 
 
@@ -111,9 +110,6 @@ public class MainActivity extends ThemedActivity {
     Toolbar toolbar;
     SelectAlbumBottomSheet bottomSheetDialogFragment;
     SwipeRefreshLayout swipeRefreshLayout;
-
-    ScrollView drawerScr;
-    Drawable drawableScrollBar;
 
     boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, firstLaunch = true;
 
@@ -181,42 +177,6 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
-
-    public static HashSet<String> getExternalMounts() {
-        final HashSet<String> out = new HashSet<String>();
-        String reg = "(?i).*vold.*(vfat|ntfs|exfat|fat32|ext3|ext4).*rw.*";
-        String s = "";
-        try {
-            final Process process = new ProcessBuilder().command("mount")
-                    .redirectErrorStream(true).start();
-            process.waitFor();
-            final InputStream is = process.getInputStream();
-            final byte[] buffer = new byte[1024];
-            while (is.read(buffer) != -1) {
-                s = s + new String(buffer);
-            }
-            is.close();
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-
-        // parse output
-        final String[] lines = s.split("\n");
-        for (String line : lines) {
-            if (!line.toLowerCase(Locale.US).contains("asec")) {
-                if (line.matches(reg)) {
-                    String[] parts = line.split(" ");
-                    for (String part : parts) {
-                        if (part.startsWith("/"))
-                            if (!part.toLowerCase(Locale.US).contains("vold"))
-                                out.add(part);
-                    }
-                }
-            }
-        }
-        return out;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -238,6 +198,7 @@ public class MainActivity extends ThemedActivity {
     @Override
     public void onResume() {
         super.onResume();
+        securityObj.updateSecuritySetting();
         setupUI();
         albums.clearSelectedAlbums();
         album.clearSelectedPhotos();
@@ -449,8 +410,7 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
-        TextView logo = (TextView) findViewById(R.id.txtLogo);
-        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
+        ((TextView) findViewById(R.id.txtLogo)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
 
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
@@ -459,25 +419,25 @@ public class MainActivity extends ThemedActivity {
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (!albumsMode && album.areFiltersActive()) {
-                    album.filterMedias(ImageFileFilter.FILTER_ALL);
+                if (!albumsMode && album.areFiltersActive()) {
+                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_ALL);
                     mediaAdapter.updateDataSet(album.media);
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-                } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));*/
+                } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
 
-
+                //region TESTING
                /* if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
                 }*/
-                newFolderDialog();
 
+                //newFolderDialog();
+                //endregion
             }
         });
 
-        drawerScr = (ScrollView) findViewById(R.id.drawer_scrollbar);
-        drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
+
 
         int statusBarHeight = Measure.getStatusBarHeight(getResources()),
             navBarHeight = Measure.getNavBarHeight(MainActivity.this);
@@ -500,6 +460,7 @@ public class MainActivity extends ThemedActivity {
     }
     ArrayAdapter<String> directoryList;
 
+    //region TESTING
     private void newFolderDialog() {
         final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
@@ -644,25 +605,7 @@ public class MainActivity extends ThemedActivity {
 
 
     }
-    void ListDir(File f){
-        /*if(f.equals(root)){
-            btnUP.setEnabled(false);
-        } else {
-            btnUP.setEnabled(true);
-        }*/
-        /*curFolder=f;
-        textFolder.setText(f.getPath());
-        File[] files = f.listFiles();
-        fileList.clear();
 
-        for (File file : files)
-            fileList.add(file.getPath());
-            */
-
-       /* ArrayAdapter<String> directoryList = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, fileList);
-        dialog_ListView.setAdapter(directoryList);§*/
-    }
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (resultCode == RESULT_OK) {
             Uri treeUri = resultData.getData();
@@ -687,6 +630,7 @@ public class MainActivity extends ThemedActivity {
             out.close();*/
         }
     }
+    //endregion
 
     @Override
     public void setNavBarColor() {
@@ -719,13 +663,11 @@ public class MainActivity extends ThemedActivity {
         mediaAdapter.updatePlaceholder(getApplicationContext(), getBasicTheme());
 
         /**** DRAWER ****/
-        setScrollViewColor(drawerScr);
+        setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
 
         /**** recyclers drawable *****/
-        //drawableScrollBar = getResources().getDrawable( R.drawable.ic_scrollbar);
+        Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
-        securityObj.updateSecuritySetting();
-
     }
 
     public void setDrawerTheme() {
@@ -862,28 +804,28 @@ public class MainActivity extends ThemedActivity {
         findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ComingSoonDialog("Moments");
+                comingSoonDialog("Moments");
             }
         });
 
         findViewById(R.id.ll_drawer_Tags).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ComingSoonDialog("Tags");
+                comingSoonDialog("Tags");
             }
         });
         */
         findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ComingSoonDialog("Wallpapers");
+                comingSoonDialog("Wallpapers");
             }
         });
     }
     //endregion
 
 
-    void ComingSoonDialog(String title) {
+    void comingSoonDialog(String title) {
         AlertDialog.Builder comingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
         AlertDialogsHelper.getTextDialog(this, comingSoonDialog, title, getString(R.string.coming_soon));
         comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), null);
@@ -1101,39 +1043,28 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.hideAlbumButton:
-                final AlertDialog.Builder hideDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                final View dialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
-                final TextView textViewTitle = (TextView) dialogLayout.findViewById(R.id.text_dialog_title);
-                final TextView textViewMessage = (TextView) dialogLayout.findViewById(R.id.text_dialog_message);
-                CardView cardView = (CardView) dialogLayout.findViewById(R.id.message_card);
+                final AlertDialog.Builder hideDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
-                cardView.setCardBackgroundColor(getCardBackgroundColor());
-                textViewTitle.setBackgroundColor(getPrimaryColor());
-                textViewTitle.setText(getString(hidden ? R.string.unhide : R.string.hide));
-                textViewMessage.setText(hidden ? R.string.unhide_album_message : R.string.hide_album_message);
-                textViewMessage.setTextColor(getTextColor());
-                hideDialog.setView(dialogLayout);
-                hideDialog.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
+                AlertDialogsHelper.getTextDialog(MainActivity.this,hideDialogBuilder,
+                        getString(hidden ? R.string.unhide : R.string.hide),
+                        getString(hidden ? R.string.unhide_album_message : R.string.hide_album_message));
+
+                hideDialogBuilder.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
-                            if (hidden)
-                                albums.unHideSelectedAlbums(getApplicationContext());
-                            else
-                                albums.hideSelectedAlbums(getApplicationContext());
-
+                            if (hidden) albums.unHideSelectedAlbums(getApplicationContext());
+                            else albums.hideSelectedAlbums(getApplicationContext());
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
-                            if(hidden)
-                                albums.unHideAlbum(album.getPath(), getApplicationContext());
-                            else
-                                albums.hideAlbum(album.getPath(), getApplicationContext());
+                            if(hidden) albums.unHideAlbum(album.getPath(), getApplicationContext());
+                            else albums.hideAlbum(album.getPath(), getApplicationContext());
                             displayAlbums(true);
                         }
                     }
                 });
                 if (!hidden) {
-                    hideDialog.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                    hideDialogBuilder.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (albumsMode) {
@@ -1147,11 +1078,8 @@ public class MainActivity extends ThemedActivity {
                         }
                     });
                 }
-                hideDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                hideDialog.show();
+                hideDialogBuilder.setNegativeButton(this.getString(R.string.cancel), null);
+                hideDialogBuilder.show();
                 return true;
 
             case R.id.delete_action:
@@ -1164,12 +1092,12 @@ public class MainActivity extends ThemedActivity {
 
                     @Override
                     protected Void doInBackground(String... arg0) {
-                        if (albumsMode) {
+                        if (albumsMode)
                             albums.deleteSelectedAlbums(MainActivity.this);
-                        } else  {
-                            if (editmode) {
+                        else {
+                            if (editmode)
                                 album.deleteSelectedMedia(getApplicationContext());
-                            } else {
+                            else {
                                 albums.deleteAlbum(album, getApplicationContext());
                                 album.media.clear();
                             }
@@ -1200,25 +1128,38 @@ public class MainActivity extends ThemedActivity {
                 AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
                 AlertDialogsHelper.getTextDialog(this, deleteDialog, getString(R.string.delete), getString(albumsMode || (!albumsMode && !editmode) ? R.string.delete_album_message : R.string.delete_photos_message));
 
-                deleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {}});
-
+                deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
                 deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
-                            final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                        if (securityObj.isActiveSecurity() && securityObj.isPasswordOnDelete()) {
+                            AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                            final EditText editTextPassword  = securityObj.getInsertPasswordDialog(MainActivity.this,passwordDialogBuilder);
+                            passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
-
-                            final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this,passwordDialogBuilder);
                             passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                                @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
+                                    //This should br empty it will be overwrite later
+                                    //to avoid dismiss of the dialog on wrong password
                                 }
                             });
-                            passwordDialogBuilder.setNegativeButton(getString(R.string.cancel),null);
-                            AlertDialog passwordDialog = passwordDialogBuilder.create();
+
+                            final AlertDialog passwordDialog = passwordDialogBuilder.create();
                             passwordDialog.show();
-                            
+
+                            passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (securityObj.checkPassword(editTextPassword.getText().toString())) {
+                                        passwordDialog.dismiss();
+                                        new DeletePhotos().execute();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                        editTextPassword.getText().clear();
+                                        editTextPassword.requestFocus();
+                                    }
+                                }
+                            });
                         } else new DeletePhotos().execute();
                     }
                 });
@@ -1227,8 +1168,12 @@ public class MainActivity extends ThemedActivity {
                 return true;
             case R.id.excludeAlbumButton:
 
-                final AlertDialog.Builder excludeDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.text_dialog, null);
+                final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
+                        getString(R.string.exclude),getString(R.string.exclude_album_message));
+
+                /*final View excludeDialogLayout = getLayoutInflater().inflate(R.layout
+                    .text_dialog, null);
                 final TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
                 final TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
                 CardView cardViewExclude = (CardView) excludeDialogLayout.findViewById(R.id.message_card);
@@ -1239,9 +1184,9 @@ public class MainActivity extends ThemedActivity {
                 textViewExcludeMessage.setText(R.string.exclude_album_message);
                 textViewExcludeMessage.setTextColor(getTextColor());
 
-                excludeDialog.setView(excludeDialogLayout);
+                excludeDialogBuilder.setView(excludeDialogLayout);*/
 
-                excludeDialog.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+                excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
                             albums.excludeSelectedAlbums(getApplicationContext());
@@ -1253,11 +1198,8 @@ public class MainActivity extends ThemedActivity {
                         }
                     }
                 });
-                excludeDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                excludeDialog.show();
+                excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel), null);
+                excludeDialogBuilder.show();
                 return true;
 
             case R.id.sharePhotos:
@@ -1273,7 +1215,7 @@ public class MainActivity extends ThemedActivity {
                 intent.setType(StringUtils.getGenericMIME(album.selectedMedias.get(0).getMIME()));
                 finishEditMode();
                 startActivity(intent);
-                return  true;
+                return true;
 
             case R.id.all_media_filter:
                 if (!albumsMode) {
@@ -1365,7 +1307,6 @@ public class MainActivity extends ThemedActivity {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
                     albums.sortAlbums(getApplicationContext());
                     albumsAdapter.updateDataset(albums.dispAlbums);
-
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
                     album.sortPhotos();
@@ -1390,50 +1331,46 @@ public class MainActivity extends ThemedActivity {
             //region Affix
             case  R.id.affixPhoto:
 
-                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
-                final View Affix_dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
-                final TextView Affix_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_title);
-                CardView cv_Affix_Dialog = (CardView) Affix_dialogLayout.findViewById(R.id.affix_card);
+                final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                final View dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
 
-                Affix_title.setBackgroundColor(getPrimaryColor());
-                cv_Affix_Dialog.setCardBackgroundColor(getCardBackgroundColor());
+                dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
+                ((CardView) dialogLayout.findViewById(R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
 
                 //ITEMS
-                final TextView txt_Affix_Vertical_title = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_title);
-                final TextView txt_Affix_Vertical_sub = (TextView) Affix_dialogLayout.findViewById(R.id.affix_vertical_sub);
-                final SwitchCompat swVertical = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.affix_vertical_switch);
-                final IconicsImageView imgAffix = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_vertical_icon);
-                final IconicsImageView imgQuality = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_quality_icon);
+                final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(R.id.affix_vertical_switch);
+                final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
 
-                final TextView labelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_title);
-                final TextView subLabelSaveHere = (TextView) Affix_dialogLayout.findViewById(R.id.save_here_sub);
+                final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
+                final RadioButton radio_jpg = (RadioButton) dialogLayout.findViewById(R.id.radio_jpeg);
+                final RadioButton radio_png = (RadioButton) dialogLayout.findViewById(R.id.radio_png);
+                final RadioButton radio_webp = (RadioButton) dialogLayout.findViewById(R.id.radio_webp);
 
-                final SwitchCompat swSaveHere = (SwitchCompat) Affix_dialogLayout.findViewById(R.id.save_here_switch);
-                final IconicsImageView imgSaveHere = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.save_here_icon);
+                final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
+                final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
 
-                final TextView txtCompressionTitle = (TextView) Affix_dialogLayout.findViewById(R.id.compression_settings_title);
-                final TextView txtFormat = (TextView) Affix_dialogLayout.findViewById(R.id.affix_format_sub);
-                final TextView txtQuality = (TextView) Affix_dialogLayout.findViewById(R.id.affix_quality_title);
-                final SeekBar seekQuality = (SeekBar) Affix_dialogLayout.findViewById(R.id.seek_bar_quality);
 
-                final RadioGroup radioFormatGroup = (RadioGroup) Affix_dialogLayout.findViewById(R.id.radio_format);
-                final RadioButton radio_jpg = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_jpeg);
-                final RadioButton radio_png = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_png);
-                final IconicsImageView imgFormat = (IconicsImageView) Affix_dialogLayout.findViewById(R.id.affix_format_icon);
-                final RadioButton radio_webp = (RadioButton) Affix_dialogLayout.findViewById(R.id.radio_webp);
-                txt_Affix_Vertical_title .setTextColor(getTextColor());
-                subLabelSaveHere.setTextColor(getSubTextColor());
-                imgSaveHere.setColor(getIconColor());
 
-                labelSaveHere.setTextColor(getTextColor());
-                txt_Affix_Vertical_sub.setTextColor(getSubTextColor());
-                txtFormat.setTextColor(getSubTextColor());
-                txtCompressionTitle.setTextColor(getTextColor());
-                txtQuality.setTextColor(getSubTextColor());
+                /** TextViews **/
+                int color = getTextColor();
+                ((TextView) dialogLayout.findViewById(R.id.affix_vertical_title)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.compression_settings_title)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
 
-                imgQuality.setColor(getIconColor());
-                imgFormat.setColor(getIconColor());
-                imgAffix.setColor(getIconColor());
+                /** Sub TextViews **/
+                color = getTextColor();
+                ((TextView) dialogLayout.findViewById(R.id.save_here_sub)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_vertical_sub)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_format_sub)).setTextColor(color);
+                txtQuality.setTextColor(color);
+
+                /** Icons **/
+                color = getIconColor();
+                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_quality_icon)).setColor(color);
+                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
+                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
+                ((IconicsImageView) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
+
                 seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
                 seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
 
@@ -1443,12 +1380,10 @@ public class MainActivity extends ThemedActivity {
                         txtQuality.setText(Html.fromHtml(
                                 String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
                     }
-
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
 
                     }
-
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -1468,10 +1403,8 @@ public class MainActivity extends ThemedActivity {
                 }
 
                 //SWITCH
-                swVertical.setChecked(false);
-                updateSwitchColor(swVertical,getAccentColor());
-                swSaveHere.setChecked(false);
-                updateSwitchColor(swSaveHere,getAccentColor());
+                updateSwitchColor(swVertical, getAccentColor());
+                updateSwitchColor(swSaveHere, getAccentColor());
 
                 swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -1544,7 +1477,7 @@ public class MainActivity extends ThemedActivity {
                     }
                 }
                 //Dialog Buttons
-                AffixDialog.setView(Affix_dialogLayout);
+                AffixDialog.setView(dialogLayout);
                 AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {new affixMedia().execute();}});
                 AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -1615,13 +1548,24 @@ public class MainActivity extends ThemedActivity {
                 final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(albumsMode ? albums.getSelectedAlbum(0).getName() : album.getName());
 
-                AlertDialog renameDialog =
-                        AlertDialogsHelper.getInsertTextDialog(
-                                this,renameDialogBuilder, editTextNewName, getString(R.string.rename_album));
+                AlertDialogsHelper.getInsertTextDialog(MainActivity.this, renameDialogBuilder,
+                        editTextNewName, getString(R.string.rename_album));
 
-                renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+                renameDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+
+                renameDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //This should br empty it will be overwrite later
+                        //to avoid dismiss of the dialog on wrong password
+                    }
+                });
+                AlertDialog renameDialog = renameDialogBuilder.create();
+                renameDialog.show();
+
+                renameDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View dialog) {
                         if (editTextNewName.length() != 0) {
                             if (albumsMode){
                                 int index = albums.dispAlbums.indexOf(albums.getSelectedAlbum(0));
@@ -1633,13 +1577,11 @@ public class MainActivity extends ThemedActivity {
                                 toolbar.setTitle(album.getName());
                                 mediaAdapter.notifyDataSetChanged();
                             }
-                        } else
-                            StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
+                        } else {
+                            StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
+                            editTextNewName.requestFocus();
+                        }
                     }});
-                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) { } });
-                renameDialog.show();
                 return true;
 
             case R.id.clear_album_preview:

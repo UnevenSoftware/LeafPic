@@ -431,6 +431,7 @@ public class HandlingAlbums {
     public void excludeAlbum(Context context, Album a) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.excludeAlbum(a.getPath());
+        excludedfolders.add(new File(a.getPath()));
         dispAlbums.remove(a);
     }
 

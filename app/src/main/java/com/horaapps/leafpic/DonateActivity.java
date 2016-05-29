@@ -25,12 +25,6 @@ public class DonateActivity extends ThemedActivity {
     Toolbar toolbar;
 
     /**** Title Cards ***/
-    TextView txtHoraApps;
-    TextView txtDonateHead;
-    TextView txtGP;
-    TextView txtPP;
-    TextView txtBT;
-    IconicsImageView imageViewGift;
     CustomTabService cts;
 
     /**** Buttons ***/
@@ -40,12 +34,7 @@ public class DonateActivity extends ThemedActivity {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        txtHoraApps = (TextView) findViewById(R.id.team_name);
-        txtDonateHead = (TextView) findViewById(R.id.donate_header_item);
-        imageViewGift = (IconicsImageView) findViewById(R.id.donate_header_icon);
-        txtGP = (TextView) findViewById(R.id.donate_googleplay_item_title);
-        txtPP = (TextView) findViewById(R.id.donate_paypal_item_title);
-        txtBT = (TextView) findViewById(R.id.donate_bitcoin_item_title);
+
 
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
@@ -75,70 +64,42 @@ public class DonateActivity extends ThemedActivity {
         });
         toolbar.setTitle(getString(R.string.donate));
 
-        /**** Status Bar ****/
         setStatusBarColor();
-
-        /**** Nav Bar *******/
         setNavBarColor();
-
-        /**** Recent App ****/
         setRecentApp(getString(R.string.donate));
 
         /**** Title Cards ***/
-        txtHoraApps.setTextColor(getAccentColor());
-        txtGP.setTextColor(getAccentColor());
-        txtPP.setTextColor(getAccentColor());
-        txtBT.setTextColor(getAccentColor());
-
-        /***** Buttons *****/
-        setThemeOnChangeListener();
-    }
-
-    public void setThemeOnChangeListener(){
+        ((TextView) findViewById(R.id.team_name)).setTextColor(getAccentColor());
+        ((TextView) findViewById(R.id.donate_googleplay_item_title)).setTextColor(getAccentColor());
+        ((TextView) findViewById(R.id.donate_paypal_item_title)).setTextColor(getAccentColor());
+        ((TextView) findViewById(R.id.donate_bitcoin_item_title)).setTextColor(getAccentColor());
 
         /** BackGround **/
-        LinearLayout bg = (LinearLayout) findViewById(R.id.donate_background);
-        bg.setBackgroundColor(getBackgroundColor());
+        findViewById(R.id.donate_background).setBackgroundColor(getBackgroundColor());
 
         /** Cards **/
-        CardView cvGP = (CardView) findViewById(R.id.donate_googleplay_card);
-        CardView cvPP = (CardView) findViewById(R.id.donate_paypal_card);
-        CardView cvBT = (CardView) findViewById(R.id.donate_bitcoin_card);
-        CardView cvHD = (CardView) findViewById(R.id.donate_header_card);
-
-
         int color = getCardBackgroundColor();
-        cvGP.setCardBackgroundColor(color);
-        cvPP.setCardBackgroundColor(color);
-        cvBT.setCardBackgroundColor(color);
-        cvHD.setCardBackgroundColor(color);
+
+        ((CardView) findViewById(R.id.donate_googleplay_card)).setCardBackgroundColor(color);
+        ((CardView) findViewById(R.id.donate_paypal_card)).setCardBackgroundColor(color);
+        ((CardView) findViewById(R.id.donate_bitcoin_card)).setCardBackgroundColor(color);
+        ((CardView) findViewById(R.id.donate_header_card)).setCardBackgroundColor(color);
 
         /** Icons **/
-        //ABOUT APP
-        IconicsImageView imgGP = (IconicsImageView) findViewById(R.id.donate_googleplay_icon_title);
-        IconicsImageView imgPP = (IconicsImageView) findViewById(R.id.donate_paypal_icon_title);
-        IconicsImageView imgBT = (IconicsImageView) findViewById(R.id.donate_bitcoin_icon_title);
-
         color = getIconColor();
-        imgGP.setColor(color);
-        imgPP.setColor(color);
-        imgBT.setColor(color);
-        imageViewGift.setColor(color);
 
+        ((IconicsImageView) findViewById(R.id.donate_googleplay_icon_title)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.donate_paypal_icon_title)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.donate_bitcoin_icon_title)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.donate_header_icon)).setColor(color);
 
         /** TextViews **/
-        TextView txtGP_CS = (TextView) findViewById(R.id.donate_googleplay_item);
-        TextView txtPP_CS = (TextView) findViewById(R.id.donate_paypal_item);
-        TextView txtBT_CS = (TextView) findViewById(R.id.donate_bitcoin_item);
-        TextView txtHD_CS = (TextView) findViewById(R.id.donate_header_item);
-
         color = getTextColor();
-        txtGP_CS.setTextColor(color);
-        txtPP_CS.setTextColor(color);
-        txtBT_CS.setTextColor(color);
-        txtHD_CS.setTextColor(color);
-        txtDonateHead.setTextColor(color);
 
+        ((TextView) findViewById(R.id.donate_googleplay_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.donate_paypal_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.donate_bitcoin_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.donate_header_item)).setTextColor(color);
 
         /** ACTIONS **/
         findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
@@ -148,7 +109,7 @@ public class DonateActivity extends ThemedActivity {
             }
         });
 
-        txtBT_CS.setOnLongClickListener(new View.OnLongClickListener() {
+        findViewById(R.id.donate_bitcoin_item).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);

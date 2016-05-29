@@ -48,7 +48,6 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
     public void initUI(){
 
         RecyclerView mRecyclerView;
-        RelativeLayout rl_ea;
         Toolbar toolbar;
 
         /** TOOLBAR **/
@@ -77,8 +76,8 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.excluded_albums));
-        rl_ea = (RelativeLayout) findViewById(R.id.rl_ea);
-        rl_ea.setBackgroundColor(getBackgroundColor());
+
+        findViewById(R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 
     private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
