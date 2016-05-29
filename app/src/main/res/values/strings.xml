@@ -204,6 +204,8 @@
     <string name="about_author_donald_sub">Major Developer</string>
     <string name="about_author_gilbert_sub">Major Designer</string>
     <string name="about_googleplus" translatable="false">Google+</string>
+    <string name="about_send_mail">SEND MAIL</string>
+    <string name="send_mail_error">There are no email clients installed.</string>
 
     <string name="about_special_thnaks">Special thanks</string>
     <string name="about_special_thnaks_patryk_goworowski">Patryk Goworowski</string>

@@ -165,7 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="2"
+                        android:weightSum="3"
                         >
                         <com.balysv.materialripple.MaterialRippleLayout
                             android:layout_width="wrap_content"
@@ -195,13 +195,32 @@
                                 android:id="@+id/about_author_donaldt_github_item"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TWITTER"
+                                android:text="GITHUB"
                                 android:textColor="@color/md_blue_500"
                                 android:textSize="16sp"
                                 android:padding="15dp"
                                 android:layout_gravity="center"
                                 />
                         </com.balysv.materialripple.MaterialRippleLayout>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1"
+                            >
+                            <TextView
+                                android:id="@+id/about_author_donald_mail_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_send_mail"
+                                android:textColor="@color/md_orange_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
                     </LinearLayout>
 
                     <!--GILBERT NDRESAJ -->
@@ -258,7 +277,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="2"
+                        android:weightSum="3"
                         >
                         <com.balysv.materialripple.MaterialRippleLayout
                             android:layout_width="wrap_content"
@@ -288,8 +307,26 @@
                                 android:id="@+id/about_author_gilbert_github_item"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TWITTER"
+                                android:text="GITHUB"
                                 android:textColor="@color/md_blue_500"
+                                android:textSize="16sp"
+                                android:padding="15dp"
+                                android:layout_gravity="center"
+                                />
+                        </com.balysv.materialripple.MaterialRippleLayout>
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:mrl_rippleAlpha="0.05"
+                            app:mrl_rippleDelayClick="false"
+                            android:layout_weight="1"
+                            >
+                            <TextView
+                                android:id="@+id/about_author_gilbert_mail_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_send_mail"
+                                android:textColor="@color/md_orange_500"
                                 android:textSize="16sp"
                                 android:padding="15dp"
                                 android:layout_gravity="center"

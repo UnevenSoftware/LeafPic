@@ -1,5 +1,6 @@
 package com.horaapps.leafpic;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.CustomTabService;
@@ -34,6 +36,8 @@ public class AboutActivity extends ThemedActivity {
     TextView txtSU;
     TextView txtLI;
     TextView txtST;
+    TextView txtSendMailDonald;
+    TextView txtSendMailGilbert;
 
     /**** CustomTabService*/
     CustomTabService cts;
@@ -53,6 +57,8 @@ public class AboutActivity extends ThemedActivity {
         txtSU = (TextView) findViewById(R.id.about_support_title);
         txtLI = (TextView) findViewById(R.id.about_license_title);
         txtST = (TextView) findViewById(R.id.about_special_thanks_title);
+        txtSendMailDonald = (TextView) findViewById(R.id.about_author_donald_mail_item);
+        txtSendMailGilbert = (TextView) findViewById(R.id.about_author_gilbert_mail_item);
         setNavBarColor();
         cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
@@ -96,6 +102,8 @@ public class AboutActivity extends ThemedActivity {
         txtSU.setTextColor(getAccentColor());
         txtLI.setTextColor(getAccentColor());
         txtST.setTextColor(getAccentColor());
+        txtSendMailDonald.setTextColor(getAccentColor());
+        txtSendMailGilbert.setTextColor(getAccentColor());
 
         /***** Buttons *****/
 
@@ -138,6 +146,22 @@ public class AboutActivity extends ThemedActivity {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/DNLDsht");}
         });
+        //Send Mail
+        findViewById(R.id.about_author_donald_mail_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"barbanish@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "LeafPic QUESTION!");
+                i.putExtra(Intent.EXTRA_TEXT   , "");
+                try {
+                    startActivity(Intent.createChooser(i, getString(R.string.about_send_mail).toString().toLowerCase()+"..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         /*** Gilbert Ndresaj ***/
         //Github
@@ -149,6 +173,22 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.about_author_gilbert_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/Mow3l");}
+        });
+        //Send Mail
+        findViewById(R.id.about_author_gilbert_mail_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"jibo95@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "LeafPic QUESTION!");
+                i.putExtra(Intent.EXTRA_TEXT   , "");
+                try {
+                    startActivity(Intent.createChooser(i, getString(R.string.about_send_mail).toString().toLowerCase()+"..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
 
