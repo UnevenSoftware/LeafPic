@@ -1560,7 +1560,7 @@ public class MainActivity extends ThemedActivity {
                         //to avoid dismiss of the dialog on wrong password
                     }
                 });
-                AlertDialog renameDialog = renameDialogBuilder.create();
+                final AlertDialog renameDialog = renameDialogBuilder.create();
                 renameDialog.show();
 
                 renameDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener( new View.OnClickListener() {
@@ -1577,6 +1577,7 @@ public class MainActivity extends ThemedActivity {
                                 toolbar.setTitle(album.getName());
                                 mediaAdapter.notifyDataSetChanged();
                             }
+                            renameDialog.dismiss();
                         } else {
                             StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
                             editTextNewName.requestFocus();

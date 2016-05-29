@@ -9,11 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -26,16 +25,18 @@ import java.util.ArrayList;
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
-    CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
-    ArrayList<File> albums = new ArrayList<File>();
+    ArrayList<File> excludedFolders = new ArrayList<File>();
+    HandlingAlbums handlingAlbums;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
 
-        albums = h.getExcludedFolders();
-        checkNothing(albums);
+        handlingAlbums = ((MyApplication) getApplicationContext()).getAlbums();
+        excludedFolders = handlingAlbums.getExcludedfolders();
+
+        checkNothing(excludedFolders);
         initUI();
     }
 
@@ -88,10 +89,15 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                 String ID = v.getTag().toString();
                 int pos;
                 if((pos = getIndex(ID)) !=-1) {
-                    h.clearAlbumExclude(ID);
-                    albums.remove(pos);
+                    handlingAlbums.unExcludeAlbum(getApplicationContext(), excludedFolders.remove(pos));
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                                handlingAlbums.loadPreviewAlbums(getApplicationContext());
+                        }
+                    });
                     notifyItemRemoved(pos);
-                    checkNothing(albums);
+                    checkNothing(excludedFolders);
                 }
             }
         };
@@ -112,7 +118,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
         @Override
         public void onBindViewHolder(final ExcludedAlbumsAdapter.ViewHolder holder, final int position) {
-            File a = albums.get(position);
+            File a = excludedFolders.get(position);
             holder.album_path.setText(a.getAbsolutePath());
             holder.album_name.setText(a.getName());
 
@@ -127,12 +133,12 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         }
 
         public int getItemCount() {
-            return albums.size();
+            return excludedFolders.size();
         }
 
         public int getIndex(String id) {
-            for (int i = 0; i < albums.size(); i++)
-                if (albums.get(i).getAbsolutePath().equals(id)) return i;
+            for (int i = 0; i < excludedFolders.size(); i++)
+                if (excludedFolders.get(i).getAbsolutePath().equals(id)) return i;
             return -1;
         }
 
