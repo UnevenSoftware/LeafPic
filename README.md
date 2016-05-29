@@ -8,7 +8,7 @@ LeafPic is available on F-Droid.
 
 [<img src="https://f-droid.org/badge/get-it-on.png"
       alt="Get it on F-Droid"
-      height="80">](https://f-droid.org/app/com.horaapps.leafpi)
+      height="80">](https://f-droid.org/app/com.horaapps.leafpic)
       
 </br>
 ## Screenshot
