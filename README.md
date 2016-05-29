@@ -6,8 +6,10 @@ LeafPic is a fluid, material-designed alternative gallery. LeafPic is ad-free, o
 
 LeafPic is available on F-Droid.
 
-[![F-Droid](https://f-droid.org/wiki/images/0/06/F-Droid-button_get-it-on.png)](https://f-droid.org/repository/browse/?fdid=com.horaapps.leafpic)
-
+[<img src="https://f-droid.org/badge/get-it-on.png"
+      alt="Get it on F-Droid"
+      height="80">](https://f-droid.org/app/com.horaapps.leafpi)
+      
 </br>
 ## Screenshot
 <div style="dispaly:flex;" >
