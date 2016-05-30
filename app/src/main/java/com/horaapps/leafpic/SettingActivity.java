@@ -89,7 +89,6 @@ public class SettingActivity extends ThemedActivity {
                 fabMoreGeneralOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
                         .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_up : GoogleMaterial.Icon.gmd_keyboard_arrow_down)
                         .sizeDp(16).color(getCardBackgroundColor()));
-
             }
         });
 
@@ -106,7 +105,6 @@ public class SettingActivity extends ThemedActivity {
                 fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
                                 .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_up : GoogleMaterial.Icon.gmd_keyboard_arrow_down)
                                 .sizeDp(16).color(getCardBackgroundColor()));
-
             }
         });
         //endregion
@@ -682,7 +680,6 @@ public class SettingActivity extends ThemedActivity {
 
         /** Icons **/
         color = getIconColor();
-
         ((IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.ll_switch_max_luminosita_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon)).setColor(color);
@@ -702,7 +699,6 @@ public class SettingActivity extends ThemedActivity {
 
         /** TextViews **/
         color = getTextColor();
-
         ((TextView) findViewById(R.id.max_luminosita_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.full_resolution_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.picture_orientation_Item)).setTextColor(color);
@@ -722,7 +718,6 @@ public class SettingActivity extends ThemedActivity {
 
         /** Sub Text Views**/
         color = getSubTextColor();
-
         ((TextView) findViewById(R.id.max_luminosita_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.full_resolution_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.custom_3thAct_Sub)).setTextColor(color);

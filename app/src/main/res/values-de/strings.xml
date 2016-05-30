@@ -154,8 +154,8 @@ Hallo.\nWir sind ein kleines unabhängiges Team das mit viel Liebe ❤ an LeafPi
     <string name="about_library_license">Bibliothekslizenz</string>
     <string name="about_library_license_sub">Von LeafPic verwendete Drittanbieter-Bibliotheken.</string>
     <string name="about_authors">Autoren</string>
-    <string name="about_author_donald_sub">Hauptentwickler</string>
-    <string name="about_author_gilbert_sub">Hauptdesigner</string>
+    <string name="about_author_donald_description">Hauptentwickler</string>
+    <string name="about_author_gilbert_description">Hauptdesigner</string>
     <string name="about_support">Unterstütze die Entwicklung</string>
     <string name="about_support_translate">Übersetzen</string>
     <string name="about_support_translate_sub">Hilf uns LeafPic in weitere Sprachen zu übersetzen.</string>

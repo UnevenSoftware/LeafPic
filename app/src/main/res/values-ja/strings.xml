@@ -158,8 +158,8 @@
     <string name="about_library_license">ライブラリのライセンス</string>
     <string name="about_library_license_sub">LeafPicで使用されている第三者のライブラリを確認します</string>
     <string name="about_authors">作者</string>
-    <string name="about_author_donald_sub">主要プログラマー、デザイナー</string>
-    <string name="about_author_gilbert_sub">主要デザイナー、プログラマー</string>
+    <string name="about_author_donald_description">主要プログラマー、デザイナー</string>
+    <string name="about_author_gilbert_description">主要デザイナー、プログラマー</string>
     <string name="about_support">開発をサポートする</string>
     <string name="about_support_translate">翻訳</string>
     <string name="about_support_translate_sub">LeafPicを多くの言語に翻訳する支援をしてください</string>

@@ -155,8 +155,8 @@
     <string name="about_library_license">Лицензия библиотеки</string>
     <string name="about_library_license_sub">Проверить сторонние библиотеки в LeafPic.</string>
     <string name="about_authors">Авторы</string>
-    <string name="about_author_donald_sub">Основной разработчик</string>
-    <string name="about_author_gilbert_sub">Основной дизайнер</string>
+    <string name="about_author_donald_description">Основной разработчик</string>
+    <string name="about_author_gilbert_description">Основной дизайнер</string>
     <string name="about_support">Поддержать разработку</string>
     <string name="about_support_translate">Перевод</string>
     <string name="about_support_translate_sub">Помогите с переводом.</string>

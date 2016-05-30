@@ -156,8 +156,8 @@
     <string name="about_library_license">Library License</string>
     <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
     <string name="about_authors">Authors</string>
-    <string name="about_author_donald_sub">Головний розробник</string>
-    <string name="about_author_gilbert_sub">Головний дизайнер</string>
+    <string name="about_author_donald_description">Головний розробник</string>
+    <string name="about_author_gilbert_description">Головний дизайнер</string>
     <string name="about_support">Support Development</string>
     <string name="about_support_translate">Translate</string>
     <string name="about_support_translate_sub">Help us to translate LeafPic in more languages.</string>

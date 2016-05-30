@@ -160,8 +160,8 @@
     <string name="about_library_license">Licenta biblioteca</string>
     <string name="about_library_license_sub">Verifica bibliotecile utilizate pe LeafPic.</string>
     <string name="about_authors">Autori</string>
-    <string name="about_author_donald_sub">Dezvoltator principal</string>
-    <string name="about_author_gilbert_sub">Designer principal</string>
+    <string name="about_author_donald_description">Dezvoltator principal</string>
+    <string name="about_author_gilbert_description">Designer principal</string>
     <string name="about_support">Sprijina dezvoltarea</string>
     <string name="about_support_translate">Traducere</string>
     <string name="about_support_translate_sub">Ajutati-ne sa traducem LeafPic in mai multe limbi.</string>

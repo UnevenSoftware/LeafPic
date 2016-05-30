@@ -155,8 +155,8 @@ Er du sikker på at du vil ekskluder albumet? \n Du kan gjenopprette den i innst
     <string name="about_library_license">Library lisens</string>
     <string name="about_library_license_sub">Sjekk tredje libs brukes på LeafPic.</string>
     <string name="about_authors">Forfattere</string>
-    <string name="about_author_donald_sub">Hovedutvikler</string>
-    <string name="about_author_gilbert_sub">Hoveddesigner</string>
+    <string name="about_author_donald_description">Hovedutvikler</string>
+    <string name="about_author_gilbert_description">Hoveddesigner</string>
     <string name="about_support">Støtt viderutvikling</string>
     <string name="about_support_translate">Oversette</string>
     <string name="about_support_translate_sub">Hjelp oss å oversette LeafPic til flere språk.</string>

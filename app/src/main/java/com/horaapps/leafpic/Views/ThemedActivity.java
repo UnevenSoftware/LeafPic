@@ -89,6 +89,16 @@ public class ThemedActivity extends AppCompatActivity {
         return color;
     }
 
+    public Drawable getic_empity(){
+        Drawable drw=null;
+        switch (basicTheme){
+            case DARK_THEME : drw = getResources().getDrawable(R.drawable.ic_empty);break;
+            case AMOLED_THEME : drw = getResources().getDrawable(R.drawable.ic_empty_amoled);break;
+            case LIGHT_THEME: drw = getResources().getDrawable(R.drawable.ic_empty_white);break;
+        }
+        return drw;
+    }
+
     public int getInvertedBackgroundColor(){
         int color;
         switch (basicTheme){

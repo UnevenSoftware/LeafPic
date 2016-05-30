@@ -156,8 +156,8 @@
     <string name="about_library_license">查看关于库的许可</string>
     <string name="about_library_license_sub">查看 LeafPic 所使用的第三方库。</string>
     <string name="about_authors">作者</string>
-    <string name="about_author_donald_sub">主要开发者</string>
-    <string name="about_author_gilbert_sub">主要设计师</string>
+    <string name="about_author_donald_description">主要开发者</string>
+    <string name="about_author_gilbert_description">主要设计师</string>
     <string name="about_support">协助开发</string>
     <string name="about_support_translate">翻译</string>
     <string name="about_support_translate_sub">帮助我们将 LeafPic 翻译成更多语言。</string>

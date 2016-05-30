@@ -157,8 +157,8 @@
     <string name="about_library_license">مكتبة الترخيص</string>
     <string name="about_library_license_sub">تفقد مكتبات الطرف الثالث المستخدمة في LeafPic.</string>
     <string name="about_authors">المؤلفون</string>
-    <string name="about_author_donald_sub">المطور الرئيسي</string>
-    <string name="about_author_gilbert_sub">المصمم الرئيسي</string>
+    <string name="about_author_donald_description">المطور الرئيسي</string>
+    <string name="about_author_gilbert_description">المصمم الرئيسي</string>
     <string name="about_support">دعم عجلة التطوير</string>
     <string name="about_support_translate">ترجم</string>
     <string name="about_support_translate_sub">ساعدنا لنترجم LeafPic لأكثر من لغة.</string>

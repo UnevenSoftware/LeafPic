@@ -160,8 +160,8 @@
     <string name="about_library_license">Licence de bibliothèque</string>
     <string name="about_library_license_sub">Vérifier les bibliothèques tierces utilisées sur LeafPic</string>
     <string name="about_authors">Auteurs</string>
-    <string name="about_author_donald_sub">Développeur principal</string>
-    <string name="about_author_gilbert_sub">Concepteur principal</string>
+    <string name="about_author_donald_description">Développeur principal</string>
+    <string name="about_author_gilbert_description">Concepteur principal</string>
     <string name="about_support">Soutenir le développement</string>
     <string name="about_support_translate">Traduire</string>
     <string name="about_support_translate_sub">Aidez-nous à traduire LeafPic en plusieurs langues</string>

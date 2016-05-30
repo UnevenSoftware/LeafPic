@@ -160,8 +160,8 @@ Deseja realmente eliminar este álbum?\n
     <string name="about_library_license">Licença da biblioteca</string>
     <string name="about_library_license_sub">Verifica as bibliotecas de terceiros usadas no LeafPic.</string>
     <string name="about_authors">Autores</string>
-    <string name="about_author_donald_sub">Programador principal, Designer</string>
-    <string name="about_author_gilbert_sub">Designer principal, Programador</string>
+    <string name="about_author_donald_description">Programador principal, Designer</string>
+    <string name="about_author_gilbert_description">Designer principal, Programador</string>
     <string name="about_support">Apoiar o desenvolvimento</string>
     <string name="about_support_translate">Traduzir</string>
     <string name="about_support_translate_sub">Ajude-nos a traduzir o LeafPic para mais idiomas.</string>

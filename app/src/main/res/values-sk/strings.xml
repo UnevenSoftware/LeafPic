@@ -160,8 +160,8 @@
     <string name="about_library_license">Licencia knižnice</string>
     <string name="about_library_license_sub">Skontrolovať knižnice tretích strán použitých v LeafPic.</string>
     <string name="about_authors">Autori</string>
-    <string name="about_author_donald_sub">Hlavný vývojár</string>
-    <string name="about_author_gilbert_sub">Hlavný dizajnér</string>
+    <string name="about_author_donald_description">Hlavný vývojár</string>
+    <string name="about_author_gilbert_description">Hlavný dizajnér</string>
     <string name="about_support">Podporte vývoj</string>
     <string name="about_support_translate">Prekladajte</string>
     <string name="about_support_translate_sub">Pomôžte nám preložiť LeafPic do viacerých jazykov.</string>

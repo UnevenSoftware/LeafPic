@@ -158,8 +158,8 @@ Ayarlara giderek yeniden düzenleyebilirsin!</string>
     <string name="about_library_license">Kütüphane Lisansı</string>
     <string name="about_library_license_sub">LeafPic\'e uygun üçüncü parti kütüphaneleri denetle</string>
     <string name="about_authors">Yazarlar</string>
-    <string name="about_author_donald_sub">Ana Geliştirici</string>
-    <string name="about_author_gilbert_sub">Ana Düzenleyici</string>
+    <string name="about_author_donald_description">Ana Geliştirici</string>
+    <string name="about_author_gilbert_description">Ana Düzenleyici</string>
     <string name="about_support">Geliştirmeyi destekle</string>
     <string name="about_support_translate">Çeviri</string>
     <string name="about_support_translate_sub">LeafPicin daha fazla dile çevrilmesine yardım et</string>

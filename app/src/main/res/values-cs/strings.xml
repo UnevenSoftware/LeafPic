@@ -160,8 +160,8 @@ Ahoj, \nJsme malý nezávislý tým, který s láskou pracuje na LeafPic ❤,
     <string name="about_library_license">Licence knihovny</string>
     <string name="about_library_license_sub">Zkontrolovat knihovny třetích stran použité v LeafPic.</string>
     <string name="about_authors">Autoři</string>
-    <string name="about_author_donald_sub">Hlavní vývojář</string>
-    <string name="about_author_gilbert_sub">Hlavní návrhář</string>
+    <string name="about_author_donald_description">Hlavní vývojář</string>
+    <string name="about_author_gilbert_description">Hlavní návrhář</string>
     <string name="about_support">Podpořte vývoj</string>
     <string name="about_support_translate">Přeložit</string>
     <string name="about_support_translate_sub">Pomozte nám přeložit LeafPic do více jazyků.</string>

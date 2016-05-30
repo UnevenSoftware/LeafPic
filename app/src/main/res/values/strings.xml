@@ -201,17 +201,20 @@
     <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
 
     <string name="about_authors">Authors</string>
-    <string name="about_author_donald_sub">Major Developer</string>
-    <string name="about_author_gilbert_sub">Major Designer</string>
+    <string name="about_author_donald_description">
+        I\'m 19 years old. I love android world and java.
+    </string>
+    <string name="about_author_gilbert_description">
+        I\'m 20 years old. I love music, videogames and drawing.
+        I\'m also really into computer science, programming and design.
+    </string>
     <string name="about_googleplus" translatable="false">Google+</string>
     <string name="send_via">send via&#8230;</string>
     <string name="send_email">SEND EMAIL</string>
 
     <string name="send_mail_error">There are no email clients installed.</string>
-
     <string name="about_special_thnaks">Special thanks</string>
-
-    <string name="about_special_thnaks_patryk_goworowski_sub">For the awesome material launcher icon.</string>
+    <string name="about_special_thnaks_patryk_goworowski_sub">For the awesome material icon.</string>
 
     <string name="about_support">Support Development</string>
     <string name="about_support_translate">Translate</string>

@@ -155,8 +155,8 @@
     <string name="about_library_license">Licencje bibliotek</string>
     <string name="about_library_license_sub">Wyświetl zewnętrzne biblioteki używane przez LeafPic.</string>
     <string name="about_authors">Autorzy</string>
-    <string name="about_author_donald_sub">Główny programista</string>
-    <string name="about_author_gilbert_sub">Główny projektant</string>
+    <string name="about_author_donald_description">Główny programista</string>
+    <string name="about_author_gilbert_description">Główny projektant</string>
     <string name="about_support">Wesprzyj rozwój</string>
     <string name="about_support_translate">Tłumaczenia</string>
     <string name="about_support_translate_sub">Pomóż nam przetłumaczyć LeafPic na więcej języków.</string>

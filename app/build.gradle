@@ -69,4 +69,5 @@ dependencies {
     compile('de.psdev.licensesdialog:licensesdialog:1.8.0')
     compile 'com.android.support:customtabs:23.4.0'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }
