@@ -68,18 +68,18 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
                         app:iiv_icon="gmd-folder"
+                        android:layout_margin="16dp"
                         />
                     <TextView
                         android:id="@+id/Drawer_Default_Item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:padding="15dp"
                         android:text="@string/local_folder"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
+                        android:padding="16dp"
                         />
                 </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -104,7 +104,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
+                        android:layout_margin="16dp"
                         app:iiv_icon="faw-low-vision"
                         />
                     <TextView
@@ -112,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:text="@string/hidden_folder"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
@@ -212,7 +212,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
+                        android:layout_margin="16dp"
                         app:iiv_icon="gmd-wallpaper" />
 
                     <TextView
@@ -220,7 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:text="@string/wallpapers"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp" />
@@ -256,7 +256,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
+                        android:layout_margin="16dp"
                         app:iiv_icon="faw-gift" />
 
                     <TextView
@@ -264,7 +264,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:text="@string/donate"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
@@ -291,7 +291,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
+                        android:layout_margin="16dp"
                         app:iiv_icon="gmd-settings"
                         />
                     <TextView
@@ -299,7 +299,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:text="@string/settings"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
@@ -326,7 +326,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
+                        android:layout_margin="16dp"
                         app:iiv_icon="gmd-info-outline"
                         />
                     <TextView
@@ -334,7 +334,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:text="@string/about"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
