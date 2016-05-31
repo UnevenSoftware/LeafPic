@@ -105,8 +105,8 @@
     <string name="traslucent_statusbar_sub">Użył ciemniejszego głównego koloru na pasku nawigacji.</string>
     <string name="excluded_albums">Wykluczone albumy</string>
     <string name="excluded_albums_sub">Przywróć wykluczone albumy.</string>
-    <string name="picture_viewer">Przeglądarka zdjeć</string>
-    <string name="picture_viewer_theme">Skórka Przeglądarki zdjęć</string>
+    <string name="media_viewer">Przeglądarka zdjeć</string>
+    <string name="media_viewer_theme">Skórka Przeglądarki zdjęć</string>
     <string name="custom_3thAct">Ustawienia Przeglądarki</string>
     <string name="custom_3thAct_sub">Zastosuj skórkę na przeglądarce zdjęć.</string>
     <string name="max_brightness">Wysoka jasność</string>

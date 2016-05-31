@@ -105,8 +105,8 @@ Er du sikker på at du vil ekskluder albumet? \n Du kan gjenopprette den i innst
     <string name="traslucent_statusbar_sub">Bruke en mørkere primærfarge på varslingslinjen.</string>
     <string name="excluded_albums">Ekskluderte albumer</string>
     <string name="excluded_albums_sub">Gjenopprette de ekskluderte albumene.</string>
-    <string name="picture_viewer">Bildeviseren</string>
-    <string name="picture_viewer_theme">Bildeviseren tema</string>
+    <string name="media_viewer">Bildeviseren</string>
+    <string name="media_viewer_theme">Bildeviseren tema</string>
     <string name="custom_3thAct">Tilpasse Viser</string>
     <string name="custom_3thAct_sub">Bruk tema på bildeviser.</string>
     <string name="max_brightness">Høy lysstyrke</string>

@@ -278,7 +278,6 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_translate_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item)).setTextColor(color);
-        ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
 
         /** Sub Text Views**/
         color=getSubTextColor();
@@ -289,6 +288,7 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_rate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_translate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
     }
 
     public void licenseDialog(){

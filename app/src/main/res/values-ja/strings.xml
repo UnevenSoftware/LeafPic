@@ -109,8 +109,8 @@
     <string name="traslucent_statusbar_sub">通知バーに暗い優先色を適用します。</string>
     <string name="excluded_albums">除外されたアルバム</string>
     <string name="excluded_albums_sub">除外されたアルバムを元に戻します。</string>
-    <string name="picture_viewer">画像ビューアー</string>
-    <string name="picture_viewer_theme">画像ビューアーのテーマ</string>
+    <string name="media_viewer">画像ビューアー</string>
+    <string name="media_viewer_theme">画像ビューアーのテーマ</string>
     <string name="custom_3thAct">ビューアーをカスタマイズ</string>
     <string name="custom_3thAct_sub">画像ビューアーにテーマを適用します</string>
     <string name="max_brightness">高輝度</string>

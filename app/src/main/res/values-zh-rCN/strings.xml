@@ -106,8 +106,8 @@
     <string name="traslucent_statusbar_sub">应用深色主色调的半透明通知栏。</string>
     <string name="excluded_albums">已排除的相册</string>
     <string name="excluded_albums_sub">还原已经被排除的相册目录。</string>
-    <string name="picture_viewer">图像浏览器</string>
-    <string name="picture_viewer_theme">图像浏览器主题</string>
+    <string name="media_viewer">图像浏览器</string>
+    <string name="media_viewer_theme">图像浏览器主题</string>
     <string name="custom_3thAct">自定义浏览器样式</string>
     <string name="custom_3thAct_sub">对图像浏览器应用自定义主题。</string>
     <string name="max_brightness">高亮模式</string>

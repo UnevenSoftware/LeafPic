@@ -18,7 +18,7 @@
         android:id="@+id/security_dialog_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp">
+        app:cardCornerRadius="@dimen/card_corner_radius">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,46 +29,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:weightSum="10"
                 >
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/active_security_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_height="@dimen/icon_width_height"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
                     app:iiv_icon="gmd-lock"
+                    android:layout_margin="@dimen/big_spacing"
                     />
-                <LinearLayout
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:orientation="vertical"
-                    android:layout_gravity="center_vertical"
-                    android:paddingEnd="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/medium_spacing"
+                    android:paddingRight="@dimen/medium_spacing"
+                    android:paddingBottom="@dimen/big_spacing"
                     >
                     <TextView
                         android:id="@+id/active_security_item_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/active_security"
-                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         />
-                </LinearLayout>
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/active_security_switch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="?android:selectableItemBackground"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:hapticFeedbackEnabled="true"
-                    android:paddingRight="5dp"
-                    />
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/active_security_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:button="@null"
+                        android:hapticFeedbackEnabled="true"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        />
+                </RelativeLayout>
             </LinearLayout>
             <!--USE FINGERPRINT-->
             <!--
@@ -78,55 +77,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:weightSum="10"
                 >
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/active_security_fingerprint_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_height="@dimen/icon_width_height"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
                     app:iiv_icon="gmd-fingerprint"
+                    android:layout_margin="@dimen/big_spacing"
                     />
-                <LinearLayout
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:orientation="vertical"
-                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/big_spacing"
+                    android:paddingRight="@dimen/medium_spacing"
+                    android:paddingBottom="@dimen/medium_spacing"
                     >
+
                     <TextView
                         android:id="@+id/active_security_fingerprint_item_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_centerVertical="true"
                         android:text="@string/fingerprint"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         />
-                </LinearLayout>
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/active_security_fingerprint_switch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:background="?android:selectableItemBackground"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:hapticFeedbackEnabled="true"
-                    android:paddingRight="5dp"
-                    />
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/active_security_fingerprint_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:button="@null"
+                        android:hapticFeedbackEnabled="true"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        />
+                </RelativeLayout>
             </LinearLayout>
             -->
             <!--BODY-->
             <LinearLayout
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/big_spacing"
                 android:id="@+id/ll_security_dialog_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="@dimen/big_spacing"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -134,7 +134,7 @@
                     android:id="@+id/security_body_apply_on"
                     android:text="@string/apply_password_on"
                     android:textColor="@color/md_dark_primary_text"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/medium_text"
                     android:textStyle="bold"
                     />
                 <!--HIDDEN FOLDER-->
@@ -144,46 +144,46 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    android:weightSum="10"
                     >
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/security_body_apply_hidden_icon"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/icon_width_height"
+                        android:layout_height="@dimen/icon_width_height"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"
                         app:iiv_icon="faw-low-vision"
+                        android:layout_margin="@dimen/big_spacing"
                         />
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:orientation="vertical"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/big_spacing"
+                        android:paddingRight="@dimen/medium_spacing"
+                        android:paddingBottom="@dimen/medium_spacing"
                         >
                         <TextView
                             android:id="@+id/security_body_apply_hidden_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_centerVertical="true"
                             android:text="@string/hidden_folder"
                             android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/medium_text"
                             />
-                    </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/security_body_apply_hidden_switch"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:background="?android:selectableItemBackground"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:hapticFeedbackEnabled="true"
-                        android:paddingRight="5dp"
-                        />
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/security_body_apply_hidden_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            />
+                    </RelativeLayout>
                 </LinearLayout>
                 <!--DELETE ACTION-->
                 <LinearLayout
@@ -192,26 +192,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:weightSum="10"
                     >
 
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/security_body_apply_delete_icon"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/icon_width_height"
+                        android:layout_height="@dimen/icon_width_height"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
                         android:gravity="center_vertical"
                         app:iiv_icon="gmd-delete"
+                        android:layout_margin="@dimen/big_spacing"
                         />
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:orientation="vertical"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/big_spacing"
+                        android:paddingRight="@dimen/medium_spacing"
+                        android:paddingBottom="@dimen/medium_spacing"
                         >
                         <TextView
                             android:id="@+id/security_body_apply_delete_title"
@@ -219,20 +218,19 @@
                             android:layout_height="wrap_content"
                             android:text="@string/delete"
                             android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/medium_text"
                             />
-                    </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/security_body_apply_delete_switch"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:background="?android:selectableItemBackground"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:hapticFeedbackEnabled="true"
-                        android:paddingRight="5dp"
-                        />
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/security_body_apply_delete_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:button="@null"
+                            android:hapticFeedbackEnabled="true"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            />
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

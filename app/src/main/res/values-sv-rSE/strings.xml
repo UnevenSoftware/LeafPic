@@ -105,8 +105,8 @@
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Excluded Albums</string>
     <string name="excluded_albums_sub">Restore the excluded albums.</string>
-    <string name="picture_viewer">Picture Viewer</string>
-    <string name="picture_viewer_theme">Picture Viewer Theme</string>
+    <string name="media_viewer">Picture Viewer</string>
+    <string name="media_viewer_theme">Picture Viewer Theme</string>
     <string name="custom_3thAct">Customize Viewer</string>
     <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
     <string name="max_brightness">High Brightness</string>

@@ -107,8 +107,8 @@
     <string name="traslucent_statusbar_sub">Aplicar un color primario más oscuro a la barra de notificaciones.</string>
     <string name="excluded_albums">Álbumes excluidos</string>
     <string name="excluded_albums_sub">Restaurar los álbumes excluidos.</string>
-    <string name="picture_viewer">Visor de imágenes</string>
-    <string name="picture_viewer_theme">Tema del visor de imágenes</string>
+    <string name="media_viewer">Visor de imágenes</string>
+    <string name="media_viewer_theme">Tema del visor de imágenes</string>
     <string name="custom_3thAct">Personalizar el visor</string>
     <string name="custom_3thAct_sub">Aplicar el tema al visor de imágenes.</string>
     <string name="max_brightness">Brillo alto</string>

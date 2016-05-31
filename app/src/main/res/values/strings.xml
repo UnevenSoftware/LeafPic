@@ -141,8 +141,8 @@
     <string name="excluded_albums_sub">Restore the excluded albums.</string>
 
 
-    <string name="picture_viewer">Picture Viewer</string>
-    <string name="picture_viewer_theme">Picture Viewer Theme</string>
+    <string name="media_viewer">Media Viewer</string>
+    <string name="media_viewer_theme">Media Viewer Theme</string>
     <string name="custom_3thAct">Customize Viewer</string>
     <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
 

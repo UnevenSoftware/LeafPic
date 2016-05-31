@@ -106,8 +106,8 @@ In den Einstellungen können Sie diese Aktion rückgängig machen.</string>
     <string name="traslucent_statusbar_sub">Eine dunklere Primärfarbe in der Benachrichtigungsleiste verwenden.</string>
     <string name="excluded_albums">Ausgeschlossene Alben</string>
     <string name="excluded_albums_sub">Ausgeschlossene Alben wieder anzeigen.</string>
-    <string name="picture_viewer">Bildbetrachter</string>
-    <string name="picture_viewer_theme">Bildbetrachter Theme</string>
+    <string name="media_viewer">Bildbetrachter</string>
+    <string name="media_viewer_theme">Bildbetrachter Theme</string>
     <string name="custom_3thAct">Bildbetrachter anpassen</string>
     <string name="custom_3thAct_sub">Theme auf den Bildbetrachter anwenden.</string>
     <string name="max_brightness">Hohe Helligkeit</string>

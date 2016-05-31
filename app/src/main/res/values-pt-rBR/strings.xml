@@ -110,8 +110,8 @@ Deseja realmente eliminar este álbum?\n
     <string name="traslucent_statusbar_sub">Aplica uma cor primária mais escura na barra de notificação.</string>
     <string name="excluded_albums">Álbuns eliminados</string>
     <string name="excluded_albums_sub">Restaura os álbuns eliminados.</string>
-    <string name="picture_viewer">Visualizador de fotos</string>
-    <string name="picture_viewer_theme">Tema do visualizador de fotos</string>
+    <string name="media_viewer">Visualizador de fotos</string>
+    <string name="media_viewer_theme">Tema do visualizador de fotos</string>
     <string name="custom_3thAct">Personalizar o visualizador</string>
     <string name="custom_3thAct_sub">Aplica o tema no visualizador de fotos.</string>
     <string name="max_brightness">Brilho alto</string>

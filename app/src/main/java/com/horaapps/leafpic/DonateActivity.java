@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -27,7 +27,8 @@ public class DonateActivity extends ThemedActivity {
     /**** Title Cards ***/
     CustomTabService cts;
 
-    /**** Buttons ***/
+    /**** Scroll View*/
+    ScrollView scr;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -35,9 +36,9 @@ public class DonateActivity extends ThemedActivity {
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
+        scr = (ScrollView)findViewById(R.id.donateAct_scrollView);
     }
 
     @Override
@@ -100,6 +101,9 @@ public class DonateActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.donate_paypal_item)).setTextColor(color);
         ((TextView) findViewById(R.id.donate_bitcoin_item)).setTextColor(color);
         ((TextView) findViewById(R.id.donate_header_item)).setTextColor(color);
+
+        /***** ScrolView *****/
+        setScrollViewColor(scr);
 
         /** ACTIONS **/
         findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {

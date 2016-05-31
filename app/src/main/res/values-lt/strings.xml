@@ -107,8 +107,8 @@ Jūs tai galite atstatyti eidami į nustatymus!    </string>
     <string name="traslucent_statusbar_sub">Taikyti tamsesnę pirminę spalvą pranešimų skydeliui</string>
     <string name="excluded_albums">Neįtraukti albumai</string>
     <string name="excluded_albums_sub">Atstatyti neįtrauktus albumus</string>
-    <string name="picture_viewer">Paveikslėlių žiūriklis</string>
-    <string name="picture_viewer_theme">Paveikslėlių peržiūros tema</string>
+    <string name="media_viewer">Paveikslėlių žiūriklis</string>
+    <string name="media_viewer_theme">Paveikslėlių peržiūros tema</string>
     <string name="custom_3thAct">Tinkinti paveikslėlių žiūriklį</string>
     <string name="custom_3thAct_sub">Pritaikyti temą paveikslėlių žiūrikliui</string>
     <string name="max_brightness">Aukštas ryškumas</string>

@@ -106,8 +106,8 @@
     <string name="traslucent_statusbar_sub">Застосувати темніший основний колір до панелі стану.</string>
     <string name="excluded_albums">Виключені альбоми</string>
     <string name="excluded_albums_sub">Відновити виключені альбоми.</string>
-    <string name="picture_viewer">Програма перегляду зображень</string>
-    <string name="picture_viewer_theme">Picture Viewer Theme</string>
+    <string name="media_viewer">Програма перегляду зображень</string>
+    <string name="media_viewer_theme">Picture Viewer Theme</string>
     <string name="custom_3thAct">Customize Viewer</string>
     <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
     <string name="max_brightness">Режим максимальної яскравості</string>

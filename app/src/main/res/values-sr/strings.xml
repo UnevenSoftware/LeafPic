@@ -109,8 +109,8 @@
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Искључени албуми</string>
     <string name="excluded_albums_sub">Враћање искључених албума.</string>
-    <string name="picture_viewer">Прегледач слика</string>
-    <string name="picture_viewer_theme">Тема прегледача слика</string>
+    <string name="media_viewer">Прегледач слика</string>
+    <string name="media_viewer_theme">Тема прегледача слика</string>
     <string name="custom_3thAct">Customize Viewer</string>
     <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
     <string name="max_brightness">High Brightness</string>

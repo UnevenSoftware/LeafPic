@@ -105,8 +105,8 @@
     <string name="traslucent_statusbar_sub">Использовать тёмный цвет как основной в строке уведомлений.</string>
     <string name="excluded_albums">Исключенные Альбомы</string>
     <string name="excluded_albums_sub">Восстановить исключенные альбомы.</string>
-    <string name="picture_viewer">Просмотрщик</string>
-    <string name="picture_viewer_theme">Темы просмотрщика</string>
+    <string name="media_viewer">Просмотрщик</string>
+    <string name="media_viewer_theme">Темы просмотрщика</string>
     <string name="custom_3thAct">Настроить Просмотрщик</string>
     <string name="custom_3thAct_sub">Применить тему.</string>
     <string name="max_brightness">High Brightness</string>

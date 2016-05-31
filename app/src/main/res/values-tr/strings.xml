@@ -108,8 +108,8 @@ Ayarlara giderek yeniden düzenleyebilirsin!</string>
     <string name="traslucent_statusbar_sub">Bildirim çubuğuna daha koyu bir birincil renk uygula.</string>
     <string name="excluded_albums">Hariç tutulan albümler</string>
     <string name="excluded_albums_sub">Dışlanan albümleri geri al.</string>
-    <string name="picture_viewer">Resim Görüntüleyici</string>
-    <string name="picture_viewer_theme">Resim Görüntüleyici Teması</string>
+    <string name="media_viewer">Resim Görüntüleyici</string>
+    <string name="media_viewer_theme">Resim Görüntüleyici Teması</string>
     <string name="custom_3thAct">Özelleştirilmiş Görüntüleyici</string>
     <string name="custom_3thAct_sub">Temayı fotoğraf göstericisine uygula.</string>
     <string name="max_brightness">Yüksek parlaklık</string>

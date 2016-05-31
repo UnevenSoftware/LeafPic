@@ -107,8 +107,8 @@
     <string name="traslucent_statusbar_sub">تطبيق لون مظلم أساسي لشريط الإشعارات.</string>
     <string name="excluded_albums">الألبومات المستثناة</string>
     <string name="excluded_albums_sub">استعادة الألبومات المستثناة.</string>
-    <string name="picture_viewer">عارض الصورة</string>
-    <string name="picture_viewer_theme">سمة عارض الصورة</string>
+    <string name="media_viewer">عارض الصورة</string>
+    <string name="media_viewer_theme">سمة عارض الصورة</string>
     <string name="custom_3thAct">تخصيص المستعرض</string>
     <string name="custom_3thAct_sub">تطبيق السمة على عارض الصور.</string>
     <string name="max_brightness">سطوع عالي</string>

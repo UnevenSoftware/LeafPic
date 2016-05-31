@@ -71,21 +71,24 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-update"
-                            android:layout_margin="16dp"
+                            android:layout_margin="25dp"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="16dp">
+                            android:paddingTop="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
+                            >
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="45dp"
+                                android:layout_marginEnd="44dp"
                                 >
                                 <TextView
                                     android:id="@+id/auto_update_media_Item"
@@ -136,14 +139,15 @@
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-folder"
-                                android:layout_margin="16dp"
+                                android:layout_margin="25dp"
                                 />
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="8"
                                 android:orientation="vertical"
-                                android:padding="16dp"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
                                 <TextView
                                     android:id="@+id/Excluded_Album_Item_Title"
@@ -178,20 +182,21 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             >
-
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/security_icon"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="faw-user-secret"
-                                android:layout_margin="16dp"
+                                android:layout_margin="25dp"
                                 />
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:padding="16dp"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
                                 <TextView
                                     android:id="@+id/security_item_title"
@@ -233,13 +238,15 @@
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-add-circle"
-                                android:layout_margin="16dp"
+                                android:layout_margin="25dp"
                                 />
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:padding="16dp"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
                                 <TextView
                                     android:id="@+id/fab_options_item_title"
@@ -291,13 +298,15 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="faw-map-signs"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:padding="16dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="16dp"
                                     >
                                     <TextView
                                         android:id="@+id/map_provider_item_title"
@@ -389,13 +398,15 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-invert-colors"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:padding="16dp"
+                                    android:paddingTop="16dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="8dp"
                                     >
                                     <TextView
                                         android:id="@+id/basic_theme_item"
@@ -439,13 +450,15 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-color-lens"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:padding="16dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="8dp"
                                     >
                                     <TextView
                                         android:id="@+id/PrimaryColor_Item"
@@ -487,13 +500,15 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="cmd-format-color-fill"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:padding="16dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="8dp"
                                     >
                                     <TextView
                                         android:id="@+id/accentColor_Item"
@@ -536,13 +551,15 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="faw-paint-brush"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:padding="16dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="8dp"
                                     >
                                     <TextView
                                         android:id="@+id/custom_3thAct_title"
@@ -588,14 +605,17 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-web-asset"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal"
-                                    android:padding="16dp">
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="8dp"
+                                    >
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -647,14 +667,17 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-video-label"
-                                    android:layout_margin="16dp"
+                                    android:layout_margin="25dp"
                                     />
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal"
-                                    android:padding="16dp">
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="16dp"
+                                    android:paddingBottom="16dp"
+                                    >
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -736,7 +759,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="15dp"
                         android:paddingTop="15dp"
-                        android:text="@string/picture_viewer"
+                        android:text="@string/media_viewer"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -754,14 +777,17 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-settings-brightness"
-                            android:layout_margin="16dp"
+                            android:layout_margin="25dp"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="16dp">
+                            android:paddingTop="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
+                            >
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -812,14 +838,16 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-screen-rotation"
-                            android:layout_margin="16dp"
+                            android:layout_margin="25dp"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -875,14 +903,17 @@
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-image"
-                                android:layout_margin="16dp"
+                                android:layout_margin="25dp"
                                 />
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="16dp">
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="16dp"
+                                >
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -961,14 +992,16 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-videocam"
-                            android:layout_margin="16dp"
+                            android:layout_margin="25dp"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="16dp"
+                            android:paddingTop="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1019,14 +1052,17 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-ondemand-video"
-                            android:layout_margin="16dp"
+                            android:layout_margin="25dp"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:padding="16dp">
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="16dp"
+                            >
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

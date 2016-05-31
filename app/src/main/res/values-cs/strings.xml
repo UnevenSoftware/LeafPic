@@ -110,8 +110,8 @@ Opravdu chcete vyloučit toto album? \n Můžete jej obnovit v nastavení!    </
     <string name="traslucent_statusbar_sub">Použít tmavší základní barvu pro navigační panel.</string>
     <string name="excluded_albums">Vynechaná alba</string>
     <string name="excluded_albums_sub">Obnovit vynechaná alba.</string>
-    <string name="picture_viewer">Prohlížeč obrázků</string>
-    <string name="picture_viewer_theme">Motiv prohlížeče obrázků</string>
+    <string name="media_viewer">Prohlížeč obrázků</string>
+    <string name="media_viewer_theme">Motiv prohlížeče obrázků</string>
     <string name="custom_3thAct">Přizpůsobit prohlížeč</string>
     <string name="custom_3thAct_sub">Použít motiv pro prohlížeč obrázků.</string>
     <string name="max_brightness">Vysoký jas</string>
