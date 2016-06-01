@@ -5,32 +5,29 @@ package com.horaapps.leafpic;
  */
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.horaapps.leafpic.Base.Album;
@@ -39,7 +36,6 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,6 +60,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     ArrayList<Album> albumArrayList = null;
     SharedPreferences SP;
     View.OnClickListener onClickListener;
+    View.OnClickListener onClickListenerNewFolder;
 
     public void setCurrentPath(String currentPath) {
         this.currentPath = currentPath;
@@ -82,6 +79,11 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
+    }
+
+    public void setOnClickListenerNewFolder(View.OnClickListener onClickListenerNF){
+        onClickListenerNewFolder = onClickListenerNF;
+
     }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
@@ -109,8 +111,13 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         /**SET UP DIALOG THEME**/
         SP = PreferenceManager.getDefaultSharedPreferences(dialog.getContext());
 
-        contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("accent_color",
-                ContextCompat.getColor(dialog.getContext(), R.color.md_light_blue_500)));
+        /**** Scrollbar *****/
+        Drawable drawableScrollBar = ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar);
+        drawableScrollBar.setColorFilter(new PorterDuffColorFilter(SP.getInt("primary_color",
+                ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)), PorterDuff.Mode.SRC_ATOP));
+        
+        contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("primary_color",
+                ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)));
 
         textViewTitle = (TextView) contentView.findViewById(R.id.bottom_sheet_title);
         progressBar = (ProgressBar) contentView.findViewById(R.id.spinner_loading);
@@ -140,13 +147,9 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
                 ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
                         ? R.color.md_light_primary_icon
                         : R.color.md_dark_primary_icon));
+
         llNewFolder = (LinearLayout) contentView.findViewById(R.id.ll_create_new_folder);
-        llNewFolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //newFolderDialog();
-            }
-        });
+        llNewFolder.setOnClickListener(onClickListenerNewFolder);
 
         background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
         background.setBackgroundColor(ContextCompat.getColor(dialog.getContext(),

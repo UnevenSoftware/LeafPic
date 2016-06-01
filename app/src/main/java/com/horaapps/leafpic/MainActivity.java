@@ -461,7 +461,7 @@ public class MainActivity extends ThemedActivity {
     ArrayAdapter<String> directoryList;
 
     //region TESTING
-    private void newFolderDialog() {
+    private void newFolderDialog(final int value) {
         final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
                 .simple_list_item_1, Arrays.asList(curFolder.list())){
@@ -483,8 +483,8 @@ public class MainActivity extends ThemedActivity {
         final TextView textViewCurrentPath = (TextView) dialogExplorerLayout.findViewById(R.id.current_path);
         textViewCurrentPath.setTextColor(getTextColor());
 
-        final LinearLayout linearLayoutTitle = (LinearLayout) dialogExplorerLayout.findViewById(R.id.ll_explorer_dialog_title);
-        linearLayoutTitle.setBackgroundColor(getPrimaryColor());
+        final RelativeLayout relativeLayoutTitle = (RelativeLayout) dialogExplorerLayout.findViewById(R.id.ll_explorer_dialog_title);
+        relativeLayoutTitle.setBackgroundColor(getPrimaryColor());
 
         final LinearLayout linearCreateNewFolder = (LinearLayout) dialogExplorerLayout.findViewById(R.id.new_folder_layout);
         IconicsImageView imgFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder);
@@ -493,6 +493,10 @@ public class MainActivity extends ThemedActivity {
         final EditText editTextFolderName = (EditText) dialogExplorerLayout.findViewById(R.id.folder_name_edit_text);
 
 
+
+        /**** Scrollbar *****/
+        Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
+        drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
 
 
         IconicsImageView btnUP;
@@ -541,14 +545,16 @@ public class MainActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(linearCreateNewFolder.getVisibility()==View.VISIBLE && !editTextFolderName.getText().equals("")) {
-                    File folder = new File(textViewCurrentPath.getText().toString() +
-                            File.separator + editTextFolderName.getText().toString());
+                    String path = textViewCurrentPath.getText().toString();
+                    File folder = new File(path + File.separator + editTextFolderName.getText().toString());
                     boolean success = true;
-                    if (!folder.exists()) {
+                    if (!folder.exists())
                         success = folder.mkdir();
-                    }
                     if (success) {
-                        // Do something
+                        if(value==1){
+                            album.copySelectedPhotos(getApplicationContext(), path + File.separator + editTextFolderName.getText().toString() + File.separator);
+                            finishEditMode();
+                        } else { new MovePhotos().execute(path + File.separator + editTextFolderName.getText().toString() + File.separator);}
                     } else {
                         Toast.makeText(MainActivity.this, "Folder Already Exist!", Toast.LENGTH_SHORT).show();
                     }
@@ -1258,24 +1264,6 @@ public class MainActivity extends ThemedActivity {
                 }
                 return true;
 
-            case R.id.action_copy:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setCurrentPath(album.getPath());
-                bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
-                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
-                bottomSheetDialogFragment.setHidden(hidden);
-                bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
-                        album.copySelectedPhotos(getApplicationContext(), path);
-                        finishEditMode();
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-                return true;
-
             case R.id.name_sort_action:
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
@@ -1349,7 +1337,8 @@ public class MainActivity extends ThemedActivity {
                 final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
                 final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
 
-
+                final ScrollView scrollView = (ScrollView) dialogLayout.findViewById(R.id.affix_scrollView);
+                setScrollViewColor(scrollView);
 
                 /** TextViews **/
                 int color = getTextColor();
@@ -1487,51 +1476,18 @@ public class MainActivity extends ThemedActivity {
             //endregion
 
             case R.id.action_move:
-                class MovePhotos extends AsyncTask<String, Void, Void> {
-
-                    @Override
-                    protected void onPreExecute() {
-                        swipeRefreshLayout.setRefreshing(true);
-                        super.onPreExecute();
-                    }
-
-                    @Override
-                    protected Void doInBackground(String... arg0) {
-                        try {
-                            for (int i = 0; i < album.selectedMedias.size(); i++) {
-                                File from = new File(album.selectedMedias.get(i).getPath());
-                                File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
-
-                                if (from.renameTo(to)) {
-                                    MediaScannerConnection.scanFile(getApplicationContext(),
-                                            new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
-                                    album.media.remove(album.selectedMedias.get(i));
-                                }
-                            }
-                        } catch (Exception e) { e.printStackTrace(); }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        if (album.media.size() == 0) {
-                            albums.removeCurrentAlbum();
-                            albumsAdapter.notifyDataSetChanged();
-                            displayAlbums();
-                        }
-
-                        mediaAdapter.updateDataSet(album.media);
-                        finishEditMode();
-                        invalidateOptionsMenu();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
                 bottomSheetDialogFragment.setHidden(hidden);
                 bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setOnClickListenerNewFolder(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialogFragment.dismiss();
+                        newFolderDialog(2);
+                    }
+                });
                 bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1542,6 +1498,31 @@ public class MainActivity extends ThemedActivity {
                 });
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
                return true;
+
+            case R.id.action_copy:
+                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
+                bottomSheetDialogFragment.setCurrentPath(album.getPath());
+                bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
+                bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
+                bottomSheetDialogFragment.setHidden(hidden);
+                bottomSheetDialogFragment.setOnClickListenerNewFolder(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialogFragment.dismiss();
+                        newFolderDialog(1);
+                    }
+                });
+                bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                        album.copySelectedPhotos(getApplicationContext(), path);
+                        finishEditMode();
+                        bottomSheetDialogFragment.dismiss();
+                    }
+                });
+                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                return true;
 
             case R.id.renameAlbum:
                 AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
@@ -1679,4 +1660,47 @@ public class MainActivity extends ThemedActivity {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
+
+    //MOVE SELECTED MEDIA ASYNCTASK
+    class MovePhotos extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            swipeRefreshLayout.setRefreshing(true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... arg0) {
+            try {
+                for (int i = 0; i < album.selectedMedias.size(); i++) {
+                    File from = new File(album.selectedMedias.get(i).getPath());
+                    File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
+
+                    if (from.renameTo(to)) {
+                        MediaScannerConnection.scanFile(getApplicationContext(),
+                                new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
+                        album.media.remove(album.selectedMedias.get(i));
+                    }
+                }
+            } catch (Exception e) { e.printStackTrace(); }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (album.media.size() == 0) {
+                albums.removeCurrentAlbum();
+                albumsAdapter.notifyDataSetChanged();
+                displayAlbums();
+            }
+
+            mediaAdapter.updateDataSet(album.media);
+            finishEditMode();
+            invalidateOptionsMenu();
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    //COPY SELECTED  MEDIA ASYNCTASK
 }

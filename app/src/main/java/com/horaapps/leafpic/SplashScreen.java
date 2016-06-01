@@ -71,6 +71,7 @@ public class SplashScreen extends ThemedActivity {
         //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
         //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
         logo.setTextColor(getSubTextColor());
+        //logo.setLetterSpacing((float)0.2);
 
 
 

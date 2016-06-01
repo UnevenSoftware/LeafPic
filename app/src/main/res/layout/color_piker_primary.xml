@@ -9,7 +9,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="1dp"
             android:id="@+id/cp_primary_card"
             >
             <ScrollView
@@ -27,7 +27,7 @@
                         android:textColor="@color/md_dark_primary_text"
                         android:layout_height="wrap_content"
                         android:background="@color/md_red_500"
-                        android:padding="24dp"
+                        android:padding="@dimen/big_spacing"
                         android:text="@string/primary_color"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -37,7 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="24dp">
+                        android:padding="@dimen/big_spacing">
 
                         <uz.shift.colorpicker.LineColorPicker
                             xmlns:app="http://schemas.android.com/apk/res-auto"
