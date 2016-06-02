@@ -56,6 +56,7 @@ public class SettingActivity extends ThemedActivity {
     SwitchCompat swInternalBrowser;
     SwitchCompat swAutoUpdate;
     SwitchCompat swIncludeVideo;
+    SwitchCompat swSwipeDirection;
 
     boolean maxLuminosita, pictureOrientation, delayfullimage, internalPlayer, includeVideo;
     int baseThemeValue;
@@ -212,6 +213,20 @@ public class SettingActivity extends ThemedActivity {
             }
         });
         updateSwitchColor(swIncludeVideo, getAccentColor());
+
+        /*** SW SWIPE DIRECTION ***/
+        swSwipeDirection = (SwitchCompat) findViewById(R.id.Set_media_viewer_swipe_direction);
+        swSwipeDirection.setChecked(SP.getBoolean("swipe_opposite", false));
+        swSwipeDirection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putBoolean("swipe_opposite", isChecked);
+                editor.apply();
+                updateSwitchColor(swSwipeDirection, getAccentColor());
+            }
+        });
+        updateSwitchColor(swSwipeDirection, getAccentColor());
 
         /*** SW AUTO UPDATE MEDIA ***/
         swAutoUpdate = (SwitchCompat) findViewById(R.id.SetAutoUpdateMedia);
@@ -627,6 +642,8 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swPictureOrientation, color);
         updateSwitchColor(swInternalBrowser, color);
         updateSwitchColor(swAutoUpdate, color);
+        updateSwitchColor(swIncludeVideo, color);
+        updateSwitchColor(swSwipeDirection, color);
     }
 
     @Override
@@ -696,6 +713,7 @@ public class SettingActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.security_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.fab_options_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.map_provider_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.media_viewer_swipe_direction_Icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
@@ -715,6 +733,7 @@ public class SettingActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.security_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.fab_options_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_title)).setTextColor(color);
+        ((TextView) findViewById(R.id.media_viewer_swipe_direction_Item)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
@@ -734,5 +753,6 @@ public class SettingActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.security_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.fab_options_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.media_viewer_swipe_direction_sub)).setTextColor(color);
     }
 }

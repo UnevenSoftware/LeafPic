@@ -41,15 +41,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:src="@drawable/leaf_pic"
-                        android:scaleType="fitXY"
-                        android:padding="10dp"
-                        android:layout_gravity="center"
-                        />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <ImageView
+                            android:id="@+id/leafpic_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:scaleType="centerCrop"
+                            />
+                        <ImageView
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/leaf_pic"
+                            android:scaleType="fitXY"
+                            android:padding="10dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
+                    </RelativeLayout>
                     <TextView
                         android:id="@+id/about_app_title"
                         android:layout_width="wrap_content"
@@ -126,6 +136,7 @@
                             android:layout_alignBottom="@id/donald_profile_img"
                             android:layout_toEndOf="@id/donald_profile_img"
                             android:layout_toRightOf="@id/donald_profile_img"
+                            android:textStyle="bold"
                             android:textSize="20dp"
                             android:text="Donald Shtjefni"/>
                     </RelativeLayout>
@@ -152,6 +163,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/send_email"
                             android:textSize="16sp"
+                            android:textStyle="bold"
                             android:padding="10dp"
                             android:clickable="true"
                             android:background="?attr/selectableItemBackground"
@@ -219,6 +231,7 @@
                             android:layout_toEndOf="@id/gilbert_profile_img"
                             android:layout_toRightOf="@id/gilbert_profile_img"
                             android:textSize="20dp"
+                            android:textStyle="bold"
                             android:text="Gilbert Ndresaj"/>
                     </RelativeLayout>
                     <TextView
@@ -244,6 +257,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/send_email"
                             android:textSize="16sp"
+                            android:textStyle="bold"
                             android:padding="10dp"
                             android:clickable="true"
                             android:background="?attr/selectableItemBackground"

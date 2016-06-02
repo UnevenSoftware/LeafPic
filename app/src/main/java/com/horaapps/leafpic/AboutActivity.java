@@ -92,7 +92,14 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_special_thanks_title)).setTextColor(color);
         ((TextView) findViewById(R.id.about_author_donald_mail_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_author_gilbert_mail_item)).setTextColor(color);
-
+        /***** LeafPic Header *****/
+        /*
+        Glide.with(this)
+                .load("https://lh5.googleusercontent.com/-aX4YeN8Cvdc/VizLlektHNI/AAAAAAAATE0/c8NUmcEs46QTVf-HITTbvo3e5dja6JwoQCL0B/w958-h539-no/flat_landscape_wallpaper_by_othrod-d8crs50.png")
+                .priority(Priority.HIGH)
+                .animate(R.anim.fade_in)
+                .into((ImageView) findViewById(R.id.leafpic_header));
+        */
         /***** Donald Card *****/
         /***** Images *****/
         Glide.with(this)
