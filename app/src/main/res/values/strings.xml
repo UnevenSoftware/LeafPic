@@ -202,14 +202,14 @@
     <string name="about_version">Version</string>
 
     <string name="about_license"> License</string>
-    <string name="about_license_sub">Check the license used on LeafPic.</string>
+    <string name="about_license_sub">Check GPLv3 license terms used on LeafPic.</string>
 
-    <string name="about_library_license">Library License</string>
-    <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
+    <string name="about_library_license">Library Licenses</string>
+    <string name="about_library_license_sub">Check third-party libs used on LeafPic.</string>
 
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_description">
-        I\'m 19 years old. I\'m a young software developer, I like CS in general, at most i love
+        I\'m 19 years old. I\'m a young software developer, I like CS in general, at most I love
         learn doing stuff with Linux and Android. I also like TV Series.
     </string>
     <string name="about_author_gilbert_description">

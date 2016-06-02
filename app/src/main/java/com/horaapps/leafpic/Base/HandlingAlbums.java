@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -77,7 +78,7 @@ public class HandlingAlbums {
         clearCameraIndex();
         includeVideo = SP.getBoolean("set_include_video", true);
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
-        HashSet<File> roots = listStorages();
+        HashSet<File> roots = listStorages(context);
         if (hidden)
             for (File storage : roots)
                 fetchRecursivelyHiddenFolder(storage, albumArrayList, storage.getAbsolutePath());
@@ -101,9 +102,15 @@ public class HandlingAlbums {
         indexCamera = -1;
     }
 
-    public HashSet<File> listStorages() {
+    public HashSet<File> listStorages(Context context) {
         HashSet<File> roots = new HashSet<File>();
         roots.add(Environment.getExternalStorageDirectory());
+        String[] extSdCardPaths = ContentHelper.getExtSdCardPaths(context);
+        for (String extSdCardPath : extSdCardPaths) {
+            File mas = new File(extSdCardPath);
+            if (mas.canRead())
+                roots.add(mas);
+        }
         //Log.wtf(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
 
         /*for (String mount : getExternalMounts()) {
@@ -152,13 +159,13 @@ public class HandlingAlbums {
         return out;
     }
 
-    public ArrayList<Album> getValidFolders(boolean hidden) {
+    public ArrayList<Album> getValidFolders(Context context,boolean hidden) {
         ArrayList<Album> folders = new ArrayList<Album>();
         if (hidden)
-            for (File storage : listStorages())
+            for (File storage : listStorages(context))
                 fetchRecursivelyHiddenFolder(storage, folders);
         else
-            for (File storage : listStorages())
+            for (File storage : listStorages(context))
                 fetchRecursivelyFolder(storage, folders);
 
         return folders;

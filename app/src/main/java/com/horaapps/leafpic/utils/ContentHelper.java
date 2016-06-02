@@ -1,17 +1,53 @@
 package com.horaapps.leafpic.utils;
 
+import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import com.horaapps.leafpic.MyApplication;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dnld on 26/05/16.
  */
 public class ContentHelper {
+
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static String[] getExtSdCardPaths(Context context) {
+        List<String> paths = new ArrayList<String>();
+        for (File file : context.getExternalFilesDirs("external")) {
+            if (file != null && !file.equals(context.getExternalFilesDir("external"))) {
+                int index = file.getAbsolutePath().lastIndexOf("/Android/data");
+                if (index < 0) {
+                    Log.w("asd", "Unexpected external file dir: " + file.getAbsolutePath());
+                } else {
+                    String path = file.getAbsolutePath().substring(0, index);
+                    try {
+                        path = new File(path).getCanonicalPath();
+                    }
+                    catch (IOException e) {
+                        // Keep non-canonical path.
+                    }
+                    paths.add(path);
+                }
+            }
+        }
+        return paths.toArray(new String[paths.size()]);
+    }
+
 
     public static String getPath(final Context context, final Uri uri)
     {

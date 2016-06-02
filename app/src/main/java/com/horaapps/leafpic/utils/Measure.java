@@ -48,7 +48,7 @@ public class Measure {
 
         int n = (int)( width / Constants.ALBUM_CARD_WIDTH);
         //StringUtils.showToast(c,width + " - " + n);
-        Log.wtf(TAG,width + " - " + n);
+        //Log.wtf(TAG,width + " - " + n);
         if(n < 2) n = 2;
         else if (n > 8) n = 8;
         return n;
@@ -60,7 +60,7 @@ public class Measure {
         //int n = Math.round(getDensity(c)/ Constants.PHOTO_CARD_WIDTH);
         int n = (int)( width / Constants.PHOTO_CARD_WIDTH);
         //StringUtils.showToast(c,width + " - " + n);
-        Log.wtf(TAG,width + " - " + n);
+        //Log.wtf(TAG,width + " - " + n);
         if(n < 3) n = 3;
         else if (n > 8) n = 8;
         return n;
