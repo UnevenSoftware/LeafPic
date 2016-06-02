@@ -10,6 +10,15 @@ import android.text.format.Time;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifDirectoryBase;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -125,17 +134,56 @@ public class Media implements Parcelable {
     }
 
     public int getWidth() { //TODO improve
-        ExifInterface exif;
-        try { exif = new ExifInterface(getPath()); }
-        catch (IOException e) {  return 0; }
-        return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH));
+
+        Metadata metadata;// = ImageMetadataReader.readMetadata(new File(getPath()));
+        //ExifInterface exif;
+        try {
+            metadata = ImageMetadataReader.readMetadata(new File(getPath()));
+        for (Directory directory : metadata.getDirectories()) {
+
+            //
+            // Each Directory stores values in Tag objects
+            //
+            Log.wtf("asd",directory.toString());
+            for (Tag tag : directory.getTags()) {
+                System.out.println(tag);
+            }
+
+            //
+            // Each Directory may also contain error messages
+            //
+            if (directory.hasErrors()) {
+                for (String error : directory.getErrors()) {
+                    System.err.println("ERROR: " + error);
+                }
+            }
+        }
+         }
+        catch (IOException e) {  return -1; }
+        catch (ImageProcessingException e) { return -2; }
+        return -3;
+
+        /**ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory
+                .class);
+        try { return directory.getInt(ExifSubIFDDirectory.TAG_IMAGE_WIDTH); }
+        catch (MetadataException e) { return -3; }
+         */
+        //return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH));
     }
 
     public int getHeight() { //TODO improve
-        ExifInterface exif;
-        try { exif = new ExifInterface(getPath()); }
-        catch (IOException e) {  return 0; }
-        return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH));
+
+        //return -3;
+        Metadata metadata;
+        try { metadata = ImageMetadataReader.readMetadata(new File(getPath())); }
+        catch (IOException e) {  return -1; }
+        catch (ImageProcessingException e) { return -1; }
+        ExifDirectoryBase directory = metadata.getFirstDirectoryOfType(ExifDirectoryBase.class);
+        if (directory != null)
+        try { return directory.getInt(ExifDirectoryBase.TAG_IMAGE_HEIGHT); }
+        catch (MetadataException e) { return -1; }
+
+        return -3;
     }
 
     public long getDateEXIF() {

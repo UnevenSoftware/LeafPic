@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp"
+        android:id="@+id/message_card"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/text_dialog_title"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/md_dark_primary_text"
+                    android:layout_height="wrap_content"
+                    android:background="@color/md_red_500"
+                    android:padding="24dp"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <RelativeLayout
+                    android:id="@+id/text_dialog_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/text_dialog_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingLeft="20dp"
+                        android:text="null"
+                        android:singleLine="false"
+                        android:textSize="16sp"
+                        />
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/label_chose_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:text="Chose parent"
+                    android:singleLine="false"
+                    android:textSize="16sp"
+                />
+                <android.support.v7.widget.AppCompatSpinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/parents_folder"/>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

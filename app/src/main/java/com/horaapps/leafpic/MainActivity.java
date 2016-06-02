@@ -56,6 +56,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1169,22 +1170,22 @@ public class MainActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
 
                 final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
-                        getString(R.string.exclude),getString(R.string.exclude_album_message));
+                /*AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
+                        getString(R.string.exclude),getString(R.string.exclude_album_message));*/
 
-                /*final View excludeDialogLayout = getLayoutInflater().inflate(R.layout
-                    .text_dialog, null);
-                final TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
-                final TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
-                CardView cardViewExclude = (CardView) excludeDialogLayout.findViewById(R.id.message_card);
+                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.exclude_dialog, null);
+                TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
+                TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
+                final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
 
-                cardViewExclude.setCardBackgroundColor(getCardBackgroundColor());
+                spinnerParents.setAdapter(new ArrayAdapter<String>(this, android.R.layout
+                        .simple_dropdown_item_1line, album.getParentsFolders()));
+                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
                 textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
                 textViewExcludeTitle.setText(getString(R.string.exclude));
                 textViewExcludeMessage.setText(R.string.exclude_album_message);
                 textViewExcludeMessage.setTextColor(getTextColor());
-
-                excludeDialogBuilder.setView(excludeDialogLayout);*/
+                excludeDialogBuilder.setView(excludeDialogLayout);
 
                 excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -1193,6 +1194,7 @@ public class MainActivity extends ThemedActivity {
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
+                            StringUtils.showToast(getApplicationContext(), spinnerParents.getSelectedItem().toString());
                             customAlbumsHandler.excludeAlbum(album.getPath());
                             displayAlbums();
                         }
