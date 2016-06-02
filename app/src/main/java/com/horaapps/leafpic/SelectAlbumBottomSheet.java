@@ -115,7 +115,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         Drawable drawableScrollBar = ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar);
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(SP.getInt("primary_color",
                 ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)), PorterDuff.Mode.SRC_ATOP));
-        
+
         contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("primary_color",
                 ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)));
 

@@ -161,6 +161,8 @@
     <string name="transparency_sub">Set the grade of transparency</string>
     <string name="delay_load_full_size_image">Delay load full-size image</string>
     <string name="load_full_image_when_zoom_in">Load full image when zoom in</string>
+    <string name="media_viewer_swipe_direction">Swipe Direction</string>
+    <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(DefaultNext: Left to Right)</string>
 
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>
