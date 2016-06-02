@@ -1184,25 +1184,34 @@ public class MainActivity extends ThemedActivity {
                 TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
                 final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
 
-                spinnerParents.setAdapter(new ArrayAdapter<String>(this, android.R.layout
-                        .simple_dropdown_item_1line, album.getParentsFolders()));
+
                 ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
                 textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
                 textViewExcludeTitle.setText(getString(R.string.exclude));
-                textViewExcludeMessage.setText(R.string.exclude_album_message);
+
+                if(albumsMode && albums.getSelectedCount() > 1) {
+                    textViewExcludeMessage.setText(R.string.exclude_albums_message);
+                    spinnerParents.setVisibility(View.GONE);
+                } else {
+
+                    textViewExcludeMessage.setText(R.string.exclude_album_message);
+                    spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? albums.getSelectedAlbum(0).getParentsFolders() : album.getParentsFolders()));
+                }
+
                 textViewExcludeMessage.setTextColor(getTextColor());
                 excludeDialogBuilder.setView(excludeDialogLayout);
 
                 excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (albumsMode) {
+                        if (albumsMode && albums.getSelectedCount() > 1) {
                             albums.excludeSelectedAlbums(getApplicationContext());
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
                             StringUtils.showToast(getApplicationContext(), spinnerParents.getSelectedItem().toString());
-                            customAlbumsHandler.excludeAlbum(album.getPath());
-                            displayAlbums();
+                            customAlbumsHandler.excludeAlbum(spinnerParents.getSelectedItem().toString());
+                            albums.loadExcludedFolders(getApplicationContext());
+                            displayAlbums(true);
                         }
                     }
                 });

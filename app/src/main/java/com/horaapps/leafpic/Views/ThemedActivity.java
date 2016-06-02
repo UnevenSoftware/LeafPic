@@ -16,17 +16,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Created by dnld on 23/02/16.
@@ -184,6 +187,14 @@ public class ThemedActivity extends AppCompatActivity {
         return style;
     }
 
+
+    public ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
+        switch (getBasicTheme()){
+            case AMOLED_THEME:
+            case DARK_THEME: return new ArrayAdapter<String>(this, R.layout.spinner_item_light, items);
+            case LIGHT_THEME: default: return new ArrayAdapter<String>(this, R.layout.spinner_item_dark, items);
+        }
+    }
 
 
     public int getDefaultThemeToolbarColor3th(){
