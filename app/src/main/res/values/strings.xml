@@ -2,7 +2,7 @@
 
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
-    <string name="app_light_description">A colourfull material gallery.</string>
+    <string name="app_light_description">A colorful material gallery.</string>
     <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
     <string name="welcome_slide_sub">Color-Full Material Designed Gallery!</string>
@@ -71,7 +71,7 @@
         (media will be available also for other apps!)
     </string>
     <string name="delete_album_message">Are you sure you want to delete selected album?</string>
-    <string name="delete_photos_message">Are you sure you want to delete selected medias?</string>
+    <string name="delete_photos_message">Are you sure you want to delete selected media?</string>
     <string name="delete_photo_message">Are you sure you want to delete this media?</string>
     <string name="exclude_album_message">Are you sure you want to exclude that album?
         \nYou can restore it in the settings section</string>

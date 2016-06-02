@@ -67,11 +67,12 @@
                         >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/auto_update_media_Icon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-update"
-                            android:layout_margin="25dp"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -135,11 +136,12 @@
                             >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/Excluded_Album_Icon"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-folder"
-                                android:layout_margin="25dp"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -184,11 +186,12 @@
                             >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/security_icon"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="faw-user-secret"
-                                android:layout_margin="25dp"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -223,7 +226,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        app:mrl_rippleDelayClick="false"
+                        android:visibility="gone"
+                        >
                         <LinearLayout
                             xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/ll_fab_options"
@@ -234,11 +239,12 @@
 
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/fab_options_icon"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-add-circle"
-                                android:layout_margin="25dp"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -276,14 +282,17 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/ll_more_options_general"
                         android:visibility="visible"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        >
 
                         <!-- MAPS PROVIDER-->
                         <com.balysv.materialripple.MaterialRippleLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false">
+                            app:mrl_rippleDelayClick="false"
+                            android:visibility="gone"
+                            >
 
                             <LinearLayout
                                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -294,11 +303,12 @@
                                 >
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/map_provider_icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="faw-map-signs"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -394,11 +404,12 @@
                                 >
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/basic_theme_icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-invert-colors"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -446,11 +457,12 @@
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/PrimaryColor_Icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-color-lens"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -496,11 +508,12 @@
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/accentColor_Icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="cmd-format-color-fill"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -547,11 +560,12 @@
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/custom_3thAct_icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="faw-paint-brush"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -601,11 +615,12 @@
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/Traslucent_StatusBar_Icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-web-asset"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <RelativeLayout
                                     android:layout_width="match_parent"
@@ -663,11 +678,12 @@
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/NavBar_Icon"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="@dimen/icon_width_height"
+                                    android:layout_height="@dimen/icon_width_height"
                                     android:layout_gravity="center_vertical"
                                     app:iiv_icon="gmd-video-label"
-                                    android:layout_margin="25dp"
+                                    android:layout_marginLeft="@dimen/big_spacing"
+                                    android:layout_marginRight="@dimen/big_spacing"
                                     />
                                 <RelativeLayout
                                     android:layout_width="match_parent"
@@ -773,11 +789,12 @@
                         >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_max_luminosita_icon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-settings-brightness"
-                            android:layout_margin="25dp"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -834,11 +851,12 @@
                         >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-screen-rotation"
-                            android:layout_margin="25dp"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -899,11 +917,12 @@
                             >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/ll_switch_full_resolution_icon"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
                                 android:layout_gravity="center_vertical"
                                 app:iiv_icon="gmd-image"
-                                android:layout_margin="25dp"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -988,11 +1007,12 @@
                         >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_include_video"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-videocam"
-                            android:layout_margin="25dp"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -1048,11 +1068,12 @@
                         >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_player_Icon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-ondemand-video"
-                            android:layout_margin="25dp"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
                         <RelativeLayout
                             android:layout_width="match_parent"
