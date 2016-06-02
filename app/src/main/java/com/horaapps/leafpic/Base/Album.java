@@ -18,7 +18,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by dnld on 26/04/16.
@@ -35,12 +38,23 @@ public class Album {
     MediaComparators mediaComparators;
     int current = -1;
 
+    private String storageRootPath;
+
     public ArrayList<Media> media = new ArrayList<Media>();
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
 
     public Album() {
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
+    }
+
+    public Album(String path, String name, int count, String storageRootPath) {
+        media = new ArrayList<Media>();
+        selectedMedias = new ArrayList<Media>();
+        this.path = path;
+        this.name = name;
+        this.count = count;
+        this.storageRootPath = storageRootPath;
     }
 
     public Album(String path, String name, int count) {
@@ -66,7 +80,6 @@ public class Album {
         selectedMedias = new ArrayList<Media>();
         this.path = path;
         this.name = name;
-        //updatePhotos();
     }
 
     public void updatePhotos(Context context) {
@@ -78,6 +91,25 @@ public class Album {
         media = mediaArrayList;
         sortPhotos();
         setCount(media.size());
+    }
+
+    public ArrayList<String> getParentsFolders() {
+        ArrayList<String> result = new ArrayList<String>();
+        String[] asd = getPath().split("/");
+        String[] asdroot  = storageRootPath.split("/");
+
+        String conc = storageRootPath;
+        result.add(conc);
+        for (int i = asdroot.length; i < asd.length; i++)
+            result.add(conc += "/" + asd[i]);
+
+        Collections.sort(result, new Comparator<String>() {
+            @Override
+            public int compare(String lhs, String rhs) {
+                return Integer.compare(rhs.length(), lhs.length());
+            }
+        });
+        return result;
     }
 
    /* public void updatePhotos(PhotosAdapter adapter) {

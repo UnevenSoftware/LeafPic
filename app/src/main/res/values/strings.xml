@@ -59,22 +59,27 @@
     <string name="upload">Upload</string>
     <string name="set_preview">Set as preview</string>
     <string name="clear_preview">Clear preview</string>
-
     <string name="new_folder">New Folder</string>
 
     <!--DIALOG MESAGES-->
-    <string name="hide_album_message">Are you sure you want to hide this album?
-        (it will create the .nomedia file in the folder and if there are others media them wont be
-        available also from other apps! use Exclude option instead)
+    <string name="hide_album_message">
+        Hiding this album will be created a .nomedia file in the folder
+        and this could make media unreachable from other apps use exclude option to avoid this.
     </string>
-    <string name="unhide_album_message">Are you sure you want to unhide this album?
-        (media will be available also for other apps!)
-    </string>
-    <string name="delete_album_message">Are you sure you want to delete selected album?</string>
+    <string name="unhide_album_message">Un-hiding this album you will make media available also for other apps.</string>
+    <string name="delete_album_message">Are you sure you want to delete this album?</string>
     <string name="delete_photos_message">Are you sure you want to delete selected media?</string>
+    <string name="delete_albums_message">Are you sure you want to delete selected albums?</string>
+    <string name="hide_albums_message">Are you sure you want to hide selected albums?</string>
+    <string name="exclude_albums_message">
+        Are you sure you want to exclude selected albums?
+    </string>
+
     <string name="delete_photo_message">Are you sure you want to delete this media?</string>
-    <string name="exclude_album_message">Are you sure you want to exclude that album?
-        \nYou can restore it in the settings section</string>
+    <string name="exclude_album_message">
+        Excluding this folder you will exclude also all sub-folders, below there is
+        a list that allow you to chose a parent if you have to exclude more folder which are on the same level.
+    </string>
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>
@@ -197,14 +202,15 @@
     <string name="about_version">Version</string>
 
     <string name="about_license"> License</string>
-    <string name="about_license_sub">Check the license used on LeafPic.</string>
+    <string name="about_license_sub">Check GPLv3 license terms used on LeafPic.</string>
 
-    <string name="about_library_license">Library License</string>
-    <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
+    <string name="about_library_license">Library Licenses</string>
+    <string name="about_library_license_sub">Check third-party libs used on LeafPic.</string>
 
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_description">
-        I\'m 19 years old. I love android world and java.
+        I\'m 19 years old. I\'m a young software developer, I like CS in general, at most I love
+        learn doing stuff with Linux and Android. I also like TV Series.
     </string>
     <string name="about_author_gilbert_description">
         I\'m 20 years old. I love music, videogames and drawing.

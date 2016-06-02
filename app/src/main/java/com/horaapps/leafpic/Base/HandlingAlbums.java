@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -77,13 +78,13 @@ public class HandlingAlbums {
         clearCameraIndex();
         includeVideo = SP.getBoolean("set_include_video", true);
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
-        HashSet<File> roots = listStorages();
+        HashSet<File> roots = listStorages(context);
         if (hidden)
             for (File storage : roots)
-                fetchRecursivelyHiddenFolder(storage, albumArrayList);
+                fetchRecursivelyHiddenFolder(storage, albumArrayList, storage.getAbsolutePath());
         else
             for (File storage : roots)
-                fetchRecursivelyFolder(storage, albumArrayList);
+                fetchRecursivelyFolder(storage, albumArrayList, storage.getAbsolutePath());
         dispAlbums = albumArrayList;
         sortAlbums(context);
 
@@ -101,9 +102,15 @@ public class HandlingAlbums {
         indexCamera = -1;
     }
 
-    public HashSet<File> listStorages() {
+    public HashSet<File> listStorages(Context context) {
         HashSet<File> roots = new HashSet<File>();
         roots.add(Environment.getExternalStorageDirectory());
+        String[] extSdCardPaths = ContentHelper.getExtSdCardPaths(context);
+        for (String extSdCardPath : extSdCardPaths) {
+            File mas = new File(extSdCardPath);
+            if (mas.canRead())
+                roots.add(mas);
+        }
         //Log.wtf(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
 
         /*for (String mount : getExternalMounts()) {
@@ -152,19 +159,19 @@ public class HandlingAlbums {
         return out;
     }
 
-    public ArrayList<Album> getValidFolders(boolean hidden) {
+    public ArrayList<Album> getValidFolders(Context context,boolean hidden) {
         ArrayList<Album> folders = new ArrayList<Album>();
         if (hidden)
-            for (File storage : listStorages())
-                fetchRecursivelyHiddenFolder(storage, folders, false);
+            for (File storage : listStorages(context))
+                fetchRecursivelyHiddenFolder(storage, folders);
         else
-            for (File storage : listStorages())
-                fetchRecursivelyFolder(storage, folders, false);
+            for (File storage : listStorages(context))
+                fetchRecursivelyFolder(storage, folders);
 
         return folders;
     }
 
-    private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders, boolean asd) {
+    private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders) {
         if (!excludedfolders.contains(dir)) {
             File[] listFiles = dir.listFiles(new ImageFileFilter());
             if (listFiles != null && listFiles.length > 0)
@@ -175,14 +182,14 @@ public class HandlingAlbums {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
-                        fetchRecursivelyFolder(temp, folders, asd);
+                        fetchRecursivelyFolder(temp, folders);
                     }
                 }
             }
         }
     }
 
-    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders, boolean asd) {
+    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders) {
         if (!excludedfolders.contains(dir)) {
             File[] asdf = dir.listFiles(new FoldersFileFilter());
             if (asdf !=null) {
@@ -193,7 +200,7 @@ public class HandlingAlbums {
                         if (files != null && files.length > 0)
                             folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
                     }
-                    fetchRecursivelyHiddenFolder(temp, folders, asd);
+                    fetchRecursivelyHiddenFolder(temp, folders);
                 }
             }
         }
@@ -209,32 +216,32 @@ public class HandlingAlbums {
         return array;
     }
 
-    private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList) {
+    private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
         if (!excludedfolders.contains(dir)) {
-            checkAndAddAlbum(dir, albumArrayList);
+            checkAndAddAlbum(dir, albumArrayList, rootExternalStorage);
             File[] children = dir.listFiles(new FoldersFileFilter());
             if (children != null) {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
                         //not excluded/hidden folder
-                        fetchRecursivelyFolder(temp, albumArrayList);
+                        fetchRecursivelyFolder(temp, albumArrayList, rootExternalStorage);
                     }
                 }
             }
         }
     }
 
-    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> albumArrayList) {
+    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
         if (!excludedfolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             if (folders != null) {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && nomedia.exists()) {
-                        checkAndAddAlbum(temp, albumArrayList);
+                        checkAndAddAlbum(temp, albumArrayList, rootExternalStorage);
                     }
-                    fetchRecursivelyHiddenFolder(temp, albumArrayList);
+                    fetchRecursivelyHiddenFolder(temp, albumArrayList, rootExternalStorage);
                 }
             }
         }
@@ -244,11 +251,11 @@ public class HandlingAlbums {
         return excludedfolders;
     }
 
-    public void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList) {
+    public void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList, String rootExternalStorage) {
         File[] files = temp.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
-            Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length);
+            Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length, rootExternalStorage);
             asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
 
             long lastMod = Long.MIN_VALUE;

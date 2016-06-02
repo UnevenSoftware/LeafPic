@@ -1,5 +1,7 @@
 package com.horaapps.leafpic;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +58,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -187,7 +190,7 @@ public class MainActivity extends ThemedActivity {
         album = new Album();
         albumsMode = true;
         editmode = false;
-        securityObj= new SecurityHelper(MainActivity.this);
+        securityObj = new SecurityHelper(MainActivity.this);
 
         initUI();
         setupUI();
@@ -419,18 +422,18 @@ public class MainActivity extends ThemedActivity {
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!albumsMode && album.areFiltersActive()) {
+                /*if (!albumsMode && album.areFiltersActive()) {
                     album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_ALL);
                     mediaAdapter.updateDataSet(album.media);
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
                 } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
-
+*/
                 //region TESTING
-               /* if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
-                }*/
+                }
 
                 //newFolderDialog();
                 //endregion
@@ -612,28 +615,25 @@ public class MainActivity extends ThemedActivity {
 
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if (resultCode == RESULT_OK) {
-            Uri treeUri = resultData.getData();
-            //ContentResolver.getPersistedUriPermissions()
-            getContentResolver().takePersistableUriPermission(treeUri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION |
-                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            DocumentFile pickedDir = DocumentFile.fromTreeUri(this, treeUri);
-            String path = ContentHelper.getPath(getApplicationContext(),pickedDir.getUri());
-            StringUtils.showToast(getApplicationContext(), path+"");
-            //Log.wtf(TAG,path);
-            // List all existing files inside picked directory
-            for (DocumentFile file : pickedDir.listFiles()) {
-                StringUtils.showToast(getApplicationContext(),file.getName());
-                Log.d(TAG, "Found file " + file.getName() + " with size " + file.length());
-            }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
+        if (requestCode == 42) {
+            Uri treeUri = null;
+            if (resultCode == Activity.RESULT_OK) {
+                // Get Uri from Storage Access Framework.
+                treeUri = resultData.getData();
 
-            // Create a new file and write into it
-            /*DocumentFile newFile = pickedDir.createFile("text/plain", "My Novel");
-            OutputStream out = getContentResolver().openOutputStream(newFile.getUri());
-            out.write("A long time ago...".getBytes());
-            out.close();*/
+                // Persist URI in shared preference so that you can use it later.
+                // Use your own framework here instead of PreferenceUtil.
+                //PreferenceUtil.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard,
+                  //      treeUri);
+
+                // Persist access permissions.
+                final int takeFlags = resultData.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
+            }
         }
     }
     //endregion
@@ -1175,32 +1175,42 @@ public class MainActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
 
                 final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
-                        getString(R.string.exclude),getString(R.string.exclude_album_message));
+                /*AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
+                        getString(R.string.exclude),getString(R.string.exclude_album_message));*/
 
-                /*final View excludeDialogLayout = getLayoutInflater().inflate(R.layout
-                    .text_dialog, null);
-                final TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
-                final TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
-                CardView cardViewExclude = (CardView) excludeDialogLayout.findViewById(R.id.message_card);
+                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.exclude_dialog, null);
+                TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
+                TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
+                final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
 
-                cardViewExclude.setCardBackgroundColor(getCardBackgroundColor());
+
+                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
                 textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
                 textViewExcludeTitle.setText(getString(R.string.exclude));
-                textViewExcludeMessage.setText(R.string.exclude_album_message);
-                textViewExcludeMessage.setTextColor(getTextColor());
 
-                excludeDialogBuilder.setView(excludeDialogLayout);*/
+                if(albumsMode && albums.getSelectedCount() > 1) {
+                    textViewExcludeMessage.setText(R.string.exclude_albums_message);
+                    spinnerParents.setVisibility(View.GONE);
+                } else {
+
+                    textViewExcludeMessage.setText(R.string.exclude_album_message);
+                    spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? albums.getSelectedAlbum(0).getParentsFolders() : album.getParentsFolders()));
+                }
+
+                textViewExcludeMessage.setTextColor(getTextColor());
+                excludeDialogBuilder.setView(excludeDialogLayout);
 
                 excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (albumsMode) {
+                        if (albumsMode && albums.getSelectedCount() > 1) {
                             albums.excludeSelectedAlbums(getApplicationContext());
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
-                            customAlbumsHandler.excludeAlbum(album.getPath());
-                            displayAlbums();
+                            StringUtils.showToast(getApplicationContext(), spinnerParents.getSelectedItem().toString());
+                            customAlbumsHandler.excludeAlbum(spinnerParents.getSelectedItem().toString());
+                            albums.loadExcludedFolders(getApplicationContext());
+                            displayAlbums(true);
                         }
                     }
                 });
