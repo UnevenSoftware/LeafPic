@@ -228,6 +228,9 @@
     <string name="about_support_translate">Translate</string>
     <string name="about_support_translate_sub">Help us to translate LeafPic in more languages.</string>
 
+    <string name="about_support_report_bug">Report bug</string>
+    <string name="about_support_report_bug_sub">Report bug or request new features.</string>
+
     <string name="about_support_rate">Rate</string>
     <string name="about_support_rate_sub">Leave us a positive rating if you like LeafPic.</string>
 

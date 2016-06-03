@@ -20,10 +20,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.provider.DocumentFile;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -76,7 +74,6 @@ import com.horaapps.leafpic.utils.AffixMedia;
 import com.horaapps.leafpic.utils.AffixOptions;
 import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
@@ -1183,6 +1180,7 @@ public class MainActivity extends ThemedActivity {
                 TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
                 final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
 
+                spinnerParents.getBackground().setColorFilter(getIconColor(), PorterDuff.Mode.SRC_ATOP);
 
                 ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
                 textViewExcludeTitle.setBackgroundColor(getPrimaryColor());

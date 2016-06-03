@@ -162,11 +162,19 @@ public class AboutActivity extends ThemedActivity {
 
     public void ClickListeners(){
 
-        ///GitHub
+        //GitHub
         findViewById(R.id.ll_about_support_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cts.launchUrl("https://github.com/HoraApps/LeafPic");
+            }
+        });
+
+        ///Report bug
+        findViewById(R.id.ll_about_report_bug).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cts.launchUrl("https://github.com/HoraApps/LeafPic/issues");
             }
         });
         //Crowdin
@@ -275,6 +283,7 @@ public class AboutActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.about_support_translate_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_support_rate_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_support_github_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.about_support_report_bug_icon)).setColor(color);
 
         /** TextViews **/
         color=getTextColor();
@@ -285,6 +294,7 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_translate_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_report_bug_item)).setTextColor(color);
 
         /** Sub Text Views**/
         color=getSubTextColor();
@@ -296,6 +306,7 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_translate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_report_bug_sub)).setTextColor(color);
     }
 
     public void licenseDialog(){

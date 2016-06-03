@@ -22,37 +22,27 @@
                 <TextView
                     android:id="@+id/text_dialog_title"
                     android:layout_width="match_parent"
-                    android:textColor="@color/md_dark_primary_text"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/md_dark_primary_text"
                     android:background="@color/md_red_500"
-                    android:padding="24dp"
-                    android:textSize="18sp"
+                    android:padding="@dimen/big_spacing"
+                    android:textSize="@dimen/sub_big_text"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/text_dialog_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="20dp"
+                    android:paddingTop="@dimen/medium_spacing"
+                    android:paddingRight="@dimen/medium_spacing"
+                    android:paddingLeft="@dimen/medium_spacing"
                     android:singleLine="false"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/medium_text" />
 
-               <!-- <TextView
-                    android:id="@+id/label_chose_parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="20dp"
-                    android:text="Chose parent"
-                    android:singleLine="false"
-                    android:textSize="16sp" />-->
                 <android.support.v7.widget.AppCompatSpinner
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/medium_spacing"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
+                    android:layout_marginLeft="@dimen/medium_spacing"
+                    android:layout_marginRight="@dimen/medium_spacing"
                     android:id="@+id/parents_folder"/>
             </LinearLayout>
         </ScrollView>

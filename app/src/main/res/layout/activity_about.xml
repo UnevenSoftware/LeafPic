@@ -405,6 +405,57 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         />
+
+                    <!--REPORT BUG-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_report_bug"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_support_report_bug_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-bug-report"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="16dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
+                                >
+                                <TextView
+                                    android:id="@+id/about_support_report_bug_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_report_bug"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_support_report_bug_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/about_support_report_bug_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
                     <!-- TRANLATE -->
                     <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
@@ -431,7 +482,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:paddingTop="16dp"
+                                android:paddingTop="8dp"
                                 android:paddingRight="16dp"
                                 android:paddingBottom="8dp"
                                 >
