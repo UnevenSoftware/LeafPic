@@ -29,14 +29,12 @@ import java.util.List;
 public class Album {
 
     String name = null;
-    String path = null;
-    int count = -1;
-    boolean selected = false;
+    private String path = null;
+    private int count = -1;
+    private boolean selected = false;
     private int filter_photos;
     public AlbumSettings settings = new AlbumSettings();
-    SharedPreferences SP;
-    MediaComparators mediaComparators;
-    int current = -1;
+    private int current = -1;
 
     private String storageRootPath;
 
@@ -83,7 +81,7 @@ public class Album {
     }
 
     public void updatePhotos(Context context) {
-        SP = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
         File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos, SP.getBoolean("set_include_video",true)));
         for (File image : images)
@@ -141,7 +139,7 @@ public class Album {
         return settings.coverPath != null;
     }
 
-    public void setSelected(boolean selected) {
+    void setSelected(boolean selected) {
         this.selected = selected;
     }
 
@@ -169,7 +167,7 @@ public class Album {
         return path;
     }
 
-    public void setCount(int count) {
+    private void setCount(int count) {
         this.count = count;
     }
 
@@ -177,7 +175,7 @@ public class Album {
         return count;
     }
 
-    public void setCoverPath(String path) {
+    void setCoverPath(String path) {
         settings.coverPath = path;
     }
 
@@ -201,7 +199,7 @@ public class Album {
         }
     }
 
-    public void setCurrentPhoto(String path) {
+    private void setCurrentPhoto(String path) {
         for (int i = 0; i < media.size(); i++)
             if (media.get(i).getPath().equals(path)) current = i;
     }
@@ -312,7 +310,7 @@ public class Album {
     }
 
     public void sortPhotos() {
-        mediaComparators = new MediaComparators(settings.ascending);
+        MediaComparators mediaComparators = new MediaComparators(settings.ascending);
         switch (settings.columnSortingMode) {
             case AlbumSettings.SORT_BY_NAME:
                 Collections.sort(media, mediaComparators.getNameComparator());
@@ -358,7 +356,7 @@ public class Album {
         setCount(media.size());
     }
 
-    public void deleteMedia(Context context, Media media) {
+    private void deleteMedia(Context context, Media media) {
         File file = new File(media.getPath());
         if (file.delete())
             scanFile(context, new String[]{ file.getAbsolutePath() });

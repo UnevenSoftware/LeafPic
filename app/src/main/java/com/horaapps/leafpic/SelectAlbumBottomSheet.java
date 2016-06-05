@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Views.ThemedActivity;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
@@ -41,49 +42,43 @@ import java.util.Locale;
 
 public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
-    RecyclerView mRecyclerView;
-    TextView textViewTitle;
-    TextView txtNewFolder;
-    IconicsImageView imgHiddenDefault;
-    ProgressBar progressBar;
+    private IconicsImageView imgHiddenDefault;
+    private ProgressBar progressBar;
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
 
-    boolean hidden = false;
-    HandlingAlbums albums;
+    private boolean hidden = false;
+    private HandlingAlbums albums;
 
-    IconicsImageView imgNewFolder;
-    LinearLayout background;
-    LinearLayout llNewFolder;
-    ArrayList<Album> albumArrayList = null;
-    SharedPreferences SP;
-    View.OnClickListener onClickListener;
-    View.OnClickListener onClickListenerNewFolder;
+    private LinearLayout llNewFolder;
+    private ArrayList<Album> albumArrayList = null;
+    private SharedPreferences SP;
+    private View.OnClickListener onClickListener;
+    private View.OnClickListener onClickListenerNewFolder;
 
-    public void setCurrentPath(String currentPath) {
+    void setCurrentPath(String currentPath) {
         this.currentPath = currentPath;
     }
 
-    public void setAlbumArrayList(ArrayList<Album> albumArrayList){ this.albumArrayList = albumArrayList; }
+    void setAlbumArrayList(ArrayList<Album> albumArrayList){ this.albumArrayList = albumArrayList; }
 
-    String currentPath;
-    BottomSheetAlbumsAdapter adapter;
+    private String currentPath;
+    private BottomSheetAlbumsAdapter adapter;
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    String title;
+    private String title;
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
-    public void setOnClickListenerNewFolder(View.OnClickListener onClickListenerNF){
+    void setOnClickListenerNewFolder(View.OnClickListener onClickListenerNF){
         onClickListenerNewFolder = onClickListenerNF;
-
     }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
@@ -103,7 +98,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         albums = new HandlingAlbums(getContext());
         View contentView = View.inflate(getContext(), R.layout.copy_move_bottom_sheet, null);
-        mRecyclerView = (RecyclerView) contentView.findViewById(R.id.rv_modal_dialog_albums);
+        RecyclerView mRecyclerView = (RecyclerView) contentView.findViewById(R.id.rv_modal_dialog_albums);
         adapter = new BottomSheetAlbumsAdapter(onClickListener);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 1));
@@ -119,7 +114,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("primary_color",
                 ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)));
 
-        textViewTitle = (TextView) contentView.findViewById(R.id.bottom_sheet_title);
+        TextView textViewTitle = (TextView) contentView.findViewById(R.id.bottom_sheet_title);
         progressBar = (ProgressBar) contentView.findViewById(R.id.spinner_loading);
         textViewTitle.setText(title);
         textViewTitle.setTextColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
@@ -136,29 +131,30 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
             }
         });
 
-        txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
-        txtNewFolder.setTextColor(
-                ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
-                    ? R.color.md_grey_800
-                    : R.color.md_grey_200));
-
-        imgNewFolder = (IconicsImageView) contentView.findViewById(R.id.Create_New_Folder_Icon);
-        imgNewFolder.setColor(
-                ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
-                        ? R.color.md_light_primary_icon
-                        : R.color.md_dark_primary_icon));
-
+        TextView txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
+        IconicsImageView imgNewFolder = (IconicsImageView) contentView.findViewById(R.id.Create_New_Folder_Icon);
         llNewFolder = (LinearLayout) contentView.findViewById(R.id.ll_create_new_folder);
         llNewFolder.setOnClickListener(onClickListenerNewFolder);
 
-        background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
-        background.setBackgroundColor(ContextCompat.getColor(dialog.getContext(),
-                SP.getInt("basic_theme", 1)==1
-                        ? R.color.md_light_cards
-                        : (SP.getInt("basic_theme", 1)==2
-                            ? R.color.md_dark_cards
-                            : R.color.md_black_1000))
-                );
+        LinearLayout background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
+        switch (SP.getInt(getContext().getString(R.string.preference_base_theme), ThemedActivity.LIGHT_THEME)) {
+            case ThemedActivity.LIGHT_THEME:
+                default:
+                background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_light_cards));
+                imgNewFolder.setColor(ContextCompat.getColor(getContext(), R.color.md_light_primary_icon));
+                txtNewFolder.setTextColor(ContextCompat.getColor(getDialog().getContext(),R.color.md_grey_800));
+                break;
+            case ThemedActivity.DARK_THEME:
+                background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_dark_cards));
+                imgNewFolder.setColor(ContextCompat.getColor(getContext(), R.color.md_dark_primary_icon));
+                txtNewFolder.setTextColor(ContextCompat.getColor(getDialog().getContext(),R.color.md_grey_200));
+                break;
+            case ThemedActivity.AMOLED_THEME:
+                background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
+                imgNewFolder.setColor(ContextCompat.getColor(getContext(), R.color.md_dark_primary_icon));
+                txtNewFolder.setTextColor(ContextCompat.getColor(getDialog().getContext(),R.color.md_grey_200));
+                break;
+        }
 
         dialog.setContentView(contentView);
         CoordinatorLayout.LayoutParams layoutParams =
@@ -271,7 +267,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
 
 
-    class ToggleAlbumsTask extends AsyncTask<Boolean, Integer, Void> {
+    private class ToggleAlbumsTask extends AsyncTask<Boolean, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -297,7 +293,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
 
         private View.OnClickListener listener;
-        public BottomSheetAlbumsAdapter( View.OnClickListener lis){
+        BottomSheetAlbumsAdapter(View.OnClickListener lis){
             listener=lis;
          }
 
@@ -354,11 +350,11 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
             return albumArrayList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
             TextView album_name;
             TextView album_media_count;
             IconicsImageView imgFolder;
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 album_name = (TextView) itemView.findViewById(R.id.title_bottom_sheet_item);
                 album_media_count = (TextView) itemView.findViewById(R.id.count_bottom_sheet_item);

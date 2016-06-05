@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.SecurityHelper;
+import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -27,14 +28,16 @@ import com.mikepenz.iconics.view.IconicsImageView;
  * Created by dnld on 22/05/16.
  */
 public class SecurityActivity extends ThemedActivity {
-    Toolbar toolbar;
-    LinearLayout llbody;
-    LinearLayout llroot;
-    SharedPreferences SP;
-    SecurityHelper securityObj;
-    SwitchCompat swActiveSecurity;
-    SwitchCompat swApplySecurityDelete;
-    SwitchCompat swApplySecurityHidden;
+
+    private Toolbar toolbar;
+    private LinearLayout llbody;
+    private LinearLayout llroot;
+    private SharedPreferences SP;
+    private SecurityHelper securityObj;
+    private SwitchCompat swActiveSecurity;
+    private SwitchCompat swApplySecurityDelete;
+    private SwitchCompat swApplySecurityHidden;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +47,6 @@ public class SecurityActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         llbody = (LinearLayout) findViewById(R.id.ll_security_dialog_body);
         llroot = (LinearLayout) findViewById(R.id.root);
-
 
         swApplySecurityDelete = (SwitchCompat) findViewById(R.id.security_body_apply_delete_switch);
         swActiveSecurity = (SwitchCompat) findViewById(R.id.active_security_switch);
@@ -57,9 +59,6 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                /*editor.putBoolean("active_security", isChecked);
-                editor.apply();*/
-
 
                 securityObj.updateSecuritySetting();
                 updateSwitchColor(swActiveSecurity, getAccentColor());
@@ -67,17 +66,15 @@ public class SecurityActivity extends ThemedActivity {
                 if (isChecked)
                     setPasswordDialog();
                 else {
-                    editor.putString("password_value","");
-                    editor.putBoolean("active_security", false);
+                    editor.putString(getString(R.string.preference_password_value),"");
+                    editor.putBoolean(getString(R.string.preference_use_password), false);
                     editor.apply();
                     toggleEnabledChild(false);
                 }
-                //llbody.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
         updateSwitchColor(swActiveSecurity, getAccentColor());
         llbody.setEnabled(swActiveSecurity.isChecked());
-        //llbody.setVisibility(swActiveSecurity.isChecked() ? View.VISIBLE : View.GONE);
 
         /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
         swApplySecurityHidden.setChecked(securityObj.isPasswordOnHidden());
@@ -85,7 +82,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("password_on_hidden", isChecked);
+                editor.putBoolean(getString(R.string.preference_use_password_on_hidden), isChecked);
                 editor.apply();
 
                 securityObj.updateSecuritySetting();
@@ -100,7 +97,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("password_on_delete", isChecked);
+                editor.putBoolean(getString(R.string.preference_use_password_on_delete), isChecked);
                 editor.apply();
 
                 securityObj.updateSecuritySetting();
@@ -111,9 +108,9 @@ public class SecurityActivity extends ThemedActivity {
         setupUI();
     }
 
-    public void setPasswordDialog() {
-        final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SecurityActivity.this,
-                getDialogStyle());
+    private void setPasswordDialog() {
+
+        final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SecurityActivity.this, getDialogStyle());
         final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.set_password_dialog, null);
         final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
         final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
@@ -135,13 +132,14 @@ public class SecurityActivity extends ThemedActivity {
         passwordDialog.setView(PasswordDialogLayout);
 
         AlertDialog dialog = passwordDialog.create();
+        dialog.setCancelable(false);
 
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
                 swActiveSecurity.setChecked(false);
-                editor.putBoolean("active_security", false);
+                editor.putBoolean(getString(R.string.preference_use_password), false);
                 editor.apply();
             }
         });
@@ -149,26 +147,22 @@ public class SecurityActivity extends ThemedActivity {
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean changed;
+                boolean changed = false;
                 SharedPreferences.Editor editor = SP.edit();
                 if (editTextPassword.length() > 3) {
                     if (editTextPassword.getText().toString().equals(editTextConfirmPassword.getText().toString())) {
-
-                        editor.putString("password_value", editTextPassword.getText().toString());
+                        editor.putString(getString(R.string.preference_password_value), editTextPassword.getText().toString());
                         editor.apply();
                         securityObj.updateSecuritySetting();
                         Toast.makeText(getApplicationContext(), R.string.remember_password_message, Toast.LENGTH_SHORT).show();
                         changed = true;
-                    } else {
-                        Toast.makeText(SecurityActivity.this, "password doesn't match", Toast.LENGTH_SHORT).show();
-                        changed = false;
-                    }
-                } else {
+                    } else
+                        Toast.makeText(getApplicationContext(), R.string.password_dont_match, Toast.LENGTH_SHORT).show();
+                } else
                     Toast.makeText(getApplicationContext(), R.string.error_password_length, Toast.LENGTH_SHORT).show();
-                    changed = false;
-                }
+
                 swActiveSecurity.setChecked(changed);
-                editor.putBoolean("active_security", changed);
+                editor.putBoolean(getString(R.string.preference_use_password), changed);
                 editor.apply();
                 toggleEnabledChild(changed);
             }
@@ -182,7 +176,7 @@ public class SecurityActivity extends ThemedActivity {
         swApplySecurityHidden.setEnabled(enable);
     }
 
-    public void setupUI() {
+    private void setupUI() {
         setStatusBarColor();
         setNavBarColor();
         toolbar.setBackgroundColor(getPrimaryColor());

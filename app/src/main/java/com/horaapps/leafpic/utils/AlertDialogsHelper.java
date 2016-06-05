@@ -1,9 +1,11 @@
 package com.horaapps.leafpic.utils;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
+import com.horaapps.leafpic.SettingActivity;
 import com.horaapps.leafpic.Views.ThemedActivity;
 
 import java.io.IOException;
@@ -162,11 +165,21 @@ public class AlertDialogsHelper {
 
                 textViewOrientation.setText(String.format(Locale.getDefault(), "%d", f.getOrientation()));
 
-                final float[] output= new float[2];
+                final float[] output = new float[2];
                 if(exif.getLatLong(output)) {
-                    String url = "http://maps.google.com/maps/api/staticmap?center=" + output[0] + "," + output[1] + "&zoom=15&size="+400+"x"+400+"&scale=2&sensor=false&&markers=color:red%7Clabel:C%7C"+output[0]+","+output[1];
-                    url = String.format(Locale.getDefault(),"http://staticmap.openstreetmap.de/staticmap.php" +
-                            "?center=%f,%f&zoom=15&size=700x700&maptype=osmarenderer", output[0], output[1]);
+                    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+                    String url;
+                    switch (SP.getInt(activity.getString(R.string.preference_map_provider),
+                            SettingActivity.GOOGLE_MAPS_PROVIDER)) {
+                        case SettingActivity.GOOGLE_MAPS_PROVIDER:
+                            default:
+                                url = String.format(Locale.getDefault(),"http://maps.google.com/maps/api/staticmap" + "?center=%f,%f&zoom=15&size=700x700&scale=2&sensor=false", output[0], output[1]);
+                                break;
+                            case SettingActivity.OSM_PROVIDER:
+                                url = String.format(Locale.getDefault(),"http://staticmap.openstreetmap.de/staticmap.php" + "?center=%f,%f&zoom=15&size=700x700&maptype=osmarenderer", output[0], output[1]);
+                                break;
+                    }
+
                     Glide.with(activity.getApplicationContext())
                             .load(url)
                             .asBitmap()
@@ -188,7 +201,7 @@ public class AlertDialogsHelper {
                 dialogLayout.findViewById(R.id.ll_exif).setVisibility(View.VISIBLE);
             }
             long dateTake;
-            if (((dateTake = f.getDateEXIF()) != -1) && dateTake != f.getDateModified()) {
+            if (((dateTake = f.getDateTaken()) != -1) && dateTake != f.getDateModified()) {
                 textViewDateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
                 dialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
             }

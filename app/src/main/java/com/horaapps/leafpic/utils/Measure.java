@@ -20,7 +20,7 @@ public class Measure {
         return Math.round(px * (displayMetrics.ydpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    public static int getScreenWidth(Context c){
+    private static int getScreenWidth(Context c){
         WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -28,7 +28,7 @@ public class Measure {
         return size.x;
     }
 
-    public static float getScreenWidthDp(Context context) {
+    private static float getScreenWidthDp(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         return pxToDp(displayMetrics.widthPixels, context);
         //return displayMetrics.widthPixels / displayMetrics.density;
@@ -101,7 +101,7 @@ public class Measure {
         return new Point();
     }
 
-    public static Point getAppUsableScreenSize(Context context) {
+    private static Point getAppUsableScreenSize(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
@@ -109,7 +109,7 @@ public class Measure {
         return size;
     }
 
-    public static Point getRealScreenSize(Context context) {
+    private static Point getRealScreenSize(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();

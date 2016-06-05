@@ -10,11 +10,11 @@ public class AffixOptions {
     /**
      * Specifies the known formats a bitmap can be compressed into
      */
-    
-    String folderPath = null;
-    Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
-    int quality = 90;
-    boolean vertical = false;
+
+    private String folderPath = null;
+    private Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
+    private int quality = 90;
+    private boolean vertical = false;
 
     public boolean isVertical() {
         return vertical;
@@ -31,7 +31,7 @@ public class AffixOptions {
         this.vertical = vertical;
     }
 
-    public String getFolderPath() {
+    String getFolderPath() {
         return folderPath;
     }
 
@@ -43,7 +43,7 @@ public class AffixOptions {
         return format;
     }
 
-    public String getExtensionFormat() {
+    String getExtensionFormat() {
         switch (format) {
             case JPEG: default: return "jpg";
             case PNG: return "png";
@@ -55,7 +55,7 @@ public class AffixOptions {
         this.format = format;
     }
 
-    public int getQuality() {
+    int getQuality() {
         return quality;
     }
 

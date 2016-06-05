@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.SecurityHelper;
+import com.horaapps.leafpic.utils.SystemUtil;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -37,33 +40,35 @@ import uz.shift.colorpicker.OnColorChangedListener;
  */
 public class SettingActivity extends ThemedActivity {
 
-    SharedPreferences SP;
-    SecurityHelper securityObj;
+    public static final int GOOGLE_MAPS_PROVIDER = 0;
+    public static final int OSM_PROVIDER = 1;
 
-    Toolbar toolbar;
-    ScrollView scr;
+    private SharedPreferences SP;
+    private SecurityHelper securityObj;
 
-    TextView txtGT;
-    TextView txtTT;
-    TextView txtPT;
-    TextView txtVT;
+    private Toolbar toolbar;
+    private ScrollView scr;
 
-    SwitchCompat swNavBar;
-    SwitchCompat swStatusBar;
-    SwitchCompat swMaxLuminosita;
-    SwitchCompat swPictureOrientation;
-    SwitchCompat swDelayFullImage;
-    SwitchCompat swInternalBrowser;
-    SwitchCompat swAutoUpdate;
-    SwitchCompat swIncludeVideo;
-    SwitchCompat swSwipeDirection;
+    private TextView txtGT;
+    private TextView txtTT;
+    private TextView txtPT;
+    private TextView txtVT;
 
-    boolean maxLuminosita, pictureOrientation, delayfullimage, internalPlayer, includeVideo;
-    int baseThemeValue;
+    private SwitchCompat swNavBar;
+    private SwitchCompat swStatusBar;
+    private SwitchCompat swMaxLuminosita;
+    private SwitchCompat swPictureOrientation;
+    private SwitchCompat swDelayFullImage;
+    private SwitchCompat swInternalBrowser;
+    private SwitchCompat swAutoUpdate;
+    private SwitchCompat swIncludeVideo;
+    private SwitchCompat swSwipeDirection;
+
+    private int baseThemeValue;
 
     //TESTING STUFF
-    FloatingActionButton fabMoreThemeOptions;
-    FloatingActionButton fabMoreGeneralOptions;
+    private FloatingActionButton fabMoreThemeOptions;
+    private FloatingActionButton fabMoreGeneralOptions;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -119,12 +124,6 @@ public class SettingActivity extends ThemedActivity {
 
         scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
 
-        maxLuminosita = SP.getBoolean("set_max_luminosita", false);
-        pictureOrientation = SP.getBoolean("set_picture_orientation", false);
-        delayfullimage = SP.getBoolean("set_delay_full_image", true);
-        internalPlayer =  SP.getBoolean("set_internal_player", false);
-        includeVideo = SP.getBoolean("set_include_video", true);
-
 
         /*** EXCLUDED ALBUMS ***/
         findViewById(R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
@@ -178,14 +177,22 @@ public class SettingActivity extends ThemedActivity {
             }
         });
 
+        /*** MAP PROVIDER DIALOG ***/
+        findViewById(R.id.ll_map_provider).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapProviderDialog();
+            }
+        });
+
         /*** SW Internal Player ***/
         swInternalBrowser = (SwitchCompat) findViewById(R.id.set_internal_player);
-        swInternalBrowser.setChecked(internalPlayer);
+        swInternalBrowser.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
         swInternalBrowser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_internal_player", isChecked);
+                editor.putBoolean(getString(R.string.preference_internal_player), isChecked);
                 editor.apply();
 
                 new Thread(new Runnable() {
@@ -202,12 +209,12 @@ public class SettingActivity extends ThemedActivity {
 
         /*** SW INCLUDE VIDEO ***/
         swIncludeVideo = (SwitchCompat) findViewById(R.id.set_include_video);
-        swIncludeVideo.setChecked(includeVideo);
+        swIncludeVideo.setChecked(SP.getBoolean(getString(R.string.preference_include_video), true));
         swIncludeVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_include_video", isChecked);
+                editor.putBoolean(getString(R.string.preference_include_video), isChecked);
                 editor.apply();
                 updateSwitchColor(swIncludeVideo, getAccentColor());
             }
@@ -216,12 +223,12 @@ public class SettingActivity extends ThemedActivity {
 
         /*** SW SWIPE DIRECTION ***/
         swSwipeDirection = (SwitchCompat) findViewById(R.id.Set_media_viewer_swipe_direction);
-        swSwipeDirection.setChecked(SP.getBoolean("swipe_opposite", false));
+        swSwipeDirection.setChecked(SP.getBoolean(getString(R.string.preference_swipe_direction_inverted), false));
         swSwipeDirection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("swipe_opposite", isChecked);
+                editor.putBoolean(getString(R.string.preference_swipe_direction_inverted), isChecked);
                 editor.apply();
                 updateSwitchColor(swSwipeDirection, getAccentColor());
             }
@@ -230,12 +237,12 @@ public class SettingActivity extends ThemedActivity {
 
         /*** SW AUTO UPDATE MEDIA ***/
         swAutoUpdate = (SwitchCompat) findViewById(R.id.SetAutoUpdateMedia);
-        swAutoUpdate.setChecked(SP.getBoolean("auto_update_media", false));
+        swAutoUpdate.setChecked(SP.getBoolean(getString(R.string.preference_auto_update_media), false));
         swAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("auto_update_media", isChecked);
+                editor.putBoolean(getString(R.string.preference_auto_update_media), isChecked);
                 editor.apply();
                 updateSwitchColor(swAutoUpdate, getAccentColor());
             }
@@ -244,12 +251,12 @@ public class SettingActivity extends ThemedActivity {
 
         /*** SW DELAY FULL-SIZE IMAGE ***/
         swDelayFullImage = (SwitchCompat) findViewById(R.id.set_full_resolution);
-        swDelayFullImage.setChecked(delayfullimage);
+        swDelayFullImage.setChecked(SP.getBoolean(getString(R.string.preference_delay_full_image), true));
         swDelayFullImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_delay_full_image", isChecked);
+                editor.putBoolean(getString(R.string.preference_delay_full_image), isChecked);
                 editor.apply();
                 updateSwitchColor(swDelayFullImage, getAccentColor());
             }
@@ -258,12 +265,12 @@ public class SettingActivity extends ThemedActivity {
 
         /*** SW PICTURE ORIENTATION ***/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
-        swPictureOrientation.setChecked(pictureOrientation);
+        swPictureOrientation.setChecked(SP.getBoolean(getString(R.string.preference_auto_rotate), false));
         swPictureOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_picture_orientation", isChecked);
+                editor.putBoolean(getString(R.string.preference_auto_rotate), isChecked);
                 editor.apply();
                 updateSwitchColor(swPictureOrientation, getAccentColor());
             }
@@ -272,12 +279,12 @@ public class SettingActivity extends ThemedActivity {
 
         /*** SW MAX LUMINOSITA ***/
         swMaxLuminosita = (SwitchCompat) findViewById(R.id.set_max_luminosita);
-        swMaxLuminosita.setChecked(maxLuminosita);
+        swMaxLuminosita.setChecked(SP.getBoolean(getString(R.string.preference_max_brightness), false));
         swMaxLuminosita.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_max_luminosita", isChecked);
+                editor.putBoolean(getString(R.string.preference_max_brightness), isChecked);
                 editor.apply();
                 updateSwitchColor(swMaxLuminosita, getAccentColor());
             }
@@ -285,13 +292,13 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swMaxLuminosita, getAccentColor());
 
         /*** SW TRANSLUCENT STATUS BAR ***/
-        swStatusBar=(SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
-        swStatusBar.setChecked(isTraslucentStatusBar());
+        swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
+        swStatusBar.setChecked(isTranslucentStatusBar());
         swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("set_traslucent_statusbar", !isTraslucentStatusBar());
+                editor.putBoolean(getString(R.string.preference_translucent_status_bar), isChecked);
                 editor.apply();
                 updateTheme();
                 setStatusBarColor();
@@ -307,22 +314,20 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("nav_bar", !isNavigationBarColored());
+                editor.putBoolean(getString(R.string.preference_colored_nav_bar), isChecked);
                 editor.apply();
                 updateTheme();
                 updateSwitchColor(swNavBar, getAccentColor());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isNavigationBarColored())
-                        getWindow().setNavigationBarColor(getPrimaryColor());
-                    else
-                        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
-                }
+                if (SystemUtil.isAndroid5())
+                    getWindow().setNavigationBarColor(
+                            isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+
             }
         });
         updateSwitchColor(swNavBar, getAccentColor());
     }
 
-    public void askPasswordDialog() {
+    private void askPasswordDialog() {
         AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
         final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingActivity.this,passwordDialogBuilder);
         passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
@@ -353,7 +358,57 @@ public class SettingActivity extends ThemedActivity {
         });
     }
 
-    public void baseThemeDialog(){
+    private void mapProviderDialog() {
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        View dialogLayout = getLayoutInflater().inflate(R.layout.map_provider_dialog, null);
+        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.title);
+        ((CardView) dialogLayout.findViewById(R.id.rename_card)).setCardBackgroundColor(getCardBackgroundColor());
+        dialogTitle.setBackgroundColor(getPrimaryColor());
+        dialogTitle.setTextColor(getTextColor());
+
+        final RadioGroup mapProvider = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_maps_provider);
+        RadioButton radioGoogleMaps = (RadioButton) dialogLayout.findViewById(R.id.radio_google_maps);
+        RadioButton radioOsm = (RadioButton) dialogLayout.findViewById(R.id.radio_osm);
+        updateRadioButtonColor(radioGoogleMaps);
+        updateRadioButtonColor(radioOsm);
+        switch (SP.getInt(getString(R.string.preference_map_provider),GOOGLE_MAPS_PROVIDER)) {
+            case GOOGLE_MAPS_PROVIDER:
+                default:
+                    radioGoogleMaps.setChecked(true);
+                    break;
+            case OSM_PROVIDER:
+                radioOsm.setChecked(true);
+                break;
+        }
+
+        dialogBuilder.setNegativeButton(R.string.cancel, null);
+        dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                SharedPreferences.Editor editor = SP.edit();
+                editor.putInt(getString(R.string.preference_map_provider), baseThemeValue);
+                editor.apply();
+
+                switch (mapProvider.getCheckedRadioButtonId()) {
+                    case R.id.radio_google_maps:
+                        default:
+                        editor.putInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER);
+                        break;
+                    case R.id.radio_osm:
+                        editor.putInt(getString(R.string.preference_map_provider), OSM_PROVIDER);
+                        break;
+                }
+                editor.apply();
+
+            }
+        });
+        dialogBuilder.setView(dialogLayout);
+        dialogBuilder.show();
+    }
+
+    private void baseThemeDialog(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
 
         final View dialogLayout = getLayoutInflater().inflate(R.layout.basic_theme_dialog, null);
@@ -363,7 +418,7 @@ public class SettingActivity extends ThemedActivity {
         final IconicsImageView whiteSelect = (IconicsImageView) dialogLayout.findViewById(R.id.white_basic_theme_select);
         final IconicsImageView darkSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_basic_theme_select);
         final IconicsImageView darkAmoledSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_amoled_basic_theme_select);
-        
+
         switch (getBasicTheme()){
             case LIGHT_THEME:
                 whiteSelect.setVisibility(View.VISIBLE);
@@ -417,7 +472,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putInt("basic_theme", baseThemeValue);
+                editor.putInt(getString(R.string.preference_base_theme), baseThemeValue);
                 editor.apply();
                 startActivity(getIntent());
                 finish();
@@ -432,7 +487,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.show();
     }
 
-    public void primaryColorPiker(){
+    private void primaryColorPiker(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
 
         final View dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
@@ -457,7 +512,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onColorChanged(int c) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isTraslucentStatusBar()) {
+                    if (isTranslucentStatusBar()) {
                         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(c);
                 }
@@ -472,7 +527,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onColorChanged(int c) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isTraslucentStatusBar()) {
+                    if (isTranslucentStatusBar()) {
                         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(c));
                     } else getWindow().setStatusBarColor(c);
                     if (isNavigationBarColored())
@@ -491,7 +546,7 @@ public class SettingActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isTraslucentStatusBar()) {
+                    if (isTranslucentStatusBar()) {
                         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(getPrimaryColor());
                 }
@@ -502,13 +557,13 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putInt("primary_color", colorPicker2.getColor());
+                editor.putInt(getString(R.string.preference_primary_color), colorPicker2.getColor());
                 editor.apply();
                 updateTheme();
                 setNavBarColor();
                 setScrollViewColor(scr);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isTraslucentStatusBar()) {
+                    if (isTranslucentStatusBar()) {
                         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                     } else {
                         getWindow().setStatusBarColor(getPrimaryColor());
@@ -516,11 +571,12 @@ public class SettingActivity extends ThemedActivity {
                 }
             }
         });
+
         dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isTraslucentStatusBar()) {
+                    if (isTranslucentStatusBar()) {
                         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(getPrimaryColor());
                     if (isNavigationBarColored())
@@ -534,7 +590,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.show();
     }
 
-    public void accentColorPiker(){
+    private void accentColorPiker(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
 
         final View dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
@@ -567,7 +623,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putInt("accent_color", colorPicker.getColor());
+                editor.putInt(getString(R.string.preference_accent_color), colorPicker.getColor());
                 editor.apply();
                 updateTheme();
                 updateAccentViewsColor(getAccentColor());
@@ -582,7 +638,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.show();
     }
 
-    public void customizePictureViewer(){
+    private void customizePictureViewer(){
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
 
@@ -618,9 +674,10 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean("apply_theme_img_act", swApplyTheme_Viewer.isChecked());
+                editor.putBoolean(getString(R.string.preference_apply_theme_pager), swApplyTheme_Viewer.isChecked
+                                                                                                ());
                 int c = Color.alpha(transparencyColorPicker.getColor());
-                editor.putInt("set_alpha", 255 - c);
+                editor.putInt(getString(R.string.preference_transparency), 255 - c);
                 editor.apply();
                 updateTheme();
             }
@@ -629,7 +686,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.show();
     }
 
-    public void updateAccentViewsColor(int color){
+    private void updateAccentViewsColor(int color){
         txtGT.setTextColor(color);
         txtTT.setTextColor(color);
         txtPT.setTextColor(color);
@@ -653,7 +710,7 @@ public class SettingActivity extends ThemedActivity {
         securityObj.updateSecuritySetting();
     }
 
-    public void setTheme(){
+    private void setTheme(){
         toolbar.setBackgroundColor(getPrimaryColor());
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(
@@ -667,7 +724,6 @@ public class SettingActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
-        toolbar.setTitle(getString(R.string.settings));
 
         setStatusBarColor();
         setNavBarColor();
@@ -682,7 +738,7 @@ public class SettingActivity extends ThemedActivity {
         setThemeOnChangeListener();
     }
 
-    public void setThemeOnChangeListener(){
+    private void setThemeOnChangeListener(){
         setScrollViewColor(scr);
 
         /** BackGround **/

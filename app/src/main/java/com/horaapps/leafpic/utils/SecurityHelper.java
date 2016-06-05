@@ -25,15 +25,14 @@ import com.horaapps.leafpic.Views.ThemedActivity;
  * Created by Jibo on 06/05/2016.
  */
 public class SecurityHelper {
-    SharedPreferences SP;
-    boolean activeSecurity;
-    boolean passwordOnDelete;
-    boolean passwordOnHidden;
-    String passwordValue;
+    private boolean activeSecurity;
+    private boolean passwordOnDelete;
+    private boolean passwordOnHidden;
+    private String passwordValue;
 
-    Context context;
-    public SecurityHelper(Context c){
-        this.context = c;
+    private Context context;
+    public SecurityHelper(Context context){
+        this.context = context;
         updateSecuritySetting();
     }
 
@@ -46,17 +45,16 @@ public class SecurityHelper {
     }
 
     public void updateSecuritySetting(){
-        this.SP = PreferenceManager.getDefaultSharedPreferences(context);
-        this.activeSecurity = SP.getBoolean("active_security", false);
-        this.passwordOnDelete = SP.getBoolean("password_on_delete", false);
-        this.passwordOnHidden = SP.getBoolean("password_on_hidden", true);
-        this.passwordValue = SP.getString("password_value", "");
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        this.activeSecurity = SP.getBoolean(context.getString(R.string.preference_use_password), false);
+        this.passwordOnDelete = SP.getBoolean(context.getString(R.string.preference_use_password_on_delete), false);
+        this.passwordOnHidden = SP.getBoolean(context.getString(R.string.preference_use_password_on_hidden), true);
+        this.passwordValue = SP.getString(context.getString(R.string.preference_password_value), "");
     }
 
     public EditText getInsertPasswordDialog(final ThemedActivity activity, AlertDialog.Builder passwordDialog){
 
-        final View PasswordDialogLayout = activity.getLayoutInflater().inflate(R.layout
-                .password_dialog, null);
+        final View PasswordDialogLayout = activity.getLayoutInflater().inflate(R.layout.password_dialog, null);
         final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
         final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
         final EditText editxtPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);
@@ -66,9 +64,7 @@ public class SecurityHelper {
         ThemedActivity.setCursorDrawableColor(editxtPassword, activity.getTextColor());
         editxtPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editxtPassword.setTextColor(activity.getTextColor());
-
         passwordDialog.setView(PasswordDialogLayout);
-
         return editxtPassword;
     }
 }

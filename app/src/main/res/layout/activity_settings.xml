@@ -281,7 +281,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/ll_more_options_general"
-                        android:visibility="visible"
                         android:orientation="vertical"
                         >
 
@@ -291,7 +290,6 @@
                             android:layout_height="wrap_content"
                             app:mrl_rippleAlpha="0.05"
                             app:mrl_rippleDelayClick="false"
-                            android:visibility="gone"
                             >
 
                             <LinearLayout

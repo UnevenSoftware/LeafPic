@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -79,7 +80,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     DemoPlayer.Listener, DemoPlayer.Id3MetadataListener, AudioCapabilitiesReceiver.Listener {
 
   // For use within demo app code.
-  public static final String CONTENT_TYPE_EXTRA = "content_type";
+  private static final String CONTENT_TYPE_EXTRA = "content_type";
 
   // For use when launching the demo app using adb.
   private static final String CONTENT_EXT_EXTRA = "type";
@@ -93,7 +94,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   }
 
   private MediaController mediaController;
-  View mediController_anchor;
+  private View mediController_anchor;
   private View shutterView;
   private AspectRatioFrameLayout videoFrame;
   private SurfaceView surfaceView;
@@ -106,13 +107,13 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   private int contentType;
 
   private AudioCapabilitiesReceiver audioCapabilitiesReceiver;
-  Toolbar toolbar;
+  private Toolbar toolbar;
 
-  boolean fullscreen = false;
+  private boolean fullscreen = false;
 
   // Activity lifecycle
 
-  public void initUI(){
+  private void initUI(){
 
     toolbar.setBackgroundColor(
             isApplyThemeOnImgAct()
@@ -213,7 +214,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   @Override
   protected void setStatusBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (isTraslucentStatusBar() && isTransparencyZero())
+      if (isTranslucentStatusBar() && isTransparencyZero())
         getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
       else
         getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
@@ -323,8 +324,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   // Permission request listener method
 
   @Override
-  public void onRequestPermissionsResult(int requestCode, String[] permissions,
-      int[] grantResults) {
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
       preparePlayer(true);
     } else {
@@ -436,7 +436,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         text += "unknown";
         break;
     }
-    //Log.d(TAG, "onStateChanged: "+text);
+    Log.d(TAG, "onStateChanged: "+text);
     //updateButtonVisibilities();
   }
 

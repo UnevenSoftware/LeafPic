@@ -31,14 +31,14 @@ import de.psdev.licensesdialog.model.Notices;
  */
 public class AboutActivity extends ThemedActivity {
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
     int color;
 
     /**** CustomTabService*/
-    CustomTabService cts;
+    private CustomTabService cts;
 
     /**** Scroll View*/
-    ScrollView scr;
+    private ScrollView scr;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class AboutActivity extends ThemedActivity {
         setTheme();
     }
 
-    public void setTheme(){
+    private void setTheme(){
         /**** ToolBar *****/
         toolbar.setBackgroundColor(getPrimaryColor());
         setSupportActionBar(toolbar);
@@ -104,7 +104,7 @@ public class AboutActivity extends ThemedActivity {
         /***** Images *****/
         Glide.with(this)
                 .load("https://lh3.googleusercontent.com/-4lGmk-K4r4U/Vw1Vj8yERrI/AAAAAAAANww/FIsb58PcO-U-9AfD8FXfruK1c75SZ184QCL0B/w958-h539-no/asd.png")
-                .placeholder(getic_empity())
+                .placeholder(getPlaceHolder())
                 .priority(Priority.HIGH)
                 .error(R.drawable.ic_error)
                 .animate(R.anim.fade_in)
@@ -130,7 +130,7 @@ public class AboutActivity extends ThemedActivity {
         /***** Images *****/
         Glide.with(this)
                 .load("https://lh6.googleusercontent.com/-CQSWRHA3PMU/U1giCTxx3LI/AAAAAAAAAZU/YVnUYwwnNOEE7ob0LyHmRnbUtEtC5znIQCL0B/w958-h639-no/1397233014-game-over-samus.jpg")
-                .placeholder(getic_empity())
+                .placeholder(getPlaceHolder())
                 .priority(Priority.HIGH)
                 .error(R.drawable.ic_error)
                 .animate(R.anim.fade_in)
@@ -157,10 +157,10 @@ public class AboutActivity extends ThemedActivity {
         setScrollViewColor(scr);
 
         setThemeOnChangeListener();
-        ClickListeners();
+        setUpActions();
     }
 
-    public void ClickListeners(){
+    private void setUpActions(){
 
         //GitHub
         findViewById(R.id.ll_about_support_github).setOnClickListener(new View.OnClickListener() {
@@ -259,7 +259,7 @@ public class AboutActivity extends ThemedActivity {
 
     }
 
-    public void setThemeOnChangeListener(){
+    private void setThemeOnChangeListener(){
 
         /** BackGround **/
         findViewById(R.id.about_background).setBackgroundColor(getBackgroundColor());
@@ -309,7 +309,8 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_report_bug_sub)).setTextColor(color);
     }
 
-    public void licenseDialog(){
+    private void licenseDialog() {
+        //TODO I HATE THIS redo please.
         final Notices notices = new Notices();
         notices.addNotice(new Notice("Glide", "http://github.com/bumptech/glide", "Copyright 2014 Google, Inc. All rights reserved.", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("Ion", "http://github.com/koush/ion", "Copyright 2013 Koushik Dutta (2013)", new ApacheSoftwareLicense20()));

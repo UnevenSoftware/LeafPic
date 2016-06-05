@@ -22,13 +22,13 @@ import com.mikepenz.iconics.view.IconicsImageView;
  */
 public class DonateActivity extends ThemedActivity {
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
     /**** Title Cards ***/
-    CustomTabService cts;
+    private CustomTabService cts;
 
     /**** Scroll View*/
-    ScrollView scr;
+    private ScrollView scr;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class DonateActivity extends ThemedActivity {
         setTheme();
     }
 
-    public void setTheme(){
+    private void setTheme(){
 
         /**** ToolBar *****/
         toolbar.setBackgroundColor(getPrimaryColor());
