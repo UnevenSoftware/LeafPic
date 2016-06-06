@@ -99,14 +99,14 @@ public class ContentHelper {
 				inChannel.transferTo(0, inChannel.size(), outChannel);
 			}
 			else {
-				if (SystemUtil.isAndroid5()) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 					// Storage Access Framework
 					DocumentFile targetDocument = getDocumentFile(context,target, false, true);
 					if (targetDocument != null) {
 						outStream = context.getContentResolver().openOutputStream(targetDocument.getUri());
 					}
 				}
-				else if (SystemUtil.isKitkat()) {
+				else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
 					// Workaround for Kitkat ext SD card
 					Uri uri = null;//MediaStoreUtil.getUriFromFile(target.getAbsolutePath());
 					if (uri != null) {
@@ -185,13 +185,13 @@ public class ContentHelper {
         }
 
         // Try with Storage Access Framework.
-        if (SystemUtil.isAndroid5()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             DocumentFile document = getDocumentFile(context, file, true, true);
             return document != null && document.delete();
         }
 
         // Try the Kitkat workaround.
-        if (SystemUtil.isKitkat()) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             ContentResolver resolver = context.getContentResolver();
             ContentValues values = new ContentValues();
             values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
@@ -467,13 +467,13 @@ public class ContentHelper {
 	}
 
 	// Try with Storage Access Framework.
-	if (SystemUtil.isAndroid5()) {
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 	  DocumentFile document = getDocumentFile(context, file, false, true);
 	  return document != null && document.delete();
 	}
 
 	// Try the Kitkat workaround.
-	if (SystemUtil.isKitkat()) {
+	if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
 	  ContentResolver resolver = context.getContentResolver();
 
 	  try {

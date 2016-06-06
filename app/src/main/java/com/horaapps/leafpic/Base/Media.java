@@ -37,6 +37,14 @@ public class Media implements Parcelable {
     public static final String TAG_MODEL = "Model";
     public static final String TAG_F_NUMBER = "F-Number";
     public static final String TAG_ISO = "ISO Speed Ratings";
+    private static final String TAG_ORIENTATION = "Orientation";
+
+    //region ORIENTATION VALUES
+    private static final int ORIENTATION_NORMAL = 1;
+    private static final int ORIENTATION_ROTATE_180 = 3;
+    private static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
+    private static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
+    //endregion
 
     private final Map<String, Object> metadataMap = new HashMap<String, Object>();
 
@@ -109,17 +117,13 @@ public class Media implements Parcelable {
     }
 
     public int getOrientation() {
-        ExifInterface exif;
-        try { exif = new ExifInterface(getPath()); }
-        catch (IOException ex) { return -1; }
-        if (exif != null) {
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
-            if (orientation != -1) {
-                switch (orientation) {
-                    case ExifInterface.ORIENTATION_ROTATE_90: return 90;
-                    case ExifInterface.ORIENTATION_ROTATE_180: return 180;
-                    case ExifInterface.ORIENTATION_ROTATE_270: return 270;
-                }
+        loadMetadata();
+        if (metadataMap.containsKey(TAG_ORIENTATION)) {
+            switch (Integer.parseInt(metadataMap.get(TAG_ORIENTATION).toString())) {
+                case ORIENTATION_NORMAL: return 0;
+                case ORIENTATION_ROTATE_90: return 90;
+                case ORIENTATION_ROTATE_180: return 180;
+                case ORIENTATION_ROTATE_270: return 270;
             }
         }
         return -1;
@@ -148,8 +152,10 @@ public class Media implements Parcelable {
             try {
                 Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
                 for (Directory directory : metadata.getDirectories())
-                    for (Tag tag : directory.getTags())
+                    for (Tag tag : directory.getTags()) {
                         metadataMap.put(tag.getTagName(), directory.getObject(tag.getTagType()));
+                        //Log.wtf("asd", tag.getTagName());
+                    }
             } catch (Exception e){ e.printStackTrace(); }
         }
     }
