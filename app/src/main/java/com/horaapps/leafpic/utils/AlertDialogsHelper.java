@@ -161,9 +161,11 @@ public class AlertDialogsHelper {
                         exif.getAttribute(ExifInterface.TAG_APERTURE),
                         exif.getAttribute(ExifInterface.TAG_ISO),
                         exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
-
-
-                textViewOrientation.setText(String.format(Locale.getDefault(), "%d", f.getOrientation()));
+                int orientation;
+                if ((orientation = f.getOrientation()) != -1) {
+                    dialogLayout.findViewById(R.id.ll_orientation_details).setVisibility(View.VISIBLE);
+                    textViewOrientation.setText(String.format(Locale.getDefault(), "%d", orientation));
+                }
 
                 final float[] output = new float[2];
                 if(exif.getLatLong(output)) {

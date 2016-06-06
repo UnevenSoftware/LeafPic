@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.SecurityHelper;
-import com.horaapps.leafpic.utils.SystemUtil;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -308,7 +307,7 @@ public class SettingActivity extends ThemedActivity {
         updateSwitchColor(swStatusBar, getAccentColor());
 
         /*** SW COLORED NAV BAR ***/
-        swNavBar=(SwitchCompat) findViewById(R.id.SetColoredNavBar);
+        swNavBar = (SwitchCompat) findViewById(R.id.SetColoredNavBar);
         swNavBar.setChecked(isNavigationBarColored());
         swNavBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -318,7 +317,7 @@ public class SettingActivity extends ThemedActivity {
                 editor.apply();
                 updateTheme();
                 updateSwitchColor(swNavBar, getAccentColor());
-                if (SystemUtil.isAndroid5())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     getWindow().setNavigationBarColor(
                             isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 

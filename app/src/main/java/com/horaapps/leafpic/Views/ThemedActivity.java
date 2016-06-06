@@ -2,7 +2,6 @@ package com.horaapps.leafpic.Views;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.SystemUtil;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
@@ -216,7 +214,7 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     protected void updateRadioButtonColor(RadioButton radioButton) {
-        if(SystemUtil.isAndroid5()) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             radioButton.setButtonTintList(getRadioButtonColor());
             radioButton.setTextColor(getTextColor());
         }
@@ -224,7 +222,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setNavBarColor() {
-        if (SystemUtil.isAndroid5()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
             else
                 getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
@@ -255,7 +253,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected void setStatusBarColor() {
-        if (SystemUtil.isAndroid5()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isTranslucentStatusBar())
                 getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
             else
@@ -322,7 +320,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setRecentApp(String text){
-        if (SystemUtil.isAndroid5()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
         }
