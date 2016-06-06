@@ -36,7 +36,8 @@
                     android:layout_height="@dimen/icon_width_height"
                     android:layout_gravity="center_vertical"
                     app:iiv_icon="gmd-lock"
-                    android:layout_margin="@dimen/big_spacing"
+                    android:layout_marginLeft="@dimen/big_spacing"
+                    android:layout_marginRight="@dimen/big_spacing"
                     />
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -45,7 +46,7 @@
                     android:orientation="horizontal"
                     android:paddingTop="@dimen/medium_spacing"
                     android:paddingRight="@dimen/medium_spacing"
-                    android:paddingBottom="@dimen/big_spacing"
+                    android:paddingBottom="@dimen/medium_spacing"
                     >
                     <TextView
                         android:id="@+id/active_security_item_title"
@@ -121,7 +122,6 @@
             -->
             <!--BODY-->
             <LinearLayout
-                android:layout_marginTop="@dimen/big_spacing"
                 android:id="@+id/ll_security_dialog_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,14 +152,15 @@
                         android:layout_height="@dimen/icon_width_height"
                         android:layout_gravity="center_vertical"
                         app:iiv_icon="faw-low-vision"
-                        android:layout_margin="@dimen/big_spacing"
+                        android:layout_marginLeft="@dimen/big_spacing"
+                        android:layout_marginRight="@dimen/big_spacing"
                         />
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingTop="@dimen/big_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:paddingRight="@dimen/medium_spacing"
                         android:paddingBottom="@dimen/medium_spacing"
                         >
@@ -201,14 +202,15 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         app:iiv_icon="gmd-delete"
-                        android:layout_margin="@dimen/big_spacing"
+                        android:layout_marginLeft="@dimen/big_spacing"
+                        android:layout_marginRight="@dimen/big_spacing"
                         />
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingTop="@dimen/big_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:paddingRight="@dimen/medium_spacing"
                         android:paddingBottom="@dimen/medium_spacing"
                         >
