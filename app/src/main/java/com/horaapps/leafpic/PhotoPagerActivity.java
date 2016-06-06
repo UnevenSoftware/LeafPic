@@ -61,18 +61,18 @@ import java.nio.channels.FileChannel;
 public class PhotoPagerActivity extends ThemedActivity {
 
     private static final String ISLOCKED_ARG = "isLocked";
-    public static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
-    public static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
+    static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
+    private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
-    HackyViewPager mViewPager;
-    MediaPagerAdapter adapter;
-    SharedPreferences SP;
-    RelativeLayout ActivityBackgorund;
-    Album album;
-    SelectAlbumBottomSheet bottomSheetDialogFragment;
-    SecurityHelper securityObj;
-    Toolbar toolbar;
-    boolean fullscreenmode;
+    private HackyViewPager mViewPager;
+    private MediaPagerAdapter adapter;
+    private SharedPreferences SP;
+    private RelativeLayout ActivityBackgorund;
+    private Album album;
+    private SelectAlbumBottomSheet bottomSheetDialogFragment;
+    private SecurityHelper securityObj;
+    private Toolbar toolbar;
+    private boolean fullscreenmode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    public void initUI() {
+    private void initUI() {
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
@@ -189,7 +189,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     }
 
-    public void setupUI() {
+    private void setupUI() {
 
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -311,7 +311,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         album.scanFile(getApplicationContext(), new String[]{album.getCurrentMedia().getPath()});
     }
 
-    public void displayAlbums(boolean reload) {
+    private void displayAlbums(boolean reload) {
         Intent i = new Intent(PhotoPagerActivity.this, MainActivity.class);
         Bundle b = new Bundle();
         b.putInt(SplashScreen.CONTENT, SplashScreen.ALBUMS_PREFETCHED);
@@ -538,14 +538,14 @@ public class PhotoPagerActivity extends ThemedActivity {
         getWindow().setAttributes(lp);
     }
 
-    public UCrop.Options getUcropOptions() {
+    private UCrop.Options getUcropOptions() {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        options.setStatusBarColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        options.setStatusBarColor(isTranslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
         options.setFreeStyleCropEnabled(true);
 
@@ -571,13 +571,13 @@ public class PhotoPagerActivity extends ThemedActivity {
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isApplyThemeOnImgAct())
-                if (isTraslucentStatusBar() && isTransparencyZero())
+                if (isTranslucentStatusBar() && isTransparencyZero())
                     getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 else
                     getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
                 getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
         }
     }
 
@@ -638,7 +638,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
     }
 
-    public void changeBackGroundColor() {
+    private void changeBackGroundColor() {
         int colorTo;
         int colorFrom;
         if (fullscreenmode) {

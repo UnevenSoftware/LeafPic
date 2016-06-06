@@ -17,17 +17,17 @@ public class AlbumSettings {
     public final static int SORT_BY_DATE = 0;
     public final static int SORT_BY_SIZE = 1;
 
-    public String coverPath;
+    String coverPath;
     public int columnSortingMode;
     public boolean ascending;
 
-    public AlbumSettings(String cover, int SortingMode, boolean asce) {
+    AlbumSettings(String cover, int SortingMode, boolean asce) {
         coverPath = cover;
         columnSortingMode = SortingMode;
         ascending = asce;
     }
 
-    public AlbumSettings() {
+    AlbumSettings() {
         coverPath = null;
         columnSortingMode = 0;
         ascending = false;

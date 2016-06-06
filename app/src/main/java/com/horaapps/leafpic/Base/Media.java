@@ -6,7 +6,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.format.Time;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -14,11 +13,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifDirectoryBase;
-import com.drew.metadata.exif.ExifIFD0Directory;
-import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -26,19 +21,31 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by dnld on 26/04/16.
  */
 public class Media implements Parcelable {
 
-    String path = null;
-    long dateModified = -1;
-    String mime = null;
+    private static final String TAG_WIDTH = "Image Width";
+    private static final String TAG_HEIGHT = "Image Height";
+    private static final String TAG_DATE_TAKEN = "Date/Time Original";
+    public static final String TAG_MAKE = "Make";
+    public static final String TAG_MODEL = "Model";
+    public static final String TAG_F_NUMBER = "F-Number";
+    public static final String TAG_ISO = "ISO Speed Ratings";
 
-    long size = 0;
-    boolean selected = false;
+    private final Map<String, Object> metadataMap = new HashMap<String, Object>();
+
+    String path = null;
+    private long dateModified = -1;
+    private String mime = null;
+
+    private long size = 0;
+    private boolean selected = false;
 
     public Media() { }
 
@@ -46,6 +53,7 @@ public class Media implements Parcelable {
         this.path=path;
         this.dateModified=dateModified;
         setMIME();
+        //loadMetadata();
     }
 
     public Media(String path, long dateModified, long size) {
@@ -53,24 +61,26 @@ public class Media implements Parcelable {
         this.dateModified = dateModified;
         this.size = size;
         setMIME();
+        //loadMetadata();
     }
 
     public Media(String path) {
         this.path = path;
         setMIME();
+        //loadMetadata();
     }
 
     public String getMIME() {
         return mime;
     }
 
-    public void setMIME() {
+    private void setMIME() {
         String extension = path.substring(path.lastIndexOf('.')+1);
-        mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        if(mime == null) mime= "custom";
+        mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        if(mime == null) mime= "unknown";
     }
 
-    public void setSelected(boolean selected) {
+    void setSelected(boolean selected) {
         this.selected = selected;
     }
 
@@ -101,7 +111,7 @@ public class Media implements Parcelable {
     public int getOrientation() {
         ExifInterface exif;
         try { exif = new ExifInterface(getPath()); }
-        catch (IOException ex) { return 0; }
+        catch (IOException ex) { return -1; }
         if (exif != null) {
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
             if (orientation != -1) {
@@ -112,7 +122,7 @@ public class Media implements Parcelable {
                 }
             }
         }
-        return 0;
+        return -1;
     }
 
     public boolean setOrientation(int orientation){
@@ -133,61 +143,42 @@ public class Media implements Parcelable {
         return true;
     }
 
-    public int getWidth() { //TODO improve
-
-        Metadata metadata;// = ImageMetadataReader.readMetadata(new File(getPath()));
-        //ExifInterface exif;
-        try {
-            metadata = ImageMetadataReader.readMetadata(new File(getPath()));
-        for (Directory directory : metadata.getDirectories()) {
-
-            //
-            // Each Directory stores values in Tag objects
-            //
-            Log.wtf("asd",directory.toString());
-            for (Tag tag : directory.getTags()) {
-                System.out.println(tag);
-            }
-
-            //
-            // Each Directory may also contain error messages
-            //
-            if (directory.hasErrors()) {
-                for (String error : directory.getErrors()) {
-                    System.err.println("ERROR: " + error);
-                }
-            }
+    private void loadMetadata() {
+        if (metadataMap.isEmpty()) {
+            try {
+                Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
+                for (Directory directory : metadata.getDirectories())
+                    for (Tag tag : directory.getTags())
+                        metadataMap.put(tag.getTagName(), directory.getObject(tag.getTagType()));
+            } catch (Exception e){ e.printStackTrace(); }
         }
-         }
-        catch (IOException e) {  return -1; }
-        catch (ImageProcessingException e) { return -2; }
-        return -3;
-
-        /**ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory
-                .class);
-        try { return directory.getInt(ExifSubIFDDirectory.TAG_IMAGE_WIDTH); }
-        catch (MetadataException e) { return -3; }
-         */
-        //return Integer.parseInt(exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH));
     }
 
-    public int getHeight() { //TODO improve
-
-        //return -3;
-        Metadata metadata;
-        try { metadata = ImageMetadataReader.readMetadata(new File(getPath())); }
-        catch (IOException e) {  return -1; }
-        catch (ImageProcessingException e) { return -1; }
-        ExifDirectoryBase directory = metadata.getFirstDirectoryOfType(ExifDirectoryBase.class);
-        if (directory != null)
-        try { return directory.getInt(ExifDirectoryBase.TAG_IMAGE_HEIGHT); }
-        catch (MetadataException e) { return -1; }
-
-        return -3;
+    public int getWidth() {
+        loadMetadata();
+        if (metadataMap.containsKey(TAG_WIDTH))
+            return Integer.parseInt(metadataMap.get(TAG_WIDTH).toString());
+        return -1;
     }
 
-    public long getDateEXIF() {
-        ExifInterface exif;
+    public int getHeight() {
+        loadMetadata();
+        if (metadataMap.containsKey(TAG_HEIGHT))
+            return Integer.parseInt(metadataMap.get(TAG_HEIGHT).toString());
+        return -1;
+    }
+
+    public long getDateTaken() {
+        loadMetadata();
+        if (metadataMap.containsKey(TAG_DATE_TAKEN))
+            //
+            try { return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(metadataMap.get(TAG_DATE_TAKEN).toString()).getTime(); }
+            catch (ParseException e) { return -1; }
+            catch (NullPointerException e) { return -1; }
+
+        return -1;
+
+        /*ExifInterface exif;
         Date date;
         try { exif = new ExifInterface(getPath()); }
         catch (IOException e) {  return -1; }
@@ -196,11 +187,11 @@ public class Media implements Parcelable {
         }
         catch (ParseException e) { return -1; }
         catch (NullPointerException e) { return -1; }
-        return date.getTime();
+        return date.getTime();*/
     }
 
     public boolean fixDate(){
-        long newDate = getDateEXIF();
+        long newDate = getDateTaken();
         if (newDate != -1){
             File f = new File(getPath());
             if (f.setLastModified(newDate)) {
@@ -224,7 +215,7 @@ public class Media implements Parcelable {
     }
 
     public long getDate() {
-        long exifDate = getDateEXIF();
+        long exifDate = getDateTaken();
         return exifDate != -1 ? exifDate : dateModified;
     }
 

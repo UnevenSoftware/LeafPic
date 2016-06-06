@@ -17,17 +17,17 @@ public class ImageFileFilter implements FilenameFilter
     public final static int FILTER_IMAGES = 1;
     public final static int FILTER_GIFS = 2;
     public final static int FILTER_VIDEO = 3;
-    public final static int FILTER_NO_VIDEO = 4;
+    private final static int FILTER_NO_VIDEO = 4;
 
-    HashSet<String> extensions;
-    public static String[] imagesExtensions =
+    private HashSet<String> extensions;
+    private static String[] imagesExtensions =
             new String[] { "jpg", "png", "jpe", "jpeg", "bmp", "webp" };
-    public static String[] videoExtensions = new String[] { "mp4", "mkv", "webm", "avi" };
-    public static String[] gifsExtensions = new String[] { "gif"} ;
+    private static String[] videoExtensions = new String[] { "mp4", "mkv", "webm", "avi" };
+    private static String[] gifsExtensions = new String[] { "gif"} ;
 
     //private String[] okFileExtensions = allExtensions;
 
-    public ImageFileFilter(int filter) {
+    private ImageFileFilter(int filter) {
         extensions = new HashSet<String>();
         switch (filter) {
             case FILTER_IMAGES:
@@ -51,7 +51,8 @@ public class ImageFileFilter implements FilenameFilter
                     break;
         }
     }
-    public ImageFileFilter(int filter, boolean includeVideo) {
+
+    ImageFileFilter(int filter, boolean includeVideo) {
         extensions = new HashSet<String>();
         switch (filter) {
             case FILTER_IMAGES:
@@ -77,10 +78,11 @@ public class ImageFileFilter implements FilenameFilter
         }
     }
 
-    public ImageFileFilter(boolean includeVideo) {
+    ImageFileFilter(boolean includeVideo) {
         this(includeVideo ? FILTER_ALL : FILTER_NO_VIDEO);
     }
-    public ImageFileFilter() {
+
+    ImageFileFilter() {
        this(FILTER_ALL);
     }
 

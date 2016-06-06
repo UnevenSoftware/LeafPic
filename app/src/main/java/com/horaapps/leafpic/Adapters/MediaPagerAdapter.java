@@ -21,9 +21,9 @@ import java.util.ArrayList;
 
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
-    ArrayList<Media> medias;
-    View.OnClickListener videoOnClickListener;
-    SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    private ArrayList<Media> medias;
+    private View.OnClickListener videoOnClickListener;
+    private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> medias) {

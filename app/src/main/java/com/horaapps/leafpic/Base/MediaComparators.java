@@ -5,14 +5,14 @@ import java.util.Comparator;
 /**
  * Created by dnld on 26/04/16.
  */
-public class MediaComparators {
-    boolean ascending = true;
+class MediaComparators {
+    private boolean ascending = true;
 
-    public MediaComparators(boolean ascending){
+    MediaComparators(boolean ascending){
         this.ascending = ascending;
     }
 
-    public Comparator<Media> getDateComparator(){
+    Comparator<Media> getDateComparator(){
         return new Comparator<Media>(){
             public int compare(Media f1, Media f2) {
                 return ascending
@@ -23,7 +23,7 @@ public class MediaComparators {
         };
     }
 
-    public Comparator<Media> getNameComparator() {
+    Comparator<Media> getNameComparator() {
         return new Comparator<Media>() {
             public int compare(Media f1, Media f2) {
                 return ascending
@@ -33,7 +33,7 @@ public class MediaComparators {
         };
     }
 
-    public Comparator<Media> getSizeComparator() {
+    Comparator<Media> getSizeComparator() {
         return new Comparator<Media>() {
             public int compare(Media f1, Media f2) {
                 return ascending

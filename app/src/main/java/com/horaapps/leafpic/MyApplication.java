@@ -1,7 +1,6 @@
 package com.horaapps.leafpic;
 
 import android.app.Application;
-
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.Album;
 
@@ -12,11 +11,11 @@ public class MyApplication extends Application {
 
     private HandlingAlbums albums;
 
-    public Album getCurrentAlbum() {
+    Album getCurrentAlbum() {
         return albums.getCurrentAlbum();
     }
 
-    public void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
+    void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
 
     public HandlingAlbums getAlbums() {
         return albums;
@@ -26,7 +25,7 @@ public class MyApplication extends Application {
         this.albums = albums;
     }
 
-    public void updateAlbums() {
+    void updateAlbums() {
         albums.loadPreviewAlbums(getApplicationContext());
     }
 }

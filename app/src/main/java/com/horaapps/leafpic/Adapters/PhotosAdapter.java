@@ -30,10 +30,10 @@ import java.util.ArrayList;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
-    ArrayList<Media> medias;
-    SharedPreferences SP;
+    private ArrayList<Media> medias;
+    private SharedPreferences SP;
 
-    BitmapDrawable drawable;
+    private BitmapDrawable drawable;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
@@ -142,11 +142,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView, selectHolder, gifIcon, videoIcon;
         TextView path;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.photo_preview);
             selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);

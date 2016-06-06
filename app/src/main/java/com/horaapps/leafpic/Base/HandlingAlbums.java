@@ -34,21 +34,21 @@ import java.util.regex.Pattern;
 public class HandlingAlbums {
 
     public final static String TAG = "HandlingAlbums";
-    Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
+    private Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
 
     public ArrayList<Album> dispAlbums;
     private ArrayList<Album> selectedAlbums;
-    boolean includeVideo = true;
+    private boolean includeVideo = true;
 
-    CustomAlbumsHandler customAlbumsHandler;
+    private CustomAlbumsHandler customAlbumsHandler;
     private SharedPreferences SP;
 
-    int indexCamera = -1;
-    int current = -1;
-    boolean hidden;
+    private int indexCamera = -1;
+    private int current = -1;
+    private boolean hidden;
 
-    ArrayList<File> excludedfolders;
-    AlbumsComparators albumsComparators;
+    private ArrayList<File> excludedfolders;
+    private AlbumsComparators albumsComparators;
 
     public HandlingAlbums(Context context) {
         SP = PreferenceManager.getDefaultSharedPreferences(context);
@@ -98,65 +98,24 @@ public class HandlingAlbums {
         return dispAlbums.get(current);
     }
 
-    public void clearCameraIndex() {
+    private void clearCameraIndex() {
         indexCamera = -1;
     }
 
-    public HashSet<File> listStorages(Context context) {
+    private HashSet<File> listStorages(Context context) {
         HashSet<File> roots = new HashSet<File>();
         roots.add(Environment.getExternalStorageDirectory());
+
         String[] extSdCardPaths = ContentHelper.getExtSdCardPaths(context);
         for (String extSdCardPath : extSdCardPaths) {
             File mas = new File(extSdCardPath);
             if (mas.canRead())
                 roots.add(mas);
         }
-        //Log.wtf(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
-
-        /*for (String mount : getExternalMounts()) {
-            File mas = new File(mount);
-            if (mas.canRead())
-                roots.add(mas);
-        }*/
 
         String sdCard = System.getenv("SECONDARY_STORAGE");
         if (sdCard != null) roots.add(new File(sdCard));
         return roots;
-    }
-
-    public static HashSet<String> getExternalMounts() {
-        final HashSet<String> out = new HashSet<String>();
-        String reg = "(?i).*vold.*(vfat|ntfs|exfat|fat32|ext3|ext4).*rw.*";
-        String s = "";
-        try {
-            final Process process = new ProcessBuilder().command("mount")
-                    .redirectErrorStream(true).start();
-            process.waitFor();
-            final InputStream is = process.getInputStream();
-            final byte[] buffer = new byte[1024];
-            while (is.read(buffer) != -1) {
-                s = s + new String(buffer);
-            }
-            is.close();
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-
-        // parse output
-        final String[] lines = s.split("\n");
-        for (String line : lines) {
-            if (!line.toLowerCase(Locale.US).contains("asec")) {
-                if (line.matches(reg)) {
-                    String[] parts = line.split(" ");
-                    for (String part : parts) {
-                        if (part.startsWith("/"))
-                            if (!part.toLowerCase(Locale.US).contains("vold"))
-                                out.add(part);
-                    }
-                }
-            }
-        }
-        return out;
     }
 
     public ArrayList<Album> getValidFolders(Context context,boolean hidden) {
@@ -251,12 +210,12 @@ public class HandlingAlbums {
         return excludedfolders;
     }
 
-    public void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList, String rootExternalStorage) {
+    private void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList, String rootExternalStorage) {
         File[] files = temp.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
             Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length, rootExternalStorage);
-            asd.setCoverPath(customAlbumsHandler.getPhotPrevieAlbum(asd.getPath()));
+            asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath()));
 
             long lastMod = Long.MIN_VALUE;
             File choice = null;
@@ -369,7 +328,8 @@ public class HandlingAlbums {
         }
         return dstBmp;
     }
-    public void scanFile(Context context, String[] path) {   MediaScannerConnection.scanFile(context, path, null, null); }
+
+    private void scanFile(Context context, String[] path) {   MediaScannerConnection.scanFile(context, path, null, null); }
 
     public void hideAlbum(String path, Context context) {
         File dirName = new File(path);
@@ -391,7 +351,7 @@ public class HandlingAlbums {
         clearSelectedAlbums();
     }
 
-    public void hideAlbum(final Album a, Context context) {
+    private void hideAlbum(final Album a, Context context) {
         hideAlbum(a.getPath(), context);
         dispAlbums.remove(a);
     }
@@ -410,7 +370,7 @@ public class HandlingAlbums {
         clearSelectedAlbums();
     }
 
-    public void unHideAlbum(final Album a, Context context) {
+    private void unHideAlbum(final Album a, Context context) {
         unHideAlbum(a.getPath(), context);
         dispAlbums.remove(a);
     }
@@ -439,7 +399,7 @@ public class HandlingAlbums {
         clearSelectedAlbums();
     }
 
-    public void excludeAlbum(Context context, Album a) {
+    private void excludeAlbum(Context context, Album a) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
         h.excludeAlbum(a.getPath());
         excludedfolders.add(new File(a.getPath()));

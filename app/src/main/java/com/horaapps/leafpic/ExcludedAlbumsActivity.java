@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
-    ArrayList<File> excludedFolders = new ArrayList<File>();
-    HandlingAlbums handlingAlbums;
+    private ArrayList<File> excludedFolders = new ArrayList<File>();
+    private HandlingAlbums handlingAlbums;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +40,13 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         initUI();
     }
 
-    public void checkNothing(ArrayList<File> asd){
+    private void checkNothing(ArrayList<File> asd){
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
         a.setTextColor(getTextColor());
         a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
-    public void initUI(){
+    private void initUI(){
 
         RecyclerView mRecyclerView;
         Toolbar toolbar;
@@ -136,21 +136,21 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
             return excludedFolders.size();
         }
 
-        public int getIndex(String id) {
+        int getIndex(String id) {
             for (int i = 0; i < excludedFolders.size(); i++)
                 if (excludedFolders.get(i).getAbsolutePath().equals(id)) return i;
             return -1;
         }
 
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
             LinearLayout card_layout;
             IconicsImageView imgUnExclude;
             IconicsImageView imgFolder;
             TextView album_name;
             TextView album_path;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
                 imgUnExclude = (IconicsImageView) itemView.findViewById(R.id.UnExclude_icon);

@@ -5,14 +5,14 @@ import java.util.Comparator;
 /**
  * Created by dnld on 26/04/16.
  */
-public class AlbumsComparators {
+class AlbumsComparators {
     boolean ascending = true;
 
-    public AlbumsComparators(boolean ascending){
+    AlbumsComparators(boolean ascending){
         this.ascending = ascending;
     }
 
-    public Comparator<Album> getDateComparator(){
+    Comparator<Album> getDateComparator(){
         return new Comparator<Album>(){
             public int compare(Album f1, Album f2) {
                 return ascending
@@ -23,7 +23,7 @@ public class AlbumsComparators {
         };
     }
 
-    public Comparator<Album> getNameComparator() {
+    Comparator<Album> getNameComparator() {
         return new Comparator<Album>() {
             public int compare(Album f1, Album f2) {
                 return ascending
@@ -33,7 +33,7 @@ public class AlbumsComparators {
         };
     }
 
-    public Comparator<Album> getSizeComparator() {
+    Comparator<Album> getSizeComparator() {
         return new Comparator<Album>() {
             public int compare(Album f1, Album f2) {
                 return ascending

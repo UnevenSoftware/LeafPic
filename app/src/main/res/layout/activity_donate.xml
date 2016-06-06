@@ -190,6 +190,7 @@
                         android:paddingRight="@dimen/medium_spacing"
                         android:paddingLeft="@dimen/medium_spacing"
                         />
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -32,8 +32,8 @@ import java.util.ArrayList;
  */
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
-    ArrayList<Album> albums;
-    SharedPreferences SP;
+    private ArrayList<Album> albums;
+    private SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
@@ -138,7 +138,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return albums.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout card_layout;
         ImageView picture;
         ImageView selectHolder;
@@ -146,7 +146,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         TextView nPhotos;
         CardView cv;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             picture = (ImageView) itemView.findViewById(R.id.album_preview);
             selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);

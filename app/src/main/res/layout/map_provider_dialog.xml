@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="2dp"
+    android:id="@+id/rename_card">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:textColor="@color/md_dark_primary_text"
+                android:layout_height="wrap_content"
+                android:background="@color/md_dark_appbar"
+                android:padding="24dp"
+                android:text="Chose the map provider"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <RadioGroup
+                android:padding="@dimen/medium_spacing"
+                android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radio_group_maps_provider"
+                        android:orientation="vertical">
+                <RadioButton android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:id="@+id/radio_google_maps"
+                             android:text="Google Maps"
+                />
+                <RadioButton android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:id="@+id/radio_osm"
+                             android:text="Open Street Maps"
+                />
+            </RadioGroup>
+        </LinearLayout>
+</android.support.v7.widget.CardView>

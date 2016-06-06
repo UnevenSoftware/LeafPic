@@ -28,19 +28,19 @@ import java.io.File;
  */
 public class SplashScreen extends ThemedActivity {
 
-    public final int READ_EXTERNAL_STORAGE_ID = 12;
-    static final int PICK_MEDIA_REQUEST = 44;
+    private final int READ_EXTERNAL_STORAGE_ID = 12;
+    private static final int PICK_MEDIA_REQUEST = 44;
 
-    public final static String CONTENT = "content";
-    public final static String PICK_MODE = "pick_mode";
+    final static String CONTENT = "content";
+    final static String PICK_MODE = "pick_mode";
 
-    public final static int ALBUMS_PREFETCHED = 23;
-    public final static int PHOTS_PREFETCHED = 2;
-    public boolean PICK_INTENT = false;
+    final static int ALBUMS_PREFETCHED = 23;
+    final static int PHOTS_PREFETCHED = 2;
+    private boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
-    HandlingAlbums albums;
-    Album album;
+    private HandlingAlbums albums;
+    private Album album;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

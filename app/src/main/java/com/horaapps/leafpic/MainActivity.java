@@ -89,31 +89,31 @@ import java.util.Locale;
 
 public class MainActivity extends ThemedActivity {
 
-    public static String TAG = "AlbumsAct";
+    private static String TAG = "AlbumsAct";
 
-    CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
-    SharedPreferences SP;
-    SecurityHelper securityObj;
+    private CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
+    private SharedPreferences SP;
+    private SecurityHelper securityObj;
 
-    HandlingAlbums albums;
-    RecyclerView recyclerViewAlbums;
-    AlbumsAdapter albumsAdapter;
-    GridSpacingItemDecoration albumsDecoration;
+    private HandlingAlbums albums;
+    private RecyclerView recyclerViewAlbums;
+    private AlbumsAdapter albumsAdapter;
+    private GridSpacingItemDecoration albumsDecoration;
 
-    Album album;
-    RecyclerView recyclerViewMedia;
-    PhotosAdapter mediaAdapter;
-    GridSpacingItemDecoration photosDecoration;
+    private Album album;
+    private RecyclerView recyclerViewMedia;
+    private PhotosAdapter mediaAdapter;
+    private GridSpacingItemDecoration photosDecoration;
 
-    FloatingActionButton fabCamera;
-    DrawerLayout mDrawerLayout;
-    Toolbar toolbar;
-    SelectAlbumBottomSheet bottomSheetDialogFragment;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private FloatingActionButton fabCamera;
+    private DrawerLayout mDrawerLayout;
+    private Toolbar toolbar;
+    private SelectAlbumBottomSheet bottomSheetDialogFragment;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, firstLaunch = true;
+    private boolean hidden = false, pickmode = false, editmode = false, albumsMode = true, firstLaunch = true;
 
-    View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
+    private View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
             int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
@@ -129,7 +129,7 @@ public class MainActivity extends ThemedActivity {
         }
     };
 
-    View.OnClickListener photosOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
                 int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
@@ -215,7 +215,7 @@ public class MainActivity extends ThemedActivity {
 
 
 
-    public void displayCurrentAlbumMedia(boolean reload) {
+    private void displayCurrentAlbumMedia(boolean reload) {
         album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
         album.setSettings(getApplicationContext());
         toolbar.setTitle(album.getName());
@@ -236,7 +236,7 @@ public class MainActivity extends ThemedActivity {
         invalidateOptionsMenu();
     }
 
-    public void displayAlbums() {
+    private void displayAlbums() {
         if (SP.getBoolean("auto_update_media", false))
             displayAlbums(true);
         else {
@@ -246,7 +246,7 @@ public class MainActivity extends ThemedActivity {
         }
     }
 
-    public void displayAlbums(boolean reload) {
+    private void displayAlbums(boolean reload) {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -275,7 +275,8 @@ public class MainActivity extends ThemedActivity {
             nSpan = Measure.getAlbumsColumns(MainActivity.this);
             recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
             recyclerViewAlbums.removeItemDecoration(albumsDecoration);
-            albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
+            albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3,
+                    getApplicationContext()), true);
             recyclerViewAlbums.addItemDecoration(albumsDecoration);
         } else {
             nSpan = Measure.getPhotosColumns(MainActivity.this);
@@ -310,7 +311,7 @@ public class MainActivity extends ThemedActivity {
         }
     }
 
-    public void displayPreFetchedData(Bundle data){
+    private void displayPreFetchedData(Bundle data){
         try {
             if (data!=null) {
                 int content = data.getInt(SplashScreen.CONTENT);
@@ -343,7 +344,7 @@ public class MainActivity extends ThemedActivity {
 
     }
 
-    public void initUI() {
+    private void initUI() {
 
         /**** TOOLBAR ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -458,9 +459,10 @@ public class MainActivity extends ThemedActivity {
             onConfigurationChanged(configuration);
         }
     }
-    ArrayAdapter<String> directoryList;
 
     //region TESTING
+    private ArrayAdapter<String> directoryList;
+
     private void newFolderDialog(final int value) {
         final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
@@ -544,7 +546,7 @@ public class MainActivity extends ThemedActivity {
         dialogExplorer.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(linearCreateNewFolder.getVisibility()==View.VISIBLE && !editTextFolderName.getText().equals("")) {
+                if(linearCreateNewFolder.getVisibility()==View.VISIBLE && !editTextFolderName.getText().toString().equals("")) {
                     String path = textViewCurrentPath.getText().toString();
                     File folder = new File(path + File.separator + editTextFolderName.getText().toString());
                     boolean success = true;
@@ -647,7 +649,7 @@ public class MainActivity extends ThemedActivity {
     }
 
     //region UI/GRAPHIC
-    public void setupUI() {
+    private void setupUI() {
         //TODO: MUST BE FIXXED
         toolbar.setPopupTheme(getPopupToolbarStyle());
         toolbar.setBackgroundColor(getPrimaryColor());
@@ -673,7 +675,7 @@ public class MainActivity extends ThemedActivity {
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
     }
 
-    public void setDrawerTheme() {
+    private void setDrawerTheme() {
         RelativeLayout DrawerHeader = (RelativeLayout) findViewById(R.id.Drawer_Header);
         DrawerHeader.setBackgroundColor(getPrimaryColor());
 
@@ -828,14 +830,14 @@ public class MainActivity extends ThemedActivity {
     //endregion
 
 
-    void comingSoonDialog(String title) {
+    private void comingSoonDialog(String title) {
         AlertDialog.Builder comingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
         AlertDialogsHelper.getTextDialog(this, comingSoonDialog, title, getString(R.string.coming_soon));
         comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), null);
         comingSoonDialog.show();
     }
 
-    void updateSelectedStuff() {
+    private void updateSelectedStuff() {
         int c;
         try {
             if (albumsMode) {
@@ -922,7 +924,7 @@ public class MainActivity extends ThemedActivity {
         invalidateOptionsMenu();
     }
 
-    public void checkNothing() {
+    private void checkNothing() {
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
         a.setTextColor(getTextColor());
         a.setVisibility((albumsMode && albums.dispAlbums.size() == 0) || (!albumsMode && album.media.size() == 0) ? View.VISIBLE : View.GONE);
@@ -997,7 +999,7 @@ public class MainActivity extends ThemedActivity {
 
         menu.findItem(R.id.select_all).setVisible(editmode);
         menu.findItem(R.id.installShortcut).setVisible(albumsMode && editmode);
-        menu.findItem(R.id.delete_action).setVisible((albumsMode && editmode) || (!albumsMode));
+        menu.findItem(R.id.delete_action).setVisible(!albumsMode || editmode);
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albums.getSelectedCount() == 1) || (!albumsMode && !editmode));
@@ -1390,14 +1392,9 @@ public class MainActivity extends ThemedActivity {
                 seekQuality.setProgress(90); //DEFAULT
 
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    radio_jpg.setButtonTintList(getRadioButtonColor());
-                    radio_png.setButtonTintList(getRadioButtonColor());
-                    radio_webp.setButtonTintList(getRadioButtonColor());
-                    radio_jpg.setTextColor(getTextColor());
-                    radio_png.setTextColor(getTextColor());
-                    radio_webp.setTextColor(getTextColor());
-                }
+                updateRadioButtonColor(radio_jpg);
+                updateRadioButtonColor(radio_png);
+                updateRadioButtonColor(radio_webp);
 
                 //SWITCH
                 updateSwitchColor(swVertical, getAccentColor());
@@ -1419,7 +1416,7 @@ public class MainActivity extends ThemedActivity {
 
                 //Affixing On Background//
                 class affixMedia extends AsyncTask<String, Integer, Void> {
-                    AlertDialog dialog;
+                    private AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
                         dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affix_text));
@@ -1617,13 +1614,12 @@ public class MainActivity extends ThemedActivity {
         }
     }
 
-    public AlertDialog.Builder progressDialog;
-    public AlertDialog ProgressDialog(String dialogTitle, String dialogText){
-        progressDialog = new AlertDialog.Builder(MainActivity.this,getDialogStyle());
+    private AlertDialog ProgressDialog(String dialogTitle, String dialogText){
+        AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
         return AlertDialogsHelper.getProgressDialog(this, progressDialog, dialogTitle, dialogText);
     }
 
-    public class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
+    private class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -1646,7 +1642,7 @@ public class MainActivity extends ThemedActivity {
         }
     }
 
-    public class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
+    private class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -1670,7 +1666,7 @@ public class MainActivity extends ThemedActivity {
     }
 
     //MOVE SELECTED MEDIA ASYNCTASK
-    class MovePhotos extends AsyncTask<String, Void, Void> {
+    private class MovePhotos extends AsyncTask<String, Void, Void> {
 
         @Override
         protected void onPreExecute() {
