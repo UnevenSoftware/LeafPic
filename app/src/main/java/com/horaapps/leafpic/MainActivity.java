@@ -242,7 +242,7 @@ public class MainActivity extends ThemedActivity {
             displayAlbums(true);
         else {
             displayAlbums(false);
-            albumsAdapter.updateDataset(albums.dispAlbums);
+            albumsAdapter.updateDataSet(albums.dispAlbums);
             toggleRecyclersVisibilty(true);
         }
     }
@@ -320,7 +320,7 @@ public class MainActivity extends ThemedActivity {
                     albums = ((MyApplication) getApplicationContext()).getAlbums();
                     displayAlbums(false);
                     pickmode = data.getBoolean(SplashScreen.PICK_MODE);
-                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    albumsAdapter.updateDataSet(albums.dispAlbums);
                     toggleRecyclersVisibilty(true);
                 } else if (content == SplashScreen.PHOTS_PREFETCHED) {
                     albums = ((MyApplication) getApplicationContext()).getAlbums();
@@ -666,7 +666,8 @@ public class MainActivity extends ThemedActivity {
         setDrawerTheme();
         recyclerViewAlbums.setBackgroundColor(getBackgroundColor());
         recyclerViewMedia.setBackgroundColor(getBackgroundColor());
-        mediaAdapter.updatePlaceholder(getApplicationContext(), getBasicTheme());
+        mediaAdapter.updatePlaceholder(getApplicationContext(), getBaseTheme());
+        albumsAdapter.updateTheme(getApplicationContext(), getBaseTheme());
 
         /**** DRAWER ****/
         setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
@@ -1279,7 +1280,7 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    albumsAdapter.updateDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
                     album.sortPhotos();
@@ -1292,7 +1293,7 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_DATE);
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    albumsAdapter.updateDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
                     album.sortPhotos();
@@ -1305,7 +1306,7 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    albumsAdapter.updateDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
                     album.sortPhotos();
@@ -1318,7 +1319,7 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingAscending(!item.isChecked());
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataset(albums.dispAlbums);
+                    albumsAdapter.updateDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
                     album.sortPhotos();
@@ -1637,7 +1638,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            albumsAdapter.updateDataset(albums.dispAlbums);
+            albumsAdapter.updateDataSet(albums.dispAlbums);
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
         }

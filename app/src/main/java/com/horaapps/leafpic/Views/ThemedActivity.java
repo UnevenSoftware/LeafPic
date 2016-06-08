@@ -78,7 +78,7 @@ public class ThemedActivity extends AppCompatActivity {
         return accentColor;
     }
 
-    public int getBasicTheme(){ return  basicTheme; }
+    public int getBaseTheme(){ return  basicTheme; }
 
     protected int getBackgroundColor(){
         int color;
@@ -167,7 +167,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     public int getDialogStyle(){
         int style;
-        switch (getBasicTheme()){
+        switch (getBaseTheme()){
             case DARK_THEME: style = R.style.AlertDialog_Dark;break;
             case AMOLED_THEME: style = R.style.AlertDialog_Dark_Amoled;break;
             case LIGHT_THEME: default: style = R.style.AlertDialog_Light;
@@ -177,7 +177,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     protected int getPopupToolbarStyle(){
         int style;
-        switch (getBasicTheme()){
+        switch (getBaseTheme()){
             case DARK_THEME: style = R.style.DarkActionBarMenu;break;
             case AMOLED_THEME: style = R.style.AmoledDarkActionBarMenu;break;
             case LIGHT_THEME: default: style = R.style.LightActionBarMenu;
@@ -187,7 +187,7 @@ public class ThemedActivity extends AppCompatActivity {
 
 
     protected ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
-        switch (getBasicTheme()){
+        switch (getBaseTheme()){
             case AMOLED_THEME:
             case DARK_THEME: return new ArrayAdapter<String>(this, R.layout.spinner_item_light, items);
             case LIGHT_THEME: default: return new ArrayAdapter<String>(this, R.layout.spinner_item_dark, items);
