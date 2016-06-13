@@ -331,7 +331,7 @@
                                         android:text="@string/map_provider_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                        />
+                                    />
                                 </LinearLayout>
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>

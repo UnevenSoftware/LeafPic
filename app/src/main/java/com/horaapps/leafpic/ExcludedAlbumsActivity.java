@@ -34,7 +34,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         setContentView(R.layout.activity_excluded);
 
         handlingAlbums = ((MyApplication) getApplicationContext()).getAlbums();
-        excludedFolders = handlingAlbums.getExcludedfolders();
+        excludedFolders = handlingAlbums.getExcludedFolders();
 
         checkNothing(excludedFolders);
         initUI();

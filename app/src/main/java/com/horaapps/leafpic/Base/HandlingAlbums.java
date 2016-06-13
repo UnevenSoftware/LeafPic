@@ -206,7 +206,7 @@ public class HandlingAlbums {
         }
     }
 
-    public ArrayList<File> getExcludedfolders() {
+    public ArrayList<File> getExcludedFolders() {
         return excludedfolders;
     }
 

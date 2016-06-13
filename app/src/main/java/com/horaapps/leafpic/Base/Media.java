@@ -1,5 +1,7 @@
 package com.horaapps.leafpic.Base;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -15,7 +17,6 @@ import com.drew.lang.Rational;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifThumbnailDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.horaapps.leafpic.utils.StringUtils;
 
@@ -56,6 +57,7 @@ public class Media implements Parcelable {
     String path = null;
     private long dateModified = -1;
     private String mime = null;
+    private Uri uri = null;
 
     private long size = 0;
     private boolean selected = false;
@@ -68,16 +70,24 @@ public class Media implements Parcelable {
         setMIME();
     }
 
-    public Media(String path, long dateModified, long size) {
-        this.path = path;
-        this.dateModified = dateModified;
-        this.size = size;
+    public Media(File file) {
+        this.path = file.getAbsolutePath();
+        this.dateModified = file.lastModified();
+        this.size = file.length();
         setMIME();
     }
 
     public Media(String path) {
         this.path = path;
         setMIME();
+    }
+
+    public Media(Context context, Uri mediaUri) {
+        this.uri = mediaUri;
+        this.path = null;
+        ContentResolver cR = context.getContentResolver();
+        mime = MimeTypeMap.getSingleton().getExtensionFromMimeType(cR.getType(uri));
+        if(mime == null) mime = "unknown";
     }
 
     public String getMIME() {
@@ -94,14 +104,14 @@ public class Media implements Parcelable {
         this.selected = selected;
     }
 
-    public boolean isGif() { return getPath().endsWith("gif"); }
+    public boolean isGif() { return getMIME().endsWith("gif"); }
 
     public boolean isImage() { return getMIME().startsWith("image"); }
 
     public boolean isVideo() { return getMIME().startsWith("video"); }
 
     public Uri getUri() {
-        return Uri.fromFile(new File(path));
+        return isMediainStorage() ? Uri.fromFile(new File(path)) : uri;
     }
 
     public byte[] getThumbnail() {
@@ -183,6 +193,11 @@ public class Media implements Parcelable {
         return true;*/
         return false;
     }
+
+    public boolean isMediainStorage() {
+        return path != null;
+    }
+
     public String getExifInfo() {
         return String.format("%s %s %s", getFNumber(), getExposureTime(), getISO());
     }

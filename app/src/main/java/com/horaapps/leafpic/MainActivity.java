@@ -75,6 +75,7 @@ import com.horaapps.leafpic.utils.AffixMedia;
 import com.horaapps.leafpic.utils.AffixOptions;
 import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
@@ -270,22 +271,20 @@ public class MainActivity extends ThemedActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int nSpan;
 
-        if (albumsMode) {
-            nSpan = Measure.getAlbumsColumns(MainActivity.this);
-            recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
-            recyclerViewAlbums.removeItemDecoration(albumsDecoration);
-            albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3,
-                    getApplicationContext()), true);
-            recyclerViewAlbums.addItemDecoration(albumsDecoration);
-        } else {
-            nSpan = Measure.getPhotosColumns(MainActivity.this);
-            recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, nSpan));
-            recyclerViewMedia.removeItemDecoration(photosDecoration);
-            photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
-            recyclerViewMedia.addItemDecoration(photosDecoration);
-        }
+        // rearrange column number
+        int nSpan = Measure.getAlbumsColumns(MainActivity.this);
+        recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
+        recyclerViewAlbums.removeItemDecoration(albumsDecoration);
+        albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
+        recyclerViewAlbums.addItemDecoration(albumsDecoration);
+
+        nSpan = Measure.getPhotosColumns(MainActivity.this);
+        recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, nSpan));
+        recyclerViewMedia.removeItemDecoration(photosDecoration);
+        photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
+        recyclerViewMedia.addItemDecoration(photosDecoration);
+
 
         int status_height = Measure.getStatusBarHeight(getResources()),
         navBarHeight =  Measure.getNavBarHeight(MainActivity.this);
@@ -421,18 +420,18 @@ public class MainActivity extends ThemedActivity {
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!albumsMode && album.areFiltersActive()) {
+               /* if (!albumsMode && album.areFiltersActive()) {
                     album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_ALL);
                     mediaAdapter.updateDataSet(album.media);
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
                 } else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
-
+*/
                 //region TESTING
-                /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
-                }*/
+                }
 
                 //newFolderDialog();
                 //endregion
@@ -441,8 +440,9 @@ public class MainActivity extends ThemedActivity {
 
 
 
+
         int statusBarHeight = Measure.getStatusBarHeight(getResources()),
-            navBarHeight = Measure.getNavBarHeight(MainActivity.this);
+                navBarHeight = Measure.getNavBarHeight(MainActivity.this);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         toolbar.animate().translationY(statusBarHeight).setInterpolator(new DecelerateInterpolator()).start();
 
@@ -626,8 +626,7 @@ public class MainActivity extends ThemedActivity {
 
                 // Persist URI in shared preference so that you can use it later.
                 // Use your own framework here instead of PreferenceUtil.
-                //PreferenceUtil.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard,
-                  //      treeUri);
+                ContentHelper.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard_photos, treeUri);
 
                 // Persist access permissions.
                 final int takeFlags = resultData.getFlags()
@@ -1683,7 +1682,7 @@ public class MainActivity extends ThemedActivity {
                     File from = new File(album.selectedMedias.get(i).getPath());
                     File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
 
-                    if (from.renameTo(to)) {
+                    if (ContentHelper.moveFile(getApplicationContext(), from, to)) {
                         MediaScannerConnection.scanFile(getApplicationContext(),
                                 new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
                         album.media.remove(album.selectedMedias.get(i));

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -239,12 +240,15 @@ public class AboutActivity extends ThemedActivity {
         /*** SPECIAL THANKS ***/
         /*** Patryk Goworowski ***/
         //G+
-        ((TextView) findViewById(R.id.about_patryk_goworowski_googleplus_item)).setTextColor(getAccentColor());
-        findViewById(R.id.about_patryk_goworowski_googleplus_item).setOnClickListener(new View.OnClickListener() {
+        //((TextView) findViewById(R.id.about_patryk_goworowski_googleplus_item)).setTextColor(getAccentColor());
+        /*findViewById(R.id.about_patryk_goworowski_googleplus_item).setOnClickListener(new View
+                                                                                                   .OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://plus.google.com/109304801957014561872/about");}
-        });
-
+        });*/
+        ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setMovementMethod(LinkMovementMethod.getInstance());
+        ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setLinkTextColor(getAccentColor());
+        //((TextView) findViewById(R.id.about_comunity_members_sub)).setMovementMethod(LinkMovementMethod.getInstance());
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,7 +269,7 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.about_background).setBackgroundColor(getBackgroundColor());
 
         /** Cards **/
-        color=getCardBackgroundColor();
+        color = getCardBackgroundColor();
         ((CardView) findViewById(R.id.about_app_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(R.id.about_special_thanks_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(R.id.about_support_card)).setCardBackgroundColor(color);
@@ -274,11 +278,10 @@ public class AboutActivity extends ThemedActivity {
 
         /** Icons **/
         //ABOUT APP
-        color=getIconColor();
+        color = getIconColor();
         ((IconicsImageView) findViewById(R.id.about_libs_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_license_icon)).setColor(color);
-        //SPECIAL THANKS
-        ((IconicsImageView) findViewById(R.id.about_patryk_goworowski_icon)).setColor(color);
+
         //ABOUT SUPPORT
         ((IconicsImageView) findViewById(R.id.about_support_translate_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_support_rate_icon)).setColor(color);
@@ -286,10 +289,9 @@ public class AboutActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.about_support_report_bug_icon)).setColor(color);
 
         /** TextViews **/
-        color=getTextColor();
+        color = getTextColor();
         ((TextView) findViewById(R.id.about_libs_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_app_light_description)).setTextColor(color);
-        ((TextView) findViewById(R.id.about_patryk_goworowski_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_rate_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_translate_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item)).setTextColor(color);
@@ -297,11 +299,13 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_report_bug_item)).setTextColor(color);
 
         /** Sub Text Views**/
-        color=getSubTextColor();
+        color = getSubTextColor();
         ((TextView) findViewById(R.id.about_version_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_version_item_sub)).setText(BuildConfig.VERSION_NAME);
         ((TextView) findViewById(R.id.about_libs_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_comunity_members_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_comunity_you_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_rate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_translate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);

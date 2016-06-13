@@ -305,78 +305,63 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
                         android:paddingTop="16dp"
-                        android:text="@string/about_special_thnaks"
+                        android:text="@string/about_special_thanks"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         />
-                    <!--Patryk Goworowski -->
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_patryk_goworowski"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:orientation="vertical"
                         >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/about_patryk_goworowski_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-person"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="8dp"
-                            >
-                            <TextView
-                                android:id="@+id/about_patryk_goworowski_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Patryk Goworowski"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-                                />
-                            <TextView
-                                android:id="@+id/about_patryk_goworowski_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_special_thnaks_patryk_goworowski_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!--PATRYK GOWOROWSKI LINKS / -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingLeft="12.5dp"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
-                        >
+                        <!--Patryk Goworowski -->
                         <TextView
+                            android:id="@+id/about_patryk_goworowski_item_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about_special_thanks_patryk_goworowski_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            android:textSize="14sp"
+                            />
+                        <TextView
+                            android:id="@+id/about_comunity_members_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about_special_thanks_members_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            android:textSize="14sp"
+                        />
+                        <TextView
+                            android:id="@+id/about_comunity_you_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about_special_thanks_you_sub"
+                            android:textColor="@color/md_grey_400"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="16dp"
+                        />
+                        <!--<TextView
                             android:id="@+id/about_patryk_goworowski_googleplus_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GOOGLE+"
                             android:textSize="16sp"
-                            android:paddingLeft="12.5dp"
-                            android:paddingRight="12.5dp"
                             android:paddingBottom="8dp"
                             android:paddingTop="8dp"
                             android:clickable="true"
                             android:background="?attr/selectableItemBackground"
-                            />
-                    </LinearLayout>
+                        />-->
 
+                    </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

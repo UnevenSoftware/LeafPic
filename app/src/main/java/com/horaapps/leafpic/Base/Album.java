@@ -10,6 +10,7 @@ import android.util.Log;
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.MyApplication;
 import com.horaapps.leafpic.R;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -63,14 +64,21 @@ public class Album {
         this.count = count;
     }
 
-    public Album(Context context, String mediaPath) {
-        File folder = new File(mediaPath).getParentFile();
+    public Album(Context context, File mediaPath) {
+        File folder = mediaPath.getParentFile();
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
         this.path = folder.getPath();
         this.name = folder.getName();
         updatePhotos(context);
-        setCurrentPhoto(mediaPath);
+        setCurrentPhoto(mediaPath.getAbsolutePath());
+    }
+
+    public Album(Context context, Uri mediaUri) {
+        media = new ArrayList<Media>();
+        selectedMedias = new ArrayList<Media>();
+        media.add(0, new Media(context, mediaUri));
+        setCurrentPhotoIndex(0);
     }
 
     public Album(String path, String name) {
@@ -85,7 +93,7 @@ public class Album {
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
         File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos, SP.getBoolean("set_include_video",true)));
         for (File image : images)
-            mediaArrayList.add(0, new Media(image.getAbsolutePath(), image.lastModified(), image.length()));
+            mediaArrayList.add(0, new Media(image));
         media = mediaArrayList;
         sortPhotos();
         setCount(media.size());
@@ -250,7 +258,7 @@ public class Album {
         try {
             File from = new File(getCurrentMedia().getPath());
             File to = new File(StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), newName));
-            if (from.renameTo(to)) {
+            if (ContentHelper.moveFile(context, from, to)) {
                 scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
                 getCurrentMedia().path = to.getAbsolutePath();
                 media.remove(getCurrentMediaIndex());
@@ -335,7 +343,10 @@ public class Album {
             File from = new File(olderPath);
             File to = new File(StringUtils.getPhotoPathMoved(olderPath, folderPath));
 
-            InputStream in = new FileInputStream(from);
+            if (ContentHelper.copyFile(context, from, to)) {
+                scanFile(context, new String[]{ to.getAbsolutePath() });
+            }
+            /*InputStream in = new FileInputStream(from);
             OutputStream out = new FileOutputStream(to);
 
             byte[] buf = new byte[1024];
@@ -344,9 +355,9 @@ public class Album {
                 out.write(buf, 0, len);
 
             in.close();
-            out.close();
+            out.close();*/
 
-            scanFile(context, new String[]{to.getAbsolutePath()});
+            //scanFile(context, new String[]{to.getAbsolutePath()});
         } catch (Exception e) { e.printStackTrace(); }
     }
 
@@ -358,7 +369,7 @@ public class Album {
 
     private void deleteMedia(Context context, Media media) {
         File file = new File(media.getPath());
-        if (file.delete())
+        if (ContentHelper.deleteFile(context, file))
             scanFile(context, new String[]{ file.getAbsolutePath() });
     }
 
@@ -373,13 +384,14 @@ public class Album {
 
     public void renameAlbum(Context context, String newName) {
         File dir = new File(StringUtils.getAlbumPathRenamed(getPath(), newName));
-        if (dir.mkdir() || dir.exists()) {
+        if (ContentHelper.mkdir(context, dir)) {
             path = dir.getAbsolutePath();
             name = newName;
             for (int i = 0; i < media.size(); i++) {
                 File from = new File(media.get(i).getPath());
                 File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(media.get(i).getPath(), newName));
-                if (from.renameTo(to)) {
+                //File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(media.get(i).getPath(), newName));
+                if (ContentHelper.moveFile(context, from, to)) {
                     MediaScannerConnection.scanFile(context,
                             new String[]{from.getAbsolutePath(), to.getAbsolutePath()}, null, null);
                     media.get(i).path = to.getAbsolutePath();
@@ -388,6 +400,6 @@ public class Album {
         }
     }
 
-    public void scanFile(Context context, String[] path) {   MediaScannerConnection.scanFile(context, path, null, null); }
+    public void scanFile(Context context, String[] path) { MediaScannerConnection.scanFile(context, path, null, null); }
 
 }

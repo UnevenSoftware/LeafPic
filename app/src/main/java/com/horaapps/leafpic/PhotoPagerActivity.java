@@ -92,7 +92,16 @@ public class PhotoPagerActivity extends ThemedActivity {
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
             else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
                             && getIntent().getData() != null) {
-                album = new Album(getApplicationContext(), ContentHelper.getPath(getApplicationContext(), getIntent().getData()));
+                File folderPath = new  File( ContentHelper.getPath(getApplicationContext(),
+                        getIntent().getData()));
+
+                if (folderPath.isFile())
+                    //the image is stored in the storage
+                    album = new Album(getApplicationContext(), folderPath);
+                else
+                    //try to show with Uri
+                    album = new Album(getApplicationContext(), getIntent().getData());
+
             }
 
             initUI();

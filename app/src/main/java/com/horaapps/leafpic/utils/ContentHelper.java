@@ -6,11 +6,14 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.storage.StorageManager;
+import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -19,6 +22,7 @@ import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
 import com.horaapps.leafpic.MyApplication;
+import com.horaapps.leafpic.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,15 +78,36 @@ public class ContentHelper {
 
 	return result;
   }
+
+
 	/**
-	 * Copy a file. The target file may even be on external SD card for Kitkat.
+	 * Create a folder. The folder may even be on external SD card for Kitkat.
 	 *
-	 * @param source The source file
-	 * @param target The target file
-	 * @return true if the copying was successful.
+	 * @param file The folder to be created.
+	 * @return True if creation was successful.
 	 */
-	@SuppressWarnings("null")
-	public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File target) {
+	public static boolean mkdir(Context context, @NonNull final File file) {
+	  if (file.exists()) {
+		// nothing to create.
+		return file.isDirectory();
+	  }
+
+	  // Try the normal way
+	  if (file.mkdir()) {
+		return true;
+	  }
+
+	  // Try with Storage Access Framework.
+	  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+		DocumentFile document = getDocumentFile(context, file, true, true);
+		// getDocumentFile implicitly creates the directory.
+		return document != null && document.exists();
+	  }
+
+	  return file.exists();
+	}
+
+  public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File target) {
 		java.io.FileInputStream inStream = null;
 		java.io.OutputStream outStream = null;
 		java.nio.channels.FileChannel inChannel = null;
@@ -97,8 +122,7 @@ public class ContentHelper {
 				inChannel = inStream.getChannel();
 				outChannel = ((FileOutputStream) outStream).getChannel();
 				inChannel.transferTo(0, inChannel.size(), outChannel);
-			}
-			else {
+			} else {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 					// Storage Access Framework
 					DocumentFile targetDocument = getDocumentFile(context,target, false, true);
@@ -108,7 +132,7 @@ public class ContentHelper {
 				}
 				else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
 					// Workaround for Kitkat ext SD card
-					Uri uri = null;//MediaStoreUtil.getUriFromFile(target.getAbsolutePath());
+					Uri uri = getUriFromFile(context,target.getAbsolutePath());
 					if (uri != null) {
 						outStream = context.getContentResolver().openOutputStream(uri);
 					}
@@ -160,6 +184,61 @@ public class ContentHelper {
 		}
 		return true;
 	}
+
+  /**
+   * Move a file. The target file may even be on external SD card.
+   *
+   * @param source The source file
+   * @param target The target file
+   * @return true if the copying was successful.
+   */
+  public static boolean moveFile(Context context, @NonNull final File source, @NonNull final File
+																				target) {
+	// First try the normal rename.
+	boolean success = source.renameTo(target);
+
+	if (!success) {
+	  success = copyFile(context, source, target);
+	  if (success) {
+		success = deleteFile(context, source);
+	  }
+	}
+
+	return success;
+  }
+
+  /**
+   * Get an Uri from an file path.
+   *
+   * @param path The file path.
+   * @return The Uri.
+   */
+  public static Uri getUriFromFile(Context context, final String path) {
+	ContentResolver resolver = context.getContentResolver();
+
+	Cursor filecursor = resolver.query(MediaStore.Files.getContentUri("external"),
+			new String[] {BaseColumns._ID}, MediaStore.MediaColumns.DATA + " = ?",
+			new String[] {path}, MediaStore.MediaColumns.DATE_ADDED + " desc");
+	if (filecursor == null) {
+	  return null;
+	}
+	filecursor.moveToFirst();
+
+	if (filecursor.isAfterLast()) {
+	  filecursor.close();
+	  ContentValues values = new ContentValues();
+	  values.put(MediaStore.MediaColumns.DATA, path);
+	  return resolver.insert(MediaStore.Files.getContentUri("external"), values);
+	}
+	else {
+	  int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
+	  Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
+			  Integer.toString(imageId)).build();
+	  filecursor.close();
+	  return uri;
+	}
+  }
+
     /**
      * Delete a folder.
      *
@@ -215,7 +294,7 @@ public class ContentHelper {
      * @return The DocumentFile
      */
     private static DocumentFile getDocumentFile(Context context, @NonNull final File file, final boolean isDirectory, final boolean createDirectories) {
-        Uri[] treeUris = new Uri[0];//= PreferenceUtil.getTreeUris();
+        Uri[] treeUris = getTreeUris();
         Uri treeUri = null;
 
         if (treeUris.length == 0) {
@@ -282,6 +361,72 @@ public class ContentHelper {
 
         return document;
     }
+
+  /**
+   * Get the stored tree URIs.
+   *
+   * @return The tree URIs.
+   */
+  public static Uri[] getTreeUris() {
+	List<Uri> uris = new ArrayList<Uri>();
+
+	Uri uri1 = getSharedPreferenceUri(R.string.key_internal_uri_extsdcard_photos);
+	if (uri1 != null) {
+	  uris.add(uri1);
+	}
+
+	/*
+	Uri uri2 = getSharedPreferenceUri(R.string.key_internal_uri_extsdcard_input);
+	if (uri2 != null) {
+	  uris.add(uri2);
+	}
+	*/
+	return uris.toArray(new Uri[uris.size()]);
+  }
+
+  /**
+   * Retrieve the default shared preferences of the application.
+   *
+   * @return the default shared preferences.
+   */
+  private static SharedPreferences getSharedPreferences() {
+	return PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+  }
+
+  /**
+   * Retrieve an Uri shared preference.
+   *
+   * @param preferenceId the id of the shared preference.
+   * @return the corresponding preference value.
+   */
+  public static Uri getSharedPreferenceUri(final int preferenceId) {
+	String uriString = getSharedPreferences().getString(MyApplication.getContext().getString(preferenceId),
+	null);
+
+	if (uriString == null) {
+	  return null;
+	}
+	else {
+	  return Uri.parse(uriString);
+	}
+  }
+
+  /**
+   * Set a shared preference for an Uri.
+   *
+   * @param preferenceId the id of the shared preference.
+   * @param uri          the target value of the preference.
+   */
+  public static void setSharedPreferenceUri(final int preferenceId, @Nullable final Uri uri) {
+	SharedPreferences.Editor editor = getSharedPreferences().edit();
+	if (uri == null) {
+	  editor.putString(MyApplication.getContext().getString(preferenceId), null);
+	}
+	else {
+	  editor.putString(MyApplication.getContext().getString(preferenceId), uri.toString());
+	}
+	editor.apply();
+  }
     /**
      * Determine the main folder of the external SD card containing the given file.
      * @param file the file.
