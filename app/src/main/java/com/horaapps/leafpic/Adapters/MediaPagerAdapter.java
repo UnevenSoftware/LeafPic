@@ -21,14 +21,14 @@ import java.util.ArrayList;
 
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<Media> medias;
+    private ArrayList<Media> media;
     private View.OnClickListener videoOnClickListener;
     private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
 
-    public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> medias) {
+    public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> media) {
         super(fm);
-        this.medias = medias;
+        this.media = media;
     }
 
     public void setVideoOnClickListener(View.OnClickListener videoOnClickListener) {
@@ -37,7 +37,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int pos) {
-        Media p = medias.get(pos);
+        Media p = media.get(pos);
         if (p.isVideo()) {
             VideoFragment fragment = VideoFragment.newInstance(p.getPath());
             fragment.setOnClickListener(videoOnClickListener);
@@ -64,6 +64,11 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         return registeredFragments.get(position);
     }
 
+    public void swapDataSet(ArrayList<Media> media) {
+        this.media = media;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemPosition(Object object) {
         return PagerAdapter.POSITION_NONE;
@@ -71,6 +76,6 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return medias.size();
+        return media.size();
     }
 }

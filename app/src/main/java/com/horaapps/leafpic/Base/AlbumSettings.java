@@ -16,6 +16,7 @@ public class AlbumSettings {
     public final static int SORT_BY_NAME = 3;
     public final static int SORT_BY_DATE = 0;
     public final static int SORT_BY_SIZE = 1;
+    public final static int SORT_BY_TYPE = 2;
 
     String coverPath;
     public int columnSortingMode;

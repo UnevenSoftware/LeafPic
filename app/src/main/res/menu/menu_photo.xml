@@ -47,6 +47,41 @@
     </group>
 
     <item
+        android:id="@+id/sort_action"
+        android:title="@string/sort_menu_title"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              tools:context=".PhotosActivity">
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/name_sort_action"
+                    android:title="@string/name"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/date_taken_sort_action"
+                    android:checked="true"
+                    android:title="@string/date"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/size_sort_action"
+                    android:title="@string/size"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/type_sort_action"
+                    android:title="@string/type"
+                    app:showAsAction="never" />
+            </group>
+            <group android:checkableBehavior="all">
+                <item
+                    android:id="@+id/ascending_sort_action"
+                    android:title="@string/ascending"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/action_copy"
         android:title="@string/copy_to"
         app:showAsAction="never" />

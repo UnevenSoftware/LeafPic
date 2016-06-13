@@ -1000,6 +1000,7 @@ public class MainActivity extends ThemedActivity {
 
         menu.findItem(R.id.select_all).setVisible(editmode);
         menu.findItem(R.id.installShortcut).setVisible(albumsMode && editmode);
+        menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
         menu.findItem(R.id.delete_action).setVisible(!albumsMode || editmode);
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && album.getSelectedCount() == 1);
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && album.hasCustomCover());
@@ -1312,6 +1313,16 @@ public class MainActivity extends ThemedActivity {
                     mediaAdapter.updateDataSet(album.media);
                 }
                 item.setChecked(true);
+                return true;
+
+            case R.id.type_sort_action:
+                if (!albumsMode) {
+                    album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
+                    album.sortPhotos();
+                    mediaAdapter.updateDataSet(album.media);
+                    item.setChecked(true);
+                }
+
                 return true;
 
             case R.id.ascending_sort_action:

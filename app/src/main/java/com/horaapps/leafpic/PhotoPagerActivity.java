@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
+import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -371,6 +372,42 @@ public class PhotoPagerActivity extends ThemedActivity {
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 
                 break;
+
+            case R.id.name_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.date_taken_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.size_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.type_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.ascending_sort_action:
+                album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+
+                item.setChecked(!item.isChecked());
+                return true;
 
 
             case R.id.action_share:

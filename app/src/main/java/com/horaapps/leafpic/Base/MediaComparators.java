@@ -5,6 +5,7 @@ import java.util.Comparator;
 /**
  * Created by dnld on 26/04/16.
  */
+
 class MediaComparators {
     private boolean ascending = true;
 
@@ -37,8 +38,18 @@ class MediaComparators {
         return new Comparator<Media>() {
             public int compare(Media f1, Media f2) {
                 return ascending
-                        ? Long.compare(f1.getSize(), f2.getSize())
-                        : Long.compare(f2.getSize(), f1.getSize());
+                               ? Long.compare(f1.getSize(), f2.getSize())
+                               : Long.compare(f2.getSize(), f1.getSize());
+            }
+        };
+    }
+
+    Comparator<Media> getTypeComparator() {
+        return new Comparator<Media>() {
+            public int compare(Media f1, Media f2) {
+                return ascending
+                               ? f1.getMIME().compareTo(f2.getMIME())
+                               : f2.getMIME().compareTo(f1.getMIME());
             }
         };
     }
