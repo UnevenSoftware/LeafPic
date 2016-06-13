@@ -418,7 +418,7 @@ public class SettingActivity extends ThemedActivity {
         final IconicsImageView darkSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_basic_theme_select);
         final IconicsImageView darkAmoledSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_amoled_basic_theme_select);
 
-        switch (getBasicTheme()){
+        switch (getBaseTheme()){
             case LIGHT_THEME:
                 whiteSelect.setVisibility(View.VISIBLE);
                 darkSelect.setVisibility(View.GONE);
@@ -480,7 +480,7 @@ public class SettingActivity extends ThemedActivity {
         dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                baseThemeValue = getBasicTheme();
+                baseThemeValue = getBaseTheme();
             }
         });
         dialogBuilder.show();

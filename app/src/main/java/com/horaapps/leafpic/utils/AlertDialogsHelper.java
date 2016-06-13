@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.drew.lang.GeoLocation;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SettingActivity;
@@ -150,66 +152,58 @@ public class AlertDialogsHelper {
         textViewLocation.setTextColor(color);
         textViewOrientation.setTextColor(color);
 
-        try {
-            ExifInterface exif = new ExifInterface(f.getPath());
-            if (exif.getAttribute(ExifInterface.TAG_MAKE) != null) {
-                textViewDevice.setText(String.format("%s %s",
-                        exif.getAttribute(ExifInterface.TAG_MAKE),
-                        exif.getAttribute(ExifInterface.TAG_MODEL)));
-
-                textViewEXIF.setText(String.format("f/%s ISO-%s %ss",
-                        exif.getAttribute(ExifInterface.TAG_APERTURE),
-                        exif.getAttribute(ExifInterface.TAG_ISO),
-                        exif.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)));
-                int orientation;
-                if ((orientation = f.getOrientation()) != -1) {
-                    dialogLayout.findViewById(R.id.ll_orientation_details).setVisibility(View.VISIBLE);
-                    textViewOrientation.setText(String.format(Locale.getDefault(), "%d", orientation));
-                }
-
-                final float[] output = new float[2];
-                if(exif.getLatLong(output)) {
-                    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
-                    String url;
-                    switch (SP.getInt(activity.getString(R.string.preference_map_provider),
-                            SettingActivity.GOOGLE_MAPS_PROVIDER)) {
-                        case SettingActivity.GOOGLE_MAPS_PROVIDER:
-                            default:
-                                url = String.format(Locale.getDefault(),"http://maps.google.com/maps/api/staticmap" + "?center=%f,%f&zoom=15&size=700x700&scale=2&sensor=false", output[0], output[1]);
-                                break;
-                            case SettingActivity.OSM_PROVIDER:
-                                url = String.format(Locale.getDefault(),"http://staticmap.openstreetmap.de/staticmap.php" + "?center=%f,%f&zoom=15&size=700x700&maptype=osmarenderer", output[0], output[1]);
-                                break;
-                    }
-
-                    Glide.with(activity.getApplicationContext())
-                            .load(url)
-                            .asBitmap()
-                            .centerCrop()
-                            .animate(R.anim.fade_in)
-                            .into(imgMap);
-                    imgMap.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=zoom", output[0], output[1]);
-                            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
-                        }
-                    });
-
-                    textViewLocation.setText(String.format(Locale.getDefault(), "%f, %f", output[0], output[1]));
-                    dialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
-                    dialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
-
-                }
-                dialogLayout.findViewById(R.id.ll_exif).setVisibility(View.VISIBLE);
-            }
-            long dateTake;
-            if (((dateTake = f.getDateTaken()) != -1) && dateTake != f.getDateModified()) {
-                textViewDateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
-                dialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
-            }
+        String cameraInfo;
+        if ((cameraInfo = f.getCameraInfo()) != null) {
+            textViewDevice.setText(cameraInfo);
+            textViewEXIF.setText(f.getExifInfo());
+            dialogLayout.findViewById(R.id.ll_exif).setVisibility(View.VISIBLE);
         }
-        catch (IOException e){ e.printStackTrace(); }
+        final GeoLocation location;
+        if((location = f.getGeoLocation()) != null) {
+            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+            String url;
+            switch (SP.getInt(activity.getString(R.string.preference_map_provider),
+                    SettingActivity.GOOGLE_MAPS_PROVIDER)) {
+                case SettingActivity.GOOGLE_MAPS_PROVIDER:
+                default:
+                    url = String.format(Locale.getDefault(),"http://maps.google.com/maps/api/staticmap" +
+                                                                    "?center=%f,%f&zoom=15&size=700x700&scale=2&sensor=false", location.getLatitude(), location.getLongitude());
+                    break;
+                case SettingActivity.OSM_PROVIDER:
+                    url = String.format(Locale.getDefault(),"http://staticmap.openstreetmap.de/staticmap.php" +
+                                                                    "?center=%f,%f&zoom=15&size=700x700&maptype=osmarenderer", location.getLatitude(), location.getLongitude());
+                    break;
+            }
 
+            Glide.with(activity.getApplicationContext())
+                    .load(url)
+                    .asBitmap()
+                    .centerCrop()
+                    .animate(R.anim.fade_in)
+                    .into(imgMap);
+            imgMap.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=zoom", location.getLatitude(), location.getLongitude());
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
+                }
+            });
+
+            textViewLocation.setText(location.toDMSString());
+            dialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
+            dialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
+
+        }
+        int orientation;
+        if ((orientation = f.getOrientation()) != -1) {
+            dialogLayout.findViewById(R.id.ll_orientation_details).setVisibility(View.VISIBLE);
+            Log.wtf("asd",orientation+"");
+            textViewOrientation.setText(String.format(Locale.getDefault(), "%d", orientation));
+        }
+        long dateTake;
+        if (((dateTake = f.getDateTaken()) != -1) && dateTake != f.getDateModified()) {
+            textViewDateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
+            dialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
+        }
         ((CardView) dialogLayout.findViewById(R.id.photo_details_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
         detailsDialogBuilder.setView(dialogLayout);
 

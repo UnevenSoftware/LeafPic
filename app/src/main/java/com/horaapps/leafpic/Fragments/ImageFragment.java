@@ -73,9 +73,8 @@ public class ImageFragment extends Fragment {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
         PhotoView photoView = new PhotoView(getContext());
         final SubsamplingScaleImageView imageView =  new SubsamplingScaleImageView(getContext());
-        final ImageView imag =  new ImageView(getContext());
 
-        if (SP.getBoolean("set_delay_full_image", true)) {
+        if (SP.getBoolean("set_delay_full_image", true) && img.isMediainStorage()) {
             Ion.with(getContext())
                     .load(img.getPath())
                     .withBitmap()
@@ -96,11 +95,11 @@ public class ImageFragment extends Fragment {
             photoView.setZoomTransitionDuration(375);
             photoView.setScaleLevels(1.0F, 4.5F, 10.0F);//TODO improve
 
-            Ion.with(getContext())
-                    .load(img.getPath())
-                    .withBitmap()
-                    .deepZoom()
-                    .intoImageView(photoView);
+        /*Ion.with(getContext())
+                .load(img.getPath())
+                .withBitmap()
+                .deepZoom()
+                .intoImageView(photoView);*/
 
             return photoView;
 
@@ -116,6 +115,7 @@ public class ImageFragment extends Fragment {
             });
             return imageView;
         }
+
     }
 
     @Override
@@ -141,7 +141,6 @@ public class ImageFragment extends Fragment {
             if(img.setOrientation(orienatation))
                 ((SubsamplingScaleImageView) view).setOrientation(orienatation);
         } else {
-
                 int orienatation = Measure.rotateBy(img.getOrientation(),rotation);
             //((ImageView) view).setRotation(orienatation);
                ((PhotoView) view).setRotationBy(rotation);

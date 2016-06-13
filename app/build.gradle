@@ -70,6 +70,6 @@ dependencies {
     compile 'com.android.support:customtabs:23.4.0'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile files('src/main/assets/libs/metadata-extractor-2.9.1.jar')
+    compile 'com.drewnoakes:metadata-extractor:2.9.1'
     compile 'org.jetbrains:annotations-java5:15.0'
 }

@@ -221,8 +221,17 @@
     <string name="send_email">SEND EMAIL</string>
 
     <string name="send_mail_error">There are no email clients installed.</string>
-    <string name="about_special_thnaks">Special thanks</string>
-    <string name="about_special_thnaks_patryk_goworowski_sub">For the awesome material icon.</string>
+    <string name="about_special_thanks">Special thanks</string>
+    <string name="about_special_thanks_patryk_goworowski_sub">to <a
+        href="https://plus.google.com/109304801957014561872/about">Patryk Goworowski</a> for the
+        awesome icon.
+    </string>
+    <string name="about_special_thanks_members_sub">
+        to Crowdin community for all the translations
+    </string>
+    <string name="about_special_thanks_you_sub">
+        to you for using the app
+    </string>
 
     <string name="about_support">Support Development</string>
     <string name="about_support_translate">Translate</string>
@@ -278,6 +287,7 @@
     <string name="map_provider_sub">Chose the source of maps</string>
     <string name="insert_something">Insert something!</string>
     <string name="password_dont_match">password doesn\'t match</string>
+    <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
 
 
 </resources>
