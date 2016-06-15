@@ -22,8 +22,8 @@ android {
         applicationId "com.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 6
-        versionName "v0.3.5"
+        versionCode 7
+        versionName "v0.4"
     }
 
     lintOptions {

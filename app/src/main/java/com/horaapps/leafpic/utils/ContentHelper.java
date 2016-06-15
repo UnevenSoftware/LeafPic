@@ -45,8 +45,6 @@ public class ContentHelper {
     private static final String TAG = "ContentHelper";
     private static final String PRIMARY_VOLUME_NAME = "primary";
 
-
-
   /**
    * Check is a file is writable. Detects write issues on external SD card.
    *

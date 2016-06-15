@@ -9,10 +9,6 @@ import android.provider.MediaStore;
  */
 public class AlbumSettings {
 
-    /*public final static String SORT_BY_NAME = "sortByName";
-    public final static String SORT_BY_DATE = "sortByDate";
-    public final static String SORT_BY_SIZE = "sortBySize";*/
-
     public final static int SORT_BY_NAME = 3;
     public final static int SORT_BY_DATE = 0;
     public final static int SORT_BY_SIZE = 1;
@@ -33,10 +29,4 @@ public class AlbumSettings {
         columnSortingMode = 0;
         ascending = false;
     }
-
-    /*public String getSQLSortingMode() {
-        columnSortingMode = columnSortingMode != null ? columnSortingMode : MediaStore.Images.ImageColumns.DATE_TAKEN;
-        return columnSortingMode + (ascending ? " ASC" : " DESC");
-    }*/
-
 }

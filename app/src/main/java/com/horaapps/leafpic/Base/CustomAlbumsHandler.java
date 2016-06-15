@@ -59,10 +59,10 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, ALBUM_EXCLUDED + "=1", null, null, null, null);
 
-        if (cur.moveToFirst())
+        if (cur.moveToFirst()) {
             do list.add(new File(cur.getString(0)));
             while (cur.moveToNext());
-
+        }
         cur.close();
         db.close();
         return list;
