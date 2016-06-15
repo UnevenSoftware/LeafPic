@@ -104,8 +104,7 @@ public class ThemedActivity extends AppCompatActivity {
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color
-                    .md_light_background);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
             case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);
         }
@@ -127,8 +126,7 @@ public class ThemedActivity extends AppCompatActivity {
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);
-                break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
             case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);
         }
@@ -148,8 +146,8 @@ public class ThemedActivity extends AppCompatActivity {
     public int getIconColor(){
         int color;
         switch (basicTheme){
-            case DARK_THEME:case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;
-            case LIGHT_THEME:default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
+            case DARK_THEME: case AMOLED_THEME: color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;
+            case LIGHT_THEME: default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
         }
         return color;
     }
@@ -185,7 +183,6 @@ public class ThemedActivity extends AppCompatActivity {
         return style;
     }
 
-
     protected ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
         switch (getBaseTheme()){
             case AMOLED_THEME:
@@ -193,7 +190,6 @@ public class ThemedActivity extends AppCompatActivity {
             case LIGHT_THEME: default: return new ArrayAdapter<String>(this, R.layout.spinner_item_dark, items);
         }
     }
-
 
     protected int getDefaultThemeToolbarColor3th(){
         int color;
@@ -283,9 +279,7 @@ public class ThemedActivity extends AppCompatActivity {
 
             ColorDrawable ColorDraw = new ColorDrawable(getPrimaryColor());
             method.invoke(scrollBar, ColorDraw);
-        }
-        catch(Exception e)
-        {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -322,7 +316,6 @@ public class ThemedActivity extends AppCompatActivity {
         oscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
         applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
     }
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setRecentApp(String text){

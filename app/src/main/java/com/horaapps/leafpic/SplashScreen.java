@@ -66,7 +66,6 @@ public class SplashScreen extends ThemedActivity {
         albums = new HandlingAlbums(getApplicationContext());
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
-        //logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Metrica-Regular.otf"));
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
         //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();

@@ -153,7 +153,6 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_author_gilbert_googleplus_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_author_gilbert_github_item)).setTextColor(color);
 
-
         /***** ScrolView *****/
         setScrollViewColor(scr);
 

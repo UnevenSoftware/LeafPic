@@ -303,7 +303,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                     } else
                         StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
-
                 default:
                     break;
             }
@@ -598,7 +597,6 @@ public class PhotoPagerActivity extends ThemedActivity {
         return options;
     }
 
-
     @Override
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -611,7 +609,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                 getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
         }
     }
-
 
     @Override
     protected void setStatusBarColor() {

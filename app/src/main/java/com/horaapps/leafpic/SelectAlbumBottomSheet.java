@@ -201,7 +201,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         IconicsImageView btnUP;
         final ListView dialog_ListView;
 
-        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog explorer, null);
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
 
         final TextView textViewCurrentPath = (TextView) dialogLayout.findViewById(R.id.current_path);
         btnUP = (IconicsImageView) dialogLayout.findViewById(R.id.directory_up);
