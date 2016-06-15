@@ -566,7 +566,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 break;
 
             default:

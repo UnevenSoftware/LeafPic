@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -467,7 +466,7 @@ public class MainActivity extends ThemedActivity {
     private void newFolderDialog(final int value) {
         final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-                .simple_list_item_1, Arrays.asList(curFolder.list())){
+                .simple_list_item_1, Arrays.asList(curFolder.list())) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -588,7 +587,6 @@ public class MainActivity extends ThemedActivity {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 File selected = new File(textViewCurrentPath.getText()+"/"+ directoryList.getItem(position));
 
-                Log.wtf("asd",selected.isDirectory()+ " - " + selected.getAbsolutePath());
                 if(selected.isDirectory()){
                 directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
                         .simple_list_item_1, HandlingAlbums.getSubFolders(selected)) {
@@ -650,7 +648,7 @@ public class MainActivity extends ThemedActivity {
 
     //region UI/GRAPHIC
     private void setupUI() {
-        //TODO: MUST BE FIXXED
+        //TODO: MUST BE FIXED
         toolbar.setPopupTheme(getPopupToolbarStyle());
         toolbar.setBackgroundColor(getPrimaryColor());
 
@@ -741,7 +739,7 @@ public class MainActivity extends ThemedActivity {
         findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });
@@ -1041,7 +1039,7 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.settings:
-                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
 
             case R.id.installShortcut:

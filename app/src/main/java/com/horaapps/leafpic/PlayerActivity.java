@@ -184,7 +184,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         return true;
 
       case R.id.action_settings:
-        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
         return true;
 
       case R.id.rotate_layout:

@@ -3,7 +3,6 @@ package com.horaapps.leafpic.utils;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -22,10 +21,9 @@ import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
-import com.horaapps.leafpic.SettingActivity;
+import com.horaapps.leafpic.SettingsActivity;
 import com.horaapps.leafpic.Views.ThemedActivity;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -163,15 +161,21 @@ public class AlertDialogsHelper {
             SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
             String url;
             switch (SP.getInt(activity.getString(R.string.preference_map_provider),
-                    SettingActivity.GOOGLE_MAPS_PROVIDER)) {
-                case SettingActivity.GOOGLE_MAPS_PROVIDER:
+                    SettingsActivity.GOOGLE_MAPS_PROVIDER)) {
+                case SettingsActivity.GOOGLE_MAPS_PROVIDER:
                 default:
                     url = String.format(Locale.getDefault(),"http://maps.google.com/maps/api/staticmap" +
-                                                                    "?center=%f,%f&zoom=15&size=700x700&scale=2&sensor=false", location.getLatitude(), location.getLongitude());
+                        "?center=%f,%f&zoom=15&size=500x300&scale=2&sensor=false", location.getLatitude(), location.getLongitude());
                     break;
-                case SettingActivity.OSM_PROVIDER:
+                case SettingsActivity.OSM_DE_PROVIDER:
                     url = String.format(Locale.getDefault(),"http://staticmap.openstreetmap.de/staticmap.php" +
-                                                                    "?center=%f,%f&zoom=15&size=700x700&maptype=osmarenderer", location.getLatitude(), location.getLongitude());
+                        "?center=%f,%f&zoom=15&size=500x300&maptype=osmarenderer", location.getLatitude(), location.getLongitude());
+                    break;
+                case SettingsActivity.OSM_TYLER_PROVIDER:
+                    url = String.format(Locale.getDefault(),"https://tyler-demo.herokuapp.com/" +
+                        "?greyscale=false&lat=%f&lon=%f&zoom=15&width=500&height=300" +
+                        "&tile_url=http://[abcd].tile.stamen.com/watercolor/{zoom}/{x}/{y}.jpg", location.getLatitude(), location.getLongitude());
+                    Log.d("url",url);
                     break;
             }
 
@@ -196,7 +200,6 @@ public class AlertDialogsHelper {
         int orientation;
         if ((orientation = f.getOrientation()) != -1) {
             dialogLayout.findViewById(R.id.ll_orientation_details).setVisibility(View.VISIBLE);
-            Log.wtf("asd",orientation+"");
             textViewOrientation.setText(String.format(Locale.getDefault(), "%d", orientation));
         }
         long dateTake;

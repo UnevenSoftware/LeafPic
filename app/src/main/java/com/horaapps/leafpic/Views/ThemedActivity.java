@@ -219,6 +219,12 @@ public class ThemedActivity extends AppCompatActivity {
             radioButton.setTextColor(getTextColor());
         }
     }
+    protected void setRadioTextButtonColor(RadioButton radioButton, int color) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            radioButton.setButtonTintList(getRadioButtonColor());
+            radioButton.setTextColor(color);
+        }
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setNavBarColor() {

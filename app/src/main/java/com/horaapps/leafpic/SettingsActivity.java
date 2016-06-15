@@ -37,10 +37,11 @@ import uz.shift.colorpicker.OnColorChangedListener;
 /**
  * Created by Jibo on 02/03/2016.
  */
-public class SettingActivity extends ThemedActivity {
+public class SettingsActivity extends ThemedActivity {
 
     public static final int GOOGLE_MAPS_PROVIDER = 0;
-    public static final int OSM_PROVIDER = 1;
+    public static final int OSM_DE_PROVIDER = 1;
+    public static final int OSM_TYLER_PROVIDER = 2;
 
     private SharedPreferences SP;
     private SecurityHelper securityObj;
@@ -91,7 +92,7 @@ public class SettingActivity extends ThemedActivity {
                 LinearLayout llMoreOptions = (LinearLayout) findViewById(R.id.ll_more_options_general);
                 boolean visible = llMoreOptions.getVisibility() == View.VISIBLE;
                 llMoreOptions.setVisibility(visible ? View.GONE : View.VISIBLE);
-                fabMoreGeneralOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
+                fabMoreGeneralOptions.setImageDrawable(new IconicsDrawable(SettingsActivity.this)
                         .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_up : GoogleMaterial.Icon.gmd_keyboard_arrow_down)
                         .sizeDp(16).color(getCardBackgroundColor()));
             }
@@ -107,14 +108,14 @@ public class SettingActivity extends ThemedActivity {
                 LinearLayout llMoreOptions = (LinearLayout) findViewById(R.id.ll_more_options_theme);
                 boolean visible = llMoreOptions.getVisibility() == View.VISIBLE;
                 llMoreOptions.setVisibility(visible ? View.GONE : View.VISIBLE);
-                fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingActivity.this)
+                fabMoreThemeOptions.setImageDrawable(new IconicsDrawable(SettingsActivity.this)
                                 .icon(visible ? GoogleMaterial.Icon.gmd_keyboard_arrow_up : GoogleMaterial.Icon.gmd_keyboard_arrow_down)
                                 .sizeDp(16).color(getCardBackgroundColor()));
             }
         });
         //endregion
 
-        securityObj = new SecurityHelper(SettingActivity.this);
+        securityObj = new SecurityHelper(SettingsActivity.this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
@@ -164,7 +165,7 @@ public class SettingActivity extends ThemedActivity {
         findViewById(R.id.ll_excluded_album).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, ExcludedAlbumsActivity.class));
+                startActivity(new Intent(SettingsActivity.this, ExcludedAlbumsActivity.class));
             }
         });
 
@@ -327,8 +328,8 @@ public class SettingActivity extends ThemedActivity {
     }
 
     private void askPasswordDialog() {
-        AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
-        final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingActivity.this,passwordDialogBuilder);
+        AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
+        final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingsActivity.this,passwordDialogBuilder);
         passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
         passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
@@ -359,25 +360,32 @@ public class SettingActivity extends ThemedActivity {
 
     private void mapProviderDialog() {
 
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         View dialogLayout = getLayoutInflater().inflate(R.layout.map_provider_dialog, null);
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.title);
         ((CardView) dialogLayout.findViewById(R.id.rename_card)).setCardBackgroundColor(getCardBackgroundColor());
         dialogTitle.setBackgroundColor(getPrimaryColor());
-        dialogTitle.setTextColor(getTextColor());
 
         final RadioGroup mapProvider = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_maps_provider);
         RadioButton radioGoogleMaps = (RadioButton) dialogLayout.findViewById(R.id.radio_google_maps);
-        RadioButton radioOsm = (RadioButton) dialogLayout.findViewById(R.id.radio_osm);
-        updateRadioButtonColor(radioGoogleMaps);
-        updateRadioButtonColor(radioOsm);
-        switch (SP.getInt(getString(R.string.preference_map_provider),GOOGLE_MAPS_PROVIDER)) {
+        RadioButton radioOsmDe = (RadioButton) dialogLayout.findViewById(R.id.radio_osm_de);
+        RadioButton radioTyler = (RadioButton) dialogLayout.findViewById(R.id.radio_osm_tyler);
+        setRadioTextButtonColor(radioGoogleMaps, getSubTextColor());
+        setRadioTextButtonColor(radioOsmDe, getSubTextColor());
+        setRadioTextButtonColor(radioTyler, getSubTextColor());
+
+        ((TextView) dialogLayout.findViewById(R.id.header_proprietary_maps)).setTextColor(getTextColor());
+        ((TextView) dialogLayout.findViewById(R.id.header_free_maps)).setTextColor(getTextColor());
+        switch (SP.getInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER)) {
             case GOOGLE_MAPS_PROVIDER:
                 default:
                     radioGoogleMaps.setChecked(true);
                     break;
-            case OSM_PROVIDER:
-                radioOsm.setChecked(true);
+            case OSM_DE_PROVIDER:
+                radioOsmDe.setChecked(true);
+                break;
+            case OSM_TYLER_PROVIDER:
+                radioTyler.setChecked(true);
                 break;
         }
 
@@ -395,8 +403,11 @@ public class SettingActivity extends ThemedActivity {
                         default:
                         editor.putInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER);
                         break;
-                    case R.id.radio_osm:
-                        editor.putInt(getString(R.string.preference_map_provider), OSM_PROVIDER);
+                    case R.id.radio_osm_de:
+                        editor.putInt(getString(R.string.preference_map_provider), OSM_DE_PROVIDER);
+                        break;
+                    case R.id.radio_osm_tyler:
+                        editor.putInt(getString(R.string.preference_map_provider), OSM_TYLER_PROVIDER);
                         break;
                 }
                 editor.apply();
@@ -408,7 +419,7 @@ public class SettingActivity extends ThemedActivity {
     }
 
     private void baseThemeDialog(){
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
         final View dialogLayout = getLayoutInflater().inflate(R.layout.basic_theme_dialog, null);
         final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.basic_theme_title);
@@ -487,7 +498,7 @@ public class SettingActivity extends ThemedActivity {
     }
 
     private void primaryColorPiker(){
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
         final View dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
         final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_primary);
@@ -538,7 +549,6 @@ public class SettingActivity extends ThemedActivity {
                 dialogTitle.setBackgroundColor(c);
             }
         });
-
         dialogBuilder.setView(dialogLayout);
 
         dialogBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -553,6 +563,7 @@ public class SettingActivity extends ThemedActivity {
                 dialog.cancel();
             }
         });
+
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.edit();
@@ -590,7 +601,7 @@ public class SettingActivity extends ThemedActivity {
     }
 
     private void accentColorPiker(){
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
         final View dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
         final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_accent);
@@ -639,7 +650,7 @@ public class SettingActivity extends ThemedActivity {
 
     private void customizePictureViewer(){
 
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
         View dialogLayout = getLayoutInflater().inflate(R.layout.third_act_theme_dialog, null);
         final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) dialogLayout.findViewById(R.id.apply_theme_3th_act_enabled);
