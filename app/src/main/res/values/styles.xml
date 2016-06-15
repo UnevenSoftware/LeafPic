@@ -62,7 +62,6 @@
         <item name="android:gravity">center_horizontal|bottom</item>
     </style>
 
-
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -103,7 +102,6 @@
         <item name="android:background">#FAFAFA</item>
         <!--<item name="android:background">#424242</item>-->
     </style>
-
 
     <!--Player-->
     <style name="RootTheme" parent="android:Theme.Holo">

@@ -56,7 +56,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         /*return new ViewHolder(

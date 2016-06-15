@@ -361,7 +361,7 @@ public class SettingsActivity extends ThemedActivity {
     private void mapProviderDialog() {
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-        View dialogLayout = getLayoutInflater().inflate(R.layout.map_provider_dialog, null);
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_map_provider, null);
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.title);
         ((CardView) dialogLayout.findViewById(R.id.rename_card)).setCardBackgroundColor(getCardBackgroundColor());
         dialogTitle.setBackgroundColor(getPrimaryColor());
@@ -421,7 +421,7 @@ public class SettingsActivity extends ThemedActivity {
     private void baseThemeDialog(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
-        final View dialogLayout = getLayoutInflater().inflate(R.layout.basic_theme_dialog, null);
+        final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_basic_theme, null);
         final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.basic_theme_title);
         final CardView dialogCardView = (CardView) dialogLayout.findViewById(R.id.basic_theme_card);
 
@@ -652,7 +652,7 @@ public class SettingsActivity extends ThemedActivity {
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
-        View dialogLayout = getLayoutInflater().inflate(R.layout.third_act_theme_dialog, null);
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_media_viewer_theme, null);
         final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) dialogLayout.findViewById(R.id.apply_theme_3th_act_enabled);
 
         ((CardView) dialogLayout.findViewById(R.id.third_act_theme_card)).setCardBackgroundColor(getCardBackgroundColor());

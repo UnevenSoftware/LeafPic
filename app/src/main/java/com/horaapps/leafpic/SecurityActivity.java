@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.SecurityHelper;
-import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -111,7 +110,7 @@ public class SecurityActivity extends ThemedActivity {
     private void setPasswordDialog() {
 
         final AlertDialog.Builder passwordDialog = new AlertDialog.Builder(SecurityActivity.this, getDialogStyle());
-        final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.set_password_dialog, null);
+        final View PasswordDialogLayout = getLayoutInflater().inflate(R.layout.dialog_set_password, null);
         final TextView passwordDialogTitle = (TextView) PasswordDialogLayout.findViewById(R.id.password_dialog_title);
         final CardView passwordDialogCard = (CardView) PasswordDialogLayout.findViewById(R.id.password_dialog_card);
         final EditText editTextPassword = (EditText) PasswordDialogLayout.findViewById(R.id.password_edittxt);

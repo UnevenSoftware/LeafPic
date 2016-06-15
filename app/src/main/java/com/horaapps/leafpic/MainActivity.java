@@ -462,7 +462,6 @@ public class MainActivity extends ThemedActivity {
 
     //region TESTING
     private ArrayAdapter<String> directoryList;
-
     private void newFolderDialog(final int value) {
         final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
@@ -479,47 +478,41 @@ public class MainActivity extends ThemedActivity {
         };
 
         final AlertDialog.Builder dialogExplorer = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-        final ListView dialogExplorerListView;
         View dialogExplorerLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
 
+        final ListView dialogExplorerListView = (ListView) dialogExplorerLayout.findViewById(R.id.folder_list);
+        dialogExplorerListView.setAdapter(directoryList);
+
         final TextView textViewCurrentPath = (TextView) dialogExplorerLayout.findViewById(R.id.current_path);
-        textViewCurrentPath.setTextColor(getTextColor());
+        textViewCurrentPath.setText(curFolder.getAbsolutePath());
 
         final RelativeLayout relativeLayoutTitle = (RelativeLayout) dialogExplorerLayout.findViewById(R.id.ll_explorer_dialog_title);
         relativeLayoutTitle.setBackgroundColor(getPrimaryColor());
 
         final LinearLayout linearCreateNewFolder = (LinearLayout) dialogExplorerLayout.findViewById(R.id.new_folder_layout);
-        IconicsImageView imgFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder);
-        imgFolder.setColor(getIconColor());
+        ((TextView) dialogExplorerLayout.findViewById(R.id.txt_new_folder_description)).setTextColor(getSubTextColor());
+        ((IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder)).setColor(getIconColor());
 
         final EditText editTextFolderName = (EditText) dialogExplorerLayout.findViewById(R.id.folder_name_edit_text);
+        editTextFolderName.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);
+        editTextFolderName.setTextColor(getTextColor());
 
-
-
-        /**** Scrollbar *****/
+        /**** Scrollbar ****/
         Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
 
-
-        IconicsImageView btnUP;
-        btnUP = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.directory_up);
-        btnUP.setColor(getIconColor());
-
-        IconicsImageView newFolder;
-        newFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.toggle_create_new_folder_icon);
-
+        /**** New Folder ****/
+        IconicsImageView newFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.toggle_create_new_folder_icon);
         newFolder.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 linearCreateNewFolder.setVisibility(linearCreateNewFolder.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
+                dialogExplorerListView.setVisibility(dialogExplorerListView.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
             }
         });
 
-
-
-        //((IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder_icon)).setColor(getIconColor());
-
-        dialogExplorerListView = (ListView) dialogExplorerLayout.findViewById(R.id.folder_list);
+        /**** Btn UP ****/
+        IconicsImageView btnUP = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.directory_up);
         btnUP.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -543,6 +536,7 @@ public class MainActivity extends ThemedActivity {
                 }
             }
         });
+        /**** OK Dialog ****/
         dialogExplorer.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -561,27 +555,17 @@ public class MainActivity extends ThemedActivity {
                         Toast.makeText(MainActivity.this, "Folder Already Exist!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                //String path = textViewCurrentPath.getText().toString();
-                //Toast.makeText(MainActivity.this, path, Toast.LENGTH_SHORT).show();
             }
         });
+        /**** CANCEL Dialog ****/
         dialogExplorer.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {}
         });
-
-        /*deleteDialog.setNeutralButton(R.string.new_folder, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String path = textViewCurrentPath.getText().toString();
-                Toast.makeText(MainActivity.this, "new folder", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-        dialogExplorerListView.setAdapter(directoryList);
-        textViewCurrentPath.setText(curFolder.getAbsolutePath());
+        /**** Set View ****/
         dialogExplorer.setView(dialogExplorerLayout);
 
+        /**** ListView Click Listener ****/
         dialogExplorerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -609,8 +593,6 @@ public class MainActivity extends ThemedActivity {
             }
         });
         dialogExplorer.show();
-
-
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -770,9 +752,7 @@ public class MainActivity extends ThemedActivity {
                     final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder);
 
                     passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
+                        public void onClick(DialogInterface dialog, int which) {}
                     });
 
                     passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
@@ -1177,7 +1157,7 @@ public class MainActivity extends ThemedActivity {
                 /*AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
                         getString(R.string.exclude),getString(R.string.exclude_album_message));*/
 
-                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.exclude_dialog, null);
+                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
                 TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
                 TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
                 final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
@@ -1340,7 +1320,7 @@ public class MainActivity extends ThemedActivity {
             case  R.id.affixPhoto:
 
                 final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                final View dialogLayout = getLayoutInflater().inflate(R.layout.affix_dialog, null);
+                final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
 
                 dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
                 ((CardView) dialogLayout.findViewById(R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
@@ -1398,9 +1378,7 @@ public class MainActivity extends ThemedActivity {
 
                     }
                 });
-
                 seekQuality.setProgress(90); //DEFAULT
-
 
                 updateRadioButtonColor(radio_jpg);
                 updateRadioButtonColor(radio_png);
@@ -1443,7 +1421,7 @@ public class MainActivity extends ThemedActivity {
                         }
 
                         if (bitmapArray.size()>1) {
-
+                            //TODO: MUST FIX
                             Bitmap.CompressFormat compressFormat;
                             switch (radioFormatGroup.getCheckedRadioButtonId()) {
                                 case R.id.radio_jpeg: default:
@@ -1600,7 +1578,6 @@ public class MainActivity extends ThemedActivity {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -1715,6 +1692,4 @@ public class MainActivity extends ThemedActivity {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
-
-    //COPY SELECTED  MEDIA ASYNCTASK
 }

@@ -1,5 +1,4 @@
 <resources>
-
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
     <string name="app_light_description">A colorful material gallery.</string>
@@ -66,20 +65,21 @@
         Hiding this album will be created a .nomedia file in the folder
         and this could make media unreachable from other apps use exclude option to avoid this.
     </string>
-    <string name="unhide_album_message">Un-hiding this album you will make media available also for other apps.</string>
     <string name="delete_album_message">Are you sure you want to delete this album?</string>
-    <string name="delete_photos_message">Are you sure you want to delete selected media?</string>
     <string name="delete_albums_message">Are you sure you want to delete selected albums?</string>
-    <string name="hide_albums_message">Are you sure you want to hide selected albums?</string>
-    <string name="exclude_albums_message">
-        Are you sure you want to exclude selected albums?
-    </string>
-
     <string name="delete_photo_message">Are you sure you want to delete this media?</string>
+    <string name="delete_photos_message">Are you sure you want to delete selected media?</string>
+    <string name="hide_albums_message">Are you sure you want to hide selected albums?</string>
+    <string name="unhide_album_message">Un-hiding this album you will make media available also for other apps.</string>
+    <string name="exclude_albums_message">Are you sure you want to exclude selected albums?</string>
     <string name="exclude_album_message">
         Excluding this folder you will exclude also all sub-folders, below there is
         a list that allow you to chose a parent if you have to exclude more folder which are on the same level.
     </string>
+    <string name="new_folder_message">The new folder will be created in the current path;
+        then the media will be copyed or moved in the new folder.
+    </string>
+
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>
@@ -126,7 +126,7 @@
 
     <string name="type_password">Insert password</string>
     <string name="security_sub">Set up a password to protect your media.</string>
-    <string name="remember_password_message">Note: password changed if you forget it you have to clear application data.</string>
+    <string name="remember_password_message">Note: password changed, if you forget it you have to clear application data.</string>
 
     <string name="apply_password_on">Use password for</string>
 
@@ -288,6 +288,5 @@
     <string name="insert_something">Insert something!</string>
     <string name="password_dont_match">password doesn\'t match</string>
     <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
-
 
 </resources>

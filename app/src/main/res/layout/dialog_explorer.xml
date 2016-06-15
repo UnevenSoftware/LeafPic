@@ -5,20 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <!--
-    <TextView
-        android:id="@+id/explorer_title_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:text="@string/new_folder"
-        android:background="@color/md_black_1000"
-        android:textColor="@color/md_dark_primary_text"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        />
-    -->
-    <!--TITLE-->
     <RelativeLayout
         android:id="@+id/ll_explorer_dialog_title"
         android:layout_width="match_parent"
@@ -78,33 +64,51 @@
 
     <!--NEW FOLDER EDIT TEXT-->
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:id="@+id/new_folder_layout"
         android:visibility="gone"
         >
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/folder"
-            android:layout_height="20dp"
-            android:layout_width="20dp"
-            android:layout_gravity="center"
-            app:iiv_icon="gmd-folder"
-            android:layout_marginRight="@dimen/big_spacing"
-            android:layout_marginLeft="@dimen/big_spacing"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:layout_marginBottom="@dimen/small_spacing"
-            />
-        <EditText
-            android:singleLine="true"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/folder_name_edit_text"
-            android:text="folder_name"
-            android:layout_marginRight="@dimen/big_spacing"
-            android:layout_marginTop="@dimen/small_spacing"
+            android:textColor="@color/md_dark_primary_text"
+            android:id="@+id/txt_new_folder_description"
+            android:textSize="@dimen/medium_text"
+            android:text="@string/new_folder_message"
+            android:layout_marginTop="@dimen/big_spacing"
             android:layout_marginBottom="@dimen/small_spacing"
+            android:layout_marginLeft="@dimen/big_spacing"
+            android:layout_marginRight="@dimen/big_spacing"
             />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/folder"
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:layout_gravity="center"
+                app:iiv_icon="gmd-folder"
+                android:layout_marginRight="@dimen/big_spacing"
+                android:layout_marginLeft="@dimen/big_spacing"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:layout_marginBottom="@dimen/small_spacing"
+                />
+            <EditText
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/folder_name_edit_text"
+                android:text="folder_name"
+                android:layout_marginRight="@dimen/big_spacing"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:layout_marginBottom="@dimen/small_spacing"
+                />
+        </LinearLayout>
     </LinearLayout>
 
     <ListView

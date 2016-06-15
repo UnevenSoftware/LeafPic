@@ -37,7 +37,7 @@ public class AlertDialogsHelper {
     public static  AlertDialog getInsertTextDialog(final ThemedActivity activity, AlertDialog
             .Builder dialogBuilder , EditText editText, String title) {
 
-        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.insert_text_dialog, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_insert_text, null);
         TextView textViewTitle = (TextView) dialogLayout.findViewById(R.id.rename_title);
 
         ((CardView) dialogLayout.findViewById(R.id.rename_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
@@ -64,7 +64,7 @@ public class AlertDialogsHelper {
     }
 
     public static AlertDialog getTextDialog(final ThemedActivity activity, AlertDialog.Builder textDialogBuilder, String title, String Message){
-        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.text_dialog, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_text, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.text_dialog_title);
         TextView dialogMessage = (TextView) dialogLayout.findViewById(R.id.text_dialog_message);
@@ -79,7 +79,7 @@ public class AlertDialogsHelper {
     }
 
     public static AlertDialog getProgressDialog(final ThemedActivity activity, AlertDialog.Builder progressDialog, String title, String message){
-        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.progress_dialog, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_progress, null);
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.progress_dialog_title);
         TextView dialogMessage = (TextView) dialogLayout.findViewById(R.id.progress_dialog_text);
 
@@ -99,7 +99,7 @@ public class AlertDialogsHelper {
 
     public static AlertDialog getDetailsDialog(final ThemedActivity activity, AlertDialog.Builder detailsDialogBuilder, Media f) {
 
-        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.detail_dialog, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_media_detail, null);
 
         TextView textViewSize = (TextView) dialogLayout.findViewById(R.id.photo_size);
         TextView textViewType = (TextView) dialogLayout.findViewById(R.id.photo_type);

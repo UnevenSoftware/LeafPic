@@ -103,7 +103,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         };
 
         public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_card, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_excluded_album, parent, false);
             v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
             return new ViewHolder(
                     MaterialRippleLayout.on(v)
