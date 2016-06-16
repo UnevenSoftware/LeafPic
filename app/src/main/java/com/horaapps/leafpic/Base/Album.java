@@ -5,24 +5,18 @@ import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
-import com.horaapps.leafpic.MyApplication;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * Created by dnld on 26/04/16.
@@ -33,38 +27,35 @@ public class Album {
     private String path = null;
     private int count = -1;
     private boolean selected = false;
-    private int filter_photos;
+    private int filter;
     public AlbumSettings settings = new AlbumSettings();
-    private int current = -1;
+    private int currentMediaIndex = 0;
 
     private String storageRootPath;
 
     public ArrayList<Media> media = new ArrayList<Media>();
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
 
-    public Album() {
-        media = new ArrayList<Media>();
-        selectedMedias = new ArrayList<Media>();
-    }
+    public Album() { }
 
-    public Album(String path, String name, int count, String storageRootPath) {
+    public Album(String path, String name) {
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
         this.path = path;
         this.name = name;
-        this.count = count;
+    }
+
+    public Album(String path, String name, int count, String storageRootPath) {
+        this(path, name, count);
         this.storageRootPath = storageRootPath;
     }
 
     public Album(String path, String name, int count) {
-        media = new ArrayList<Media>();
-        selectedMedias = new ArrayList<Media>();
-        this.path = path;
-        this.name = name;
+        this(path, name);
         this.count = count;
     }
 
-    public Album(Context context, File mediaPath) {
+    public Album(Context context, @NotNull File mediaPath) {
         File folder = mediaPath.getParentFile();
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
@@ -81,17 +72,10 @@ public class Album {
         setCurrentPhotoIndex(0);
     }
 
-    public Album(String path, String name) {
-        media = new ArrayList<Media>();
-        selectedMedias = new ArrayList<Media>();
-        this.path = path;
-        this.name = name;
-    }
-
     public void updatePhotos(Context context) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-        File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos, SP.getBoolean("set_include_video",true)));
+        File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter, SP.getBoolean("set_include_video",true)));
         for (File image : images)
             mediaArrayList.add(0, new Media(image));
         media = mediaArrayList;
@@ -118,23 +102,8 @@ public class Album {
         return result;
     }
 
-   /* public void updatePhotos(PhotosAdapter adapter) {
-        media = new ArrayList<Media>();
-        File[] images = new File(getPath()).listFiles(new ImageFileFilter(filter_photos));
-        for (int i = 0; i < images.length; i++) {
-            media.add(0, new Media(images[i].getAbsolutePath(), images[i].lastModified(), images[i].length()));
-            adapter.notifyItemInserted(i);
-        }
-        sortPhotos();
-        adapter.notifyDataSetChanged();
-    }*/
-
-    public boolean areFiltersActive() {
-        return filter_photos != ImageFileFilter.FILTER_ALL;
-    }
-
     public void filterMedias(Context context, int filter) {
-        filter_photos = filter;
+        this.filter = filter;
         updatePhotos(context);
     }
 
@@ -157,11 +126,11 @@ public class Album {
 
     public Media getMedia(int index) { return media.get(index); }
 
-    public void setCurrentPhotoIndex(int index){ current = index; }
+    public void setCurrentPhotoIndex(int index){ currentMediaIndex = index; }
 
-    public Media getCurrentMedia() { return getMedia(current); }
+    public Media getCurrentMedia() { return getMedia(currentMediaIndex); }
 
-    public int getCurrentMediaIndex() { return current; }
+    public int getCurrentMediaIndex() { return currentMediaIndex; }
 
     public String getContentDescription(Context c) {
         return c.getString(R.string.media);
@@ -209,19 +178,22 @@ public class Album {
 
     private void setCurrentPhoto(String path) {
         for (int i = 0; i < media.size(); i++)
-            if (media.get(i).getPath().equals(path)) current = i;
+            if (media.get(i).getPath().equals(path)) currentMediaIndex = i;
     }
 
     public int getSelectedCount() {
         return selectedMedias.size();
     }
 
+    public boolean areMediaSelected() { return getSelectedCount() != 0;}
+
     public void selectAllPhotos() {
-        for (int i = 0; i < media.size(); i++)
+        for (int i = 0; i < media.size(); i++) {
             if (!media.get(i).isSelected()) {
                 media.get(i).setSelected(true);
                 selectedMedias.add(media.get(i));
             }
+        }
     }
 
     public int toggleSelectPhoto(int index) {
@@ -241,31 +213,32 @@ public class Album {
         settings.columnSortingMode = column;
     }
 
-    public void renameCurrentMedia(Context context, String newName) {
+    public boolean renameCurrentMedia(Context context, String newName) {
+        boolean success = false;
         try {
             File from = new File(getCurrentMedia().getPath());
             File to = new File(StringUtils.getPhotoPathRenamed(getCurrentMedia().getPath(), newName));
-            if (from.renameTo(to)) {
+            if (success =  ContentHelper.moveFile(context, from, to)) {
                 scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
                 getCurrentMedia().path = to.getAbsolutePath();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+        return success;
     }
 
-    public int moveCurrentPhoto(Context context, String newName) {
+    public boolean moveCurrentPhoto(Context context, String newName) {
+        boolean success = false;
         try {
             File from = new File(getCurrentMedia().getPath());
             File to = new File(StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), newName));
-            if (ContentHelper.moveFile(context, from, to)) {
+            if (success = ContentHelper.moveFile(context, from, to)) {
                 scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
                 getCurrentMedia().path = to.getAbsolutePath();
                 media.remove(getCurrentMediaIndex());
                 setCount(media.size());
             }
         } catch (Exception e) { e.printStackTrace(); }
-        return getCurrentMediaIndex();
+        return success;
     }
 
     public void setDefaultSortingAscending(Context context, Boolean ascending) {
@@ -311,9 +284,8 @@ public class Album {
     }
 
     public void clearSelectedPhotos() {
-        for (Media m : media) {
+        for (Media m : media)
             m.setSelected(false);
-        }
         selectedMedias.clear();
     }
 
@@ -341,39 +313,30 @@ public class Album {
             copyPhoto(context, media.getPath(), folderPath);
     }
 
-    public void copyPhoto(Context context, String olderPath, String folderPath) {
+    public boolean copyPhoto(Context context, String olderPath, String folderPath) {
+        boolean success = false;
         try {
             File from = new File(olderPath);
             File to = new File(StringUtils.getPhotoPathMoved(olderPath, folderPath));
-
-            if (ContentHelper.copyFile(context, from, to)) {
+            if (success = ContentHelper.copyFile(context, from, to))
                 scanFile(context, new String[]{ to.getAbsolutePath() });
-            }
-            /*InputStream in = new FileInputStream(from);
-            OutputStream out = new FileOutputStream(to);
 
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0)
-                out.write(buf, 0, len);
-
-            in.close();
-            out.close();*/
-
-            //scanFile(context, new String[]{to.getAbsolutePath()});
         } catch (Exception e) { e.printStackTrace(); }
+        return success;
     }
 
     public void deleteCurrentMedia(Context context) {
-        deleteMedia(context, media.get(getCurrentMediaIndex()));
+        deleteMedia(context, getCurrentMedia());
         media.remove(getCurrentMediaIndex());
         setCount(media.size());
     }
 
-    private void deleteMedia(Context context, Media media) {
+    private boolean deleteMedia(Context context, Media media) {
+        boolean success;
         File file = new File(media.getPath());
-        if (ContentHelper.deleteFile(context, file))
+        if (success = ContentHelper.deleteFile(context, file))
             scanFile(context, new String[]{ file.getAbsolutePath() });
+        return success;
     }
 
     public void deleteSelectedMedia(Context context) {
@@ -393,7 +356,6 @@ public class Album {
             for (int i = 0; i < media.size(); i++) {
                 File from = new File(media.get(i).getPath());
                 File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(media.get(i).getPath(), newName));
-                //File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(media.get(i).getPath(), newName));
                 if (ContentHelper.moveFile(context, from, to)) {
                     MediaScannerConnection.scanFile(context,
                             new String[]{from.getAbsolutePath(), to.getAbsolutePath()}, null, null);
@@ -405,4 +367,7 @@ public class Album {
 
     public void scanFile(Context context, String[] path) { MediaScannerConnection.scanFile(context, path, null, null); }
 
+    public boolean areFiltersActive() {
+        return filter != ImageFileFilter.FILTER_ALL;
+    }
 }
