@@ -50,6 +50,8 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
             app:iiv_icon="gmd-close"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
             />
 
     </LinearLayout>

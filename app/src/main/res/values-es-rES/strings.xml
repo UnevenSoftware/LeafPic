@@ -107,8 +107,8 @@
     <string name="traslucent_statusbar_sub">Aplicar un color primario más oscuro a la barra de notificaciones.</string>
     <string name="excluded_albums">Álbumes excluidos</string>
     <string name="excluded_albums_sub">Restaurar los álbumes excluidos.</string>
-    <string name="picture_viewer">Visor de imágenes</string>
-    <string name="picture_viewer_theme">Tema del visor de imágenes</string>
+    <string name="media_viewer">Visor de imágenes</string>
+    <string name="media_viewer_theme">Tema del visor de imágenes</string>
     <string name="custom_3thAct">Personalizar el visor</string>
     <string name="custom_3thAct_sub">Aplicar el tema al visor de imágenes.</string>
     <string name="max_brightness">Brillo alto</string>
@@ -157,8 +157,8 @@
     <string name="about_library_license">Licencia de la biblioteca</string>
     <string name="about_library_license_sub">Ver librerías de terceros, usadas en LeafPic.</string>
     <string name="about_authors">Autores</string>
-    <string name="about_author_donald_sub">Desarrollador principal</string>
-    <string name="about_author_gilbert_sub">Diseñador principal</string>
+    <string name="about_author_donald_description">Desarrollador principal</string>
+    <string name="about_author_gilbert_description">Diseñador principal</string>
     <string name="about_support">Apoyar al desarrollo</string>
     <string name="about_support_translate">Traducir</string>
     <string name="about_support_translate_sub">Ayudanos a traducir LeafPic en más idiomas.</string>

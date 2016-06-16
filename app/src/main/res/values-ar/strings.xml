@@ -107,8 +107,8 @@
     <string name="traslucent_statusbar_sub">تطبيق لون مظلم أساسي لشريط الإشعارات.</string>
     <string name="excluded_albums">الألبومات المستثناة</string>
     <string name="excluded_albums_sub">استعادة الألبومات المستثناة.</string>
-    <string name="picture_viewer">عارض الصورة</string>
-    <string name="picture_viewer_theme">سمة عارض الصورة</string>
+    <string name="media_viewer">عارض الصورة</string>
+    <string name="media_viewer_theme">سمة عارض الصورة</string>
     <string name="custom_3thAct">تخصيص المستعرض</string>
     <string name="custom_3thAct_sub">تطبيق السمة على عارض الصور.</string>
     <string name="max_brightness">سطوع عالي</string>
@@ -157,8 +157,8 @@
     <string name="about_library_license">مكتبة الترخيص</string>
     <string name="about_library_license_sub">تفقد مكتبات الطرف الثالث المستخدمة في LeafPic.</string>
     <string name="about_authors">المؤلفون</string>
-    <string name="about_author_donald_sub">المطور الرئيسي</string>
-    <string name="about_author_gilbert_sub">المصمم الرئيسي</string>
+    <string name="about_author_donald_description">المطور الرئيسي</string>
+    <string name="about_author_gilbert_description">المصمم الرئيسي</string>
     <string name="about_support">دعم عجلة التطوير</string>
     <string name="about_support_translate">ترجم</string>
     <string name="about_support_translate_sub">ساعدنا لنترجم LeafPic لأكثر من لغة.</string>

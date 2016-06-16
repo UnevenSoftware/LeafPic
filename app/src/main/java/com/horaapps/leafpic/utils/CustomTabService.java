@@ -10,13 +10,13 @@ import android.support.customtabs.CustomTabsSession;
 
 
 public class CustomTabService {
-    CustomTabsClient mCustomTabsClient;
-    CustomTabsSession mCustomTabsSession;
-    CustomTabsServiceConnection mCustomTabsServiceConnection;
-    CustomTabsIntent mCustomTabsIntent;
+    private CustomTabsClient mCustomTabsClient;
+    private CustomTabsSession mCustomTabsSession;
+    private CustomTabsServiceConnection mCustomTabsServiceConnection;
+    private CustomTabsIntent mCustomTabsIntent;
 
-    Activity activity;
-    int color;
+    private Activity activity;
+    private int color;
 
     public CustomTabService (Activity act, int c) {
         this.activity = act;

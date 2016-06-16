@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
+import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -61,18 +62,18 @@ import java.nio.channels.FileChannel;
 public class PhotoPagerActivity extends ThemedActivity {
 
     private static final String ISLOCKED_ARG = "isLocked";
-    public static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
-    public static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
+    static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
+    private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
-    HackyViewPager mViewPager;
-    MediaPagerAdapter adapter;
-    SharedPreferences SP;
-    RelativeLayout ActivityBackgorund;
-    Album album;
-    SelectAlbumBottomSheet bottomSheetDialogFragment;
-    SecurityHelper securityObj;
-    Toolbar toolbar;
-    boolean fullscreenmode;
+    private HackyViewPager mViewPager;
+    private MediaPagerAdapter adapter;
+    private SharedPreferences SP;
+    private RelativeLayout ActivityBackgorund;
+    private Album album;
+    private SelectAlbumBottomSheet bottomSheetDialogFragment;
+    private SecurityHelper securityObj;
+    private Toolbar toolbar;
+    private boolean fullscreenmode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,16 @@ public class PhotoPagerActivity extends ThemedActivity {
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
             else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
                             && getIntent().getData() != null) {
-                album = new Album(getApplicationContext(), ContentHelper.getPath(getApplicationContext(), getIntent().getData()));
+                File folderPath = new  File( ContentHelper.getPath(getApplicationContext(),
+                        getIntent().getData()));
+
+                if (folderPath.isFile())
+                    //the image is stored in the storage
+                    album = new Album(getApplicationContext(), folderPath);
+                else
+                    //try to show with Uri
+                    album = new Album(getApplicationContext(), getIntent().getData());
+
             }
 
             initUI();
@@ -100,7 +110,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    public void initUI() {
+    private void initUI() {
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
@@ -189,7 +199,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     }
 
-    public void setupUI() {
+    private void setupUI() {
 
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -293,7 +303,6 @@ public class PhotoPagerActivity extends ThemedActivity {
                     } else
                         StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
-
                 default:
                     break;
             }
@@ -311,7 +320,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         album.scanFile(getApplicationContext(), new String[]{album.getCurrentMedia().getPath()});
     }
 
-    public void displayAlbums(boolean reload) {
+    private void displayAlbums(boolean reload) {
         Intent i = new Intent(PhotoPagerActivity.this, MainActivity.class);
         Bundle b = new Bundle();
         b.putInt(SplashScreen.CONTENT, SplashScreen.ALBUMS_PREFETCHED);
@@ -363,6 +372,42 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                 break;
 
+            case R.id.name_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.date_taken_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.size_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.type_sort_action:
+                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+                item.setChecked(true);
+                return true;
+
+            case R.id.ascending_sort_action:
+                album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
+                album.sortPhotos();
+                adapter.swapDataSet(album.media);
+
+                item.setChecked(!item.isChecked());
+                return true;
+
 
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
@@ -399,23 +444,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 AlertDialogsHelper.getTextDialog(PhotoPagerActivity.this,deleteDialog,
                         getString(R.string.delete), getString(R.string.delete_photo_message));
 
-               /* final View Delete_dialogLayout = getLayoutInflater().inflate(R.layout
-                    .text_dialog, null);
-                final TextView txt_Delete_title = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_title);
-                final TextView txt_Delete_message = (TextView) Delete_dialogLayout.findViewById(R.id.text_dialog_message);
-                CardView cv_Delete_Dialog = (CardView) Delete_dialogLayout.findViewById(R.id.message_card);
-
-                cv_Delete_Dialog.setBackgroundColor(getCardBackgroundColor());
-                txt_Delete_title.setBackgroundColor(getPrimaryColor());
-                txt_Delete_title.setText(getString(R.string.delete));
-                txt_Delete_message.setText(R.string.delete_photo_message);
-                txt_Delete_message.setTextColor(getTextColor());
-                DeleteDialog.setView(Delete_dialogLayout);*/
-
-                deleteDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
+                deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
                 deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
@@ -434,9 +463,9 @@ public class PhotoPagerActivity extends ThemedActivity {
                                         }
                                         adapter.notifyDataSetChanged();
                                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
-                                    } else {
+                                    } else
                                         Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                    }
+
                                 }
                             });
                             passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
@@ -536,7 +565,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 break;
 
             default:
@@ -554,20 +583,19 @@ public class PhotoPagerActivity extends ThemedActivity {
         getWindow().setAttributes(lp);
     }
 
-    public UCrop.Options getUcropOptions() {
+    private UCrop.Options getUcropOptions() {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        options.setStatusBarColor(isTraslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        options.setStatusBarColor(isTranslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
         options.setFreeStyleCropEnabled(true);
 
         return options;
     }
-
 
     @Override
     public void setNavBarColor() {
@@ -582,18 +610,17 @@ public class PhotoPagerActivity extends ThemedActivity {
         }
     }
 
-
     @Override
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isApplyThemeOnImgAct())
-                if (isTraslucentStatusBar() && isTransparencyZero())
+                if (isTranslucentStatusBar() && isTransparencyZero())
                     getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
                 else
                     getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
                 getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//TODO ;UST BE BETER FIXXED
+                        ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
         }
     }
 
@@ -654,7 +681,7 @@ public class PhotoPagerActivity extends ThemedActivity {
         });
     }
 
-    public void changeBackGroundColor() {
+    private void changeBackGroundColor() {
         int colorTo;
         int colorFrom;
         if (fullscreenmode) {

@@ -21,7 +21,7 @@ public class IntroActivity extends AppIntro {
     public void init(Bundle savedInstanceState) {
 
         addSlide(AppIntroFragment.newInstance(this.getString(R.string.welcome_slide_title), this.getString(R.string.welcome_slide_sub),
-                R.drawable.leafpic_big, ContextCompat.getColor(this, R.color.accent_teal)));
+                R.drawable.leaf_pic, ContextCompat.getColor(this, R.color.accent_teal)));
 
        /* addSlide(AppIntroFragment.newInstance(this.getString(R.string.storage_slide_title), this.getString(R.string.storage_slide_sub),
                 R.drawable.storage_permission, ContextCompat.getColor(this, R.color.accent_brown)));//Color.parseColor("#607D8B")*/
@@ -73,7 +73,7 @@ public class IntroActivity extends AppIntro {
             }
             setSeparatorColor(ContextCompat.getColor(this, R.color.accent_teal));
             setBarColor(ContextCompat.getColor(this, R.color.accent_teal));
-            drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+            //drawable = ((BitmapDrawable) ContextCompat.getDrawable(R.mipmap.ic_launcher));
 
 
         } else{

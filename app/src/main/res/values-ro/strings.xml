@@ -110,8 +110,8 @@
     <string name="traslucent_statusbar_sub">Aplica o culoare primara mai inchisa pe bara de notificare.</string>
     <string name="excluded_albums">Albume excluse</string>
     <string name="excluded_albums_sub">Restabileste albumele excluse.</string>
-    <string name="picture_viewer">Vizualizator de imagini</string>
-    <string name="picture_viewer_theme">Tema vizualizatorului de imagini</string>
+    <string name="media_viewer">Vizualizator de imagini</string>
+    <string name="media_viewer_theme">Tema vizualizatorului de imagini</string>
     <string name="custom_3thAct">Personalizeaza vizualizatorul de imagini</string>
     <string name="custom_3thAct_sub">Aplica tema vizualizatorului de imagini.</string>
     <string name="max_brightness">Luminozitate ridicată</string>
@@ -160,8 +160,8 @@
     <string name="about_library_license">Licenta biblioteca</string>
     <string name="about_library_license_sub">Verifica bibliotecile utilizate pe LeafPic.</string>
     <string name="about_authors">Autori</string>
-    <string name="about_author_donald_sub">Dezvoltator principal</string>
-    <string name="about_author_gilbert_sub">Designer principal</string>
+    <string name="about_author_donald_description">Dezvoltator principal</string>
+    <string name="about_author_gilbert_description">Designer principal</string>
     <string name="about_support">Sprijina dezvoltarea</string>
     <string name="about_support_translate">Traducere</string>
     <string name="about_support_translate_sub">Ajutati-ne sa traducem LeafPic in mai multe limbi.</string>

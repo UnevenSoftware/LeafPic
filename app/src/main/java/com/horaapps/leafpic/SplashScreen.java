@@ -9,10 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +18,6 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.Measure;
 import com.horaapps.leafpic.utils.PermissionUtils;
 import com.horaapps.leafpic.utils.StringUtils;
 
@@ -32,19 +28,19 @@ import java.io.File;
  */
 public class SplashScreen extends ThemedActivity {
 
-    public final int READ_EXTERNAL_STORAGE_ID = 12;
-    static final int PICK_MEDIA_REQUEST = 44;
+    private final int READ_EXTERNAL_STORAGE_ID = 12;
+    private static final int PICK_MEDIA_REQUEST = 44;
 
-    public final static String CONTENT = "content";
-    public final static String PICK_MODE = "pick_mode";
+    final static String CONTENT = "content";
+    final static String PICK_MODE = "pick_mode";
 
-    public final static int ALBUMS_PREFETCHED = 23;
-    public final static int PHOTS_PREFETCHED = 2;
-    public boolean PICK_INTENT = false;
+    final static int ALBUMS_PREFETCHED = 23;
+    final static int PHOTS_PREFETCHED = 2;
+    private boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
-    HandlingAlbums albums;
-    Album album;
+    private HandlingAlbums albums;
+    private Album album;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,18 +66,17 @@ public class SplashScreen extends ThemedActivity {
         albums = new HandlingAlbums(getApplicationContext());
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
-//        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Metrica-Regular.otf"));
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
         //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
-        logo.setTextColor(getTextColor());
+        logo.setTextColor(getSubTextColor());
+        //logo.setLetterSpacing((float)0.2);
 
-        //ImageView imgLogo = (ImageView) findViewById(R.id.imgLogo);
-        //imgLogo.setImageResource(R.drawable.leafpic_big);
+
 
         RelativeLayout RelLay = (RelativeLayout) findViewById(R.id.Splah_Bg);
         RelLay.setBackgroundColor(getBackgroundColor());
-        //logo.setTextColor(getInvertedBackgroundColor());
+
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE

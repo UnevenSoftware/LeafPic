@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.MediaStoreSignature;
 import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Views.ThemedActivity;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
 
@@ -30,34 +30,33 @@ import java.util.ArrayList;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
-    ArrayList<Media> medias;
-    SharedPreferences SP;
+    private ArrayList<Media> medias;
 
-    BitmapDrawable drawable;
+    private BitmapDrawable drawable;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
     public PhotosAdapter(ArrayList<Media> ph , Context context) {
         medias = ph;
-        SP = PreferenceManager.getDefaultSharedPreferences(context);
-        updatePlaceholder(context, SP.getInt("basic_theme", 1));
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        updatePlaceholder(context, SP.getInt("basic_theme", ThemedActivity.LIGHT_THEME));
     }
 
     public void updatePlaceholder(Context context, int theme) {
         switch (theme){
-            case 2: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));break;
-            case 3: drawable = null ;break;
-            case 1: default: drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));break;
+            case ThemedActivity.DARK_THEME:
+                drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
+                break;
+            case ThemedActivity.AMOLED_THEME: drawable = null; break;
+            case ThemedActivity.LIGHT_THEME: default:
+                drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
+                break;
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_card, parent, false);
-
-        //int width=v.getLayoutParams().width;
-        //v.setLayoutParams(new FrameLayout.LayoutParams(v.getWidth(), v.getWidth()));//width , width
-
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         /*return new ViewHolder(
@@ -78,11 +77,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
-        byte[] thumnail = f.getThumnail();
+        byte[] thumbnail = f.getThumbnail();
 
-        if (thumnail != null) {
+        if (thumbnail != null) {
             Glide.with(holder.imageView.getContext())
-                    .load(thumnail)
+                    .load(thumbnail)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .placeholder(drawable)
@@ -98,11 +97,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                 Glide.with(holder.imageView.getContext())
                         .load(f.getPath())
                         .asBitmap()
-                        .signature(new StringSignature(f.getPath() +"-"+ f.getDateModified()))
+                        .signature(new StringSignature(f.getPath() + "-" + f.getDateModified()))
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .placeholder(drawable)
-                        //.placeholder(SP.getBoolean("set_dark_theme", true) ? R.drawable.ic_empty : R.drawable.ic_empty_white)
                         .animate(R.anim.fade_in)
                         .into(holder.imageView);
                 holder.gifIcon.setVisibility(View.GONE);
@@ -142,11 +140,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView, selectHolder, gifIcon, videoIcon;
         TextView path;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.photo_preview);
             selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);

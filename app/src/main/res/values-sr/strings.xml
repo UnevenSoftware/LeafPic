@@ -109,8 +109,8 @@
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Искључени албуми</string>
     <string name="excluded_albums_sub">Враћање искључених албума.</string>
-    <string name="picture_viewer">Прегледач слика</string>
-    <string name="picture_viewer_theme">Тема прегледача слика</string>
+    <string name="media_viewer">Прегледач слика</string>
+    <string name="media_viewer_theme">Тема прегледача слика</string>
     <string name="custom_3thAct">Customize Viewer</string>
     <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
     <string name="max_brightness">High Brightness</string>
@@ -159,8 +159,8 @@
     <string name="about_library_license">Лиценца библиотеке</string>
     <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
     <string name="about_authors">Аутори</string>
-    <string name="about_author_donald_sub">Главни програмер</string>
-    <string name="about_author_gilbert_sub">Главни дизајнер</string>
+    <string name="about_author_donald_description">Главни програмер</string>
+    <string name="about_author_gilbert_description">Главни дизајнер</string>
     <string name="about_support">Подржите развој</string>
     <string name="about_support_translate">Преведите</string>
     <string name="about_support_translate_sub">Помозите превођењем Лифпика на још језика.</string>

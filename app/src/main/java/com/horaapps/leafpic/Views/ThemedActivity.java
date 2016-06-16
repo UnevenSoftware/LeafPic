@@ -1,5 +1,6 @@
 package com.horaapps.leafpic.Views;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -13,10 +14,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ import com.mikepenz.iconics.typeface.IIcon;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Created by dnld on 23/02/16.
@@ -37,34 +40,34 @@ public class ThemedActivity extends AppCompatActivity {
     public static final int LIGHT_THEME = 1;
     public static final int AMOLED_THEME = 3;
 
-    SharedPreferences SP;
+    private SharedPreferences SP;
 
     private int primaryColor;
     private int accentColor;
     private int basicTheme;
     private boolean coloredNavBar;
     private boolean oscuredStatusBar;
-    private boolean applyThemeImgAct; //TASPARENCY
+    private boolean applyThemeImgAct;
 
 
     public boolean isNavigationBarColored() {
         return coloredNavBar;
     }
 
-    public boolean isTraslucentStatusBar() {
+    public boolean isTranslucentStatusBar() {
         return oscuredStatusBar;
     }
 
-    public boolean isApplyThemeOnImgAct() {
+    protected boolean isApplyThemeOnImgAct() {
         return applyThemeImgAct;
     }
 
-    public boolean isTransparencyZero() {
-        return 255 - SP.getInt("set_alpha", 0) == 255;
+    protected boolean isTransparencyZero() {
+        return 255 - SP.getInt(getString(R.string.preference_transparency), 0) == 255;
     }
 
     public int getTransparency() {
-        return 255 - SP.getInt("set_alpha", 0);
+        return 255 - SP.getInt(getString(R.string.preference_transparency), 0);
     }
 
     public int getPrimaryColor() {
@@ -75,10 +78,9 @@ public class ThemedActivity extends AppCompatActivity {
         return accentColor;
     }
 
-    public int getBasicTheme(){ return  basicTheme; }
+    public int getBaseTheme(){ return  basicTheme; }
 
-    //METHOD
-    public int getBackgroundColor(){
+    protected int getBackgroundColor(){
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background);break;
@@ -89,12 +91,20 @@ public class ThemedActivity extends AppCompatActivity {
         return color;
     }
 
-    public int getInvertedBackgroundColor(){
+    protected Drawable getPlaceHolder(){
+        switch (basicTheme){
+            case DARK_THEME : return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_empty);
+            case AMOLED_THEME : return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_empty_amoled);
+            case LIGHT_THEME: return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_empty_white);
+        }
+        return null;
+    }
+
+    protected int getInvertedBackgroundColor(){
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color
-                    .md_light_background);break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
             case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);
         }
@@ -116,8 +126,7 @@ public class ThemedActivity extends AppCompatActivity {
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);
-                break;
+            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
             case LIGHT_THEME:
             default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);
         }
@@ -137,13 +146,13 @@ public class ThemedActivity extends AppCompatActivity {
     public int getIconColor(){
         int color;
         switch (basicTheme){
-            case DARK_THEME:case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;
-            case LIGHT_THEME:default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
+            case DARK_THEME: case AMOLED_THEME: color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;
+            case LIGHT_THEME: default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
         }
         return color;
     }
 
-    public int getDrawerBackground(){
+    protected int getDrawerBackground(){
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
@@ -156,7 +165,7 @@ public class ThemedActivity extends AppCompatActivity {
 
     public int getDialogStyle(){
         int style;
-        switch (getBasicTheme()){
+        switch (getBaseTheme()){
             case DARK_THEME: style = R.style.AlertDialog_Dark;break;
             case AMOLED_THEME: style = R.style.AlertDialog_Dark_Amoled;break;
             case LIGHT_THEME: default: style = R.style.AlertDialog_Light;
@@ -164,9 +173,9 @@ public class ThemedActivity extends AppCompatActivity {
         return style;
     }
 
-    public int getPopupToolbarStyle(){
+    protected int getPopupToolbarStyle(){
         int style;
-        switch (getBasicTheme()){
+        switch (getBaseTheme()){
             case DARK_THEME: style = R.style.DarkActionBarMenu;break;
             case AMOLED_THEME: style = R.style.AmoledDarkActionBarMenu;break;
             case LIGHT_THEME: default: style = R.style.LightActionBarMenu;
@@ -174,9 +183,15 @@ public class ThemedActivity extends AppCompatActivity {
         return style;
     }
 
+    protected ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
+        switch (getBaseTheme()){
+            case AMOLED_THEME:
+            case DARK_THEME: return new ArrayAdapter<String>(this, R.layout.spinner_item_light, items);
+            case LIGHT_THEME: default: return new ArrayAdapter<String>(this, R.layout.spinner_item_dark, items);
+        }
+    }
 
-
-    public int getDefaultThemeToolbarColor3th(){
+    protected int getDefaultThemeToolbarColor3th(){
         int color;
         switch (basicTheme){
             case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000); break;
@@ -186,7 +201,7 @@ public class ThemedActivity extends AppCompatActivity {
         return color;
     }
 
-    public ColorStateList getRadioButtonColor(){
+    private ColorStateList getRadioButtonColor(){
         return new ColorStateList(
                 new int[][]{
                         new int[]{ -android.R.attr.state_enabled }, //disabled
@@ -194,6 +209,20 @@ public class ThemedActivity extends AppCompatActivity {
                 }, new int[] { getTextColor(), getAccentColor() });
     }
 
+    protected void updateRadioButtonColor(RadioButton radioButton) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            radioButton.setButtonTintList(getRadioButtonColor());
+            radioButton.setTextColor(getTextColor());
+        }
+    }
+    protected void setRadioTextButtonColor(RadioButton radioButton, int color) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            radioButton.setButtonTintList(getRadioButtonColor());
+            radioButton.setTextColor(color);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
@@ -205,20 +234,6 @@ public class ThemedActivity extends AppCompatActivity {
     public void updateSwitchColor(SwitchCompat sw, int color){
         sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getSubTextColor(), PorterDuff.Mode.MULTIPLY);
         sw.getTrackDrawable().setColorFilter(sw.isChecked() ? ColorPalette.getTransparentColor(color,100): getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-    }
-
-    public void updateCheckBoxColor(AppCompatCheckBox sw, int color){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            sw.getButtonDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        }
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(sw.isChecked())
-                sw.getButtonDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        else
-            sw.getButtonDrawable().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);
-        if(getBasicTheme()!=3)sw.getButtonDrawable().setColorFilter(getBackgroundColor(), PorterDuff.Mode.SRC_IN);
-        else sw.getButtonDrawable().setColorFilter(getSubTextColor(), PorterDuff.Mode.SRC_IN);
-        }*/
     }
 
     @Override
@@ -238,9 +253,10 @@ public class ThemedActivity extends AppCompatActivity {
         updateTheme();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isTraslucentStatusBar())
+            if (isTranslucentStatusBar())
                 getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
             else
                 getWindow().setStatusBarColor(getPrimaryColor());
@@ -261,15 +277,9 @@ public class ThemedActivity extends AppCompatActivity {
             Method method = scrollBar.getClass().getDeclaredMethod("setVerticalThumbDrawable", Drawable.class);
             method.setAccessible(true);
 
-            // Set your drawable here.
-            //Bitmap myBitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
-            //myBitmap.setPixel(0, 0, getPrimaryColor());
-
             ColorDrawable ColorDraw = new ColorDrawable(getPrimaryColor());
             method.invoke(scrollBar, ColorDraw);
-        }
-        catch(Exception e)
-        {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -297,15 +307,17 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     public void updateTheme(){
-        this.primaryColor = SP.getInt("primary_color", ContextCompat.getColor(getApplicationContext(),R.color.md_indigo_500));//DEFAULT;
-        this.accentColor = SP.getInt("accent_color", ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500));//COLOR DEFAULT
-        basicTheme = SP.getInt("basic_theme", 1);//WHITE DEFAULT
-        coloredNavBar = SP. getBoolean("nav_bar", false);
-        oscuredStatusBar = SP.getBoolean("set_traslucent_statusbar",true);
-        applyThemeImgAct = SP.getBoolean("apply_theme_img_act", true);
+        this.primaryColor = SP.getInt(getString(R.string.preference_primary_color),
+                ContextCompat.getColor(getApplicationContext(), R.color.md_indigo_500));
+        this.accentColor = SP.getInt(getString(R.string.preference_accent_color),
+                ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500));
+        basicTheme = SP.getInt(getString(R.string.preference_base_theme), LIGHT_THEME);
+        coloredNavBar = SP. getBoolean(getString(R.string.preference_colored_nav_bar), false);
+        oscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
+        applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
     }
 
-
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setRecentApp(String text){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));

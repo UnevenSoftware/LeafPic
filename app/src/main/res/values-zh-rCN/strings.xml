@@ -106,8 +106,8 @@
     <string name="traslucent_statusbar_sub">应用深色主色调的半透明通知栏。</string>
     <string name="excluded_albums">已排除的相册</string>
     <string name="excluded_albums_sub">还原已经被排除的相册目录。</string>
-    <string name="picture_viewer">图像浏览器</string>
-    <string name="picture_viewer_theme">图像浏览器主题</string>
+    <string name="media_viewer">图像浏览器</string>
+    <string name="media_viewer_theme">图像浏览器主题</string>
     <string name="custom_3thAct">自定义浏览器样式</string>
     <string name="custom_3thAct_sub">对图像浏览器应用自定义主题。</string>
     <string name="max_brightness">高亮模式</string>
@@ -156,8 +156,8 @@
     <string name="about_library_license">查看关于库的许可</string>
     <string name="about_library_license_sub">查看 LeafPic 所使用的第三方库。</string>
     <string name="about_authors">作者</string>
-    <string name="about_author_donald_sub">主要开发者</string>
-    <string name="about_author_gilbert_sub">主要设计师</string>
+    <string name="about_author_donald_description">主要开发者</string>
+    <string name="about_author_gilbert_description">主要设计师</string>
     <string name="about_support">协助开发</string>
     <string name="about_support_translate">翻译</string>
     <string name="about_support_translate_sub">帮助我们将 LeafPic 翻译成更多语言。</string>

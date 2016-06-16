@@ -105,8 +105,8 @@
     <string name="traslucent_statusbar_sub">Użył ciemniejszego głównego koloru na pasku nawigacji.</string>
     <string name="excluded_albums">Wykluczone albumy</string>
     <string name="excluded_albums_sub">Przywróć wykluczone albumy.</string>
-    <string name="picture_viewer">Przeglądarka zdjeć</string>
-    <string name="picture_viewer_theme">Skórka Przeglądarki zdjęć</string>
+    <string name="media_viewer">Przeglądarka zdjeć</string>
+    <string name="media_viewer_theme">Skórka Przeglądarki zdjęć</string>
     <string name="custom_3thAct">Ustawienia Przeglądarki</string>
     <string name="custom_3thAct_sub">Zastosuj skórkę na przeglądarce zdjęć.</string>
     <string name="max_brightness">Wysoka jasność</string>
@@ -155,8 +155,8 @@
     <string name="about_library_license">Licencje bibliotek</string>
     <string name="about_library_license_sub">Wyświetl zewnętrzne biblioteki używane przez LeafPic.</string>
     <string name="about_authors">Autorzy</string>
-    <string name="about_author_donald_sub">Główny programista</string>
-    <string name="about_author_gilbert_sub">Główny projektant</string>
+    <string name="about_author_donald_description">Główny programista</string>
+    <string name="about_author_gilbert_description">Główny projektant</string>
     <string name="about_support">Wesprzyj rozwój</string>
     <string name="about_support_translate">Tłumaczenia</string>
     <string name="about_support_translate_sub">Pomóż nam przetłumaczyć LeafPic na więcej języków.</string>

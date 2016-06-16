@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -24,6 +25,7 @@ import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
+import com.horaapps.leafpic.Views.ThemedActivity;
 
 import java.util.ArrayList;
 
@@ -32,19 +34,38 @@ import java.util.ArrayList;
  */
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
-    ArrayList<Album> albums;
-    SharedPreferences SP;
+    private ArrayList<Album> albums;
+    private SharedPreferences SP;
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public AlbumsAdapter(ArrayList<Album> ph, Context ctx) {
+    private int theme_code = 1;
+    private BitmapDrawable placeholder;
+
+    public AlbumsAdapter(ArrayList<Album> ph, Context context) {
         albums = ph;
-        SP = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SP = PreferenceManager.getDefaultSharedPreferences(context);
+        updateTheme(context, SP.getInt("basic_theme", ThemedActivity.LIGHT_THEME));
+    }
+
+    public void updateTheme(Context context, int theme) {
+        theme_code = theme;
+        switch (theme){
+            case ThemedActivity.DARK_THEME:
+                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
+                break;
+            case ThemedActivity.AMOLED_THEME:
+                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));;
+                break;
+            case ThemedActivity.LIGHT_THEME: default:
+                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
+                break;
+        }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.album_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album, parent, false);
 
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
@@ -73,11 +94,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .signature(new StringSignature(f.getPath() +"-"+ f.getDateModified()))
                 .centerCrop()
                 .error(R.drawable.ic_error)
-                .placeholder(SP.getInt("basic_theme", 1)==1
-                        ? R.drawable.ic_empty_white
-                        : (SP.getInt("basic_theme", 1)==2
-                                ? R.drawable.ic_empty
-                                : R.drawable.ic_empty_amoled))
+                .placeholder(placeholder)
                 .animate(R.anim.fade_in)
                 .into(holder.picture);
 
@@ -95,20 +112,20 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
 
-        String textColor = SP.getInt("basic_theme", 1)!=1 ? "#FAFAFA" : "#2b2b2b";
+        String textColor = theme_code != ThemedActivity.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            if (SP.getInt("basic_theme", 1)==1 ) textColor ="#FAFAFA";
+            if (theme_code == ThemedActivity.LIGHT_THEME ) textColor ="#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.GONE);
 
-            if (SP.getInt("basic_theme", 1)==1)
+            if (theme_code == ThemedActivity.LIGHT_THEME)
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_light_cards));
-            else if (SP.getInt("basic_theme", 1)==2)
+            else if (theme_code == ThemedActivity.DARK_THEME)
                 holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
             else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_black_1000));
         }
@@ -126,19 +143,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataset(ArrayList<Album> asd) {
+    public void updateDataSet(ArrayList<Album> asd) {
         albums = asd;
         notifyDataSetChanged();
     }
-
-
 
     @Override
     public int getItemCount() {
         return albums.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout card_layout;
         ImageView picture;
         ImageView selectHolder;
@@ -146,7 +161,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         TextView nPhotos;
         CardView cv;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             picture = (ImageView) itemView.findViewById(R.id.album_preview);
             selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);

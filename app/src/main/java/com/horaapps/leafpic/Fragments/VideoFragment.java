@@ -47,7 +47,7 @@ public class VideoFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.video_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_video, container, false);
 
         ImageView picture = (ImageView) view.findViewById(R.id.media_view);
         IconicsImageView videoInd = (IconicsImageView) view.findViewById(R.id.video_indicator);

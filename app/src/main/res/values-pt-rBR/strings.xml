@@ -110,8 +110,8 @@ Deseja realmente eliminar este álbum?\n
     <string name="traslucent_statusbar_sub">Aplica uma cor primária mais escura na barra de notificação.</string>
     <string name="excluded_albums">Álbuns eliminados</string>
     <string name="excluded_albums_sub">Restaura os álbuns eliminados.</string>
-    <string name="picture_viewer">Visualizador de fotos</string>
-    <string name="picture_viewer_theme">Tema do visualizador de fotos</string>
+    <string name="media_viewer">Visualizador de fotos</string>
+    <string name="media_viewer_theme">Tema do visualizador de fotos</string>
     <string name="custom_3thAct">Personalizar o visualizador</string>
     <string name="custom_3thAct_sub">Aplica o tema no visualizador de fotos.</string>
     <string name="max_brightness">Brilho alto</string>
@@ -160,8 +160,8 @@ Deseja realmente eliminar este álbum?\n
     <string name="about_library_license">Licença da biblioteca</string>
     <string name="about_library_license_sub">Verifica as bibliotecas de terceiros usadas no LeafPic.</string>
     <string name="about_authors">Autores</string>
-    <string name="about_author_donald_sub">Programador principal, Designer</string>
-    <string name="about_author_gilbert_sub">Designer principal, Programador</string>
+    <string name="about_author_donald_description">Programador principal, Designer</string>
+    <string name="about_author_gilbert_description">Designer principal, Programador</string>
     <string name="about_support">Apoiar o desenvolvimento</string>
     <string name="about_support_translate">Traduzir</string>
     <string name="about_support_translate_sub">Ajude-nos a traduzir o LeafPic para mais idiomas.</string>

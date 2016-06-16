@@ -1,7 +1,6 @@
 package com.horaapps.leafpic.Views;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
@@ -15,18 +14,18 @@ import com.horaapps.leafpic.utils.Measure;
 /**
  * Created by dnld on 06/03/16.
  */
-public class FabScroll extends FloatingActionButton.Behavior {
+public class FabScrollBehaviour extends FloatingActionButton.Behavior {
 
-    public FabScroll(Context context, AttributeSet attributeSet) {
-        super();
+    public FabScrollBehaviour(Context context, AttributeSet attributeSet) {
+         super();
     }
 
     @Override
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE)
+        if (dyConsumed > 0)
             child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
-         else
+        else
             child.animate().translationY(-Measure.getNavigationBarSize(coordinatorLayout.getContext()).y).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 

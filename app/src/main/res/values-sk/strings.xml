@@ -110,8 +110,8 @@
     <string name="traslucent_statusbar_sub">Použiť tmavšiu hlavnú farbu na lištu upozornení.</string>
     <string name="excluded_albums">Vylúčené albumy</string>
     <string name="excluded_albums_sub">Obnoviť vylúčené albumy.</string>
-    <string name="picture_viewer">Prehliadač obrázkov</string>
-    <string name="picture_viewer_theme">Prehliadač obrázkov vzhľadu</string>
+    <string name="media_viewer">Prehliadač obrázkov</string>
+    <string name="media_viewer_theme">Prehliadač obrázkov vzhľadu</string>
     <string name="custom_3thAct">Prisposobiť prehliadač</string>
     <string name="custom_3thAct_sub">Použiť vzhľad na prehliadač obrázkov.</string>
     <string name="max_brightness">Vysoký jas</string>
@@ -160,8 +160,8 @@
     <string name="about_library_license">Licencia knižnice</string>
     <string name="about_library_license_sub">Skontrolovať knižnice tretích strán použitých v LeafPic.</string>
     <string name="about_authors">Autori</string>
-    <string name="about_author_donald_sub">Hlavný vývojár</string>
-    <string name="about_author_gilbert_sub">Hlavný dizajnér</string>
+    <string name="about_author_donald_description">Hlavný vývojár</string>
+    <string name="about_author_gilbert_description">Hlavný dizajnér</string>
     <string name="about_support">Podporte vývoj</string>
     <string name="about_support_translate">Prekladajte</string>
     <string name="about_support_translate_sub">Pomôžte nám preložiť LeafPic do viacerých jazykov.</string>

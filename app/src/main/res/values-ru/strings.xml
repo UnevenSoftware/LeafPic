@@ -105,8 +105,8 @@
     <string name="traslucent_statusbar_sub">Использовать тёмный цвет как основной в строке уведомлений.</string>
     <string name="excluded_albums">Исключенные Альбомы</string>
     <string name="excluded_albums_sub">Восстановить исключенные альбомы.</string>
-    <string name="picture_viewer">Просмотрщик</string>
-    <string name="picture_viewer_theme">Темы просмотрщика</string>
+    <string name="media_viewer">Просмотрщик</string>
+    <string name="media_viewer_theme">Темы просмотрщика</string>
     <string name="custom_3thAct">Настроить Просмотрщик</string>
     <string name="custom_3thAct_sub">Применить тему.</string>
     <string name="max_brightness">High Brightness</string>
@@ -155,8 +155,8 @@
     <string name="about_library_license">Лицензия библиотеки</string>
     <string name="about_library_license_sub">Проверить сторонние библиотеки в LeafPic.</string>
     <string name="about_authors">Авторы</string>
-    <string name="about_author_donald_sub">Основной разработчик</string>
-    <string name="about_author_gilbert_sub">Основной дизайнер</string>
+    <string name="about_author_donald_description">Основной разработчик</string>
+    <string name="about_author_gilbert_description">Основной дизайнер</string>
     <string name="about_support">Поддержать разработку</string>
     <string name="about_support_translate">Перевод</string>
     <string name="about_support_translate_sub">Помогите с переводом.</string>

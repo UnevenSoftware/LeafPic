@@ -22,7 +22,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/md_dark_appbar"
                     android:padding="24dp"
-                    android:text="@string/picture_viewer_theme"
+                    android:text="@string/media_viewer_theme"
                     android:textColor="@color/md_dark_primary_text"
                     android:textSize="18sp"
                     android:textStyle="bold" />

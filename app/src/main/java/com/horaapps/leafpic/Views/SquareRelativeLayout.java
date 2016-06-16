@@ -24,7 +24,7 @@ public class SquareRelativeLayout extends RelativeLayout {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public SquareRelativeLayout(Context context, AttributeSet attrs,         int defStyleAttr, int defStyleRes) {
+    public SquareRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

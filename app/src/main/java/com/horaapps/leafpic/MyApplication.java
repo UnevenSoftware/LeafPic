@@ -1,9 +1,10 @@
 package com.horaapps.leafpic;
 
 import android.app.Application;
+import android.content.Context;
 
-import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.Album;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 
 /**
  * Created by dnld on 28/04/16.
@@ -11,12 +12,21 @@ import com.horaapps.leafpic.Base.Album;
 public class MyApplication extends Application {
 
     private HandlingAlbums albums;
+    static Context context;
 
-    public Album getCurrentAlbum() {
+    public static Context getContext() { return context; }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        context = getApplicationContext();
+    }
+
+    Album getCurrentAlbum() {
         return albums.getCurrentAlbum();
     }
 
-    public void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
+    void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
 
     public HandlingAlbums getAlbums() {
         return albums;
@@ -26,7 +36,7 @@ public class MyApplication extends Application {
         this.albums = albums;
     }
 
-    public void updateAlbums() {
+    void updateAlbums() {
         albums.loadPreviewAlbums(getApplicationContext());
     }
 }

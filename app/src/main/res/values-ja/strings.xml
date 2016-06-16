@@ -109,8 +109,8 @@
     <string name="traslucent_statusbar_sub">通知バーに暗い優先色を適用します。</string>
     <string name="excluded_albums">除外されたアルバム</string>
     <string name="excluded_albums_sub">除外されたアルバムを元に戻します。</string>
-    <string name="picture_viewer">画像ビューアー</string>
-    <string name="picture_viewer_theme">画像ビューアーのテーマ</string>
+    <string name="media_viewer">画像ビューアー</string>
+    <string name="media_viewer_theme">画像ビューアーのテーマ</string>
     <string name="custom_3thAct">ビューアーをカスタマイズ</string>
     <string name="custom_3thAct_sub">画像ビューアーにテーマを適用します</string>
     <string name="max_brightness">高輝度</string>
@@ -158,8 +158,8 @@
     <string name="about_library_license">ライブラリのライセンス</string>
     <string name="about_library_license_sub">LeafPicで使用されている第三者のライブラリを確認します</string>
     <string name="about_authors">作者</string>
-    <string name="about_author_donald_sub">主要プログラマー、デザイナー</string>
-    <string name="about_author_gilbert_sub">主要デザイナー、プログラマー</string>
+    <string name="about_author_donald_description">主要プログラマー、デザイナー</string>
+    <string name="about_author_gilbert_description">主要デザイナー、プログラマー</string>
     <string name="about_support">開発をサポートする</string>
     <string name="about_support_translate">翻訳</string>
     <string name="about_support_translate_sub">LeafPicを多くの言語に翻訳する支援をしてください</string>

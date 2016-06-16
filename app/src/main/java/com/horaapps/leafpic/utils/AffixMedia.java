@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class AffixMedia {
 
-    public static final String DIRECTORY_NAME = "AffixedPictures";
+    private static final String DIRECTORY_NAME = "AffixedPictures";
 
    /* public static void AffixBitmapList(Context ctx, ArrayList<Bitmap> bitmapArray, boolean
             vertical, String folderPath, String format){
@@ -45,7 +45,7 @@ public class AffixMedia {
         saveFile(ctx, unionBitmap, options);
     }
 
-    public static Canvas combineBitmap(Canvas cs, ArrayList<Bitmap> bpmList, boolean vertical){
+    private static Canvas combineBitmap(Canvas cs, ArrayList<Bitmap> bpmList, boolean vertical){
         if (vertical){
             int height = bpmList.get(0).getHeight();
             cs.drawBitmap(bpmList.get(0), 0f, 0f, null);
@@ -67,9 +67,7 @@ public class AffixMedia {
         }
     }
 
-    public static void saveFile(Context context, Bitmap bmp, AffixOptions options){
-        Log .wtf("asd",String.format("%s/%d.%s",options.getFolderPath(),System.currentTimeMillis
-                (),options.getExtensionFormat()));
+    private static void saveFile(Context context, Bitmap bmp, AffixOptions options){
         try {
             File file = new File(options.getFolderPath()+'/'+(System.currentTimeMillis()) + "." +
                     options.getExtensionFormat());
@@ -84,7 +82,7 @@ public class AffixMedia {
         }
     }
 
-    public static int getMaxBitmapWidth(ArrayList<Bitmap> bpmHeightArray){
+    private static int getMaxBitmapWidth(ArrayList<Bitmap> bpmHeightArray){
         int width = bpmHeightArray.get(0).getWidth();
         for (int i=1;i<bpmHeightArray.size();i++){
             if(width<bpmHeightArray.get(i).getWidth())
@@ -93,7 +91,7 @@ public class AffixMedia {
         return width;
     }
 
-    public static int getBitmapsWidth(ArrayList<Bitmap> bpmHeightArray){
+    private static int getBitmapsWidth(ArrayList<Bitmap> bpmHeightArray){
         int width=0;
         for (int i=0;i<bpmHeightArray.size();i++){
             width+=bpmHeightArray.get(i).getWidth();
@@ -101,7 +99,7 @@ public class AffixMedia {
         return width;
     }
 
-    public static int getMaxBitmapHeight(ArrayList<Bitmap> bpmHeightArray){
+    private static int getMaxBitmapHeight(ArrayList<Bitmap> bpmHeightArray){
         int height = bpmHeightArray.get(0).getHeight();
         for (int i=1;i<bpmHeightArray.size();i++){
             if(height<bpmHeightArray.get(i).getHeight())
@@ -110,7 +108,7 @@ public class AffixMedia {
         return height;
     }
 
-    public static int getBitmapsHeight(ArrayList<Bitmap> bpmHeightArray){
+    private static int getBitmapsHeight(ArrayList<Bitmap> bpmHeightArray){
         int height=0;
         for (int i=0;i<bpmHeightArray.size();i++){
             height+=bpmHeightArray.get(i).getHeight();

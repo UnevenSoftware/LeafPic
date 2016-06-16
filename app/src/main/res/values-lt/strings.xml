@@ -107,8 +107,8 @@ Jūs tai galite atstatyti eidami į nustatymus!    </string>
     <string name="traslucent_statusbar_sub">Taikyti tamsesnę pirminę spalvą pranešimų skydeliui</string>
     <string name="excluded_albums">Neįtraukti albumai</string>
     <string name="excluded_albums_sub">Atstatyti neįtrauktus albumus</string>
-    <string name="picture_viewer">Paveikslėlių žiūriklis</string>
-    <string name="picture_viewer_theme">Paveikslėlių peržiūros tema</string>
+    <string name="media_viewer">Paveikslėlių žiūriklis</string>
+    <string name="media_viewer_theme">Paveikslėlių peržiūros tema</string>
     <string name="custom_3thAct">Tinkinti paveikslėlių žiūriklį</string>
     <string name="custom_3thAct_sub">Pritaikyti temą paveikslėlių žiūrikliui</string>
     <string name="max_brightness">Aukštas ryškumas</string>
@@ -157,8 +157,8 @@ Jūs tai galite atstatyti eidami į nustatymus!    </string>
     <string name="about_library_license">Bibliotekos licenzija</string>
     <string name="about_library_license_sub">Patikrinti trečiąsias bibliotekas naudojamas LeafPic</string>
     <string name="about_authors">Autoriai</string>
-    <string name="about_author_donald_sub">Pagrindinis programuotojas</string>
-    <string name="about_author_gilbert_sub">Pagrindinis dizaineris</string>
+    <string name="about_author_donald_description">Pagrindinis programuotojas</string>
+    <string name="about_author_gilbert_description">Pagrindinis dizaineris</string>
     <string name="about_support">Paremti programėlės vystymą</string>
     <string name="about_support_translate">Išverskite</string>
     <string name="about_support_translate_sub">Padėkite išversti LeafPic į daugiau kalbų</string>

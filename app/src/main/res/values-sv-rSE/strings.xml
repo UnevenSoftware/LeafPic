@@ -105,8 +105,8 @@
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="excluded_albums">Excluded Albums</string>
     <string name="excluded_albums_sub">Restore the excluded albums.</string>
-    <string name="picture_viewer">Picture Viewer</string>
-    <string name="picture_viewer_theme">Picture Viewer Theme</string>
+    <string name="media_viewer">Picture Viewer</string>
+    <string name="media_viewer_theme">Picture Viewer Theme</string>
     <string name="custom_3thAct">Customize Viewer</string>
     <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
     <string name="max_brightness">High Brightness</string>
@@ -155,8 +155,8 @@
     <string name="about_library_license">Bibliotek-licens</string>
     <string name="about_library_license_sub">Check third libs used on LeafPic.</string>
     <string name="about_authors">Upphovsmän</string>
-    <string name="about_author_donald_sub">Major Developer</string>
-    <string name="about_author_gilbert_sub">Major Designer</string>
+    <string name="about_author_donald_description">Major Developer</string>
+    <string name="about_author_gilbert_description">Major Designer</string>
     <string name="about_support">Stöd utvecklingen</string>
     <string name="about_support_translate">Översätt</string>
     <string name="about_support_translate_sub">Hjälp oss att översätta LeafPic på fler språk.</string>

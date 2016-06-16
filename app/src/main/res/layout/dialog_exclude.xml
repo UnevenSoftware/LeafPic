@@ -10,45 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="2dp"
-        android:id="@+id/cp_accent_card"
+        android:id="@+id/message_card"
         >
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <TextView
-                    android:id="@+id/cp_accent_title"
+                    android:id="@+id/text_dialog_title"
                     android:layout_width="match_parent"
-                    android:textColor="@color/md_dark_primary_text"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/md_dark_primary_text"
                     android:background="@color/md_red_500"
                     android:padding="@dimen/big_spacing"
-                    android:text="@string/accent_color"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/sub_big_text"
                     android:textStyle="bold" />
-
-                <RelativeLayout
-                    android:id="@+id/container_edit_text"
+                <TextView
+                    android:id="@+id/text_dialog_message"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="@dimen/big_spacing">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/medium_spacing"
+                    android:paddingRight="@dimen/medium_spacing"
+                    android:paddingLeft="@dimen/medium_spacing"
+                    android:singleLine="false"
+                    android:textSize="@dimen/medium_text" />
 
-                    <uz.shift.colorpicker.LineColorPicker
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/color_picker_accent"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        app:orientation="horizontal"
-                        app:selectedColorIndex="0" />
-
-                </RelativeLayout>
-
+                <android.support.v7.widget.AppCompatSpinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/medium_spacing"
+                    android:layout_marginRight="@dimen/medium_spacing"
+                    android:id="@+id/parents_folder"/>
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

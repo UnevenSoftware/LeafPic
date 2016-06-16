@@ -68,11 +68,11 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
-            android:layout_margin="15dp"
+            android:layout_margin="@dimen/medium_spacing"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
-            app:elevation="4dp"
-            app:layout_behavior=".Views.FabScroll"
+            app:elevation="@dimen/card_elevation"
+            app:layout_behavior=".Views.FabScrollBehaviour"
             />
     </android.support.design.widget.CoordinatorLayout>
     <include

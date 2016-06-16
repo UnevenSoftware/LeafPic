@@ -9,11 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.horaapps.leafpic.Base.CustomAlbumsHandler;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -26,29 +25,30 @@ import java.util.ArrayList;
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
-    CustomAlbumsHandler h = new CustomAlbumsHandler(ExcludedAlbumsActivity.this);
-    ArrayList<File> albums = new ArrayList<File>();
+    private ArrayList<File> excludedFolders = new ArrayList<File>();
+    private HandlingAlbums handlingAlbums;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
 
-        albums = h.getExcludedFolders();
-        checkNothing(albums);
+        handlingAlbums = ((MyApplication) getApplicationContext()).getAlbums();
+        excludedFolders = handlingAlbums.getExcludedFolders();
+
+        checkNothing(excludedFolders);
         initUI();
     }
 
-    public void checkNothing(ArrayList<File> asd){
+    private void checkNothing(ArrayList<File> asd){
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
         a.setTextColor(getTextColor());
         a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
-    public void initUI(){
+    private void initUI(){
 
         RecyclerView mRecyclerView;
-        RelativeLayout rl_ea;
         Toolbar toolbar;
 
         /** TOOLBAR **/
@@ -77,8 +77,8 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.excluded_albums));
-        rl_ea = (RelativeLayout) findViewById(R.id.rl_ea);
-        rl_ea.setBackgroundColor(getBackgroundColor());
+
+        findViewById(R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 
     private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
@@ -89,16 +89,21 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                 String ID = v.getTag().toString();
                 int pos;
                 if((pos = getIndex(ID)) !=-1) {
-                    h.clearAlbumExclude(ID);
-                    albums.remove(pos);
+                    handlingAlbums.unExcludeAlbum(getApplicationContext(), excludedFolders.remove(pos));
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                                handlingAlbums.loadPreviewAlbums(getApplicationContext());
+                        }
+                    });
                     notifyItemRemoved(pos);
-                    checkNothing(albums);
+                    checkNothing(excludedFolders);
                 }
             }
         };
 
         public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.excluded_card, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_excluded_album, parent, false);
             v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
             return new ViewHolder(
                     MaterialRippleLayout.on(v)
@@ -113,7 +118,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
         @Override
         public void onBindViewHolder(final ExcludedAlbumsAdapter.ViewHolder holder, final int position) {
-            File a = albums.get(position);
+            File a = excludedFolders.get(position);
             holder.album_path.setText(a.getAbsolutePath());
             holder.album_name.setText(a.getName());
 
@@ -128,24 +133,24 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
         }
 
         public int getItemCount() {
-            return albums.size();
+            return excludedFolders.size();
         }
 
-        public int getIndex(String id) {
-            for (int i = 0; i < albums.size(); i++)
-                if (albums.get(i).getAbsolutePath().equals(id)) return i;
+        int getIndex(String id) {
+            for (int i = 0; i < excludedFolders.size(); i++)
+                if (excludedFolders.get(i).getAbsolutePath().equals(id)) return i;
             return -1;
         }
 
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
             LinearLayout card_layout;
             IconicsImageView imgUnExclude;
             IconicsImageView imgFolder;
             TextView album_name;
             TextView album_path;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
                 imgUnExclude = (IconicsImageView) itemView.findViewById(R.id.UnExclude_icon);

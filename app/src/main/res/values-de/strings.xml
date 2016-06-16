@@ -106,8 +106,8 @@ In den Einstellungen können Sie diese Aktion rückgängig machen.</string>
     <string name="traslucent_statusbar_sub">Eine dunklere Primärfarbe in der Benachrichtigungsleiste verwenden.</string>
     <string name="excluded_albums">Ausgeschlossene Alben</string>
     <string name="excluded_albums_sub">Ausgeschlossene Alben wieder anzeigen.</string>
-    <string name="picture_viewer">Bildbetrachter</string>
-    <string name="picture_viewer_theme">Bildbetrachter Theme</string>
+    <string name="media_viewer">Bildbetrachter</string>
+    <string name="media_viewer_theme">Bildbetrachter Theme</string>
     <string name="custom_3thAct">Bildbetrachter anpassen</string>
     <string name="custom_3thAct_sub">Theme auf den Bildbetrachter anwenden.</string>
     <string name="max_brightness">Hohe Helligkeit</string>
@@ -154,8 +154,8 @@ Hallo.\nWir sind ein kleines unabhängiges Team das mit viel Liebe ❤ an LeafPi
     <string name="about_library_license">Bibliothekslizenz</string>
     <string name="about_library_license_sub">Von LeafPic verwendete Drittanbieter-Bibliotheken.</string>
     <string name="about_authors">Autoren</string>
-    <string name="about_author_donald_sub">Hauptentwickler</string>
-    <string name="about_author_gilbert_sub">Hauptdesigner</string>
+    <string name="about_author_donald_description">Hauptentwickler</string>
+    <string name="about_author_gilbert_description">Hauptdesigner</string>
     <string name="about_support">Unterstütze die Entwicklung</string>
     <string name="about_support_translate">Übersetzen</string>
     <string name="about_support_translate_sub">Hilf uns LeafPic in weitere Sprachen zu übersetzen.</string>

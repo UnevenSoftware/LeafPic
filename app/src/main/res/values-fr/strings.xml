@@ -110,8 +110,8 @@
     <string name="traslucent_statusbar_sub">Appliquer une couleur principale plus sombre sur la barre d\'état</string>
     <string name="excluded_albums">Albums exclus</string>
     <string name="excluded_albums_sub">Restaurer les albums exclus</string>
-    <string name="picture_viewer">Visionneuse d\'image</string>
-    <string name="picture_viewer_theme">Thème visionneuse d\'image</string>
+    <string name="media_viewer">Visionneuse d\'image</string>
+    <string name="media_viewer_theme">Thème visionneuse d\'image</string>
     <string name="custom_3thAct">Personnaliser visionneuse</string>
     <string name="custom_3thAct_sub">Appliquer le thème sur la visionneuse d\'images</string>
     <string name="max_brightness">Haute luminosité</string>
@@ -160,8 +160,8 @@
     <string name="about_library_license">Licence de bibliothèque</string>
     <string name="about_library_license_sub">Vérifier les bibliothèques tierces utilisées sur LeafPic</string>
     <string name="about_authors">Auteurs</string>
-    <string name="about_author_donald_sub">Développeur principal</string>
-    <string name="about_author_gilbert_sub">Concepteur principal</string>
+    <string name="about_author_donald_description">Développeur principal</string>
+    <string name="about_author_gilbert_description">Concepteur principal</string>
     <string name="about_support">Soutenir le développement</string>
     <string name="about_support_translate">Traduire</string>
     <string name="about_support_translate_sub">Aidez-nous à traduire LeafPic en plusieurs langues</string>

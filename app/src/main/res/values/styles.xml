@@ -27,12 +27,9 @@
         <item name="android:popupBackground">@drawable/ic_empty_amoled</item>
     </style>
 
-
-
     <style name="MyToolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
         <item name="android:elevation" tools:ignore="NewApi">5dp</item>
         <item name="theme">@style/MyToolbarTheme</item>
 
@@ -64,7 +61,6 @@
         <item name="rippleColor">@android:color/white</item>
         <item name="android:gravity">center_horizontal|bottom</item>
     </style>
-
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
@@ -106,7 +102,6 @@
         <item name="android:background">#FAFAFA</item>
         <!--<item name="android:background">#424242</item>-->
     </style>
-
 
     <!--Player-->
     <style name="RootTheme" parent="android:Theme.Holo">

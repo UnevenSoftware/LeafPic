@@ -166,12 +166,13 @@
                             />
                     </LinearLayout>
                     <!--ORIENTATION-->
-                    <!--TODO: MUST TEST WITH IMG WITH LOCATION-->
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_orientation_details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:orientation="horizontal"
                         >
                         <TextView

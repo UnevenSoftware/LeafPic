@@ -112,7 +112,7 @@
         </activity>
 
         <activity
-            android:name=".SettingActivity"
+            android:name=".SettingsActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SETTING" />
