@@ -187,7 +187,7 @@ public class AlertDialogsHelper {
                     .into(imgMap);
             imgMap.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=zoom", location.getLatitude(), location.getLongitude());
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%f", location.getLatitude(), location.getLongitude(), 17);
                     activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
                 }
             });
