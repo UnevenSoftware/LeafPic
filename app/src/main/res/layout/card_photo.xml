@@ -46,9 +46,13 @@
         tools:targetApi="lollipop" />
     <TextView
         android:id="@+id/photo_path"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="visible"
+        android:elevation="10dp"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:layout_alignParentBottom="true"
     />
     <ImageView
         android:id="@+id/photo_preview"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="2dp"
-    android:id="@+id/rename_card">
+    android:id="@+id/dialog_chose_provider_title">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

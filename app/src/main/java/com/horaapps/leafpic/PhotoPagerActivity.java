@@ -142,7 +142,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         else hideSystemUI();
                     }
                 });
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), album.media);
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), album.getMedia());
 
         adapter.setVideoOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,14 +154,14 @@ public class PhotoPagerActivity extends ThemedActivity {
                 } else {
                     Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
                     intentopenWith.setDataAndType(
-                            album.media.get(mViewPager.getCurrentItem()).getUri(),
-                            album.media.get(mViewPager.getCurrentItem()).getMIME());
+                            album.getMedia().get(mViewPager.getCurrentItem()).getUri(),
+                            album.getMedia().get(mViewPager.getCurrentItem()).getMIME());
                     startActivity(intentopenWith);
                 }
             }
         });
 
-        getSupportActionBar().setTitle((album.getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+        getSupportActionBar().setTitle((album.getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(album.getCurrentMediaIndex());
@@ -175,7 +175,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             @Override
             public void onPageSelected(int position) {
                 album.setCurrentPhotoIndex(position);
-                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + album.media.size());
+                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
                 if (!fullscreenmode) new Handler().postDelayed(new Runnable() {
                     public void run() {
                         //hideSystemUI();
@@ -331,12 +331,12 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     private void deleteCurrentMedia() {
         album.deleteCurrentMedia(getApplicationContext());
-        if (album.media.size() == 0) {
+        if (album.getMedia().size() == 0) {
             ((MyApplication) getApplicationContext()).removeCurrentAlbum();
             displayAlbums(false);
         }
         adapter.notifyDataSetChanged();
-        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
     }
 
     @Override
@@ -375,35 +375,35 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.name_sort_action:
                 album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
                 album.sortPhotos();
-                adapter.swapDataSet(album.media);
+                adapter.swapDataSet(album.getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_action:
                 album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
                 album.sortPhotos();
-                adapter.swapDataSet(album.media);
+                adapter.swapDataSet(album.getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_action:
                 album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
                 album.sortPhotos();
-                adapter.swapDataSet(album.media);
+                adapter.swapDataSet(album.getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.type_sort_action:
                 album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
                 album.sortPhotos();
-                adapter.swapDataSet(album.media);
+                adapter.swapDataSet(album.getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.ascending_sort_action:
                 album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
                 album.sortPhotos();
-                adapter.swapDataSet(album.media);
+                adapter.swapDataSet(album.getMedia());
 
                 item.setChecked(!item.isChecked());
                 return true;
@@ -457,12 +457,12 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (securityObj.checkPassword(editTextPassword.getText().toString())) {
                                         album.deleteCurrentMedia(getApplicationContext());
-                                        if (album.media.size() == 0) {
+                                        if (album.getMedia().size() == 0) {
                                             ((MyApplication) getApplicationContext()).removeCurrentAlbum();
                                             displayAlbums(false);
                                         }
                                         adapter.notifyDataSetChanged();
-                                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+                                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
                                     } else
                                         Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
 
@@ -502,12 +502,12 @@ public class PhotoPagerActivity extends ThemedActivity {
                         String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
                         album.moveCurrentPhoto(getApplicationContext(), path);
 
-                        if (album.media.size() == 0) {
+                        if (album.getMedia().size() == 0) {
                             ((MyApplication) getApplicationContext()).removeCurrentAlbum();
                             displayAlbums(false);
                         }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.media.size());
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
                         bottomSheetDialogFragment.dismiss();
                     }
                 });

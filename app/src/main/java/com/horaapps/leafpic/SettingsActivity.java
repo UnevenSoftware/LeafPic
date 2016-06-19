@@ -363,7 +363,7 @@ public class SettingsActivity extends ThemedActivity {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_map_provider, null);
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.title);
-        ((CardView) dialogLayout.findViewById(R.id.rename_card)).setCardBackgroundColor(getCardBackgroundColor());
+        ((CardView) dialogLayout.findViewById(R.id.dialog_chose_provider_title)).setCardBackgroundColor(getCardBackgroundColor());
         dialogTitle.setBackgroundColor(getPrimaryColor());
 
         final RadioGroup mapProvider = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_maps_provider);

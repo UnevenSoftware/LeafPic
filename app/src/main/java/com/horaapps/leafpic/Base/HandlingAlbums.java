@@ -154,7 +154,7 @@ public class HandlingAlbums {
             if (asdf !=null) {
                 for (File temp : asdf) {
                     File nomedia = new File(temp, ".nomedia");
-                    if (!excludedfolders.contains(temp) && nomedia.exists()) {
+                    if (!excludedfolders.contains(temp) && (nomedia.exists() || temp.isHidden())) {
                         File[] files = temp.listFiles(new ImageFileFilter());
                         if (files != null && files.length > 0)
                             folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
@@ -197,9 +197,9 @@ public class HandlingAlbums {
             if (folders != null) {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
-                    if (!excludedfolders.contains(temp) && nomedia.exists()) {
+                    if (!excludedfolders.contains(temp) && (nomedia.exists() || temp.isHidden()))
                         checkAndAddAlbum(temp, albumArrayList, rootExternalStorage);
-                    }
+
                     fetchRecursivelyHiddenFolder(temp, albumArrayList, rootExternalStorage);
                 }
             }
