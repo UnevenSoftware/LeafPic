@@ -18,6 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.ColorPalette;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
 
@@ -107,7 +108,18 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             }
         }
 
-        holder.videoIcon.setVisibility(f.isVideo() ? View.VISIBLE : View.GONE);
+        if(f.isVideo()) {
+            holder.videoIcon.setVisibility(View.VISIBLE);
+            holder.path.setVisibility(View.VISIBLE);
+            holder.path.setText(f.getName());
+            holder.path.setBackgroundColor(
+                    ColorPalette.getTransparentColor(
+                            ContextCompat.getColor(holder.path.getContext(), R.color.md_black_1000), 160));
+        } else {
+            holder.videoIcon.setVisibility(View.GONE);
+            holder.path.setVisibility(View.GONE);
+
+        }
         holder.path.setTag(position);
 
         if (f.isSelected()) {

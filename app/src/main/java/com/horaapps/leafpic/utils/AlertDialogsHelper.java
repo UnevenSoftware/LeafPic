@@ -40,7 +40,7 @@ public class AlertDialogsHelper {
         View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_insert_text, null);
         TextView textViewTitle = (TextView) dialogLayout.findViewById(R.id.rename_title);
 
-        ((CardView) dialogLayout.findViewById(R.id.rename_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
+        ((CardView) dialogLayout.findViewById(R.id.dialog_chose_provider_title)).setCardBackgroundColor(activity.getCardBackgroundColor());
         textViewTitle.setBackgroundColor(activity.getPrimaryColor());
         textViewTitle.setText(title);
         ThemedActivity.setCursorDrawableColor(editText, activity.getTextColor());
@@ -187,7 +187,7 @@ public class AlertDialogsHelper {
                     .into(imgMap);
             imgMap.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%f", location.getLatitude(), location.getLongitude(), 17);
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d", location.getLatitude(), location.getLongitude(), 17);
                     activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
                 }
             });

@@ -226,7 +226,7 @@ public class MainActivity extends ThemedActivity {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         if (reload) {
             //display available medias before reload
-            mediaAdapter.updateDataSet(album.media);
+            mediaAdapter.updateDataSet(album.getMedia());
             new PreparePhotosTask().execute();
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -333,7 +333,7 @@ public class MainActivity extends ThemedActivity {
                         }
                     }).start();
                     displayCurrentAlbumMedia(false);
-                    mediaAdapter.updateDataSet(album.media);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     toggleRecyclersVisibilty(false);
 
                 }
@@ -372,7 +372,7 @@ public class MainActivity extends ThemedActivity {
         albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
         recyclerViewAlbums.setAdapter(albumsAdapter);
 
-        mediaAdapter = new PhotosAdapter(album.media, MainActivity.this);
+        mediaAdapter = new PhotosAdapter(album.getMedia(), MainActivity.this);
         recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColumns(getApplicationContext())));
         mediaAdapter.setOnClickListener(photosOnClickListener);
         mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
@@ -420,8 +420,8 @@ public class MainActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 if (!albumsMode && album.areFiltersActive()) {
-                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_ALL);
-                    mediaAdapter.updateDataSet(album.media);
+                    album.filterMedias(ImageFileFilter.FILTER_ALL);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
@@ -858,7 +858,7 @@ public class MainActivity extends ThemedActivity {
                 }
             }  else {
                 if ((c = album.getSelectedCount()) != 0) {
-                    toolbar.setTitle(c + "/" + album.media.size());
+                    toolbar.setTitle(c + "/" + album.getMedia().size());
                     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
                     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                         @Override
@@ -869,7 +869,7 @@ public class MainActivity extends ThemedActivity {
                     toolbar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (album.getSelectedCount() == album.media.size())
+                            if (album.getSelectedCount() == album.getMedia().size())
                                 album.clearSelectedPhotos();
                             else album.selectAllPhotos();
                             mediaAdapter.notifyDataSetChanged();
@@ -909,7 +909,7 @@ public class MainActivity extends ThemedActivity {
     private void checkNothing() {
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
         a.setTextColor(getTextColor());
-        a.setVisibility((albumsMode && albums.dispAlbums.size() == 0) || (!albumsMode && album.media.size() == 0) ? View.VISIBLE : View.GONE);
+        a.setVisibility((albumsMode && albums.dispAlbums.size() == 0) || (!albumsMode && album.getMedia().size() == 0) ? View.VISIBLE : View.GONE);
     }
 
     //region MENU
@@ -1087,7 +1087,7 @@ public class MainActivity extends ThemedActivity {
                                 album.deleteSelectedMedia(getApplicationContext());
                             else {
                                 albums.deleteAlbum(album, getApplicationContext());
-                                album.media.clear();
+                                album.getMedia().clear();
                             }
                         }
                         return null;
@@ -1099,13 +1099,13 @@ public class MainActivity extends ThemedActivity {
                             albums.clearSelectedAlbums();
                             albumsAdapter.notifyDataSetChanged();
                         } else {
-                            if (album.media.size() == 0) {
+                            if (album.getMedia().size() == 0) {
                                 albums.removeCurrentAlbum();
                                 albumsAdapter.notifyDataSetChanged();
                                 displayAlbums();
                             }
                             else
-                                mediaAdapter.updateDataSet(album.media);
+                                mediaAdapter.updateDataSet(album.getMedia());
                         }
                         invalidateOptionsMenu();
                         checkNothing();
@@ -1218,8 +1218,8 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.all_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_ALL);
-                    mediaAdapter.updateDataSet(album.media);
+                    album.filterMedias(ImageFileFilter.FILTER_ALL);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     //TODO improve
@@ -1229,8 +1229,8 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.video_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_VIDEO);
-                    mediaAdapter.updateDataSet(album.media);
+                    album.filterMedias(ImageFileFilter.FILTER_VIDEO);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1239,8 +1239,8 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.image_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_IMAGES);
-                    mediaAdapter.updateDataSet(album.media);
+                    album.filterMedias(ImageFileFilter.FILTER_IMAGES);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1249,8 +1249,8 @@ public class MainActivity extends ThemedActivity {
 
             case R.id.gifs_media_filter:
                 if (!albumsMode) {
-                    album.filterMedias(getApplicationContext(), ImageFileFilter.FILTER_GIFS);
-                    mediaAdapter.updateDataSet(album.media);
+                    album.filterMedias(ImageFileFilter.FILTER_GIFS);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1265,7 +1265,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.media);
+                    mediaAdapter.updateDataSet(album.getMedia());
                 }
                 item.setChecked(true);
                 return true;
@@ -1278,7 +1278,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.media);
+                    mediaAdapter.updateDataSet(album.getMedia());
                 }
                 item.setChecked(true);
                 return true;
@@ -1291,7 +1291,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.media);
+                    mediaAdapter.updateDataSet(album.getMedia());
                 }
                 item.setChecked(true);
                 return true;
@@ -1300,7 +1300,7 @@ public class MainActivity extends ThemedActivity {
                 if (!albumsMode) {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.media);
+                    mediaAdapter.updateDataSet(album.getMedia());
                     item.setChecked(true);
                 }
 
@@ -1314,7 +1314,7 @@ public class MainActivity extends ThemedActivity {
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.media);
+                    mediaAdapter.updateDataSet(album.getMedia());
                 }
                 item.setChecked(!item.isChecked());
                 return true;
@@ -1649,7 +1649,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            mediaAdapter.updateDataSet(album.media);
+            mediaAdapter.updateDataSet(album.getMedia());
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -1674,7 +1674,7 @@ public class MainActivity extends ThemedActivity {
                     if (ContentHelper.moveFile(getApplicationContext(), from, to)) {
                         MediaScannerConnection.scanFile(getApplicationContext(),
                                 new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
-                        album.media.remove(album.selectedMedias.get(i));
+                        album.getMedia().remove(album.selectedMedias.get(i));
                     }
                 }
             } catch (Exception e) { e.printStackTrace(); }
@@ -1683,13 +1683,13 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            if (album.media.size() == 0) {
+            if (album.getMedia().size() == 0) {
                 albums.removeCurrentAlbum();
                 albumsAdapter.notifyDataSetChanged();
                 displayAlbums();
             }
 
-            mediaAdapter.updateDataSet(album.media);
+            mediaAdapter.updateDataSet(album.getMedia());
             finishEditMode();
             invalidateOptionsMenu();
             swipeRefreshLayout.setRefreshing(false);

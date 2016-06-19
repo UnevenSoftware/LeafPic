@@ -136,7 +136,9 @@ public class Media implements Parcelable {
         } catch (Exception e) { return null; }*/
     }
 
-
+    public String getName() {
+        return StringUtils.getPhotoNamebyPath(path);
+    }
     public GeoLocation getGeoLocation()  {
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
