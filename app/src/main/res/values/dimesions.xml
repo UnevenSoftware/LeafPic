@@ -5,6 +5,7 @@
     <!--ICONS-->
     <dimen name="icon_margion">24dp</dimen>
     <dimen name="icon_width_height">20dp</dimen>
+    <dimen name="big_icon">36dp</dimen>
 
     <!--PADDING & MARGIN-->
     <dimen name="big_spacing">24dp</dimen>
@@ -19,6 +20,7 @@
     <dimen name="sub_big_text">18sp</dimen>
     <dimen name="medium_text">16sp</dimen>
     <dimen name="sub_medium_text">14sp</dimen>
+    <dimen name="medium_small_text">10sp</dimen>
     <dimen name="small_text">8sp</dimen>
 
     <!--VIEWS-->

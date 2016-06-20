@@ -72,4 +72,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
     compile 'org.jetbrains:annotations-java5:15.0'
+
+    compile 'com.turingtechnologies.materialscrollbar:lib:10.+'
 }

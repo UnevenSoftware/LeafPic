@@ -8,10 +8,10 @@
     >
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/selected_icon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:elevation="10dp"
@@ -22,10 +22,10 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/type_icon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginBottom="1dp"
-        android:layout_marginStart="5dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="4dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:elevation="10dp"
@@ -36,21 +36,23 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/video_indicator"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/icon_width_height"
+        android:layout_height="@dimen/icon_width_height"
         android:elevation="10dp"
         android:visibility="gone"
         android:layout_centerInParent="true"
         app:iiv_color="@color/md_white_1000"
-        app:iiv_icon="gmd-play-circle-filled"
-        tools:targetApi="lollipop" />
+        app:iiv_icon="gmd-play-arrow"
+        tools:targetApi="lollipop"/>
+
     <TextView
         android:id="@+id/photo_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        android:padding="4dp"
         android:elevation="10dp"
-        android:textSize="12sp"
+        android:textSize="@dimen/medium_small_text"
         android:maxLines="1"
         android:layout_alignParentBottom="true"
     />

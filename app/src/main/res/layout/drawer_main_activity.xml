@@ -13,344 +13,354 @@
         android:scrollbarSize="4dip"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-    <RelativeLayout
-        android:id="@+id/Drawer_Header"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:clickable="true"
-        android:elevation="8dp"
-        >
-         <TextView
-             android:id="@+id/txtLogo"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentBottom="true"
-             android:layout_marginBottom="7dp"
-             android:layout_marginStart="15dp"
-             android:text="leafpiC"
-             android:textColor="@color/md_white_1000"
-             android:textSize="50sp"
-             />
-    </RelativeLayout>
-
-
-        <LinearLayout
-            android:id="@+id/Drawer_Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            android:scrollbars="vertical"
-            >
-
-            <!-- DEFAULT ALBUMS -->
-            <com.balysv.materialripple.MaterialRippleLayout
+            <RelativeLayout
+                android:id="@+id/Drawer_Header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false"
+                android:layout_height="160dp"
+                android:clickable="true"
+                android:elevation="8dp"
+                android:orientation="vertical"
                 >
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Default"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_Default_Icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
-                        android:layout_gravity="center_vertical"
-                        app:iiv_icon="gmd-folder"
-                        android:layout_marginLeft="@dimen/big_spacing"
-                        android:layout_marginRight="@dimen/big_spacing"
-                        />
-                    <TextView
-                        android:id="@+id/Drawer_Default_Item"
+                    android:orientation="vertical"
+                    android:layout_alignParentBottom="true">
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/local_folder"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:paddingLeft="@dimen/big_spacing"
+                        android:paddingBottom="@dimen/small_spacing"
                         />
+                     <TextView
+                         android:id="@+id/txtLogo"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="LeafPic"
+                         android:textColor="@color/md_white_1000"
+                         android:textSize="@dimen/big_text"
+                         android:paddingLeft="@dimen/big_spacing"
+                         android:paddingBottom="@dimen/small_spacing"
+                         />
                 </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
-
-            <!-- HIDDEN ALBUMS -->
-            <com.balysv.materialripple.MaterialRippleLayout
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/Drawer_Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                android:scrollbars="vertical"
                 >
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_hidden"
+
+                <!-- DEFAULT ALBUMS -->
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false"
                     >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_hidden_Icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/big_spacing"
-                        android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="faw-low-vision"
-                        />
-                    <TextView
-                        android:id="@+id/Drawer_hidden_Item"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_Default"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="@string/hidden_folder"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
+                        android:orientation="horizontal"
+                        >
 
-            <!-- TAGS ALBUMS -->
-            <!--
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Tags"
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_Default_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-folder"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
+                        <TextView
+                            android:id="@+id/Drawer_Default_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/local_folder"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <!-- HIDDEN ALBUMS -->
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false"
                     >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_Tags_Icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        app:iiv_icon="faw-tag"
-                        />
-
-                    <TextView
-                        android:id="@+id/Drawer_Tags_Item"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_hidden"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:padding="15dp"
-                        android:text="@string/tags"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
-            -->
-            <!-- TIMELINE -->
-            <!--
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Moments"
+                        android:orientation="horizontal"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_hidden_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            app:iiv_icon="faw-low-vision"
+                            />
+                        <TextView
+                            android:id="@+id/Drawer_hidden_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:text="@string/hidden_folder"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <!-- TAGS ALBUMS -->
+                <!--
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_Moments_Icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        app:iiv_icon="gmd-timeline"
-                        />
-                    <TextView
-                        android:id="@+id/Drawer_Moments_Item"
-                        android:layout_width="wrap_content"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_Tags"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:padding="15dp"
-                        android:text="@string/timeline"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
-            -->
+                        android:orientation="horizontal"
+                        >
 
-            <!-- WALLPAPERS -->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_Tags_Icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="faw-tag"
+                            />
 
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Wallpapers"
+                        <TextView
+                            android:id="@+id/Drawer_Tags_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:padding="15dp"
+                            android:text="@string/tags"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+                -->
+                <!-- TIMELINE -->
+                <!--
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_wallpapers_Icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/big_spacing"
-                        android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="gmd-wallpaper" />
-
-                    <TextView
-                        android:id="@+id/Drawer_wallpapers_Item"
-                        android:layout_width="wrap_content"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_Moments"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="@string/wallpapers"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp" />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
+                        android:orientation="horizontal"
+                        >
 
-            <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_Moments_Icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            app:iiv_icon="gmd-timeline"
+                            />
+                        <TextView
+                            android:id="@+id/Drawer_Moments_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:padding="15dp"
+                            android:text="@string/timeline"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+                -->
 
-            <View
-                android:id="@+id/Drawer_Body_Divider"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="0dp"
-                android:layout_marginTop="0dp"
-                android:padding="0dp"
-                />
-
-
-            <!--DONATE-->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Donate"
+                <!-- WALLPAPERS -->
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_Donate_Icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/big_spacing"
-                        android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="faw-gift" />
-
-                    <TextView
-                        android:id="@+id/Drawer_Donate_Item"
-                        android:layout_width="wrap_content"
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_Wallpapers"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="@string/donate"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
+                        android:orientation="horizontal">
 
-            <!-- SETTING -->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_Setting"
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_wallpapers_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            app:iiv_icon="gmd-wallpaper" />
+
+                        <TextView
+                            android:id="@+id/Drawer_wallpapers_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:text="@string/wallpapers"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
+
+                <View
+                    android:id="@+id/Drawer_Body_Divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:padding="0dp"
+                    />
+
+
+                <!--DONATE-->
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_Setting_Icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/big_spacing"
-                        android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="gmd-settings"
-                        />
-                    <TextView
-                        android:id="@+id/Drawer_Setting_Item"
-                        android:layout_width="wrap_content"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_Donate"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="@string/settings"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
+                        android:orientation="horizontal"
+                        >
 
-            <!-- ABOUT -->
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleAlpha="0.05"
-                app:mrl_rippleDelayClick="false">
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_drawer_About"
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_Donate_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            app:iiv_icon="faw-gift" />
+
+                        <TextView
+                            android:id="@+id/Drawer_Donate_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:text="@string/donate"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <!-- SETTING -->
+                <com.balysv.materialripple.MaterialRippleLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/Drawer_About_Icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/big_spacing"
-                        android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="gmd-info-outline"
-                        />
-                    <TextView
-                        android:id="@+id/Drawer_About_Item"
-                        android:layout_width="wrap_content"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_Setting"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="@string/about"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
+                        android:orientation="horizontal"
+                        >
 
-        </LinearLayout>
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_Setting_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            app:iiv_icon="gmd-settings"
+                            />
+                        <TextView
+                            android:id="@+id/Drawer_Setting_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:text="@string/settings"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <!-- ABOUT -->
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleAlpha="0.05"
+                    app:mrl_rippleDelayClick="false">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_drawer_About"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Drawer_About_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            app:iiv_icon="gmd-info-outline"
+                            />
+                        <TextView
+                            android:id="@+id/Drawer_About_Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:text="@string/about"
+                            android:textColor="@color/md_dark_background"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

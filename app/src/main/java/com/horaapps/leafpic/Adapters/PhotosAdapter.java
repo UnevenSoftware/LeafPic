@@ -112,9 +112,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             holder.videoIcon.setVisibility(View.VISIBLE);
             holder.path.setVisibility(View.VISIBLE);
             holder.path.setText(f.getName());
+            holder.path.setTextColor(ContextCompat.getColor(holder.path.getContext(), R.color.md_dark_primary_text));
             holder.path.setBackgroundColor(
                     ColorPalette.getTransparentColor(
-                            ContextCompat.getColor(holder.path.getContext(), R.color.md_black_1000), 160));
+                            ContextCompat.getColor(holder.path.getContext(), R.color.md_black_1000), 100));
         } else {
             holder.videoIcon.setVisibility(View.GONE);
             holder.path.setVisibility(View.GONE);

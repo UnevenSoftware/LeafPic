@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -82,6 +81,7 @@ import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -113,6 +113,9 @@ public class MainActivity extends ThemedActivity {
     private Toolbar toolbar;
     private SelectAlbumBottomSheet bottomSheetDialogFragment;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private RelativeLayout relativeLayoutMainContent;
+
+    private TouchScrollBar touchScrollBar;
 
     private boolean hidden = false, pickMode = false, editMode = false, albumsMode = true, firstLaunch = true;
 
@@ -265,8 +268,7 @@ public class MainActivity extends ThemedActivity {
         editMode = false;
         invalidateOptionsMenu();
         mediaAdapter.updateDataSet(new ArrayList<Media>());
-        recyclerViewMedia.scrollToPosition(0);
-    }
+        recyclerViewMedia.scrollToPosition(0);}
 
 
     @Override
@@ -286,7 +288,6 @@ public class MainActivity extends ThemedActivity {
         photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
         recyclerViewMedia.addItemDecoration(photosDecoration);
 
-
         int status_height = Measure.getStatusBarHeight(getResources()),
         navBarHeight =  Measure.getNavBarHeight(MainActivity.this);
 
@@ -295,20 +296,25 @@ public class MainActivity extends ThemedActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-            recyclerViewAlbums.setPadding(0, 0, 0, status_height);
-            recyclerViewMedia.setPadding(0, 0, 0, status_height);
+            //recyclerViewAlbums.setPadding(0, 0, 0, status_height);
+            //recyclerViewMedia.setPadding(0, 0, 0, status_height);
+            //touchScrollBar.setPadding(0, 0, 0, status_height);
+
+            relativeLayoutMainContent.setPadding(0, 0, 0, status_height);
             fabCamera.setVisibility(View.GONE);
         }
         else {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
             toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
-
             swipeRefreshLayout.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
-            recyclerViewAlbums.setPadding(0, 0, 0, status_height + navBarHeight);
-            recyclerViewMedia.setPadding(0, 0, 0, status_height + navBarHeight);
+
+            //recyclerViewAlbums.setPadding(0, 0, 0, status_height + navBarHeight);
+            //recyclerViewMedia.setPadding(0, 0, 0, status_height + navBarHeight);
+            //touchScrollBar.setPadding(0, 0, 0, status_height + navBarHeight);
+            relativeLayoutMainContent.setPadding(0, 0, 0, status_height + navBarHeight);
+
             fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
-            fabCamera.setVisibility(View.VISIBLE);
         }
     }
 
@@ -410,8 +416,6 @@ public class MainActivity extends ThemedActivity {
             }
         });
 
-        ((TextView) findViewById(R.id.txtLogo)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
-
         /**** FAB ***/
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
@@ -453,8 +457,20 @@ public class MainActivity extends ThemedActivity {
 
         swipeRefreshLayout.animate().translationY(statusBarHeight).setInterpolator(new DecelerateInterpolator()).start();
 
-        recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
-        recyclerViewMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+        //recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+        //recyclerViewMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+
+        relativeLayoutMainContent=(RelativeLayout) findViewById(R.id.rl_main_content);
+        relativeLayoutMainContent.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+
+        /**** SCROLLBAR ****/
+
+        touchScrollBar = (TouchScrollBar) findViewById(R.id.touchScrollBar);
+        touchScrollBar.setHandleColour(getAccentColor());
+        touchScrollBar.setHandleOffColour(getPrimaryColor());
+        touchScrollBar.setBarColour((ColorPalette.getTransparentColor(getInvertedBackgroundColor(), 160)));
+        touchScrollBar.setHideDuration(1500);
+
         setRecentApp(getString(R.string.app_name));
 
         Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
@@ -1585,8 +1601,10 @@ public class MainActivity extends ThemedActivity {
     }
 
     private void toggleRecyclersVisibilty(boolean albumsMode){
-            recyclerViewAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
-            recyclerViewMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
+        recyclerViewAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
+        recyclerViewMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
+        touchScrollBar.setScrollBarHidden(albumsMode);
+
     }
 
     @Override

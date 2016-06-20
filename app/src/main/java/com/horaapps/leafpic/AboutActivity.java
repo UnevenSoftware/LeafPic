@@ -107,14 +107,12 @@ public class AboutActivity extends ThemedActivity {
                 .load("https://lh3.googleusercontent.com/-4lGmk-K4r4U/Vw1Vj8yERrI/AAAAAAAANww/FIsb58PcO-U-9AfD8FXfruK1c75SZ184QCL0B/w958-h539-no/asd.png")
                 .placeholder(getPlaceHolder())
                 .priority(Priority.HIGH)
-                .error(R.drawable.ic_error)
                 .animate(R.anim.fade_in)
                 .into((ImageView) findViewById(R.id.donald_header_img));
         Glide.with(this)
                 .load("https://lh5.googleusercontent.com/-kp20brbsTS0/VLQv60zDLQI/AAAAAAAAD9s/Wu-g8p-OvdISYmyEC9aCQXNaxxUJYfD0QCL0B/w776-h779-no/IMG_20150112_164721.jpg")
-                //.placeholder(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()))
                 .priority(Priority.HIGH)
-                .error(R.drawable.ic_error)
+                .error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()).paddingDp(24))
                 .animate(R.anim.fade_in)
                 .into((CircleImageView) findViewById(R.id.donald_profile_img));
         ((CircleImageView) findViewById(R.id.donald_profile_img)).setBorderColor(getInvertedBackgroundColor());
@@ -131,19 +129,22 @@ public class AboutActivity extends ThemedActivity {
         /***** Images *****/
         Glide.with(this)
                 .load("https://lh6.googleusercontent.com/-CQSWRHA3PMU/U1giCTxx3LI/AAAAAAAAAZU/YVnUYwwnNOEE7ob0LyHmRnbUtEtC5znIQCL0B/w958-h639-no/1397233014-game-over-samus.jpg")
-                .placeholder(getPlaceHolder())
                 .priority(Priority.HIGH)
-                .error(R.drawable.ic_error)
                 .animate(R.anim.fade_in)
                 .into((ImageView) findViewById(R.id.gilbert_header_img));
         Glide.with(this)
                 .load("https://lh6.googleusercontent.com/-gucGwwJrFMg/U4IErjai3SI/AAAAAAAAANI/YGGxrdWO88cIsIpYrYxaq2KjSDfinLTmACL0B/s779-no/PicsArt_1387801769612.jpg")
-                //.placeholder(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()))
                 .priority(Priority.HIGH)
-                .error(R.drawable.ic_error)
+                .error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()).paddingDp(24))
                 .animate(R.anim.fade_in)
                 .into((CircleImageView) findViewById(R.id.gilbert_profile_img));
         ((CircleImageView) findViewById(R.id.gilbert_profile_img)).setBorderColor(getInvertedBackgroundColor());
+        /*
+        if((ImageView) findViewById(R.id.gilbert_header_img)==null) {
+            ((ImageView) findViewById(R.id.gilbert_header_img)).setImageResource(R.mipmap.ic_launcher);
+            ((CircleImageView) findViewById(R.id.gilbert_profile_img)).setBorderWidth(0);
+        }
+        */
         /***** Object *****/
         ((CardView) findViewById(R.id.about_gilbert_card)).setCardBackgroundColor(getCardBackgroundColor());
         ((TextView) findViewById(R.id.gilbert_ndresaj)).setTextColor(getTextColor());
@@ -325,6 +326,8 @@ public class AboutActivity extends ThemedActivity {
         notices.addNotice(new Notice("material-ripple", "http://github.com/balysv/material-ripple", "Copyright 2015 Balys Valentukevicius", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("PhotoView", "http://github.com/chrisbanes/PhotoView", "Copyright 2011, 2012 Chris Banes.", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("CircleImageView", "https://github.com/hdodenhof/CircleImageView", "Copyright 2014 - 2015 Henning Dodenhof", new ApacheSoftwareLicense20()));
+
+        notices.addNotice(new Notice("Material Scroll Bar", "https://github.com/krimin-killr21/MaterialScrollBar", "Copyright 2016 Turing Technologies, an unincorporated orginisation of Wynne Plaga.", new ApacheSoftwareLicense20()));
 
         new LicensesDialog.Builder(this)
                 .setNotices(notices)
