@@ -153,8 +153,8 @@
 
     <string name="max_brightness">High Brightness</string>
     <string name="max_brightness_sub">Maximum brightness when view a media.</string>
-    <string name="picture_orientation">Picture Orientation</string>
-    <string name="picture_orientation_sub">Update orientation changes using the sensor</string>
+    <string name="picture_orientation">Force use sensor for orientation</string>
+    <string name="picture_orientation_sub">Rotate even when orientation is locked</string>
     <string name="apply_theme">Apply Theme</string>
     <string name="apply_theme_sub">Apply custom color on the picture viewer.</string>
     <string name="transparency">Transparency</string>
