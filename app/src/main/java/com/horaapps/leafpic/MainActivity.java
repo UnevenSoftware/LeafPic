@@ -470,7 +470,6 @@ public class MainActivity extends ThemedActivity {
         touchScrollBar.setHandleOffColour(getPrimaryColor());
         touchScrollBar.setBarColour((ColorPalette.getTransparentColor(getInvertedBackgroundColor(), 160)));
         touchScrollBar.setHideDuration(1500);
-
         setRecentApp(getString(R.string.app_name));
 
         Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
