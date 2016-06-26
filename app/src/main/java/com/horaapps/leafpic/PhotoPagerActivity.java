@@ -113,6 +113,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     private void initUI() {
 
         setSupportActionBar(toolbar);
+        toolbar.bringToFront();
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_arrow_back)
                 .color(Color.WHITE)
