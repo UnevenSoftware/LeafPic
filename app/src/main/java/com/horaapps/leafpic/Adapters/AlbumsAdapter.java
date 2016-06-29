@@ -55,7 +55,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
                 break;
             case ThemedActivity.AMOLED_THEME:
-                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));;
+                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));
                 break;
             case ThemedActivity.LIGHT_THEME: default:
                 placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));

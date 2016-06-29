@@ -277,7 +277,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Boolean... arg0) {
-            albumArrayList = albums.getValidFolders(getContext(), arg0[0]);
+            albumArrayList = albums.getValidFolders(arg0[0]);
             return null;
         }
 
