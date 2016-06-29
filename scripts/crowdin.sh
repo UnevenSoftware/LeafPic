@@ -15,8 +15,7 @@ if [ -n "$(git status --porcelain $basedir/$location)" ]; then
     exit 1
 fi
 
-response=$(curl -sS "https://api.crowdin.com/api/project/leafpic/export?key=$apikey" | grep
-'<success')
+response=$(curl -sS "https://api.crowdin.com/api/project/leafpic/export?key=$apikey" | grep '<success' )
 echo $response
 
 if [ -n "$response" ]; then
