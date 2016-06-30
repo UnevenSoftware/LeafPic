@@ -538,7 +538,7 @@ public class ContentHelper {
 
 			Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
 			Method getUuid = storageVolumeClazz.getMethod("getUuid");
-			Method getPath = storageVolumeClazz.getMethod("getPath");
+			Method getPath = storageVolumeClazz.getMethod("getMediaPath");
 			Method isPrimary = storageVolumeClazz.getMethod("isPrimary");
 			Object result = getVolumeList.invoke(mStorageManager);
 
@@ -658,8 +658,9 @@ public class ContentHelper {
     }
 
 
-    public static String getPath(final Context context, final Uri uri)
+    public static String getMediaPath(final Context context, final Uri uri)
     {
+	  Log.wtf("asd", uri+"");
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
 
@@ -716,7 +717,10 @@ public class ContentHelper {
         }
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            return getDataColumn(context, uri, null, null);
+		  try {
+			return getDataColumn(context, uri, null, null);
+		  } catch (Exception ignored){ }
+
         }
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {

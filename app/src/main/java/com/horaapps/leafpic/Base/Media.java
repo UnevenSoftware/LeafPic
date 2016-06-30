@@ -129,7 +129,7 @@ public class Media implements Parcelable {
 
         // NOTE: ExifInterface is faster than metadata-extractor to get the thumbnail data
         /*try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
+            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
             ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
             if (thumbnailDirectory.hasThumbnailData())
                 return thumbnailDirectory.getThumbnailData();
@@ -148,7 +148,7 @@ public class Media implements Parcelable {
     }
 
     private void loadMetadata() {
-        if (metadataMap.isEmpty()) {
+        if (isMediainStorage() && metadataMap.isEmpty()) {
             try {
                 Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
                 for (Directory directory : metadata.getDirectories())
@@ -180,7 +180,7 @@ public class Media implements Parcelable {
     public boolean setOrientation(int orientation){
         /*int asd;
         ExifInterface exif;
-        try { exif = new ExifInterface(getPath()); }
+        try { exif = new ExifInterface(getMediaPath()); }
         catch (IOException ex) { return false; }
         switch (orientation) {
             case 90: asd = ExifInterface.ORIENTATION_ROTATE_90; break;
