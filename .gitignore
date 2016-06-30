@@ -11,3 +11,4 @@
 .DS_Store
 /build
 /captures
+/scripts/crowdin.key

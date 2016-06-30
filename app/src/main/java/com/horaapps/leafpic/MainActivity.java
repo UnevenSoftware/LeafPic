@@ -441,9 +441,7 @@ public class MainActivity extends ThemedActivity {
 
                 // NOTE: this is used to acquire write permission on sd with api 21
                 // TODO call this one when unable to write on sd
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_CODE_SD_CARD_PERMISSIONS);
-                }
+                requestSdCardPermissions();
                 return false;
             }
         });
@@ -634,6 +632,23 @@ public class MainActivity extends ThemedActivity {
         }
     }
     //endregion
+
+    private void requestSdCardPermissions() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+        AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
+                getString(R.string.sd_card_write_permission_title),
+                getString(R.string.sd_card_permissions_message));
+
+        dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_CODE_SD_CARD_PERMISSIONS);
+            }
+        });
+        dialogBuilder.show();
+    }
 
     @Override
     public void setNavBarColor() {
@@ -958,6 +973,7 @@ public class MainActivity extends ThemedActivity {
             switch (album.settings.columnSortingMode) {
                 case AlbumSettings.SORT_BY_NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
                 case AlbumSettings.SORT_BY_SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
+                case AlbumSettings.SORT_BY_TYPE:  menu.findItem(R.id.type_sort_action).setChecked(true); break;
                 case AlbumSettings.SORT_BY_DATE:
                 default:
                     menu.findItem(R.id.date_taken_sort_action).setChecked(true);
@@ -1172,8 +1188,6 @@ public class MainActivity extends ThemedActivity {
             case R.id.excludeAlbumButton:
 
                 final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                /*AlertDialogsHelper.getTextDialog(MainActivity.this, excludeDialogBuilder,
-                        getString(R.string.exclude),getString(R.string.exclude_album_message));*/
 
                 final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
                 TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
@@ -1190,7 +1204,6 @@ public class MainActivity extends ThemedActivity {
                     textViewExcludeMessage.setText(R.string.exclude_albums_message);
                     spinnerParents.setVisibility(View.GONE);
                 } else {
-
                     textViewExcludeMessage.setText(R.string.exclude_album_message);
                     spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? albums.getSelectedAlbum(0).getParentsFolders() : album.getParentsFolders()));
                 }

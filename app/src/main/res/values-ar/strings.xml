@@ -3,23 +3,25 @@
 <resources>
     <!--LEAF PIC STRING'S-->
     <string name="app_name">LeafPic</string>
+    <string name="app_light_description">معرض بتصميم مادي ملون.</string>
     <string name="team_name">HoraApps</string>
     <string name="welcome_slide_title">مرحبا بك في LeafPic!</string>
-    <string name="welcome_slide_sub">معرض صور مصمم بكامل ألوان التصميم المادي!</string>
+    <string name="welcome_slide_sub">معرض صور مصمم بكامل ألوان التصميم المادي Material Design!</string>
+    <string name="made_with_love_by">صنع مع الحب بواسطة</string>
     <!-- ACTIONS -->
     <string name="sort">فرز</string>
     <string name="camera">الكاميرا</string>
-    <string name="exclude">إستثناء</string>
+    <string name="exclude">استبعاد</string>
     <string name="cancel">إلغاء</string>
     <string name="delete">حذف</string>
     <string name="hide">إخفاء</string>
-    <string name="unhide">Unhide</string>
+    <string name="unhide">إلغاء الإخفاء</string>
     <string name="ok_action">موافق</string>
     <string name="rename_photo_action">إعادة تسمية الصورة</string>
     <string name="drawer_open">فتح درج التنقل</string>
     <string name="drawer_close">غلق درج التنقل</string>
     <string name="refresh">تحديث</string>
-    <string name="sent_to_action">إرسال إلى</string>
+    <string name="sent_to_action">ارسال إلى</string>
     <string name="filter_menu_title">تصفية</string>
     <string name="all">الكل</string>
     <string name="videos">فيديو</string>
@@ -28,19 +30,21 @@
     <string name="sort_menu_title">فرز</string>
     <string name="name">الاسم</string>
     <string name="date">التاريخ</string>
+    <string name="date_taken">تاريخ الإلتقاط</string>
     <string name="size">الحجم</string>
     <string name="ascending">تصاعدي</string>
     <string name="select_all">تحديد الكل</string>
     <string name="clear_selected">إلغاء المحددة</string>
     <string name="share">مشاركة</string>
     <string name="rotate">تدوير</string>
-    <string name="rotate_right_90">تدوير إلى اليمين 90 درجة</string>
-    <string name="rotate_left_90">تدوير إلى اليسار 90 درجة</string>
-    <string name="rotate_180">تدوير 180 درجة</string>
+    <string name="rotate_right_90">تدوير إلى اليمين °90 درجة</string>
+    <string name="rotate_left_90">تدوير إلى اليسار°90 درجة</string>
+    <string name="rotate_180">تدوير °180 درجة</string>
     <string name="copy_to">نسخ إلى</string>
     <string name="move_to">نقل إلى</string>
-    <string name="use_as">إستخدام كـ</string>
+    <string name="use_as">استخدام كـ</string>
     <string name="edit">تعديل</string>
+    <string name="fix_date">إصلاح التاريخ</string>
     <string name="rename">إعادة تسمية</string>
     <string name="rename_album">إعادة تسمية الألبوم</string>
     <string name="details">التفاصيل</string>
@@ -50,65 +54,81 @@
     <string name="upload">رفع</string>
     <string name="set_preview">تعيين كمعاينة</string>
     <string name="clear_preview">مسح المعاينة</string>
-    <string name="new_folder">New Folder</string>
+    <string name="new_folder">مجلد جديد</string>
     <!--DIALOG MESAGES-->
-  <string name="hide_album_message">هل أنت متأكد من أنك تريد إخفاء هذا الألبوم؟
-(هذه الخطوة ستنشئ ملف .nomedia في المجلد، وإذا كان هناك ملفات وسائط أخرى فيه لن تكون متوفرة أيضا في التطبيقات الأخرى! استخدم خيار الإستثناء بدلاً من ذلك)    </string>
-  <string name="unhide_album_message">Are you sure you want to unhide this album?
-        (media will be available also for other apps!)
+    <string name="hide_album_message">
+        اخفاء هذا الألبوم سينشئ ملف .nomedia في المجلد
+        وهذا قد يجعل الوسائط غير قابلة للوصول من التطبيقات الأخرى استخدم خيار الاستبعاد لتجنب هذا.
     </string>
     <string name="delete_album_message">هل أنت متأكد أنك تريد حذف الألبوم المحدد؟</string>
-    <string name="delete_photos_message">هل أنت متأكد أنك تريد حذف ملفات الوسائط المحددة هذه؟</string>
+    <string name="delete_albums_message">هل أنت متأكد أنك تريد حذف الألبومات المحددة؟</string>
     <string name="delete_photo_message">هل أنت متأكد أنك تريد حذف ملف الوسائط هذا؟</string>
-  <string name="exclude_album_message">
-هل أنت متأكد من أنك تريد استبعاد هذا الألبوم؟\n
-يمكنك إستعادته بالذهاب إلى الإعدادات!    </string>
+    <string name="delete_photos_message">هل أنت متأكد أنك تريد حذف ملفات الوسائط المحددة هذه؟</string>
+    <string name="hide_albums_message">هل أنت متأكد أنك تريد إخفاء الألبومات المحددة؟</string>
+    <string name="unhide_album_message">إلغاء اخفاء هذا الألبوم سيجعل وسائطه متوفرة أيضاً للتطبيقات الأخرى.</string>
+    <string name="exclude_albums_message">هل أنت متأكد أنك تريد استبعاد الألبومات المحددة؟</string>
+    <string name="exclude_album_message">
+        Excluding this folder you will exclude also all sub-folders, below there is
+        a list that allow you to chose a parent if you have to exclude more folder which are on the same level.
+    </string>
+    <string name="new_folder_message">The new folder will be created in the current path;
+        then the media will be copyed or moved in the new folder.
+    </string>
     <!-- ITEMS -->
     <string name="singular_photo">صورة</string>
     <string name="plural_photos">صور</string>
     <string name="video_player">مشغل الفيديو</string>
     <string name="media">وسائط</string>
-    <string name="send_to">إرسال إلى</string>
+    <string name="send_to">ارسال إلى</string>
     <string name="search_menu">بحث</string>
     <string name="full_resolution">الدقة الكاملة</string>
     <string name="of">من</string>
     <!-- AFFIX -->
     <string name="affix">Affix</string>
-    <string name="affix_vertical">Affix Vertical</string>
-    <string name="affix_vertical_sub">Affix horizontal by default!</string>
+    <string name="affix_vertical">Affix عمودي</string>
+    <string name="affix_vertical_sub">تعيين الاتجاه، أفقي بشكل افتراضي.</string>
+    <string name="affix_save_here">جفظ في هذا الألبوم</string>
+    <string name="affix_save_here_sub">النتيجة ستحفظ في هذا الألبوم</string>
+    <string name="affix_format">صيغة الصورة</string>
+    <string name="affix_format_sub">الصيغ المتوفرة</string>
+    <string name="affix_text">Affixing your media, please wait&#8230;</string>
+    <string name="affix_error">Can\'t affix video, you must select at least 2 images.</string>
+    <string name="quality">الجودة</string>
     <!-- RANDOM -->
     <string name="done">تمّ!</string>
     <string name="there_is_nothing_to_show">لا يوجد شيء لعرضه!</string>
     <string name="insert_a_name">أدخل شيء ما</string>
     <string name="nothing_changed">لم يتغير شيء!</string>
-    <string name="install_shortcut">Install shortcut</string>
+    <string name="install_shortcut">تثبيت اختصار</string>
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">الإعداد العام</string>
-    <string name="folder">المجلد</string>
+    <string name="folder">مجلد</string>
     <string name="color_palette">لوح الألوان</string>
     <string name="app_intro_skip">المقدمة تخطيت!</string>
     <!-- SECURITY-->
-    <string name="type_password">Insert password</string>
-    <string name="wrong_password">Wrong password</string>
     <string name="security">الأمان</string>
-    <string name="active_security">Use password</string>
-    <string name="security_sub">Set up a password to protect your media.</string>
-    <string name="remember_password_message">Note: password changed if you forget it you have to clear application data.</string>
-    <string name="apply_password_on">Apply password on</string>
-    <string name="fingerprint">Finger print</string>
-    <string name="clear_password">Clear Password</string>
-    <string name="error_password_length">The minimum password length is 4 character</string>
+    <string name="active_security">وصول بواسطة كلمة مرور</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="wrong_password">كلمة مرور خاطئة</string>
+    <string name="type_password">أدخل كلمة مرور</string>
+    <string name="security_sub">عيّن كلمة مرور لحماية وسائطك.</string>
+    <string name="remember_password_message">Note: password changed, if you forget it you have to clear application data.</string>
+    <string name="apply_password_on">استخدام كلمة مرور لـ</string>
+    <string name="fingerprint">بصمة الإصبع</string>
+    <string name="clear_password">مسح كلمة المرور</string>
+    <string name="error_password_length">الحد الأدنى طول لكلمة المرور 4 محارف</string>
     <!-- SETTINGS -->
     <string name="settings">الإعدادت</string>
     <string name="general">عام</string>
-    <string name="auto_update_media">Auto update media</string>
-    <string name="auto_update_media_sub">You should disable in case of huge number of images.</string>
+    <string name="auto_update_media">تحديث وسائط آلي</string>
+    <string name="auto_update_media_sub">يجب عليك تعطيله في حالة الأعداد الكبيرة من الصور.</string>
     <string name="traslucent_statusbar">شريط حالة شبه شفاف</string>
     <string name="traslucent_statusbar_sub">تطبيق لون مظلم أساسي لشريط الإشعارات.</string>
-    <string name="excluded_albums">الألبومات المستثناة</string>
-    <string name="excluded_albums_sub">استعادة الألبومات المستثناة.</string>
-    <string name="media_viewer">عارض الصورة</string>
-    <string name="media_viewer_theme">سمة عارض الصورة</string>
+    <string name="excluded_albums">الألبومات المستبعدة</string>
+    <string name="excluded_albums_sub">استعادة الألبومات المستبعدة.</string>
+    <string name="media_viewer">عارض الوسائط</string>
+    <string name="media_viewer_theme">سمة عارض الوسائط</string>
     <string name="custom_3thAct">تخصيص المستعرض</string>
     <string name="custom_3thAct_sub">تطبيق السمة على عارض الصور.</string>
     <string name="max_brightness">سطوع عالي</string>
@@ -118,50 +138,72 @@
     <string name="apply_theme">تطبيق السمة</string>
     <string name="apply_theme_sub">تطبيق لون مخصص في مستعرض الصورة.</string>
     <string name="transparency">الشفافية</string>
-    <string name="transparency_sub">تعيين درجة الشفافية</string>
-    <string name="delay_load_full_size_image">تأخير تحميل صورة كاملة الحجم</string>
+    <string name="transparency_sub">تعيين درجة شفافية</string>
+    <string name="delay_load_full_size_image">تأخير تحميل الصورة كاملة الحجم</string>
     <string name="load_full_image_when_zoom_in">تحميل الصورة كاملة عند التكبير</string>
+    <string name="media_viewer_swipe_direction">إتجاه التمرير</string>
+    <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(DefaultNext: Left to Right)</string>
     <string name="theme">السمة</string>
     <string name="primary_color">اللون الأساسي</string>
     <string name="primary_color_sub">اللون الرئيسي الذي يتم استخدامه في واجهة المستخدم.</string>
     <string name="accent_color">لون مميز</string>
     <string name="accent_color_sub">اللون الثانوي الذي يتم استخدامه لصبغ الودجات widgets في تفاصيل واجهة مستخدم.</string>
-    <string name="basic_theme">Basic Theme</string>
-    <string name="basic_theme_sub">Select a basic theme.</string>
-    <string name="white_basic_theme">White</string>
-    <string name="dark_basic_theme">Dark</string>
-    <string name="dark_amoled_basic_theme">Dark AMOLED</string>
-    <string name="colored_navbar">شريط التنقل ملون</string>
+    <string name="basic_theme">السمة الإفتراضية</string>
+    <string name="basic_theme_sub">حدد سمةً إفتراضية.</string>
+    <string name="white_basic_theme">أبيض</string>
+    <string name="dark_basic_theme">مظلم</string>
+    <string name="dark_amoled_basic_theme">مظلم أموليد AMOLED</string>
+    <string name="colored_navbar">شريط تنقل ملون</string>
     <string name="colored_navbar_sub">تطبيق اللون الأساسي لشريط التنقل.</string>
     <string name="internal_player">مشغل الفيديو الداخلي</string>
     <string name="internal_player_sub">استخدم مشغل الفيديو المدمج</string>
     <!--DONATE STRINGS-->
-    <string name="donate_googleplay">Google Play Store</string>
-    <string name="donate_payppal">PayPal</string>
-    <string name="donate_bitcoin">Bitcoin</string>
-  <string name="donate_header_text">
-        Hi,\nWe are a small independent team which worked with love on LeafPic ❤,
-        this is our first app, so we have a lot to learn by your feedback. If you enjoy our work you can show us your appreciation by donating.\nWith your help we can make this project even better or start new cool ones.
-    </string>
-    <string name="thank_you">Thank you!</string>
-    <string name="address_copied">Address copied to clipboard</string>
-    <string name="coming_soon">Coming Soon!</string>
-    <string name="google_takes">Google takes 30% off every donation. (Cooming Soon!)</string>
-  <string name="paypal_text">PayPal.Me allow you to send us money in seconds without charges,
-        if you use a credit card PayPal takes 4% of donations and a standard fee 0.35€ </string>
+    <string name="donate_googleplay">سوق Google Play</string>
+    <string name="donate_payppal">پاي پال PayPal</string>
+    <string name="donate_bitcoin">بٍتكوين BitCoin</string>
+    <string name="donate_header_text">
+        مرحبًا،\nنحن فريق مستقل صغير الذين عملنا بحبٍّ على LeafPic ❤.
+        هذا أول تطبيقٍ لنا، لذلك نحن نحتاج الكثير لنتعلمه من التغذية المرتدة feedback التي نستقبلها منكم، إذا كنت مستمتعاً بعملنا، تستطيع أن تظهر لنا شكرك بالتبرع.\nبمساعدتكم نستطيع أن نجعل هذا المشروع أفضل وأفضل أو نبدأ أشياء جديدة رائعة.    </string>
+    <string name="thank_you">شكرًا لك!</string>
+    <string name="address_copied">العنوان نُسخ للحافظة</string>
+    <string name="coming_soon">قادم قريبًا!</string>
+    <string name="google_takes">غوغل تأخذ 30% من كلِّ تبرع. (قادم قريباً!)</string>
+    <string name="paypal_text">PayPal.Me يسمح لك بارسال أموالٍ لنا في غضون ثوانٍ بدون رسوم.
+        إذا كنت تستخدم بطاقة إتمانية پاي پال PayPal يأخذ 4% من التبرعات و0.35€ رسم قياسي </string>
     <!--ABOUT STRINGS-->
     <string name="about">حول</string>
-    <string name="about_version">النسخة</string>
-    <string name="about_license"> License</string>
-    <string name="about_license_sub">Check the license used on LeafPic.</string>
-    <string name="about_library_license">مكتبة الترخيص</string>
-    <string name="about_library_license_sub">تفقد مكتبات الطرف الثالث المستخدمة في LeafPic.</string>
+    <string name="about_version">الإصدار</string>
+    <string name="about_license"> الترخيص</string>
+    <string name="about_license_sub">تفقد شروط ترخيص GPLv3 المستخدم في LeafPic.</string>
+    <string name="about_library_license">تراخيص المكتبة</string>
+    <string name="about_library_license_sub">Check third-party libs used on LeafPic.</string>
     <string name="about_authors">المؤلفون</string>
-    <string name="about_author_donald_description">المطور الرئيسي</string>
-    <string name="about_author_gilbert_description">المصمم الرئيسي</string>
+    <string name="about_author_donald_description">
+        I\'m 19 years old. I\'m a young software developer, I like CS in general, at most I love
+        learn doing stuff with Linux and Android. I also like TV Series.
+    </string>
+    <string name="about_author_gilbert_description">
+        I\'m 20 years old. I love music, videogames and drawing.
+        I\'m also really into computer science, programming and design.
+    </string>
+    <string name="send_via">ارسال عبر&#8230;</string>
+    <string name="send_email">ارسال بريد إلكتروني</string>
+    <string name="send_mail_error">لا يوجد عميل بريد الإلكتروني مثبت.</string>
+    <string name="about_special_thanks">شكر خاص</string>
+    <string name="about_special_thanks_patryk_goworowski_sub">لـ <a href="https://plus.google.com/109304801957014561872/about">Patryk Goworowski</a>
+        للأيقونة الرائعة.
+    </string>
+    <string name="about_special_thanks_members_sub">
+        لمجتمع Crowdin لقيامهم بالترجمة
+    </string>
+    <string name="about_special_thanks_you_sub">
+        لك لاستخدامك التطبيق
+    </string>
     <string name="about_support">دعم عجلة التطوير</string>
     <string name="about_support_translate">ترجم</string>
     <string name="about_support_translate_sub">ساعدنا لنترجم LeafPic لأكثر من لغة.</string>
+    <string name="about_support_report_bug">إبلاغ عن علة</string>
+    <string name="about_support_report_bug_sub">إبلاغ عن علة أو طلب ميزات جديدة.</string>
     <string name="about_support_rate">ﺗﻘﻴﻴﻢ</string>
     <string name="about_support_rate_sub">أترك لنا تقييماً إيجابياً إذا كنت قد أحببت LeafPic.</string>
     <string name="about_support_github">GitHub</string>
@@ -171,11 +213,12 @@
     <string name="type">النوع</string>
     <string name="resolution">الدقة</string>
     <string name="exif">EXIF</string>
-    <string name="device">Device</string>
-    <string name="location">Location</string>
+    <string name="device">الجهاز</string>
+    <string name="orientation">اتجاه</string>
+    <string name="location">الموقع</string>
     <!--DRAWER ITEMS -->
     <string name="local_folder">المجلدات المحلية</string>
-    <string name="hidden_folder">Hidden Folders</string>
+    <string name="hidden_folder">المجلدات المخفية</string>
     <string name="tags">الوسوم</string>
     <string name="timeline">الخط الزمني</string>
     <string name="wallpapers">الخلفيات</string>
@@ -188,9 +231,27 @@
     <string name="retry">إعادة المحاولة</string>
     <string name="off">إيقاف</string>
     <!-- ERRORS -->
-    <string name="error_drm_not_supported">المحتوى المحمي غير مدعوم على مستويات مكتبة برمجية API أقل من 18</string>
+    <string name="error_drm_not_supported">المحتوى المحمي مدعوم على آندرويد 4.3 أو مابعده</string>
     <string name="error_drm_unsupported_scheme">هذا الجهاز لا يدعم نظام إدارة الحقوق الرقمية DRM المطلوبة</string>
     <string name="error_drm_unknown">حدث خطأ DRM غير معروف</string>
     <string name="storage_permission_denied">تم رفض إذن الوصول إلى وحدة التخزين!\n لست قادراً على الحصول على صورك!</string>
     <string name="error_querying_decoders">غير قادر على الإستعلام عن جهاز فك الترميز Decoders</string>
+    <string name="unable_to_fix_date">غير قادر على إصلاح التاريخ</string>
+    <string name="compression_settings">إعدادات الضغط</string>
+    <string name="include_video">ضم فيديو</string>
+    <string name="fab_options">خيارات \"زر الإجراء العائم FAB\"</string>
+    <string name="fab_options_sub">اختيار متى يتم عرض الزر العائم</string>
+    <string name="map_provider">موفر الخريطة</string>
+    <string name="map_provider_sub">اختر مصدر الخرائط</string>
+    <string name="insert_something">أدخل شيء ما!</string>
+    <string name="password_dont_match">كلمة المرور لا تتطابق</string>
+    <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
+    <string name="chose_the_map_provider">Chose the map provider</string>
+    <string name="use_google_static_maps_faster">Use Google static maps (faster)</string>
+    <string name="use_openstreetmap_slower">Use OpenStreetMap (slower)</string>
+    <string name="sd_card_write_permission_title">SD-Card write permission</string>
+    <string name="sd_card_permissions_message">In the next screen, please select the root of the SD
+        card on the left sidebar and confirm at the bottom, to grant the writing permission of
+        the SD card.
+    </string>
 </resources>

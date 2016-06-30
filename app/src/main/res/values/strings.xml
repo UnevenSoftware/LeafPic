@@ -291,5 +291,10 @@
     <string name="chose_the_map_provider">Chose the map provider</string>
     <string name="use_google_static_maps_faster">Use Google static maps (faster)</string>
     <string name="use_openstreetmap_slower">Use OpenStreetMap (slower)</string>
+    <string name="sd_card_write_permission_title">SD-Card write permission</string>
+    <string name="sd_card_permissions_message">In the next screen, please select the root of the SD
+        card on the left sidebar and confirm at the bottom, to grant the writing permission of
+        the SD card.
+    </string>
 
 </resources>

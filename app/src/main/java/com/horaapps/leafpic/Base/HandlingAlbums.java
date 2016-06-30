@@ -49,11 +49,12 @@ public class HandlingAlbums {
 
     private ArrayList<File> excludedfolders;
     private AlbumsComparators albumsComparators;
+    private HashSet<File> roots;
 
     public HandlingAlbums(Context context) {
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         customAlbumsHandler = new CustomAlbumsHandler(context);
-
+        roots = listStorages(context);
         excludedfolders = new ArrayList<File>();
         loadExcludedFolders(context);
         dispAlbums = new ArrayList<Album>();
@@ -61,24 +62,16 @@ public class HandlingAlbums {
     }
 
     public HandlingAlbums(Context context, Album current) {
-        SP = PreferenceManager.getDefaultSharedPreferences(context);
-        customAlbumsHandler = new CustomAlbumsHandler(context);
-        excludedfolders = new ArrayList<File>();
-        loadExcludedFolders(context);
-        dispAlbums = new ArrayList<Album>();
+        this(context);
         dispAlbums.add(0, current);
         setCurrentAlbumIndex(0);
-        selectedAlbums = new ArrayList<Album>();
-
     }
-
 
     public void loadPreviewAlbums(Context context, boolean hidden) {
         this.hidden = hidden;
         clearCameraIndex();
         includeVideo = SP.getBoolean("set_include_video", true);
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
-        HashSet<File> roots = listStorages(context);
         if (hidden)
             for (File storage : roots)
                 fetchRecursivelyHiddenFolder(storage, albumArrayList, storage.getAbsolutePath());
@@ -89,6 +82,8 @@ public class HandlingAlbums {
         sortAlbums(context);
 
     }
+
+    public boolean hasSdCard(){ return roots.size() > 1;}
 
     public void setCurrentAlbumIndex(int index) {
         current = index;
@@ -118,13 +113,13 @@ public class HandlingAlbums {
         return roots;
     }
 
-    public ArrayList<Album> getValidFolders(Context context,boolean hidden) {
+    public ArrayList<Album> getValidFolders(boolean hidden) {
         ArrayList<Album> folders = new ArrayList<Album>();
         if (hidden)
-            for (File storage : listStorages(context))
+            for (File storage : roots)
                 fetchRecursivelyHiddenFolder(storage, folders);
         else
-            for (File storage : listStorages(context))
+            for (File storage : roots)
                 fetchRecursivelyFolder(storage, folders);
 
         return folders;
@@ -167,8 +162,7 @@ public class HandlingAlbums {
 
     public static ArrayList<String> getSubFolders(File dir) {
         ArrayList<String> array = new ArrayList<String>();
-        //File[] children = dir.listFiles(new FoldersFileFilter());
-        File[] children = dir.listFiles();
+        File[] children = dir.listFiles(new FoldersFileFilter());
         if (children != null)
             for (File child : children)
                 array.add(child.getName());
