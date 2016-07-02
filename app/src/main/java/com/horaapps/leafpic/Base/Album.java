@@ -332,9 +332,12 @@ public class Album implements Serializable {
         }
     }
 
-    public void copySelectedPhotos(Context context, String folderPath) {
+    public boolean copySelectedPhotos(Context context, String folderPath) {
+        boolean success = true;
         for (Media media : selectedMedias)
-            copyPhoto(context, media.getPath(), folderPath);
+            if(!copyPhoto(context, media.getPath(), folderPath))
+                success = false;
+        return success;
     }
 
     public boolean copyPhoto(Context context, String olderPath, String folderPath) {

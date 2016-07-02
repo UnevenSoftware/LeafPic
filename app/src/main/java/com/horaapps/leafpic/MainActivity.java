@@ -1117,7 +1117,7 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.delete_action:
-                class DeletePhotos extends AsyncTask<String, Integer, Void> {
+                class DeletePhotos extends AsyncTask<String, Integer, Boolean> {
                     @Override
                     protected void onPreExecute() {
                         swipeRefreshLayout.setRefreshing(true);
@@ -1125,34 +1125,37 @@ public class MainActivity extends ThemedActivity {
                     }
 
                     @Override
-                    protected Void doInBackground(String... arg0) {
+                    protected Boolean doInBackground(String... arg0) {
                         if (albumsMode)
-                            albums.deleteSelectedAlbums(MainActivity.this);
+                            return albums.deleteSelectedAlbums(MainActivity.this);
                         else {
                             if (editMode)
-                                album.deleteSelectedMedia(getApplicationContext());
+							 return album.deleteSelectedMedia(getApplicationContext());
                             else {
-                                albums.deleteAlbum(album, getApplicationContext());
+							  	boolean succ = albums.deleteAlbum(album, getApplicationContext());
                                 album.getMedia().clear();
+							  	return succ;
                             }
                         }
-                        return null;
                     }
 
                     @Override
-                    protected void onPostExecute(Void result) {
-                        if (albumsMode) {
-                            albums.clearSelectedAlbums();
-                            albumsAdapter.notifyDataSetChanged();
-                        } else {
-                            if (album.getMedia().size() == 0) {
-                                albums.removeCurrentAlbum();
-                                albumsAdapter.notifyDataSetChanged();
-                                displayAlbums();
-                            }
-                            else
-                                mediaAdapter.swapDataSet(album.getMedia());
-                        }
+                    protected void onPostExecute(Boolean result) {
+					  if (result) {
+						if (albumsMode) {
+						  albums.clearSelectedAlbums();
+						  albumsAdapter.notifyDataSetChanged();
+						} else {
+						  if (album.getMedia().size() == 0) {
+							albums.removeCurrentAlbum();
+							albumsAdapter.notifyDataSetChanged();
+							displayAlbums();
+						  } else
+							mediaAdapter.swapDataSet(album.getMedia());
+						}
+					  }
+
+					  Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
                         invalidateOptionsMenu();
                         checkNothing();
                         swipeRefreshLayout.setRefreshing(false);
@@ -1515,6 +1518,7 @@ public class MainActivity extends ThemedActivity {
             //endregion
 
             case R.id.action_move:
+
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
@@ -1555,8 +1559,9 @@ public class MainActivity extends ThemedActivity {
                     @Override
                     public void onClick(View v) {
                         String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
-                        album.copySelectedPhotos(getApplicationContext(), path);
-                        finishEditMode();
+                        boolean success = album.copySelectedPhotos(getApplicationContext(), path);
+					  Toast.makeText(MainActivity.this, ""+ success, Toast.LENGTH_SHORT).show();
+					  finishEditMode();
                         bottomSheetDialogFragment.dismiss();
                     }
                 });
@@ -1680,66 +1685,70 @@ public class MainActivity extends ThemedActivity {
 
     private class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            swipeRefreshLayout.setRefreshing(true);
-            toggleRecyclersVisibilty(false);
-            super.onPreExecute();
-        }
+	  @Override
+	  protected void onPreExecute() {
+		swipeRefreshLayout.setRefreshing(true);
+		toggleRecyclersVisibilty(false);
+		super.onPreExecute();
+	  }
 
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            album.updatePhotos(getApplicationContext());
-            return null;
-        }
+	  @Override
+	  protected Void doInBackground(Void... arg0) {
+		album.updatePhotos(getApplicationContext());
+		return null;
+	  }
 
-        @Override
-        protected void onPostExecute(Void result) {
-            mediaAdapter.swapDataSet(album.getMedia());
-            checkNothing();
-            swipeRefreshLayout.setRefreshing(false);
-            albums.saveBackup(getApplicationContext());
-        }
-    }
+	  @Override
+	  protected void onPostExecute(Void result) {
+		mediaAdapter.swapDataSet(album.getMedia());
+		checkNothing();
+		swipeRefreshLayout.setRefreshing(false);
+		albums.saveBackup(getApplicationContext());
+	  }
+	}
 
-    //MOVE SELECTED MEDIA ASYNCTASK
-    private class MovePhotos extends AsyncTask<String, Void, Void> {
+  private class MovePhotos extends AsyncTask<String, Void, Boolean> {
 
-        @Override
-        protected void onPreExecute() {
-            swipeRefreshLayout.setRefreshing(true);
-            super.onPreExecute();
-        }
+	@Override
+	protected void onPreExecute() {
+	  swipeRefreshLayout.setRefreshing(true);
+	  super.onPreExecute();
+	}
 
-        @Override
-        protected Void doInBackground(String... arg0) {
-            try {
-                for (int i = 0; i < album.selectedMedias.size(); i++) {
-                    File from = new File(album.selectedMedias.get(i).getPath());
-                    File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
+	@Override
+	protected Boolean doInBackground(String... arg0) {
+	  boolean success = true;
+	  try
+	  {
+		for (int i = 0; i < album.selectedMedias.size(); i++) {
+		  File from = new File(album.selectedMedias.get(i).getPath());
+		  File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
 
-                    if (ContentHelper.moveFile(getApplicationContext(), from, to)) {
-                        MediaScannerConnection.scanFile(getApplicationContext(),
-                                new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
-                        album.getMedia().remove(album.selectedMedias.get(i));
-                    }
-                }
-            } catch (Exception e) { e.printStackTrace(); }
-            return null;
-        }
+		  if (ContentHelper.moveFile(getApplicationContext(), from, to)) {
+			MediaScannerConnection.scanFile(getApplicationContext(),
+					new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
+			album.getMedia().remove(album.selectedMedias.get(i));
+		  } else success = false;
+		}
+	  } catch (Exception e) { e.printStackTrace(); }
+	  return success;
+	}
 
-        @Override
-        protected void onPostExecute(Void result) {
-            if (album.getMedia().size() == 0) {
-                albums.removeCurrentAlbum();
-                albumsAdapter.notifyDataSetChanged();
-                displayAlbums();
-            }
+	@Override
+	protected void onPostExecute(Boolean result) {
+	  if (result) {
+		if (album.getMedia().size() == 0) {
+		  albums.removeCurrentAlbum();
+		  albumsAdapter.notifyDataSetChanged();
+		  displayAlbums();
+		}
+	  }
+	  Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
 
-            mediaAdapter.swapDataSet(album.getMedia());
-            finishEditMode();
-            invalidateOptionsMenu();
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
+	  mediaAdapter.swapDataSet(album.getMedia());
+	  finishEditMode();
+	  invalidateOptionsMenu();
+	  swipeRefreshLayout.setRefreshing(false);
+	}
+  }
 }

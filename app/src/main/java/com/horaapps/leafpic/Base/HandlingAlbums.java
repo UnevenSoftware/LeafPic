@@ -419,21 +419,20 @@ public class HandlingAlbums implements Serializable {
         dispAlbums.remove(a);
     }
 
-    public void deleteSelectedAlbums(Context context) {
+    public boolean deleteSelectedAlbums(Context context) {
+        boolean success = true;
+
         for (Album selectedAlbum : selectedAlbums) {
             int index = dispAlbums.indexOf(selectedAlbum);
-            deleteAlbum(selectedAlbum, context);
-            dispAlbums.remove(index);
+            if(deleteAlbum(selectedAlbum, context))
+                dispAlbums.remove(index);
+            else success = false;
         }
+        return success;
     }
 
-    public void deleteAlbum(Album album, Context context) {
-        File[] files = new File(album.getPath()).listFiles(new ImageFileFilter());
-        for (File file : files) {
-            if (file.delete()){
-                scanFile(context, new String[]{ file.getAbsolutePath() });
-            }
-        }
+    public boolean deleteAlbum(Album album, Context context) {
+        return ContentHelper.deleteFilesInFolder(context, new File(album.getPath()));
     }
 
     public void excludeSelectedAlbums(Context context) {
