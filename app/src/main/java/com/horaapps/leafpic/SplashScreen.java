@@ -53,21 +53,6 @@ public class SplashScreen extends ThemedActivity {
         setContentView(R.layout.activity_splash);
         SP = PreferenceManager.getDefaultSharedPreferences(this);
         /**** START APP ****/
-        /*
-            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            boolean isFirstStart = SP.getBoolean("firstStart", true);
-            if (isFirstStart) {
-                SharedPreferences.Editor e = SP.edit();
-                e.putBoolean("firstStart", false);
-                e.apply();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MainActivity.this, IntroActivity.class));
-                    }
-                }).start();
-            }
-        */
 
         albums = new HandlingAlbums(getApplicationContext());
 

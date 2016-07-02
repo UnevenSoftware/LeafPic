@@ -384,9 +384,9 @@ public class Album implements Serializable {
     }
 
     public boolean renameAlbum(Context context, String newName) {
-        boolean success = true;
+        boolean success;
         File dir = new File(StringUtils.getAlbumPathRenamed(getPath(), newName));
-        if (ContentHelper.mkdir(context, dir)) {
+        if (success = ContentHelper.mkdir(context, dir)) {
             path = dir.getAbsolutePath();
             name = newName;
             for (int i = 0; i < media.size(); i++) {

@@ -335,7 +335,6 @@ public class MainActivity extends ThemedActivity {
 
                         albums = ((MyApplication) getApplicationContext()).getAlbums();
                         albumsAdapter.swapDataSet(albums.dispAlbums);
-                        Toast.makeText(this, "bck", Toast.LENGTH_SHORT).show();
                         displayAlbums(true);
                         pickMode = data.getBoolean(SplashScreen.PICK_MODE);
                         //albumsAdapter.swapDataSet(albums.dispAlbums);
@@ -632,18 +631,15 @@ public class MainActivity extends ThemedActivity {
     public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
-                // Get Uri from Storage Access Framework.
                 Uri treeUri = resultData.getData();
-
                 // Persist URI in shared preference so that you can use it later.
-                // Use your own framework here instead of PreferenceUtil.
                 ContentHelper.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard_photos, treeUri);
 
-                // Persist access permissions.
                 final int takeFlags = resultData.getFlags()
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
-            }
+			  	Toast.makeText(this, R.string.got_oermission_wr_sdcard, Toast.LENGTH_SHORT).show();
+			}
         }
     }
     //endregion
@@ -1153,9 +1149,9 @@ public class MainActivity extends ThemedActivity {
 						  } else
 							mediaAdapter.swapDataSet(album.getMedia());
 						}
-					  }
+					  } else requestSdCardPermissions();
 
-					  Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
+					  //Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
                         invalidateOptionsMenu();
                         checkNothing();
                         swipeRefreshLayout.setRefreshing(false);
@@ -1456,8 +1452,11 @@ public class MainActivity extends ThemedActivity {
                     private AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affix_text));
-                        dialog.show();
+					  AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+					  dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, progressDialog,
+							  getString(R.string.affix), getString(R.string.affix_text));
+					  dialog.show();
                         super.onPreExecute();
                     }
 
@@ -1469,7 +1468,7 @@ public class MainActivity extends ThemedActivity {
                                 bitmapArray.add(album.selectedMedias.get(i).getBitmap());
                         }
 
-                        if (bitmapArray.size()>1) {
+                        if (bitmapArray.size() > 1) {
                             //TODO: MUST FIX
                             Bitmap.CompressFormat compressFormat;
                             switch (radioFormatGroup.getCheckedRadioButtonId()) {
@@ -1560,9 +1559,11 @@ public class MainActivity extends ThemedActivity {
                     public void onClick(View v) {
                         String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
                         boolean success = album.copySelectedPhotos(getApplicationContext(), path);
-					  Toast.makeText(MainActivity.this, ""+ success, Toast.LENGTH_SHORT).show();
-					  finishEditMode();
+					  	finishEditMode();
                         bottomSheetDialogFragment.dismiss();
+						if (!success)
+						   requestSdCardPermissions();
+
                     }
                 });
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
@@ -1592,18 +1593,23 @@ public class MainActivity extends ThemedActivity {
                     @Override
                     public void onClick(View dialog) {
                         if (editTextNewName.length() != 0) {
+						  	boolean success;
                             if (albumsMode){
                                 int index = albums.dispAlbums.indexOf(albums.getSelectedAlbum(0));
                                 albums.getAlbum(index).updatePhotos(getApplicationContext());
-                                albums.getAlbum(index).renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
+							  	success = albums.getAlbum(index).renameAlbum(getApplicationContext(),
+										 editTextNewName.getText().toString());
                                 albumsAdapter.notifyItemChanged(index);
                             } else {
-                                album.renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
+							  success = album.renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
                                 toolbar.setTitle(album.getName());
                                 mediaAdapter.notifyDataSetChanged();
                             }
                             renameDialog.dismiss();
-                        } else {
+						  if (!success) requestSdCardPermissions();
+						  //Toast.makeText(MainActivity.this, ""+success, Toast.LENGTH_SHORT)
+						  // .show();
+						} else {
                             StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
                             editTextNewName.requestFocus();
                         }
@@ -1652,11 +1658,6 @@ public class MainActivity extends ThemedActivity {
                 setRecentApp(getString(R.string.app_name));
             }
         }
-    }
-
-    private AlertDialog ProgressDialog(String dialogTitle, String dialogText){
-        AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-        return AlertDialogsHelper.getProgressDialog(this, progressDialog, dialogTitle, dialogText);
     }
 
     private class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
@@ -1742,8 +1743,8 @@ public class MainActivity extends ThemedActivity {
 		  albumsAdapter.notifyDataSetChanged();
 		  displayAlbums();
 		}
-	  }
-	  Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
+	  } else requestSdCardPermissions();
+	  //Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
 
 	  mediaAdapter.swapDataSet(album.getMedia());
 	  finishEditMode();

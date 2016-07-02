@@ -36,11 +36,6 @@
         </activity>
 
         <activity
-            android:name=".IntroActivity"
-            android:label="Intro Activity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
-        <activity
             android:name=".SplashScreen"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
