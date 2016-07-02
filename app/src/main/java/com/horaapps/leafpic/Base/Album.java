@@ -15,6 +15,7 @@ import com.koushikdutta.ion.builder.Builders;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +23,7 @@ import java.util.Comparator;
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album {
+public class Album implements Serializable {
 
     String name = null;
     private String path = null;

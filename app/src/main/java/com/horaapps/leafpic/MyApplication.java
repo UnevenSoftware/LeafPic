@@ -12,7 +12,7 @@ import com.horaapps.leafpic.Base.HandlingAlbums;
 public class MyApplication extends Application {
 
     private HandlingAlbums albums = null;
-    static Context context;
+    private static Context context;
 
     public static Context getContext() { return context; }
 

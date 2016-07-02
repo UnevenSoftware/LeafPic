@@ -19,19 +19,25 @@ import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.io.Serializable;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by dnld on 27/04/16.
  */
-public class HandlingAlbums {
+public class HandlingAlbums implements Serializable {
 
     public final static String TAG = "HandlingAlbums";
     private Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
@@ -168,6 +174,50 @@ public class HandlingAlbums {
                 array.add(child.getName());
         return array;
     }
+
+    public void saveBackup(Context context) {
+        new Thread(new Runnable() {
+            public void run() {
+                FileOutputStream outStream;
+                try {
+                    File f = new File(Environment.getExternalStorageDirectory(), "/data.dat");
+                    outStream = new FileOutputStream(f);
+                    ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
+                    objectOutStream.writeObject(dispAlbums);
+                    objectOutStream.close();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    public void restoreBackup(Context context) {
+        FileInputStream inStream;
+        try {
+            File f = new File(Environment.getExternalStorageDirectory(), "/data.dat");
+            inStream = new FileInputStream(f);
+            ObjectInputStream objectInStream = new ObjectInputStream(inStream);
+
+            dispAlbums = (ArrayList<Album>) objectInStream.readObject();
+
+            objectInStream.close();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (OptionalDataException e1) {
+            e1.printStackTrace();
+        } catch (StreamCorruptedException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 
     private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
         if (!excludedfolders.contains(dir)) {

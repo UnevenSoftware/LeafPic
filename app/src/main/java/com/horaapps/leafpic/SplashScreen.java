@@ -2,11 +2,13 @@ package com.horaapps.leafpic;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -36,16 +38,20 @@ public class SplashScreen extends ThemedActivity {
 
     final static int ALBUMS_PREFETCHED = 23;
     final static int PHOTS_PREFETCHED = 2;
+    final static int ALBUMS_BACKUP = 60;
     private boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
     private HandlingAlbums albums;
     private Album album;
 
+    SharedPreferences SP;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        SP = PreferenceManager.getDefaultSharedPreferences(this);
         /**** START APP ****/
         /*
             SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -87,11 +93,12 @@ public class SplashScreen extends ThemedActivity {
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
             if (getIntent().getAction().equals(Intent.ACTION_MAIN))
-                new PrefetchAlbumsData().execute();
+                new PrefetchAlbumsData().execute(SP.getBoolean(getString(R.string.preference_auto_update_media), false));
+            //new PrefetchAlbumsData().execute();
             else if (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT)
                     || getIntent().getAction().equals(Intent.ACTION_PICK)) {
                 PICK_INTENT = true;
-                new PrefetchAlbumsData().execute();
+                new PrefetchAlbumsData().execute(SP.getBoolean(getString(R.string.preference_auto_update_media), false));
             } else if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 Bundle data = getIntent().getExtras();
                 if (data != null) {
@@ -142,7 +149,7 @@ public class SplashScreen extends ThemedActivity {
             case READ_EXTERNAL_STORAGE_ID:
                 boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 if (granted)
-                    new PrefetchAlbumsData().execute();
+                    new PrefetchAlbumsData().execute(SP.getBoolean(getString(R.string.preference_auto_update_media), false));
                 else
                     Toast.makeText(SplashScreen.this, getString(R.string.storage_permission_denied), Toast.LENGTH_LONG).show();
                 break;
@@ -151,20 +158,29 @@ public class SplashScreen extends ThemedActivity {
         }
     }
 
-    private class PrefetchAlbumsData extends AsyncTask<Void, Void, Void> {
+    private class PrefetchAlbumsData extends AsyncTask<Boolean, Boolean, Boolean> {
+
         @Override
-        protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums(getApplicationContext(),false);
-            return null;
+        protected Boolean doInBackground(Boolean... arg0) {
+            if (arg0[0])
+                albums.loadPreviewAlbums(getApplicationContext(), false);
+            else {
+                albums.restoreBackup(getApplicationContext());
+                if(albums.dispAlbums.size() == 0)
+                    albums.loadPreviewAlbums(getApplicationContext(), false);
+                else return false;
+            }
+            return true;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
+
             ((MyApplication) getApplicationContext()).setAlbums(albums);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
-            b.putInt(CONTENT, ALBUMS_PREFETCHED);
+            b.putInt(CONTENT, result ? ALBUMS_PREFETCHED : ALBUMS_BACKUP);
             b.putBoolean(PICK_MODE, PICK_INTENT);
             i.putExtras(b);
             if (PICK_INTENT)
