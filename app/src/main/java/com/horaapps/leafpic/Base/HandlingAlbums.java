@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 public class HandlingAlbums implements Serializable {
 
     public final static String TAG = "HandlingAlbums";
+    private String backupFile = "albums.dat";
     private Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
 
     public ArrayList<Album> dispAlbums;
@@ -175,12 +176,12 @@ public class HandlingAlbums implements Serializable {
         return array;
     }
 
-    public void saveBackup(Context context) {
+    public void saveBackup(final Context context) {
         new Thread(new Runnable() {
             public void run() {
                 FileOutputStream outStream;
                 try {
-                    File f = new File(Environment.getExternalStorageDirectory(), "/data.dat");
+                    File f = new File(context.getCacheDir(), backupFile);
                     outStream = new FileOutputStream(f);
                     ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
                     objectOutStream.writeObject(dispAlbums);
@@ -198,7 +199,7 @@ public class HandlingAlbums implements Serializable {
     public void restoreBackup(Context context) {
         FileInputStream inStream;
         try {
-            File f = new File(Environment.getExternalStorageDirectory(), "/data.dat");
+            File f = new File(context.getCacheDir(), backupFile);
             inStream = new FileInputStream(f);
             ObjectInputStream objectInStream = new ObjectInputStream(inStream);
 

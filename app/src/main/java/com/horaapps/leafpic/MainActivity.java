@@ -1681,6 +1681,7 @@ public class MainActivity extends ThemedActivity {
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
             ((MyApplication) getApplicationContext()).setAlbums(albums);
+            albums.saveBackup(getApplicationContext());
         }
     }
 
@@ -1704,7 +1705,7 @@ public class MainActivity extends ThemedActivity {
 		mediaAdapter.swapDataSet(album.getMedia());
 		checkNothing();
 		swipeRefreshLayout.setRefreshing(false);
-		albums.saveBackup(getApplicationContext());
+		//albums.saveBackup(getApplicationContext());
 	  }
 	}
 
