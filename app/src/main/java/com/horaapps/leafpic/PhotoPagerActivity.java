@@ -73,7 +73,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     private SelectAlbumBottomSheet bottomSheetDialogFragment;
     private SecurityHelper securityObj;
     private Toolbar toolbar;
-    private boolean fullscreenmode;
+    private boolean fullScreenMode, customUri = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,15 +93,22 @@ public class PhotoPagerActivity extends ThemedActivity {
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
             else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
                             && getIntent().getData() != null) {
-                File folderPath = new  File( ContentHelper.getPath(getApplicationContext(),
-                        getIntent().getData()));
 
-                if (folderPath.isFile())
+                String path = ContentHelper.getMediaPath(getApplicationContext(),
+                        getIntent().getData());
+
+                File file = null;
+                if (path != null)
+                    file = new  File(path);
+
+                if (file != null && file.isFile())
                     //the image is stored in the storage
-                    album = new Album(getApplicationContext(), folderPath);
-                else
+                    album = new Album(getApplicationContext(), file);
+                else {
                     //try to show with Uri
                     album = new Album(getApplicationContext(), getIntent().getData());
+                    customUri = true;
+                }
 
             }
 
@@ -177,7 +184,7 @@ public class PhotoPagerActivity extends ThemedActivity {
             public void onPageSelected(int position) {
                 album.setCurrentPhotoIndex(position);
                 toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
-                if (!fullscreenmode) new Handler().postDelayed(new Runnable() {
+                if (!fullScreenMode) new Handler().postDelayed(new Runnable() {
                     public void run() {
                         //hideSystemUI();
                     }
@@ -255,7 +262,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_photo, menu);
+        getMenuInflater().inflate(R.menu.menu_view_pager, menu);
 
         menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
         menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
@@ -284,6 +291,12 @@ public class PhotoPagerActivity extends ThemedActivity {
     public boolean onPrepareOptionsMenu(final Menu menu) {
 
         menu.setGroupVisible(R.id.only_photos_otions, !album.getCurrentMedia().isVideo());
+
+        if (customUri) {
+            menu.setGroupVisible(R.id.on_internal_storage, false);
+            menu.setGroupVisible(R.id.only_photos_otions, false);
+            menu.findItem(R.id.sort_action).setVisible(false);
+        }
         return super.onPrepareOptionsMenu(menu);
 
     }
@@ -634,7 +647,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     public void toggleSystemUI() {
-        if (fullscreenmode)
+        if (fullScreenMode)
             showSystemUI();
         else hideSystemUI();
     }
@@ -652,7 +665,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-                fullscreenmode = true;
+                fullScreenMode = true;
                 changeBackGroundColor();
             }
         });
@@ -676,7 +689,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                fullscreenmode = false;
+                fullScreenMode = false;
                 changeBackGroundColor();
             }
         });
@@ -685,7 +698,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     private void changeBackGroundColor() {
         int colorTo;
         int colorFrom;
-        if (fullscreenmode) {
+        if (fullScreenMode) {
             colorFrom = getBackgroundColor();
             colorTo = (ContextCompat.getColor(PhotoPagerActivity.this, R.color.md_black_1000));
         } else {

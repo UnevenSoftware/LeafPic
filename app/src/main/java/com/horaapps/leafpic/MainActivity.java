@@ -229,7 +229,7 @@ public class MainActivity extends ThemedActivity {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         if (reload) {
             //display available medias before reload
-            mediaAdapter.updateDataSet(album.getMedia());
+            mediaAdapter.swapDataSet(album.getMedia());
             new PreparePhotosTask().execute();
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -247,7 +247,7 @@ public class MainActivity extends ThemedActivity {
             displayAlbums(true);
         else {
             displayAlbums(false);
-            albumsAdapter.updateDataSet(albums.dispAlbums);
+            albumsAdapter.swapDataSet(albums.dispAlbums);
             toggleRecyclersVisibilty(true);
         }
     }
@@ -267,7 +267,7 @@ public class MainActivity extends ThemedActivity {
         albumsMode = true;
         editMode = false;
         invalidateOptionsMenu();
-        mediaAdapter.updateDataSet(new ArrayList<Media>());
+        mediaAdapter.swapDataSet(new ArrayList<Media>());
         recyclerViewMedia.scrollToPosition(0);}
 
 
@@ -322,25 +322,39 @@ public class MainActivity extends ThemedActivity {
         try {
             if (data!=null) {
                 int content = data.getInt(SplashScreen.CONTENT);
-                if (content == SplashScreen.ALBUMS_PREFETCHED) {
-                    albums = ((MyApplication) getApplicationContext()).getAlbums();
-                    displayAlbums(false);
-                    pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-                    albumsAdapter.updateDataSet(albums.dispAlbums);
-                    toggleRecyclersVisibilty(true);
-                } else if (content == SplashScreen.PHOTS_PREFETCHED) {
-                    albums = ((MyApplication) getApplicationContext()).getAlbums();
-                    album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-                    //TODO ask password if hidden
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            albums.loadPreviewAlbums(getApplicationContext(), album.isHidden());
-                        }
-                    }).start();
-                    displayCurrentAlbumMedia(false);
-                    mediaAdapter.updateDataSet(album.getMedia());
-                    toggleRecyclersVisibilty(false);
+                switch (content) {
+                    case SplashScreen.ALBUMS_PREFETCHED:
+                        albums = ((MyApplication) getApplicationContext()).getAlbums();
+                        displayAlbums(false);
+                        pickMode = data.getBoolean(SplashScreen.PICK_MODE);
+                        albumsAdapter.swapDataSet(albums.dispAlbums);
+                        toggleRecyclersVisibilty(true);
+                        break;
+
+                    case SplashScreen.ALBUMS_BACKUP:
+
+                        albums = ((MyApplication) getApplicationContext()).getAlbums();
+                        albumsAdapter.swapDataSet(albums.dispAlbums);
+                        displayAlbums(true);
+                        pickMode = data.getBoolean(SplashScreen.PICK_MODE);
+                        //albumsAdapter.swapDataSet(albums.dispAlbums);
+                        toggleRecyclersVisibilty(true);
+                        break;
+
+                    case SplashScreen.PHOTS_PREFETCHED:
+                        albums = ((MyApplication) getApplicationContext()).getAlbums();
+                        album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
+                        //TODO ask password if hidden
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                albums.loadPreviewAlbums(getApplicationContext(), album.isHidden());
+                            }
+                        }).start();
+                        displayCurrentAlbumMedia(false);
+                        mediaAdapter.swapDataSet(album.getMedia());
+                        toggleRecyclersVisibilty(false);
+                        break;
 
                 }
             } else {
@@ -425,7 +439,7 @@ public class MainActivity extends ThemedActivity {
             public void onClick(View v) {
                 if (!albumsMode && album.areFiltersActive()) {
                     album.filterMedias(ImageFileFilter.FILTER_ALL);
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                     checkNothing();
                     toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
                     fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
@@ -617,18 +631,15 @@ public class MainActivity extends ThemedActivity {
     public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
-                // Get Uri from Storage Access Framework.
                 Uri treeUri = resultData.getData();
-
                 // Persist URI in shared preference so that you can use it later.
-                // Use your own framework here instead of PreferenceUtil.
                 ContentHelper.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard_photos, treeUri);
 
-                // Persist access permissions.
                 final int takeFlags = resultData.getFlags()
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
-            }
+			  	Toast.makeText(this, R.string.got_oermission_wr_sdcard, Toast.LENGTH_SHORT).show();
+			}
         }
     }
     //endregion
@@ -1102,7 +1113,7 @@ public class MainActivity extends ThemedActivity {
                 return true;
 
             case R.id.delete_action:
-                class DeletePhotos extends AsyncTask<String, Integer, Void> {
+                class DeletePhotos extends AsyncTask<String, Integer, Boolean> {
                     @Override
                     protected void onPreExecute() {
                         swipeRefreshLayout.setRefreshing(true);
@@ -1110,34 +1121,37 @@ public class MainActivity extends ThemedActivity {
                     }
 
                     @Override
-                    protected Void doInBackground(String... arg0) {
+                    protected Boolean doInBackground(String... arg0) {
                         if (albumsMode)
-                            albums.deleteSelectedAlbums(MainActivity.this);
+                            return albums.deleteSelectedAlbums(MainActivity.this);
                         else {
                             if (editMode)
-                                album.deleteSelectedMedia(getApplicationContext());
+							 return album.deleteSelectedMedia(getApplicationContext());
                             else {
-                                albums.deleteAlbum(album, getApplicationContext());
+							  	boolean succ = albums.deleteAlbum(album, getApplicationContext());
                                 album.getMedia().clear();
+							  	return succ;
                             }
                         }
-                        return null;
                     }
 
                     @Override
-                    protected void onPostExecute(Void result) {
-                        if (albumsMode) {
-                            albums.clearSelectedAlbums();
-                            albumsAdapter.notifyDataSetChanged();
-                        } else {
-                            if (album.getMedia().size() == 0) {
-                                albums.removeCurrentAlbum();
-                                albumsAdapter.notifyDataSetChanged();
-                                displayAlbums();
-                            }
-                            else
-                                mediaAdapter.updateDataSet(album.getMedia());
-                        }
+                    protected void onPostExecute(Boolean result) {
+					  if (result) {
+						if (albumsMode) {
+						  albums.clearSelectedAlbums();
+						  albumsAdapter.notifyDataSetChanged();
+						} else {
+						  if (album.getMedia().size() == 0) {
+							albums.removeCurrentAlbum();
+							albumsAdapter.notifyDataSetChanged();
+							displayAlbums();
+						  } else
+							mediaAdapter.swapDataSet(album.getMedia());
+						}
+					  } else requestSdCardPermissions();
+
+					  //Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
                         invalidateOptionsMenu();
                         checkNothing();
                         swipeRefreshLayout.setRefreshing(false);
@@ -1247,7 +1261,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.all_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_ALL);
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     //TODO improve
@@ -1258,7 +1272,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.video_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_VIDEO);
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1268,7 +1282,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.image_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_IMAGES);
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1278,7 +1292,7 @@ public class MainActivity extends ThemedActivity {
             case R.id.gifs_media_filter:
                 if (!albumsMode) {
                     album.filterMedias(ImageFileFilter.FILTER_GIFS);
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                     item.setChecked(true);
                     checkNothing();
                     fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
@@ -1289,11 +1303,11 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataSet(albums.dispAlbums);
+                    albumsAdapter.swapDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                 }
                 item.setChecked(true);
                 return true;
@@ -1302,11 +1316,11 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_DATE);
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataSet(albums.dispAlbums);
+                    albumsAdapter.swapDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                 }
                 item.setChecked(true);
                 return true;
@@ -1315,11 +1329,11 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataSet(albums.dispAlbums);
+                    albumsAdapter.swapDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                 }
                 item.setChecked(true);
                 return true;
@@ -1328,7 +1342,7 @@ public class MainActivity extends ThemedActivity {
                 if (!albumsMode) {
                     album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                     item.setChecked(true);
                 }
 
@@ -1338,11 +1352,11 @@ public class MainActivity extends ThemedActivity {
                 if (albumsMode) {
                     albums.setDefaultSortingAscending(!item.isChecked());
                     albums.sortAlbums(getApplicationContext());
-                    albumsAdapter.updateDataSet(albums.dispAlbums);
+                    albumsAdapter.swapDataSet(albums.dispAlbums);
                 } else {
                     album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
                     album.sortPhotos();
-                    mediaAdapter.updateDataSet(album.getMedia());
+                    mediaAdapter.swapDataSet(album.getMedia());
                 }
                 item.setChecked(!item.isChecked());
                 return true;
@@ -1438,8 +1452,11 @@ public class MainActivity extends ThemedActivity {
                     private AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        dialog = ProgressDialog(getString(R.string.affix), getString(R.string.affix_text));
-                        dialog.show();
+					  AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+					  dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, progressDialog,
+							  getString(R.string.affix), getString(R.string.affix_text));
+					  dialog.show();
                         super.onPreExecute();
                     }
 
@@ -1451,7 +1468,7 @@ public class MainActivity extends ThemedActivity {
                                 bitmapArray.add(album.selectedMedias.get(i).getBitmap());
                         }
 
-                        if (bitmapArray.size()>1) {
+                        if (bitmapArray.size() > 1) {
                             //TODO: MUST FIX
                             Bitmap.CompressFormat compressFormat;
                             switch (radioFormatGroup.getCheckedRadioButtonId()) {
@@ -1500,6 +1517,7 @@ public class MainActivity extends ThemedActivity {
             //endregion
 
             case R.id.action_move:
+
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
@@ -1540,9 +1558,12 @@ public class MainActivity extends ThemedActivity {
                     @Override
                     public void onClick(View v) {
                         String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
-                        album.copySelectedPhotos(getApplicationContext(), path);
-                        finishEditMode();
+                        boolean success = album.copySelectedPhotos(getApplicationContext(), path);
+					  	finishEditMode();
                         bottomSheetDialogFragment.dismiss();
+						if (!success)
+						   requestSdCardPermissions();
+
                     }
                 });
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
@@ -1572,18 +1593,23 @@ public class MainActivity extends ThemedActivity {
                     @Override
                     public void onClick(View dialog) {
                         if (editTextNewName.length() != 0) {
+						  	boolean success;
                             if (albumsMode){
                                 int index = albums.dispAlbums.indexOf(albums.getSelectedAlbum(0));
                                 albums.getAlbum(index).updatePhotos(getApplicationContext());
-                                albums.getAlbum(index).renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
+							  	success = albums.getAlbum(index).renameAlbum(getApplicationContext(),
+										 editTextNewName.getText().toString());
                                 albumsAdapter.notifyItemChanged(index);
                             } else {
-                                album.renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
+							  success = album.renameAlbum(getApplicationContext(), editTextNewName.getText().toString());
                                 toolbar.setTitle(album.getName());
                                 mediaAdapter.notifyDataSetChanged();
                             }
                             renameDialog.dismiss();
-                        } else {
+						  if (!success) requestSdCardPermissions();
+						  //Toast.makeText(MainActivity.this, ""+success, Toast.LENGTH_SHORT)
+						  // .show();
+						} else {
                             StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
                             editTextNewName.requestFocus();
                         }
@@ -1634,11 +1660,6 @@ public class MainActivity extends ThemedActivity {
         }
     }
 
-    private AlertDialog ProgressDialog(String dialogTitle, String dialogText){
-        AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-        return AlertDialogsHelper.getProgressDialog(this, progressDialog, dialogTitle, dialogText);
-    }
-
     private class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
@@ -1656,73 +1677,80 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            albumsAdapter.updateDataSet(albums.dispAlbums);
+            albumsAdapter.swapDataSet(albums.dispAlbums);
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
+            ((MyApplication) getApplicationContext()).setAlbums(albums);
+            albums.saveBackup(getApplicationContext());
         }
     }
 
     private class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            swipeRefreshLayout.setRefreshing(true);
-            toggleRecyclersVisibilty(false);
-            super.onPreExecute();
-        }
+	  @Override
+	  protected void onPreExecute() {
+		swipeRefreshLayout.setRefreshing(true);
+		toggleRecyclersVisibilty(false);
+		super.onPreExecute();
+	  }
 
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            album.updatePhotos(getApplicationContext());
-            return null;
-        }
+	  @Override
+	  protected Void doInBackground(Void... arg0) {
+		album.updatePhotos(getApplicationContext());
+		return null;
+	  }
 
-        @Override
-        protected void onPostExecute(Void result) {
-            mediaAdapter.updateDataSet(album.getMedia());
-            checkNothing();
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
+	  @Override
+	  protected void onPostExecute(Void result) {
+		mediaAdapter.swapDataSet(album.getMedia());
+		checkNothing();
+		swipeRefreshLayout.setRefreshing(false);
+		//albums.saveBackup(getApplicationContext());
+	  }
+	}
 
-    //MOVE SELECTED MEDIA ASYNCTASK
-    private class MovePhotos extends AsyncTask<String, Void, Void> {
+  private class MovePhotos extends AsyncTask<String, Void, Boolean> {
 
-        @Override
-        protected void onPreExecute() {
-            swipeRefreshLayout.setRefreshing(true);
-            super.onPreExecute();
-        }
+	@Override
+	protected void onPreExecute() {
+	  swipeRefreshLayout.setRefreshing(true);
+	  super.onPreExecute();
+	}
 
-        @Override
-        protected Void doInBackground(String... arg0) {
-            try {
-                for (int i = 0; i < album.selectedMedias.size(); i++) {
-                    File from = new File(album.selectedMedias.get(i).getPath());
-                    File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
+	@Override
+	protected Boolean doInBackground(String... arg0) {
+	  boolean success = true;
+	  try
+	  {
+		for (int i = 0; i < album.selectedMedias.size(); i++) {
+		  File from = new File(album.selectedMedias.get(i).getPath());
+		  File to = new File(StringUtils.getPhotoPathMoved(album.selectedMedias.get(i).getPath(), arg0[0]));
 
-                    if (ContentHelper.moveFile(getApplicationContext(), from, to)) {
-                        MediaScannerConnection.scanFile(getApplicationContext(),
-                                new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
-                        album.getMedia().remove(album.selectedMedias.get(i));
-                    }
-                }
-            } catch (Exception e) { e.printStackTrace(); }
-            return null;
-        }
+		  if (ContentHelper.moveFile(getApplicationContext(), from, to)) {
+			MediaScannerConnection.scanFile(getApplicationContext(),
+					new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
+			album.getMedia().remove(album.selectedMedias.get(i));
+		  } else success = false;
+		}
+	  } catch (Exception e) { e.printStackTrace(); }
+	  return success;
+	}
 
-        @Override
-        protected void onPostExecute(Void result) {
-            if (album.getMedia().size() == 0) {
-                albums.removeCurrentAlbum();
-                albumsAdapter.notifyDataSetChanged();
-                displayAlbums();
-            }
+	@Override
+	protected void onPostExecute(Boolean result) {
+	  if (result) {
+		if (album.getMedia().size() == 0) {
+		  albums.removeCurrentAlbum();
+		  albumsAdapter.notifyDataSetChanged();
+		  displayAlbums();
+		}
+	  } else requestSdCardPermissions();
+	  //Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
 
-            mediaAdapter.updateDataSet(album.getMedia());
-            finishEditMode();
-            invalidateOptionsMenu();
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
+	  mediaAdapter.swapDataSet(album.getMedia());
+	  finishEditMode();
+	  invalidateOptionsMenu();
+	  swipeRefreshLayout.setRefreshing(false);
+	}
+  }
 }

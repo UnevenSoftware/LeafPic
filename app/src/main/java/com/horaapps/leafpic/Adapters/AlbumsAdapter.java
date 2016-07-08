@@ -143,7 +143,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataSet(ArrayList<Album> asd) {
+    public void swapDataSet(ArrayList<Album> asd) {
         albums = asd;
         notifyDataSetChanged();
     }

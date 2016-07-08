@@ -4,10 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 
+import java.io.Serializable;
+
 /**
  * Created by dnld on 2/4/16.
  */
-public class AlbumSettings {
+public class AlbumSettings implements Serializable{
 
     public final static int SORT_BY_NAME = 3;
     public final static int SORT_BY_DATE = 0;

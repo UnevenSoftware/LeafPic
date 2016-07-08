@@ -41,7 +41,6 @@ import java.util.List;
  */
 public class ContentHelper {
 
-
     private static final String TAG = "ContentHelper";
     private static final String PRIMARY_VOLUME_NAME = "primary";
 
@@ -106,20 +105,22 @@ public class ContentHelper {
 	}
 
   public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File target) {
-		java.io.FileInputStream inStream = null;
-		java.io.OutputStream outStream = null;
-		java.nio.channels.FileChannel inChannel = null;
+		FileInputStream inStream = null;
+		OutputStream outStream = null;
+		FileChannel inChannel = null;
 		FileChannel outChannel = null;
+		boolean success = false;
 		try {
 			inStream = new FileInputStream(source);
 
 			// First try the normal way
 			if (isWritable(target)) {
 				// standard way
-				outStream = new java.io.FileOutputStream(target);
+				outStream = new FileOutputStream(target);
 				inChannel = inStream.getChannel();
 				outChannel = ((FileOutputStream) outStream).getChannel();
 				inChannel.transferTo(0, inChannel.size(), outChannel);
+			  	success = true;
 			} else {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 					// Storage Access Framework
@@ -136,7 +137,7 @@ public class ContentHelper {
 					}
 				}
 				else {
-					return false;
+					success = false;
 				}
 
 				if (outStream != null) {
@@ -146,6 +147,7 @@ public class ContentHelper {
 					while ((bytesRead = inStream.read(buffer)) != -1) {
 						outStream.write(buffer, 0, bytesRead);
 					}
+				  success = true;
 				}
 
 			}
@@ -180,7 +182,7 @@ public class ContentHelper {
 				// ignore exception
 			}
 		}
-		return true;
+		return success;
 	}
 
   /**
@@ -538,7 +540,7 @@ public class ContentHelper {
 
 			Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
 			Method getUuid = storageVolumeClazz.getMethod("getUuid");
-			Method getPath = storageVolumeClazz.getMethod("getPath");
+			Method getPath = storageVolumeClazz.getMethod("getMediaPath");
 			Method isPrimary = storageVolumeClazz.getMethod("isPrimary");
 			Object result = getVolumeList.invoke(mStorageManager);
 
@@ -658,8 +660,9 @@ public class ContentHelper {
     }
 
 
-    public static String getPath(final Context context, final Uri uri)
+    public static String getMediaPath(final Context context, final Uri uri)
     {
+	  Log.wtf("asd", uri+"");
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
 
@@ -716,7 +719,10 @@ public class ContentHelper {
         }
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            return getDataColumn(context, uri, null, null);
+		  try {
+			return getDataColumn(context, uri, null, null);
+		  } catch (Exception ignored){ }
+
         }
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {

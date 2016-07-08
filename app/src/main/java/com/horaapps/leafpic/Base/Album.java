@@ -15,6 +15,7 @@ import com.koushikdutta.ion.builder.Builders;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +23,7 @@ import java.util.Comparator;
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album {
+public class Album implements Serializable {
 
     String name = null;
     private String path = null;
@@ -331,9 +332,12 @@ public class Album {
         }
     }
 
-    public void copySelectedPhotos(Context context, String folderPath) {
+    public boolean copySelectedPhotos(Context context, String folderPath) {
+        boolean success = true;
         for (Media media : selectedMedias)
-            copyPhoto(context, media.getPath(), folderPath);
+            if(!copyPhoto(context, media.getPath(), folderPath))
+                success = false;
+        return success;
     }
 
     public boolean copyPhoto(Context context, String olderPath, String folderPath) {
@@ -380,9 +384,9 @@ public class Album {
     }
 
     public boolean renameAlbum(Context context, String newName) {
-        boolean success = true;
+        boolean success;
         File dir = new File(StringUtils.getAlbumPathRenamed(getPath(), newName));
-        if (ContentHelper.mkdir(context, dir)) {
+        if (success = ContentHelper.mkdir(context, dir)) {
             path = dir.getAbsolutePath();
             name = newName;
             for (int i = 0; i < media.size(); i++) {

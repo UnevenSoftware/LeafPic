@@ -13,6 +13,10 @@
             android:title="@string/rotate"
             app:showAsAction="ifRoom"
             />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
        <!--
         <item
             android:id="@+id/video_stuff"
@@ -22,10 +26,7 @@
             android:id="@+id/audio_stuff"
             android:title="@string/audio"
             app:showAsAction="ifRoom"/>-->
-        <item
-            android:id="@+id/action_settings"
-            android:title="@string/settings"
-            app:showAsAction="never" />
+
         <!--<item
             android:id="@+id/text_stuff"
             android:title="@string/text"

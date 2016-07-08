@@ -13,9 +13,6 @@ import android.support.v7.app.AppCompatActivity;
  */
 public final class PermissionUtils {
 
-    private PermissionUtils() {
-    }
-
     public static boolean checkPermissions(Context context, String... permissions) {
         for (String permission : permissions) {
             if (!checkPermission(context, permission)) {

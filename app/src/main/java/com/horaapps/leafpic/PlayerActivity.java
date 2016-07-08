@@ -159,7 +159,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_video, menu);
+    getMenuInflater().inflate(R.menu.menu_video_player, menu);
 
     menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
     menu.findItem(R.id.rotate_layout).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_screen_rotation));
@@ -177,7 +177,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
 
       case R.id.action_share:
         Intent share = new Intent(Intent.ACTION_SEND);
-        Media m = new Media(ContentHelper.getPath(getApplicationContext() ,getIntent().getData()));
+        Media m = new Media(ContentHelper.getMediaPath(getApplicationContext() ,getIntent().getData()));
         share.setType(m.getMIME());
         share.putExtra(Intent.EXTRA_STREAM, getIntent().getData());
         startActivity(Intent.createChooser(share, getString(R.string.send_to)));

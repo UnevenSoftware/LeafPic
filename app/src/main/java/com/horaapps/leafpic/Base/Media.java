@@ -9,11 +9,13 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.Rational;
+import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
@@ -22,6 +24,7 @@ import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -33,7 +36,7 @@ import java.util.Map;
 /**
  * Created by dnld on 26/04/16.
  */
-public class Media implements Parcelable {
+public class Media implements Parcelable, Serializable {
 
     private static final String TAG_WIDTH = "Image Width";
     private static final String TAG_HEIGHT = "Image Height";
@@ -85,9 +88,8 @@ public class Media implements Parcelable {
     public Media(Context context, Uri mediaUri) {
         this.uri = mediaUri;
         this.path = null;
-        ContentResolver cR = context.getContentResolver();
-        mime = MimeTypeMap.getSingleton().getExtensionFromMimeType(cR.getType(uri));
-        if(mime == null) mime = "unknown";
+        setMIME(context.getContentResolver().getType(uri));
+
     }
 
     public String getMIME() {
@@ -96,8 +98,11 @@ public class Media implements Parcelable {
 
     private void setMIME() {
         String extension = path.substring(path.lastIndexOf('.')+1);
-        mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
-        if(mime == null) mime= "unknown";
+        setMIME(MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase()));
+    }
+
+    private void setMIME(String mime) {
+        this.mime = (mime != null) ? mime : "unknown";
     }
 
     void setSelected(boolean selected) {
@@ -129,12 +134,13 @@ public class Media implements Parcelable {
 
         // NOTE: ExifInterface is faster than metadata-extractor to get the thumbnail data
         /*try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
+            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
             ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
             if (thumbnailDirectory.hasThumbnailData())
                 return thumbnailDirectory.getThumbnailData();
         } catch (Exception e) { return null; }*/
     }
+
 
     public String getName() {
         return StringUtils.getPhotoNamebyPath(path);
@@ -148,7 +154,7 @@ public class Media implements Parcelable {
     }
 
     private void loadMetadata() {
-        if (metadataMap.isEmpty()) {
+        if (isMediainStorage() && metadataMap.isEmpty()) {
             try {
                 Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
                 for (Directory directory : metadata.getDirectories())
@@ -180,7 +186,7 @@ public class Media implements Parcelable {
     public boolean setOrientation(int orientation){
         /*int asd;
         ExifInterface exif;
-        try { exif = new ExifInterface(getPath()); }
+        try { exif = new ExifInterface(getMediaPath()); }
         catch (IOException ex) { return false; }
         switch (orientation) {
             case 90: asd = ExifInterface.ORIENTATION_ROTATE_90; break;
@@ -201,7 +207,12 @@ public class Media implements Parcelable {
     }
 
     public String getExifInfo() {
-        return String.format("%s %s %s", getFNumber(), getExposureTime(), getISO());
+        StringBuilder result = new StringBuilder();
+        String asd;
+        if((asd = getFNumber()) != null) result.append(asd).append(" ");
+        if((asd = getExposureTime()) != null) result.append(asd).append(" ");
+        if((asd = getISO()) != null) result.append(asd).append(" ");
+        return result.toString();
     }
 
     private Rational getRational(Object o)
@@ -308,8 +319,10 @@ public class Media implements Parcelable {
         return false;
     }
 
-    public String getResolution() {
-        return String.format(Locale.getDefault(), "%dx%d", getWidth(), getHeight());
+    @Nullable public String getResolution() {
+        if (getWidth() != -1 && getHeight() != -1)
+            return String.format(Locale.getDefault(), "%dx%d", getWidth(), getHeight());
+        else return null;
     }
 
     public String getHumanReadableSize() {
@@ -318,6 +331,13 @@ public class Media implements Parcelable {
 
     public String getPath() {
         return path;
+    }
+
+    public String getDisplayName() {
+        if(isMediainStorage()) return getPath();
+        else {
+            return getUri().getEncodedPath();
+        }
     }
 
     public long getDate() {

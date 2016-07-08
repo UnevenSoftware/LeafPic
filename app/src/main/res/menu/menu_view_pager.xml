@@ -4,18 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PhotoPagerActivity"
 >
-    <item
-        android:id="@+id/action_share"
-        android:orderInCategory="0"
-        android:title="@string/share"
-        app:showAsAction="always"
-    />
-    <item
-        android:id="@+id/action_delete"
-        android:orderInCategory="1"
-        android:title="@string/delete"
-        app:showAsAction="always"
-        />
+
     <group android:id="@+id/only_photos_otions">
         <item
             android:id="@+id/action_edit"
@@ -80,7 +69,19 @@
             </group>
         </menu>
     </item>
-
+    <group android:id="@+id/on_internal_storage">
+        <item
+            android:id="@+id/action_share"
+            android:orderInCategory="0"
+            android:title="@string/share"
+            app:showAsAction="always"
+        />
+        <item
+            android:id="@+id/action_delete"
+            android:orderInCategory="1"
+            android:title="@string/delete"
+            app:showAsAction="always"
+        />
     <item
         android:id="@+id/action_copy"
         android:title="@string/copy_to"
@@ -95,6 +96,8 @@
         android:title="@string/rename"
         app:showAsAction="never"
         />
+    </group>
+
     <item
         android:id="@+id/action_details"
         android:title="@string/details"

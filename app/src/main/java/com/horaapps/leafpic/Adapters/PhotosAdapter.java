@@ -147,7 +147,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         mOnLongClickListener = lis;
     }
 
-    public void updateDataSet(ArrayList<Media> asd) {
+    public void swapDataSet(ArrayList<Media> asd) {
         medias = asd;
         notifyDataSetChanged();
     }

@@ -117,10 +117,9 @@ public class AlertDialogsHelper {
         dialogLayout.findViewById(R.id.details_title).setBackgroundColor(activity.getPrimaryColor());
 
         textViewSize.setText(f.getHumanReadableSize());
-        textViewResolution.setText(f.getResolution());
         textViewData.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(f.getDateModified())));
         textViewType.setText(f.getMIME());
-        textViewPath.setText(f.getPath());
+        textViewPath.setText(f.getDisplayName());
 
         /** details labels **/
         int color = activity.getTextColor();
@@ -150,12 +149,23 @@ public class AlertDialogsHelper {
         textViewLocation.setTextColor(color);
         textViewOrientation.setTextColor(color);
 
-        String cameraInfo;
-        if ((cameraInfo = f.getCameraInfo()) != null) {
-            textViewDevice.setText(cameraInfo);
-            textViewEXIF.setText(f.getExifInfo());
-            dialogLayout.findViewById(R.id.ll_exif).setVisibility(View.VISIBLE);
+        String asd = f.getResolution();
+        if (asd != null) {
+            textViewResolution.setText(asd);
+            dialogLayout.findViewById(R.id.ll_resolution).setVisibility(View.VISIBLE);
         }
+
+        if ((asd = f.getCameraInfo()) != null) {
+            textViewDevice.setText(asd);
+            dialogLayout.findViewById(R.id.ll_device).setVisibility(View.VISIBLE);
+        }
+
+        if ((asd = f.getExifInfo()) != null) {
+            textViewEXIF.setText(asd);
+            dialogLayout.findViewById(R.id.ll_camera_details).setVisibility(View.VISIBLE);
+        }
+
+
         final GeoLocation location;
         if((location = f.getGeoLocation()) != null) {
             SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -194,7 +204,8 @@ public class AlertDialogsHelper {
 
             textViewLocation.setText(location.toDMSString());
             dialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
-            dialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
+            imgMap.setVisibility(View.VISIBLE);
+            //dialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
 
         }
         int orientation;

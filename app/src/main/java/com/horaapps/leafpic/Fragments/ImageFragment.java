@@ -96,7 +96,7 @@ public class ImageFragment extends Fragment {
             photoView.setScaleLevels(1.0F, 4.5F, 10.0F);//TODO improve
 
         /*Ion.with(getContext())
-                .load(img.getPath())
+                .load(img.getMediaPath())
                 .withBitmap()
                 .deepZoom()
                 .intoImageView(photoView);*/
