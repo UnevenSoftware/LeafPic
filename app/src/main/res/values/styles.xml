@@ -85,6 +85,8 @@
         <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
         <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
         <item name="android:backgroundTint" tools:targetApi="lollipop">@color/md_black_1000</item>
+        <item name="android:windowBackground">@color/md_black_1000</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
     </style>
 
     <!--LICENSE DIALOG-->
