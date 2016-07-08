@@ -129,16 +129,29 @@
                             android:layout_marginTop="105dp"
                             app:civ_border_width="1dp"
                             />
-                        <TextView
-                            android:id="@+id/donald_shtjefni"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/donald_profile_img"
-                            android:layout_toEndOf="@id/donald_profile_img"
+                            android:orientation="vertical"
                             android:layout_toRightOf="@id/donald_profile_img"
-                            android:textStyle="bold"
-                            android:textSize="20dp"
-                            android:text="Donald Shtjefni"/>
+                            android:layout_marginTop="158dp"
+                            >
+                            <TextView
+                                android:id="@+id/donald_shtjefni"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sub_big_text"
+                                android:textStyle="bold"
+                                android:text="Donald Shtjefni"/>
+
+                            <TextView
+                                android:id="@+id/donald_shtjefni_role"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/medium_text"
+                                android:text="@string/donald_role"/>
+
+                        </LinearLayout>
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/donald_description"
@@ -223,16 +236,30 @@
                             android:layout_marginTop="105dp"
                             app:civ_border_width="1dp"
                             />
-                        <TextView
-                            android:id="@+id/gilbert_ndresaj"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/gilbert_profile_img"
-                            android:layout_toEndOf="@id/gilbert_profile_img"
+                            android:orientation="vertical"
                             android:layout_toRightOf="@id/gilbert_profile_img"
-                            android:textSize="20dp"
-                            android:textStyle="bold"
-                            android:text="Gilbert Ndresaj"/>
+                            android:layout_marginTop="158dp"
+                            >
+                            <TextView
+                                android:id="@+id/gilbert_ndresaj"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sub_big_text"
+                                android:textStyle="bold"
+                                android:text="Gilbert Ndresaj"/>
+
+                            <TextView
+                                android:id="@+id/gilbert_ndresaj_role"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/medium_text"
+                                android:text="@string/gilbert_role"/>
+
+                        </LinearLayout>
+
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/gilbert_description"
@@ -568,7 +595,7 @@
                                 android:orientation="vertical"
                                 android:paddingTop="8dp"
                                 android:paddingRight="16dp"
-                                android:paddingBottom="16dp"
+                                android:paddingBottom="8dp"
                                 >
                                 <TextView
                                     android:id="@+id/about_support_github_item"
@@ -583,6 +610,56 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/about_support_github_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                    <!-- DONATE -->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_about_support_donate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/about_support_donate_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="faw-gift"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="16dp"
+                                >
+                                <TextView
+                                    android:id="@+id/about_support_donate_item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/donate"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/about_support_donate_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/donate_sub_text"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
                                     />
