@@ -25,9 +25,8 @@ LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free a
 ###### Code & Issues
 If you are a developer and you wish to contribute to the app please fork the project
 and submit a pull request if possible make it on the [develop branch](https://github.com/HoraApps/LeafPic/tree/develop).
-If you have any questions, feel free to ask [me](mailto:dnld.sht@gmail.com) about whatever you want.
-If you want trace the status of known issues you check out [waffle.io](https://waffle.io/HoraApps/LeafPic),
-feel free to file a new issue (helpful description, screenshots and logcat are appreciated).
+You can trace the status of known issues on [waffle.io](https://waffle.io/HoraApps/LeafPic),
+also feel free to file a new issue (helpful description, screenshots and logcat are appreciated), or send me an [email](mailto:dnld.sht@gmail.com) if you have any questions.
 
 ###### Translations
 If you are able to contribute with a new translation of a missing language or if you want to improve an existing one, we greatly appreciate any suggestion!
