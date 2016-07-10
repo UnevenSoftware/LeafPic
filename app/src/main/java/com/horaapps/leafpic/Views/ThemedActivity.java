@@ -168,7 +168,7 @@ public class ThemedActivity extends AppCompatActivity {
         switch (getBaseTheme()){
             case DARK_THEME: style = R.style.AlertDialog_Dark;break;
             case AMOLED_THEME: style = R.style.AlertDialog_Dark_Amoled;break;
-            case LIGHT_THEME: default: style = R.style.AlertDialog_Light;
+            case LIGHT_THEME: default: style = R.style.AlertDialog_Light;break;
         }
         return style;
     }

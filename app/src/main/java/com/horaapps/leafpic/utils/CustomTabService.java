@@ -7,6 +7,7 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
+import android.widget.Toast;
 
 
 public class CustomTabService {
@@ -45,6 +46,10 @@ public class CustomTabService {
     }
 
     public void launchUrl(String Url){
-        mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
+        try{
+            mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
+        }catch (Exception e){
+            Toast.makeText(activity.getApplication(), "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

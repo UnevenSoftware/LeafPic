@@ -2,6 +2,7 @@ package com.horaapps.leafpic;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +51,7 @@ public class AboutActivity extends ThemedActivity {
         setNavBarColor();
         cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
+
     }
 
     @Override
@@ -139,12 +141,7 @@ public class AboutActivity extends ThemedActivity {
                 .animate(R.anim.fade_in)
                 .into((CircleImageView) findViewById(R.id.gilbert_profile_img));
         ((CircleImageView) findViewById(R.id.gilbert_profile_img)).setBorderColor(getInvertedBackgroundColor());
-        /*
-        if((ImageView) findViewById(R.id.gilbert_header_img)==null) {
-            ((ImageView) findViewById(R.id.gilbert_header_img)).setImageResource(R.mipmap.ic_launcher);
-            ((CircleImageView) findViewById(R.id.gilbert_profile_img)).setBorderWidth(0);
-        }
-        */
+
         /***** Object *****/
         ((CardView) findViewById(R.id.about_gilbert_card)).setCardBackgroundColor(getCardBackgroundColor());
         ((TextView) findViewById(R.id.gilbert_ndresaj)).setTextColor(getTextColor());
@@ -170,7 +167,6 @@ public class AboutActivity extends ThemedActivity {
                 cts.launchUrl("https://github.com/HoraApps/LeafPic");
             }
         });
-
         ///Report bug
         findViewById(R.id.ll_about_report_bug).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,6 +178,16 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_support_translate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://crowdin.com/project/leafpic");}
+        });
+
+        //Donate
+        findViewById(R.id.ll_about_support_donate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutActivity.this, DonateActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         /*** Donald Shtjefni ***/
@@ -199,12 +205,12 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.about_author_donald_mail_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL, new String[]{"dnld.sht@gmail.com"});
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto: dnld.sht@gmail.com"));
                 try {
-                    startActivity(Intent.createChooser(i, getString(R.string.send_via)));
-                } catch (android.content.ActivityNotFoundException ex) {
+                    startActivity(intent);
+                } catch (Exception e){
                     Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -225,12 +231,12 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.about_author_gilbert_mail_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"jibo95@gmail.com"});
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto: jibo95@gmail.com"));
                 try {
-                    startActivity(Intent.createChooser(i, getString(R.string.send_via)));
-                } catch (android.content.ActivityNotFoundException ex) {
+                    startActivity(intent);
+                } catch (Exception e){
                     Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -239,16 +245,9 @@ public class AboutActivity extends ThemedActivity {
 
         /*** SPECIAL THANKS ***/
         /*** Patryk Goworowski ***/
-        //G+
-        //((TextView) findViewById(R.id.about_patryk_goworowski_googleplus_item)).setTextColor(getAccentColor());
-        /*findViewById(R.id.about_patryk_goworowski_googleplus_item).setOnClickListener(new View
-                                                                                                   .OnClickListener() {
-            @Override
-            public void onClick(View v) { cts.launchUrl("https://plus.google.com/109304801957014561872/about");}
-        });*/
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setMovementMethod(LinkMovementMethod.getInstance());
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setLinkTextColor(getAccentColor());
-        //((TextView) findViewById(R.id.about_comunity_members_sub)).setMovementMethod(LinkMovementMethod.getInstance());
+
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,6 +286,7 @@ public class AboutActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.about_support_rate_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_support_github_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_support_report_bug_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.about_support_donate_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
@@ -297,6 +297,7 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_github_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_report_bug_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_donate_item)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
@@ -311,6 +312,9 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_report_bug_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_donate_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.donald_shtjefni_role)).setTextColor(color);
+        ((TextView) findViewById(R.id.gilbert_ndresaj_role)).setTextColor(color);
     }
 
     private void licenseDialog() {

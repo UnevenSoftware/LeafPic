@@ -993,7 +993,7 @@
                                 android:orientation="horizontal"
                                 android:paddingTop="8dp"
                                 android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
+                                android:paddingBottom="16dp"
                                 >
                                 <LinearLayout
                                     android:layout_width="match_parent"
