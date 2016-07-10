@@ -318,7 +318,7 @@ public class AboutActivity extends ThemedActivity {
     }
 
     private void licenseDialog() {
-        //TODO I HATE THIS redo please.
+        // TODO: 10/07/16 ~Jibe rifai sta roba please!
         final Notices notices = new Notices();
         notices.addNotice(new Notice("Glide", "http://github.com/bumptech/glide", "Copyright 2014 Google, Inc. All rights reserved.", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("Ion", "http://github.com/koush/ion", "Copyright 2013 Koushik Dutta (2013)", new ApacheSoftwareLicense20()));

@@ -243,7 +243,7 @@
   <string name="map_provider_sub">从地图上选择</string>
   <string name="insert_something">写点东西吧！</string>
   <string name="password_dont_match">password doesn\'t match</string>
-  <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
+  <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
   <string name="chose_the_map_provider">Chose the map provider</string>
   <string name="use_google_static_maps_faster">Use Google static maps (faster)</string>
   <string name="use_openstreetmap_slower">Use OpenStreetMap (slower)</string>

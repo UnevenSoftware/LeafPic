@@ -173,7 +173,7 @@ Ciao, \nSiamo un piccolo team indipendente che lavora con amore su LeafPic ❤, 
   <string name="about_library_license_sub">Verifica librerie di terze parti utilizzate su LeafPic.</string>
   <string name="about_authors">Autori</string>
   <string name="about_author_donald_description">Ho 19 anni.  Sono un giovane sviluppatore di software , mi piace l\'informatica in generale, ma più di tutto amo imparare a lavorare con Linux e Android. Mi piacciono anche le serie TV.     </string>
-  <string name="about_author_gilbert_description">Ho 20 anni. Amo la musica, videogiochi e il disegno. 
+  <string name="about_author_gilbert_description">Ho 20 anni. Amo la musica, videogiochi e il disegno.
 Mi piace anche lavorare con l\'informatica, la programmazione e il design.</string>
   <string name="send_via">inviare con...</string>
   <string name="send_email">INVIA UNA MAIL</string>
@@ -234,7 +234,7 @@ Mi piace anche lavorare con l\'informatica, la programmazione e il design.</stri
   <string name="map_provider_sub">Scegli il sorgente della mappa</string>
   <string name="insert_something">Inserisci qualcosa!</string>
   <string name="password_dont_match">password doesn\'t match</string>
-  <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
+  <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
   <string name="chose_the_map_provider">Chose the map provider</string>
   <string name="use_google_static_maps_faster">Use Google static maps (faster)</string>
   <string name="use_openstreetmap_slower">Use OpenStreetMap (slower)</string>

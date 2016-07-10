@@ -68,8 +68,8 @@
   <string name="unhide_album_message">Un-hiding this album you will make media available also for other apps.</string>
   <string name="exclude_albums_message">
         Seçilen albüleri dışarıda tutmak istediğinden emin misin?
-        
-    
+
+
                </string>
   <string name="exclude_album_message">
         Excluding this folder you will exclude also all sub-folders, below there is
@@ -246,7 +246,7 @@ bu bizim ilk uygulamamız, bu nedenle sizlerin geri dönüşlerinden çok şey �
   <string name="map_provider_sub">Harita kaynağını seç</string>
   <string name="insert_something">Araya ekle!</string>
   <string name="password_dont_match">Parola eşleşmiyor</string>
-  <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
+  <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
   <string name="chose_the_map_provider">Chose the map provider</string>
   <string name="use_google_static_maps_faster">Use Google static maps (faster)</string>
   <string name="use_openstreetmap_slower">Use OpenStreetMap (slower)</string>

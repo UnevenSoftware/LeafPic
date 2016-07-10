@@ -64,7 +64,6 @@ import com.horaapps.leafpic.Adapters.AlbumsAdapter;
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
-import com.horaapps.leafpic.Base.AlbumsProvider;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
@@ -635,7 +634,7 @@ public class MainActivity extends ThemedActivity {
             if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
                 Uri treeUri = resultData.getData();
                 // Persist URI in shared preference so that you can use it later.
-                ContentHelper.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard_photos, treeUri);
+                ContentHelper.setSharedPreferenceUri(R.string.preference_internal_uri_extsdcard_photos, treeUri);
 
                 final int takeFlags = resultData.getFlags()
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

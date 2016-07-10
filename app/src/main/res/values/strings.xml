@@ -8,7 +8,7 @@
     <string name="made_with_love_by">Made with love by</string>
 
     <!--AUTORS-->
-    <string name="donald_role">Major Developer</string>
+    <string name="donald_role">Project Manager</string>
     <string name="gilbert_role">Major Designer</string>
 
     <!-- ACTIONS -->
@@ -292,7 +292,6 @@
     <string name="map_provider_sub">Chose the source of maps</string>
     <string name="insert_something">Insert something!</string>
     <string name="password_dont_match">password doesn\'t match</string>
-    <string name="key_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
     <string name="chose_the_map_provider">Chose the map provider</string>
     <string name="use_google_static_maps_faster">Use Google static maps (faster)</string>
     <string name="use_openstreetmap_slower">Use OpenStreetMap (slower)</string>
@@ -303,5 +302,7 @@
     </string>
     <string name="got_oermission_wr_sdcard">Got permission to write on the SD-Card.</string>
     <string name="use_mediastore_provider">Use MediaStore Provider</string>
+    <string name="use_media_store_sub">If disabled it fetch the storage recursively for media.
+    </string>
 
 </resources>

@@ -161,7 +161,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:text="@string/about_author_donald_description"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         />
                     <!--DONALD LINKS  -->
                     <LinearLayout

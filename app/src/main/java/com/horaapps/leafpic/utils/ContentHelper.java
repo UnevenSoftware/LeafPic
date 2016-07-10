@@ -1,7 +1,6 @@
 package com.horaapps.leafpic.utils;
 
 import android.annotation.TargetApi;
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -26,7 +25,6 @@ import com.horaapps.leafpic.R;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -370,7 +368,7 @@ public class ContentHelper {
   public static Uri[] getTreeUris() {
 	List<Uri> uris = new ArrayList<Uri>();
 
-	Uri uri1 = getSharedPreferenceUri(R.string.key_internal_uri_extsdcard_photos);
+	Uri uri1 = getSharedPreferenceUri(R.string.preference_internal_uri_extsdcard_photos);
 	if (uri1 != null) {
 	  uris.add(uri1);
 	}

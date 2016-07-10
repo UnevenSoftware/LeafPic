@@ -38,6 +38,7 @@ import com.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import com.horaapps.leafpic.Animations.DepthPageTransformer;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
+import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Views.HackyViewPager;
 import com.horaapps.leafpic.Views.ThemedActivity;
@@ -89,9 +90,9 @@ public class PhotoPagerActivity extends ThemedActivity {
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
         try
         {
-            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM))
+            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-            else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
+            } else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
                             && getIntent().getData() != null) {
 
                 String path = ContentHelper.getMediaPath(getApplicationContext(),
@@ -110,6 +111,8 @@ public class PhotoPagerActivity extends ThemedActivity {
                     customUri = true;
                 }
 
+                HandlingAlbums albums = new HandlingAlbums(getApplicationContext(), album);
+                ((MyApplication) getApplicationContext()).setAlbums(albums);
             }
 
             initUI();
@@ -346,8 +349,11 @@ public class PhotoPagerActivity extends ThemedActivity {
     private void deleteCurrentMedia() {
         album.deleteCurrentMedia(getApplicationContext());
         if (album.getMedia().size() == 0) {
-            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
-            displayAlbums(false);
+            if (customUri) finish();
+            else {
+                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                displayAlbums(false);
+            }
         }
         adapter.notifyDataSetChanged();
         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
@@ -470,11 +476,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                             passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (securityObj.checkPassword(editTextPassword.getText().toString())) {
-                                        album.deleteCurrentMedia(getApplicationContext());
-                                        if (album.getMedia().size() == 0) {
-                                            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
-                                            displayAlbums(false);
-                                        }
+                                        deleteCurrentMedia();
                                         adapter.notifyDataSetChanged();
                                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
                                     } else
@@ -517,8 +519,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                         album.moveCurrentPhoto(getApplicationContext(), path);
 
                         if (album.getMedia().size() == 0) {
-                            ((MyApplication) getApplicationContext()).removeCurrentAlbum();
-                            displayAlbums(false);
+                            if (customUri) finish();
+                            else {
+                                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                                displayAlbums(false);
+                            }
                         }
                         adapter.notifyDataSetChanged();
                         toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
