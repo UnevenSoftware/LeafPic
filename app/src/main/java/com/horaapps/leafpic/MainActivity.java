@@ -64,6 +64,7 @@ import com.horaapps.leafpic.Adapters.AlbumsAdapter;
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.AlbumSettings;
+import com.horaapps.leafpic.Base.AlbumsProvider;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
@@ -197,6 +198,7 @@ public class MainActivity extends ThemedActivity {
 
         initUI();
         setupUI();
+
 
         displayPreFetchedData(getIntent().getExtras());
     }

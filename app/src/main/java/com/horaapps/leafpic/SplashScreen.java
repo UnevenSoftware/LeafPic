@@ -174,10 +174,8 @@ public class SplashScreen extends ThemedActivity {
                 startActivity(i);
                 finish();
             }
-            if(result) {
+            if(result)
                 albums.saveBackup(getApplicationContext());
-                Toast.makeText(SplashScreen.this, "saved", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 

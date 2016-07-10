@@ -17,7 +17,7 @@ public class ImageFileFilter implements FilenameFilter
     public final static int FILTER_IMAGES = 1;
     public final static int FILTER_GIFS = 2;
     public final static int FILTER_VIDEO = 3;
-    private final static int FILTER_NO_VIDEO = 4;
+    public final static int FILTER_NO_VIDEO = 4;
 
     private HashSet<String> extensions;
     private static String[] imagesExtensions =

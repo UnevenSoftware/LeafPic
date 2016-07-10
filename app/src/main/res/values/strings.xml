@@ -297,5 +297,6 @@
         the SD card.
     </string>
     <string name="got_oermission_wr_sdcard">Got permission to write on the SD-Card.</string>
+    <string name="use_mediastore_provider">Use MediaStore Provider</string>
 
 </resources>

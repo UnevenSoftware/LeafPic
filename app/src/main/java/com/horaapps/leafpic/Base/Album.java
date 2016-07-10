@@ -27,6 +27,12 @@ public class Album implements Serializable {
 
     String name = null;
     private String path = null;
+
+    public long getId() {
+        return id;
+    }
+
+    private long id = -1;
     private int count = -1;
     private boolean selected = false;
     private int filter;
@@ -55,6 +61,14 @@ public class Album implements Serializable {
     public Album(String path, String name, int count) {
         this(path, name);
         this.count = count;
+    }
+
+    public Album(long id, String name, int count) {
+        this.id = id;
+        this.name = name;
+        this.count = count;
+        media = new ArrayList<Media>();
+        selectedMedias = new ArrayList<Media>();
     }
 
     public Album(Context context, @NotNull File mediaPath) {
@@ -100,12 +114,26 @@ public class Album implements Serializable {
     public void updatePhotos(Context context) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-        File[] images = new File(getPath()).listFiles(new ImageFileFilter(ImageFileFilter.FILTER_ALL, SP.getBoolean("set_include_video",true)));
-        for (File image : images)
-            mediaArrayList.add(new Media(image));
+        if (isFromMediaStore()) {
+            mediaArrayList.addAll(
+                    AlbumsProvider.getAlbumPhotos(
+                            context,id,-1,
+                            SP.getBoolean("set_include_video", true)
+                                    ?ImageFileFilter.FILTER_ALL
+                                    :ImageFileFilter.FILTER_NO_VIDEO));
+
+        } else {
+            File[] images = new File(getPath()).listFiles(new ImageFileFilter(ImageFileFilter.FILTER_ALL, SP.getBoolean("set_include_video", true)));
+            for (File image : images)
+                mediaArrayList.add(new Media(image));
+        }
         media = mediaArrayList;
         sortPhotos();
         setCount(media.size());
+    }
+
+    private boolean isFromMediaStore() {
+        return id != -1;
     }
 
     public ArrayList<String> getParentsFolders() {
@@ -133,7 +161,7 @@ public class Album implements Serializable {
 
     public void setSettings(Context context) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        settings = h.getSettings(getPath());
+        settings = h.getSettings(isFromMediaStore() ? getId()+"" : getPath());
     }
 
     public boolean hasCustomCover() {

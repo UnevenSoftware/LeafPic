@@ -12,6 +12,8 @@ import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
@@ -76,15 +78,21 @@ public class HandlingAlbums implements Serializable {
 
     public void loadPreviewAlbums(Context context, boolean hidden) {
         this.hidden = hidden;
-        clearCameraIndex();
-        includeVideo = SP.getBoolean("set_include_video", true);
+        boolean mediastore = SP.getBoolean(context.getString(R.string.preference_use_media_store), true);
+
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
-        if (hidden)
-            for (File storage : roots)
-                fetchRecursivelyHiddenFolder(storage, albumArrayList, storage.getAbsolutePath());
-        else
-            for (File storage : roots)
-                fetchRecursivelyFolder(storage, albumArrayList, storage.getAbsolutePath());
+        clearCameraIndex();
+        if (mediastore && !hidden) {
+            albumArrayList.addAll(AlbumsProvider.getMediaStoreAlbums(context));
+        } else {
+            includeVideo = SP.getBoolean("set_include_video", false);
+            if (hidden)
+                for (File storage : roots)
+                    fetchRecursivelyHiddenFolder(storage, albumArrayList, storage.getAbsolutePath());
+            else
+                for (File storage : roots)
+                    fetchRecursivelyFolder(storage, albumArrayList, storage.getAbsolutePath());
+        }
         dispAlbums = albumArrayList;
         sortAlbums(context);
 
@@ -153,7 +161,7 @@ public class HandlingAlbums implements Serializable {
     private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders) {
         if (!excludedfolders.contains(dir)) {
             File[] asdf = dir.listFiles(new FoldersFileFilter());
-            if (asdf !=null) {
+            if (asdf != null) {
                 for (File temp : asdf) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedfolders.contains(temp) && (nomedia.exists() || temp.isHidden())) {
@@ -515,8 +523,10 @@ public class HandlingAlbums implements Serializable {
             public void run() {
                 clearCameraIndex();
                 for (int i = 0; i < dispAlbums.size(); i++) {
-                    Matcher matcher = CAMERA_FOLDER_PATTERN.matcher(dispAlbums.get(i).getPath());
-                    if (matcher.find()) indexCamera = i;
+                    /*Matcher matcher = CAMERA_FOLDER_PATTERN.matcher(dispAlbums.get(i).getPath());
+                    if (matcher.find()) indexCamera = i;*/
+
+                    if (getAlbum(i).getName().equals("Camera")) indexCamera = i;
                 }
                 if (indexCamera != -1)
                 {

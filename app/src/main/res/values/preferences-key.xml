@@ -4,6 +4,7 @@
     <string name="preference_include_video">set_include_video</string>
     <string name="preference_swipe_direction_inverted">swipe_opposite</string>
     <string name="preference_auto_update_media">auto_update_media</string>
+    <string name="preference_use_media_store">use_media_store</string>
     <string name="preference_delay_full_image">set_delay_full_image</string>
     <string name="preference_auto_rotate">set_picture_orientation</string>
     <string name="preference_max_brightness">set_max_luminosita</string>

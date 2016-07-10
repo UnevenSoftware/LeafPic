@@ -1,7 +1,9 @@
 package com.horaapps.leafpic.Base;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -9,12 +11,14 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.Rational;
+import com.drew.lang.annotations.NotNull;
 import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
@@ -89,7 +93,19 @@ public class Media implements Parcelable, Serializable {
         this.uri = mediaUri;
         this.path = null;
         setMIME(context.getContentResolver().getType(uri));
+    }
 
+    public Media(long id, String path, long dateModified, String mime) {
+
+    }
+
+    public Media(@NotNull Cursor cur) {
+        this.path = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.DATA));
+        this.size = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.SIZE));
+        this.dateModified = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
+        setMIME(cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
+        this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"),
+                cur.getColumnIndex(MediaStore.Images.Media._ID));
     }
 
     public String getMIME() {
