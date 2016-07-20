@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/HoraApps/LeafPic.png?label=ready&title=Ready)](https://waffle.io/HoraApps/LeafPic)
 [![GitHub release](https://img.shields.io/github/release/HoraApps/LeafPic.svg)](https://github.com/HoraApps/LeafPic/releases)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/leafpic/localized.svg)](https://crowdin.com/project/leafpic)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/HoraApps)
