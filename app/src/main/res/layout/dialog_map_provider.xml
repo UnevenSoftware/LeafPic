@@ -50,8 +50,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sub_medium_text"
-                    android:id="@+id/radio_osm_de"
-                    android:text="openstreetmap.de"
+                    android:id="@+id/radio_mapb_streets"
+                    android:text="mapbox.com (streets)"
+                />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sub_medium_text"
+                    android:id="@+id/radio_mapb_dark"
+                    android:text="mapbox.com (dark)"
+                />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sub_medium_text"
+                    android:id="@+id/radio_mapb_light"
+                    android:text="mapbox.com (light)"
                 />
                 <RadioButton
                     android:layout_width="wrap_content"

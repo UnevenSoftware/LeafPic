@@ -1,5 +1,6 @@
 package com.horaapps.leafpic;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,8 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -26,15 +29,15 @@ import java.util.ArrayList;
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
     private ArrayList<File> excludedFolders = new ArrayList<File>();
-    private HandlingAlbums handlingAlbums;
-
+    private CustomAlbumsHandler h;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excluded);
+        h = new CustomAlbumsHandler(getApplicationContext());
+        PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
 
-        handlingAlbums = ((MyApplication) getApplicationContext()).getAlbums();
-        excludedFolders = handlingAlbums.getExcludedFolders();
+        excludedFolders = h.getExcludedFolderFiles(SP.getBoolean(getString(R.string.preference_use_media_store), false));
 
         checkNothing(excludedFolders);
         initUI();
@@ -89,11 +92,11 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
                 String ID = v.getTag().toString();
                 int pos;
                 if((pos = getIndex(ID)) !=-1) {
-                    handlingAlbums.unExcludeAlbum(getApplicationContext(), excludedFolders.remove(pos));
+                    h.clearAlbumExclude(excludedFolders.remove(pos).getAbsolutePath());
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                                handlingAlbums.loadPreviewAlbums(getApplicationContext());
+                            ((MyApplication) getApplicationContext()).getAlbums().loadAlbums(getApplicationContext());
                         }
                     });
                     notifyItemRemoved(pos);

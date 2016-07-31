@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -40,10 +41,12 @@ import uz.shift.colorpicker.OnColorChangedListener;
 public class SettingsActivity extends ThemedActivity {
 
     public static final int GOOGLE_MAPS_PROVIDER = 0;
-    public static final int OSM_DE_PROVIDER = 1;
+    public static final int OSM_MAP_BOX = 1;
+    public static final int OSM_MAP_BOX_DARK = 12;
+    public static final int OSM_MAP_BOX_LIGHT = 13;
     public static final int OSM_TYLER_PROVIDER = 2;
 
-    private SharedPreferences SP;
+    private PreferenceUtil SP;
     private SecurityHelper securityObj;
 
     private Toolbar toolbar;
@@ -76,7 +79,7 @@ public class SettingsActivity extends ThemedActivity {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        SP = PreferenceManager.getDefaultSharedPreferences(this);
+        SP = PreferenceUtil.getInstance(getApplicationContext());
 
         //region TESTING
         fabMoreThemeOptions = (FloatingActionButton) findViewById(R.id.fab_more_theme_options);
@@ -192,10 +195,7 @@ public class SettingsActivity extends ThemedActivity {
         swInternalBrowser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_internal_player), isChecked);
-                editor.apply();
-
+                SP.putBoolean(getString(R.string.preference_internal_player), isChecked);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -214,9 +214,7 @@ public class SettingsActivity extends ThemedActivity {
         swIncludeVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_include_video), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_include_video), isChecked);
                 updateSwitchColor(swIncludeVideo, getAccentColor());
             }
         });
@@ -228,9 +226,7 @@ public class SettingsActivity extends ThemedActivity {
         swSwipeDirection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_swipe_direction_inverted), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_swipe_direction_inverted), isChecked);
                 updateSwitchColor(swSwipeDirection, getAccentColor());
             }
         });
@@ -242,23 +238,19 @@ public class SettingsActivity extends ThemedActivity {
         swAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_auto_update_media), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_auto_update_media), isChecked);
                 updateSwitchColor(swAutoUpdate, getAccentColor());
             }
         });
         updateSwitchColor(swAutoUpdate, getAccentColor());
 
-        /*** SW AUTO UPDATE MEDIA ***/
+        /*** SW MEDIA STORE ***/
         swUseMediaStore = (SwitchCompat) findViewById(R.id.sw_use_media_mediastore);
         swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_media_store), false));
         swUseMediaStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_use_media_store), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_use_media_store), isChecked);
                 updateSwitchColor(swUseMediaStore, getAccentColor());
             }
         });
@@ -270,9 +262,7 @@ public class SettingsActivity extends ThemedActivity {
         swDelayFullImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_delay_full_image), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_delay_full_image), isChecked);
                 updateSwitchColor(swDelayFullImage, getAccentColor());
             }
         });
@@ -284,9 +274,7 @@ public class SettingsActivity extends ThemedActivity {
         swPictureOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_auto_rotate), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_auto_rotate), isChecked);
                 updateSwitchColor(swPictureOrientation, getAccentColor());
             }
         });
@@ -298,9 +286,7 @@ public class SettingsActivity extends ThemedActivity {
         swMaxLuminosita.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_max_brightness), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_max_brightness), isChecked);
                 updateSwitchColor(swMaxLuminosita, getAccentColor());
             }
         });
@@ -312,9 +298,7 @@ public class SettingsActivity extends ThemedActivity {
         swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_translucent_status_bar), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_translucent_status_bar), isChecked);
                 updateTheme();
                 setStatusBarColor();
                 updateSwitchColor(swStatusBar, getAccentColor());
@@ -328,9 +312,7 @@ public class SettingsActivity extends ThemedActivity {
         swNavBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_colored_nav_bar), isChecked);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_colored_nav_bar), isChecked);
                 updateTheme();
                 updateSwitchColor(swNavBar, getAccentColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -383,50 +365,39 @@ public class SettingsActivity extends ThemedActivity {
 
         final RadioGroup mapProvider = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_maps_provider);
         RadioButton radioGoogleMaps = (RadioButton) dialogLayout.findViewById(R.id.radio_google_maps);
-        RadioButton radioOsmDe = (RadioButton) dialogLayout.findViewById(R.id.radio_osm_de);
+        RadioButton radioMapBoxStreets = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_streets);
+        RadioButton radioMapBoxDark = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_dark);
+        RadioButton radioMapBoxLight = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_light);
         RadioButton radioTyler = (RadioButton) dialogLayout.findViewById(R.id.radio_osm_tyler);
         setRadioTextButtonColor(radioGoogleMaps, getSubTextColor());
-        setRadioTextButtonColor(radioOsmDe, getSubTextColor());
+        setRadioTextButtonColor(radioMapBoxStreets, getSubTextColor());
+        setRadioTextButtonColor(radioMapBoxDark, getSubTextColor());
+        setRadioTextButtonColor(radioMapBoxLight, getSubTextColor());
         setRadioTextButtonColor(radioTyler, getSubTextColor());
 
         ((TextView) dialogLayout.findViewById(R.id.header_proprietary_maps)).setTextColor(getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.header_free_maps)).setTextColor(getTextColor());
         switch (SP.getInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER)) {
             case GOOGLE_MAPS_PROVIDER:
-                default:
-                    radioGoogleMaps.setChecked(true);
-                    break;
-            case OSM_DE_PROVIDER:
-                radioOsmDe.setChecked(true);
-                break;
-            case OSM_TYLER_PROVIDER:
-                radioTyler.setChecked(true);
-                break;
+                default: radioGoogleMaps.setChecked(true); break;
+            case OSM_MAP_BOX: radioMapBoxStreets.setChecked(true); break;
+            case OSM_MAP_BOX_DARK: radioMapBoxDark.setChecked(true); break;
+            case OSM_MAP_BOX_LIGHT: radioMapBoxLight.setChecked(true); break;
+            case OSM_TYLER_PROVIDER: radioTyler.setChecked(true); break;
         }
 
         dialogBuilder.setNegativeButton(R.string.cancel, null);
         dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putInt(getString(R.string.preference_map_provider), baseThemeValue);
-                editor.apply();
-
                 switch (mapProvider.getCheckedRadioButtonId()) {
                     case R.id.radio_google_maps:
-                        default:
-                        editor.putInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER);
-                        break;
-                    case R.id.radio_osm_de:
-                        editor.putInt(getString(R.string.preference_map_provider), OSM_DE_PROVIDER);
-                        break;
-                    case R.id.radio_osm_tyler:
-                        editor.putInt(getString(R.string.preference_map_provider), OSM_TYLER_PROVIDER);
-                        break;
+                    default: SP.putInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER); break;
+                    case R.id.radio_mapb_streets: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX); break;
+                    case R.id.radio_osm_tyler: SP.putInt(getString(R.string.preference_map_provider), OSM_TYLER_PROVIDER); break;
+                    case R.id.radio_mapb_dark: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX_DARK); break;
+                    case R.id.radio_mapb_light: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX_LIGHT); break;
                 }
-                editor.apply();
-
             }
         });
         dialogBuilder.setView(dialogLayout);
@@ -496,9 +467,7 @@ public class SettingsActivity extends ThemedActivity {
         dialogBuilder.setView(dialogLayout);
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putInt(getString(R.string.preference_base_theme), baseThemeValue);
-                editor.apply();
+                SP.putInt(getString(R.string.preference_base_theme), baseThemeValue);
                 startActivity(getIntent());
                 finish();
             }
@@ -581,9 +550,7 @@ public class SettingsActivity extends ThemedActivity {
 
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putInt(getString(R.string.preference_primary_color), colorPicker2.getColor());
-                editor.apply();
+                SP.putInt(getString(R.string.preference_primary_color), colorPicker2.getColor());
                 updateTheme();
                 setNavBarColor();
                 setScrollViewColor(scr);
@@ -647,9 +614,7 @@ public class SettingsActivity extends ThemedActivity {
         });
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putInt(getString(R.string.preference_accent_color), colorPicker.getColor());
-                editor.apply();
+                SP.putInt(getString(R.string.preference_accent_color), colorPicker.getColor());
                 updateTheme();
                 updateAccentViewsColor(getAccentColor());
             }
@@ -698,12 +663,11 @@ public class SettingsActivity extends ThemedActivity {
         dialogBuilder.setNeutralButton(getString(R.string.cancel), null);
         dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_apply_theme_pager), swApplyTheme_Viewer.isChecked
-                                                                                                ());
+                SharedPreferences.Editor editor = SP.getEditor();
+                editor.putBoolean(getString(R.string.preference_apply_theme_pager), swApplyTheme_Viewer.isChecked());
                 int c = Color.alpha(transparencyColorPicker.getColor());
                 editor.putInt(getString(R.string.preference_transparency), 255 - c);
-                editor.apply();
+                editor.commit();
                 updateTheme();
             }
         });

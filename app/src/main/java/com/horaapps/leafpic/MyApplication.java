@@ -12,15 +12,6 @@ import com.horaapps.leafpic.Base.HandlingAlbums;
 public class MyApplication extends Application {
 
     private HandlingAlbums albums = null;
-    private static Context context;
-
-    public static Context getContext() { return context; }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = getApplicationContext();
-    }
 
     Album getCurrentAlbum() {
         return albums.getCurrentAlbum();
@@ -29,7 +20,7 @@ public class MyApplication extends Application {
     void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
 
     public HandlingAlbums getAlbums() {
-        return albums != null ? albums : new HandlingAlbums(context);
+        return albums != null ? albums : new HandlingAlbums(getApplicationContext());
     }
 
     public void setAlbums(HandlingAlbums albums) {
@@ -37,6 +28,6 @@ public class MyApplication extends Application {
     }
 
     void updateAlbums() {
-        albums.loadPreviewAlbums(getApplicationContext());
+        albums.loadAlbums(getApplicationContext());
     }
 }

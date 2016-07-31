@@ -349,7 +349,7 @@ public class MainActivity extends ThemedActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                albums.loadPreviewAlbums(getApplicationContext(), album.isHidden());
+                                albums.loadAlbums(getApplicationContext(), album.isHidden());
                             }
                         }).start();
                         displayCurrentAlbumMedia(false);
@@ -634,7 +634,8 @@ public class MainActivity extends ThemedActivity {
             if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
                 Uri treeUri = resultData.getData();
                 // Persist URI in shared preference so that you can use it later.
-                ContentHelper.setSharedPreferenceUri(R.string.preference_internal_uri_extsdcard_photos, treeUri);
+                ContentHelper.setSharedPreferenceUri(getApplicationContext(),R.string
+                                                              .preference_internal_uri_extsdcard_photos, treeUri);
 
                 final int takeFlags = resultData.getFlags()
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -1103,7 +1104,7 @@ public class MainActivity extends ThemedActivity {
                                 albumsAdapter.notifyDataSetChanged();
                                 invalidateOptionsMenu();
                             } else {
-                                customAlbumsHandler.excludeAlbum(album.getPath());
+                                customAlbumsHandler.excludeAlbum(album.getPath(), album.getId());
                                 displayAlbums(true);
                             }
                         }
@@ -1215,7 +1216,7 @@ public class MainActivity extends ThemedActivity {
                 textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
                 textViewExcludeTitle.setText(getString(R.string.exclude));
 
-                if(albumsMode && albums.getSelectedCount() > 1) {
+                if((albumsMode && albums.getSelectedCount() > 1) || albums.isContentFromMediaStore()) {
                     textViewExcludeMessage.setText(R.string.exclude_albums_message);
                     spinnerParents.setVisibility(View.GONE);
                 } else {
@@ -1228,14 +1229,15 @@ public class MainActivity extends ThemedActivity {
 
                 excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (albumsMode && albums.getSelectedCount() > 1) {
+
+                        if ((albumsMode && albums.getSelectedCount() > 1) || albums.isContentFromMediaStore()) {
                             albums.excludeSelectedAlbums(getApplicationContext());
                             albumsAdapter.notifyDataSetChanged();
                             invalidateOptionsMenu();
                         } else {
                             StringUtils.showToast(getApplicationContext(), spinnerParents.getSelectedItem().toString());
-                            customAlbumsHandler.excludeAlbum(spinnerParents.getSelectedItem().toString());
-                            albums.loadExcludedFolders(getApplicationContext());
+                            // TODO: 24/07/16 fix for media store
+                            customAlbumsHandler.excludeAlbum(spinnerParents.getSelectedItem().toString(),album.getId());
                             displayAlbums(true);
                         }
                     }
@@ -1672,7 +1674,7 @@ public class MainActivity extends ThemedActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            albums.loadPreviewAlbums(getApplicationContext(), hidden);
+            albums.loadAlbums(getApplicationContext(), hidden);
             return null;
         }
 

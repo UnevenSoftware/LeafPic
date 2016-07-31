@@ -73,6 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:textSize="16sp"
                         />
                 </TableRow>
@@ -300,6 +301,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:visibility="gone"
+                android:layout_marginTop="6dp"
                 android:layout_below="@id/ll_detail_dialog"
             />
             <!--<LinearLayout

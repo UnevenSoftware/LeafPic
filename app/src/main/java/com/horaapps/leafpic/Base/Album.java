@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
+import com.horaapps.leafpic.Base.Providers.AlbumsProvider;
+import com.horaapps.leafpic.Base.Providers.MediaStoreProvider;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.StringUtils;
-import com.koushikdutta.ion.builder.Builders;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,18 +30,13 @@ public class Album implements Serializable {
     String name = null;
     private String path = null;
 
-    public long getId() {
-        return id;
-    }
-
     private long id = -1;
     private int count = -1;
     private boolean selected = false;
     private int filter;
     public AlbumSettings settings = new AlbumSettings();
     private int currentMediaIndex = 0;
-
-    private String storageRootPath;
+    private String storageRootPath = "";
 
     public ArrayList<Media> media = new ArrayList<Media>();
     public ArrayList<Media> selectedMedias = new ArrayList<Media>();
@@ -63,12 +60,13 @@ public class Album implements Serializable {
         this.count = count;
     }
 
-    public Album(long id, String name, int count) {
+    public Album(String path, long id, String name, int count) {
+        this(path, name, count);
         this.id = id;
-        this.name = name;
-        this.count = count;
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
+        Log.wtf("asd",""+this.id);
+        isFromContentReoslver();
     }
 
     public Album(Context context, @NotNull File mediaPath) {
@@ -116,16 +114,12 @@ public class Album implements Serializable {
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
         if (isFromMediaStore()) {
             mediaArrayList.addAll(
-                    AlbumsProvider.getAlbumPhotos(
-                            context,id,-1,
-                            SP.getBoolean("set_include_video", true)
-                                    ?ImageFileFilter.FILTER_ALL
-                                    :ImageFileFilter.FILTER_NO_VIDEO));
-
+                    MediaStoreProvider.getAlbumPhotos(
+                            context, id, SP.getBoolean("set_include_video", true)));
         } else {
-            File[] images = new File(getPath()).listFiles(new ImageFileFilter(ImageFileFilter.FILTER_ALL, SP.getBoolean("set_include_video", true)));
-            for (File image : images)
-                mediaArrayList.add(new Media(image));
+            mediaArrayList.addAll(AlbumsProvider.getAlbumPhotos(
+                    getPath(),filter,
+                    SP.getBoolean("set_include_video", true)));
         }
         media = mediaArrayList;
         sortPhotos();
@@ -134,6 +128,11 @@ public class Album implements Serializable {
 
     private boolean isFromMediaStore() {
         return id != -1;
+    }
+
+
+    public long getId() {
+        return  this.id;
     }
 
     public ArrayList<String> getParentsFolders() {
@@ -153,6 +152,12 @@ public class Album implements Serializable {
             }
         });
         return result;
+    }
+
+    public boolean isFromContentReoslver() {
+        Log.wtf("asd-asd", getId()+"");
+        Log.wtf("asd", "isFromContentReoslver: "+ (getId() != -1) );
+        return this.id != -1;
     }
 
     public void filterMedias(int filter) {
@@ -204,7 +209,7 @@ public class Album implements Serializable {
         return count;
     }
 
-    void setCoverPath(String path) {
+    public void setCoverPath(String path) {
         settings.coverPath = path;
     }
 

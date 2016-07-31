@@ -148,11 +148,11 @@ public class SplashScreen extends ThemedActivity {
         @Override
         protected Boolean doInBackground(Boolean... arg0) {
             if (arg0[0])
-                albums.loadPreviewAlbums(getApplicationContext(), false);
+                albums.loadAlbums(getApplicationContext(), false);
             else {
                 albums.restoreBackup(getApplicationContext());
                 if(albums.dispAlbums.size() == 0)
-                    albums.loadPreviewAlbums(getApplicationContext(), false);
+                    albums.loadAlbums(getApplicationContext(), false);
                 else return false;
             }
             return true;

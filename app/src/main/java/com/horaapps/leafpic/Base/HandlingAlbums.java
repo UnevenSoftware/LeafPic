@@ -9,12 +9,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.horaapps.leafpic.Base.Providers.AlbumsProvider;
+import com.horaapps.leafpic.Base.Providers.MediaStoreProvider;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
 import com.horaapps.leafpic.utils.ContentHelper;
@@ -32,8 +32,6 @@ import java.io.Serializable;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -43,29 +41,20 @@ public class HandlingAlbums implements Serializable {
 
     public final static String TAG = "HandlingAlbums";
     private String backupFile = "albums.dat";
-    private Pattern CAMERA_FOLDER_PATTERN = Pattern.compile("\\b/DCIM/Camera/?$");
 
     public ArrayList<Album> dispAlbums;
     private ArrayList<Album> selectedAlbums;
-    private boolean includeVideo = true;
+    private String nameProvider = MediaStoreProvider.class.getName();
 
-    private CustomAlbumsHandler customAlbumsHandler;
-    private SharedPreferences SP;
+
+  private SharedPreferences SP;
 
     private int indexCamera = -1;
-    private int current = -1;
+    private int current = 0;
     private boolean hidden;
 
-    private ArrayList<File> excludedfolders;
-    private AlbumsComparators albumsComparators;
-    private HashSet<File> roots;
-
-    public HandlingAlbums(Context context) {
+  public HandlingAlbums(Context context) {
         SP = PreferenceManager.getDefaultSharedPreferences(context);
-        customAlbumsHandler = new CustomAlbumsHandler(context);
-        roots = listStorages(context);
-        excludedfolders = new ArrayList<File>();
-        loadExcludedFolders(context);
         dispAlbums = new ArrayList<Album>();
         selectedAlbums = new ArrayList<Album>();
     }
@@ -76,29 +65,22 @@ public class HandlingAlbums implements Serializable {
         setCurrentAlbumIndex(0);
     }
 
-    public void loadPreviewAlbums(Context context, boolean hidden) {
+    public void loadAlbums(Context context, boolean hidden) {
         this.hidden = hidden;
-        boolean mediastore = SP.getBoolean(context.getString(R.string.preference_use_media_store), true);
 
-        ArrayList<Album> albumArrayList = new ArrayList<Album>();
+        ArrayList<Album> list = new ArrayList<Album>();
         clearCameraIndex();
-        if (mediastore && !hidden) {
-            albumArrayList.addAll(AlbumsProvider.getMediaStoreAlbums(context));
+        if (SP.getBoolean(context.getString(R.string.preference_use_media_store), true) && !hidden) {
+            list.addAll(MediaStoreProvider.getAlbums(context));
+            nameProvider = MediaStoreProvider.class.getName();
         } else {
-            includeVideo = SP.getBoolean("set_include_video", false);
-            if (hidden)
-                for (File storage : roots)
-                    fetchRecursivelyHiddenFolder(storage, albumArrayList, storage.getAbsolutePath());
-            else
-                for (File storage : roots)
-                    fetchRecursivelyFolder(storage, albumArrayList, storage.getAbsolutePath());
+            AlbumsProvider p = new AlbumsProvider(context);
+            list = p.getAlbums(hidden);
+            nameProvider = AlbumsProvider.class.getName();
         }
-        dispAlbums = albumArrayList;
+        dispAlbums = list;
         sortAlbums(context);
-
     }
-
-    public boolean hasSdCard(){ return roots.size() > 1;}
 
     public void setCurrentAlbumIndex(int index) {
         current = index;
@@ -112,23 +94,14 @@ public class HandlingAlbums implements Serializable {
         indexCamera = -1;
     }
 
-    private HashSet<File> listStorages(Context context) {
-        HashSet<File> roots = new HashSet<File>();
-        roots.add(Environment.getExternalStorageDirectory());
 
-        String[] extSdCardPaths = ContentHelper.getExtSdCardPaths(context);
-        for (String extSdCardPath : extSdCardPaths) {
-            File mas = new File(extSdCardPath);
-            if (mas.canRead())
-                roots.add(mas);
-        }
+    public boolean isContentFromMediaStore() {
+	  return nameProvider.equals(MediaStoreProvider.class.getName());
+	}
 
-        String sdCard = System.getenv("SECONDARY_STORAGE");
-        if (sdCard != null) roots.add(new File(sdCard));
-        return roots;
-    }
-
-    public ArrayList<Album> getValidFolders(boolean hidden) {
+   /*****
+    *
+    * public ArrayList<Album> getValidFolders(boolean hidden) {
         ArrayList<Album> folders = new ArrayList<Album>();
         if (hidden)
             for (File storage : roots)
@@ -173,7 +146,7 @@ public class HandlingAlbums implements Serializable {
                 }
             }
         }
-    }
+    }*****/
 
     public static ArrayList<String> getSubFolders(File dir) {
         ArrayList<String> array = new ArrayList<String>();
@@ -227,71 +200,6 @@ public class HandlingAlbums implements Serializable {
         }
     }
 
-
-    private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
-        if (!excludedfolders.contains(dir)) {
-            checkAndAddAlbum(dir, albumArrayList, rootExternalStorage);
-            File[] children = dir.listFiles(new FoldersFileFilter());
-            if (children != null) {
-                for (File temp : children) {
-                    File nomedia = new File(temp, ".nomedia");
-                    if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
-                        //not excluded/hidden folder
-                        fetchRecursivelyFolder(temp, albumArrayList, rootExternalStorage);
-                    }
-                }
-            }
-        }
-    }
-
-    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
-        if (!excludedfolders.contains(dir)) {
-            File[] folders = dir.listFiles(new FoldersFileFilter());
-            if (folders != null) {
-                for (File temp : folders) {
-                    File nomedia = new File(temp, ".nomedia");
-                    if (!excludedfolders.contains(temp) && (nomedia.exists() || temp.isHidden()))
-                        checkAndAddAlbum(temp, albumArrayList, rootExternalStorage);
-
-                    fetchRecursivelyHiddenFolder(temp, albumArrayList, rootExternalStorage);
-                }
-            }
-        }
-    }
-
-    public ArrayList<File> getExcludedFolders() {
-        return excludedfolders;
-    }
-
-    private void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList, String rootExternalStorage) {
-        File[] files = temp.listFiles(new ImageFileFilter(includeVideo));
-        if (files != null && files.length > 0) {
-            //valid folder
-            Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length, rootExternalStorage);
-            asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath()));
-
-            long lastMod = Long.MIN_VALUE;
-            File choice = null;
-            for (File file : files) {
-                if (file.lastModified() > lastMod) {
-                    choice = file;
-                    lastMod = file.lastModified();
-                }
-            }
-            if (choice != null)
-                asd.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
-
-            albumArrayList.add(asd);
-        }
-    }
-
-    public void loadExcludedFolders(Context context) {
-        excludedfolders = new ArrayList<File>();
-        //forced excluded folder
-        excludedfolders.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
-        CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
-        excludedfolders.addAll(handler.getExcludedFolders());
-    }
 
     public int toggleSelectAlbum(int index) {
         if (dispAlbums.get(index) != null) {
@@ -451,16 +359,12 @@ public class HandlingAlbums implements Serializable {
         clearSelectedAlbums();
     }
 
-    private void excludeAlbum(Context context, Album a) {
-        CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        h.excludeAlbum(a.getPath());
-        excludedfolders.add(new File(a.getPath()));
-        dispAlbums.remove(a);
-    }
 
-    public void unExcludeAlbum(Context c, File dirPath) {
-        customAlbumsHandler.clearAlbumExclude(dirPath.getAbsolutePath());
-        excludedfolders.remove(dirPath);
+    private void excludeAlbum(Context context, Album a) {
+      CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+      Log.wtf("excluded:::", a.getPath() + " - " + a.getId());
+      h.excludeAlbum(a.getPath(), a.getId());
+      dispAlbums.remove(a);
     }
 
     public int getColumnSortingMode() {
@@ -484,66 +388,42 @@ public class HandlingAlbums implements Serializable {
         editor.apply();
     }
 
-    public void sortAlbums(final Context context, ArrayList<Album> albumArrayList) {
-        albumsComparators = new AlbumsComparators(isAscending());
+    public void sortAlbums(final Context context) {
+      AlbumsComparators albumsComparators = new AlbumsComparators(isAscending());
 
         switch (getColumnSortingMode()) {
             case AlbumSettings.SORT_BY_NAME:
-                Collections.sort(albumArrayList, albumsComparators.getNameComparator());
+                Collections.sort(dispAlbums, albumsComparators.getNameComparator());
                 break;
             case AlbumSettings.SORT_BY_SIZE:
-                Collections.sort(albumArrayList, albumsComparators.getSizeComparator());
+                Collections.sort(dispAlbums, albumsComparators.getSizeComparator());
                 break;
-            case AlbumSettings.SORT_BY_DATE:
-            default:
-                Collections.sort(albumArrayList, albumsComparators.getDateComparator());
+            case AlbumSettings.SORT_BY_DATE: default:
+                Collections.sort(dispAlbums, albumsComparators.getDateComparator());
                 break;
         }
-
-    }
-
-        public void sortAlbums(final Context context) {
-            albumsComparators = new AlbumsComparators(isAscending());
-
-            switch (getColumnSortingMode()) {
-                case AlbumSettings.SORT_BY_NAME:
-                    Collections.sort(dispAlbums, albumsComparators.getNameComparator());
-                    break;
-                case AlbumSettings.SORT_BY_SIZE:
-                    Collections.sort(dispAlbums, albumsComparators.getSizeComparator());
-                    break;
-                case AlbumSettings.SORT_BY_DATE:
-                default:
-                    Collections.sort(dispAlbums, albumsComparators.getDateComparator());
-                    break;
-            }
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 clearCameraIndex();
-                for (int i = 0; i < dispAlbums.size(); i++) {
-                    /*Matcher matcher = CAMERA_FOLDER_PATTERN.matcher(dispAlbums.get(i).getPath());
-                    if (matcher.find()) indexCamera = i;*/
+                for (int i = 0; i < dispAlbums.size(); i++)
+                  if (getAlbum(i).getName().equals("Camera")) {
+                    indexCamera = i; break;
+                  }
 
-                    if (getAlbum(i).getName().equals("Camera")) indexCamera = i;
-                }
-                if (indexCamera != -1)
-                {
+                if (indexCamera != -1) {
                     Album camera = dispAlbums.remove(indexCamera);
-
                     camera.name = context.getString(R.string.camera);
                     dispAlbums.add(0, camera);
                 }
             }
         }).start();
-
-
     }
 
     public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
 
-    public void loadPreviewAlbums(Context applicationContext) {
-        loadPreviewAlbums(applicationContext, hidden);
+    public void loadAlbums(Context applicationContext) {
+        loadAlbums(applicationContext, hidden);
     }
 }

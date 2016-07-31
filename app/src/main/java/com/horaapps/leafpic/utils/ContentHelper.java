@@ -48,7 +48,7 @@ public class ContentHelper {
    * @param file The file
    * @return true if the file is writable.
    */
-  public static boolean isWritable(@NonNull final File file) {
+  private static boolean isWritable(@NonNull final File file) {
 	boolean isExisting = file.exists();
 
 	try {
@@ -211,7 +211,7 @@ public class ContentHelper {
    * @param path The file path.
    * @return The Uri.
    */
-  public static Uri getUriFromFile(Context context, final String path) {
+  private static Uri getUriFromFile(Context context, final String path) {
 	ContentResolver resolver = context.getContentResolver();
 
 	Cursor filecursor = resolver.query(MediaStore.Files.getContentUri("external"),
@@ -292,7 +292,7 @@ public class ContentHelper {
      * @return The DocumentFile
      */
     private static DocumentFile getDocumentFile(Context context, @NonNull final File file, final boolean isDirectory, final boolean createDirectories) {
-        Uri[] treeUris = getTreeUris();
+        Uri[] treeUris = getTreeUris(context);
         Uri treeUri = null;
 
         if (treeUris.length == 0) {
@@ -364,11 +364,12 @@ public class ContentHelper {
    * Get the stored tree URIs.
    *
    * @return The tree URIs.
+   * @param context context
    */
-  public static Uri[] getTreeUris() {
+  private static Uri[] getTreeUris(Context context) {
 	List<Uri> uris = new ArrayList<Uri>();
 
-	Uri uri1 = getSharedPreferenceUri(R.string.preference_internal_uri_extsdcard_photos);
+	Uri uri1 = getSharedPreferenceUri(context, R.string.preference_internal_uri_extsdcard_photos);
 	if (uri1 != null) {
 	  uris.add(uri1);
 	}
@@ -387,8 +388,8 @@ public class ContentHelper {
    *
    * @return the default shared preferences.
    */
-  private static SharedPreferences getSharedPreferences() {
-	return PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+  private static PreferenceUtil getSharedPreferences(Context context) {
+	return PreferenceUtil.getInstance(context);
   }
 
   /**
@@ -397,33 +398,22 @@ public class ContentHelper {
    * @param preferenceId the id of the shared preference.
    * @return the corresponding preference value.
    */
-  public static Uri getSharedPreferenceUri(final int preferenceId) {
-	String uriString = getSharedPreferences().getString(MyApplication.getContext().getString(preferenceId),
-	null);
+  private static Uri getSharedPreferenceUri(Context context , int preferenceId) {
+	String uriString = getSharedPreferences(context).getString(context.getString(preferenceId), null);
 
-	if (uriString == null) {
-	  return null;
-	}
-	else {
-	  return Uri.parse(uriString);
-	}
+	if (uriString == null) return null;
+	return Uri.parse(uriString);
   }
 
   /**
    * Set a shared preference for an Uri.
    *
+   * @param context context
    * @param preferenceId the id of the shared preference.
    * @param uri          the target value of the preference.
    */
-  public static void setSharedPreferenceUri(final int preferenceId, @Nullable final Uri uri) {
-	SharedPreferences.Editor editor = getSharedPreferences().edit();
-	if (uri == null) {
-	  editor.putString(MyApplication.getContext().getString(preferenceId), null);
-	}
-	else {
-	  editor.putString(MyApplication.getContext().getString(preferenceId), uri.toString());
-	}
-	editor.apply();
+  public static void setSharedPreferenceUri(Context context, final int preferenceId, @Nullable final Uri uri) {
+	getSharedPreferences(context).putString(context.getString(preferenceId), uri == null ? null :uri.toString());
   }
     /**
      * Determine the main folder of the external SD card containing the given file.
@@ -432,7 +422,7 @@ public class ContentHelper {
      * null is returned.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static String getExtSdCardFolder(Context context, @NonNull final File file) {
+	private static String getExtSdCardFolder(Context context, @NonNull final File file) {
         String[] extSdPaths = getExtSdCardPaths(context);
         try {
             for (String extSdPath : extSdPaths) {
@@ -740,8 +730,8 @@ public class ContentHelper {
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+    private static String getDataColumn(Context context, Uri uri, String selection,
+										String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -767,7 +757,7 @@ public class ContentHelper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
@@ -775,7 +765,7 @@ public class ContentHelper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    public static boolean isDownloadsDocument(Uri uri) {
+    private static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
@@ -783,7 +773,7 @@ public class ContentHelper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    public static boolean isMediaDocument(Uri uri) {
+    private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 

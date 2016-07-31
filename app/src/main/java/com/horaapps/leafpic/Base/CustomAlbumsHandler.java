@@ -19,11 +19,12 @@ import java.util.ArrayList;
 
 
 public class CustomAlbumsHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "CustomAlbums";
 
     private static final String TABLE_ALBUMS = "albums";
     private static final String ALBUM_PATH = "path";
+    private static final String ALBUM_ID = "id";
     private static final String ALBUM_EXCLUDED = "excluded";
     private static final String ALBUM_COVER = "cover_path";
     private static final String ALBUM_DEAFAULT_SORTMODE = "sort_mode";
@@ -38,6 +39,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " +
                 TABLE_ALBUMS + "(" +
                 ALBUM_PATH + " TEXT," +
+                ALBUM_ID + " INTEGER," +
                 ALBUM_EXCLUDED + " INTEGER," +
                 ALBUM_COVER + " TEXT, " +
                 ALBUM_DEAFAULT_SORTMODE + " INTEGER, " +
@@ -54,10 +56,10 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    ArrayList<File>  getExcludedFolders() {
+    public ArrayList<File> getExcludedFolderFiles() {
         ArrayList<File> list = new ArrayList<File>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, ALBUM_EXCLUDED + "=1", null, null, null, null);
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, ALBUM_EXCLUDED + "=1 AND "+ ALBUM_ID+"=-1", null, null, null, null);
 
         if (cur.moveToFirst()) {
             do list.add(new File(cur.getString(0)));
@@ -68,16 +70,44 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         return list;
     }
 
-    void clearAlbumExclude(String id) {
+    public ArrayList<File> getExcludedFolderFiles(boolean mediaStore) {
+        ArrayList<File> list = new ArrayList<File>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = mediaStore ? ALBUM_EXCLUDED + "=1 AND "+ ALBUM_ID+"!=-1" : ALBUM_EXCLUDED + "=1 AND "+ ALBUM_ID+"=-1";
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, selection, null, null, null, null);
+        if (cur.moveToFirst()) do list.add(new File(cur.getString(0)));
+        while (cur.moveToNext());
+        cur.close();
+        db.close();
+        return list;
+    }
+
+    public ArrayList<String> getExcludedFolderIds() {
+        ArrayList<String> list = new ArrayList<String>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ALBUM_ID}, ALBUM_EXCLUDED + "=1 AND "+ ALBUM_ID+"!=-1", null, null, null, null);
+
+        if (cur.moveToFirst()) do {
+            list.add(cur.getString(0));
+        } while (cur.moveToNext());
+
+        cur.close();
+        db.close();
+        return list;
+    }
+
+    public void clearAlbumExclude(String path) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "=0 WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(id) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "=0 WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(path) + "'");
         db.close();
     }
 
-    public void excludeAlbum(String path) {
+    public void excludeAlbum(String path, long id) {
         checkAndCreateAlbum(path);
         SQLiteDatabase db = this.getWritableDatabase();
+        Log.wtf("asd-db",path+ " + "+id);
         db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_EXCLUDED + "=1 WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(path) + "'");
+        db.execSQL("UPDATE " + TABLE_ALBUMS + " SET " + ALBUM_ID + "="+id+" WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(path) + "'");
         db.close();
     }
 
@@ -106,7 +136,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    String getCoverPathAlbum(String path) {
+    public String getCoverPathAlbum(String path) {
         String s = null;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + ALBUM_COVER + " FROM " + TABLE_ALBUMS + " WHERE " + ALBUM_PATH + "='" + StringUtils.quoteReplace(path)

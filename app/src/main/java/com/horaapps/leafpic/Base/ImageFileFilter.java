@@ -52,7 +52,7 @@ public class ImageFileFilter implements FilenameFilter
         }
     }
 
-    ImageFileFilter(int filter, boolean includeVideo) {
+    public ImageFileFilter(int filter, boolean includeVideo) {
         extensions = new HashSet<String>();
         switch (filter) {
             case FILTER_IMAGES:
@@ -78,11 +78,11 @@ public class ImageFileFilter implements FilenameFilter
         }
     }
 
-    ImageFileFilter(boolean includeVideo) {
+    public ImageFileFilter(boolean includeVideo) {
         this(includeVideo ? FILTER_ALL : FILTER_NO_VIDEO);
     }
 
-    ImageFileFilter() {
+    public ImageFileFilter() {
        this(FILTER_ALL);
     }
 
