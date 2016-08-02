@@ -1,9 +1,11 @@
 package com.horaapps.leafpic.Base.Providers;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.CustomAlbumsHandler;
@@ -11,6 +13,7 @@ import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.utils.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +22,44 @@ import java.util.ArrayList;
 
 public class  MediaStoreProvider {
 
-  public static ArrayList<Album> getAlbums(Context context) {
+
+  public static ArrayList<Album> getAlbums(Context context, boolean hidden) {
+	return hidden ? getHiddenAlbums(context) : getAlbums(context);
+  }
+
+  private static ArrayList<Album> getHiddenAlbums(Context context) {
+	ArrayList<Album> list = new ArrayList<Album>();
+	String[] projection = new String[]{ MediaStore.Files.FileColumns.DATA };
+	Uri uri = MediaStore.Files.getContentUri("external");
+	String selection = MediaStore.Files.FileColumns.DATA +" LIKE '%.nomedia'";
+	Cursor cur = context.getContentResolver().query(uri, projection, selection, null, null);
+	if(cur.moveToFirst()) do {
+	  File folder = new File(cur.getString(0)).getParentFile();
+	  File[] files = folder.listFiles(new ImageFileFilter(true));
+	  if(files != null && files.length > 0) {
+		Album album = new Album(folder.getAbsolutePath(), folder.getName(), files.length);
+		//asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath()));
+
+		long lastMod = Long.MIN_VALUE;
+		File choice = null;
+		for (File file : files) {
+		  if (file.lastModified() > lastMod) {
+			choice = file;
+			lastMod = file.lastModified();
+		  }
+		}
+		if (choice != null){
+		  album.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
+		  list.add(album);
+		}
+	  }
+	  Log.wtf("nomedia", cur.getString(0));
+	} while (cur.moveToNext());
+	cur.close();
+	return list;
+  }
+
+  private static ArrayList<Album> getAlbums(Context context) {
 	ArrayList<Album> list = new ArrayList<Album>();
 
 	CustomAlbumsHandler h = new CustomAlbumsHandler(context);

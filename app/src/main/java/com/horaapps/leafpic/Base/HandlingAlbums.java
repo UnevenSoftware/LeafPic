@@ -70,8 +70,8 @@ public class HandlingAlbums implements Serializable {
 
         ArrayList<Album> list = new ArrayList<Album>();
         clearCameraIndex();
-        if (SP.getBoolean(context.getString(R.string.preference_use_media_store), true) && !hidden) {
-            list.addAll(MediaStoreProvider.getAlbums(context));
+        if (SP.getBoolean(context.getString(R.string.preference_use_media_store), true)) {
+            list.addAll(MediaStoreProvider.getAlbums(context, hidden));
             nameProvider = MediaStoreProvider.class.getName();
         } else {
             AlbumsProvider p = new AlbumsProvider(context);
