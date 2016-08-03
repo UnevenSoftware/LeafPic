@@ -376,14 +376,11 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.action_copy:
-
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
-                bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
+                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
                     @Override
-                    public void onClick(View v) {
-                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                    public void folderSelected(String path) {
                         album.copyPhoto(getApplicationContext(), album.getCurrentMedia().getPath(), path);
                         bottomSheetDialogFragment.dismiss();
                     }
@@ -462,7 +459,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
 
                 AlertDialogsHelper.getTextDialog(PhotoPagerActivity.this,deleteDialog,
-                        getString(R.string.delete), getString(R.string.delete_photo_message));
+                        R.string.delete, R.string.delete_photo_message);
 
                 deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
                 deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -510,12 +507,10 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             case R.id.action_move:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setCurrentPath(album.getPath());
                 bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
-                bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
+                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
                     @Override
-                    public void onClick(View v) {
-                        String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+                    public void folderSelected(String path) {
                         album.moveCurrentPhoto(getApplicationContext(), path);
 
                         if (album.getMedia().size() == 0) {
@@ -541,7 +536,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                 AlertDialog renameDialog =
                         AlertDialogsHelper.getInsertTextDialog(
-                        this,renameDialogBuilder, editTextNewName, getString(R.string.rename_photo_action));
+                        this,renameDialogBuilder, editTextNewName, R.string.rename_photo_action);
 
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     @Override

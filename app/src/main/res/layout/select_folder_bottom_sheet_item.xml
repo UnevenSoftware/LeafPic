@@ -26,7 +26,7 @@
         android:layout_marginRight="@dimen/big_spacing"
         >
         <TextView
-            android:id="@+id/title_bottom_sheet_item"
+            android:id="@+id/name_folder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
@@ -34,7 +34,7 @@
             android:textSize="16sp"
             />
         <TextView
-            android:id="@+id/count_bottom_sheet_item"
+            android:id="@+id/count_folder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""

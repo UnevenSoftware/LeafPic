@@ -63,6 +63,7 @@
     <string name="set_preview">Set as preview</string>
     <string name="clear_preview">Clear preview</string>
     <string name="new_folder">New Folder</string>
+    <string name="create_new_folder">Create new folder</string>
 
     <!--DIALOG MESAGES-->
     <string name="hide_album_message">

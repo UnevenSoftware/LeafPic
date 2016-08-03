@@ -68,7 +68,6 @@ import com.horaapps.leafpic.Base.CustomAlbumsHandler;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Base.ImageFileFilter;
 import com.horaapps.leafpic.Base.Media;
-import com.horaapps.leafpic.Base.Providers.MediaStoreProvider;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.AffixMedia;
@@ -496,137 +495,6 @@ public class MainActivity extends ThemedActivity {
   }
 
   //region TESTING
-  private ArrayAdapter<String> directoryList;
-  private void newFolderDialog(final int value) {
-	final File curFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-	directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-																			  .simple_list_item_1, Arrays.asList(curFolder.list())) {
-	  @Override
-	  public View getView(int position, View convertView, ViewGroup parent) {
-		View view = super.getView(position, convertView, parent);
-		if (view!=null){
-		  TextView text = (TextView) view.findViewById(android.R.id.text1);
-		  text.setTextColor(getTextColor());
-		}
-		return view;
-	  }
-	};
-
-	final AlertDialog.Builder dialogExplorer = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-	View dialogExplorerLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
-
-	final ListView dialogExplorerListView = (ListView) dialogExplorerLayout.findViewById(R.id.folder_list);
-	dialogExplorerListView.setAdapter(directoryList);
-
-	final TextView textViewCurrentPath = (TextView) dialogExplorerLayout.findViewById(R.id.current_path);
-	textViewCurrentPath.setText(curFolder.getAbsolutePath());
-
-	final RelativeLayout relativeLayoutTitle = (RelativeLayout) dialogExplorerLayout.findViewById(R.id.ll_explorer_dialog_title);
-	relativeLayoutTitle.setBackgroundColor(getPrimaryColor());
-
-	final LinearLayout linearCreateNewFolder = (LinearLayout) dialogExplorerLayout.findViewById(R.id.new_folder_layout);
-	((TextView) dialogExplorerLayout.findViewById(R.id.txt_new_folder_description)).setTextColor(getSubTextColor());
-	((IconicsImageView) dialogExplorerLayout.findViewById(R.id.folder)).setColor(getIconColor());
-
-	final EditText editTextFolderName = (EditText) dialogExplorerLayout.findViewById(R.id.folder_name_edit_text);
-	editTextFolderName.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_IN);
-	editTextFolderName.setTextColor(getTextColor());
-
-	/**** Scrollbar ****/
-	Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
-	drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
-
-	/**** New Folder ****/
-	IconicsImageView newFolder = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.toggle_create_new_folder_icon);
-	newFolder.setOnClickListener(new View.OnClickListener(){
-	  @Override
-	  public void onClick(View v){
-		linearCreateNewFolder.setVisibility(linearCreateNewFolder.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
-		dialogExplorerListView.setVisibility(dialogExplorerListView.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
-	  }
-	});
-
-	/**** Btn UP ****/
-	IconicsImageView btnUP = (IconicsImageView) dialogExplorerLayout.findViewById(R.id.directory_up);
-	btnUP.setOnClickListener(new View.OnClickListener(){
-	  @Override
-	  public void onClick(View v){
-		File current = new File(textViewCurrentPath.getText().toString());
-		Log.wtf(TAG,current.getAbsolutePath());
-		if(current.isDirectory() && !(textViewCurrentPath.getText().toString().equals("/")) ) {
-		  directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-																					.simple_list_item_1, HandlingAlbums.getSubFolders(current.getParentFile())){
-			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {
-			  View view = super.getView(position, convertView, parent);
-			  if (view!=null){
-				TextView text = (TextView) view.findViewById(android.R.id.text1);
-				text.setTextColor(getTextColor());
-			  }
-			  return view;
-			}
-		  };
-		  textViewCurrentPath.setText(current.getParentFile().getAbsolutePath());
-		  dialogExplorerListView.setAdapter(directoryList);
-		}
-	  }
-	});
-
-	/**** OK Dialog ****/
-	dialogExplorer.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
-	  @Override
-	  public void onClick(DialogInterface dialog, int which) {
-		if(linearCreateNewFolder.getVisibility()==View.VISIBLE && !editTextFolderName.getText().toString().equals("")) {
-		  String path = textViewCurrentPath.getText().toString();
-		  File folder = new File(path + File.separator + editTextFolderName.getText().toString());
-		  boolean success = true;
-		  if (!folder.exists())
-			success = folder.mkdir();
-		  if (success) {
-			if(value==1){
-			  album.copySelectedPhotos(getApplicationContext(), path + File.separator + editTextFolderName.getText().toString() + File.separator);
-			  finishEditMode();
-			} else { new MovePhotos().execute(path + File.separator + editTextFolderName.getText().toString() + File.separator);}
-		  } else {
-			Toast.makeText(MainActivity.this, "Folder Already Exist!", Toast.LENGTH_SHORT).show();
-		  }
-		}
-	  }
-	});
-	/**** CANCEL Dialog ****/
-	dialogExplorer.setNegativeButton(R.string.cancel, null);
-	/**** Set View ****/
-	dialogExplorer.setView(dialogExplorerLayout);
-
-	/**** ListView Click Listener ****/
-	dialogExplorerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-	  @Override
-	  public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-		File selected = new File(textViewCurrentPath.getText()+"/"+ directoryList.getItem(position));
-
-		if(selected.isDirectory()){
-		  directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-																					.simple_list_item_1, HandlingAlbums.getSubFolders(selected)) {
-			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {
-			  View view = super.getView(position, convertView, parent);
-			  if (view!=null){
-				TextView text = (TextView) view.findViewById(android.R.id.text1);
-				text.setTextColor(getTextColor());
-			  }
-			  return view;
-			}
-		  };
-		  textViewCurrentPath.setText(selected.getAbsolutePath());
-		  dialogExplorerListView.setAdapter(directoryList);
-		} else {
-		  Toast.makeText(getApplicationContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT).show();
-		  //dialog.dismiss();
-		}
-	  }
-	});
-	dialogExplorer.show();
-  }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   @Override
@@ -651,8 +519,7 @@ public class MainActivity extends ThemedActivity {
 	final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
 	AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
-			getString(R.string.sd_card_write_permission_title),
-			getString(R.string.sd_card_permissions_message));
+			R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
 
 	dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
 	  @Override
@@ -692,9 +559,8 @@ public class MainActivity extends ThemedActivity {
 	setDrawerTheme();
 	recyclerViewAlbums.setBackgroundColor(getBackgroundColor());
 	recyclerViewMedia.setBackgroundColor(getBackgroundColor());
-	mediaAdapter.updatePlaceholder(getApplicationContext(), getBaseTheme());
-	albumsAdapter.updateTheme(getApplicationContext(), getBaseTheme());
-
+	mediaAdapter.updatePlaceholder(getApplicationContext());
+	albumsAdapter.updateTheme();
 	/**** DRAWER ****/
 	setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
 
@@ -849,19 +715,12 @@ public class MainActivity extends ThemedActivity {
 	findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
-		comingSoonDialog("Wallpapers");
+		Toast.makeText(MainActivity.this, "Cooming Soon!", Toast.LENGTH_SHORT).show();
 	  }
 	});
   }
   //endregion
 
-
-  private void comingSoonDialog(String title) {
-	AlertDialog.Builder comingSoonDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-	AlertDialogsHelper.getTextDialog(this, comingSoonDialog, title, getString(R.string.coming_soon));
-	comingSoonDialog.setPositiveButton(this.getString(R.string.ok_action), null);
-	comingSoonDialog.show();
-  }
 
   private void updateSelectedStuff() {
 	int c;
@@ -1079,8 +938,8 @@ public class MainActivity extends ThemedActivity {
 		final AlertDialog.Builder hideDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
 		AlertDialogsHelper.getTextDialog(MainActivity.this,hideDialogBuilder,
-				getString(hidden ? R.string.unhide : R.string.hide),
-				getString(hidden ? R.string.unhide_album_message : R.string.hide_album_message));
+				hidden ? R.string.unhide : R.string.hide,
+				hidden ? R.string.unhide_album_message : R.string.hide_album_message);
 
 		hideDialogBuilder.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
@@ -1162,7 +1021,7 @@ public class MainActivity extends ThemedActivity {
 		}
 
 		AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-		AlertDialogsHelper.getTextDialog(this, deleteDialog, getString(R.string.delete), getString(albumsMode || (!albumsMode && !editMode) ? R.string.delete_album_message : R.string.delete_photos_message));
+		AlertDialogsHelper.getTextDialog(this, deleteDialog, R.string.delete, albumsMode || (!albumsMode && !editMode) ? R.string.delete_album_message : R.string.delete_photos_message);
 
 		deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
 		deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -1367,6 +1226,7 @@ public class MainActivity extends ThemedActivity {
 
 	  //region Affix
 	  case  R.id.affixPhoto:
+		// TODO: 03/08/16 move this away from this activity
 
 		final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 		final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
@@ -1523,21 +1383,10 @@ public class MainActivity extends ThemedActivity {
 	  case R.id.action_move:
 
 		bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-		bottomSheetDialogFragment.setCurrentPath(album.getPath());
 		bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
-		bottomSheetDialogFragment.setHidden(hidden);
-		bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
-		bottomSheetDialogFragment.setOnClickListenerNewFolder(new View.OnClickListener(){
+		bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
 		  @Override
-		  public void onClick(View v) {
-			bottomSheetDialogFragment.dismiss();
-			newFolderDialog(2);
-		  }
-		});
-		bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
-		  @Override
-		  public void onClick(View v) {
-			String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+		  public void folderSelected(String path) {
 			new MovePhotos().execute(path);
 			bottomSheetDialogFragment.dismiss();
 		  }
@@ -1547,27 +1396,15 @@ public class MainActivity extends ThemedActivity {
 
 	  case R.id.action_copy:
 		bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-		bottomSheetDialogFragment.setCurrentPath(album.getPath());
 		bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
-		bottomSheetDialogFragment.setAlbumArrayList(albums.dispAlbums);
-		bottomSheetDialogFragment.setHidden(hidden);
-		bottomSheetDialogFragment.setOnClickListenerNewFolder(new View.OnClickListener(){
+		bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
 		  @Override
-		  public void onClick(View v) {
-			bottomSheetDialogFragment.dismiss();
-			newFolderDialog(1);
-		  }
-		});
-		bottomSheetDialogFragment.setOnClickListener(new View.OnClickListener() {
-		  @Override
-		  public void onClick(View v) {
-			String path = v.findViewById(R.id.title_bottom_sheet_item).getTag().toString();
+		  public void folderSelected(String path) {
 			boolean success = album.copySelectedPhotos(getApplicationContext(), path);
 			finishEditMode();
 			bottomSheetDialogFragment.dismiss();
 			if (!success)
 			  requestSdCardPermissions();
-
 		  }
 		});
 		bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
@@ -1579,7 +1416,7 @@ public class MainActivity extends ThemedActivity {
 		editTextNewName.setText(albumsMode ? albums.getSelectedAlbum(0).getName() : album.getName());
 
 		AlertDialogsHelper.getInsertTextDialog(MainActivity.this, renameDialogBuilder,
-				editTextNewName, getString(R.string.rename_album));
+				editTextNewName, R.string.rename_album);
 
 		renameDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 

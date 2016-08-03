@@ -53,7 +53,7 @@ public class SecurityHelper {
 
         passwordDialogTitle.setBackgroundColor(activity.getPrimaryColor());
         passwordDialogCard.setBackgroundColor(activity.getCardBackgroundColor());
-        ThemedActivity.setCursorDrawableColor(editxtPassword, activity.getTextColor());
+        ThemeHelper.setCursorDrawableColor(editxtPassword, activity.getTextColor());
         editxtPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editxtPassword.setTextColor(activity.getTextColor());
         passwordDialog.setView(PasswordDialogLayout);

@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.PreferenceUtil;
+import com.horaapps.leafpic.utils.ThemeHelper;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
@@ -36,292 +38,165 @@ import java.util.ArrayList;
  */
 public class ThemedActivity extends AppCompatActivity {
 
-    public static final int DARK_THEME = 2;
-    public static final int LIGHT_THEME = 1;
-    public static final int AMOLED_THEME = 3;
 
-    private SharedPreferences SP;
-
-    private int primaryColor;
-    private int accentColor;
-    private int basicTheme;
-    private boolean coloredNavBar;
-    private boolean oscuredStatusBar;
-    private boolean applyThemeImgAct;
+  private ThemeHelper themeHelper;
+  private PreferenceUtil SP;
 
 
-    public boolean isNavigationBarColored() {
-        return coloredNavBar;
-    }
+  private boolean coloredNavBar;
+  private boolean oscuredStatusBar;
+  private boolean applyThemeImgAct;
 
-    public boolean isTranslucentStatusBar() {
-        return oscuredStatusBar;
-    }
 
-    protected boolean isApplyThemeOnImgAct() {
-        return applyThemeImgAct;
-    }
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	SP = PreferenceUtil.getInstance(getApplicationContext());
+	themeHelper = new ThemeHelper(getApplicationContext());
+  }
 
-    protected boolean isTransparencyZero() {
-        return 255 - SP.getInt(getString(R.string.preference_transparency), 0) == 255;
-    }
+  @Override
+  public void onResume(){
+	super.onResume();
+	updateTheme();
+  }
 
-    public int getTransparency() {
-        return 255 - SP.getInt(getString(R.string.preference_transparency), 0);
-    }
+  public void updateTheme(){
+	themeHelper.updateTheme();
+	coloredNavBar = SP. getBoolean(getString(R.string.preference_colored_nav_bar), false);
+	oscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
+	applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
+  }
 
-    public int getPrimaryColor() {
-        return primaryColor;
-    }
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public void setNavBarColor() {
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	  if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
+	  else
+		getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
+	}
+  }
 
-    public int getAccentColor() {
-        return accentColor;
-    }
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  protected void setStatusBarColor() {
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	  if (isTranslucentStatusBar())
+		getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+	  else
+		getWindow().setStatusBarColor(getPrimaryColor());
+	}
+  }
 
-    public int getBaseTheme(){ return  basicTheme; }
+  protected void setScrollViewColor(ScrollView scr){
+	themeHelper.setScrollViewColor(scr);
+  }
 
-    protected int getBackgroundColor(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_background);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case LIGHT_THEME:
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);
-        }
-        return color;
-    }
+  public void setCursorDrawableColor(EditText editText, int color) {
+	// TODO: 02/08/16 remove thhis
+	ThemeHelper.setCursorDrawableColor(editText, color);
+  }
 
-    protected Drawable getPlaceHolder(){
-        switch (basicTheme){
-            case DARK_THEME : return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_empty);
-            case AMOLED_THEME : return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_empty_amoled);
-            case LIGHT_THEME: return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_empty_white);
-        }
-        return null;
-    }
 
-    protected int getInvertedBackgroundColor(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_background);break;
-            case LIGHT_THEME:
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);
-        }
-        return color;
-    }
 
-    public int getTextColor(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_200);break;
-            case LIGHT_THEME:
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_800);
-        }
-        return color;
-    }
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public void setRecentApp(String text){
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	  BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
+	  setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
+	}
+  }
 
-    public int getSubTextColor(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_400);break;
-            case LIGHT_THEME:
-            default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_grey_600);
-        }
-        return color;
-    }
 
-    public int getCardBackgroundColor(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case LIGHT_THEME:default:color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
-        }
-        return color;
-    }
+  public boolean isNavigationBarColored() {
+	return coloredNavBar;
+  }
 
-    public int getIconColor(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME: case AMOLED_THEME: color = ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000);break;
-            case LIGHT_THEME: default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_primary_icon);
-        }
-        return color;
-    }
+  public boolean isTranslucentStatusBar() {
+	return oscuredStatusBar;
+  }
 
-    protected int getDrawerBackground(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_dark_cards);break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000);break;
-            case LIGHT_THEME:
-            default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_light_cards);
-        }
-        return color;
-    }
+  protected boolean isApplyThemeOnImgAct() {
+	return applyThemeImgAct;
+  }
 
-    public int getDialogStyle(){
-        int style;
-        switch (getBaseTheme()){
-            case DARK_THEME: style = R.style.AlertDialog_Dark;break;
-            case AMOLED_THEME: style = R.style.AlertDialog_Dark_Amoled;break;
-            case LIGHT_THEME: default: style = R.style.AlertDialog_Light;break;
-        }
-        return style;
-    }
+  protected boolean isTransparencyZero() {
+	return 255 - SP.getInt(getString(R.string.preference_transparency), 0) == 255;
+  }
 
-    protected int getPopupToolbarStyle(){
-        int style;
-        switch (getBaseTheme()){
-            case DARK_THEME: style = R.style.DarkActionBarMenu;break;
-            case AMOLED_THEME: style = R.style.AmoledDarkActionBarMenu;break;
-            case LIGHT_THEME: default: style = R.style.LightActionBarMenu;
-        }
-        return style;
-    }
+  public int getTransparency() {
+	return 255 - SP.getInt(getString(R.string.preference_transparency), 0);
+  }
 
-    protected ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
-        switch (getBaseTheme()){
-            case AMOLED_THEME:
-            case DARK_THEME: return new ArrayAdapter<String>(this, R.layout.spinner_item_light, items);
-            case LIGHT_THEME: default: return new ArrayAdapter<String>(this, R.layout.spinner_item_dark, items);
-        }
-    }
+  public int getPrimaryColor() {
+	return themeHelper.getPrimaryColor();
+  }
 
-    protected int getDefaultThemeToolbarColor3th(){
-        int color;
-        switch (basicTheme){
-            case DARK_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000); break;
-            case AMOLED_THEME:color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);break;
-            case LIGHT_THEME: default: color = ContextCompat.getColor(getApplicationContext(), R.color.md_blue_grey_800);
-        }
-        return color;
-    }
+  public int getAccentColor() {
+	return themeHelper.getAccentColor();
+  }
 
-    private ColorStateList getRadioButtonColor(){
-        return new ColorStateList(
-                new int[][]{
-                        new int[]{ -android.R.attr.state_enabled }, //disabled
-                        new int[]{ android.R.attr.state_enabled } //enabled
-                }, new int[] { getTextColor(), getAccentColor() });
-    }
+  public int getBaseTheme(){ return  themeHelper.getBaseTheme(); }
 
-    protected void updateRadioButtonColor(RadioButton radioButton) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            radioButton.setButtonTintList(getRadioButtonColor());
-            radioButton.setTextColor(getTextColor());
-        }
-    }
-    protected void setRadioTextButtonColor(RadioButton radioButton, int color) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            radioButton.setButtonTintList(getRadioButtonColor());
-            radioButton.setTextColor(color);
-        }
-    }
+  protected int getBackgroundColor(){
+	return themeHelper.getCardBackgroundColor();
+  }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void setNavBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
-            else
-                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
-        }
-    }
+  protected Drawable getPlaceHolder(){
+	return themeHelper.getPlaceHolder();
+  }
 
-    public void updateSwitchColor(SwitchCompat sw, int color){
-        sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getSubTextColor(), PorterDuff.Mode.MULTIPLY);
-        sw.getTrackDrawable().setColorFilter(sw.isChecked() ? ColorPalette.getTransparentColor(color,100): getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-    }
+  protected int getInvertedBackgroundColor(){
+	return themeHelper.getInvertedBackgroundColor();
+  }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        updateTheme();
-    }
+  public int getTextColor(){
+	return themeHelper.getTextColor();
+  }
 
-    public IconicsDrawable getToolbarIcon(IIcon icon){
-        return new IconicsDrawable(this).icon(icon).color(Color.WHITE).sizeDp(18);
-    }
+  public int getSubTextColor(){
+	return themeHelper.getSubTextColor();
+  }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        updateTheme();
-    }
+  public int getCardBackgroundColor(){
+	return themeHelper.getCardBackgroundColor();
+  }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    protected void setStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isTranslucentStatusBar())
-                getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
-            else
-                getWindow().setStatusBarColor(getPrimaryColor());
-        }
-    }
+  public int getIconColor(){
+	return themeHelper.getIconColor();
+  }
 
-    protected void setScrollViewColor(ScrollView scr){
-        try
-        {
-            Field mScrollCacheField = View.class.getDeclaredField("mScrollCache");
-            mScrollCacheField.setAccessible(true);
-            Object mScrollCache = mScrollCacheField.get(scr); // scr is your Scroll View
+  protected int getDrawerBackground(){
+	return themeHelper.getDrawerBackground();
+  }
 
-            Field scrollBarField = mScrollCache.getClass().getDeclaredField("scrollBar");
-            scrollBarField.setAccessible(true);
-            Object scrollBar = scrollBarField.get(mScrollCache);
+  public int getDialogStyle(){
+	return themeHelper.getDialogStyle();
+  }
 
-            Method method = scrollBar.getClass().getDeclaredMethod("setVerticalThumbDrawable", Drawable.class);
-            method.setAccessible(true);
+  protected int getPopupToolbarStyle(){
+	return themeHelper.getPopupToolbarStyle();
+  }
 
-            ColorDrawable ColorDraw = new ColorDrawable(getPrimaryColor());
-            method.invoke(scrollBar, ColorDraw);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+  protected ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
+	return themeHelper.getSpinnerAdapter(items);
+  }
 
-    public static void setCursorDrawableColor(EditText editText, int color) {
-        try {
-            Field fCursorDrawableRes =
-                    TextView.class.getDeclaredField("mCursorDrawableRes");
-            fCursorDrawableRes.setAccessible(true);
-            int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
-            Field fEditor = TextView.class.getDeclaredField("mEditor");
-            fEditor.setAccessible(true);
-            Object editor = fEditor.get(editText);
-            Class<?> clazz = editor.getClass();
-            Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
-            fCursorDrawable.setAccessible(true);
+  protected int getDefaultThemeToolbarColor3th(){
+	return themeHelper.getDefaultThemeToolbarColor3th();
+  }
 
-            Drawable[] drawables = new Drawable[2];
-            drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-            drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            fCursorDrawable.set(editor, drawables);
-        } catch (final Throwable ignored) {  }
-    }
+  protected void updateRadioButtonColor(RadioButton radioButton) {
+	themeHelper.updateRadioButtonColor(radioButton);
+  }
+  protected void setRadioTextButtonColor(RadioButton radioButton, int color) {
+	themeHelper.setRadioTextButtonColor(radioButton, color);
+  }
 
-    public void updateTheme(){
-        this.primaryColor = SP.getInt(getString(R.string.preference_primary_color),
-                ContextCompat.getColor(getApplicationContext(), R.color.md_indigo_500));
-        this.accentColor = SP.getInt(getString(R.string.preference_accent_color),
-                ContextCompat.getColor(getApplicationContext(), R.color.md_light_blue_500));
-        basicTheme = SP.getInt(getString(R.string.preference_base_theme), LIGHT_THEME);
-        coloredNavBar = SP. getBoolean(getString(R.string.preference_colored_nav_bar), false);
-        oscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
-        applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
-    }
+  public void updateSwitchColor(SwitchCompat sw, int color){
+	themeHelper.updateSwitchColor(sw, color);
+  }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void setRecentApp(String text){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
-            setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
-        }
-    }
+  public IconicsDrawable getToolbarIcon(IIcon icon){
+	return themeHelper.getToolbarIcon(icon);
+  }
 }

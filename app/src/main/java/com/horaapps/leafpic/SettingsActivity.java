@@ -28,12 +28,17 @@ import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.SecurityHelper;
+import com.horaapps.leafpic.utils.ThemeHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
+
+import static com.horaapps.leafpic.utils.ThemeHelper.AMOLED_THEME;
+import static com.horaapps.leafpic.utils.ThemeHelper.DARK_THEME;
+import static com.horaapps.leafpic.utils.ThemeHelper.LIGHT_THEME;
 
 /**
  * Created by Jibo on 02/03/2016.

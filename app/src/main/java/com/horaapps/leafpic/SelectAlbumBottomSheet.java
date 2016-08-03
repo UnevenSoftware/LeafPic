@@ -5,362 +5,268 @@ package com.horaapps.leafpic;
  */
 
 import android.app.Dialog;
-import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
+import android.content.DialogInterface;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Base.FoldersFileFilter;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.AlertDialogsHelper;
+import com.horaapps.leafpic.utils.ThemeHelper;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
-    private IconicsImageView imgHiddenDefault;
-    private ProgressBar progressBar;
+  private String title;
+  private ArrayList<File> folders;
 
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
+  private BottomSheetAlbumsAdapter adapter;
+  private ThemeHelper theme;
 
-    private boolean hidden = false;
-    private HandlingAlbums albums;
+  private boolean exploreMode = false;
+  private boolean canGoBack = false;
+  private IconicsImageView imgExploreMode;
+  private LinearLayout exploreModePanel;
+  private TextView currentFolderPath;
 
-    private LinearLayout llNewFolder;
-    private ArrayList<Album> albumArrayList = null;
-    private SharedPreferences SP;
-    private View.OnClickListener onClickListener;
-    private View.OnClickListener onClickListenerNewFolder;
+  private SelectAlbumInterface selectAlbumInterface;
 
-    void setCurrentPath(String currentPath) {
-        this.currentPath = currentPath;
-    }
+  public boolean canGoBack() {
+	return canGoBack;
+  }
 
-    void setAlbumArrayList(ArrayList<Album> albumArrayList){ this.albumArrayList = albumArrayList; }
+  interface SelectAlbumInterface {
+	void folderSelected(String path);
+  }
 
-    private String currentPath;
-    private BottomSheetAlbumsAdapter adapter;
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    private String title;
-
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    void setOnClickListenerNewFolder(View.OnClickListener onClickListenerNF){
-        onClickListenerNewFolder = onClickListenerNF;
-    }
-
-    private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
-        @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                dismiss();
-            }
-        }
-        @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-        }
-    };
-
-    @Override
-    public void setupDialog(Dialog dialog, int style) {
-        super.setupDialog(dialog, style);
-        albums = new HandlingAlbums(getContext());
-        View contentView = View.inflate(getContext(), R.layout.copy_move_bottom_sheet, null);
-        RecyclerView mRecyclerView = (RecyclerView) contentView.findViewById(R.id.rv_modal_dialog_albums);
-        adapter = new BottomSheetAlbumsAdapter(onClickListener);
-        mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(dialog.getContext(), 1));
-
-        /**SET UP DIALOG THEME**/
-        SP = PreferenceManager.getDefaultSharedPreferences(dialog.getContext());
-
-        /**** Scrollbar *****/
-        Drawable drawableScrollBar = ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar);
-        drawableScrollBar.setColorFilter(new PorterDuffColorFilter(SP.getInt("primary_color",
-                ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)), PorterDuff.Mode.SRC_ATOP));
-
-        contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(SP.getInt("primary_color",
-                ContextCompat.getColor(dialog.getContext(), R.color.md_indigo_500)));
-
-        TextView textViewTitle = (TextView) contentView.findViewById(R.id.bottom_sheet_title);
-        progressBar = (ProgressBar) contentView.findViewById(R.id.spinner_loading);
-        textViewTitle.setText(title);
-        textViewTitle.setTextColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
-
-        //TODO:WILL BE REPLACED WITH EXPANDABLE VIEW
-        imgHiddenDefault = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
-        imgHiddenDefault.setColor(ContextCompat.getColor(dialog.getContext(),R.color.md_white_1000));
-
-        imgHiddenDefault.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hidden = !hidden;
-                new ToggleAlbumsTask().execute(hidden);
-            }
-        });
-
-        TextView txtNewFolder = (TextView) contentView.findViewById(R.id.Create_New_Folder_Item);
-        IconicsImageView imgNewFolder = (IconicsImageView) contentView.findViewById(R.id.Create_New_Folder_Icon);
-        llNewFolder = (LinearLayout) contentView.findViewById(R.id.ll_create_new_folder);
-        llNewFolder.setOnClickListener(onClickListenerNewFolder);
-
-        LinearLayout background = (LinearLayout) contentView.findViewById(R.id.ll_album_modal_dialog);
-        switch (SP.getInt(getContext().getString(R.string.preference_base_theme), ThemedActivity.LIGHT_THEME)) {
-            case ThemedActivity.LIGHT_THEME:
-                default:
-                background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_light_cards));
-                imgNewFolder.setColor(ContextCompat.getColor(getContext(), R.color.md_light_primary_icon));
-                txtNewFolder.setTextColor(ContextCompat.getColor(getDialog().getContext(),R.color.md_grey_800));
-                break;
-            case ThemedActivity.DARK_THEME:
-                background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_dark_cards));
-                imgNewFolder.setColor(ContextCompat.getColor(getContext(), R.color.md_dark_primary_icon));
-                txtNewFolder.setTextColor(ContextCompat.getColor(getDialog().getContext(),R.color.md_grey_200));
-                break;
-            case ThemedActivity.AMOLED_THEME:
-                background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
-                imgNewFolder.setColor(ContextCompat.getColor(getContext(), R.color.md_dark_primary_icon));
-                txtNewFolder.setTextColor(ContextCompat.getColor(getDialog().getContext(),R.color.md_grey_200));
-                break;
-        }
-
-        dialog.setContentView(contentView);
-        CoordinatorLayout.LayoutParams layoutParams =
-                (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
-        CoordinatorLayout.Behavior behavior = layoutParams.getBehavior();
-        if (behavior != null && behavior instanceof BottomSheetBehavior) {
-            ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
-        }
-
-        llNewFolder.setVisibility(View.GONE);
-        if (albumArrayList == null) {
-            albumArrayList = new ArrayList<Album>();
-            new ToggleAlbumsTask().execute(hidden);
-        } else {
-            progressBar.setVisibility(View.INVISIBLE);
-            adapter.notifyDataSetChanged();
-            imgHiddenDefault.setIcon(hidden ? "gmd-folder" : "faw-low-vision");
-            llNewFolder.setVisibility(View.VISIBLE);
-        }
-    }
+  void setSelectAlbumInterface(SelectAlbumInterface selectAlbumInterface) {
+	this.selectAlbumInterface = selectAlbumInterface;
+  }
 
 
-    Button btnUP;
-    TextView textFolder;
-    ListView dialog_ListView;
-    File root;
-    File curFolder;
-    private List<String> fileList = new ArrayList<String>();
-
-    ArrayAdapter<String> directoryList;
-
-    private void newFolderDialog() {
-        //Toast.makeText(getContext(),"New Folder",Toast.LENGTH_SHORT).show();
+  private View.OnClickListener onClickListener = new View.OnClickListener() {
+	@Override
+	public void onClick(View view) {
+	  String path = view.findViewById(R.id.name_folder).getTag().toString();
+	  if (isExploreMode()) displayContentFolder(new File(path));
+	  else selectAlbumInterface.folderSelected(path);
+	}
+  };
 
 
-        /*final File curFolder = new File(Environment.getExternalStorageDirectory()
-                .getAbsolutePath());
+  @Override
+  public void setupDialog(Dialog dialog, int style) {
+	super.setupDialog(dialog, style);
 
-        directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-                .simple_list_item_1, Arrays.asList(curFolder.list()));
+	View contentView = View.inflate(getContext(), R.layout.select_folder_bottom_sheet, null);
+	theme = new ThemeHelper(getContext());
 
-        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+	RecyclerView mRecyclerView = (RecyclerView) contentView.findViewById(R.id.folders);
+	mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+	adapter = new BottomSheetAlbumsAdapter();
+	mRecyclerView.setAdapter(adapter);
 
-        IconicsImageView btnUP;
-        final ListView dialog_ListView;
+	exploreModePanel = (LinearLayout) contentView.findViewById(R.id.explore_mode_panel);
+	currentFolderPath = (TextView) contentView.findViewById(R.id.bottom_sheet_sub_title);
+	imgExploreMode = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
+	imgExploreMode.setOnClickListener(new View.OnClickListener() {
+	  @Override
+	  public void onClick(View v) {
+		toggleExplorerMode(!exploreMode);
+	  }
+	});
 
-        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_explorer, null);
+	toggleExplorerMode(false);
 
-        final TextView textViewCurrentPath = (TextView) dialogLayout.findViewById(R.id.current_path);
-        btnUP = (IconicsImageView) dialogLayout.findViewById(R.id.directory_up);
-        btnUP.setColor(getIconColor());
-        ((IconicsImageView) dialogLayout.findViewById(R.id.folder_icon)).setColor(getIconColor());
-        dialog_ListView = (ListView) dialogLayout.findViewById(R.id.folder_list);
-        btnUP.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                File current = new File(textViewCurrentPath.getText().toString());
-                Log.wtf(TAG,current.getAbsolutePath());
-                if(current.isDirectory()) {
-                    directoryList = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
-                            .simple_list_item_1, HandlingAlbums.getSubFolders(current.getParentFile()));
-                    textViewCurrentPath.setText(current.getParentFile().getAbsolutePath());
-                    dialog_ListView.setAdapter(directoryList);
-                }
-            }
-        });
-        deleteDialog.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String path = textViewCurrentPath.getText().toString();
-                Toast.makeText(getContext(),"asd", Toast.LENGTH_SHORT).show();
-            }
-        });
+	/**SET UP THEME**/
+	theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
+	contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(theme.getPrimaryColor());
+	contentView.findViewById(R.id.ll_select_folder).setBackgroundColor(theme.getCardBackgroundColor());
+	((TextView) contentView.findViewById(R.id.bottom_sheet_title)).setText(title);
 
-        /*deleteDialog.setNeutralButton(R.string.new_folder, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String path = textViewCurrentPath.getText().toString();
-                Toast.makeText(MainActivity.this, "new folder", Toast.LENGTH_SHORT).show();
-            }
-        });*/
+	((IconicsImageView) contentView.findViewById(R.id.create_new_folder)).setColor(theme.getIconColor());
+	((TextView) contentView.findViewById(R.id.create_new_folder_text)).setTextColor(theme.getSubTextColor());
+	((IconicsImageView) contentView.findViewById(R.id.done)).setColor(theme.getIconColor());
 
+	contentView.findViewById(R.id.done).setOnClickListener(new View.OnClickListener() {
+	  @Override
+	  public void onClick(View view) {
+		selectAlbumInterface.folderSelected(currentFolderPath.getText().toString());
+	  }
+	});
 
-        /*dialog_ListView.setAdapter(directoryList);
-        textViewCurrentPath.setText(curFolder.getAbsolutePath());
-        deleteDialog.setView(dialogLayout);
+	contentView.findViewById(R.id.ll_create_new_folder).setOnClickListener(new View.OnClickListener() {
+	  @Override
+	  public void onClick(View view) {
+		final EditText editText = new EditText(getContext());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), theme.getDialogStyle());
+		AlertDialogsHelper.getInsertTextDialog(((ThemedActivity) getActivity()), builder,
+				editText, R.string.new_folder);
+		builder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+		  @Override
+		  public void onClick(DialogInterface dialogInterface, int i) {
+			File folderPath = new File(currentFolderPath.getText().toString() + File.separator + editText.getText().toString());
+			if (folderPath.mkdir()) displayContentFolder(folderPath);
 
-        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File selected = new File(textViewCurrentPath.getText()+"/"+ directoryList.getItem(position));
-
-                Log.wtf("asd",selected.isDirectory()+ " - " + selected.getAbsolutePath());
-                if(selected.isDirectory()){
-                    directoryList = new ArrayAdapter<String>(getContext(), android.R.layout
-                            .simple_list_item_1, HandlingAlbums.getSubFolders(selected));
-                    textViewCurrentPath.setText(selected.getAbsolutePath());
-                    dialog_ListView.setAdapter(directoryList);
-                } else {
-                    Toast.makeText(getContext(), selected.toString() + "selected ", Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        });
-
-        deleteDialog.show();*/
+		  }
+		});
+		builder.show();
+	  }
+	});
 
 
-    }
+	dialog.setContentView(contentView);
+	CoordinatorLayout.LayoutParams layoutParams =
+			(CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
+	CoordinatorLayout.Behavior behavior = layoutParams.getBehavior();
+	if (behavior != null && behavior instanceof BottomSheetBehavior) {
+	  ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
+	}
+	adapter.notifyDataSetChanged();
+  }
 
+  private void displayContentFolder(File dir) {
+	canGoBack = false;
+	if(dir.canRead()) {
+	  folders = new ArrayList<File>();
+	  File parent = dir.getParentFile();
+	  if (parent.canRead()) {
+		canGoBack = true;
+		folders.add(0, parent);
+	  }
+	  File[] files = dir.listFiles(new FoldersFileFilter());
+	  if (files != null && files.length > 0) {
+		folders.addAll(new ArrayList<File>(Arrays.asList(files)));
+		currentFolderPath.setText(dir.getAbsolutePath());
+	  }
+	  currentFolderPath.setText(dir.getAbsolutePath());
+	  adapter.notifyDataSetChanged();
+	}
+  }
 
+  private void setExploreMode(boolean exploreMode) {
+	this.exploreMode = exploreMode;
+  }
 
-    private class ToggleAlbumsTask extends AsyncTask<Boolean, Integer, Void> {
+  private boolean isExploreMode() { return  exploreMode; }
 
-        @Override
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
+  public void setTitle(String title) {
+	this.title = title;
+  }
 
-        @Override
-        protected Void doInBackground(Boolean... arg0) {
-            //albumArrayList = albums.getValidFolders(arg0[0]);
-            return null;
-        }
+  private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
+	@Override
+	public void onStateChanged(@NonNull View bottomSheet, int newState) {
+	  if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+		dismiss();
+	  }
+	}
+	@Override
+	public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+	}
+  };
 
-        @Override
-        protected void onPostExecute(Void result) {
-            progressBar.setVisibility(View.INVISIBLE);
-            adapter.notifyDataSetChanged();
-            imgHiddenDefault.setIcon(hidden ? "gmd-folder" : "faw-low-vision");
-            llNewFolder.setVisibility(View.VISIBLE);
-        }
-    }
+  private void toggleExplorerMode(boolean enabled) {
+	folders = new ArrayList<File>();
+	setExploreMode(enabled);
+	if(enabled) {
+	  displayContentFolder(Environment.getExternalStorageDirectory());
+	  imgExploreMode.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_folder));
+	  exploreModePanel.setVisibility(View.VISIBLE);
+	} else {
+	  currentFolderPath.setText(R.string.local_folder);
+	  for (Album album : ((MyApplication) getActivity().getApplicationContext()).getAlbums().dispAlbums) {
+		folders.add(new File(album.getPath()));
+	  }
+	  imgExploreMode.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_explore));
+	  exploreModePanel.setVisibility(View.GONE);
+	}
+	adapter.notifyDataSetChanged();
+  }
 
-    class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
+  class BottomSheetAlbumsAdapter extends RecyclerView.Adapter<BottomSheetAlbumsAdapter.ViewHolder> {
 
-        private View.OnClickListener listener;
-        BottomSheetAlbumsAdapter(View.OnClickListener lis){
-            listener=lis;
-         }
+	BottomSheetAlbumsAdapter() {}
 
-        public BottomSheetAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.copy_move_bottom_sheet_item, parent, false);
-            v.setOnClickListener(listener);
-            v.findViewById(R.id.ll_album_bottom_sheet_item).setOnClickListener(listener);
-            return new ViewHolder(
-                    MaterialRippleLayout.on(v)
-                            .rippleOverlay(true)
-                            .rippleAlpha(0.2f)
-                            .rippleColor(0xFF585858)
-                            .rippleHover(true)
-                            .rippleDuration(1)
-                            .create()
-            );
-        }
+	public BottomSheetAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	  View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_folder_bottom_sheet_item, parent, false);
+	  v.setOnClickListener(onClickListener);
+	  return new ViewHolder(MaterialRippleLayout.on(v)
+								 .rippleOverlay(true)
+								 .rippleAlpha(0.2f)
+								 .rippleColor(0xFF585858)
+								 .rippleHover(true)
+								 .rippleDuration(1)
+								 .create()
+	  );
+	}
 
-        @Override
-        public void onBindViewHolder(final BottomSheetAlbumsAdapter.ViewHolder holder, final int position) {
+	@Override
+	public void onBindViewHolder(final BottomSheetAlbumsAdapter.ViewHolder holder, final int position) {
 
-            final Album a = albumArrayList.get(position);
-            holder.album_name.setText(a.getName());
-            holder.album_media_count.setText(String.format(Locale.getDefault(),"%d %s",a.getCount(),a.getContentDescription(getDialog().getContext())));
-            holder.album_name.setTag(a.getPath());
+	  File f = folders.get(position);
+	  String[] list = f.list();
+	  int count = list == null ? 0 : list.length;
+	  holder.folderName.setText(f.getName());
+	  holder.folderName.setTag(f.getPath());
 
-            /**SET LAYOUT THEME**/
-            SP = PreferenceManager.getDefaultSharedPreferences(getDialog().getContext());
-            //getDialog().getContext()
-            int textColor= ContextCompat.getColor(getDialog().getContext(),  SP.getInt("basic_theme", 1)==1
-                    ? R.color.md_grey_800
-                    : R.color.md_grey_200);
+	  /** SET UP THEME**/
+	  holder.folderName.setTextColor(theme.getTextColor());
+	  String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
+	  holder.folderCount.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + count + "</font></b>" + "<font " + "color='" + theme.getSubTextColor() + "'> Media</font>"));
+	  holder.imgFolder.setColor(theme.getIconColor());
+	  holder.imgFolder.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_folder));
 
-            int subtextColor= ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
-                    ? R.color.md_grey_600
-                    : R.color.md_grey_400);
+	  if(canGoBack() && position == 0) { // go to parent folder
+		holder.folderName.setText("..");
+		holder.folderCount.setText(Html.fromHtml("<font color='" + theme.getSubTextColor() + "'>Go to parent</font>"));
+		holder.imgFolder.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_keyboard_arrow_up));
+	  }
+	}
 
-            holder.album_name.setTextColor(textColor);
+	public int getItemCount() {
+	  return folders.size();
+	}
 
-            String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color",
-                    ContextCompat.getColor(getDialog().getContext(), R.color.md_light_blue_500))));
-
-            holder.album_media_count.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>"
-                    + a.getCount() + "</font></b>" + "<font " + "color='" + subtextColor + "'> "
-                    + a.getContentDescription(getDialog().getContext()) + "</font>"));
-
-            holder.imgFolder.setColor(
-                    ContextCompat.getColor(getDialog().getContext(), SP.getInt("basic_theme", 1)==1
-                            ? R.color.md_light_primary_icon
-                            : R.color.md_dark_primary_icon));
-        }
-
-        public int getItemCount() {
-            return albumArrayList.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView album_name;
-            TextView album_media_count;
-            IconicsImageView imgFolder;
-            ViewHolder(View itemView) {
-                super(itemView);
-                album_name = (TextView) itemView.findViewById(R.id.title_bottom_sheet_item);
-                album_media_count = (TextView) itemView.findViewById(R.id.count_bottom_sheet_item);
-                imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon_bottom_sheet_item);
-            }
-        }
-    }
+	class ViewHolder extends RecyclerView.ViewHolder {
+	  TextView folderName;
+	  TextView folderCount;
+	  IconicsImageView imgFolder;
+	  ViewHolder(View itemView) {
+		super(itemView);
+		folderName = (TextView) itemView.findViewById(R.id.name_folder);
+		folderCount = (TextView) itemView.findViewById(R.id.count_folder);
+		imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon_bottom_sheet_item);
+	  }
+	}
+  }
 }
 

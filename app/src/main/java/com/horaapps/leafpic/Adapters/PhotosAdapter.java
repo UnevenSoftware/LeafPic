@@ -1,10 +1,8 @@
 package com.horaapps.leafpic.Adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.horaapps.leafpic.Base.Media;
-import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.ThemeHelper;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
 
@@ -39,20 +37,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     public PhotosAdapter(ArrayList<Media> ph , Context context) {
         medias = ph;
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-        updatePlaceholder(context, SP.getInt("basic_theme", ThemedActivity.LIGHT_THEME));
+        updatePlaceholder(context);
     }
 
-    public void updatePlaceholder(Context context, int theme) {
-        switch (theme){
-            case ThemedActivity.DARK_THEME:
-                drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
-                break;
-            case ThemedActivity.AMOLED_THEME: drawable = null; break;
-            case ThemedActivity.LIGHT_THEME: default:
-                drawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
-                break;
-        }
+    public void updatePlaceholder(Context context) {
+        drawable = (BitmapDrawable) ThemeHelper.getPlaceHolder(context);
     }
 
     @Override
@@ -60,16 +49,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_photo, parent, false);
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
-        /*return new ViewHolder(
-                MaterialRippleLayout.on(v)
-                        .rippleOverlay(true)
-                        .rippleAlpha(0.2f)
-                        .rippleColor(0xFF585858)
-                        .rippleHover(true)
-                        .rippleDuration(1)
-                        .create();
-        );*/
-
         return new ViewHolder(v);
     }
 
@@ -78,7 +57,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
-        byte[] thumbnail = f.getThumbnail();
+        // TODO: 03/08/16 testing
+        byte[] thumbnail = null;//f.getThumbnail();
 
         if (thumbnail != null) {
             Glide.with(holder.imageView.getContext())

@@ -26,6 +26,7 @@ import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.Media;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.ThemeHelper;
 
 import java.util.ArrayList;
 
@@ -35,32 +36,22 @@ import java.util.ArrayList;
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
     private ArrayList<Album> albums;
-    private SharedPreferences SP;
+
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
+    private ThemeHelper theme;
 
-    private int theme_code = 1;
     private BitmapDrawable placeholder;
 
     public AlbumsAdapter(ArrayList<Album> ph, Context context) {
         albums = ph;
-        SP = PreferenceManager.getDefaultSharedPreferences(context);
-        updateTheme(context, SP.getInt("basic_theme", ThemedActivity.LIGHT_THEME));
+        theme = new ThemeHelper(context);
+        updateTheme();
     }
 
-    public void updateTheme(Context context, int theme) {
-        theme_code = theme;
-        switch (theme){
-            case ThemedActivity.DARK_THEME:
-                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty));
-                break;
-            case ThemedActivity.AMOLED_THEME:
-                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled));
-                break;
-            case ThemedActivity.LIGHT_THEME: default:
-                placeholder = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_empty_white));
-                break;
-        }
+    public void updateTheme() {
+        theme.updateTheme();
+        placeholder = ((BitmapDrawable) theme.getPlaceHolder());
     }
 
     @Override
@@ -100,35 +91,32 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         holder.name.setTag(position);
 
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & SP.getInt("primary_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_indigo_500))));
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & SP.getInt("accent_color", ContextCompat.getColor(holder.card_layout.getContext(), R.color.md_light_blue_500))));
+        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & theme.getPrimaryColor()));
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
 
         if (hexAccentColor.equals(hexPrimaryColor)) {
             float[] hsv = new float[3];
-            int color = SP.getInt("accent_color", ContextCompat.getColor(c, R.color.md_light_blue_500));
+            int color = theme.getAccentColor();
             Color.colorToHSV(color, hsv);
             hsv[2] *= 0.72f; // value component
             color = Color.HSVToColor(hsv);
             hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
         }
 
-        String textColor = theme_code != ThemedActivity.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
+        String textColor = theme.getBaseTheme() != ThemeHelper.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
             holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectHolder.setVisibility(View.VISIBLE);
-            if (theme_code == ThemedActivity.LIGHT_THEME ) textColor ="#FAFAFA";
+            if (theme.getBaseTheme() == ThemeHelper.LIGHT_THEME ) textColor = "#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectHolder.setVisibility(View.GONE);
 
-            if (theme_code == ThemedActivity.LIGHT_THEME)
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_light_cards));
-            else if (theme_code == ThemedActivity.DARK_THEME)
-                holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_dark_cards));
-            else holder.card_layout.setBackgroundColor(ContextCompat.getColor(c, R.color.md_black_1000));
+            holder.card_layout.setBackgroundColor(theme.getCardBackgroundColor());
         }
+        // TODO: 02/08/16 Html.fromHtml deprecated
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.getName() + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
                 "color='" + textColor + "'> " +a.getContentDescription(c) + "</font>"));
