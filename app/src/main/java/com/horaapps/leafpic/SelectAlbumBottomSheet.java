@@ -59,7 +59,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
   private SelectAlbumInterface selectAlbumInterface;
 
-  public boolean canGoBack() {
+  private boolean canGoBack() {
 	return canGoBack;
   }
 

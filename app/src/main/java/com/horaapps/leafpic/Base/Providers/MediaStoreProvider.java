@@ -135,7 +135,6 @@ public class  MediaStoreProvider {
   public static ArrayList<Media> getAlbumPhotos(Context context, long id, int n, int filter) {
 
 	String limit = n == -1 ? "" : "LIMIT " + n;
-
 	ArrayList<Media> list = new ArrayList<Media>();
 
 	String[] projection = new String[]{
@@ -151,14 +150,9 @@ public class  MediaStoreProvider {
 	};
 
 	Uri images = MediaStore.Files.getContentUri("external");
-	String selection;/* = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore
-                                                                                           .Files.FileColumns.MEDIA_TYPE_IMAGE +
-                                   " or " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
-                                   + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id +
-                                    "'";*/
+	String selection;
 
 	switch (filter) {
-
 	  case ImageFileFilter.FILTER_IMAGES:
 		selection = "( " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE + ") and " + MediaStore.Files.FileColumns.PARENT + "='" + id + "'";
 		break;
@@ -178,11 +172,21 @@ public class  MediaStoreProvider {
 
 	if (cur != null) {
 	  if (cur.moveToFirst()) {
-
+		//int idColumnIndex =cur.getColumnIndex(MediaStore.Files.FileColumns._ID);
 		do {
 		  Media m = new Media(cur);
+		  /*iCursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+				  context.getContentResolver(), cur.getLong(idColumnIndex),
+				  MediaStore.Images.Thumbnails.MINI_KIND,
+				  new String[]{ MediaStore.Images.Thumbnails.DATA } );
+		  if( cursor != null && cursor.getCount() > 0 ) {
+			cursor.moveToFirst();//**EDIT**
+			String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+			Log.wtf("thumb","found:: " + path);
+		  } else
+			Log.wtf("thumb","NOT found");*/
 		  list.add(m);
-		  //Log.wtf("asd", m.getPath() +" - "+ m.getDateModified());
+		  //Log.wtf("thumb", m.getPath() +" - "+ m.getDateModified());
 		} while (cur.moveToNext());
 	  }
 	  cur.close();

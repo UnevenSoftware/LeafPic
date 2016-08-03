@@ -95,10 +95,6 @@ public class Media implements Parcelable, Serializable {
         setMIME(context.getContentResolver().getType(uri));
     }
 
-    public Media(long id, String path, long dateModified, String mime) {
-
-    }
-
     public Media(@NotNull Cursor cur) {
         this.path = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.DATA));
         this.size = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.SIZE));
