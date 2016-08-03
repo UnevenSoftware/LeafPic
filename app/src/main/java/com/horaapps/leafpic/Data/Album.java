@@ -1,17 +1,16 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
-import com.horaapps.leafpic.Base.Providers.AlbumsProvider;
-import com.horaapps.leafpic.Base.Providers.MediaStoreProvider;
+import com.horaapps.leafpic.Data.Providers.AlbumsProvider;
+import com.horaapps.leafpic.Data.Providers.MediaStoreProvider;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.utils.ContentHelper;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -110,7 +109,7 @@ public class Album implements Serializable {
     }
 
     public void updatePhotos(Context context) {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        PreferenceUtil SP = PreferenceUtil.getInstance(context);
         ArrayList<Media> mediaArrayList = new ArrayList<Media>();
         if (isFromMediaStore()) {
             mediaArrayList.addAll(

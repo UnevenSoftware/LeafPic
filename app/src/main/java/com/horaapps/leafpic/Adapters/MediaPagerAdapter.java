@@ -8,7 +8,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.Fragments.GifFragment;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Fragments.VideoFragment;

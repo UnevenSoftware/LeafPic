@@ -1,8 +1,4 @@
-package com.horaapps.leafpic.Base;
-
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.provider.MediaStore;
+package com.horaapps.leafpic.Data;
 
 import java.io.Serializable;
 

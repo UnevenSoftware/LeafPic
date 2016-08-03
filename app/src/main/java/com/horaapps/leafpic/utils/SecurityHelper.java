@@ -1,9 +1,7 @@
 package com.horaapps.leafpic.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -37,7 +35,7 @@ public class SecurityHelper {
     }
 
     public void updateSecuritySetting(){
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+        PreferenceUtil SP = PreferenceUtil.getInstance(context);
         this.activeSecurity = SP.getBoolean(context.getString(R.string.preference_use_password), false);
         this.passwordOnDelete = SP.getBoolean(context.getString(R.string.preference_use_password_on_delete), false);
         this.passwordOnHidden = SP.getBoolean(context.getString(R.string.preference_use_password_on_hidden), true);

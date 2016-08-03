@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -17,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -44,7 +42,6 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -56,11 +53,10 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Adapters.AlbumsAdapter;
 import com.horaapps.leafpic.Adapters.PhotosAdapter;
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.AlbumSettings;
-import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.ImageFileFilter;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.AlbumSettings;
+import com.horaapps.leafpic.Data.CustomAlbumsHandler;
+import com.horaapps.leafpic.Data.ImageFileFilter;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import com.horaapps.leafpic.Views.SharedMediaActivity;
 import com.horaapps.leafpic.utils.AffixMedia;
@@ -69,6 +65,7 @@ import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.Measure;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -87,7 +84,7 @@ public class MainActivity extends SharedMediaActivity {
   private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
   private CustomAlbumsHandler customAlbumsHandler = new CustomAlbumsHandler(MainActivity.this);
-  private SharedPreferences SP;
+  private PreferenceUtil SP;
   private SecurityHelper securityObj;
 
   private RecyclerView recyclerViewAlbums;
@@ -178,7 +175,7 @@ public class MainActivity extends SharedMediaActivity {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_main);
 
-	SP = PreferenceManager.getDefaultSharedPreferences(this);
+	SP = PreferenceUtil.getInstance(getApplicationContext());
 	albumsMode = true;
 	editMode = false;
 	securityObj = new SecurityHelper(MainActivity.this);

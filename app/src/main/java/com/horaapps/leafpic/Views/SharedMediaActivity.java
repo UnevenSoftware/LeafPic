@@ -2,8 +2,8 @@ package com.horaapps.leafpic.Views;
 
 import android.os.Bundle;
 
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Data.Album;
+import com.horaapps.leafpic.Data.HandlingAlbums;
 import com.horaapps.leafpic.MyApplication;
 
 /**

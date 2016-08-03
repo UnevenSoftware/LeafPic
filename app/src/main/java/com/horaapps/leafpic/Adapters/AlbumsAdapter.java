@@ -1,12 +1,9 @@
 package com.horaapps.leafpic.Adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -22,10 +19,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.Album;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.R;
-import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ThemeHelper;
 
 import java.util.ArrayList;

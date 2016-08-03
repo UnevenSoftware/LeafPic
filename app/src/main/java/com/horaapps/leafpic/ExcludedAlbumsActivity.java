@@ -1,6 +1,5 @@
 package com.horaapps.leafpic;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,8 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Data.CustomAlbumsHandler;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;

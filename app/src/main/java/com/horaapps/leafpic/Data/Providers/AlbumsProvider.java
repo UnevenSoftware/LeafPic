@@ -1,16 +1,15 @@
-package com.horaapps.leafpic.Base.Providers;
+package com.horaapps.leafpic.Data.Providers;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.FoldersFileFilter;
-import com.horaapps.leafpic.Base.ImageFileFilter;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.Album;
+import com.horaapps.leafpic.Data.CustomAlbumsHandler;
+import com.horaapps.leafpic.Data.FoldersFileFilter;
+import com.horaapps.leafpic.Data.ImageFileFilter;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.utils.ContentHelper;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,10 +25,10 @@ public class AlbumsProvider {
     private boolean includeVideo = true;
     private CustomAlbumsHandler customAlbumsHandler;
 
-    private SharedPreferences SP;
+    private PreferenceUtil SP;
 
     public AlbumsProvider(Context context) {
-        SP = PreferenceManager.getDefaultSharedPreferences(context);
+        SP = PreferenceUtil.getInstance(context);
         customAlbumsHandler = new CustomAlbumsHandler(context);
         roots = getRoots(context);
         excludedfolders = getExcludedFolders(context);

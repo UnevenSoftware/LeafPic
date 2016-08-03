@@ -60,7 +60,7 @@ import com.google.android.exoplayer.metadata.id3.Id3Frame;
 import com.google.android.exoplayer.metadata.id3.PrivFrame;
 import com.google.android.exoplayer.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer.util.Util;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.player.DemoPlayer;
 import com.horaapps.leafpic.player.ExtractorRendererBuilder;

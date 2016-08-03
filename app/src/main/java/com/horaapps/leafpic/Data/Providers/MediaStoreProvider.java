@@ -1,16 +1,15 @@
-package com.horaapps.leafpic.Base.Providers;
+package com.horaapps.leafpic.Data.Providers;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.CustomAlbumsHandler;
-import com.horaapps.leafpic.Base.ImageFileFilter;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.Album;
+import com.horaapps.leafpic.Data.CustomAlbumsHandler;
+import com.horaapps.leafpic.Data.ImageFileFilter;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;

@@ -1,10 +1,8 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Data;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 
 /**

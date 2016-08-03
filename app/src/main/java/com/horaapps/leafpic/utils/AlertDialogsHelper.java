@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
-import com.horaapps.leafpic.Base.Media;
+import com.horaapps.leafpic.Data.Media;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SecretConstants;
 import com.horaapps.leafpic.SettingsActivity;

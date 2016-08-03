@@ -2,13 +2,11 @@ package com.horaapps.leafpic;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -16,10 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.horaapps.leafpic.Base.Album;
-import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Data.Album;
 import com.horaapps.leafpic.Views.SharedMediaActivity;
-import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PermissionUtils;
 import com.horaapps.leafpic.utils.PreferenceUtil;

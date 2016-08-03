@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -31,7 +31,7 @@ public class SecurityActivity extends ThemedActivity {
     private Toolbar toolbar;
     private LinearLayout llbody;
     private LinearLayout llroot;
-    private SharedPreferences SP;
+    private PreferenceUtil SP;
     private SecurityHelper securityObj;
     private SwitchCompat swActiveSecurity;
     private SwitchCompat swApplySecurityDelete;
@@ -41,7 +41,7 @@ public class SecurityActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_layout);
-        SP = PreferenceManager.getDefaultSharedPreferences(SecurityActivity.this);
+        SP = PreferenceUtil.getInstance(getApplicationContext());
         securityObj = new SecurityHelper(SecurityActivity.this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         llbody = (LinearLayout) findViewById(R.id.ll_security_dialog_body);
@@ -57,7 +57,7 @@ public class SecurityActivity extends ThemedActivity {
         swActiveSecurity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
+                SharedPreferences.Editor editor = SP.getEditor();
 
                 securityObj.updateSecuritySetting();
                 updateSwitchColor(swActiveSecurity, getAccentColor());
@@ -67,7 +67,7 @@ public class SecurityActivity extends ThemedActivity {
                 else {
                     editor.putString(getString(R.string.preference_password_value),"");
                     editor.putBoolean(getString(R.string.preference_use_password), false);
-                    editor.apply();
+                    editor.commit();
                     toggleEnabledChild(false);
                 }
             }
@@ -80,10 +80,7 @@ public class SecurityActivity extends ThemedActivity {
         swApplySecurityHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_use_password_on_hidden), isChecked);
-                editor.apply();
-
+                SP.putBoolean(getString(R.string.preference_use_password_on_hidden), isChecked);
                 securityObj.updateSecuritySetting();
                 updateSwitchColor(swApplySecurityHidden, getAccentColor());
             }
@@ -95,10 +92,7 @@ public class SecurityActivity extends ThemedActivity {
         swApplySecurityDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.edit();
-                editor.putBoolean(getString(R.string.preference_use_password_on_delete), isChecked);
-                editor.apply();
-
+                SP.putBoolean(getString(R.string.preference_use_password_on_delete), isChecked);
                 securityObj.updateSecuritySetting();
                 updateSwitchColor(swApplySecurityDelete, getAccentColor());
             }
@@ -136,10 +130,8 @@ public class SecurityActivity extends ThemedActivity {
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = SP.edit();
                 swActiveSecurity.setChecked(false);
-                editor.putBoolean(getString(R.string.preference_use_password), false);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_use_password), false);
             }
         });
 
@@ -147,11 +139,10 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 boolean changed = false;
-                SharedPreferences.Editor editor = SP.edit();
+
                 if (editTextPassword.length() > 3) {
                     if (editTextPassword.getText().toString().equals(editTextConfirmPassword.getText().toString())) {
-                        editor.putString(getString(R.string.preference_password_value), editTextPassword.getText().toString());
-                        editor.apply();
+                        SP.putString(getString(R.string.preference_password_value), editTextPassword.getText().toString());
                         securityObj.updateSecuritySetting();
                         Toast.makeText(getApplicationContext(), R.string.remember_password_message, Toast.LENGTH_SHORT).show();
                         changed = true;
@@ -161,8 +152,7 @@ public class SecurityActivity extends ThemedActivity {
                     Toast.makeText(getApplicationContext(), R.string.error_password_length, Toast.LENGTH_SHORT).show();
 
                 swActiveSecurity.setChecked(changed);
-                editor.putBoolean(getString(R.string.preference_use_password), changed);
-                editor.apply();
+                SP.putBoolean(getString(R.string.preference_use_password), changed);
                 toggleEnabledChild(changed);
             }
         });

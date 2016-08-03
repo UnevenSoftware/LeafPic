@@ -1,23 +1,22 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Data;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.horaapps.leafpic.Base.Providers.AlbumsProvider;
-import com.horaapps.leafpic.Base.Providers.MediaStoreProvider;
+import com.horaapps.leafpic.Data.Providers.AlbumsProvider;
+import com.horaapps.leafpic.Data.Providers.MediaStoreProvider;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
 import com.horaapps.leafpic.utils.ContentHelper;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -32,7 +31,6 @@ import java.io.Serializable;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.regex.Pattern;
 
 /**
  * Created by dnld on 27/04/16.
@@ -47,14 +45,14 @@ public class HandlingAlbums implements Serializable {
   private String nameProvider = MediaStoreProvider.class.getName();
 
 
-  private SharedPreferences SP;
+  private PreferenceUtil SP;
 
   private int indexCamera = -1;
   private int current = 0;
   private boolean hidden;
 
   public HandlingAlbums(Context context) {
-    SP = PreferenceManager.getDefaultSharedPreferences(context);
+    SP = PreferenceUtil.getInstance(context);
     dispAlbums = new ArrayList<Album>();
     selectedAlbums = new ArrayList<Album>();
   }
@@ -379,15 +377,11 @@ public class HandlingAlbums implements Serializable {
 
 
   public void setDefaultSortingMode(int column) {
-    SharedPreferences.Editor editor = SP.edit();
-    editor.putInt("column_sort", column);
-    editor.apply();
+    SP.putInt("column_sort", column);
   }
 
   public void setDefaultSortingAscending(Boolean ascending) {
-    SharedPreferences.Editor editor = SP.edit();
-    editor.putBoolean("ascending_mode", ascending);
-    editor.apply();
+    SP.putBoolean("ascending_mode", ascending);
   }
 
   public void sortAlbums(final Context context) {

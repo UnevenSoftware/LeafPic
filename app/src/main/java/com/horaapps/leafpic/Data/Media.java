@@ -1,6 +1,5 @@
-package com.horaapps.leafpic.Base;
+package com.horaapps.leafpic.Data;
 
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,7 +11,6 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.drew.imaging.ImageMetadataReader;
