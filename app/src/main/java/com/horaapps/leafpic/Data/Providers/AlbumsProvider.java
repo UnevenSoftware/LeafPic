@@ -52,7 +52,7 @@ public class AlbumsProvider {
         list.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
 
         CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
-        list.addAll(handler.getExcludedFolderFiles());
+        list.addAll(handler.getExcludedFolders(false));
         return list;
     }
 
@@ -93,7 +93,7 @@ public class AlbumsProvider {
         if (files != null && files.length > 0) {
             //valid folder
             Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length, rootExternalStorage);
-            asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath()));
+            asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath(), asd.getId()));
 
             long lastMod = Long.MIN_VALUE;
             File choice = null;

@@ -1405,7 +1405,7 @@ public class MainActivity extends SharedMediaActivity {
 	  case R.id.clear_album_preview:
 		if (!albumsMode) {
 		  CustomAlbumsHandler as = new CustomAlbumsHandler(getApplicationContext());
-		  as.clearAlbumPreview(getAlbum().getPath());
+		  as.clearAlbumPreview(getAlbum().getPath(), getAlbum().getId());
 		  getAlbum().setSettings(getApplicationContext());
 		}
 		return true;

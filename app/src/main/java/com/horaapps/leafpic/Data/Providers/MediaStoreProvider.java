@@ -62,7 +62,7 @@ public class  MediaStoreProvider {
 	ArrayList<Album> list = new ArrayList<Album>();
 
 	CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-	ArrayList<String> excludedAlbums = h.getExcludedFolderIds();
+	ArrayList<Long> excludedAlbums = h.getExcludedFolderIds();
 
 
 	String[] projection = new String[]{
@@ -85,13 +85,13 @@ public class  MediaStoreProvider {
 	  if (cur.moveToFirst()) {
 		int idColumn = cur.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
 		int nameColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-		do if (!excludedAlbums.contains(cur.getString(idColumn))) {
+		do if (!excludedAlbums.contains(cur.getLong(idColumn))) {
 		  Media firstAlbumPhoto = getFirstAlbumPhoto(context, cur.getLong(idColumn));
 		  if (firstAlbumPhoto != null) {
 			String path = StringUtils.getBucketPathbyImagePath(firstAlbumPhoto.getPath());
 			Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn),
 										   getAlbumPhotosCount(context, cur.getLong(idColumn)));
-			album.setCoverPath(h.getCoverPathAlbum(album.getPath()));
+			album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
 			album.media.add(getFirstAlbumPhoto(context, album.getId()));
 			list.add(album);
 		  }

@@ -64,8 +64,6 @@ public class Album implements Serializable {
         this.id = id;
         media = new ArrayList<Media>();
         selectedMedias = new ArrayList<Media>();
-        Log.wtf("asd",""+this.id);
-        isFromContentReoslver();
     }
 
     public Album(Context context, @NotNull File mediaPath) {
@@ -74,6 +72,7 @@ public class Album implements Serializable {
         selectedMedias = new ArrayList<Media>();
         this.path = folder.getPath();
         this.name = folder.getName();
+        setSettings(context);
         updatePhotos(context);
         setCurrentPhoto(mediaPath.getAbsolutePath());
     }
@@ -165,7 +164,7 @@ public class Album implements Serializable {
 
     public void setSettings(Context context) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        settings = h.getSettings(isFromMediaStore() ? getId()+"" : getPath());
+        settings = h.getSettings(getPath(), getId());
     }
 
     public boolean hasCustomCover() {
@@ -227,7 +226,7 @@ public class Album implements Serializable {
     public void setSelectedPhotoAsPreview(Context context) {
         if (selectedMedias.size() > 0) {
             CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-            h.setAlbumPhotPreview(getPath(), selectedMedias.get(0).getPath());
+            h.setAlbumPhotoPreview(getPath(), getId(), selectedMedias.get(0).getPath());
             settings.coverPath = selectedMedias.get(0).getPath();
         }
     }
@@ -265,7 +264,7 @@ public class Album implements Serializable {
 
     public void setDefaultSortingMode(Context context, int column) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        h.setAlbumSortingMode(getPath(), column);
+        h.setAlbumSortingMode(getPath(), getId(), column);
         settings.columnSortingMode = column;
     }
 
@@ -299,7 +298,7 @@ public class Album implements Serializable {
 
     public void setDefaultSortingAscending(Context context, Boolean ascending) {
         CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-        h.setAlbumSortingAscending(getPath(), ascending);
+        h.setAlbumSortingAscending(getPath(), getId(), ascending);
         settings.ascending = ascending;
     }
 

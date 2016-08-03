@@ -89,31 +89,24 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         try
         {
             Album album;
-            /*if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
-                album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-            } else*/ if ((getIntent().getAction().equals(Intent.ACTION_VIEW)
-                                              || getIntent().getAction().equals(ACTION_REVIEW))
-                                             && getIntent().getData() != null) {
+            if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW)) && getIntent().getData() != null) {
 
-            String path = ContentHelper.getMediaPath(getApplicationContext(),
-                    getIntent().getData());
+                String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
 
-            File file = null;
-            if (path != null)
-                file = new  File(path);
+                File file = null;
+                if (path != null)
+                    file = new File(path);
 
-            if (file != null && file.isFile())
-                //the image is stored in the storage
-                album = new Album(getApplicationContext(), file);
-            else {
-                //try to show with Uri
-                album = new Album(getApplicationContext(), getIntent().getData());
-                customUri = true;
+                if (file != null && file.isFile())
+                    //the image is stored in the storage
+                    album = new Album(getApplicationContext(), file);
+                else {
+                    //try to show with Uri
+                    album = new Album(getApplicationContext(), getIntent().getData());
+                    customUri = true;
+                }
+                getAlbums().addAlbum(0, album);
             }
-
-            getAlbums().addAlbum(0, album);
-        }
-
             initUI();
             setupUI();
         } catch (Exception e) { e.printStackTrace(); }
@@ -123,10 +116,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        toolbar.setNavigationIcon(new IconicsDrawable(this)
-                                          .icon(GoogleMaterial.Icon.gmd_arrow_back)
-                                          .color(Color.WHITE)
-                                          .sizeDp(18));
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,13 +126,11 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         setRecentApp(getString(R.string.app_name));
         setupSystemUI();
 
-        /*
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 hideSystemUI();
             }
         }, 1500);
-        */
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
                                            (new View.OnSystemUiVisibilityChangeListener() {
@@ -188,7 +176,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
                 if (!fullScreenMode) new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        //hideSystemUI();
+                        hideSystemUI();
                     }
                 }, 1200);
                 invalidateOptionsMenu();
@@ -201,7 +189,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
         Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 
-        if (aa.getRotation() == Surface.ROTATION_90) {//1
+        if (aa.getRotation() == Surface.ROTATION_90) {
             Configuration configuration = new Configuration();
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
@@ -228,7 +216,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
         securityObj.updateSecuritySetting();
 
-        /**** Settings ****/
+        /**** SETTINGS ****/
 
         if (SP.getBoolean("set_max_luminosita", false))
             updateBrightness(1.0F);
@@ -351,7 +339,6 @@ public class PhotoPagerActivity extends SharedMediaActivity {
             if (customUri) finish();
             else {
                 getAlbums().removeCurrentAlbum();
-                //((MyApplication) getApplicationContext()).removeCurrentAlbum();
                 displayAlbums(false);
             }
         }
