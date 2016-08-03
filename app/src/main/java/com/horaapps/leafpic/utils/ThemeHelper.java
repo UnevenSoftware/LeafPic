@@ -92,7 +92,7 @@ public class ThemeHelper {
 	return ContextCompat.getColor(context, color);
   }
 
-  protected int getBackgroundColor(){
+  public int getBackgroundColor(){
 	int color;
 	switch (baseTheme){
 	  case DARK_THEME:color = getColor(R.color.md_dark_background);break;

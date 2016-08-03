@@ -65,6 +65,7 @@ public class Media implements Parcelable, Serializable {
     private long dateModified = -1;
     private String mime = null;
     private Uri uri = null;
+    long id;
 
     private long size = 0;
     private boolean selected = false;
@@ -102,6 +103,7 @@ public class Media implements Parcelable, Serializable {
         setMIME(cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
         this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"),
                 cur.getColumnIndex(MediaStore.Images.Media._ID));
+        this.id = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media._ID));
     }
 
     public String getMIME() {
@@ -151,6 +153,16 @@ public class Media implements Parcelable, Serializable {
             if (thumbnailDirectory.hasThumbnailData())
                 return thumbnailDirectory.getThumbnailData();
         } catch (Exception e) { return null; }*/
+    }
+
+    public String getThumnail(Context context) {
+        Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                context.getContentResolver(), id,
+                MediaStore.Images.Thumbnails.MINI_KIND,
+                new String[]{ MediaStore.Images.Thumbnails.DATA } );
+        if(cursor.moveToFirst())
+            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+        return null;
     }
 
 

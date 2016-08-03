@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -57,35 +59,24 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
-        // TODO: 03/08/16 testing
-        byte[] thumbnail = null;//f.getThumbnail();
 
-        if (thumbnail != null) {
+        if (f.isGif()) {
+            Ion.with(holder.imageView.getContext())
+                    .load(f.getPath())
+                    .intoImageView(holder.imageView);
+            holder.gifIcon.setVisibility(View.VISIBLE);
+        } else {
             Glide.with(holder.imageView.getContext())
-                    .load(thumbnail)
+                    .load(f.getUri())
+                    .asBitmap()
+                    .signature(new StringSignature(f.getPath() + "-" + f.getDateModified()))
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .thumbnail(0.5f)
                     .placeholder(drawable)
                     .animate(R.anim.fade_in)
                     .into(holder.imageView);
-        } else {
-            if (f.isGif()) {
-                Ion.with(holder.imageView.getContext())
-                        .load(f.getPath())
-                        .intoImageView(holder.imageView);
-                holder.gifIcon.setVisibility(View.VISIBLE);
-            } else {
-                Glide.with(holder.imageView.getContext())
-                        .load(f.getPath())
-                        .asBitmap()
-                        .signature(new StringSignature(f.getPath() + "-" + f.getDateModified()))
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .placeholder(drawable)
-                        .animate(R.anim.fade_in)
-                        .into(holder.imageView);
-                holder.gifIcon.setVisibility(View.GONE);
-            }
+            holder.gifIcon.setVisibility(View.GONE);
         }
 
         if(f.isVideo()) {

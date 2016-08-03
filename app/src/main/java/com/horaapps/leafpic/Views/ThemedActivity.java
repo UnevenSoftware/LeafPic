@@ -138,7 +138,7 @@ public class ThemedActivity extends AppCompatActivity {
   public int getBaseTheme(){ return  themeHelper.getBaseTheme(); }
 
   protected int getBackgroundColor(){
-	return themeHelper.getCardBackgroundColor();
+	return themeHelper.getBackgroundColor();
   }
 
   protected Drawable getPlaceHolder(){
