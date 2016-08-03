@@ -13,14 +13,18 @@ public class MyApplication extends Application {
 
     private HandlingAlbums albums = null;
 
-    Album getCurrentAlbum() {
+    public Album getCurrentAlbum() {
         return albums.getCurrentAlbum();
     }
 
-    void removeCurrentAlbum() { albums.removeCurrentAlbum(); }
+    @Override
+    public void onCreate() {
+        albums = new HandlingAlbums(getApplicationContext());
+        super.onCreate();
+    }
 
     public HandlingAlbums getAlbums() {
-        return albums != null ? albums : new HandlingAlbums(getApplicationContext());
+        return albums;
     }
 
     public void setAlbums(HandlingAlbums albums) {

@@ -41,6 +41,7 @@ import com.horaapps.leafpic.Base.AlbumSettings;
 import com.horaapps.leafpic.Base.HandlingAlbums;
 import com.horaapps.leafpic.Fragments.ImageFragment;
 import com.horaapps.leafpic.Views.HackyViewPager;
+import com.horaapps.leafpic.Views.SharedMediaActivity;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
@@ -60,7 +61,7 @@ import java.nio.channels.FileChannel;
 /**
  * Created by dnld on 18/02/16.
  */
-public class PhotoPagerActivity extends ThemedActivity {
+public class PhotoPagerActivity extends SharedMediaActivity {
 
     private static final String ISLOCKED_ARG = "isLocked";
     static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
@@ -70,7 +71,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     private MediaPagerAdapter adapter;
     private SharedPreferences SP;
     private RelativeLayout ActivityBackgorund;
-    private Album album;
+    //private Album album;
     private SelectAlbumBottomSheet bottomSheetDialogFragment;
     private SecurityHelper securityObj;
     private Toolbar toolbar;
@@ -90,30 +91,31 @@ public class PhotoPagerActivity extends ThemedActivity {
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
         try
         {
-            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+            Album album;
+            /*if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 album = ((MyApplication) getApplicationContext()).getCurrentAlbum();
-            } else if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW))
-                            && getIntent().getData() != null) {
+            } else*/ if ((getIntent().getAction().equals(Intent.ACTION_VIEW)
+                                              || getIntent().getAction().equals(ACTION_REVIEW))
+                                             && getIntent().getData() != null) {
 
-                String path = ContentHelper.getMediaPath(getApplicationContext(),
-                        getIntent().getData());
+            String path = ContentHelper.getMediaPath(getApplicationContext(),
+                    getIntent().getData());
 
-                File file = null;
-                if (path != null)
-                    file = new  File(path);
+            File file = null;
+            if (path != null)
+                file = new  File(path);
 
-                if (file != null && file.isFile())
-                    //the image is stored in the storage
-                    album = new Album(getApplicationContext(), file);
-                else {
-                    //try to show with Uri
-                    album = new Album(getApplicationContext(), getIntent().getData());
-                    customUri = true;
-                }
-
-                HandlingAlbums albums = new HandlingAlbums(getApplicationContext(), album);
-                ((MyApplication) getApplicationContext()).setAlbums(albums);
+            if (file != null && file.isFile())
+                //the image is stored in the storage
+                album = new Album(getApplicationContext(), file);
+            else {
+                //try to show with Uri
+                album = new Album(getApplicationContext(), getIntent().getData());
+                customUri = true;
             }
+
+            getAlbums().addAlbum(0, album);
+        }
 
             initUI();
             setupUI();
@@ -125,9 +127,9 @@ public class PhotoPagerActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
         toolbar.setNavigationIcon(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_arrow_back)
-                .color(Color.WHITE)
-                .sizeDp(18));
+                                          .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                                          .color(Color.WHITE)
+                                          .sizeDp(18));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,36 +148,36 @@ public class PhotoPagerActivity extends ThemedActivity {
         */
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
-                        else hideSystemUI();
-                    }
-                });
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), album.getMedia());
+                                           (new View.OnSystemUiVisibilityChangeListener() {
+                                               @Override
+                                               public void onSystemUiVisibilityChange(int visibility) {
+                                                   if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                                                   else hideSystemUI();
+                                               }
+                                           });
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
 
         adapter.setVideoOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (SP.getBoolean("set_internal_player", false)) {
                     Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
-                            .setData(album.getCurrentMedia().getUri());
+                                               .setData(getAlbum().getCurrentMedia().getUri());
                     startActivity(mpdIntent);
                 } else {
                     Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
                     intentopenWith.setDataAndType(
-                            album.getMedia().get(mViewPager.getCurrentItem()).getUri(),
-                            album.getMedia().get(mViewPager.getCurrentItem()).getMIME());
+                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getUri(),
+                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMIME());
                     startActivity(intentopenWith);
                 }
             }
         });
 
-        getSupportActionBar().setTitle((album.getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
+        getSupportActionBar().setTitle((getAlbum().getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
 
         mViewPager.setAdapter(adapter);
-        mViewPager.setCurrentItem(album.getCurrentMediaIndex());
+        mViewPager.setCurrentItem(getAlbum().getCurrentMediaIndex());
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -185,8 +187,8 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             @Override
             public void onPageSelected(int position) {
-                album.setCurrentPhotoIndex(position);
-                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
+                getAlbum().setCurrentPhotoIndex(position);
+                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
                 if (!fullScreenMode) new Handler().postDelayed(new Runnable() {
                     public void run() {
                         //hideSystemUI();
@@ -281,9 +283,9 @@ public class PhotoPagerActivity extends ThemedActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                                                                                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-           params.setMargins(0,0,Measure.getNavigationBarSize(PhotoPagerActivity.this).x,0);
+            params.setMargins(0,0,Measure.getNavigationBarSize(PhotoPagerActivity.this).x,0);
         else
             params.setMargins(0,0,0,0);
 
@@ -293,7 +295,7 @@ public class PhotoPagerActivity extends ThemedActivity {
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
 
-        menu.setGroupVisible(R.id.only_photos_otions, !album.getCurrentMedia().isVideo());
+        menu.setGroupVisible(R.id.only_photos_otions, !getAlbum().getCurrentMedia().isVideo());
 
         if (customUri) {
             menu.setGroupVisible(R.id.on_internal_storage, false);
@@ -328,13 +330,13 @@ public class PhotoPagerActivity extends ThemedActivity {
 
     private void copyFileToDownloads(Uri croppedFileUri) throws Exception {
         FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
-        FileOutputStream outStream = new FileOutputStream(new File(album.getCurrentMedia().getPath()));
+        FileOutputStream outStream = new FileOutputStream(new File(getAlbum().getCurrentMedia().getPath()));
         FileChannel inChannel = inStream.getChannel();
         FileChannel outChannel = outStream.getChannel();
         inChannel.transferTo(0, inChannel.size(), outChannel);
         inStream.close();
         outStream.close();
-        album.scanFile(getApplicationContext(), new String[]{album.getCurrentMedia().getPath()});
+        getAlbum().scanFile(getApplicationContext(), new String[]{getAlbum().getCurrentMedia().getPath()});
     }
 
     private void displayAlbums(boolean reload) {
@@ -347,16 +349,17 @@ public class PhotoPagerActivity extends ThemedActivity {
     }
 
     private void deleteCurrentMedia() {
-        album.deleteCurrentMedia(getApplicationContext());
-        if (album.getMedia().size() == 0) {
+        getAlbum().deleteCurrentMedia(getApplicationContext());
+        if (getAlbum().getMedia().size() == 0) {
             if (customUri) finish();
             else {
-                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                getAlbums().removeCurrentAlbum();
+                //((MyApplication) getApplicationContext()).removeCurrentAlbum();
                 displayAlbums(false);
             }
         }
         adapter.notifyDataSetChanged();
-        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
+        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
     }
 
     @Override
@@ -364,15 +367,15 @@ public class PhotoPagerActivity extends ThemedActivity {
         switch (item.getItemId()) {
 
             case R.id.rotate_180:
-                ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentMediaIndex())).rotatePicture(180);
+                ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).rotatePicture(180);
                 break;
 
             case R.id.rotate_right_90:
-                ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentMediaIndex())).rotatePicture(90);
+                ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).rotatePicture(90);
                 break;
 
             case R.id.rotate_left_90:
-                ((ImageFragment) adapter.getRegisteredFragment(album.getCurrentMediaIndex())).rotatePicture(-90);
+                ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).rotatePicture(-90);
                 break;
 
             case R.id.action_copy:
@@ -381,7 +384,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                 bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
                     @Override
                     public void folderSelected(String path) {
-                        album.copyPhoto(getApplicationContext(), album.getCurrentMedia().getPath(), path);
+                        getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
                         bottomSheetDialogFragment.dismiss();
                     }
                 });
@@ -390,37 +393,37 @@ public class PhotoPagerActivity extends ThemedActivity {
                 break;
 
             case R.id.name_sort_action:
-                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
-                album.sortPhotos();
-                adapter.swapDataSet(album.getMedia());
+                getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
+                getAlbum().sortPhotos();
+                adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_action:
-                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
-                album.sortPhotos();
-                adapter.swapDataSet(album.getMedia());
+                getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
+                getAlbum().sortPhotos();
+                adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_action:
-                album.setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
-                album.sortPhotos();
-                adapter.swapDataSet(album.getMedia());
+                getAlbum().setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
+                getAlbum().sortPhotos();
+                adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.type_sort_action:
-                album.setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
-                album.sortPhotos();
-                adapter.swapDataSet(album.getMedia());
+                getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
+                getAlbum().sortPhotos();
+                adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.ascending_sort_action:
-                album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
-                album.sortPhotos();
-                adapter.swapDataSet(album.getMedia());
+                getAlbum().setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
+                getAlbum().sortPhotos();
+                adapter.swapDataSet(getAlbum().getMedia());
 
                 item.setChecked(!item.isChecked());
                 return true;
@@ -428,14 +431,14 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(album.getCurrentMedia().getMIME());
-                share.putExtra(Intent.EXTRA_STREAM, album.getCurrentMedia().getUri());
+                share.setType(getAlbum().getCurrentMedia().getMIME());
+                share.putExtra(Intent.EXTRA_STREAM, getAlbum().getCurrentMedia().getUri());
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
             case R.id.action_edit:
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
-                Uri uri = Uri.fromFile(new File(album.getCurrentMedia().getPath()));
+                Uri uri = Uri.fromFile(new File(getAlbum().getCurrentMedia().getPath()));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
                 uCrop.withOptions(getUcropOptions());
                 uCrop.start(PhotoPagerActivity.this);
@@ -444,14 +447,14 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.action_use_as:
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
                 intent.setDataAndType(
-                       album.getCurrentMedia().getUri(), album.getCurrentMedia().getMIME());
+                        getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMIME());
                 startActivity(Intent.createChooser(intent, getString(R.string.use_as)));
                 return true;
 
             case R.id.action_open_with:
                 Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
                 intentopenWith.setDataAndType(
-                        album.getCurrentMedia().getUri(), album.getCurrentMedia().getMIME());
+                        getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMIME());
                 startActivity(Intent.createChooser(intentopenWith, getString(R.string.open_with)));
                 break;
 
@@ -468,14 +471,14 @@ public class PhotoPagerActivity extends ThemedActivity {
 
                             final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
                             final EditText editTextPassword = securityObj.getInsertPasswordDialog
-                                    (PhotoPagerActivity.this, passwordDialogBuilder);
+                                                                                  (PhotoPagerActivity.this, passwordDialogBuilder);
 
                             passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (securityObj.checkPassword(editTextPassword.getText().toString())) {
                                         deleteCurrentMedia();
                                         adapter.notifyDataSetChanged();
-                                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
+                                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
                                     } else
                                         Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
 
@@ -485,7 +488,7 @@ public class PhotoPagerActivity extends ThemedActivity {
                             final AlertDialog passwordDialog = passwordDialogBuilder.create();
                             passwordDialog.show();
                             passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
-                                    .OnClickListener() {
+                                                                                                                 .OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if (securityObj.checkPassword(editTextPassword.getText().toString())){
@@ -511,17 +514,18 @@ public class PhotoPagerActivity extends ThemedActivity {
                 bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
                     @Override
                     public void folderSelected(String path) {
-                        album.moveCurrentPhoto(getApplicationContext(), path);
+                        getAlbum().moveCurrentPhoto(getApplicationContext(), path);
 
-                        if (album.getMedia().size() == 0) {
+                        if (getAlbum().getMedia().size() == 0) {
                             if (customUri) finish();
                             else {
-                                ((MyApplication) getApplicationContext()).removeCurrentAlbum();
+                                getAlbums().removeCurrentAlbum();
+                                //((MyApplication) getApplicationContext()).removeCurrentAlbum();
                                 displayAlbums(false);
                             }
                         }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + album.getMedia().size());
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
                         bottomSheetDialogFragment.dismiss();
                     }
                 });
@@ -532,18 +536,18 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.action_rename:
                 AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
                 final EditText editTextNewName = new EditText(getApplicationContext());
-                editTextNewName.setText(StringUtils.getPhotoNamebyPath(album.getCurrentMedia().getPath()));
+                editTextNewName.setText(StringUtils.getPhotoNamebyPath(getAlbum().getCurrentMedia().getPath()));
 
                 AlertDialog renameDialog =
                         AlertDialogsHelper.getInsertTextDialog(
-                        this,renameDialogBuilder, editTextNewName, R.string.rename_photo_action);
+                                this,renameDialogBuilder, editTextNewName, R.string.rename_photo_action);
 
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (editTextNewName.length() != 0)
-                            album.renameCurrentMedia(getApplicationContext(), editTextNewName.getText().toString());
-                         else
+                            getAlbum().renameCurrentMedia(getApplicationContext(), editTextNewName.getText().toString());
+                        else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
                     }});
                 renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -554,7 +558,7 @@ public class PhotoPagerActivity extends ThemedActivity {
 
             case R.id.action_edit_with:
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(album.getCurrentMedia().getUri(), album.getCurrentMedia().getMIME());
+                editIntent.setDataAndType(getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMIME());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(editIntent, "Edit with"));
                 break;
@@ -562,16 +566,16 @@ public class PhotoPagerActivity extends ThemedActivity {
             case R.id.action_details:
                 AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
                 AlertDialog detailsDialog =
-                         AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,album.getCurrentMedia());
+                        AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,getAlbum().getCurrentMedia());
 
                 detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
-                        .ok_action), new DialogInterface.OnClickListener() {
+                                                                                           .ok_action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) { }});
                 detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!album.getCurrentMedia().fixDate())
+                        if (!getAlbum().getCurrentMedia().fixDate())
                             Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                     }
                 });

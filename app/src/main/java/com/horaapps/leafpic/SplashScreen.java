@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.horaapps.leafpic.Base.Album;
 import com.horaapps.leafpic.Base.HandlingAlbums;
+import com.horaapps.leafpic.Views.SharedMediaActivity;
 import com.horaapps.leafpic.Views.ThemedActivity;
 import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.PermissionUtils;
+import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.StringUtils;
 
 import java.io.File;
@@ -28,7 +30,7 @@ import java.io.File;
 /**
  * Created by dnld on 01/04/16.
  */
-public class SplashScreen extends ThemedActivity {
+public class SplashScreen extends SharedMediaActivity {
 
     private final int READ_EXTERNAL_STORAGE_ID = 12;
     private static final int PICK_MEDIA_REQUEST = 44;
@@ -42,19 +44,19 @@ public class SplashScreen extends ThemedActivity {
     private boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
 
-    private HandlingAlbums albums;
+    //private HandlingAlbums albums;
     private Album album;
 
-    SharedPreferences SP;
+    private PreferenceUtil SP;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        SP = PreferenceManager.getDefaultSharedPreferences(this);
+        SP = PreferenceUtil.getInstance(getApplicationContext());
         /**** START APP ****/
 
-        albums = new HandlingAlbums(getApplicationContext());
+        //albums = new HandlingAlbums(getApplicationContext());
 
         TextView logo = (TextView) findViewById(R.id.txtLogo);
         logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
@@ -148,11 +150,11 @@ public class SplashScreen extends ThemedActivity {
         @Override
         protected Boolean doInBackground(Boolean... arg0) {
             if (arg0[0])
-                albums.loadAlbums(getApplicationContext(), false);
+                getAlbums().loadAlbums(getApplicationContext(), false);
             else {
-                albums.restoreBackup(getApplicationContext());
-                if(albums.dispAlbums.size() == 0)
-                    albums.loadAlbums(getApplicationContext(), false);
+                getAlbums().restoreBackup(getApplicationContext());
+                if(getAlbums().dispAlbums.size() == 0)
+                    getAlbums().loadAlbums(getApplicationContext(), false);
                 else return false;
             }
             return true;
@@ -162,7 +164,7 @@ public class SplashScreen extends ThemedActivity {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
 
-            ((MyApplication) getApplicationContext()).setAlbums(albums);
+            //((MyApplication) getApplicationContext()).setAlbums(albums);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
             b.putInt(CONTENT, result ? ALBUMS_PREFETCHED : ALBUMS_BACKUP);
@@ -175,7 +177,7 @@ public class SplashScreen extends ThemedActivity {
                 finish();
             }
             if(result)
-                albums.saveBackup(getApplicationContext());
+                getAlbums().saveBackup(getApplicationContext());
         }
     }
 
@@ -191,7 +193,7 @@ public class SplashScreen extends ThemedActivity {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
-            ((MyApplication) getApplicationContext()).setAlbums(new HandlingAlbums(SplashScreen.this, album));
+            getAlbums().addAlbum(0, album);
             b.putInt(CONTENT, PHOTS_PREFETCHED);
             i.putExtras(b);
             startActivity(i);
