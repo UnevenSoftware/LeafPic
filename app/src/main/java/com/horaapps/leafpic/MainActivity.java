@@ -52,7 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.horaapps.leafpic.Adapters.AlbumsAdapter;
-import com.horaapps.leafpic.Adapters.PhotosAdapter;
+import com.horaapps.leafpic.Adapters.MediaAdapter;
 import com.horaapps.leafpic.Data.AlbumSettings;
 import com.horaapps.leafpic.Data.CustomAlbumsHandler;
 import com.horaapps.leafpic.Data.ImageFileFilter;
@@ -92,7 +92,7 @@ public class MainActivity extends SharedMediaActivity {
   private GridSpacingItemDecoration albumsDecoration;
 
   private RecyclerView recyclerViewMedia;
-  private PhotosAdapter mediaAdapter;
+  private MediaAdapter mediaAdapter;
   private GridSpacingItemDecoration photosDecoration;
 
   private FloatingActionButton fabCamera;
@@ -370,7 +370,7 @@ public class MainActivity extends SharedMediaActivity {
 	albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
 	recyclerViewAlbums.setAdapter(albumsAdapter);
 
-	mediaAdapter = new PhotosAdapter(getAlbum().getMedia(), MainActivity.this);
+	mediaAdapter = new MediaAdapter(getAlbum().getMedia(), MainActivity.this);
 	recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColumns(getApplicationContext())));
 	mediaAdapter.setOnClickListener(photosOnClickListener);
 	mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
@@ -1332,7 +1332,19 @@ public class MainActivity extends SharedMediaActivity {
 		bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
 		  @Override
 		  public void folderSelected(String path) {
-			new MovePhotos().execute(path);
+			swipeRefreshLayout.setRefreshing(true);
+			if (getAlbum().moveSelectedMedia(getApplicationContext(), path) > 0) {
+			  if (getAlbum().getMedia().size() == 0) {
+				getAlbums().removeCurrentAlbum();
+				albumsAdapter.notifyDataSetChanged();
+				displayAlbums();
+			  }
+			  mediaAdapter.swapDataSet(getAlbum().getMedia());
+			  finishEditMode();
+			  invalidateOptionsMenu();
+			} else requestSdCardPermissions();
+
+			swipeRefreshLayout.setRefreshing(false);
 			bottomSheetDialogFragment.dismiss();
 		  }
 		});
@@ -1369,7 +1381,7 @@ public class MainActivity extends SharedMediaActivity {
 		  @Override
 		  public void onClick(DialogInterface dialog, int which) {
 			//This should br empty it will be overwrite later
-			//to avoid dismiss of the dialog on wrong password
+			//to avoid dismiss of the dialog
 		  }
 		});
 		final AlertDialog renameDialog = renameDialogBuilder.create();
@@ -1379,8 +1391,10 @@ public class MainActivity extends SharedMediaActivity {
 		  @Override
 		  public void onClick(View dialog) {
 			if (editTextNewName.length() != 0) {
+			  swipeRefreshLayout.setRefreshing(true);
 			  boolean success;
 			  if (albumsMode){
+
 				int index = getAlbums().dispAlbums.indexOf(getAlbums().getSelectedAlbum(0));
 				getAlbums().getAlbum(index).updatePhotos(getApplicationContext());
 				success = getAlbums().getAlbum(index).renameAlbum(getApplicationContext(),
@@ -1393,8 +1407,7 @@ public class MainActivity extends SharedMediaActivity {
 			  }
 			  renameDialog.dismiss();
 			  if (!success) requestSdCardPermissions();
-			  //Toast.makeText(MainActivity.this, ""+success, Toast.LENGTH_SHORT)
-			  // .show();
+			  swipeRefreshLayout.setRefreshing(false);
 			} else {
 			  StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
 			  editTextNewName.requestFocus();
@@ -1466,7 +1479,6 @@ public class MainActivity extends SharedMediaActivity {
 	  albumsAdapter.swapDataSet(getAlbums().dispAlbums);
 	  checkNothing();
 	  swipeRefreshLayout.setRefreshing(false);
-	  //((MyApplication) getApplicationContext()).setAlbums(albums);
 	  getAlbums().saveBackup(getApplicationContext());
 	}
   }
@@ -1491,7 +1503,6 @@ public class MainActivity extends SharedMediaActivity {
 	  mediaAdapter.swapDataSet(getAlbum().getMedia());
 	  checkNothing();
 	  swipeRefreshLayout.setRefreshing(false);
-	  //((MyApplication) getApplicationContext()).setAlbums(albums);
 	}
   }
 
@@ -1531,7 +1542,6 @@ public class MainActivity extends SharedMediaActivity {
 		  displayAlbums();
 		}
 	  } else requestSdCardPermissions();
-	  //Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
 
 	  mediaAdapter.swapDataSet(getAlbum().getMedia());
 	  finishEditMode();

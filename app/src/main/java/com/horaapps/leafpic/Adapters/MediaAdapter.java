@@ -19,6 +19,8 @@ import com.horaapps.leafpic.utils.ColorPalette;
 import com.horaapps.leafpic.utils.ThemeHelper;
 import com.koushikdutta.ion.Ion;
 import com.horaapps.leafpic.R;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
@@ -27,7 +29,7 @@ import java.util.ArrayList;
  * Created by dnld on 1/7/16.
  */
 
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private ArrayList<Media> medias;
 
@@ -35,7 +37,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
 
-    public PhotosAdapter(ArrayList<Media> ph , Context context) {
+    public MediaAdapter(ArrayList<Media> ph , Context context) {
         medias = ph;
         updatePlaceholder(context);
     }
@@ -54,9 +56,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
 
     @Override
-    public void onBindViewHolder(final PhotosAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final MediaAdapter.ViewHolder holder, int position) {
 
         Media f = medias.get(position);
+
+        holder.icon.setVisibility(View.GONE);
 
         if (f.isGif()) {
             Ion.with(holder.imageView.getContext())
@@ -78,28 +82,27 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
 
         if(f.isVideo()) {
-            holder.videoIcon.setVisibility(View.VISIBLE);
+            holder.icon.setVisibility(View.VISIBLE);
             holder.path.setVisibility(View.VISIBLE);
             holder.path.setText(f.getName());
             holder.path.setTextColor(ContextCompat.getColor(holder.path.getContext(), R.color.md_dark_primary_text));
             holder.path.setBackgroundColor(
                     ColorPalette.getTransparentColor(
                             ContextCompat.getColor(holder.path.getContext(), R.color.md_black_1000), 100));
+            holder.icon.setIcon(GoogleMaterial.Icon.gmd_play_circle_filled);
         } else {
-            holder.videoIcon.setVisibility(View.GONE);
-            holder.path.setVisibility(View.GONE);
-
+            holder.icon.setVisibility(View.GONE);
         }
         holder.path.setTag(position);
 
         if (f.isSelected()) {
-            holder.selectHolder.setVisibility(View.VISIBLE);
+            holder.icon.setIcon(GoogleMaterial.Icon.gmd_done);
+            holder.icon.setVisibility(View.VISIBLE);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
-            holder.imageView.setPadding(15,15,15,15);
+            holder.layout.setPadding(15,15,15,15);
         } else {
-            holder.selectHolder.setVisibility(View.GONE);
             holder.imageView.clearColorFilter();
-            holder.imageView.setPadding(0,0,0,0);
+            holder.layout.setPadding(0,0,0,0);
         }
     }
 
@@ -121,17 +124,16 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView, selectHolder, gifIcon, videoIcon;
-        TextView path;
+        ImageView imageView; View gifIcon, layout;
+        TextView path; IconicsImageView icon;
 
         ViewHolder(View itemView) {
             super(itemView);
+            layout = itemView.findViewById(R.id.media_card_layout);
             imageView = (ImageView) itemView.findViewById(R.id.photo_preview);
-            selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);
-            gifIcon = (ImageView) itemView.findViewById(R.id.type_icon);
-            videoIcon = (ImageView) itemView.findViewById(R.id.video_indicator);
+            gifIcon = itemView.findViewById(R.id.gif_icon);
+            icon = (IconicsImageView) itemView.findViewById(R.id.icon);
             path = (TextView) itemView.findViewById(R.id.photo_path);
         }
     }

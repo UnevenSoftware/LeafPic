@@ -36,14 +36,14 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
-                TABLE_ALBUMS + "(" +
-                ALBUM_PATH + " TEXT," +
-                ALBUM_ID + " INTEGER," +
-                ALBUM_EXCLUDED + " INTEGER," +
-                ALBUM_COVER + " TEXT, " +
-                ALBUM_DEAFAULT_SORTMODE + " INTEGER, " +
-                ALBUM_DEAFAULT_SORT_ASCENDING + " INTEGER, " +
-                ALBUM_COLUMN_COUNT + " TEXT)");
+                           TABLE_ALBUMS + "(" +
+                           ALBUM_PATH + " TEXT," +
+                           ALBUM_ID + " INTEGER," +
+                           ALBUM_EXCLUDED + " INTEGER," +
+                           ALBUM_COVER + " TEXT, " +
+                           ALBUM_DEAFAULT_SORTMODE + " INTEGER, " +
+                           ALBUM_DEAFAULT_SORT_ASCENDING + " INTEGER, " +
+                           ALBUM_COLUMN_COUNT + " TEXT)");
 
         // NOTE: excluded music folder by default
         ContentValues values = new ContentValues();

@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -57,13 +55,13 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(
-                MaterialRippleLayout.on(v)
-                        .rippleOverlay(true)
-                        .rippleAlpha(0.2f)
-                        .rippleColor(0xFF585858)
-                        .rippleHover(true)
-                        .rippleDuration(1)
-                        .create()
+                                     MaterialRippleLayout.on(v)
+                                             .rippleOverlay(true)
+                                             .rippleAlpha(0.2f)
+                                             .rippleColor(0xFF585858)
+                                             .rippleHover(true)
+                                             .rippleDuration(1)
+                                             .create()
         );
     }
 
@@ -102,20 +100,19 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         String textColor = theme.getBaseTheme() != ThemeHelper.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
 
         if (a.isSelected()) {
-            holder.card_layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+            holder.layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-            holder.selectHolder.setVisibility(View.VISIBLE);
+            holder.selectedIcon.setVisibility(View.VISIBLE);
             if (theme.getBaseTheme() == ThemeHelper.LIGHT_THEME ) textColor = "#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
-            holder.selectHolder.setVisibility(View.GONE);
-
-            holder.card_layout.setBackgroundColor(theme.getCardBackgroundColor());
+            holder.selectedIcon.setVisibility(View.GONE);
+            holder.layout.setBackgroundColor(theme.getCardBackgroundColor());
         }
         // TODO: 02/08/16 Html.fromHtml deprecated
         holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.getName() + "</font></i>"));
         holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " +a.getContentDescription(c) + "</font>"));
+                                                     "color='" + textColor + "'> " +a.getContentDescription(c) + "</font>"));
         // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }
 
@@ -138,21 +135,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout card_layout;
         ImageView picture;
-        ImageView selectHolder;
-        TextView name;
-        TextView nPhotos;
-        CardView cv;
+        View selectedIcon, layout;
+        TextView name, nPhotos;
 
         ViewHolder(View itemView) {
             super(itemView);
             picture = (ImageView) itemView.findViewById(R.id.album_preview);
-            selectHolder = (ImageView) itemView.findViewById(R.id.selected_icon);
-            card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_text);
+            selectedIcon = itemView.findViewById(R.id.selected_icon);
+            layout = itemView.findViewById(R.id.linear_card_text);
             name = (TextView) itemView.findViewById(R.id.album_name);
             nPhotos = (TextView) itemView.findViewById(R.id.album_photos_count);
-            cv = (CardView) itemView.findViewById(R.id.album_card);
         }
     }
 }

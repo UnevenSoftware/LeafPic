@@ -51,10 +51,35 @@ public class ImageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        PreferenceUtil SP = PreferenceUtil.getInstance(getContext());
-        //PhotoView photoView = new PhotoView(getContext());
         final SubsamplingScaleImageView imageView =  new SubsamplingScaleImageView(getContext());
+        imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+        displayMedia(imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+            }
+        });
+
+        return imageView;
+    }
+
+   /* private void rotateLoop() { //april fools
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                photoView.setRotationBy(1);
+                rotateLoop();
+            }
+        }, 5);
+    }*/
+
+    public void displayMedia() {
+        displayMedia(((SubsamplingScaleImageView) getView()));
+    }
+
+    private void displayMedia(SubsamplingScaleImageView imageView) {
+        PreferenceUtil SP = PreferenceUtil.getInstance(getContext());
 
         if (SP.getBoolean("set_delay_full_image", true)) {
             /*Ion.with(getContext())
@@ -81,41 +106,16 @@ public class ImageFragment extends Fragment {
             return photoView;*/
             imageView.setImage(ImageSource.uri(img.getUri()));
         } else {
-
             imageView.setImage(ImageSource.uri(img.getUri()).tilingEnabled());
-
-
         }
-        imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
-            }
-        });
-        return imageView;
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //StringUtils.showToast(getContext(),"resume");
-    }
 
-   /* private void rotateLoop() { //april fools
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                photoView.setRotationBy(1);
-                rotateLoop();
-            }
-        }, 5);
-    }*/
+    }
 
     public void rotatePicture(int rotation) {
         View view = getView();
         if (view.getClass().equals(SubsamplingScaleImageView.class)) {
-            int orienatation = Measure.rotateBy(img.getOrientation(),rotation);
+            int orienatation = Measure.rotateBy(img.getOrientation(), rotation);
             if(img.setOrientation(orienatation))
                 ((SubsamplingScaleImageView) view).setOrientation(orienatation);
         } else {

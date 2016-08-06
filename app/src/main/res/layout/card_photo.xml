@@ -3,64 +3,55 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/media_card_layout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
-    <com.mikepenz.iconics.view.IconicsImageView
-        android:id="@+id/selected_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:elevation="10dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/photo_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+    />
+
+    <TextView
+        android:id="@+id/photo_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        app:iiv_color="@color/md_white_1000"
-        app:iiv_icon="gmd-check-circle"
-        tools:targetApi="lollipop" />
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:elevation="10dp"
+        android:textSize="@dimen/medium_small_text"
+        android:maxLines="1"
+        android:layout_alignParentBottom="true"
+        tools:targetApi="lollipop"
+    />
 
     <com.mikepenz.iconics.view.IconicsImageView
-        android:id="@+id/type_icon"
+        android:id="@+id/gif_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginBottom="2dp"
         android:layout_marginStart="4dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:elevation="10dp"
         android:visibility="gone"
+        android:elevation="10dp"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-gif"
-        tools:targetApi="lollipop" />
+        tools:targetApi="lollipop"
+    />
 
     <com.mikepenz.iconics.view.IconicsImageView
-        android:id="@+id/video_indicator"
-        android:layout_width="@dimen/icon_width_height"
-        android:layout_height="@dimen/icon_width_height"
+        android:id="@+id/icon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:elevation="10dp"
         android:visibility="gone"
         android:layout_centerInParent="true"
         app:iiv_color="@color/md_white_1000"
-        app:iiv_icon="gmd-play-arrow"
-        tools:targetApi="lollipop"/>
-
-    <TextView
-        android:id="@+id/photo_path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:padding="4dp"
-        android:elevation="10dp"
-        android:textSize="@dimen/medium_small_text"
-        android:maxLines="1"
-        android:layout_alignParentBottom="true"
-    />
-    <ImageView
-        android:id="@+id/photo_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="?attr/selectableItemBackground"
+        app:iiv_icon="gmd-play-circle-filled"
+        tools:targetApi="lollipop"
     />
 </com.horaapps.leafpic.Views.SquareRelativeLayout>

@@ -18,20 +18,20 @@ import java.util.HashSet;
 /**
  * Created by weconstudio on 07/07/16.
  */
-public class AlbumsProvider {
+public class StorageProvider {
 
     private HashSet<File> roots;
-    private ArrayList<File> excludedfolders;
+    private ArrayList<File> excludedFolders;
     private boolean includeVideo = true;
     private CustomAlbumsHandler customAlbumsHandler;
 
     private PreferenceUtil SP;
 
-    public AlbumsProvider(Context context) {
+    public StorageProvider(Context context) {
         SP = PreferenceUtil.getInstance(context);
         customAlbumsHandler = new CustomAlbumsHandler(context);
         roots = getRoots(context);
-        excludedfolders = getExcludedFolders(context);
+        excludedFolders = getExcludedFolders(context);
     }
 
     public ArrayList<Album> getAlbums(boolean hidden) {
@@ -57,13 +57,13 @@ public class AlbumsProvider {
     }
 
     private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
-        if (!excludedfolders.contains(dir)) {
+        if (!excludedFolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             if (folders != null) {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
-                    if (!excludedfolders.contains(temp) && (nomedia.exists() || temp.isHidden()))
-                        checkAndAddAlbum(temp, albumArrayList, rootExternalStorage);
+                    if (!excludedFolders.contains(temp) && (nomedia.exists() || temp.isHidden()))
+                        checkAndAddFolder(temp, albumArrayList, rootExternalStorage);
 
                     fetchRecursivelyHiddenFolder(temp, albumArrayList, rootExternalStorage);
                 }
@@ -72,13 +72,13 @@ public class AlbumsProvider {
     }
 
     private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
-        if (!excludedfolders.contains(dir)) {
-            checkAndAddAlbum(dir, albumArrayList, rootExternalStorage);
+        if (!excludedFolders.contains(dir)) {
+            checkAndAddFolder(dir, albumArrayList, rootExternalStorage);
             File[] children = dir.listFiles(new FoldersFileFilter());
             if (children != null) {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
-                    if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
+                    if (!excludedFolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
                         //not excluded/hidden folder
                         fetchRecursivelyFolder(temp, albumArrayList, rootExternalStorage);
                     }
@@ -87,12 +87,11 @@ public class AlbumsProvider {
         }
     }
 
-
-    private void checkAndAddAlbum(File temp, ArrayList<Album> albumArrayList, String rootExternalStorage) {
-        File[] files = temp.listFiles(new ImageFileFilter(includeVideo));
+    private void checkAndAddFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
+        File[] files = dir.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
-            Album asd = new Album(temp.getAbsolutePath(), temp.getName(), files.length, rootExternalStorage);
+            Album asd = new Album(dir.getAbsolutePath(), dir.getName(), files.length, rootExternalStorage);
             asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath(), asd.getId()));
 
             long lastMod = Long.MIN_VALUE;
@@ -127,7 +126,7 @@ public class AlbumsProvider {
     }
 
 
-    public static ArrayList<Media> getAlbumPhotos(String path, int filter, boolean includeVideo) {
+    public static ArrayList<Media> getMedia(String path, int filter, boolean includeVideo) {
         ArrayList<Media> list = new ArrayList<Media>();
         File[] images = new File(path).listFiles(new ImageFileFilter(filter, includeVideo));
         for (File image : images)

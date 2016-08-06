@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +46,6 @@ import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -299,8 +297,11 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                     final Uri imageUri = UCrop.getOutput(data);
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
-                            copyFileToDownloads(imageUri);
-                            adapter.notifyDataSetChanged();
+                            //copyFileToDownloads(imageUri);
+                            if(ContentHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(getAlbum().getCurrentMedia().getPath()))) {
+                                ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).displayMedia();
+                            }
+                            //adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e("ERROS - uCrop", imageUri.toString(), e);
                         }
@@ -313,16 +314,6 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         }
     }
 
-    private void copyFileToDownloads(Uri croppedFileUri) throws Exception {
-        FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
-        FileOutputStream outStream = new FileOutputStream(new File(getAlbum().getCurrentMedia().getPath()));
-        FileChannel inChannel = inStream.getChannel();
-        FileChannel outChannel = outStream.getChannel();
-        inChannel.transferTo(0, inChannel.size(), outChannel);
-        inStream.close();
-        outStream.close();
-        getAlbum().scanFile(getApplicationContext(), new String[]{getAlbum().getCurrentMedia().getPath()});
-    }
 
     private void displayAlbums(boolean reload) {
         Intent i = new Intent(PhotoPagerActivity.this, MainActivity.class);
@@ -498,7 +489,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
                     @Override
                     public void folderSelected(String path) {
-                        getAlbum().moveCurrentPhoto(getApplicationContext(), path);
+                        getAlbum().moveCurrentMedia(getApplicationContext(), path);
 
                         if (getAlbum().getMedia().size() == 0) {
                             if (customUri) finish();
@@ -509,7 +500,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                             }
                         }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getCount());
                         bottomSheetDialogFragment.dismiss();
                     }
                 });

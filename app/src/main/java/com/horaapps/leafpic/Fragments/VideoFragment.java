@@ -50,7 +50,7 @@ public class VideoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_video, container, false);
 
         ImageView picture = (ImageView) view.findViewById(R.id.media_view);
-        IconicsImageView videoInd = (IconicsImageView) view.findViewById(R.id.video_indicator);
+        IconicsImageView videoInd = (IconicsImageView) view.findViewById(R.id.icon);
         videoInd.setOnClickListener(onClickListener);
 
         Ion.with(getContext())

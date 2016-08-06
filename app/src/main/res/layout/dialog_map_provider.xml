@@ -6,20 +6,22 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="2dp"
     android:id="@+id/dialog_chose_provider_title">
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
+            android:textColor="@color/md_dark_primary_text"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:textColor="@color/md_dark_primary_text"
-                android:layout_height="wrap_content"
-                android:background="@color/md_dark_appbar"
-                android:padding="@dimen/big_spacing"
-                android:text="@string/chose_the_map_provider"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            android:background="@color/md_dark_appbar"
+            android:padding="@dimen/big_spacing"
+            android:text="@string/chose_the_map_provider"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <ScrollView android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
             <RadioGroup
                 android:padding="@dimen/medium_spacing"
                 android:layout_width="match_parent"
@@ -75,5 +77,6 @@
                     android:text="herokuapp.com (watercolor)"
                 />
             </RadioGroup>
-        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

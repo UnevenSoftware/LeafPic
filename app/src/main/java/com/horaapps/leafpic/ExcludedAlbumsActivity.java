@@ -26,139 +26,138 @@ import java.util.ArrayList;
  */
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
-    private ArrayList<File> excludedFolders = new ArrayList<File>();
-    private CustomAlbumsHandler h;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_excluded);
-        h = new CustomAlbumsHandler(getApplicationContext());
-        PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
+  private ArrayList<File> excludedFolders = new ArrayList<File>();
+  private CustomAlbumsHandler h;
 
-        excludedFolders = h.getExcludedFolders(SP.getBoolean(getString(R.string.preference_use_media_store), false));
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_excluded);
+	h = new CustomAlbumsHandler(getApplicationContext());
+	PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
 
-        checkNothing(excludedFolders);
-        initUI();
-    }
+	excludedFolders = h.getExcludedFolders(SP.getBoolean(getString(R.string.preference_use_media_store), false));
 
-    private void checkNothing(ArrayList<File> asd){
-        TextView a = (TextView) findViewById(R.id.nothing_to_show);
-        a.setTextColor(getTextColor());
-        a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
-    }
+	checkNothing(excludedFolders);
+	initUI();
+  }
 
-    private void initUI(){
+  private void checkNothing(ArrayList<File> asd){
+	TextView a = (TextView) findViewById(R.id.nothing_to_show);
+	a.setTextColor(getTextColor());
+	a.setVisibility(asd.size() == 0 ? View.VISIBLE : View.GONE);
+  }
 
-        RecyclerView mRecyclerView;
-        Toolbar toolbar;
+  private void initUI(){
 
-        /** TOOLBAR **/
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+	RecyclerView mRecyclerView;
+	Toolbar toolbar;
 
-        /** RECYCLE VIEW**/
-        mRecyclerView = (RecyclerView) findViewById(R.id.excluded_albums);
-        mRecyclerView.setHasFixedSize(true);
+	/** TOOLBAR **/
+	toolbar = (Toolbar) findViewById(R.id.toolbar);
+	setSupportActionBar(toolbar);
+	getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
-        mRecyclerView.setAdapter(new ExcludedAlbumsAdapter());
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setBackgroundColor(getBackgroundColor());
+	/** RECYCLE VIEW**/
+	mRecyclerView = (RecyclerView) findViewById(R.id.excluded_albums);
+	mRecyclerView.setHasFixedSize(true);
 
-        /**SET UP UI COLORS**/
-        toolbar.setBackgroundColor(getPrimaryColor());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        setStatusBarColor();
-        setNavBarColor();
-        setRecentApp(getString(R.string.excluded_albums));
+	mRecyclerView.setAdapter(new ExcludedAlbumsAdapter());
+	mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+	mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+	mRecyclerView.setBackgroundColor(getBackgroundColor());
 
-        findViewById(R.id.rl_ea).setBackgroundColor(getBackgroundColor());
-    }
+	/**SET UP UI COLORS**/
+	toolbar.setBackgroundColor(getPrimaryColor());
+	toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+	toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+	  @Override
+	  public void onClick(View v) {
+		onBackPressed();
+	  }
+	});
+	setStatusBarColor();
+	setNavBarColor();
+	setRecentApp(getString(R.string.excluded_albums));
 
-    private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
+	findViewById(R.id.rl_ea).setBackgroundColor(getBackgroundColor());
+  }
 
-        private View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String ID = v.getTag().toString();
-                int pos;
-                if((pos = getIndex(ID)) !=-1) {
-                    h.clearAlbumExclude(excludedFolders.remove(pos).getAbsolutePath());
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((MyApplication) getApplicationContext()).getAlbums().loadAlbums(getApplicationContext());
-                        }
-                    });
-                    notifyItemRemoved(pos);
-                    checkNothing(excludedFolders);
-                }
-            }
-        };
+  private class ExcludedAlbumsAdapter extends RecyclerView.Adapter<ExcludedAlbumsAdapter.ViewHolder> {
 
-        public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_excluded_album, parent, false);
-            v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
-            return new ViewHolder(
-                    MaterialRippleLayout.on(v)
-                            .rippleOverlay(true)
-                            .rippleAlpha(0.2f)
-                            .rippleColor(0xFF585858)
-                            .rippleHover(true)
-                            .rippleDuration(1)
-                            .create()
-            );
-        }
+	private View.OnClickListener listener = new View.OnClickListener() {
+	  @Override
+	  public void onClick(View v) {
+		String path = v.getTag().toString();
+		int pos;
+		if((pos = getIndex(path)) !=-1) {
+		  h.clearAlbumExclude(excludedFolders.remove(pos).getAbsolutePath());
+		  new Thread(new Runnable() {
+			@Override
+			public void run() {
+			  ((MyApplication) getApplicationContext()).getAlbums().loadAlbums(getApplicationContext());
+			}
+		  });
+		  notifyItemRemoved(pos);
+		  checkNothing(excludedFolders);
+		}
+	  }
+	};
 
-        @Override
-        public void onBindViewHolder(final ExcludedAlbumsAdapter.ViewHolder holder, final int position) {
-            File a = excludedFolders.get(position);
-            holder.album_path.setText(a.getAbsolutePath());
-            holder.album_name.setText(a.getName());
+	public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	  View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_excluded_album, parent, false);
+	  v.findViewById(R.id.UnExclude_icon).setOnClickListener(listener);
+	  return new ViewHolder(
+								   MaterialRippleLayout.on(v)
+										   .rippleOverlay(true)
+										   .rippleAlpha(0.2f)
+										   .rippleColor(0xFF585858)
+										   .rippleHover(true)
+										   .rippleDuration(1)
+										   .create()
+	  );
+	}
 
-            /**SET LAYOUT THEME**/
-            holder.album_name.setTextColor(getTextColor());
-            holder.album_path.setTextColor(getSubTextColor());
-            holder.imgFolder.setColor(getIconColor());
-            holder.imgUnExclude.setColor(getIconColor());
-            holder.card_layout.setBackgroundColor(getCardBackgroundColor());
+	@Override
+	public void onBindViewHolder(final ExcludedAlbumsAdapter.ViewHolder holder, final int position) {
+	  File a = excludedFolders.get(position);
+	  holder.album_path.setText(a.getAbsolutePath());
+	  holder.album_name.setText(a.getName());
+	  holder.imgUnExclude.setTag(a.getAbsolutePath());
 
-            holder.imgUnExclude.setTag(a.getAbsolutePath());
-        }
+	  /**SET LAYOUT THEME**/
+	  holder.album_name.setTextColor(getTextColor());
+	  holder.album_path.setTextColor(getSubTextColor());
+	  holder.imgFolder.setColor(getIconColor());
+	  holder.imgUnExclude.setColor(getIconColor());
+	  holder.card_layout.setBackgroundColor(getCardBackgroundColor());
+	}
 
-        public int getItemCount() {
-            return excludedFolders.size();
-        }
+	public int getItemCount() {
+	  return excludedFolders.size();
+	}
 
-        int getIndex(String id) {
-            for (int i = 0; i < excludedFolders.size(); i++)
-                if (excludedFolders.get(i).getAbsolutePath().equals(id)) return i;
-            return -1;
-        }
+	int getIndex(String path) {
+	  for (int i = 0; i < excludedFolders.size(); i++)
+		if (excludedFolders.get(i).getAbsolutePath().equals(path)) return i;
+	  return -1;
+	}
 
+	class ViewHolder extends RecyclerView.ViewHolder {
+	  LinearLayout card_layout;
+	  IconicsImageView imgUnExclude;
+	  IconicsImageView imgFolder;
+	  TextView album_name;
+	  TextView album_path;
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            LinearLayout card_layout;
-            IconicsImageView imgUnExclude;
-            IconicsImageView imgFolder;
-            TextView album_name;
-            TextView album_path;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
-                imgUnExclude = (IconicsImageView) itemView.findViewById(R.id.UnExclude_icon);
-                imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon);
-                album_name = (TextView) itemView.findViewById(R.id.Excluded_Title_Item);
-                album_path = (TextView) itemView.findViewById(R.id.Excluded_Path_Item);
-            }
-        }
-    }
+	  ViewHolder(View itemView) {
+		super(itemView);
+		card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
+		imgUnExclude = (IconicsImageView) itemView.findViewById(R.id.UnExclude_icon);
+		imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon);
+		album_name = (TextView) itemView.findViewById(R.id.Excluded_Title_Item);
+		album_path = (TextView) itemView.findViewById(R.id.Excluded_Path_Item);
+	  }
+	}
+  }
 }

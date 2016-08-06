@@ -11,7 +11,7 @@ import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.horaapps.leafpic.Data.Providers.AlbumsProvider;
+import com.horaapps.leafpic.Data.Providers.StorageProvider;
 import com.horaapps.leafpic.Data.Providers.MediaStoreProvider;
 import com.horaapps.leafpic.R;
 import com.horaapps.leafpic.SplashScreen;
@@ -68,9 +68,9 @@ public class HandlingAlbums implements Serializable {
       list.addAll(MediaStoreProvider.getAlbums(context, hidden));
       nameProvider = MediaStoreProvider.class.getName();
     } else {
-      AlbumsProvider p = new AlbumsProvider(context);
+      StorageProvider p = new StorageProvider(context);
       list = p.getAlbums(hidden);
-      nameProvider = AlbumsProvider.class.getName();
+      nameProvider = StorageProvider.class.getName();
     }
     dispAlbums = list;
     sortAlbums(context);
@@ -410,7 +410,7 @@ public class HandlingAlbums implements Serializable {
 
         if (indexCamera != -1) {
           Album camera = dispAlbums.remove(indexCamera);
-          camera.name = context.getString(R.string.camera);
+          camera.setName(context.getString(R.string.camera));
           dispAlbums.add(0, camera);
         }
       }

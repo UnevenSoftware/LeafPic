@@ -26,6 +26,7 @@ import com.horaapps.leafpic.Views.ThemedActivity;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -198,7 +199,6 @@ public class AlertDialogsHelper {
 
                     break;
             }
-            Log.d("url",url);
 
             Glide.with(activity.getApplicationContext())
                     .load(url)
@@ -206,6 +206,7 @@ public class AlertDialogsHelper {
                     .centerCrop()
                     .animate(R.anim.fade_in)
                     .into(imgMap);
+
             imgMap.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d", location.getLatitude(), location.getLongitude(), 17);
@@ -216,18 +217,21 @@ public class AlertDialogsHelper {
             textViewLocation.setText(location.toDMSString());
             dialogLayout.findViewById(R.id.ll_location).setVisibility(View.VISIBLE);
             imgMap.setVisibility(View.VISIBLE);
-            //dialogLayout.findViewById(R.id.ll_map).setVisibility(View.VISIBLE);
-
         }
         int orientation;
         if ((orientation = f.getOrientation()) != -1) {
             dialogLayout.findViewById(R.id.ll_orientation_details).setVisibility(View.VISIBLE);
             textViewOrientation.setText(String.format(Locale.getDefault(), "%d", orientation));
         }
-        long dateTake;
-        if (((dateTake = f.getDateTaken()) != -1) && dateTake != f.getDateModified()) {
-            textViewDateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
-            dialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
+        // TODO: 06/08/16 fix date
+        long dateTake = f.getDateTaken();
+        if (dateTake != -1) {
+            Calendar c = Calendar.getInstance(), c2 = Calendar.getInstance();
+            c.setTimeInMillis(dateTake); c2.setTimeInMillis(f.getDateModified());
+            if (!(c.get(Calendar.YEAR) == c2.get(Calendar.YEAR)) && !(c.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR))) {
+                textViewDateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
+                dialogLayout.findViewById(R.id.ll_date_taken).setVisibility(View.VISIBLE);
+            }
         }
         ((CardView) dialogLayout.findViewById(R.id.photo_details_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
         detailsDialogBuilder.setView(dialogLayout);

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.drew.imaging.ImageMetadataReader;
@@ -24,6 +25,8 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.GpsDirectory;
 import com.horaapps.leafpic.utils.StringUtils;
 
+import org.jetbrains.annotations.TestOnly;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,6 +34,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -59,11 +63,11 @@ public class Media implements Parcelable, Serializable {
 
     private final Map<String, Object> metadataMap = new HashMap<String, Object>();
 
-    String path = null;
+    private String path = null;
     private long dateModified = -1;
     private String mime = null;
     private Uri uri = null;
-    long id;
+    private long id;
 
     private long size = 0;
     private boolean selected = false;
@@ -97,11 +101,22 @@ public class Media implements Parcelable, Serializable {
     public Media(@NotNull Cursor cur) {
         this.path = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.DATA));
         this.size = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.SIZE));
-        this.dateModified = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
+        this.dateModified = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
         setMIME(cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
-        this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"),
-                cur.getColumnIndex(MediaStore.Images.Media._ID));
         this.id = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media._ID));
+        this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), getId());
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    private long getId() {
+        return id;
     }
 
     public String getMIME() {
@@ -128,9 +143,10 @@ public class Media implements Parcelable, Serializable {
     public boolean isVideo() { return getMIME().startsWith("video"); }
 
     public Uri getUri() {
-        return isMediainStorage() ? Uri.fromFile(new File(path)) : uri;
+        return isFromContentProvider() ? uri : Uri.fromFile(new File(path));
     }
 
+    @TestOnly
     public byte[] getThumbnail() {
 
         ExifInterface exif;
@@ -139,9 +155,8 @@ public class Media implements Parcelable, Serializable {
         } catch (IOException e) {
             return null;
         }
-        byte[] imageData = exif.getThumbnail();
-        if (imageData != null)
-            return imageData;
+        if (exif.hasThumbnail())
+            return exif.getThumbnail();
         return null;
 
         // NOTE: ExifInterface is faster than metadata-extractor to get the thumbnail data
@@ -153,6 +168,7 @@ public class Media implements Parcelable, Serializable {
         } catch (Exception e) { return null; }*/
     }
 
+    @TestOnly
     public String getThumnail(Context context) {
         Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                 context.getContentResolver(), id,
@@ -167,6 +183,7 @@ public class Media implements Parcelable, Serializable {
     public String getName() {
         return StringUtils.getPhotoNamebyPath(path);
     }
+
     public GeoLocation getGeoLocation()  {
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
@@ -176,7 +193,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     private void loadMetadata() {
-        if (isMediainStorage() && metadataMap.isEmpty()) {
+        if (isFromContentProvider() && metadataMap.isEmpty()) {
             try {
                 Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
                 for (Directory directory : metadata.getDirectories())
@@ -205,10 +222,11 @@ public class Media implements Parcelable, Serializable {
         return -1;
     }
 
-    public boolean setOrientation(int orientation){
+    public boolean setOrientation(int orientation) {
+        // TODO: 06/08/16 implemt this method
         /*int asd;
         ExifInterface exif;
-        try { exif = new ExifInterface(getMediaPath()); }
+        try { exif = new ExifInterface(getPath()); }
         catch (IOException ex) { return false; }
         switch (orientation) {
             case 90: asd = ExifInterface.ORIENTATION_ROTATE_90; break;
@@ -224,17 +242,17 @@ public class Media implements Parcelable, Serializable {
         return false;
     }
 
-    public boolean isMediainStorage() {
+    private boolean isFromContentProvider() {
         return path != null;
     }
 
-    public String getExifInfo() {
+    @Nullable public String getExifInfo() {
         StringBuilder result = new StringBuilder();
         String asd;
         if((asd = getFNumber()) != null) result.append(asd).append(" ");
         if((asd = getExposureTime()) != null) result.append(asd).append(" ");
         if((asd = getISO()) != null) result.append(asd).append(" ");
-        return result.toString();
+        return result.length() == 0 ? null : result.toString();
     }
 
     private Rational getRational(Object o)
@@ -254,7 +272,7 @@ public class Media implements Parcelable, Serializable {
         return null;
     }
 
-    private String getFNumber() {
+    @Nullable private String getFNumber() {
         loadMetadata();
         if (metadataMap.containsKey(TAG_F_NUMBER)) {
             DecimalFormat format = new DecimalFormat("0.0");
@@ -266,7 +284,7 @@ public class Media implements Parcelable, Serializable {
         return null;
     }
 
-    private String getExposureTime() {
+    @Nullable private String getExposureTime() {
         loadMetadata();
         if (metadataMap.containsKey(TAG_EXPOSURE)){
             DecimalFormat format = new DecimalFormat("0.000");
@@ -277,7 +295,7 @@ public class Media implements Parcelable, Serializable {
         return null;
     }
 
-    private String getISO() {
+    @Nullable private String getISO() {
         loadMetadata();
         if (metadataMap.containsKey(TAG_ISO))
             return "ISO-"+metadataMap.get(TAG_ISO).toString();
@@ -356,15 +374,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public String getDisplayName() {
-        if(isMediainStorage()) return getPath();
-        else {
-            return getUri().getEncodedPath();
-        }
-    }
-
-    public long getDate() {
-        long exifDate = getDateTaken();
-        return exifDate != -1 ? exifDate : dateModified;
+        return  isFromContentProvider() ? getPath() : getUri().getEncodedPath();
     }
 
     public long getDateModified() {

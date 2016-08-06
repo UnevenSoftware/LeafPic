@@ -163,6 +163,10 @@ public class ThemeHelper {
 	return new IconicsDrawable(context).icon(icon).color(getIconColor());
   }
 
+  public static IconicsDrawable getIcon(Context context, IIcon icon) {
+	return new IconicsDrawable(context).icon(icon).color(Color.WHITE);
+  }
+
 
   public int getDrawerBackground(){
 	int color;
