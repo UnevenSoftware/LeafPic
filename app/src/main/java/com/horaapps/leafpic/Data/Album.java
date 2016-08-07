@@ -474,7 +474,7 @@ public class Album implements Serializable {
 						found_id_album = true;
 					  }
 					  Log.d(s, "onScanCompleted: "+s);
-					  m.setPath(s); m.setUri(uri);
+					  m.setPath(s); m.setUri(uri.toString());
 					}
 				  });
 

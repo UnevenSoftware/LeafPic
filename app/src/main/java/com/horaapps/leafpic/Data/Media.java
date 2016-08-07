@@ -66,7 +66,7 @@ public class Media implements Parcelable, Serializable {
     private String path = null;
     private long dateModified = -1;
     private String mime = null;
-    private Uri uri = null;
+    private String uri = null;
     private long id;
 
     private long size = 0;
@@ -93,9 +93,9 @@ public class Media implements Parcelable, Serializable {
     }
 
     public Media(Context context, Uri mediaUri) {
-        this.uri = mediaUri;
+        this.uri = mediaUri.toString();
         this.path = null;
-        setMIME(context.getContentResolver().getType(uri));
+        setMIME(context.getContentResolver().getType(getUri()));
     }
 
     public Media(@NotNull Cursor cur) {
@@ -104,11 +104,11 @@ public class Media implements Parcelable, Serializable {
         this.dateModified = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
         setMIME(cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
         this.id = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media._ID));
-        this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), getId());
+        this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), getId()).toString();
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setUri(String uriString) {
+        this.uri = uriString;
     }
 
     public void setPath(String path) {
@@ -143,7 +143,7 @@ public class Media implements Parcelable, Serializable {
     public boolean isVideo() { return getMIME().startsWith("video"); }
 
     public Uri getUri() {
-        return isFromContentProvider() ? uri : Uri.fromFile(new File(path));
+        return isFromContentProvider() ? Uri.parse(uri) : Uri.fromFile(new File(path));
     }
 
     @TestOnly
@@ -402,7 +402,6 @@ public class Media implements Parcelable, Serializable {
         dest.writeString(this.path);
         dest.writeLong(this.dateModified);
         dest.writeString(this.mime);
-        dest.writeParcelable(this.uri, flags);
         dest.writeLong(this.id);
         dest.writeLong(this.size);
         dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
@@ -412,7 +411,6 @@ public class Media implements Parcelable, Serializable {
         this.path = in.readString();
         this.dateModified = in.readLong();
         this.mime = in.readString();
-        this.uri = in.readParcelable(Uri.class.getClassLoader());
         this.id = in.readLong();
         this.size = in.readLong();
         this.selected = in.readByte() != 0;

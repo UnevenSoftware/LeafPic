@@ -271,7 +271,7 @@ public class MainActivity extends SharedMediaActivity {
 	rvAlbums.addItemDecoration(rvAlbumsDecoration);
 
 	// TODO: 07/08/16 not change this
-	changeSpanCountRvMedia(Measure.getPhotosColumns(MainActivity.this));
+	//changeSpanCountRvMedia(Measure.getPhotosColumns(MainActivity.this));
 
 	int status_height = Measure.getStatusBarHeight(getResources()),
 			navBarHeight =  Measure.getNavBarHeight(MainActivity.this);
@@ -356,7 +356,7 @@ public class MainActivity extends SharedMediaActivity {
 	rvMedia.setHasFixedSize(true);
 	rvMedia.setItemAnimator(new DefaultItemAnimator());
 
-	changeSpanCountRvMedia(Measure.getPhotosColumns(getApplicationContext()));
+	changeSpanCountRvMedia(SP.getInt("span_count", Measure.getPhotosColumns(getApplicationContext())));
 
 	rvAlbumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
 	rvAlbums.addItemDecoration(rvAlbumsDecoration);
@@ -380,19 +380,20 @@ public class MainActivity extends SharedMediaActivity {
 	  @Override
 	  public boolean onScaleBegin(ScaleGestureDetector detector) {
 		swipeRefreshLayout.setEnabled(false);
+		mediaAdapter.setOnClickListener(null);
+		mediaAdapter.setOnLongClickListener(null);
 		return super.onScaleBegin(detector);
 	  }
 
 	  @Override
 	  public boolean onScale(ScaleGestureDetector detector) {
-		Log.d(TAG, "onScale: ");
 		int spanCount = ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
-		if (detector.getCurrentSpan() > 200 && detector.getTimeDelta() > 300) {
+		if (detector.getCurrentSpan() > 200 && detector.getTimeDelta() > 400) {
 		  if (detector.getCurrentSpan() > detector.getPreviousSpan()) {
-			changeSpanCountRvMedia(spanCount + 1);
+			changeSpanCountRvMedia(spanCount - 1);
 			return true;
 		  } else if(detector.getCurrentSpan() < detector.getPreviousSpan()) {
-			changeSpanCountRvMedia(spanCount - 1);
+			changeSpanCountRvMedia(spanCount + 1);
 			return true;
 		  }
 		}
@@ -403,8 +404,9 @@ public class MainActivity extends SharedMediaActivity {
 	  @Override
 	  public void onScaleEnd(ScaleGestureDetector detector) {
 		super.onScaleEnd(detector);
+		mediaAdapter.setOnClickListener(photosOnClickListener);
+		mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
 		swipeRefreshLayout.setEnabled(true);
-		Log.d(TAG, "onScaleEnd: ");
 	  }
 	});
 
@@ -517,6 +519,8 @@ public class MainActivity extends SharedMediaActivity {
 	  rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
 	  rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
 	  rvMedia.addItemDecoration(rvMediaDecoration);
+
+	  SP.putInt("span_count", spanCount);
 	}
   }
 
