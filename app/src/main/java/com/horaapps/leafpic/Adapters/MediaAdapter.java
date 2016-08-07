@@ -92,6 +92,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             holder.icon.setIcon(GoogleMaterial.Icon.gmd_play_circle_filled);
         } else {
             holder.icon.setVisibility(View.GONE);
+            holder.path.setVisibility(View.GONE);
         }
         holder.path.setTag(position);
 

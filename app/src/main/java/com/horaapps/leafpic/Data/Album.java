@@ -3,6 +3,7 @@ package com.horaapps.leafpic.Data;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.horaapps.leafpic.Adapters.MediaAdapter;
@@ -161,8 +162,7 @@ public class Album implements Serializable {
   }
 
   public boolean isFromContentReoslver() {
-	Log.wtf("asd-asd", getId()+"");
-	Log.wtf("asd", "isFromContentReoslver: "+ (getId() != -1) );
+
 	return this.id != -1;
   }
 
@@ -173,6 +173,12 @@ public class Album implements Serializable {
   public void setSettings(Context context) {
 	CustomAlbumsHandler h = new CustomAlbumsHandler(context);
 	settings = h.getSettings(getPath(), getId());
+  }
+
+  public boolean addMedia(@Nullable Media media) {
+	if(media == null) return false;
+	this.media.add(media);
+	return true;
   }
 
   public boolean hasCustomCover() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.horaapps.leafpic.Data.Album;
@@ -98,8 +99,7 @@ public class  MediaStoreProvider {
 			Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn),
 										   getAlbumCount(context, cur.getLong(idColumn)));
 			album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
-			album.media.add(getLastMedia(context, album.getId()));
-			list.add(album);
+			if (album.addMedia(getLastMedia(context, album.getId()))) list.add(album);
 		  }
 		}
 		while (cur.moveToNext());
@@ -127,7 +127,7 @@ public class  MediaStoreProvider {
 	return c;
   }
 
-  private static Media getLastMedia(Context context, long albumId) {
+  @Nullable private static Media getLastMedia(Context context, long albumId) {
 	ArrayList<Media> list = getMedia(context, albumId, 1, ImageFileFilter.FILTER_ALL);
 	return list.size() > 0 ? list.get(0) : null;
   }
