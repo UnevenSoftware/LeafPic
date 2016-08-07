@@ -33,7 +33,7 @@ public class  MediaStoreProvider {
 	CustomAlbumsHandler h = new CustomAlbumsHandler(context);
 	ArrayList<Long> excludedAlbums = h.getExcludedFolderIds();
 	String[] projection = new String[]{ MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT };
-	String selection = MediaStore.Files.FileColumns.MEDIA_TYPE+"="+MediaStore.Files.FileColumns.MEDIA_TYPE_NONE+
+	String selection = MediaStore.Files.FileColumns.MEDIA_TYPE+"="+MediaStore.Files.FileColumns.MEDIA_TYPE_NONE+" and "+
 							   MediaStore.Files.FileColumns.DATA +" LIKE '%.nomedia'";
 	Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"), projection, selection, null, null);
 	if(cur.moveToFirst())
