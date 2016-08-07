@@ -33,9 +33,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
@@ -71,7 +75,6 @@ import com.horaapps.leafpic.utils.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
-import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,13 +90,13 @@ public class MainActivity extends SharedMediaActivity {
   private PreferenceUtil SP;
   private SecurityHelper securityObj;
 
-  private RecyclerView recyclerViewAlbums;
+  private RecyclerView rvAlbums;
   private AlbumsAdapter albumsAdapter;
-  private GridSpacingItemDecoration albumsDecoration;
+  private GridSpacingItemDecoration rvAlbumsDecoration;
 
-  private RecyclerView recyclerViewMedia;
+  private RecyclerView rvMedia;
   private MediaAdapter mediaAdapter;
-  private GridSpacingItemDecoration photosDecoration;
+  private GridSpacingItemDecoration rvMediaDecoration;
 
   private FloatingActionButton fabCamera;
   private DrawerLayout mDrawerLayout;
@@ -102,7 +105,7 @@ public class MainActivity extends SharedMediaActivity {
   private SwipeRefreshLayout swipeRefreshLayout;
   private RelativeLayout relativeLayoutMainContent;
 
-  private TouchScrollBar touchScrollBar;
+  //private TouchScrollBar touchScrollBar;
 
   private boolean hidden = false, pickMode = false, editMode = false, albumsMode = true, firstLaunch = true;
 
@@ -253,7 +256,7 @@ public class MainActivity extends SharedMediaActivity {
 	editMode = false;
 	invalidateOptionsMenu();
 	mediaAdapter.swapDataSet(new ArrayList<Media>());
-	recyclerViewMedia.scrollToPosition(0);}
+	rvMedia.scrollToPosition(0);}
 
 
   @Override
@@ -262,16 +265,13 @@ public class MainActivity extends SharedMediaActivity {
 
 	// rearrange column number
 	int nSpan = Measure.getAlbumsColumns(MainActivity.this);
-	recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
-	recyclerViewAlbums.removeItemDecoration(albumsDecoration);
-	albumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
-	recyclerViewAlbums.addItemDecoration(albumsDecoration);
+	rvAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
+	rvAlbums.removeItemDecoration(rvAlbumsDecoration);
+	rvAlbumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
+	rvAlbums.addItemDecoration(rvAlbumsDecoration);
 
-	nSpan = Measure.getPhotosColumns(MainActivity.this);
-	recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, nSpan));
-	recyclerViewMedia.removeItemDecoration(photosDecoration);
-	photosDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
-	recyclerViewMedia.addItemDecoration(photosDecoration);
+	// TODO: 07/08/16 not change this
+	changeSpanCountRvMedia(Measure.getPhotosColumns(MainActivity.this));
 
 	int status_height = Measure.getStatusBarHeight(getResources()),
 			navBarHeight =  Measure.getNavBarHeight(MainActivity.this);
@@ -281,8 +281,8 @@ public class MainActivity extends SharedMediaActivity {
 			  View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 					  | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-	  //recyclerViewAlbums.setPadding(0, 0, 0, status_height);
-	  //recyclerViewMedia.setPadding(0, 0, 0, status_height);
+	  //rvAlbums.setPadding(0, 0, 0, status_height);
+	  //rvMedia.setPadding(0, 0, 0, status_height);
 	  //touchScrollBar.setPadding(0, 0, 0, status_height);
 
 	  relativeLayoutMainContent.setPadding(0, 0, 0, status_height);
@@ -294,8 +294,8 @@ public class MainActivity extends SharedMediaActivity {
 	  toolbar.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
 	  swipeRefreshLayout.animate().translationY(status_height).setInterpolator(new DecelerateInterpolator()).start();
 
-	  //recyclerViewAlbums.setPadding(0, 0, 0, status_height + navBarHeight);
-	  //recyclerViewMedia.setPadding(0, 0, 0, status_height + navBarHeight);
+	  //rvAlbums.setPadding(0, 0, 0, status_height + navBarHeight);
+	  //rvMedia.setPadding(0, 0, 0, status_height + navBarHeight);
 	  //touchScrollBar.setPadding(0, 0, 0, status_height + navBarHeight);
 	  relativeLayoutMainContent.setPadding(0, 0, 0, status_height + navBarHeight);
 
@@ -319,7 +319,6 @@ public class MainActivity extends SharedMediaActivity {
 			albumsAdapter.swapDataSet(getAlbums().dispAlbums);
 			displayAlbums(true);
 			pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-			//albumsAdapter.swapDataSet(getAlbums().dispAlbums);
 			toggleRecyclersVisibilty(true);
 			break;
 
@@ -350,31 +349,73 @@ public class MainActivity extends SharedMediaActivity {
 	setSupportActionBar(toolbar);
 
 	/**** RECYCLER VIEW ****/
-	recyclerViewAlbums = (RecyclerView) findViewById(R.id.grid_albums);
-	recyclerViewMedia = ((RecyclerView) findViewById(R.id.grid_photos));
-	recyclerViewAlbums.setHasFixedSize(true);
-	recyclerViewAlbums.setItemAnimator(new DefaultItemAnimator());
-	recyclerViewMedia.setHasFixedSize(true);
-	recyclerViewMedia.setItemAnimator(new DefaultItemAnimator());
+	rvAlbums = (RecyclerView) findViewById(R.id.grid_albums);
+	rvMedia = ((RecyclerView) findViewById(R.id.grid_photos));
+	rvAlbums.setHasFixedSize(true);
+	rvAlbums.setItemAnimator(new DefaultItemAnimator());
+	rvMedia.setHasFixedSize(true);
+	rvMedia.setItemAnimator(new DefaultItemAnimator());
 
-	albumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
-	photosDecoration = new GridSpacingItemDecoration(Measure.getPhotosColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
+	changeSpanCountRvMedia(Measure.getPhotosColumns(getApplicationContext()));
 
-	recyclerViewAlbums.addItemDecoration(albumsDecoration);
-	recyclerViewMedia.addItemDecoration(photosDecoration);
+	rvAlbumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
+	rvAlbums.addItemDecoration(rvAlbumsDecoration);
+
 
 	albumsAdapter = new AlbumsAdapter(getAlbums().dispAlbums, MainActivity.this);
-	recyclerViewAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColumns(getApplicationContext())));
+	rvAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColumns(getApplicationContext())));
 
 	albumsAdapter.setOnClickListener(albumOnClickListener);
 	albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
-	recyclerViewAlbums.setAdapter(albumsAdapter);
+	rvAlbums.setAdapter(albumsAdapter);
 
 	mediaAdapter = new MediaAdapter(getAlbum().getMedia(), MainActivity.this);
-	recyclerViewMedia.setLayoutManager(new GridLayoutManager(this, Measure.getPhotosColumns(getApplicationContext())));
+
 	mediaAdapter.setOnClickListener(photosOnClickListener);
 	mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
-	recyclerViewMedia.setAdapter(mediaAdapter);
+	rvMedia.setAdapter(mediaAdapter);
+
+	//set scale gesture detector
+	final ScaleGestureDetector mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+	  @Override
+	  public boolean onScaleBegin(ScaleGestureDetector detector) {
+		swipeRefreshLayout.setEnabled(false);
+		return super.onScaleBegin(detector);
+	  }
+
+	  @Override
+	  public boolean onScale(ScaleGestureDetector detector) {
+		Log.d(TAG, "onScale: ");
+		int spanCount = ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+		if (detector.getCurrentSpan() > 200 && detector.getTimeDelta() > 300) {
+		  if (detector.getCurrentSpan() > detector.getPreviousSpan()) {
+			changeSpanCountRvMedia(spanCount + 1);
+			return true;
+		  } else if(detector.getCurrentSpan() < detector.getPreviousSpan()) {
+			changeSpanCountRvMedia(spanCount - 1);
+			return true;
+		  }
+		}
+
+		return false;
+	  }
+
+	  @Override
+	  public void onScaleEnd(ScaleGestureDetector detector) {
+		super.onScaleEnd(detector);
+		swipeRefreshLayout.setEnabled(true);
+		Log.d(TAG, "onScaleEnd: ");
+	  }
+	});
+
+	rvMedia.setOnTouchListener(new View.OnTouchListener() {
+	  @Override
+	  public boolean onTouch(View v, MotionEvent event) {
+		mScaleGestureDetector.onTouchEvent(event);
+		return false;
+	  }
+	});
+
 
 	/**** SWIPE TO REFRESH ****/
 	swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -446,29 +487,50 @@ public class MainActivity extends SharedMediaActivity {
 
 	swipeRefreshLayout.animate().translationY(statusBarHeight).setInterpolator(new DecelerateInterpolator()).start();
 
-	//recyclerViewAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
-	//recyclerViewMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+	//rvAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
+	//rvMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
 
 	relativeLayoutMainContent=(RelativeLayout) findViewById(R.id.rl_main_content);
 	relativeLayoutMainContent.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
 
 	/**** SCROLLBAR ****/
 
-	touchScrollBar = (TouchScrollBar) findViewById(R.id.touchScrollBar);
-	touchScrollBar.setHandleColour(getAccentColor());
-	touchScrollBar.setHandleOffColour(getPrimaryColor());
-	touchScrollBar.setBarColour((ColorPalette.getTransparentColor(getInvertedBackgroundColor(), 160)));
-	touchScrollBar.setHideDuration(1500);
+	//touchScrollBar = (TouchScrollBar) findViewById(R.id.touchScrollBar);
+	//touchScrollBar.setHandleColour(getAccentColor());
+	//touchScrollBar.setHandleOffColour(getPrimaryColor());
+	//touchScrollBar.setBarColour((ColorPalette.getTransparentColor(getInvertedBackgroundColor(),160)));
+	//touchScrollBar.setHideDuration(1500);
 	setRecentApp(getString(R.string.app_name));
 
 	Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 
-	if (aa.getRotation() == Surface.ROTATION_90) {//1
+	if (aa.getRotation() == Surface.ROTATION_90) {
 	  Configuration configuration = new Configuration();
 	  configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
 	  onConfigurationChanged(configuration);
 	}
   }
+
+  private void changeSpanCountRvMedia(int spanCount) {
+	if (spanCount > 0 && spanCount < 9) {
+	  rvMedia.removeItemDecoration(rvMediaDecoration);
+	  rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+	  rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
+	  rvMedia.addItemDecoration(rvMediaDecoration);
+	}
+  }
+
+  @Override public boolean onKeyDown(int keyCode, KeyEvent event)
+  {
+	int spanCount = ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+	if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+	  changeSpanCountRvMedia(spanCount - 1);
+	  return true;
+	} else if(keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+	  changeSpanCountRvMedia(spanCount + 1);
+	  return true;
+	}
+	return super.onKeyDown(keyCode, event);  }
 
   //region TESTING
 
@@ -533,8 +595,8 @@ public class MainActivity extends SharedMediaActivity {
 
 	fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
 	setDrawerTheme();
-	recyclerViewAlbums.setBackgroundColor(getBackgroundColor());
-	recyclerViewMedia.setBackgroundColor(getBackgroundColor());
+	rvAlbums.setBackgroundColor(getBackgroundColor());
+	rvMedia.setBackgroundColor(getBackgroundColor());
 	mediaAdapter.updatePlaceholder(getApplicationContext());
 	albumsAdapter.updateTheme();
 	/**** DRAWER ****/
@@ -642,25 +704,10 @@ public class MainActivity extends SharedMediaActivity {
 	  }
 	});
 
-        /*
-        findViewById(R.id.ll_drawer_Moments).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                comingSoonDialog("Moments");
-            }
-        });
-
-        findViewById(R.id.ll_drawer_Tags).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                comingSoonDialog("Tags");
-            }
-        });
-        */
 	findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
-		Toast.makeText(MainActivity.this, "Cooming Soon!", Toast.LENGTH_SHORT).show();
+		Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
 	  }
 	});
   }
@@ -847,6 +894,8 @@ public class MainActivity extends SharedMediaActivity {
 	  menu.findItem(R.id.search_action).setVisible(albumsMode);
 	}
   }
+
+  //endregion
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
@@ -1438,9 +1487,9 @@ public class MainActivity extends SharedMediaActivity {
   }
 
   private void toggleRecyclersVisibilty(boolean albumsMode){
-	recyclerViewAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
-	recyclerViewMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
-	touchScrollBar.setScrollBarHidden(albumsMode);
+	rvAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
+	rvMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
+	//touchScrollBar.setScrollBarHidden(albumsMode);
 
   }
 

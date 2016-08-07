@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by dnld on 2/4/16.
  */
-public class AlbumSettings implements Serializable{
+public class AlbumSettings implements Serializable {
 
     public final static int SORT_BY_NAME = 3;
     public final static int SORT_BY_DATE = 0;
@@ -16,10 +16,10 @@ public class AlbumSettings implements Serializable{
     public int columnSortingMode;
     public boolean ascending;
 
-    AlbumSettings(String cover, int SortingMode, boolean asce) {
+    AlbumSettings(String cover, int SortingMode, boolean asc) {
         coverPath = cover;
         columnSortingMode = SortingMode;
-        ascending = asce;
+        ascending = asc;
     }
 
     AlbumSettings() {

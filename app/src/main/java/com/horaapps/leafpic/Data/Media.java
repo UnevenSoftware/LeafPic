@@ -392,14 +392,6 @@ public class Media implements Parcelable, Serializable {
         return bitmap;
     }
 
-    protected Media(Parcel in) {
-        path = in.readString();
-        dateModified = in.readLong();
-        mime = in.readString();
-        size = in.readLong();
-        selected = in.readByte() != 0x00;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -407,18 +399,29 @@ public class Media implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(path);
-        dest.writeLong(dateModified);
-        dest.writeString(mime);
-        dest.writeLong(size);
-        dest.writeByte((byte) (selected ? 0x01 : 0x00));
+        dest.writeString(this.path);
+        dest.writeLong(this.dateModified);
+        dest.writeString(this.mime);
+        dest.writeParcelable(this.uri, flags);
+        dest.writeLong(this.id);
+        dest.writeLong(this.size);
+        dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
+    protected Media(Parcel in) {
+        this.path = in.readString();
+        this.dateModified = in.readLong();
+        this.mime = in.readString();
+        this.uri = in.readParcelable(Uri.class.getClassLoader());
+        this.id = in.readLong();
+        this.size = in.readLong();
+        this.selected = in.readByte() != 0;
+    }
+
+    public static final Creator<Media> CREATOR = new Creator<Media>() {
         @Override
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
+        public Media createFromParcel(Parcel source) {
+            return new Media(source);
         }
 
         @Override

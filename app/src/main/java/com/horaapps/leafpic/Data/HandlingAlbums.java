@@ -35,7 +35,7 @@ import java.util.Collections;
 /**
  * Created by dnld on 27/04/16.
  */
-public class HandlingAlbums implements Serializable {
+public class HandlingAlbums {
 
   public final static String TAG = "HandlingAlbums";
   private String backupFile = "albums.dat";
@@ -56,7 +56,6 @@ public class HandlingAlbums implements Serializable {
     dispAlbums = new ArrayList<Album>();
     selectedAlbums = new ArrayList<Album>();
   }
-
 
 
   public void loadAlbums(Context context, boolean hidden) {
@@ -99,54 +98,6 @@ public class HandlingAlbums implements Serializable {
     return nameProvider.equals(MediaStoreProvider.class.getName());
   }
 
-  /*****
-   *
-   * public ArrayList<Album> getValidFolders(boolean hidden) {
-   ArrayList<Album> folders = new ArrayList<Album>();
-   if (hidden)
-   for (File storage : roots)
-   fetchRecursivelyHiddenFolder(storage, folders);
-   else
-   for (File storage : roots)
-   fetchRecursivelyFolder(storage, folders);
-
-   return folders;
-   }
-
-   private void fetchRecursivelyFolder(File dir, ArrayList<Album> folders) {
-   if (!excludedfolders.contains(dir)) {
-   File[] listFiles = dir.listFiles(new ImageFileFilter());
-   if (listFiles != null && listFiles.length > 0)
-   folders.add(new Album(dir.getAbsolutePath(), dir.getName(), listFiles.length));
-
-   File[] children = dir.listFiles(new FoldersFileFilter());
-   if (children != null) {
-   for (File temp : children) {
-   File nomedia = new File(temp, ".nomedia");
-   if (!excludedfolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
-   fetchRecursivelyFolder(temp, folders);
-   }
-   }
-   }
-   }
-   }
-
-   private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> folders) {
-   if (!excludedfolders.contains(dir)) {
-   File[] asdf = dir.listFiles(new FoldersFileFilter());
-   if (asdf != null) {
-   for (File temp : asdf) {
-   File nomedia = new File(temp, ".nomedia");
-   if (!excludedfolders.contains(temp) && (nomedia.exists() || temp.isHidden())) {
-   File[] files = temp.listFiles(new ImageFileFilter());
-   if (files != null && files.length > 0)
-   folders.add(new Album(temp.getAbsolutePath(), temp.getName(), files.length));
-   }
-   fetchRecursivelyHiddenFolder(temp, folders);
-   }
-   }
-   }
-   }*****/
 
   public static ArrayList<String> getSubFolders(File dir) {
     ArrayList<String> array = new ArrayList<String>();

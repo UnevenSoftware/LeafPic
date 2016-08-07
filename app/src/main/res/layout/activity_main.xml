@@ -49,14 +49,14 @@
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                      -->
-                    <com.turingtechnologies.materialscrollbar.TouchScrollBar
+                    <!--<com.turingtechnologies.materialscrollbar.TouchScrollBar
                         android:id="@+id/touchScrollBar"
                         android:layout_width="wrap_content"
                         app:msb_recyclerView="@id/grid_photos"
                         app:msb_lightOnTouch="true"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        />
+                        />-->
 
                     <TextView
                         android:layout_width="match_parent"

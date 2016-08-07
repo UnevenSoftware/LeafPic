@@ -29,15 +29,6 @@ public class Album implements Serializable {
 
   private String name = null;
   private String path = null;
-
-  public void setName(String name) {
-	this.name = name;
-  }
-
-  public void setPath(String path) {
-	this.path = path;
-  }
-
   private long id = -1;
   private int count = -1;
   private boolean selected = false;
@@ -137,6 +128,13 @@ public class Album implements Serializable {
 	return id != -1;
   }
 
+  public void setName(String name) {
+	this.name = name;
+  }
+
+  public void setPath(String path) {
+	this.path = path;
+  }
 
   public long getId() {
 	return  this.id;
