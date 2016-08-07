@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.drew.imaging.ImageMetadataReader;
@@ -34,7 +33,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -143,7 +141,7 @@ public class Media implements Parcelable, Serializable {
     public boolean isVideo() { return getMIME().startsWith("video"); }
 
     public Uri getUri() {
-        return isFromContentProvider() ? Uri.parse(uri) : Uri.fromFile(new File(path));
+        return hasUri() ? Uri.parse(uri) : Uri.fromFile(new File(path));
     }
 
     @TestOnly
@@ -193,7 +191,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     private void loadMetadata() {
-        if (isFromContentProvider() && metadataMap.isEmpty()) {
+        if (hasPath() && metadataMap.isEmpty()) {
             try {
                 Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
                 for (Directory directory : metadata.getDirectories())
@@ -242,8 +240,12 @@ public class Media implements Parcelable, Serializable {
         return false;
     }
 
-    private boolean isFromContentProvider() {
+    private boolean hasPath() {
         return path != null;
+    }
+
+    private boolean hasUri() {
+        return uri != null;
     }
 
     @Nullable public String getExifInfo() {
@@ -374,7 +376,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public String getDisplayName() {
-        return  isFromContentProvider() ? getPath() : getUri().getEncodedPath();
+        return  hasPath() ? getPath() : getUri().getEncodedPath();
     }
 
     public long getDateModified() {

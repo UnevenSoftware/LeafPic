@@ -380,8 +380,6 @@ public class MainActivity extends SharedMediaActivity {
 	  @Override
 	  public boolean onScaleBegin(ScaleGestureDetector detector) {
 		swipeRefreshLayout.setEnabled(false);
-		mediaAdapter.setOnClickListener(null);
-		mediaAdapter.setOnLongClickListener(null);
 		return super.onScaleBegin(detector);
 	  }
 
@@ -404,8 +402,6 @@ public class MainActivity extends SharedMediaActivity {
 	  @Override
 	  public void onScaleEnd(ScaleGestureDetector detector) {
 		super.onScaleEnd(detector);
-		mediaAdapter.setOnClickListener(photosOnClickListener);
-		mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
 		swipeRefreshLayout.setEnabled(true);
 	  }
 	});
@@ -524,15 +520,16 @@ public class MainActivity extends SharedMediaActivity {
 	}
   }
 
-  @Override public boolean onKeyDown(int keyCode, KeyEvent event)
-  {
-	int spanCount = ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
-	if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-	  changeSpanCountRvMedia(spanCount - 1);
-	  return true;
-	} else if(keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-	  changeSpanCountRvMedia(spanCount + 1);
-	  return true;
+  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+	if (!albumsMode) {
+	  int spanCount = ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+	  if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+		changeSpanCountRvMedia(spanCount - 1);
+		return true;
+	  } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+		changeSpanCountRvMedia(spanCount + 1);
+		return true;
+	  }
 	}
 	return super.onKeyDown(keyCode, event);  }
 
