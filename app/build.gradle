@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha6'
     }
 }
 
@@ -17,13 +17,13 @@ repositories {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion '24'
     defaultConfig {
         applicationId "com.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 7
-        versionName "v0.4"
+        versionCode 8
+        versionName "v0.5"
     }
 
     lintOptions {

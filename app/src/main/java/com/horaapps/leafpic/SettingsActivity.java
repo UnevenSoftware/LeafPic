@@ -249,7 +249,7 @@ public class SettingsActivity extends ThemedActivity {
 
         /*** SW MEDIA STORE ***/
         swUseMediaStore = (SwitchCompat) findViewById(R.id.sw_use_media_mediastore);
-        swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_media_store), false));
+        swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_media_store), true));
         swUseMediaStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

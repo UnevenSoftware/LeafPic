@@ -36,7 +36,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 	h = new CustomAlbumsHandler(getApplicationContext());
 	PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
 
-	excludedFolders = h.getExcludedFolders(SP.getBoolean(getString(R.string.preference_use_media_store), false));
+	excludedFolders = h.getExcludedFolders(SP.getBoolean(getString(R.string.preference_use_media_store), true));
 
 	checkNothing(excludedFolders);
 	initUI();

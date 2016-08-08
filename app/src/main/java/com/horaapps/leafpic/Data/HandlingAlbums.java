@@ -78,7 +78,6 @@ public class HandlingAlbums {
   public void addAlbum(int position, Album album) {
     dispAlbums.add(position, album);
     setCurrentAlbumIndex(dispAlbums.indexOf(album));
-    Log.wtf("asd", current+"");
   }
 
   public void setCurrentAlbumIndex(int index) {
