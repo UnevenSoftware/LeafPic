@@ -62,7 +62,7 @@ public class SettingsActivity extends ThemedActivity {
 
     private SwitchCompat swNavBar;
     private SwitchCompat swStatusBar;
-    private SwitchCompat swMaxLuminosita;
+    private SwitchCompat swMaxLuminosity;
     private SwitchCompat swPictureOrientation;
     private SwitchCompat swDelayFullImage;
     private SwitchCompat swInternalBrowser;
@@ -283,17 +283,17 @@ public class SettingsActivity extends ThemedActivity {
         });
         updateSwitchColor(swPictureOrientation, getAccentColor());
 
-        /*** SW MAX LUMINOSITA ***/
-        swMaxLuminosita = (SwitchCompat) findViewById(R.id.set_max_luminosita);
-        swMaxLuminosita.setChecked(SP.getBoolean(getString(R.string.preference_max_brightness), false));
-        swMaxLuminosita.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*** SW MAX LUMINOSITY ***/
+        swMaxLuminosity = (SwitchCompat) findViewById(R.id.set_max_luminosity);
+        swMaxLuminosity.setChecked(SP.getBoolean(getString(R.string.preference_max_brightness), false));
+        swMaxLuminosity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SP.putBoolean(getString(R.string.preference_max_brightness), isChecked);
-                updateSwitchColor(swMaxLuminosita, getAccentColor());
+                updateSwitchColor(swMaxLuminosity, getAccentColor());
             }
         });
-        updateSwitchColor(swMaxLuminosita, getAccentColor());
+        updateSwitchColor(swMaxLuminosity, getAccentColor());
 
         /*** SW TRANSLUCENT STATUS BAR ***/
         swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
@@ -510,7 +510,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onColorChanged(int c) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(c);
                 }
 
@@ -525,7 +525,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onColorChanged(int c) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(c));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(c));
                     } else getWindow().setStatusBarColor(c);
                     if (isNavigationBarColored())
                         getWindow().setNavigationBarColor(c);
@@ -543,7 +543,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(getPrimaryColor());
                 }
                 toolbar.setBackgroundColor(getPrimaryColor());
@@ -559,7 +559,7 @@ public class SettingsActivity extends ThemedActivity {
                 setScrollViewColor(scr);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else {
                         getWindow().setStatusBarColor(getPrimaryColor());
                     }
@@ -572,7 +572,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onDismiss(DialogInterface dialog) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(getPrimaryColor());
                     if (isNavigationBarColored())
                         getWindow().setNavigationBarColor(getPrimaryColor());
@@ -639,7 +639,7 @@ public class SettingsActivity extends ThemedActivity {
         final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) dialogLayout.findViewById(R.id.apply_theme_3th_act_enabled);
 
         ((CardView) dialogLayout.findViewById(R.id.third_act_theme_card)).setCardBackgroundColor(getCardBackgroundColor());
-        dialogLayout.findViewById(R.id.third_act_theme_title).setBackgroundColor(getPrimaryColor());//or Getprimary
+        dialogLayout.findViewById(R.id.third_act_theme_title).setBackgroundColor(getPrimaryColor());//or GetPrimary
         ((TextView) dialogLayout.findViewById(R.id.apply_theme_3thAct_title)).setTextColor(getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.apply_theme_3thAct_title_Sub)).setTextColor(getSubTextColor());
         ((IconicsImageView) dialogLayout.findViewById(R.id.ll_apply_theme_3thAct_icon)).setColor(getIconColor());
@@ -687,7 +687,7 @@ public class SettingsActivity extends ThemedActivity {
         updateSwitchColor(swDelayFullImage, color);
         updateSwitchColor(swNavBar, color);
         updateSwitchColor(swStatusBar, color);
-        updateSwitchColor(swMaxLuminosita, color);
+        updateSwitchColor(swMaxLuminosity, color);
         updateSwitchColor(swPictureOrientation, color);
         updateSwitchColor(swInternalBrowser, color);
         updateSwitchColor(swAutoUpdate, color);
@@ -747,7 +747,7 @@ public class SettingsActivity extends ThemedActivity {
         /** Icons **/
         color = getIconColor();
         ((IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.ll_switch_max_luminosita_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.ll_switch_max_luminosity_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.custom_3thAct_icon)).setColor(color);
@@ -767,7 +767,7 @@ public class SettingsActivity extends ThemedActivity {
 
         /** TextViews **/
         color = getTextColor();
-        ((TextView) findViewById(R.id.max_luminosita_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.max_luminosity_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.full_resolution_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.picture_orientation_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.custom_3thAct_title)).setTextColor(color);
@@ -788,7 +788,7 @@ public class SettingsActivity extends ThemedActivity {
 
         /** Sub Text Views**/
         color = getSubTextColor();
-        ((TextView) findViewById(R.id.max_luminosita_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.max_luminosity_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.full_resolution_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.custom_3thAct_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.picture_orientation_Item_Sub)).setTextColor(color);

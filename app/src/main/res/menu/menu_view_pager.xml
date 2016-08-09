@@ -5,7 +5,7 @@
     tools:context=".PhotoPagerActivity"
 >
 
-    <group android:id="@+id/only_photos_otions">
+    <group android:id="@+id/only_photos_options">
         <item
             android:id="@+id/action_edit"
             android:title="@string/edit"

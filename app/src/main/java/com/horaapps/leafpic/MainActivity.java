@@ -33,7 +33,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -236,7 +235,7 @@ public class MainActivity extends SharedMediaActivity {
 	else {
 	  displayAlbums(false);
 	  albumsAdapter.swapDataSet(getAlbums().dispAlbums);
-	  toggleRecyclersVisibilty(true);
+	  toggleRecyclersVisibility(true);
 	}
   }
 
@@ -312,17 +311,17 @@ public class MainActivity extends SharedMediaActivity {
 			displayAlbums(false);
 			pickMode = data.getBoolean(SplashScreen.PICK_MODE);
 			albumsAdapter.swapDataSet(getAlbums().dispAlbums);
-			toggleRecyclersVisibilty(true);
+			toggleRecyclersVisibility(true);
 			break;
 
 		  case SplashScreen.ALBUMS_BACKUP:
 			albumsAdapter.swapDataSet(getAlbums().dispAlbums);
 			displayAlbums(true);
 			pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-			toggleRecyclersVisibilty(true);
+			toggleRecyclersVisibility(true);
 			break;
 
-		  case SplashScreen.PHOTS_PREFETCHED:
+		  case SplashScreen.PHOTOS_PREFETCHED:
 			//TODO ask password if hidden
 			new Thread(new Runnable() {
 			  @Override
@@ -332,7 +331,7 @@ public class MainActivity extends SharedMediaActivity {
 			}).start();
 			displayCurrentAlbumMedia(false);
 			mediaAdapter.swapDataSet(getAlbum().getMedia());
-			toggleRecyclersVisibilty(false);
+			toggleRecyclersVisibility(false);
 			break;
 		}
 	  } else
@@ -548,7 +547,7 @@ public class MainActivity extends SharedMediaActivity {
 		final int takeFlags = resultData.getFlags()
 									  & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 		getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
-		Toast.makeText(this, R.string.got_oermission_wr_sdcard, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
 	  }
 	}
   }
@@ -1487,7 +1486,7 @@ public class MainActivity extends SharedMediaActivity {
 	}
   }
 
-  private void toggleRecyclersVisibilty(boolean albumsMode){
+  private void toggleRecyclersVisibility(boolean albumsMode){
 	rvAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
 	rvMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
 	//touchScrollBar.setScrollBarHidden(albumsMode);
@@ -1514,7 +1513,7 @@ public class MainActivity extends SharedMediaActivity {
 	@Override
 	protected void onPreExecute() {
 	  swipeRefreshLayout.setRefreshing(true);
-	  toggleRecyclersVisibilty(true);
+	  toggleRecyclersVisibility(true);
 	  super.onPreExecute();
 	}
 
@@ -1538,7 +1537,7 @@ public class MainActivity extends SharedMediaActivity {
 	@Override
 	protected void onPreExecute() {
 	  swipeRefreshLayout.setRefreshing(true);
-	  toggleRecyclersVisibilty(false);
+	  toggleRecyclersVisibility(false);
 	  super.onPreExecute();
 	}
 

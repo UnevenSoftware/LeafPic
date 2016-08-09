@@ -49,9 +49,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 
 /**
  * Created by dnld on 18/02/16.
@@ -65,7 +62,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
     private HackyViewPager mViewPager;
     private MediaPagerAdapter adapter;
     private PreferenceUtil SP;
-    private RelativeLayout ActivityBackgorund;
+    private RelativeLayout ActivityBackground;
     //private Album album;
     private SelectAlbumBottomSheet bottomSheetDialogFragment;
     private SecurityHelper securityObj;
@@ -148,11 +145,11 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                                                .setData(getAlbum().getCurrentMedia().getUri());
                     startActivity(mpdIntent);
                 } else {
-                    Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
-                    intentopenWith.setDataAndType(
+                    Intent intentOpenWith = new Intent(Intent.ACTION_VIEW);
+                    intentOpenWith.setDataAndType(
                             getAlbum().getMedia().get(mViewPager.getCurrentItem()).getUri(),
                             getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMIME());
-                    startActivity(intentopenWith);
+                    startActivity(intentOpenWith);
                 }
             }
         });
@@ -206,8 +203,8 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
 
-        ActivityBackgorund = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
-        ActivityBackgorund.setBackgroundColor(getBackgroundColor());
+        ActivityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
+        ActivityBackground.setBackgroundColor(getBackgroundColor());
 
         setStatusBarColor();
         setNavBarColor();
@@ -216,7 +213,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
         /**** SETTINGS ****/
 
-        if (SP.getBoolean("set_max_luminosita", false))
+        if (SP.getBoolean("set_max_luminosity", false))
             updateBrightness(1.0F);
         else try {
             float brightness = android.provider.Settings.System.getInt(
@@ -278,11 +275,11 @@ public class PhotoPagerActivity extends SharedMediaActivity {
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
 
-        menu.setGroupVisible(R.id.only_photos_otions, !getAlbum().getCurrentMedia().isVideo());
+        menu.setGroupVisible(R.id.only_photos_options, !getAlbum().getCurrentMedia().isVideo());
 
         if (customUri) {
             menu.setGroupVisible(R.id.on_internal_storage, false);
-            menu.setGroupVisible(R.id.only_photos_otions, false);
+            menu.setGroupVisible(R.id.only_photos_options, false);
             menu.findItem(R.id.sort_action).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
@@ -511,7 +508,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
             case R.id.action_rename:
                 AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
                 final EditText editTextNewName = new EditText(getApplicationContext());
-                editTextNewName.setText(StringUtils.getPhotoNamebyPath(getAlbum().getCurrentMedia().getPath()));
+                editTextNewName.setText(StringUtils.getPhotoNameByPath(getAlbum().getCurrentMedia().getPath()));
 
                 AlertDialog renameDialog =
                         AlertDialogsHelper.getInsertTextDialog(
@@ -583,7 +580,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         options.setCompressionQuality(90);
         options.setActiveWidgetColor(getAccentColor());
         options.setToolbarColor(getPrimaryColor());
-        options.setStatusBarColor(isTranslucentStatusBar() ? ColorPalette.getOscuredColor(getPrimaryColor()) : getPrimaryColor());
+        options.setStatusBarColor(isTranslucentStatusBar() ? ColorPalette.getObscuredColor(getPrimaryColor()) : getPrimaryColor());
         options.setCropFrameColor(getAccentColor());
         options.setFreeStyleCropEnabled(true);
 
@@ -599,7 +596,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 else
                     getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
             else
-                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SETTED BETTER
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SET BETTER
         }
     }
 
@@ -608,7 +605,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isApplyThemeOnImgAct())
                 if (isTranslucentStatusBar() && isTransparencyZero())
-                    getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                    getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                 else
                     getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
             else
@@ -689,7 +686,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
-                ActivityBackgorund.setBackgroundColor((Integer) animator.getAnimatedValue());
+                ActivityBackground.setBackgroundColor((Integer) animator.getAnimatedValue());
             }
         });
         colorAnimation.start();

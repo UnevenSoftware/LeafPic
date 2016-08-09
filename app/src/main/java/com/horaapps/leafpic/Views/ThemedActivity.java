@@ -34,7 +34,7 @@ public class ThemedActivity extends AppCompatActivity {
 
 
   private boolean coloredNavBar;
-  private boolean oscuredStatusBar;
+  private boolean obscuredStatusBar;
   private boolean applyThemeImgAct;
 
 
@@ -54,7 +54,7 @@ public class ThemedActivity extends AppCompatActivity {
   public void updateTheme(){
 	themeHelper.updateTheme();
 	coloredNavBar = SP. getBoolean(getString(R.string.preference_colored_nav_bar), false);
-	oscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
+	obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
 	applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
   }
 
@@ -71,7 +71,7 @@ public class ThemedActivity extends AppCompatActivity {
   protected void setStatusBarColor() {
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 	  if (isTranslucentStatusBar())
-		getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+		getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
 	  else
 		getWindow().setStatusBarColor(getPrimaryColor());
 	}
@@ -82,7 +82,7 @@ public class ThemedActivity extends AppCompatActivity {
   }
 
   public void setCursorDrawableColor(EditText editText, int color) {
-	// TODO: 02/08/16 remove thhis
+	// TODO: 02/08/16 remove this
 	ThemeHelper.setCursorDrawableColor(editText, color);
   }
 
@@ -102,7 +102,7 @@ public class ThemedActivity extends AppCompatActivity {
   }
 
   public boolean isTranslucentStatusBar() {
-	return oscuredStatusBar;
+	return obscuredStatusBar;
   }
 
   protected boolean isApplyThemeOnImgAct() {

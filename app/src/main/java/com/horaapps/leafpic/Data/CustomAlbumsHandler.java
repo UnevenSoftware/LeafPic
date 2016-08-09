@@ -26,8 +26,8 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     private static final String ALBUM_ID = "id";
     private static final String ALBUM_EXCLUDED = "excluded";
     private static final String ALBUM_COVER = "cover_path";
-    private static final String ALBUM_DEAFAULT_SORTMODE = "sort_mode";
-    private static final String ALBUM_DEAFAULT_SORT_ASCENDING = "sort_ascending";
+    private static final String ALBUM_DEFAULT_SORTMODE = "sort_mode";
+    private static final String ALBUM_DEFAULT_SORT_ASCENDING = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "column_count";
 
     public CustomAlbumsHandler(Context ctx) {
@@ -36,14 +36,14 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
-                           TABLE_ALBUMS + "(" +
-                           ALBUM_PATH + " TEXT," +
-                           ALBUM_ID + " INTEGER," +
-                           ALBUM_EXCLUDED + " INTEGER," +
-                           ALBUM_COVER + " TEXT, " +
-                           ALBUM_DEAFAULT_SORTMODE + " INTEGER, " +
-                           ALBUM_DEAFAULT_SORT_ASCENDING + " INTEGER, " +
-                           ALBUM_COLUMN_COUNT + " TEXT)");
+                TABLE_ALBUMS + "(" +
+                ALBUM_PATH + " TEXT," +
+                ALBUM_ID + " INTEGER," +
+                ALBUM_EXCLUDED + " INTEGER," +
+                ALBUM_COVER + " TEXT, " +
+                ALBUM_DEFAULT_SORTMODE + " INTEGER, " +
+                ALBUM_DEFAULT_SORT_ASCENDING + " INTEGER, " +
+                ALBUM_COLUMN_COUNT + " TEXT)");
 
         // NOTE: excluded music folder by default
         ContentValues values = new ContentValues();
@@ -81,7 +81,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         AlbumSettings s = new AlbumSettings();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String[] selection = new  String[] { ALBUM_COVER, ALBUM_DEAFAULT_SORTMODE, ALBUM_DEAFAULT_SORT_ASCENDING };
+        String[] selection = new  String[] { ALBUM_COVER, ALBUM_DEFAULT_SORTMODE, ALBUM_DEFAULT_SORT_ASCENDING};
         Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?",
                 new String[]{ path, String.valueOf(id) }, null, null, null);
 
@@ -167,7 +167,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         checkAndCreateAlbum(path, id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ALBUM_DEAFAULT_SORTMODE, column);
+        values.put(ALBUM_DEFAULT_SORTMODE, column);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, String.valueOf(id) });
         db.close();
     }
@@ -176,7 +176,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         checkAndCreateAlbum(path, id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ALBUM_DEAFAULT_SORTMODE, asc ? 1 : 0);
+        values.put(ALBUM_DEFAULT_SORTMODE, asc ? 1 : 0);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, String.valueOf(id) });
         db.close();
     }

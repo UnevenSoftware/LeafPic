@@ -86,7 +86,7 @@
                         />
                 </LinearLayout>
 
-                <!-- TRASPARENCY -->
+                <!-- TRANSPARENCY -->
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_seek_bar_alpha"
                     android:layout_width="match_parent"
