@@ -15,7 +15,7 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.utils.PreferenceUtil;
+import org.horaapps.leafpic.util.PreferenceUtil;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 

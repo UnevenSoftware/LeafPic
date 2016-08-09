@@ -8,8 +8,8 @@ import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Data.FoldersFileFilter;
 import org.horaapps.leafpic.Data.ImageFileFilter;
 import org.horaapps.leafpic.Data.Media;
-import org.horaapps.leafpic.utils.ContentHelper;
-import org.horaapps.leafpic.utils.PreferenceUtil;
+import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;
 import java.util.ArrayList;

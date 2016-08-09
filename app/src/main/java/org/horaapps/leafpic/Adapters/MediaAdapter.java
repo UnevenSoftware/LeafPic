@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.horaapps.leafpic.Data.Media;
-import org.horaapps.leafpic.utils.ColorPalette;
-import org.horaapps.leafpic.utils.ThemeHelper;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.ThemeHelper;
 import com.koushikdutta.ion.Ion;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;

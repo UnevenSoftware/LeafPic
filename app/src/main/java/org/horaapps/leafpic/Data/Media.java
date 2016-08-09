@@ -23,7 +23,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.GpsDirectory;
-import org.horaapps.leafpic.utils.StringUtils;
+import org.horaapps.leafpic.util.StringUtils;
 
 import org.jetbrains.annotations.TestOnly;
 

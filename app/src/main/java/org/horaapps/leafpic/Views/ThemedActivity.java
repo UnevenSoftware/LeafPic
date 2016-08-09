@@ -14,9 +14,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 
-import org.horaapps.leafpic.utils.ColorPalette;
-import org.horaapps.leafpic.utils.PreferenceUtil;
-import org.horaapps.leafpic.utils.ThemeHelper;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.ThemeHelper;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 

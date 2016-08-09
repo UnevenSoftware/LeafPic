@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
-import org.horaapps.leafpic.utils.StringUtils;
+import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;

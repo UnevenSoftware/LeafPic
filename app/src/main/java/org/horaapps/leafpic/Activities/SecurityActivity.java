@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.utils.PreferenceUtil;
-import org.horaapps.leafpic.utils.SecurityHelper;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.SecurityHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;

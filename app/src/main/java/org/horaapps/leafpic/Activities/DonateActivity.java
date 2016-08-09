@@ -6,13 +6,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.utils.CustomTabService;
-import org.horaapps.leafpic.utils.StringUtils;
+import org.horaapps.leafpic.util.CustomTabService;
+import org.horaapps.leafpic.util.IabHelper;
+import org.horaapps.leafpic.util.IabResult;
+import org.horaapps.leafpic.util.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -30,6 +34,8 @@ public class DonateActivity extends ThemedActivity {
     /**** Scroll View*/
     private ScrollView scr;
 
+    IabHelper mHelper;
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -39,6 +45,28 @@ public class DonateActivity extends ThemedActivity {
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);
+        String base64EncodedPublicKey = "";
+
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.d("donateAct", "Problem setting up In-app Billing: " + result);
+                }
+                // Hooray, IAB is fully set up!
+            }
+        });
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHelper != null) try {
+            mHelper.dispose();
+        } catch (IabHelper.IabAsyncInProgressException ignored) { }
+        mHelper = null;
     }
 
     @Override

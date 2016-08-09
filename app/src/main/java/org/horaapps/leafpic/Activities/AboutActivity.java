@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.utils.CustomTabService;
+import org.horaapps.leafpic.util.CustomTabService;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;

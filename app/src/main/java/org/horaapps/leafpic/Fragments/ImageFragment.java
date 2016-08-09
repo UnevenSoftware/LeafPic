@@ -13,8 +13,6 @@ import com.bumptech.glide.signature.StringSignature;
 import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.Activities.PhotoPagerActivity;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.utils.Measure;
-import org.horaapps.leafpic.utils.PreferenceUtil;
 
 import java.util.Date;
 

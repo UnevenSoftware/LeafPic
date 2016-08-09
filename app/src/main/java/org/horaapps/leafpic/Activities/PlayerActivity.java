@@ -65,9 +65,9 @@ import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.player.DemoPlayer;
 import org.horaapps.leafpic.player.ExtractorRendererBuilder;
 import org.horaapps.leafpic.player.HlsRendererBuilder;
-import org.horaapps.leafpic.utils.ColorPalette;
-import org.horaapps.leafpic.utils.ContentHelper;
-import org.horaapps.leafpic.utils.Measure;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.util.Measure;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import java.net.CookieHandler;

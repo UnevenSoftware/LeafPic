@@ -9,9 +9,9 @@ import android.util.Log;
 import org.horaapps.leafpic.Adapters.MediaAdapter;
 import org.horaapps.leafpic.Data.Providers.StorageProvider;
 import org.horaapps.leafpic.Data.Providers.MediaStoreProvider;
-import org.horaapps.leafpic.utils.ContentHelper;
-import org.horaapps.leafpic.utils.PreferenceUtil;
-import org.horaapps.leafpic.utils.StringUtils;
+import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 

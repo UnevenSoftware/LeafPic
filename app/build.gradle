@@ -22,10 +22,9 @@ android {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 9
+        versionCode 10
         versionName "v0.5.1"
     }
-
     lintOptions {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
@@ -67,7 +66,6 @@ dependencies {
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.google.android.exoplayer:exoplayer:r1.5.7'
     compile 'de.psdev.licensesdialog:licensesdialog:1.8.0'
-    //compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
     compile 'org.jetbrains:annotations-java5:15.0'

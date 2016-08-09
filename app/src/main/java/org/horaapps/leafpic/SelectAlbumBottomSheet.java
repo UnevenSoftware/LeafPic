@@ -27,8 +27,8 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.FoldersFileFilter;
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.utils.AlertDialogsHelper;
-import org.horaapps.leafpic.utils.ThemeHelper;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.ThemeHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 

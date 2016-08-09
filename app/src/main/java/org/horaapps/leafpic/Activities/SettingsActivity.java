@@ -22,10 +22,10 @@ import android.widget.Toast;
 
 import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.utils.ColorPalette;
-import org.horaapps.leafpic.utils.PreferenceUtil;
-import org.horaapps.leafpic.utils.SecurityHelper;
-import org.horaapps.leafpic.utils.ThemeHelper;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.ThemeHelper;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -34,9 +34,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
 
-import static org.horaapps.leafpic.utils.ThemeHelper.AMOLED_THEME;
-import static org.horaapps.leafpic.utils.ThemeHelper.DARK_THEME;
-import static org.horaapps.leafpic.utils.ThemeHelper.LIGHT_THEME;
+import static org.horaapps.leafpic.util.ThemeHelper.AMOLED_THEME;
+import static org.horaapps.leafpic.util.ThemeHelper.DARK_THEME;
+import static org.horaapps.leafpic.util.ThemeHelper.LIGHT_THEME;
 
 /**
  * Created by Jibo on 02/03/2016.

@@ -16,10 +16,10 @@ import android.widget.Toast;
 
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
-import org.horaapps.leafpic.utils.ColorPalette;
-import org.horaapps.leafpic.utils.PermissionUtils;
-import org.horaapps.leafpic.utils.PreferenceUtil;
-import org.horaapps.leafpic.utils.StringUtils;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.PermissionUtils;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 

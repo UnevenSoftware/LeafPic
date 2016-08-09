@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.Data.Providers;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -12,8 +11,8 @@ import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Data.ImageFileFilter;
 import org.horaapps.leafpic.Data.Media;
-import org.horaapps.leafpic.utils.PreferenceUtil;
-import org.horaapps.leafpic.utils.StringUtils;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.StringUtils;
 
 import org.jetbrains.annotations.TestOnly;
 

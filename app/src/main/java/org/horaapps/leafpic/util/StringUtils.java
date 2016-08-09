@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.utils;
+package org.horaapps.leafpic.util;
 
 import android.content.Context;
 import android.media.ExifInterface;
@@ -6,14 +6,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by dnld on 1/3/16.

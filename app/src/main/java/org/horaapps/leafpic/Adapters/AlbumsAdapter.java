@@ -19,7 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.Media;
-import org.horaapps.leafpic.utils.ThemeHelper;
+import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.utils;
+package org.horaapps.leafpic.util;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;

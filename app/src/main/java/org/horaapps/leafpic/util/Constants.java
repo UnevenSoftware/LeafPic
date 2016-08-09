@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.utils;
+package org.horaapps.leafpic.util;
 
 /**
  * Created by dnld on 30/03/16.

@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import org.horaapps.leafpic.utils.Measure;
+import org.horaapps.leafpic.util.Measure;
 
 /**
  * Created by dnld on 06/03/16.
