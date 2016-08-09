@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,10 +110,20 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.selectedIcon.setVisibility(View.GONE);
             holder.layout.setBackgroundColor(theme.getCardBackgroundColor());
         }
-        // TODO: 02/08/16 Html.fromHtml deprecated
-        holder.name.setText(Html.fromHtml("<i><font color='" + textColor + "'>" + a.getName() + "</font></i>"));
-        holder.nPhotos.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
-                                                     "color='" + textColor + "'> " +a.getContentDescription(c) + "</font>"));
+
+        // TODO 09/08/16 Html.fromHtml(String) is deprecated
+        String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
+        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
+                "color='" + textColor + "'> " +a.getContentDescription(c) + "</font>";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.name.setText(Html.fromHtml(albumNameHtml, Html.FROM_HTML_MODE_LEGACY));
+            holder.nPhotos.setText(Html.fromHtml(albumPhotoCountHtml, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            holder.name.setText(Html.fromHtml(albumNameHtml));
+            holder.nPhotos.setText(Html.fromHtml(albumPhotoCountHtml));
+        }
+
         // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }
 
