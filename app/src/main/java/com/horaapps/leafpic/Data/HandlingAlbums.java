@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
-import java.io.Serializable;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -209,7 +208,7 @@ public class HandlingAlbums {
         bitmap = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().getPath(),
                 MediaStore.Images.Thumbnails.MINI_KIND);
       } else return;
-      bitmap = Bitmap.createScaledBitmap(getCropedBitmap(bitmap), 128, 128, false);
+      bitmap = Bitmap.createScaledBitmap(getCroppedBitmap(bitmap), 128, 128, false);
       addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(bitmap, 5));
 
       addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
@@ -225,7 +224,7 @@ public class HandlingAlbums {
     return bmpWithBorder;
   }
 
-  private Bitmap getCropedBitmap(Bitmap srcBmp){
+  private Bitmap getCroppedBitmap(Bitmap srcBmp){
     Bitmap dstBmp;
     if (srcBmp.getWidth() >= srcBmp.getHeight()){
       dstBmp = Bitmap.createBitmap(srcBmp,

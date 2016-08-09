@@ -666,7 +666,7 @@
                             android:id="@+id/ll_more_options_theme"
                             android:visibility="visible"
                             android:orientation="vertical">
-                            <!-- TRASLUCENT STATUS BAR-->
+                            <!-- TRANSLUCENT STATUS BAR-->
                             <LinearLayout
                                 xmlns:android="http://schemas.android.com/apk/res/android"
                                 android:id="@+id/ll_switch_TraslucentStatusBar"
@@ -842,15 +842,15 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <!--MAX BRIGHTENESS-->
+                    <!--MAX BRIGHTNESS-->
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_max_luminosita"
+                        android:id="@+id/ll_switch_max_luminosity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_switch_max_luminosita_icon"
+                            android:id="@+id/ll_switch_max_luminosity_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -875,7 +875,7 @@
                                 android:layout_marginEnd="45dp"
                                 >
                                 <TextView
-                                    android:id="@+id/max_luminosita_Item"
+                                    android:id="@+id/max_luminosity_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/max_brightness"
@@ -883,7 +883,7 @@
                                     android:textSize="16sp"
                                     />
                                 <TextView
-                                    android:id="@+id/max_luminosita_Item_Sub"
+                                    android:id="@+id/max_luminosity_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/max_brightness_sub"
@@ -892,7 +892,7 @@
                                     />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_max_luminosita"
+                                android:id="@+id/set_max_luminosity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"

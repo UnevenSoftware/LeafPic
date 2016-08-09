@@ -115,9 +115,9 @@ public class ImageFragment extends Fragment {
     public void rotatePicture(int rotation) {
         View view = getView();
         if (view.getClass().equals(SubsamplingScaleImageView.class)) {
-            int orienatation = Measure.rotateBy(img.getOrientation(), rotation);
-            if(img.setOrientation(orienatation))
-                ((SubsamplingScaleImageView) view).setOrientation(orienatation);
+            int orientation = Measure.rotateBy(img.getOrientation(), rotation);
+            if(img.setOrientation(orientation))
+                ((SubsamplingScaleImageView) view).setOrientation(orientation);
         } else {
                 int orienatation = Measure.rotateBy(img.getOrientation(),rotation);
             //((ImageView) view).setRotation(orienatation);

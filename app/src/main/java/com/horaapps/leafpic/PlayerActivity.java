@@ -215,7 +215,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   protected void setStatusBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       if (isTranslucentStatusBar() && isTransparencyZero())
-        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
       else
         getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
     }

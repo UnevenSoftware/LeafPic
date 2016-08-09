@@ -30,7 +30,7 @@ public class ColorPalette {
         };
     }
 
-    public static int getOscuredColor(int c){
+    public static int getObscuredColor(int c){
         float[] hsv = new float[3];
         int color = c;
         Color.colorToHSV(color, hsv);

@@ -117,8 +117,8 @@ public class Measure {
         return size;
     }
 
-    public static int rotateBy(int current, int degres){
-        int rotation = current + degres;
+    public static int rotateBy(int current, int degrees){
+        int rotation = current + degrees;
         if (rotation > 359) rotation -=360;
         if (rotation < 0) rotation +=360;
         return rotation;

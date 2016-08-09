@@ -102,7 +102,7 @@ public class DonateActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.donate_bitcoin_item)).setTextColor(color);
         ((TextView) findViewById(R.id.donate_header_item)).setTextColor(color);
 
-        /***** ScrolView *****/
+        /***** ScrollView *****/
         setScrollViewColor(scr);
 
         /** ACTIONS **/

@@ -58,17 +58,17 @@ public class StringUtils {
         return degree;
     }
 
-    public static String getBucketNamebyImagePath(String path) {
+    public static String getBucketNameByImagePath(String path) {
         String b[] = path.split("/");
         return b[b.length - 2];
     }
 
-    public static String getBucketNamebyBucketPath(String path) {
+    public static String getBucketNameByBucketPath(String path) {
         String b[] = path.split("/");
         return b[b.length - 1];
     }
 
-    public static String getPhotoNamebyPath(String path) {
+    public static String getPhotoNameByPath(String path) {
         String b[] = path.split("/");
         String fi = b[b.length - 1];
         return fi.substring(0, fi.lastIndexOf('.'));
@@ -83,10 +83,10 @@ public class StringUtils {
         return c;
     }
 
-    public static String getPhotoPathRenamedAlbumChange(String olderPath, String albumnewName) {
+    public static String getPhotoPathRenamedAlbumChange(String olderPath, String albumNewName) {
         String c = "", b[] = olderPath.split("/");
         for (int x = 0; x < b.length - 2; x++) c += b[x] + "/";
-        c += albumnewName +"/"+b[b.length - 1];
+        c += albumNewName +"/"+b[b.length - 1];
         return c;
     }
 
@@ -94,7 +94,7 @@ public class StringUtils {
         return Long.parseLong(uri.substring(uri.lastIndexOf('/')+1));
     }
 
-    public static String getPhotoExtensionbyPath(String path) {
+    public static String getPhotoExtensionByPath(String path) {
         String b[] = path.split("/");
         String fi = b[b.length - 1];
         return fi.substring(fi.indexOf('.'), fi.length());
@@ -144,7 +144,7 @@ public class StringUtils {
 
 
 
-    public static String getBucketPathbyImagePath(String path) {
+    public static String getBucketPathByImagePath(String path) {
         String b[] = path.split("/");
         String c = "";
         for (int x = 0; x < b.length - 1; x++) c += b[x] + "/";

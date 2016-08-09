@@ -51,7 +51,7 @@ public class SecurityActivity extends ThemedActivity {
         swActiveSecurity = (SwitchCompat) findViewById(R.id.active_security_switch);
         swApplySecurityHidden = (SwitchCompat) findViewById(R.id.security_body_apply_hidden_switch);
 
-        /** - SWITCHS - **/
+        /** - SWITCHES - **/
         /** - ACTIVE SECURITY - **/
         swActiveSecurity.setChecked(securityObj.isActiveSecurity());
         swActiveSecurity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

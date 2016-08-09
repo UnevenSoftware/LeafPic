@@ -95,7 +95,7 @@ public class  MediaStoreProvider {
 		do if (!excludedAlbums.contains(cur.getLong(idColumn))) {
 		  Media firstAlbumPhoto = getLastMedia(context, cur.getLong(idColumn));
 		  if (firstAlbumPhoto != null) {
-			String path = StringUtils.getBucketPathbyImagePath(firstAlbumPhoto.getPath());
+			String path = StringUtils.getBucketPathByImagePath(firstAlbumPhoto.getPath());
 			Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn),
 										   getAlbumCount(context, cur.getLong(idColumn)));
 			album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
@@ -199,7 +199,7 @@ public class  MediaStoreProvider {
   }
 
   @TestOnly
-  private String getThumnailPath(Context context, long id) {
+  private String getThumbnailPath(Context context, long id) {
 	Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
 			context.getContentResolver(), id, MediaStore.Images.Thumbnails.MINI_KIND,
 			new String[]{ MediaStore.Images.Thumbnails.DATA });
@@ -213,7 +213,7 @@ public class  MediaStoreProvider {
 
 //https://github.com/HoraApps/LeafPic/blob/dcbee1b9aeb3f7c7df2c4a20527727819b90584c/app/src/main/java/com/leafpic/app/Base/MediaStoreHandler.java
 //
-//    public void getThumnails(){
+//    public void getThumbnails(){
 //
 //        String[] projection = new String[]{
 //                MediaStore.Images.Thumbnails.DATA,

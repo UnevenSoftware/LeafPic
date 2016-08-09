@@ -3,7 +3,7 @@
     <dimen name="height_bottombar">50dp</dimen>
 
     <!--ICONS-->
-    <dimen name="icon_margion">24dp</dimen>
+    <dimen name="icon_margin">24dp</dimen>
     <dimen name="icon_width_height">20dp</dimen>
     <dimen name="big_icon">36dp</dimen>
 

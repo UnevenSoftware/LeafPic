@@ -167,7 +167,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     @TestOnly
-    public String getThumnail(Context context) {
+    public String getThumbnail(Context context) {
         Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                 context.getContentResolver(), id,
                 MediaStore.Images.Thumbnails.MINI_KIND,
@@ -179,7 +179,7 @@ public class Media implements Parcelable, Serializable {
 
 
     public String getName() {
-        return StringUtils.getPhotoNamebyPath(path);
+        return StringUtils.getPhotoNameByPath(path);
     }
 
     public GeoLocation getGeoLocation()  {
@@ -221,7 +221,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public boolean setOrientation(int orientation) {
-        // TODO: 06/08/16 implemt this method
+        // TODO: 06/08/16 implement this method
         /*int asd;
         ExifInterface exif;
         try { exif = new ExifInterface(getPath()); }

@@ -305,8 +305,8 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_version_item_sub)).setText(BuildConfig.VERSION_NAME);
         ((TextView) findViewById(R.id.about_libs_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setTextColor(color);
-        ((TextView) findViewById(R.id.about_comunity_members_sub)).setTextColor(color);
-        ((TextView) findViewById(R.id.about_comunity_you_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_community_members_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_community_you_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_rate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_translate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);
