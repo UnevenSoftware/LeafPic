@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.horaapps.leafpic">
+    package="org.horaapps.leafpic">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -9,14 +9,14 @@
 
     <application
         android:allowBackup="true"
-        android:name=".MyApplication"
+        android:name="org.horaapps.leafpic.MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/Theme.AppCompat">
 
         <activity
-            android:name=".PlayerActivity"
+            android:name="org.horaapps.leafpic.Activities.PlayerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/video_player"
             android:launchMode="singleInstance"
@@ -36,7 +36,7 @@
         </activity>
 
         <activity
-            android:name=".SplashScreen"
+            android:name="org.horaapps.leafpic.Activities.SplashScreen"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name="org.horaapps.leafpic.Activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -78,14 +78,14 @@
         </activity>
 
         <activity
-            android:name=".PhotoPagerActivity"
+            android:name="org.horaapps.leafpic.Activities.PhotoPagerActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="org.horaapps.leafpic.Activities.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="org.horaapps.leafpic.Activities.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.albumPhoto" />
@@ -108,7 +108,7 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name="org.horaapps.leafpic.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -118,7 +118,7 @@
         </activity>
 
         <activity
-            android:name=".AboutActivity"
+            android:name="org.horaapps.leafpic.Activities.AboutActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -128,7 +128,7 @@
         </activity>
 
         <activity
-            android:name=".SecurityActivity"
+            android:name="org.horaapps.leafpic.Activities.SecurityActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:label="@string/security">
@@ -139,7 +139,7 @@
         </activity>
 
         <activity
-            android:name=".DonateActivity"
+            android:name="org.horaapps.leafpic.Activities.DonateActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.DONATE" />
@@ -148,7 +148,7 @@
         </activity>
 
         <activity
-            android:name=".ExcludedAlbumsActivity"
+            android:name="org.horaapps.leafpic.Activities.ExcludedAlbumsActivity"
             android:label="@string/excluded_albums"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -163,7 +163,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <meta-data
-            android:name="com.horaapps.leafpic.CustomGlideModule"
+            android:name="org.horaapps.leafpic.CustomGlideModule"
             android:value="GlideModule" />
 
     </application>

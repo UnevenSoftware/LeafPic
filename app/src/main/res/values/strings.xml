@@ -302,8 +302,8 @@
         the SD card.
     </string>
     <string name="got_oermission_wr_sdcard">Got permission to write on the SD-Card.</string>
-    <string name="use_mediastore_provider">Use MediaStore Provider</string>
-    <string name="use_media_store_sub">If disabled it fetch the storage recursively for media.
-    </string>
+    <string name="use_mediastore_provider">Use alternative images provider</string>
+    <string name="use_media_store_sub">If can\'t show all your media turn this on to fetch
+        your storage recursively</string>
 
 </resources>

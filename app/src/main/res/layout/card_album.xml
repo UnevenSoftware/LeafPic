@@ -30,7 +30,7 @@
                 app:iiv_icon="gmd-check"
                 tools:targetApi="lollipop" />
 
-            <com.horaapps.leafpic.Views.SquareImageView
+            <org.horaapps.leafpic.Views.SquareImageView
                 android:id="@+id/album_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
