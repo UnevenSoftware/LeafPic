@@ -111,7 +111,7 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
 	@Override
 	public boolean onLongClick(View v) {
-	  int index = Integer.parseInt(v.findViewById(org.horaapps.leafpic.R.id.photo_path).getTag().toString());
+	  int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
 	  if (!editMode) {
 		// If it is the first long press
 		mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(index));
@@ -127,7 +127,7 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
 	@Override
 	public void onClick(View v) {
-	  int index = Integer.parseInt(v.findViewById(org.horaapps.leafpic.R.id.photo_path).getTag().toString());
+	  int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
 	  if (!pickMode) {
 		if (editMode) {
 		  mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(index));
@@ -149,7 +149,7 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
 	@Override
 	public boolean onLongClick(View v) {
-	  int index = Integer.parseInt(v.findViewById(org.horaapps.leafpic.R.id.album_name).getTag().toString());
+	  int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
 	  albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(index));
 	  editMode = true;
 	  invalidateOptionsMenu();
@@ -160,7 +160,7 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
 	@Override
 	public void onClick(View v) {
-	  int index = Integer.parseInt(v.findViewById(org.horaapps.leafpic.R.id.album_name).getTag().toString());
+	  int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
 	  if (editMode) {
 		albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(index));
 		invalidateOptionsMenu();
@@ -175,7 +175,7 @@ public class MainActivity extends SharedMediaActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setContentView(org.horaapps.leafpic.R.layout.activity_main);
+	setContentView(R.layout.activity_main);
 
 	SP = PreferenceUtil.getInstance(getApplicationContext());
 	albumsMode = true;
@@ -235,13 +235,13 @@ public class MainActivity extends SharedMediaActivity {
 	else {
 	  displayAlbums(false);
 	  albumsAdapter.swapDataSet(getAlbums().dispAlbums);
-	  toggleRecyclersVisibilty(true);
+	  toggleRecyclersVisibility(true);
 	}
   }
 
   private void displayAlbums(boolean reload) {
 	toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
-	toolbar.setTitle(getString(org.horaapps.leafpic.R.string.app_name));
+	toolbar.setTitle(getString(R.string.app_name));
 	mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
 	if (reload) new PrepareAlbumTask().execute();
@@ -311,17 +311,17 @@ public class MainActivity extends SharedMediaActivity {
 			displayAlbums(false);
 			pickMode = data.getBoolean(SplashScreen.PICK_MODE);
 			albumsAdapter.swapDataSet(getAlbums().dispAlbums);
-			toggleRecyclersVisibilty(true);
+			toggleRecyclersVisibility(true);
 			break;
 
 		  case SplashScreen.ALBUMS_BACKUP:
 			albumsAdapter.swapDataSet(getAlbums().dispAlbums);
 			displayAlbums(true);
 			pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-			toggleRecyclersVisibilty(true);
+			toggleRecyclersVisibility(true);
 			break;
 
-		  case SplashScreen.PHOTS_PREFETCHED:
+		  case SplashScreen.PHOTOS_PREFETCHED:
 			//TODO ask password if hidden
 			new Thread(new Runnable() {
 			  @Override
@@ -331,7 +331,7 @@ public class MainActivity extends SharedMediaActivity {
 			}).start();
 			displayCurrentAlbumMedia(false);
 			mediaAdapter.swapDataSet(getAlbum().getMedia());
-			toggleRecyclersVisibilty(false);
+			toggleRecyclersVisibility(false);
 			break;
 		}
 	  } else
@@ -344,12 +344,12 @@ public class MainActivity extends SharedMediaActivity {
   private void initUI() {
 
 	/**** TOOLBAR ****/
-	toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
+	toolbar = (Toolbar) findViewById(R.id.toolbar);
 	setSupportActionBar(toolbar);
 
 	/**** RECYCLER VIEW ****/
-	rvAlbums = (RecyclerView) findViewById(org.horaapps.leafpic.R.id.grid_albums);
-	rvMedia = ((RecyclerView) findViewById(org.horaapps.leafpic.R.id.grid_photos));
+	rvAlbums = (RecyclerView) findViewById(R.id.grid_albums);
+	rvMedia = ((RecyclerView) findViewById(R.id.grid_photos));
 	rvAlbums.setHasFixedSize(true);
 	rvAlbums.setItemAnimator(new DefaultItemAnimator());
 	rvMedia.setHasFixedSize(true);
@@ -415,7 +415,7 @@ public class MainActivity extends SharedMediaActivity {
 
 
 	/**** SWIPE TO REFRESH ****/
-	swipeRefreshLayout = (SwipeRefreshLayout) findViewById(org.horaapps.leafpic.R.id.swipeRefreshLayout);
+	swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 	swipeRefreshLayout.setColorSchemeColors(getAccentColor());
 	swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getBackgroundColor());
 	swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -432,9 +432,9 @@ public class MainActivity extends SharedMediaActivity {
 	});
 
 	/**** DRAWER ****/
-	mDrawerLayout = (DrawerLayout) findViewById(org.horaapps.leafpic.R.id.drawer_layout);
+	mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
-																	 mDrawerLayout, toolbar, org.horaapps.leafpic.R.string.drawer_open, org.horaapps.leafpic.R.string.drawer_close) {
+																	 mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 	  public void onDrawerClosed(View view) {
 		//Put your code here
 		// materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
@@ -447,7 +447,7 @@ public class MainActivity extends SharedMediaActivity {
 	});
 
 	/**** FAB ***/
-	fabCamera = (FloatingActionButton) findViewById(org.horaapps.leafpic.R.id.fab_camera);
+	fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
 	fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
 	fabCamera.animate().translationY(-Measure.getNavBarHeight(MainActivity.this)).setInterpolator(new DecelerateInterpolator(2)).start();
 	fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -457,7 +457,7 @@ public class MainActivity extends SharedMediaActivity {
 		  getAlbum().filterMedias(ImageFileFilter.FILTER_ALL);
 		  mediaAdapter.swapDataSet(getAlbum().getMedia());
 		  checkNothing();
-		  toolbar.getMenu().findItem(org.horaapps.leafpic.R.id.all_media_filter).setChecked(true);
+		  toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
 		  fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
 		} else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
 	  }
@@ -487,7 +487,7 @@ public class MainActivity extends SharedMediaActivity {
 	//rvAlbums.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
 	//rvMedia.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
 
-	relativeLayoutMainContent=(RelativeLayout) findViewById(org.horaapps.leafpic.R.id.rl_main_content);
+	relativeLayoutMainContent=(RelativeLayout) findViewById(R.id.rl_main_content);
 	relativeLayoutMainContent.setPadding(0, 0, 0, statusBarHeight + navBarHeight);
 
 	/**** SCROLLBAR ****/
@@ -497,7 +497,7 @@ public class MainActivity extends SharedMediaActivity {
 	//touchScrollBar.setHandleOffColour(getPrimaryColor());
 	//touchScrollBar.setBarColour((ColorPalette.getTransparentColor(getInvertedBackgroundColor(),160)));
 	//touchScrollBar.setHideDuration(1500);
-	setRecentApp(getString(org.horaapps.leafpic.R.string.app_name));
+	setRecentApp(getString(R.string.app_name));
 
 	Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 
@@ -537,17 +537,17 @@ public class MainActivity extends SharedMediaActivity {
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   @Override
   public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
-	if (resultCode == RESULT_OK) {
+	if (resultCode == Activity.RESULT_OK) {
 	  if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
 		Uri treeUri = resultData.getData();
 		// Persist URI in shared preference so that you can use it later.
-		ContentHelper.setSharedPreferenceUri(getApplicationContext(), org.horaapps.leafpic.R.string
+		ContentHelper.setSharedPreferenceUri(getApplicationContext(),R.string
 																			 .preference_internal_uri_extsdcard_photos, treeUri);
 
 		final int takeFlags = resultData.getFlags()
 									  & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 		getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
-		Toast.makeText(this, org.horaapps.leafpic.R.string.got_oermission_wr_sdcard, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
 	  }
 	}
   }
@@ -557,9 +557,9 @@ public class MainActivity extends SharedMediaActivity {
 	final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
 	AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
-			org.horaapps.leafpic.R.string.sd_card_write_permission_title, org.horaapps.leafpic.R.string.sd_card_permissions_message);
+			R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
 
-	dialogBuilder.setPositiveButton(org.horaapps.leafpic.R.string.ok_action, new DialogInterface.OnClickListener() {
+	dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
 	  @Override
 	  public void onClick(DialogInterface dialogInterface, int i) {
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -576,7 +576,7 @@ public class MainActivity extends SharedMediaActivity {
 		super.setNavBarColor();
 	  else
 		getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-				ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), 110));
+				ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
 	}
   }
 
@@ -600,47 +600,47 @@ public class MainActivity extends SharedMediaActivity {
 	mediaAdapter.updatePlaceholder(getApplicationContext());
 	albumsAdapter.updateTheme();
 	/**** DRAWER ****/
-	setScrollViewColor((ScrollView) findViewById(org.horaapps.leafpic.R.id.drawer_scrollbar));
+	setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
 
 	/**** recyclers drawable *****/
-	Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), org.horaapps.leafpic.R.drawable.ic_scrollbar);
+	Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
 	drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
   }
 
   private void setDrawerTheme() {
 
-	findViewById(org.horaapps.leafpic.R.id.Drawer_Header).setBackgroundColor(getPrimaryColor());
-	findViewById(org.horaapps.leafpic.R.id.Drawer_Body).setBackgroundColor(getDrawerBackground());
-	findViewById(org.horaapps.leafpic.R.id.drawer_scrollbar).setBackgroundColor(getDrawerBackground());
-	findViewById(org.horaapps.leafpic.R.id.Drawer_Body_Divider).setBackgroundColor(getIconColor());
+	findViewById(R.id.Drawer_Header).setBackgroundColor(getPrimaryColor());
+	findViewById(R.id.Drawer_Body).setBackgroundColor(getDrawerBackground());
+	findViewById(R.id.drawer_scrollbar).setBackgroundColor(getDrawerBackground());
+	findViewById(R.id.Drawer_Body_Divider).setBackgroundColor(getIconColor());
 
 	/** TEXT VIEWS **/
 	int color = getTextColor();
-	((TextView) findViewById(org.horaapps.leafpic.R.id.Drawer_Default_Item)).setTextColor(color);
-	((TextView) findViewById(org.horaapps.leafpic.R.id.Drawer_Setting_Item)).setTextColor(color);
-	((TextView) findViewById(org.horaapps.leafpic.R.id.Drawer_Donate_Item)).setTextColor(color);
-	((TextView) findViewById(org.horaapps.leafpic.R.id.Drawer_wallpapers_Item)).setTextColor(color);
-	((TextView) findViewById(org.horaapps.leafpic.R.id.Drawer_About_Item)).setTextColor(color);
-	((TextView) findViewById(org.horaapps.leafpic.R.id.Drawer_hidden_Item)).setTextColor(color);
+	((TextView) findViewById(R.id.Drawer_Default_Item)).setTextColor(color);
+	((TextView) findViewById(R.id.Drawer_Setting_Item)).setTextColor(color);
+	((TextView) findViewById(R.id.Drawer_Donate_Item)).setTextColor(color);
+	((TextView) findViewById(R.id.Drawer_wallpapers_Item)).setTextColor(color);
+	((TextView) findViewById(R.id.Drawer_About_Item)).setTextColor(color);
+	((TextView) findViewById(R.id.Drawer_hidden_Item)).setTextColor(color);
 
 	/** ICONS **/
 	color = getIconColor();
-	((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Drawer_Default_Icon)).setColor(color);
-	((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Drawer_Donate_Icon)).setColor(color);
-	((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Drawer_Setting_Icon)).setColor(color);
-	((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Drawer_wallpapers_Icon)).setColor(color);
-	((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Drawer_About_Icon)).setColor(color);
-	((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Drawer_hidden_Icon)).setColor(color);
+	((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
+	((IconicsImageView) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
+	((IconicsImageView) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
+	((IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
+	((IconicsImageView) findViewById(R.id.Drawer_About_Icon)).setColor(color);
+	((IconicsImageView) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
 
 	/** CLICK LISTENERS **/
-	findViewById(org.horaapps.leafpic.R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
+	findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		Intent intent = new Intent(MainActivity.this, DonateActivity.class);
 		startActivity(intent);
 	  }
 	});
-	findViewById(org.horaapps.leafpic.R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
+	findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -648,7 +648,7 @@ public class MainActivity extends SharedMediaActivity {
 	  }
 	});
 
-	findViewById(org.horaapps.leafpic.R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
+	findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		Intent intent = new Intent(MainActivity.this, AboutActivity.class);
@@ -656,7 +656,7 @@ public class MainActivity extends SharedMediaActivity {
 	  }
 	});
 
-	findViewById(org.horaapps.leafpic.R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
+	findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		hidden = false;
@@ -664,18 +664,18 @@ public class MainActivity extends SharedMediaActivity {
 		new PrepareAlbumTask().execute();
 	  }
 	});
-	findViewById(org.horaapps.leafpic.R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
+	findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		if (securityObj.isActiveSecurity() && securityObj.isPasswordOnHidden()){
 
 		  AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder (MainActivity.this, getDialogStyle());
 		  final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder);
-		  passwordDialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+		  passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {}
 		  });
 
-		  passwordDialogBuilder.setNegativeButton(getString(org.horaapps.leafpic.R.string.cancel), null);
+		  passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
 		  final AlertDialog passwordDialog = passwordDialogBuilder.create();
 		  passwordDialog.show();
@@ -690,7 +690,7 @@ public class MainActivity extends SharedMediaActivity {
 				new PrepareAlbumTask().execute();
 				passwordDialog.dismiss();
 			  } else {
-				Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.wrong_password, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
 				editTextPassword.getText().clear();
 				editTextPassword.requestFocus();
 			  }
@@ -704,7 +704,7 @@ public class MainActivity extends SharedMediaActivity {
 	  }
 	});
 
-	findViewById(org.horaapps.leafpic.R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
+	findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
@@ -741,7 +741,7 @@ public class MainActivity extends SharedMediaActivity {
 			}
 		  });
 		} else {
-		  toolbar.setTitle(getString(org.horaapps.leafpic.R.string.app_name));
+		  toolbar.setTitle(getString(R.string.app_name));
 		  toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
 		  toolbar.setOnClickListener(null);
 		  toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -802,7 +802,7 @@ public class MainActivity extends SharedMediaActivity {
   }
 
   private void checkNothing() {
-	TextView a = (TextView) findViewById(org.horaapps.leafpic.R.id.nothing_to_show);
+	TextView a = (TextView) findViewById(R.id.nothing_to_show);
 	a.setTextColor(getTextColor());
 	a.setVisibility((albumsMode && getAlbums().dispAlbums.size() == 0) || (!albumsMode && getAlbum().getMedia().size() == 0) ? View.VISIBLE : View.GONE);
   }
@@ -812,50 +812,50 @@ public class MainActivity extends SharedMediaActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
 
 	// Inflate the menu; this adds items to the action bar if it is present.
-	getMenuInflater().inflate(org.horaapps.leafpic.R.menu.menu_albums, menu);
+	getMenuInflater().inflate(R.menu.menu_albums, menu);
 
 	if (albumsMode) {
-	  menu.findItem(org.horaapps.leafpic.R.id.select_all).setTitle(
+	  menu.findItem(R.id.select_all).setTitle(
 			  getString(getAlbums().getSelectedCount() == albumsAdapter.getItemCount()
-								? org.horaapps.leafpic.R.string.clear_selected
-								: org.horaapps.leafpic.R.string.select_all));
-	  menu.findItem(org.horaapps.leafpic.R.id.ascending_sort_action).setChecked(getAlbums().isAscending());
+								? R.string.clear_selected
+								: R.string.select_all));
+	  menu.findItem(R.id.ascending_sort_action).setChecked(getAlbums().isAscending());
 	  switch (getAlbums().getColumnSortingMode()) {
-		case AlbumSettings.SORT_BY_NAME:  menu.findItem(org.horaapps.leafpic.R.id.name_sort_action).setChecked(true); break;
-		case AlbumSettings.SORT_BY_SIZE:  menu.findItem(org.horaapps.leafpic.R.id.size_sort_action).setChecked(true); break;
+		case AlbumSettings.SORT_BY_NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
+		case AlbumSettings.SORT_BY_SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
 		case AlbumSettings.SORT_BY_DATE:
 		default:
-		  menu.findItem(org.horaapps.leafpic.R.id.date_taken_sort_action).setChecked(true);
+		  menu.findItem(R.id.date_taken_sort_action).setChecked(true);
 		  break;
 	  }
 
 	} else {
-	  menu.findItem(org.horaapps.leafpic.R.id.select_all).setTitle(getString(
+	  menu.findItem(R.id.select_all).setTitle(getString(
 			  getAlbum().getSelectedCount() == mediaAdapter.getItemCount()
-					  ? org.horaapps.leafpic.R.string.clear_selected
-					  : org.horaapps.leafpic.R.string.select_all));
-	  menu.findItem(org.horaapps.leafpic.R.id.ascending_sort_action).setChecked(getAlbum().settings.ascending);
+					  ? R.string.clear_selected
+					  : R.string.select_all));
+	  menu.findItem(R.id.ascending_sort_action).setChecked(getAlbum().settings.ascending);
 	  switch (getAlbum().settings.columnSortingMode) {
-		case AlbumSettings.SORT_BY_NAME:  menu.findItem(org.horaapps.leafpic.R.id.name_sort_action).setChecked(true); break;
-		case AlbumSettings.SORT_BY_SIZE:  menu.findItem(org.horaapps.leafpic.R.id.size_sort_action).setChecked(true); break;
-		case AlbumSettings.SORT_BY_TYPE:  menu.findItem(org.horaapps.leafpic.R.id.type_sort_action).setChecked(true); break;
+		case AlbumSettings.SORT_BY_NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
+		case AlbumSettings.SORT_BY_SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
+		case AlbumSettings.SORT_BY_TYPE:  menu.findItem(R.id.type_sort_action).setChecked(true); break;
 		case AlbumSettings.SORT_BY_DATE:
 		default:
-		  menu.findItem(org.horaapps.leafpic.R.id.date_taken_sort_action).setChecked(true);
+		  menu.findItem(R.id.date_taken_sort_action).setChecked(true);
 		  break;
 	  }
 	}
-	menu.findItem(org.horaapps.leafpic.R.id.hideAlbumButton).setTitle(hidden ? getString(org.horaapps.leafpic.R.string.unhide) : getString(org.horaapps.leafpic.R.string.hide));
-	menu.findItem(org.horaapps.leafpic.R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
-	menu.findItem(org.horaapps.leafpic.R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
-	menu.findItem(org.horaapps.leafpic.R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
-	menu.findItem(org.horaapps.leafpic.R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
-	menu.findItem(org.horaapps.leafpic.R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
-	menu.findItem(org.horaapps.leafpic.R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+	menu.findItem(R.id.hideAlbumButton).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
+	menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
+	menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+	menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
+	menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
+	menu.findItem(R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+	menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
 
-	final MenuItem searchItem = menu.findItem(org.horaapps.leafpic.R.id.search_action);
+	final MenuItem searchItem = menu.findItem(R.id.search_action);
 	final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-	searchView.setQueryHint(getString(org.horaapps.leafpic.R.string.coming_soon));
+	searchView.setQueryHint(getString(R.string.coming_soon));
 
 	return true;
   }
@@ -864,34 +864,34 @@ public class MainActivity extends SharedMediaActivity {
   public boolean onPrepareOptionsMenu(final Menu menu) {
 	if (albumsMode) {
 	  editMode = getAlbums().getSelectedCount() != 0;
-	  menu.setGroupVisible(org.horaapps.leafpic.R.id.album_options_menu, editMode);
-	  menu.setGroupVisible(org.horaapps.leafpic.R.id.photos_option_men, false);
+	  menu.setGroupVisible(R.id.album_options_menu, editMode);
+	  menu.setGroupVisible(R.id.photos_option_men, false);
 	} else {
 	  editMode = getAlbum().areMediaSelected();
-	  menu.setGroupVisible(org.horaapps.leafpic.R.id.photos_option_men, editMode);
-	  menu.setGroupVisible(org.horaapps.leafpic.R.id.album_options_menu, !editMode);
+	  menu.setGroupVisible(R.id.photos_option_men, editMode);
+	  menu.setGroupVisible(R.id.album_options_menu, !editMode);
 	}
 
 	togglePrimaryToolbarOptions(menu);
 	updateSelectedStuff();
 
-	menu.findItem(org.horaapps.leafpic.R.id.select_all).setVisible(editMode);
-	menu.findItem(org.horaapps.leafpic.R.id.installShortcut).setVisible(albumsMode && editMode);
-	menu.findItem(org.horaapps.leafpic.R.id.type_sort_action).setVisible(!albumsMode);
-	menu.findItem(org.horaapps.leafpic.R.id.delete_action).setVisible(!albumsMode || editMode);
-	menu.findItem(org.horaapps.leafpic.R.id.setAsAlbumPreview).setVisible(!albumsMode && getAlbum().getSelectedCount() == 1);
-	menu.findItem(org.horaapps.leafpic.R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCustomCover());
-	menu.findItem(org.horaapps.leafpic.R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));
-	menu.findItem(org.horaapps.leafpic.R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedCount() > 1);
+	menu.findItem(R.id.select_all).setVisible(editMode);
+	menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
+	menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
+	menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
+	menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && getAlbum().getSelectedCount() == 1);
+	menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCustomCover());
+	menu.findItem(R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));
+	menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedCount() > 1);
 	return super.onPrepareOptionsMenu(menu);
   }
 
   private void togglePrimaryToolbarOptions(final Menu menu) {
-	menu.setGroupVisible(org.horaapps.leafpic.R.id.general_action, !editMode);
+	menu.setGroupVisible(R.id.general_action, !editMode);
 
 	if (!editMode) {
-	  menu.findItem(org.horaapps.leafpic.R.id.filter_menu).setVisible(!albumsMode);
-	  menu.findItem(org.horaapps.leafpic.R.id.search_action).setVisible(albumsMode);
+	  menu.findItem(R.id.filter_menu).setVisible(!albumsMode);
+	  menu.findItem(R.id.search_action).setVisible(albumsMode);
 	}
   }
 
@@ -902,7 +902,7 @@ public class MainActivity extends SharedMediaActivity {
 
 	switch (item.getItemId()) {
 
-	  case org.horaapps.leafpic.R.id.select_all:
+	  case R.id.select_all:
 		if (albumsMode) {
 		  if (getAlbums().getSelectedCount() == albumsAdapter.getItemCount()) {
 			editMode = false;
@@ -919,23 +919,23 @@ public class MainActivity extends SharedMediaActivity {
 		invalidateOptionsMenu();
 		return true;
 
-	  case org.horaapps.leafpic.R.id.settings:
+	  case R.id.settings:
 		startActivity(new Intent(MainActivity.this, SettingsActivity.class));
 		return true;
 
-	  case org.horaapps.leafpic.R.id.installShortcut:
+	  case R.id.installShortcut:
 		getAlbums().installShortcutForSelectedAlbums(this.getApplicationContext());
 		finishEditMode();
 		return true;
 
-	  case org.horaapps.leafpic.R.id.hideAlbumButton:
+	  case R.id.hideAlbumButton:
 		final AlertDialog.Builder hideDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
 		AlertDialogsHelper.getTextDialog(MainActivity.this,hideDialogBuilder,
-				hidden ? org.horaapps.leafpic.R.string.unhide : org.horaapps.leafpic.R.string.hide,
-				hidden ? org.horaapps.leafpic.R.string.unhide_album_message : org.horaapps.leafpic.R.string.hide_album_message);
+				hidden ? R.string.unhide : R.string.hide,
+				hidden ? R.string.unhide_album_message : R.string.hide_album_message);
 
-		hideDialogBuilder.setPositiveButton(getString(hidden ? org.horaapps.leafpic.R.string.unhide : org.horaapps.leafpic.R.string.hide), new DialogInterface.OnClickListener() {
+		hideDialogBuilder.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
 			if (albumsMode) {
 			  if (hidden) getAlbums().unHideSelectedAlbums(getApplicationContext());
@@ -950,7 +950,7 @@ public class MainActivity extends SharedMediaActivity {
 		  }
 		});
 		if (!hidden) {
-		  hideDialogBuilder.setNeutralButton(this.getString(org.horaapps.leafpic.R.string.exclude), new DialogInterface.OnClickListener() {
+		  hideDialogBuilder.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			  if (albumsMode) {
@@ -964,11 +964,11 @@ public class MainActivity extends SharedMediaActivity {
 			}
 		  });
 		}
-		hideDialogBuilder.setNegativeButton(this.getString(org.horaapps.leafpic.R.string.cancel), null);
+		hideDialogBuilder.setNegativeButton(this.getString(R.string.cancel), null);
 		hideDialogBuilder.show();
 		return true;
 
-	  case org.horaapps.leafpic.R.id.delete_action:
+	  case R.id.delete_action:
 		class DeletePhotos extends AsyncTask<String, Integer, Boolean> {
 		  @Override
 		  protected void onPreExecute() {
@@ -1015,17 +1015,17 @@ public class MainActivity extends SharedMediaActivity {
 		}
 
 		AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-		AlertDialogsHelper.getTextDialog(this, deleteDialog, org.horaapps.leafpic.R.string.delete, albumsMode || (!albumsMode && !editMode) ? org.horaapps.leafpic.R.string.delete_album_message : org.horaapps.leafpic.R.string.delete_photos_message);
+		AlertDialogsHelper.getTextDialog(this, deleteDialog, R.string.delete, albumsMode || (!albumsMode && !editMode) ? R.string.delete_album_message : R.string.delete_photos_message);
 
-		deleteDialog.setNegativeButton(this.getString(org.horaapps.leafpic.R.string.cancel), null);
-		deleteDialog.setPositiveButton(this.getString(org.horaapps.leafpic.R.string.delete), new DialogInterface.OnClickListener() {
+		deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
+		deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
 			if (securityObj.isActiveSecurity() && securityObj.isPasswordOnDelete()) {
 			  AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 			  final EditText editTextPassword  = securityObj.getInsertPasswordDialog(MainActivity.this,passwordDialogBuilder);
-			  passwordDialogBuilder.setNegativeButton(getString(org.horaapps.leafpic.R.string.cancel), null);
+			  passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
-			  passwordDialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+			  passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 				  //This should br empty it will be overwrite later
@@ -1043,7 +1043,7 @@ public class MainActivity extends SharedMediaActivity {
 					passwordDialog.dismiss();
 					new DeletePhotos().execute();
 				  } else {
-					Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.wrong_password, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
 					editTextPassword.getText().clear();
 					editTextPassword.requestFocus();
 				  }
@@ -1055,33 +1055,33 @@ public class MainActivity extends SharedMediaActivity {
 		deleteDialog.show();
 
 		return true;
-	  case org.horaapps.leafpic.R.id.excludeAlbumButton:
+	  case R.id.excludeAlbumButton:
 
 		final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
-		final View excludeDialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_exclude, null);
-		TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_title);
-		TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_message);
-		final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(org.horaapps.leafpic.R.id.parents_folder);
+		final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
+		TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
+		TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
+		final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
 
 		spinnerParents.getBackground().setColorFilter(getIconColor(), PorterDuff.Mode.SRC_ATOP);
 
-		((CardView) excludeDialogLayout.findViewById(org.horaapps.leafpic.R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
+		((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
 		textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
-		textViewExcludeTitle.setText(getString(org.horaapps.leafpic.R.string.exclude));
+		textViewExcludeTitle.setText(getString(R.string.exclude));
 
 		if((albumsMode && getAlbums().getSelectedCount() > 1) || getAlbums().isContentFromMediaStore()) {
-		  textViewExcludeMessage.setText(org.horaapps.leafpic.R.string.exclude_albums_message);
+		  textViewExcludeMessage.setText(R.string.exclude_albums_message);
 		  spinnerParents.setVisibility(View.GONE);
 		} else {
-		  textViewExcludeMessage.setText(org.horaapps.leafpic.R.string.exclude_album_message);
+		  textViewExcludeMessage.setText(R.string.exclude_album_message);
 		  spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? getAlbums().getSelectedAlbum(0).getParentsFolders() : getAlbum().getParentsFolders()));
 		}
 
 		textViewExcludeMessage.setTextColor(getTextColor());
 		excludeDialogBuilder.setView(excludeDialogLayout);
 
-		excludeDialogBuilder.setPositiveButton(this.getString(org.horaapps.leafpic.R.string.exclude), new DialogInterface.OnClickListener() {
+		excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
 
 			if ((albumsMode && getAlbums().getSelectedCount() > 1) || getAlbums().isContentFromMediaStore()) {
@@ -1096,14 +1096,14 @@ public class MainActivity extends SharedMediaActivity {
 			}
 		  }
 		});
-		excludeDialogBuilder.setNegativeButton(this.getString(org.horaapps.leafpic.R.string.cancel), null);
+		excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel), null);
 		excludeDialogBuilder.show();
 		return true;
 
-	  case org.horaapps.leafpic.R.id.sharePhotos:
+	  case R.id.sharePhotos:
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-		intent.putExtra(Intent.EXTRA_SUBJECT, getString(org.horaapps.leafpic.R.string.sent_to_action));
+		intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
 		ArrayList<Uri> files = new ArrayList<Uri>();
 		for (Media f : getAlbum().selectedMedias)
@@ -1115,7 +1115,7 @@ public class MainActivity extends SharedMediaActivity {
 		startActivity(intent);
 		return true;
 
-	  case org.horaapps.leafpic.R.id.all_media_filter:
+	  case R.id.all_media_filter:
 		if (!albumsMode) {
 		  getAlbum().filterMedias(ImageFileFilter.FILTER_ALL);
 		  mediaAdapter.swapDataSet(getAlbum().getMedia());
@@ -1126,7 +1126,7 @@ public class MainActivity extends SharedMediaActivity {
 		}
 		return true;
 
-	  case org.horaapps.leafpic.R.id.video_media_filter:
+	  case R.id.video_media_filter:
 		if (!albumsMode) {
 		  getAlbum().filterMedias(ImageFileFilter.FILTER_VIDEO);
 		  mediaAdapter.swapDataSet(getAlbum().getMedia());
@@ -1136,7 +1136,7 @@ public class MainActivity extends SharedMediaActivity {
 		}
 		return true;
 
-	  case org.horaapps.leafpic.R.id.image_media_filter:
+	  case R.id.image_media_filter:
 		if (!albumsMode) {
 		  getAlbum().filterMedias(ImageFileFilter.FILTER_IMAGES);
 		  mediaAdapter.swapDataSet(getAlbum().getMedia());
@@ -1146,7 +1146,7 @@ public class MainActivity extends SharedMediaActivity {
 		}
 		return true;
 
-	  case org.horaapps.leafpic.R.id.gifs_media_filter:
+	  case R.id.gifs_media_filter:
 		if (!albumsMode) {
 		  getAlbum().filterMedias(ImageFileFilter.FILTER_GIFS);
 		  mediaAdapter.swapDataSet(getAlbum().getMedia());
@@ -1156,7 +1156,7 @@ public class MainActivity extends SharedMediaActivity {
 		}
 		return true;
 
-	  case org.horaapps.leafpic.R.id.name_sort_action:
+	  case R.id.name_sort_action:
 		if (albumsMode) {
 		  getAlbums().setDefaultSortingMode(AlbumSettings.SORT_BY_NAME);
 		  getAlbums().sortAlbums(getApplicationContext());
@@ -1169,7 +1169,7 @@ public class MainActivity extends SharedMediaActivity {
 		item.setChecked(true);
 		return true;
 
-	  case org.horaapps.leafpic.R.id.date_taken_sort_action:
+	  case R.id.date_taken_sort_action:
 		if (albumsMode) {
 		  getAlbums().setDefaultSortingMode(AlbumSettings.SORT_BY_DATE);
 		  getAlbums().sortAlbums(getApplicationContext());
@@ -1182,7 +1182,7 @@ public class MainActivity extends SharedMediaActivity {
 		item.setChecked(true);
 		return true;
 
-	  case org.horaapps.leafpic.R.id.size_sort_action:
+	  case R.id.size_sort_action:
 		if (albumsMode) {
 		  getAlbums().setDefaultSortingMode(AlbumSettings.SORT_BY_SIZE);
 		  getAlbums().sortAlbums(getApplicationContext());
@@ -1195,7 +1195,7 @@ public class MainActivity extends SharedMediaActivity {
 		item.setChecked(true);
 		return true;
 
-	  case org.horaapps.leafpic.R.id.type_sort_action:
+	  case R.id.type_sort_action:
 		if (!albumsMode) {
 		  getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
 		  getAlbum().sortPhotos();
@@ -1205,7 +1205,7 @@ public class MainActivity extends SharedMediaActivity {
 
 		return true;
 
-	  case org.horaapps.leafpic.R.id.ascending_sort_action:
+	  case R.id.ascending_sort_action:
 		if (albumsMode) {
 		  getAlbums().setDefaultSortingAscending(!item.isChecked());
 		  getAlbums().sortAlbums(getApplicationContext());
@@ -1219,49 +1219,49 @@ public class MainActivity extends SharedMediaActivity {
 		return true;
 
 	  //region Affix
-	  case  org.horaapps.leafpic.R.id.affixPhoto:
+	  case  R.id.affixPhoto:
 		// TODO: 03/08/16 move this away from this activity
 
 		final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-		final View dialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_affix, null);
+		final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
 
-		dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_title).setBackgroundColor(getPrimaryColor());
-		((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
+		dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
+		((CardView) dialogLayout.findViewById(R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
 
 		//ITEMS
-		final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_vertical_switch);
-		final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(org.horaapps.leafpic.R.id.save_here_switch);
+		final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(R.id.affix_vertical_switch);
+		final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
 
-		final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_format);
-		final RadioButton radio_jpg = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_jpeg);
-		final RadioButton radio_png = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_png);
-		final RadioButton radio_webp = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_webp);
+		final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
+		final RadioButton radio_jpg = (RadioButton) dialogLayout.findViewById(R.id.radio_jpeg);
+		final RadioButton radio_png = (RadioButton) dialogLayout.findViewById(R.id.radio_png);
+		final RadioButton radio_webp = (RadioButton) dialogLayout.findViewById(R.id.radio_webp);
 
-		final TextView txtQuality = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_quality_title);
-		final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(org.horaapps.leafpic.R.id.seek_bar_quality);
+		final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
+		final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
 
-		final ScrollView scrollView = (ScrollView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_scrollView);
+		final ScrollView scrollView = (ScrollView) dialogLayout.findViewById(R.id.affix_scrollView);
 		setScrollViewColor(scrollView);
 
 		/** TextViews **/
 		int color = getTextColor();
-		((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_vertical_title)).setTextColor(color);
-		((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.compression_settings_title)).setTextColor(color);
-		((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.save_here_title)).setTextColor(color);
+		((TextView) dialogLayout.findViewById(R.id.affix_vertical_title)).setTextColor(color);
+		((TextView) dialogLayout.findViewById(R.id.compression_settings_title)).setTextColor(color);
+		((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
 
 		/** Sub TextViews **/
 		color = getTextColor();
-		((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.save_here_sub)).setTextColor(color);
-		((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_vertical_sub)).setTextColor(color);
-		((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_format_sub)).setTextColor(color);
+		((TextView) dialogLayout.findViewById(R.id.save_here_sub)).setTextColor(color);
+		((TextView) dialogLayout.findViewById(R.id.affix_vertical_sub)).setTextColor(color);
+		((TextView) dialogLayout.findViewById(R.id.affix_format_sub)).setTextColor(color);
 		txtQuality.setTextColor(color);
 
 		/** Icons **/
 		color = getIconColor();
-		((IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_quality_icon)).setColor(color);
-		((IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_format_icon)).setColor(color);
-		((IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.affix_vertical_icon)).setColor(color);
-		((IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.save_here_icon)).setColor(color);
+		((IconicsImageView) dialogLayout.findViewById(R.id.affix_quality_icon)).setColor(color);
+		((IconicsImageView) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
+		((IconicsImageView) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
+		((IconicsImageView) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
 
 		seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
 		seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
@@ -1270,7 +1270,7 @@ public class MainActivity extends SharedMediaActivity {
 		  @Override
 		  public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			txtQuality.setText(Html.fromHtml(
-					String.format(Locale.getDefault(), "%s <b>%d</b>", getString(org.horaapps.leafpic.R.string.quality), progress)));
+					String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
 		  }
 		  @Override
 		  public void onStartTrackingTouch(SeekBar seekBar) {
@@ -1313,7 +1313,7 @@ public class MainActivity extends SharedMediaActivity {
 			AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
 			dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, progressDialog,
-					getString(org.horaapps.leafpic.R.string.affix), getString(org.horaapps.leafpic.R.string.affix_text));
+					getString(R.string.affix), getString(R.string.affix_text));
 			dialog.show();
 			super.onPreExecute();
 		  }
@@ -1330,11 +1330,11 @@ public class MainActivity extends SharedMediaActivity {
 			  //TODO: MUST FIX
 			  Bitmap.CompressFormat compressFormat;
 			  switch (radioFormatGroup.getCheckedRadioButtonId()) {
-				case org.horaapps.leafpic.R.id.radio_jpeg: default:
+				case R.id.radio_jpeg: default:
 				  compressFormat = Bitmap.CompressFormat.JPEG; break;
-				case org.horaapps.leafpic.R.id.radio_png:
+				case R.id.radio_png:
 				  compressFormat = Bitmap.CompressFormat.PNG; break;
-				case org.horaapps.leafpic.R.id.radio_webp:
+				case R.id.radio_webp:
 				  compressFormat = Bitmap.CompressFormat.WEBP; break;
 			  }
 
@@ -1349,7 +1349,7 @@ public class MainActivity extends SharedMediaActivity {
 			} else {
 			  runOnUiThread(new Runnable(){
 				@Override
-				public void run(){ Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.affix_error,Toast.LENGTH_SHORT).show(); }
+				public void run(){ Toast.makeText(getApplicationContext(),R.string.affix_error,Toast.LENGTH_SHORT).show(); }
 			  });
 			}
 			return null;
@@ -1366,18 +1366,18 @@ public class MainActivity extends SharedMediaActivity {
 		}
 		//Dialog Buttons
 		AffixDialog.setView(dialogLayout);
-		AffixDialog.setPositiveButton(this.getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+		AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {new affixMedia().execute();}});
-		AffixDialog.setNegativeButton(this.getString(org.horaapps.leafpic.R.string.cancel), new DialogInterface.OnClickListener() {
+		AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {}});
 		AffixDialog.show();
 		return true;
 	  //endregion
 
-	  case org.horaapps.leafpic.R.id.action_move:
+	  case R.id.action_move:
 
 		bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-		bottomSheetDialogFragment.setTitle(getString(org.horaapps.leafpic.R.string.move_to));
+		bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
 		bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
 		  @Override
 		  public void folderSelected(String path) {
@@ -1400,9 +1400,9 @@ public class MainActivity extends SharedMediaActivity {
 		bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 		return true;
 
-	  case org.horaapps.leafpic.R.id.action_copy:
+	  case R.id.action_copy:
 		bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-		bottomSheetDialogFragment.setTitle(getString(org.horaapps.leafpic.R.string.copy_to));
+		bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
 		bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
 		  @Override
 		  public void folderSelected(String path) {
@@ -1416,17 +1416,17 @@ public class MainActivity extends SharedMediaActivity {
 		bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 		return true;
 
-	  case org.horaapps.leafpic.R.id.renameAlbum:
+	  case R.id.renameAlbum:
 		AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 		final EditText editTextNewName = new EditText(getApplicationContext());
 		editTextNewName.setText(albumsMode ? getAlbums().getSelectedAlbum(0).getName() : getAlbum().getName());
 
 		AlertDialogsHelper.getInsertTextDialog(MainActivity.this, renameDialogBuilder,
-				editTextNewName, org.horaapps.leafpic.R.string.rename_album);
+				editTextNewName, R.string.rename_album);
 
-		renameDialogBuilder.setNegativeButton(getString(org.horaapps.leafpic.R.string.cancel), null);
+		renameDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
-		renameDialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+		renameDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
 		  @Override
 		  public void onClick(DialogInterface dialog, int which) {
 			//This should br empty it will be overwrite later
@@ -1458,13 +1458,13 @@ public class MainActivity extends SharedMediaActivity {
 			  if (!success) requestSdCardPermissions();
 			  swipeRefreshLayout.setRefreshing(false);
 			} else {
-			  StringUtils.showToast(getApplicationContext(), getString(org.horaapps.leafpic.R.string.insert_something));
+			  StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
 			  editTextNewName.requestFocus();
 			}
 		  }});
 		return true;
 
-	  case org.horaapps.leafpic.R.id.clear_album_preview:
+	  case R.id.clear_album_preview:
 		if (!albumsMode) {
 		  CustomAlbumsHandler as = new CustomAlbumsHandler(getApplicationContext());
 		  as.clearAlbumPreview(getAlbum().getPath(), getAlbum().getId());
@@ -1472,7 +1472,7 @@ public class MainActivity extends SharedMediaActivity {
 		}
 		return true;
 
-	  case org.horaapps.leafpic.R.id.setAsAlbumPreview:
+	  case R.id.setAsAlbumPreview:
 		if (!albumsMode) {
 		  getAlbum().setSelectedPhotoAsPreview(getApplicationContext());
 		  finishEditMode();
@@ -1486,7 +1486,7 @@ public class MainActivity extends SharedMediaActivity {
 	}
   }
 
-  private void toggleRecyclersVisibilty(boolean albumsMode){
+  private void toggleRecyclersVisibility(boolean albumsMode){
 	rvAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
 	rvMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
 	//touchScrollBar.setScrollBarHidden(albumsMode);
@@ -1503,7 +1503,7 @@ public class MainActivity extends SharedMediaActivity {
 		else finish();
 	  } else {
 		displayAlbums();
-		setRecentApp(getString(org.horaapps.leafpic.R.string.app_name));
+		setRecentApp(getString(R.string.app_name));
 	  }
 	}
   }
@@ -1513,7 +1513,7 @@ public class MainActivity extends SharedMediaActivity {
 	@Override
 	protected void onPreExecute() {
 	  swipeRefreshLayout.setRefreshing(true);
-	  toggleRecyclersVisibilty(true);
+	  toggleRecyclersVisibility(true);
 	  super.onPreExecute();
 	}
 
@@ -1537,7 +1537,7 @@ public class MainActivity extends SharedMediaActivity {
 	@Override
 	protected void onPreExecute() {
 	  swipeRefreshLayout.setRefreshing(true);
-	  toggleRecyclersVisibilty(false);
+	  toggleRecyclersVisibility(false);
 	  super.onPreExecute();
 	}
 

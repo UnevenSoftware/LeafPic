@@ -301,20 +301,20 @@ public class AboutActivity extends ThemedActivity {
 
         /** Sub Text Views**/
         color = getSubTextColor();
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_version_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_version_item_sub)).setText(BuildConfig.VERSION_NAME);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_libs_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_patryk_goworowski_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_comunity_members_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_comunity_you_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_rate_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_translate_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_github_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_license_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_report_bug_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_donate_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.donald_shtjefni_role)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.gilbert_ndresaj_role)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_version_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_version_item_sub)).setText(BuildConfig.VERSION_NAME);
+        ((TextView) findViewById(R.id.about_libs_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_community_members_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_community_you_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_rate_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_translate_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_report_bug_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_support_donate_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.donald_shtjefni_role)).setTextColor(color);
+        ((TextView) findViewById(R.id.gilbert_ndresaj_role)).setTextColor(color);
     }
 
     private void licenseDialog() {
@@ -324,7 +324,7 @@ public class AboutActivity extends ThemedActivity {
         notices.addNotice(new Notice("Ion", "http://github.com/koush/ion", "Copyright 2013 Koushik Dutta (2013)", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("Android-Iconics", "http://github.com/mikepenz/Android-Iconics", "Copyright 2016 Mike Penz", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("AppIntro", "http://github.com/PaoloRotolo/AppIntro", "Copyright 2015 Paolo Rotolo\n"
-                                                                                                   + "Copyright 2016 Maximilian Narr", new ApacheSoftwareLicense20()));
+                + "Copyright 2016 Maximilian Narr", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("uCrop", "http://github.com/Yalantis/uCrop", "Copyright 2016, Yalantis", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("ShiftColorPicker", "http://github.com/DASAR/ShiftColorPicker", "Copyright (c) 2015 Bogdasarov Bogdan", new MITLicense()));
         notices.addNotice(new Notice("material-ripple", "http://github.com/balysv/material-ripple", "Copyright 2015 Balys Valentukevicius", new ApacheSoftwareLicense20()));

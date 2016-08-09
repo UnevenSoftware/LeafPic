@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
->
+    >
     <!--
     TOOLBAR
     -->
@@ -15,7 +15,7 @@
         layout="@layout/toolbar"
         android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true"
-    />
+        />
 
     <ScrollView
         android:id="@+id/settingAct_scrollView"
@@ -41,7 +41,7 @@
                     android:layout_marginBottom="10dp"
                     app:cardCornerRadius="1dp"
                     app:cardElevation="5dp"
-                >
+                    >
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -56,21 +56,21 @@
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                        />
+                            />
                         <!--BASIC THEME-->
                         <com.balysv.materialripple.MaterialRippleLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:mrl_rippleAlpha="0.05"
                             app:mrl_rippleDelayClick="false"
-                        >
+                            >
                             <LinearLayout
                                 xmlns:android="http://schemas.android.com/apk/res/android"
                                 android:id="@+id/ll_basic_theme"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                            >
+                                >
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/basic_theme_icon"
                                     android:layout_width="@dimen/icon_width_height"
@@ -79,7 +79,7 @@
                                     app:iiv_icon="gmd-invert-colors"
                                     android:layout_marginLeft="@dimen/big_spacing"
                                     android:layout_marginRight="@dimen/big_spacing"
-                                />
+                                    />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                                     android:paddingTop="16dp"
                                     android:paddingRight="16dp"
                                     android:paddingBottom="8dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/basic_theme_item"
                                         android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                                         android:text="@string/basic_theme"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/basic_theme_item_sub"
                                         android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                                         android:text="@string/basic_theme_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>
@@ -115,14 +115,14 @@
                             android:layout_height="wrap_content"
                             app:mrl_rippleAlpha="0.05"
                             app:mrl_rippleDelayClick="false"
-                        >
+                            >
                             <LinearLayout
                                 xmlns:android="http://schemas.android.com/apk/res/android"
                                 android:id="@+id/ll_primaryColor"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                            >
+                                >
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/PrimaryColor_Icon"
@@ -132,7 +132,7 @@
                                     app:iiv_icon="gmd-color-lens"
                                     android:layout_marginLeft="@dimen/big_spacing"
                                     android:layout_marginRight="@dimen/big_spacing"
-                                />
+                                    />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                                     android:paddingTop="8dp"
                                     android:paddingRight="16dp"
                                     android:paddingBottom="8dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/PrimaryColor_Item"
                                         android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                                         android:text="@string/primary_color"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/PrimaryColor_Item_Sub"
                                         android:layout_width="wrap_content"
@@ -156,7 +156,7 @@
                                         android:text="@string/primary_color_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>
@@ -173,7 +173,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                            >
+                                >
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/accentColor_Icon"
@@ -183,7 +183,7 @@
                                     app:iiv_icon="cmd-format-color-fill"
                                     android:layout_marginLeft="@dimen/big_spacing"
                                     android:layout_marginRight="@dimen/big_spacing"
-                                />
+                                    />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                                     android:paddingTop="8dp"
                                     android:paddingRight="16dp"
                                     android:paddingBottom="8dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/accentColor_Item"
                                         android:layout_width="wrap_content"
@@ -199,7 +199,7 @@
                                         android:text="@string/accent_color"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/accentColor_Item_Sub"
                                         android:layout_width="wrap_content"
@@ -207,7 +207,7 @@
                                         android:text="@string/accent_color_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>
@@ -218,14 +218,14 @@
                             android:layout_height="wrap_content"
                             app:mrl_rippleAlpha="0.05"
                             app:mrl_rippleDelayClick="false"
-                        >
+                            >
                             <LinearLayout
                                 xmlns:android="http://schemas.android.com/apk/res/android"
                                 android:id="@+id/ll_custom_thirdAct"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                            >
+                                >
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/custom_3thAct_icon"
@@ -235,7 +235,7 @@
                                     app:iiv_icon="faw-paint-brush"
                                     android:layout_marginLeft="@dimen/big_spacing"
                                     android:layout_marginRight="@dimen/big_spacing"
-                                />
+                                    />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
                                     android:paddingTop="8dp"
                                     android:paddingRight="16dp"
                                     android:paddingBottom="8dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/custom_3thAct_title"
                                         android:layout_width="wrap_content"
@@ -251,7 +251,7 @@
                                         android:text="@string/custom_3thAct"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/custom_3thAct_Sub"
                                         android:layout_width="wrap_content"
@@ -259,7 +259,7 @@
                                         android:text="@string/custom_3thAct_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                             </LinearLayout>
                         </com.balysv.materialripple.MaterialRippleLayout>
@@ -273,14 +273,14 @@
                             android:id="@+id/ll_more_options_theme"
                             android:visibility="visible"
                             android:orientation="vertical">
-                            <!-- TRASLUCENT STATUS BAR-->
+                            <!-- TRANSLUCENT STATUS BAR-->
                             <LinearLayout
                                 xmlns:android="http://schemas.android.com/apk/res/android"
                                 android:id="@+id/ll_switch_TraslucentStatusBar"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                            >
+                                >
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/Traslucent_StatusBar_Icon"
@@ -290,7 +290,7 @@
                                     app:iiv_icon="gmd-web-asset"
                                     android:layout_marginLeft="@dimen/big_spacing"
                                     android:layout_marginRight="@dimen/big_spacing"
-                                />
+                                    />
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -299,14 +299,14 @@
                                     android:paddingTop="8dp"
                                     android:paddingRight="16dp"
                                     android:paddingBottom="8dp"
-                                >
+                                    >
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:orientation="vertical"
                                         android:layout_marginEnd="45dp"
-                                    >
+                                        >
                                         <TextView
                                             android:id="@+id/Traslucent_StatusBar_Item"
                                             android:layout_width="wrap_content"
@@ -314,7 +314,7 @@
                                             android:text="@string/traslucent_statusbar"
                                             android:textColor="@color/md_dark_background"
                                             android:textSize="16sp"
-                                        />
+                                            />
                                         <TextView
                                             android:id="@+id/Traslucent_StatusBar_Item_Sub"
                                             android:layout_width="wrap_content"
@@ -322,7 +322,7 @@
                                             android:text="@string/traslucent_statusbar_sub"
                                             android:textColor="@color/md_grey_400"
                                             android:textSize="14sp"
-                                        />
+                                            />
                                     </LinearLayout>
                                     <android.support.v7.widget.SwitchCompat
                                         android:id="@+id/SetTraslucentStatusBar"
@@ -333,7 +333,7 @@
                                         android:hapticFeedbackEnabled="true"
                                         android:layout_centerVertical="true"
                                         android:layout_alignParentEnd="true"
-                                    />
+                                        />
                                 </RelativeLayout>
                             </LinearLayout>
                             <!--COLORED NAV BAR-->
@@ -343,7 +343,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                            >
+                                >
 
                                 <com.mikepenz.iconics.view.IconicsImageView
                                     android:id="@+id/NavBar_Icon"
@@ -353,7 +353,7 @@
                                     app:iiv_icon="gmd-video-label"
                                     android:layout_marginLeft="@dimen/big_spacing"
                                     android:layout_marginRight="@dimen/big_spacing"
-                                />
+                                    />
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -362,14 +362,14 @@
                                     android:paddingTop="8dp"
                                     android:paddingRight="16dp"
                                     android:paddingBottom="16dp"
-                                >
+                                    >
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:orientation="vertical"
                                         android:layout_marginEnd="45dp"
-                                    >
+                                        >
                                         <TextView
                                             android:id="@+id/NavBar_Item"
                                             android:layout_width="wrap_content"
@@ -377,7 +377,7 @@
                                             android:text="@string/colored_navbar"
                                             android:textColor="@color/md_dark_background"
                                             android:textSize="16sp"
-                                        />
+                                            />
                                         <TextView
                                             android:id="@+id/NavBar_Item_Sub"
                                             android:layout_width="wrap_content"
@@ -385,7 +385,7 @@
                                             android:text="@string/colored_navbar_sub"
                                             android:textColor="@color/md_grey_400"
                                             android:textSize="14sp"
-                                        />
+                                            />
                                     </LinearLayout>
                                     <android.support.v7.widget.SwitchCompat
                                         android:id="@+id/SetColoredNavBar"
@@ -396,7 +396,7 @@
                                         android:hapticFeedbackEnabled="true"
                                         android:layout_centerVertical="true"
                                         android:layout_alignParentEnd="true"
-                                    />
+                                        />
                                 </RelativeLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -405,7 +405,7 @@
 
                 </android.support.v7.widget.CardView>
 
-                <!--TODO: I WILL WORK ON IT LATER-->
+                 <!--TODO: I WILL WORK ON IT LATER-->
 
                 <android.support.design.widget.FloatingActionButton
                     android:visibility="gone"
@@ -419,7 +419,7 @@
                     android:scaleType="centerInside"
                     android:layout_marginBottom="0dp"
                     app:elevation="5dp"
-                />
+                    />
 
             </FrameLayout>
 
@@ -453,21 +453,21 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
-                        <!--MAX BRIGHTENESS-->
-                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                      android:id="@+id/ll_switch_max_luminosita"
-                                      android:layout_width="match_parent"
-                                      android:layout_height="wrap_content"
-                                      android:orientation="horizontal"
+                    <!--MAX BRIGHTNESS-->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_max_luminosity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/ll_switch_max_luminosita_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-settings-brightness"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/ll_switch_max_luminosity_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-settings-brightness"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -485,32 +485,32 @@
                                     android:orientation="vertical"
                                     android:layout_marginEnd="45dp"
                                 >
-                                    <TextView
-                                        android:id="@+id/max_luminosita_Item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/max_brightness"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                    />
-                                    <TextView
-                                        android:id="@+id/max_luminosita_Item_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/max_brightness_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                    />
-                                </LinearLayout>
-                                <android.support.v7.widget.SwitchCompat
-                                    android:id="@+id/set_max_luminosita"
+                                <TextView
+                                    android:id="@+id/max_luminosity_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:button="@null"
-                                    android:hapticFeedbackEnabled="true"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentEnd="true"
+                                    android:text="@string/max_brightness"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/max_luminosity_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/max_brightness_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_max_luminosity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
                                 />
                             </RelativeLayout>
                         </LinearLayout>
@@ -1110,7 +1110,7 @@
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="5dp"
-            >
+                >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1125,7 +1125,7 @@
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                    />
+                        />
 
                     <!-- INCLUDE VIDEO -->
                     <LinearLayout
@@ -1134,7 +1134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                    >
+                        >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_include_video"
                             android:layout_width="@dimen/icon_width_height"
@@ -1143,7 +1143,7 @@
                             app:iiv_icon="gmd-videocam"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing"
-                        />
+                            />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1152,13 +1152,13 @@
                             android:paddingTop="16dp"
                             android:paddingRight="16dp"
                             android:paddingBottom="8dp"
-                        >
+                            >
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:layout_marginEnd="45dp"
-                            >
+                                >
                                 <TextView
                                     android:id="@+id/include_video_Item"
                                     android:layout_width="wrap_content"
@@ -1166,7 +1166,7 @@
                                     android:text="@string/include_video"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
-                                />
+                                    />
                                 <TextView
                                     android:id="@+id/include_video_Item_Sub"
                                     android:layout_width="wrap_content"
@@ -1174,7 +1174,7 @@
                                     android:text="Display also video"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
-                                />
+                                    />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/set_include_video"
@@ -1185,7 +1185,7 @@
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
                                 android:layout_alignParentEnd="true"
-                            />
+                                />
                         </RelativeLayout>
                     </LinearLayout>
                     <!-- USE EXTERNAL Player-->
@@ -1195,7 +1195,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                    >
+                        >
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_player_Icon"
                             android:layout_width="@dimen/icon_width_height"
@@ -1204,7 +1204,7 @@
                             app:iiv_icon="gmd-ondemand-video"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing"
-                        />
+                            />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1213,13 +1213,13 @@
                             android:paddingTop="8dp"
                             android:paddingRight="16dp"
                             android:paddingBottom="16dp"
-                        >
+                            >
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:layout_marginEnd="45dp"
-                            >
+                                >
                                 <TextView
                                     android:id="@+id/internal_player_Item"
                                     android:layout_width="wrap_content"
@@ -1227,7 +1227,7 @@
                                     android:text="@string/internal_player"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"
-                                />
+                                    />
                                 <TextView
                                     android:id="@+id/internal_player_Item_Sub"
                                     android:layout_width="wrap_content"
@@ -1235,7 +1235,7 @@
                                     android:text="@string/internal_player_sub"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="14sp"
-                                />
+                                    />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/set_internal_player"
@@ -1246,7 +1246,7 @@
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
                                 android:layout_alignParentEnd="true"
-                            />
+                                />
                         </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>

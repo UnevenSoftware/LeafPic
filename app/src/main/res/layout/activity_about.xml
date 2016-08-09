@@ -358,7 +358,7 @@
                             android:textSize="14sp"
                             />
                         <TextView
-                            android:id="@+id/about_comunity_members_sub"
+                            android:id="@+id/about_community_members_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_special_thanks_members_sub"
@@ -367,7 +367,7 @@
                             android:textSize="14sp"
                         />
                         <TextView
-                            android:id="@+id/about_comunity_you_sub"
+                            android:id="@+id/about_community_you_sub"
                             android:layout_width="wrap_content"
                             android:layout_marginTop="@dimen/small_spacing"
                             android:layout_height="wrap_content"
@@ -468,7 +468,7 @@
                         </LinearLayout>
                     </com.balysv.materialripple.MaterialRippleLayout>
 
-                    <!-- TRANLATE -->
+                    <!-- TRANSLATE -->
                     <com.balysv.materialripple.MaterialRippleLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

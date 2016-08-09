@@ -62,7 +62,7 @@ public class SettingsActivity extends ThemedActivity {
 
     private SwitchCompat swNavBar;
     private SwitchCompat swStatusBar;
-    private SwitchCompat swMaxLuminosita;
+    private SwitchCompat swMaxLuminosity;
     private SwitchCompat swPictureOrientation;
     private SwitchCompat swDelayFullImage;
     private SwitchCompat swInternalBrowser;
@@ -75,24 +75,24 @@ public class SettingsActivity extends ThemedActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setContentView(org.horaapps.leafpic.R.layout.activity_settings);
-        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
+        setContentView(R.layout.activity_settings);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
 
 
         securityObj = new SecurityHelper(SettingsActivity.this);
 
-        txtTT = (TextView) findViewById(org.horaapps.leafpic.R.id.theme_setting_title);
-        txtGT = (TextView) findViewById(org.horaapps.leafpic.R.id.general_setting_title);
-        txtPT = (TextView) findViewById(org.horaapps.leafpic.R.id.picture_setting_title);
-        txtVT = (TextView) findViewById(org.horaapps.leafpic.R.id.video_setting_title);
+        txtTT = (TextView) findViewById(R.id.theme_setting_title);
+        txtGT = (TextView) findViewById(R.id.general_setting_title);
+        txtPT = (TextView) findViewById(R.id.picture_setting_title);
+        txtVT = (TextView) findViewById(R.id.video_setting_title);
 
-        scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.settingAct_scrollView);
+        scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
 
 
         /*** EXCLUDED ALBUMS ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 baseThemeDialog();
@@ -100,7 +100,7 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** SECURITY ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_security).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_security).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!securityObj.isActiveSecurity())
@@ -112,7 +112,7 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** PRIMARY COLOR PIKER ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_primaryColor).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_primaryColor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 primaryColorPiker();
@@ -120,7 +120,7 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** ACCENT COLOR PIKER ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_accentColor).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_accentColor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 accentColorPiker();
@@ -128,7 +128,7 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** EXCLUDED ALBUMS INTENT ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_excluded_album).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_excluded_album).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingsActivity.this, ExcludedAlbumsActivity.class));
@@ -136,7 +136,7 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** CUSTOMIZE PICTURE VIEWER DIALOG ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_custom_thirdAct).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_custom_thirdAct).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customizePictureViewer();
@@ -144,7 +144,7 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** MAP PROVIDER DIALOG ***/
-        findViewById(org.horaapps.leafpic.R.id.ll_map_provider).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_map_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mapProviderDialog();
@@ -152,12 +152,12 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** SW Internal Player ***/
-        swInternalBrowser = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.set_internal_player);
-        swInternalBrowser.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_internal_player), false));
+        swInternalBrowser = (SwitchCompat) findViewById(R.id.set_internal_player);
+        swInternalBrowser.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
         swInternalBrowser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_internal_player), isChecked);
+                SP.putBoolean(getString(R.string.preference_internal_player), isChecked);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -170,89 +170,90 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** SW INCLUDE VIDEO ***/
-        swIncludeVideo = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.set_include_video);
-        swIncludeVideo.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_include_video), true));
+        swIncludeVideo = (SwitchCompat) findViewById(R.id.set_include_video);
+        swIncludeVideo.setChecked(SP.getBoolean(getString(R.string.preference_include_video), true));
         swIncludeVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_include_video), isChecked);
+                SP.putBoolean(getString(R.string.preference_include_video), isChecked);
                 updateSwitchColor(swIncludeVideo, getAccentColor());
             }
         });
 
         /*** SW SWIPE DIRECTION ***/
-        swSwipeDirection = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.Set_media_viewer_swipe_direction);
-        swSwipeDirection.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_swipe_direction_inverted), false));
+        swSwipeDirection = (SwitchCompat) findViewById(R.id.Set_media_viewer_swipe_direction);
+        swSwipeDirection.setChecked(SP.getBoolean(getString(R.string.preference_swipe_direction_inverted), false));
         swSwipeDirection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_swipe_direction_inverted), isChecked);
+                SP.putBoolean(getString(R.string.preference_swipe_direction_inverted), isChecked);
                 updateSwitchColor(swSwipeDirection, getAccentColor());
             }
         });
 
         /*** SW AUTO UPDATE MEDIA ***/
-        swAutoUpdate = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.SetAutoUpdateMedia);
-        swAutoUpdate.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_auto_update_media), false));
+        swAutoUpdate = (SwitchCompat) findViewById(R.id.SetAutoUpdateMedia);
+        swAutoUpdate.setChecked(SP.getBoolean(getString(R.string.preference_auto_update_media), false));
         swAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_auto_update_media), isChecked);
+                SP.putBoolean(getString(R.string.preference_auto_update_media), isChecked);
                 updateSwitchColor(swAutoUpdate, getAccentColor());
             }
         });
 
         /*** SW MEDIA STORE ***/
-        swUseMediaStore = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.sw_use_media_mediastore);
-        swUseMediaStore.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_use_alternative_provider), false));
+        swUseMediaStore = (SwitchCompat) findViewById(R.id.sw_use_media_mediastore);
+        swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_media_store), false));
         swUseMediaStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_use_alternative_provider), isChecked);
+                SP.putBoolean(getString(R.string.preference_use_media_store), isChecked);
                 updateSwitchColor(swUseMediaStore, getAccentColor());
             }
         });
 
         /*** SW DELAY FULL-SIZE IMAGE ***/
-        swDelayFullImage = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.set_full_resolution);
-        swDelayFullImage.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_delay_full_image), true));
+        swDelayFullImage = (SwitchCompat) findViewById(R.id.set_full_resolution);
+        swDelayFullImage.setChecked(SP.getBoolean(getString(R.string.preference_delay_full_image), true));
         swDelayFullImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_delay_full_image), isChecked);
+                SP.putBoolean(getString(R.string.preference_delay_full_image), isChecked);
                 updateSwitchColor(swDelayFullImage, getAccentColor());
             }
         });
 
         /*** SW PICTURE ORIENTATION ***/
-        swPictureOrientation = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.set_picture_orientation);
-        swPictureOrientation.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_auto_rotate), false));
+        swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
+        swPictureOrientation.setChecked(SP.getBoolean(getString(R.string.preference_auto_rotate), false));
         swPictureOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_auto_rotate), isChecked);
+                SP.putBoolean(getString(R.string.preference_auto_rotate), isChecked);
                 updateSwitchColor(swPictureOrientation, getAccentColor());
             }
         });
 
-        /*** SW MAX LUMINOSITA ***/
-        swMaxLuminosita = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.set_max_luminosita);
-        swMaxLuminosita.setChecked(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_max_brightness), false));
-        swMaxLuminosita.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*** SW MAX LUMINOSITY ***/
+        swMaxLuminosity = (SwitchCompat) findViewById(R.id.set_max_luminosity);
+        swMaxLuminosity.setChecked(SP.getBoolean(getString(R.string.preference_max_brightness), false));
+        swMaxLuminosity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_max_brightness), isChecked);
-                updateSwitchColor(swMaxLuminosita, getAccentColor());
+                SP.putBoolean(getString(R.string.preference_max_brightness), isChecked);
+                updateSwitchColor(swMaxLuminosity, getAccentColor());
             }
         });
 
+
         /*** SW TRANSLUCENT STATUS BAR ***/
-        swStatusBar = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.SetTraslucentStatusBar);
+        swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
         swStatusBar.setChecked(isTranslucentStatusBar());
         swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_translucent_status_bar), isChecked);
+                SP.putBoolean(getString(R.string.preference_translucent_status_bar), isChecked);
                 updateTheme();
                 setStatusBarColor();
                 updateSwitchColor(swStatusBar, getAccentColor());
@@ -260,17 +261,17 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** SW COLORED NAV BAR ***/
-        swNavBar = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.SetColoredNavBar);
+        swNavBar = (SwitchCompat) findViewById(R.id.SetColoredNavBar);
         swNavBar.setChecked(isNavigationBarColored());
         swNavBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_colored_nav_bar), isChecked);
+                SP.putBoolean(getString(R.string.preference_colored_nav_bar), isChecked);
                 updateTheme();
                 updateSwitchColor(swNavBar, getAccentColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     getWindow().setNavigationBarColor(
-                            isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000));
+                            isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
             }
         });
@@ -279,9 +280,9 @@ public class SettingsActivity extends ThemedActivity {
     private void askPasswordDialog() {
         AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingsActivity.this,passwordDialogBuilder);
-        passwordDialogBuilder.setNegativeButton(getString(org.horaapps.leafpic.R.string.cancel), null);
+        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
-        passwordDialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //This should br empty it will be overwrite later
@@ -299,7 +300,7 @@ public class SettingsActivity extends ThemedActivity {
                     passwordDialog.dismiss();
                     startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
                 } else {
-                    Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                     editTextPassword.getText().clear();
                     editTextPassword.requestFocus();
                 }
@@ -310,26 +311,26 @@ public class SettingsActivity extends ThemedActivity {
     private void mapProviderDialog() {
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-        View dialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_map_provider, null);
-        TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.title);
-        ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.dialog_chose_provider_title)).setCardBackgroundColor(getCardBackgroundColor());
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_map_provider, null);
+        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.title);
+        ((CardView) dialogLayout.findViewById(R.id.dialog_chose_provider_title)).setCardBackgroundColor(getCardBackgroundColor());
         dialogTitle.setBackgroundColor(getPrimaryColor());
 
-        final RadioGroup mapProvider = (RadioGroup) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_group_maps_provider);
-        RadioButton radioGoogleMaps = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_google_maps);
-        RadioButton radioMapBoxStreets = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_mapb_streets);
-        RadioButton radioMapBoxDark = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_mapb_dark);
-        RadioButton radioMapBoxLight = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_mapb_light);
-        RadioButton radioTyler = (RadioButton) dialogLayout.findViewById(org.horaapps.leafpic.R.id.radio_osm_tyler);
+        final RadioGroup mapProvider = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_maps_provider);
+        RadioButton radioGoogleMaps = (RadioButton) dialogLayout.findViewById(R.id.radio_google_maps);
+        RadioButton radioMapBoxStreets = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_streets);
+        RadioButton radioMapBoxDark = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_dark);
+        RadioButton radioMapBoxLight = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_light);
+        RadioButton radioTyler = (RadioButton) dialogLayout.findViewById(R.id.radio_osm_tyler);
         setRadioTextButtonColor(radioGoogleMaps, getSubTextColor());
         setRadioTextButtonColor(radioMapBoxStreets, getSubTextColor());
         setRadioTextButtonColor(radioMapBoxDark, getSubTextColor());
         setRadioTextButtonColor(radioMapBoxLight, getSubTextColor());
         setRadioTextButtonColor(radioTyler, getSubTextColor());
 
-        ((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.header_proprietary_maps)).setTextColor(getTextColor());
-        ((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.header_free_maps)).setTextColor(getTextColor());
-        switch (SP.getInt(getString(org.horaapps.leafpic.R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER)) {
+        ((TextView) dialogLayout.findViewById(R.id.header_proprietary_maps)).setTextColor(getTextColor());
+        ((TextView) dialogLayout.findViewById(R.id.header_free_maps)).setTextColor(getTextColor());
+        switch (SP.getInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER)) {
             case GOOGLE_MAPS_PROVIDER:
                 default: radioGoogleMaps.setChecked(true); break;
             case OSM_MAP_BOX: radioMapBoxStreets.setChecked(true); break;
@@ -338,17 +339,17 @@ public class SettingsActivity extends ThemedActivity {
             case OSM_TYLER_PROVIDER: radioTyler.setChecked(true); break;
         }
 
-        dialogBuilder.setNegativeButton(org.horaapps.leafpic.R.string.cancel, null);
-        dialogBuilder.setPositiveButton(org.horaapps.leafpic.R.string.ok_action, new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(R.string.cancel, null);
+        dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (mapProvider.getCheckedRadioButtonId()) {
-                    case org.horaapps.leafpic.R.id.radio_google_maps:
-                    default: SP.putInt(getString(org.horaapps.leafpic.R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER); break;
-                    case org.horaapps.leafpic.R.id.radio_mapb_streets: SP.putInt(getString(org.horaapps.leafpic.R.string.preference_map_provider), OSM_MAP_BOX); break;
-                    case org.horaapps.leafpic.R.id.radio_osm_tyler: SP.putInt(getString(org.horaapps.leafpic.R.string.preference_map_provider), OSM_TYLER_PROVIDER); break;
-                    case org.horaapps.leafpic.R.id.radio_mapb_dark: SP.putInt(getString(org.horaapps.leafpic.R.string.preference_map_provider), OSM_MAP_BOX_DARK); break;
-                    case org.horaapps.leafpic.R.id.radio_mapb_light: SP.putInt(getString(org.horaapps.leafpic.R.string.preference_map_provider), OSM_MAP_BOX_LIGHT); break;
+                    case R.id.radio_google_maps:
+                    default: SP.putInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER); break;
+                    case R.id.radio_mapb_streets: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX); break;
+                    case R.id.radio_osm_tyler: SP.putInt(getString(R.string.preference_map_provider), OSM_TYLER_PROVIDER); break;
+                    case R.id.radio_mapb_dark: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX_DARK); break;
+                    case R.id.radio_mapb_light: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX_LIGHT); break;
                 }
             }
         });
@@ -359,13 +360,13 @@ public class SettingsActivity extends ThemedActivity {
     private void baseThemeDialog(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
-        final View dialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_basic_theme, null);
-        final TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.basic_theme_title);
-        final CardView dialogCardView = (CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.basic_theme_card);
+        final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_basic_theme, null);
+        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.basic_theme_title);
+        final CardView dialogCardView = (CardView) dialogLayout.findViewById(R.id.basic_theme_card);
 
-        final IconicsImageView whiteSelect = (IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.white_basic_theme_select);
-        final IconicsImageView darkSelect = (IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.dark_basic_theme_select);
-        final IconicsImageView darkAmoledSelect = (IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.dark_amoled_basic_theme_select);
+        final IconicsImageView whiteSelect = (IconicsImageView) dialogLayout.findViewById(R.id.white_basic_theme_select);
+        final IconicsImageView darkSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_basic_theme_select);
+        final IconicsImageView darkAmoledSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_amoled_basic_theme_select);
 
         switch (getBaseTheme()){
             case LIGHT_THEME:
@@ -389,7 +390,7 @@ public class SettingsActivity extends ThemedActivity {
         dialogTitle.setBackgroundColor(getPrimaryColor());
         dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
 
-        dialogLayout.findViewById(org.horaapps.leafpic.R.id.ll_white_basic_theme).setOnClickListener(new View.OnClickListener() {
+        dialogLayout.findViewById(R.id.ll_white_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 whiteSelect.setVisibility(View.VISIBLE);
@@ -400,7 +401,7 @@ public class SettingsActivity extends ThemedActivity {
                 setTheme();
             }
         });
-        dialogLayout.findViewById(org.horaapps.leafpic.R.id.ll_dark_basic_theme).setOnClickListener(new View.OnClickListener() {
+        dialogLayout.findViewById(R.id.ll_dark_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 whiteSelect.setVisibility(View.GONE);
@@ -411,7 +412,7 @@ public class SettingsActivity extends ThemedActivity {
                 setTheme();
             }
         });
-        dialogLayout.findViewById(org.horaapps.leafpic.R.id.ll_dark_amoled_basic_theme).setOnClickListener(new View.OnClickListener() {
+        dialogLayout.findViewById(R.id.ll_dark_amoled_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 whiteSelect.setVisibility(View.GONE);
@@ -422,13 +423,14 @@ public class SettingsActivity extends ThemedActivity {
                 setTheme();
             }
         });
-        dialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setView(dialogLayout);
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SP.putInt(getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme());
                 setTheme();
             }
         });
-        dialogBuilder.setNegativeButton(getString(org.horaapps.leafpic.R.string.cancel), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 setBaseTheme(ThemeHelper.getBaseTheme(getApplicationContext()), false);
@@ -442,11 +444,11 @@ public class SettingsActivity extends ThemedActivity {
     private void primaryColorPiker(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
-        final View dialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.color_piker_primary, null);
-        final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(org.horaapps.leafpic.R.id.color_picker_primary);
-        final LineColorPicker colorPicker2 = (LineColorPicker) dialogLayout.findViewById(org.horaapps.leafpic.R.id.color_picker_primary_2);
-        final TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.cp_primary_title);
-        CardView dialogCardView = (CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.cp_primary_card);
+        final View dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_primary, null);
+        final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_primary);
+        final LineColorPicker colorPicker2 = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_primary_2);
+        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.cp_primary_title);
+        CardView dialogCardView = (CardView) dialogLayout.findViewById(R.id.cp_primary_card);
         dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
 
         colorPicker.setColors(ColorPalette.getBaseColors(getApplicationContext()));
@@ -465,7 +467,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onColorChanged(int c) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(c);
                 }
 
@@ -480,12 +482,12 @@ public class SettingsActivity extends ThemedActivity {
             public void onColorChanged(int c) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(c));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(c));
                     } else getWindow().setStatusBarColor(c);
                     if (isNavigationBarColored())
                         getWindow().setNavigationBarColor(c);
                     else
-                        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000));
+                        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
                 }
                 toolbar.setBackgroundColor(c);
                 dialogTitle.setBackgroundColor(c);
@@ -493,12 +495,12 @@ public class SettingsActivity extends ThemedActivity {
         });
         dialogBuilder.setView(dialogLayout);
 
-        dialogBuilder.setNeutralButton(getString(org.horaapps.leafpic.R.string.cancel), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(getPrimaryColor());
                 }
                 toolbar.setBackgroundColor(getPrimaryColor());
@@ -506,15 +508,15 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
-        dialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SP.putInt(getString(org.horaapps.leafpic.R.string.preference_primary_color), colorPicker2.getColor());
+                SP.putInt(getString(R.string.preference_primary_color), colorPicker2.getColor());
                 updateTheme();
                 setNavBarColor();
                 setScrollViewColor(scr);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else {
                         getWindow().setStatusBarColor(getPrimaryColor());
                     }
@@ -527,11 +529,11 @@ public class SettingsActivity extends ThemedActivity {
             public void onDismiss(DialogInterface dialog) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (isTranslucentStatusBar()) {
-                        getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+                        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                     } else getWindow().setStatusBarColor(getPrimaryColor());
                     if (isNavigationBarColored())
                         getWindow().setNavigationBarColor(getPrimaryColor());
-                    else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000));
+                    else getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
                 }
                 toolbar.setBackgroundColor(getPrimaryColor());
 
@@ -543,10 +545,10 @@ public class SettingsActivity extends ThemedActivity {
     private void accentColorPiker(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
-        final View dialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.color_piker_accent, null);
-        final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(org.horaapps.leafpic.R.id.color_picker_accent);
-        final TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.cp_accent_title);
-        CardView cv = (CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.cp_accent_card);
+        final View dialogLayout = getLayoutInflater().inflate(R.layout.color_piker_accent, null);
+        final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_accent);
+        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.cp_accent_title);
+        CardView cv = (CardView) dialogLayout.findViewById(R.id.cp_accent_card);
         cv.setCardBackgroundColor(getCardBackgroundColor());
 
         colorPicker.setColors(ColorPalette.getAccentColors(getApplicationContext()));
@@ -563,16 +565,16 @@ public class SettingsActivity extends ThemedActivity {
         });
         dialogBuilder.setView(dialogLayout);
 
-        dialogBuilder.setNeutralButton(getString(org.horaapps.leafpic.R.string.cancel), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 updateViewswithAccentColor(getAccentColor());
             }
         });
-        dialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SP.putInt(getString(org.horaapps.leafpic.R.string.preference_accent_color), colorPicker.getColor());
+                SP.putInt(getString(R.string.preference_accent_color), colorPicker.getColor());
                 updateTheme();
                 updateViewswithAccentColor(getAccentColor());
             }
@@ -590,14 +592,14 @@ public class SettingsActivity extends ThemedActivity {
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
-        View dialogLayout = getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_viewer_theme, null);
-        final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) dialogLayout.findViewById(org.horaapps.leafpic.R.id.apply_theme_3th_act_enabled);
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_media_viewer_theme, null);
+        final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) dialogLayout.findViewById(R.id.apply_theme_3th_act_enabled);
 
-        ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.third_act_theme_card)).setCardBackgroundColor(getCardBackgroundColor());
-        dialogLayout.findViewById(org.horaapps.leafpic.R.id.third_act_theme_title).setBackgroundColor(getPrimaryColor());//or Getprimary
-        ((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.apply_theme_3thAct_title)).setTextColor(getTextColor());
-        ((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.apply_theme_3thAct_title_Sub)).setTextColor(getSubTextColor());
-        ((IconicsImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.ll_apply_theme_3thAct_icon)).setColor(getIconColor());
+        ((CardView) dialogLayout.findViewById(R.id.third_act_theme_card)).setCardBackgroundColor(getCardBackgroundColor());
+        dialogLayout.findViewById(R.id.third_act_theme_title).setBackgroundColor(getPrimaryColor());//or GetPrimary
+        ((TextView) dialogLayout.findViewById(R.id.apply_theme_3thAct_title)).setTextColor(getTextColor());
+        ((TextView) dialogLayout.findViewById(R.id.apply_theme_3thAct_title_Sub)).setTextColor(getSubTextColor());
+        ((IconicsImageView) dialogLayout.findViewById(R.id.ll_apply_theme_3thAct_icon)).setColor(getIconColor());
 
         swApplyTheme_Viewer.setChecked(isApplyThemeOnImgAct());
         swApplyTheme_Viewer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -609,22 +611,22 @@ public class SettingsActivity extends ThemedActivity {
         updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
 
 
-        final LineColorPicker transparencyColorPicker = (LineColorPicker) dialogLayout.findViewById(org.horaapps.leafpic.R.id.pickerTransparent);
+        final LineColorPicker transparencyColorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.pickerTransparent);
         transparencyColorPicker.setColors(ColorPalette.getTransparencyShadows(getPrimaryColor()));
         transparencyColorPicker.setSelectedColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
 
         /**TEXT VIEWS**/
-        ((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.seek_bar_alpha_title)).setTextColor(getTextColor());
-        ((TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.seek_bar_alpha_title_Sub)).setTextColor(getSubTextColor());
+        ((TextView) dialogLayout.findViewById(R.id.seek_bar_alpha_title)).setTextColor(getTextColor());
+        ((TextView) dialogLayout.findViewById(R.id.seek_bar_alpha_title_Sub)).setTextColor(getSubTextColor());
 
         dialogBuilder.setView(dialogLayout);
-        dialogBuilder.setNeutralButton(getString(org.horaapps.leafpic.R.string.cancel), null);
-        dialogBuilder.setPositiveButton(getString(org.horaapps.leafpic.R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNeutralButton(getString(R.string.cancel), null);
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.getEditor();
-                editor.putBoolean(getString(org.horaapps.leafpic.R.string.preference_apply_theme_pager), swApplyTheme_Viewer.isChecked());
+                editor.putBoolean(getString(R.string.preference_apply_theme_pager), swApplyTheme_Viewer.isChecked());
                 int c = Color.alpha(transparencyColorPicker.getColor());
-                editor.putInt(getString(org.horaapps.leafpic.R.string.preference_transparency), 255 - c);
+                editor.putInt(getString(R.string.preference_transparency), 255 - c);
                 editor.commit();
                 updateTheme();
             }
@@ -642,7 +644,7 @@ public class SettingsActivity extends ThemedActivity {
         updateSwitchColor(swDelayFullImage, color);
         updateSwitchColor(swNavBar, color);
         updateSwitchColor(swStatusBar, color);
-        updateSwitchColor(swMaxLuminosita, color);
+        updateSwitchColor(swMaxLuminosity, color);
         updateSwitchColor(swPictureOrientation, color);
         updateSwitchColor(swInternalBrowser, color);
         updateSwitchColor(swAutoUpdate, color);
@@ -693,65 +695,65 @@ public class SettingsActivity extends ThemedActivity {
 
         /** Icons **/
         color = getIconColor();
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.ll_switch_picture_orientation_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.ll_switch_max_luminosita_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.ll_switch_full_resolution_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Traslucent_StatusBar_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.custom_3thAct_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.PrimaryColor_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.accentColor_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.basic_theme_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.NavBar_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.Excluded_Album_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.internal_player_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.internal_include_video)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.auto_update_media_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.use_media_mediastore_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.fab_options_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.map_provider_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.media_viewer_swipe_direction_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.ll_switch_max_luminosity_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.Traslucent_StatusBar_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.custom_3thAct_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.PrimaryColor_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.accentColor_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.basic_theme_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.NavBar_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.Excluded_Album_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.internal_player_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.internal_include_video)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.auto_update_media_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.use_media_mediastore_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.security_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.fab_options_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.map_provider_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.media_viewer_swipe_direction_Icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.max_luminosita_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.full_resolution_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.picture_orientation_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.custom_3thAct_title)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.Traslucent_StatusBar_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.PrimaryColor_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.accentColor_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.basic_theme_item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.NavBar_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.Excluded_Album_Item_Title)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.internal_player_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.include_video_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.auto_update_media_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.security_item_title)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.use_media_mediastore_Item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.fab_options_item_title)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.map_provider_item_title)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.media_viewer_swipe_direction_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.max_luminosity_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.full_resolution_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.picture_orientation_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.custom_3thAct_title)).setTextColor(color);
+        ((TextView) findViewById(R.id.Traslucent_StatusBar_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.PrimaryColor_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.accentColor_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.basic_theme_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.NavBar_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.Excluded_Album_Item_Title)).setTextColor(color);
+        ((TextView) findViewById(R.id.internal_player_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.include_video_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.auto_update_media_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.security_item_title)).setTextColor(color);
+        ((TextView) findViewById(R.id.use_media_mediastore_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.fab_options_item_title)).setTextColor(color);
+        ((TextView) findViewById(R.id.map_provider_item_title)).setTextColor(color);
+        ((TextView) findViewById(R.id.media_viewer_swipe_direction_Item)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.max_luminosita_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.full_resolution_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.custom_3thAct_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.picture_orientation_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.Traslucent_StatusBar_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.use_media_mediastore_Item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.PrimaryColor_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.accentColor_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.basic_theme_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.NavBar_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.Excluded_Album_Item_Title_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.internal_player_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.include_video_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.auto_update_media_Item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.security_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.fab_options_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.map_provider_item_sub)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.media_viewer_swipe_direction_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.max_luminosity_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.full_resolution_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.custom_3thAct_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.picture_orientation_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.Traslucent_StatusBar_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.use_media_mediastore_Item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.PrimaryColor_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.accentColor_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.basic_theme_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.NavBar_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.internal_player_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.include_video_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.auto_update_media_Item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.security_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.fab_options_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.map_provider_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.media_viewer_swipe_direction_sub)).setTextColor(color);
     }
 }

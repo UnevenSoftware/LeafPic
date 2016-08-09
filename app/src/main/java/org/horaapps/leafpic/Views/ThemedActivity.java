@@ -33,7 +33,7 @@ public class ThemedActivity extends AppCompatActivity {
 
 
   private boolean coloredNavBar;
-  private boolean oscuredStatusBar;
+  private boolean obscuredStatusBar;
   private boolean applyThemeImgAct;
 
 
@@ -52,9 +52,9 @@ public class ThemedActivity extends AppCompatActivity {
 
   public void updateTheme(){
 	themeHelper.updateTheme();
-	coloredNavBar = SP. getBoolean(getString(org.horaapps.leafpic.R.string.preference_colored_nav_bar), false);
-	oscuredStatusBar = SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_translucent_status_bar),true);
-	applyThemeImgAct = SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_apply_theme_pager), true);
+	coloredNavBar = SP. getBoolean(getString(R.string.preference_colored_nav_bar), false);
+	obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
+	applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -62,7 +62,7 @@ public class ThemedActivity extends AppCompatActivity {
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 	  if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
 	  else
-		getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), 255));
+		getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
 	}
   }
 
@@ -70,7 +70,7 @@ public class ThemedActivity extends AppCompatActivity {
   protected void setStatusBarColor() {
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 	  if (isTranslucentStatusBar())
-		getWindow().setStatusBarColor(ColorPalette.getOscuredColor(getPrimaryColor()));
+		getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
 	  else
 		getWindow().setStatusBarColor(getPrimaryColor());
 	}
@@ -81,7 +81,7 @@ public class ThemedActivity extends AppCompatActivity {
   }
 
   public void setCursorDrawableColor(EditText editText, int color) {
-	// TODO: 02/08/16 remove thhis
+	// TODO: 02/08/16 remove this
 	ThemeHelper.setCursorDrawableColor(editText, color);
   }
 
@@ -90,7 +90,7 @@ public class ThemedActivity extends AppCompatActivity {
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public void setRecentApp(String text){
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-	  BitmapDrawable drawable = ((BitmapDrawable) getDrawable(org.horaapps.leafpic.R.mipmap.ic_launcher));
+	  BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
 	  setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
 	}
   }
@@ -101,7 +101,7 @@ public class ThemedActivity extends AppCompatActivity {
   }
 
   public boolean isTranslucentStatusBar() {
-	return oscuredStatusBar;
+	return obscuredStatusBar;
   }
 
   protected boolean isApplyThemeOnImgAct() {
@@ -109,7 +109,7 @@ public class ThemedActivity extends AppCompatActivity {
   }
 
   protected boolean isTransparencyZero() {
-	return 255 - SP.getInt(getString(org.horaapps.leafpic.R.string.preference_transparency), 0) == 255;
+	return 255 - SP.getInt(getString(R.string.preference_transparency), 0) == 255;
   }
 
   public int getTransparency() {

@@ -7,8 +7,8 @@
     <string name="preference_use_alternative_provider">alternative_provider</string>
     <string name="preference_delay_full_image">set_delay_full_image</string>
     <string name="preference_auto_rotate">set_picture_orientation</string>
-    <string name="preference_max_brightness">set_max_luminosita</string>
-    <string name="preference_translucent_status_bar">set_traslucent_statusbar</string>
+    <string name="preference_max_brightness">set_max_luminosity</string>
+    <string name="preference_translucent_status_bar">set_translucent_statusbar</string>
     <string name="preference_colored_nav_bar">nav_bar</string>
     <string name="preference_base_theme">basic_theme</string>
     <string name="preference_primary_color">primary_color</string>

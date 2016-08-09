@@ -35,7 +35,7 @@ public class SplashScreen extends SharedMediaActivity {
     final static String PICK_MODE = "pick_mode";
 
     final static int ALBUMS_PREFETCHED = 23;
-    final static int PHOTS_PREFETCHED = 2;
+    final static int PHOTOS_PREFETCHED = 2;
     final static int ALBUMS_BACKUP = 60;
     private boolean PICK_INTENT = false;
     public final static String ACTION_OPEN_ALBUM = "com.horaapps.leafpic.OPEN_ALBUM";
@@ -188,7 +188,7 @@ public class SplashScreen extends SharedMediaActivity {
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
             Bundle b = new Bundle();
             getAlbums().addAlbum(0, album);
-            b.putInt(CONTENT, PHOTS_PREFETCHED);
+            b.putInt(CONTENT, PHOTOS_PREFETCHED);
             i.putExtras(b);
             startActivity(i);
             finish();
