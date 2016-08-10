@@ -3,18 +3,19 @@ package org.horaapps.leafpic.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.horaapps.leafpic.Data.Album;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PermissionUtils;
@@ -54,18 +55,17 @@ public class SplashScreen extends SharedMediaActivity {
 
         //albums = new HandlingAlbums(getApplicationContext());
 
-        TextView logo = (TextView) findViewById(org.horaapps.leafpic.R.id.txtLogo);
-        logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
+        //TextView logo = (TextView) findViewById(org.horaapps.leafpic.R.id.txtLogo);
+        //logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
         //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
         //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
-        logo.setTextColor(getSubTextColor());
+        //logo.setTextColor(getSubTextColor());
         //logo.setLetterSpacing((float)0.2);
 
-
+        ((ProgressBar) findViewById(R.id.progress_splash)).getIndeterminateDrawable().setColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP);
 
         RelativeLayout RelLay = (RelativeLayout) findViewById(org.horaapps.leafpic.R.id.Splah_Bg);
         RelLay.setBackgroundColor(getBackgroundColor());
-
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
