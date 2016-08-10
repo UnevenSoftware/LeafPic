@@ -11,7 +11,7 @@ LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free a
 </a>
 </br></br>
 ## Screenshots
-<div style="dispaly:flex;" >
+<div style="display:flex;" >
 <img  src="screenshots/1.png" width="19%" >
 <img style="margin-left:10px;" src="screenshots/2.png" width="19%" >
 <img style="margin-left:10px;" src="screenshots/3.png" width="19%" >
