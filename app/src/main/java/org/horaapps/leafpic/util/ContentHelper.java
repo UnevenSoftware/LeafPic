@@ -19,6 +19,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
+import org.horaapps.leafpic.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -98,12 +100,14 @@ public class ContentHelper {
 	return success;
   }
 
-  public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File target) {
+  public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File targetDir) {
 	FileInputStream inStream = null;
 	OutputStream outStream = null;
 	FileChannel inChannel = null;
 	FileChannel outChannel = null;
 	boolean success = false;
+	File target = new File(targetDir, source.getName());
+
 	try {
 	  inStream = new FileInputStream(source);
 
@@ -118,7 +122,7 @@ public class ContentHelper {
 	  } else {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 		  // Storage Access Framework
-		  DocumentFile targetDocument = getDocumentFile(context,target, false, true);
+		  DocumentFile targetDocument = getDocumentFile(context, target, false, false);
 		  if (targetDocument != null) {
 			outStream = context.getContentResolver().openOutputStream(targetDocument.getUri());
 		  }
@@ -159,11 +163,13 @@ public class ContentHelper {
    * Move a file. The target file may even be on external SD card.
    *
    * @param source The source file
-   * @param target The target file
+   * @param targetDir The target Directory
    * @return true if the copying was successful.
    */
-  public static boolean moveFile(Context context, @NonNull final File source, @NonNull final File target) {
+  public static boolean moveFile(Context context, @NonNull final File source, @NonNull final File targetDir) {
 	// First try the normal rename.
+	File target = new File(targetDir, source.getName());
+
 	boolean success = source.renameTo(target);
 
 	if (!success) {
@@ -207,6 +213,92 @@ public class ContentHelper {
 	  filecursor.close();
 	  return uri;
 	}
+  }
+
+  /**
+   * Delete all files in a folder.
+   *
+   * @param folder the folder
+   * @return true if successful.
+   */
+
+  public static boolean deleteFilesInFolder(Context context, @NonNull final File folder) {
+	boolean totalSuccess = true;
+
+	String[] children = folder.list();
+	if (children != null) {
+	  for (String child : children) {
+		File file = new File(folder, child);
+		if (!file.isDirectory()) {
+		  boolean success = deleteFile(context, file);
+		  if (!success) {
+			Log.w(TAG, "Failed to delete file" + child);
+			totalSuccess = false;
+		  }
+		}
+	  }
+	}
+	return totalSuccess;
+  }
+
+
+
+  /**
+   * Delete a file. May be even on external SD card.
+   *
+   * @param file the file to be deleted.
+   * @return True if successfully deleted.
+   */
+  public static boolean deleteFile(Context context, @NonNull final File file) {
+
+
+	//W/DocumentFile: Failed query: java.lang.IllegalArgumentException: Failed to determine if A613-F0E1:.android_secure is child of A613-F0E1:: java.io.FileNotFoundException: Missing file for A613-F0E1:.android_secure at /storage/sdcard1/.android_secure
+	// First try the normal deletion.
+	boolean success = file.delete();
+
+	// Try with Storage Access Framework.
+	if (!success && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	  DocumentFile document = getDocumentFile(context, file, false, false);
+	  success = document != null && document.delete();
+	}
+
+	// Try the Kitkat workaround.
+	if (!success && Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+	  ContentResolver resolver = context.getContentResolver();
+
+	  try {
+		Uri uri = null;//MediaStoreUtil.getUriFromFile(file.getAbsolutePath());
+		if (uri != null) {
+		  resolver.delete(uri, null, null);
+		}
+		success = !file.exists();
+	  }
+	  catch (Exception e) {
+		Log.e(TAG, "Error when deleting file " + file.getAbsolutePath(), e);
+		return false;
+	  }
+	}
+
+	if(success) scanFile(context, new String[]{ file.getPath() });
+	return success;
+  }
+
+  public static String[] getExtSdCardPaths(Context context) {
+	List<String> paths = new ArrayList<String>();
+	for (File file : context.getExternalFilesDirs("external")) {
+	  if (file != null && !file.equals(context.getExternalFilesDir("external"))) {
+		int index = file.getAbsolutePath().lastIndexOf("/Android/data");
+		if (index < 0) Log.w("asd", "Unexpected external file dir: " + file.getAbsolutePath());
+		else {
+		  String path = file.getAbsolutePath().substring(0, index);
+		  try { path = new File(path).getCanonicalPath(); }
+		  // Keep non-canonical path.
+		  catch (IOException ignored) { }
+		  paths.add(path);
+		}
+	  }
+	}
+	return paths.toArray(new String[paths.size()]);
   }
 
   /**
@@ -260,54 +352,26 @@ public class ContentHelper {
    * @return The DocumentFile
    */
   private static DocumentFile getDocumentFile(Context context, @NonNull final File file, final boolean isDirectory, final boolean createDirectories) {
-	ArrayList<Uri> treeUris = getTreeUris(context);
-	Uri treeUri = null;
 
-	if (treeUris.size() == 0) return null;
+	Uri treeUri = getTreeUri(context);
 
-	String fullPath;
-	try { fullPath = file.getCanonicalPath(); }
-	catch (IOException e) { return null; }
+	if (treeUri == null) return null;
 
-	String baseFolder = null;
-
-	// First try to get the base folder via unofficial StorageVolume API from the URIs.
-
-	for (int i = 0; baseFolder == null && i < treeUris.size(); i++) {
-	  String treeBase = getFullPathFromTreeUri(context,treeUris.get(i));
-	  if (treeBase != null && fullPath.startsWith(treeBase)) {
-		treeUri = treeUris.get(i);
-		baseFolder = treeBase;
-	  }
-	}
-
-	if (baseFolder == null) {
-	  // Alternatively, take root folder from device and assume that base URI works.
-	  treeUri = treeUris.get(0);
-	  baseFolder = getExtSdCardFolder(context, file);
-	}
-
-	if (baseFolder == null) return null;
-
-
-	String relativePath = fullPath.substring(baseFolder.length() + 1);
-
-	// start with root of SD card and then parse through document tree.
 	DocumentFile document = DocumentFile.fromTreeUri(context, treeUri);
 
-	String[] parts = relativePath.split("/");
-	for (int i = 0; i < parts.length; i++) {
-	  DocumentFile nextDocument = document.findFile(parts[i]);
-
-	  if (nextDocument == null) {
+	String[] parts = file.getPath().split("/");
+	for (int i = 3; i < parts.length; i++) { // 3 is the magic number todo change this
+	  DocumentFile tmp = document.findFile(parts[i]);
+	  if (tmp != null)
+		document = document.findFile(parts[i]);
+	  else {
 		if (i < parts.length - 1) {
-		  if (createDirectories) nextDocument = document.createDirectory(parts[i]);
+		  if (createDirectories) document = document.createDirectory(parts[i]);
 		  else return null;
 		}
-		else if (isDirectory) nextDocument = document.createDirectory(parts[i]);
-		else nextDocument = document.createFile("image", parts[i]);
+		else if (isDirectory) document = document.createDirectory(parts[i]);
+		else return document.createFile("image", parts[i]);
 	  }
-	  document = nextDocument;
 	}
 
 	return document;
@@ -319,32 +383,8 @@ public class ContentHelper {
    * @return The tree URIs.
    * @param context context
    */
-  private static ArrayList<Uri> getTreeUris(Context context) {
-	ArrayList<Uri> uris = new ArrayList<Uri>();
-
-	Uri uri1 = getSharedPreferenceUri(context, org.horaapps.leafpic.R.string.preference_internal_uri_extsdcard_photos);
-	if (uri1 != null) uris.add(uri1);
-
-	return uris;
-  }
-
-  /**
-   * Retrieve the default shared preferences of the application.
-   *
-   * @return the default shared preferences.
-   */
-  private static PreferenceUtil getSharedPreferences(Context context) {
-	return PreferenceUtil.getInstance(context);
-  }
-
-  /**
-   * Retrieve an Uri shared preference.
-   *
-   * @param preferenceId the id of the shared preference.
-   * @return the corresponding preference value.
-   */
-  private static Uri getSharedPreferenceUri(Context context , int preferenceId) {
-	String uriString = getSharedPreferences(context).getString(context.getString(preferenceId), null);
+  private static Uri getTreeUri(Context context) {
+	String uriString = PreferenceUtil.getInstance(context).getString(context.getString(R.string.preference_internal_uri_extsdcard_photos), null);
 
 	if (uriString == null) return null;
 	return Uri.parse(uriString);
@@ -358,200 +398,7 @@ public class ContentHelper {
    * @param uri          the target value of the preference.
    */
   public static void setSharedPreferenceUri(Context context, final int preferenceId, @Nullable final Uri uri) {
-	getSharedPreferences(context).putString(context.getString(preferenceId), uri == null ? null :uri.toString());
-  }
-  /**
-   * Determine the main folder of the external SD card containing the given file.
-   * @param file the file.
-   * @return The main folder of the external SD card containing this file, if the file is on an SD card. Otherwise,
-   * null is returned.
-   */
-  @TargetApi(Build.VERSION_CODES.KITKAT)
-  private static String getExtSdCardFolder(Context context, @NonNull final File file) {
-	String[] extSdPaths = getExtSdCardPaths(context);
-	try {
-	  for (String extSdPath : extSdPaths)
-		if (file.getCanonicalPath().startsWith(extSdPath)) return extSdPath;
-	}
-	catch (IOException e) { return null; }
-	return null;
-  }
-  /**
-   * Get the full path of a document from its tree URI.
-   *
-   * @param treeUri The tree RI.
-   * @return The path (without trailing file separator).
-   */
-  @Nullable
-  private static String getFullPathFromTreeUri(Context context, @Nullable final Uri treeUri) {
-	if (treeUri == null) return null;
-	String volumePath = getVolumePath(context, getVolumeIdFromTreeUri(treeUri));
-	if (volumePath == null) return File.separator;
-
-	if (volumePath.endsWith(File.separator))
-	  volumePath = volumePath.substring(0, volumePath.length() - 1);
-
-	String documentPath = getDocumentPathFromTreeUri(treeUri);
-	if (documentPath.endsWith(File.separator))
-	  documentPath = documentPath.substring(0, documentPath.length() - 1);
-
-	if (documentPath.length() > 0) {
-	  if (documentPath.startsWith(File.separator)) return volumePath + documentPath;
-	  else return volumePath + File.separator + documentPath;
-	}
-	else return volumePath;
-  }
-
-  /**
-   * Get the volume ID from the tree URI.
-   *
-   * @param treeUri The tree URI.
-   * @return The volume ID.
-   */
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  private static String getVolumeIdFromTreeUri(final Uri treeUri) {
-	final String docId = DocumentsContract.getTreeDocumentId(treeUri);
-	final String[] split = docId.split(":");
-
-	if (split.length > 0) return split[0];
-	else return null;
-  }
-
-  /**
-   * Get the document path (relative to volume name) for a tree URI (LOLLIPOP).
-   *
-   * @param treeUri The tree URI.
-   * @return the document path.
-   */
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  private static String getDocumentPathFromTreeUri(final Uri treeUri) {
-	final String docId = DocumentsContract.getTreeDocumentId(treeUri);
-	final String[] split = docId.split(":");
-	if ((split.length >= 2) && (split[1] != null)) return split[1];
-	else return File.separator;
-  }
-
-  /**
-   * Get the path of a certain volume.
-   *
-   * @param volumeId The volume id.
-   * @return The path.
-   */
-  private static String getVolumePath(Context context, final String volumeId) {
-	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return null;
-
-	try {
-	  StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
-
-	  Class<?> storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
-
-	  Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
-	  Method getUuid = storageVolumeClazz.getMethod("getUuid");
-	  Method getPath = storageVolumeClazz.getMethod("getMediaPath");
-	  Method isPrimary = storageVolumeClazz.getMethod("isPrimary");
-	  Object result = getVolumeList.invoke(mStorageManager);
-
-	  final int length = java.lang.reflect.Array.getLength(result);
-	  for (int i = 0; i < length; i++) {
-		Object storageVolumeElement = Array.get(result, i);
-		String uuid = (String) getUuid.invoke(storageVolumeElement);
-		Boolean primary = (Boolean) isPrimary.invoke(storageVolumeElement);
-
-		// primary volume?
-		if (primary && PRIMARY_VOLUME_NAME.equals(volumeId))
-		  return (String) getPath.invoke(storageVolumeElement);
-
-		// other volumes?
-		if (uuid != null && uuid.equals(volumeId))
-		  return (String) getPath.invoke(storageVolumeElement);
-	  }
-	  return null;
-	}
-	catch (Exception ex) { return null; }
-  }
-
-  /**
-   * Delete all files in a folder.
-   *
-   * @param folder the folder
-   * @return true if successful.
-   */
-
-  public static boolean deleteFilesInFolder(Context context, @NonNull final File folder) {
-	boolean totalSuccess = true;
-
-	String[] children = folder.list();
-	if (children != null) {
-	  for (String child : children) {
-		File file = new File(folder, child);
-		if (!file.isDirectory()) {
-		  boolean success = deleteFile(context, file);
-		  if (!success) {
-			Log.w(TAG, "Failed to delete file" + child);
-			totalSuccess = false;
-		  }
-		}
-	  }
-	}
-	return totalSuccess;
-  }
-
-
-
-  /**
-   * Delete a file. May be even on external SD card.
-   *
-   * @param file the file to be deleted.
-   * @return True if successfully deleted.
-   */
-  public static boolean deleteFile(Context context, @NonNull final File file) {
-
-	// First try the normal deletion.
-	boolean success = file.delete();
-
-	// Try with Storage Access Framework.
-	if (!success && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-	  DocumentFile document = getDocumentFile(context, file, false, true);
-	  success = document != null && document.delete();
-	}
-
-	// Try the Kitkat workaround.
-	if (!success && Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-	  ContentResolver resolver = context.getContentResolver();
-
-	  try {
-		Uri uri = null;//MediaStoreUtil.getUriFromFile(file.getAbsolutePath());
-		if (uri != null) {
-		  resolver.delete(uri, null, null);
-		}
-		success = !file.exists();
-	  }
-	  catch (Exception e) {
-		Log.e(TAG, "Error when deleting file " + file.getAbsolutePath(), e);
-		return false;
-	  }
-	}
-
-	if(success) scanFile(context, new String[]{ file.getPath() });
-	return success;
-  }
-  @TargetApi(Build.VERSION_CODES.KITKAT)
-  public static String[] getExtSdCardPaths(Context context) {
-	List<String> paths = new ArrayList<String>();
-	for (File file : context.getExternalFilesDirs("external")) {
-	  if (file != null && !file.equals(context.getExternalFilesDir("external"))) {
-		int index = file.getAbsolutePath().lastIndexOf("/Android/data");
-		if (index < 0) Log.w("asd", "Unexpected external file dir: " + file.getAbsolutePath());
-		else {
-		  String path = file.getAbsolutePath().substring(0, index);
-		  try { path = new File(path).getCanonicalPath(); }
-		  // Keep non-canonical path.
-		  catch (IOException ignored) { }
-		  paths.add(path);
-		}
-	  }
-	}
-	return paths.toArray(new String[paths.size()]);
+	PreferenceUtil.getInstance(context).putString(context.getString(preferenceId), uri == null ? null :uri.toString());
   }
 
 
@@ -681,4 +528,118 @@ public class ContentHelper {
 	return "com.android.providers.media.documents".equals(uri.getAuthority());
   }
 
+
+
+  /** unused methods **/
+
+
+  //region old stuff
+  /**
+   * Determine the main folder of the external SD card containing the given file.
+   * @param file the file.
+   * @return The main folder of the external SD card containing this file, if the file is on an SD card. Otherwise,
+   * null is returned.
+   */
+  /*@TargetApi(Build.VERSION_CODES.KITKAT)
+  private static String getExtSdCardFolder(Context context, @NonNull final File file) {
+	String[] extSdPaths = getExtSdCardPaths(context);
+	try {
+	  for (String extSdPath : extSdPaths)
+		if (file.getCanonicalPath().startsWith(extSdPath)) return extSdPath;
+	}
+	catch (IOException e) { return null; }
+	return null;
+  }
+  *//**
+   * Get the full path of a document from its tree URI.
+   *
+   * @param treeUri The tree RI.
+   * @return The path (without trailing file separator).
+   *//*
+  @Nullable
+  private static String getFullPathFromTreeUri(Context context, @Nullable final Uri treeUri) {
+	if (treeUri == null) return null;
+	String volumePath = getVolumePath(context, getVolumeIdFromTreeUri(treeUri));
+	if (volumePath == null) return File.separator;
+
+	if (volumePath.endsWith(File.separator))
+	  volumePath = volumePath.substring(0, volumePath.length() - 1);
+
+	String documentPath = getDocumentPathFromTreeUri(treeUri);
+	if (documentPath.endsWith(File.separator))
+	  documentPath = documentPath.substring(0, documentPath.length() - 1);
+
+	if (documentPath.length() > 0) {
+	  if (documentPath.startsWith(File.separator)) return volumePath + documentPath;
+	  else return volumePath + File.separator + documentPath;
+	}
+	else return volumePath;
+  }
+
+  *//**
+   * Get the volume ID from the tree URI.
+   *
+   * @param treeUri The tree URI.
+   * @return The volume ID.
+   *//*
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private static String getVolumeIdFromTreeUri(final Uri treeUri) {
+	final String docId = DocumentsContract.getTreeDocumentId(treeUri);
+	final String[] split = docId.split(":");
+
+	if (split.length > 0) return split[0];
+	else return null;
+  }*/
+
+/*  *//**
+   * Get the document path (relative to volume name) for a tree URI (LOLLIPOP).
+   *
+   * @param treeUri The tree URI.
+   * @return the document path.
+   *//*
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private static String getDocumentPathFromTreeUri(final Uri treeUri) {
+	final String docId = DocumentsContract.getTreeDocumentId(treeUri);
+	final String[] split = docId.split(":");
+	if ((split.length >= 2) && (split[1] != null)) return split[1];
+	else return File.separator;
+  }
+
+  *//**
+   * Get the path of a certain volume.
+   *
+   *//*
+  private static String getVolumePath(Context context, final String volumeId) {
+	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return null;
+
+	try {
+	  StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+
+	  Class<?> storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
+
+	  Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
+	  Method getUuid = storageVolumeClazz.getMethod("getUuid");
+	  Method getPath = storageVolumeClazz.getMethod("getMediaPath");
+	  Method isPrimary = storageVolumeClazz.getMethod("isPrimary");
+	  Object result = getVolumeList.invoke(mStorageManager);
+
+	  final int length = java.lang.reflect.Array.getLength(result);
+	  for (int i = 0; i < length; i++) {
+		Object storageVolumeElement = Array.get(result, i);
+		String uuid = (String) getUuid.invoke(storageVolumeElement);
+		Boolean primary = (Boolean) isPrimary.invoke(storageVolumeElement);
+
+		// primary volume?
+		if (primary && PRIMARY_VOLUME_NAME.equals(volumeId))
+		  return (String) getPath.invoke(storageVolumeElement);
+
+		// other volumes?
+		if (uuid != null && uuid.equals(volumeId))
+		  return (String) getPath.invoke(storageVolumeElement);
+	  }
+	  return null;
+	}
+	catch (Exception ex) { return null; }
+  }*/
+  //endregion
 }

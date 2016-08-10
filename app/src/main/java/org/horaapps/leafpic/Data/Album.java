@@ -323,7 +323,7 @@ public class Album implements Serializable {
 
   private boolean moveMedia(Context context, String source, String targetDir) {
 	File from = new File(source);
-	File to = new File(StringUtils.getPhotoPathMoved(source, targetDir));
+	File to = new File(targetDir);
 	return ContentHelper.moveFile(context, from, to);
   }
 
@@ -402,9 +402,9 @@ public class Album implements Serializable {
 	boolean success = false;
 	try {
 	  File from = new File(olderPath);
-	  File to = new File(StringUtils.getPhotoPathMoved(olderPath, folderPath));
+	  File to = new File(folderPath);
 	  if (success = ContentHelper.copyFile(context, from, to))
-		scanFile(context, new String[]{ to.getAbsolutePath() });
+		scanFile(context, new String[]{ StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), folderPath) });
 
 	} catch (Exception e) { e.printStackTrace(); }
 	return success;
@@ -420,12 +420,12 @@ public class Album implements Serializable {
   }
 
   private boolean deleteMedia(Context context, Media media) {
-	boolean success = false;
+	boolean success;
 	File file = new File(media.getPath());
-	if (isFromMediaStore()) {
+	/*if (isFromMediaStore()) {
 	  success = context.getContentResolver().delete(media.getUri(), null, null) == 1;
-	}
-	if (!success && (success = ContentHelper.deleteFile(context, file)))
+	}*/
+	if (success = ContentHelper.deleteFile(context, file))
 	  scanFile(context, new String[]{ file.getAbsolutePath() });
 	return success;
   }
