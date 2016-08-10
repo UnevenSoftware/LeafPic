@@ -53,14 +53,16 @@ import com.google.android.exoplayer.MediaCodecTrackRenderer.DecoderInitializatio
 import com.google.android.exoplayer.MediaCodecUtil.DecoderQueryException;
 import com.google.android.exoplayer.audio.AudioCapabilities;
 import com.google.android.exoplayer.audio.AudioCapabilitiesReceiver;
-
 import com.google.android.exoplayer.drm.UnsupportedDrmException;
 import com.google.android.exoplayer.metadata.id3.GeobFrame;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
 import com.google.android.exoplayer.metadata.id3.PrivFrame;
 import com.google.android.exoplayer.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer.util.Util;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+
 import org.horaapps.leafpic.Data.Media;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.player.DemoPlayer;
 import org.horaapps.leafpic.player.ExtractorRendererBuilder;
@@ -68,7 +70,6 @@ import org.horaapps.leafpic.player.HlsRendererBuilder;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -128,7 +129,9 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         onBackPressed();
       }
     });
-    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    //toolbar.setTitle(contentUri.getPath().substring(contentUri.getPath().lastIndexOf("/")+1));
+    toolbar.setTitle(R.string.video_player);
+    //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
     getWindow().getDecorView().setSystemUiVisibility(
