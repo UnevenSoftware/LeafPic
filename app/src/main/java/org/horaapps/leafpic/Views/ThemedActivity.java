@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.ColorPalette;
@@ -121,6 +122,9 @@ public class ThemedActivity extends AppCompatActivity {
 	themeHelper.setBaseTheme(baseTheme, permanent);
   }
 
+  public void themeSeekBar(SeekBar bar) {
+  	themeHelper.themeSeekBar(bar);
+  }
   public int getPrimaryColor() {
 	return themeHelper.getPrimaryColor();
   }

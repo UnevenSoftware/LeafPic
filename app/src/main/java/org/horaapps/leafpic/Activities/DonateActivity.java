@@ -116,8 +116,7 @@ public class DonateActivity extends ThemedActivity {
         final Button btnDonateIap = (Button) findViewById(R.id.button_donate_play_store);
         btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate), progress));
 
-        bar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
-        bar.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
+        themeSeekBar(bar);
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {

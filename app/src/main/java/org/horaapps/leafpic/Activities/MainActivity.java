@@ -29,6 +29,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -265,11 +266,11 @@ public class MainActivity extends SharedMediaActivity {
 	super.onConfigurationChanged(newConfig);
 
 	// rearrange column number
-	int nSpan = Measure.getAlbumsColumns(MainActivity.this);
+	/*int nSpan = Measure.getAlbumsColumns(MainActivity.this);
 	rvAlbums.setLayoutManager(new GridLayoutManager(this, nSpan));
 	rvAlbums.removeItemDecoration(rvAlbumsDecoration);
 	rvAlbumsDecoration = new GridSpacingItemDecoration(nSpan, Measure.pxToDp(3, getApplicationContext()), true);
-	rvAlbums.addItemDecoration(rvAlbumsDecoration);
+	rvAlbums.addItemDecoration(rvAlbumsDecoration);*/
 
 	// TODO: 07/08/16 not change this
 	//changeSpanCountRvMedia(Measure.getPhotosColumns(MainActivity.this));
@@ -357,14 +358,8 @@ public class MainActivity extends SharedMediaActivity {
 	rvMedia.setHasFixedSize(true);
 	rvMedia.setItemAnimator(new DefaultItemAnimator());
 
-	changeSpanCountRvMedia(SP.getInt("span_count", Measure.getPhotosColumns(getApplicationContext())));
-
-	rvAlbumsDecoration = new GridSpacingItemDecoration(Measure.getAlbumsColumns(MainActivity.this), Measure.pxToDp(3, getApplicationContext()), true);
-	rvAlbums.addItemDecoration(rvAlbumsDecoration);
-
 
 	albumsAdapter = new AlbumsAdapter(getAlbums().dispAlbums, MainActivity.this);
-	rvAlbums.setLayoutManager(new GridLayoutManager(this, Measure.getAlbumsColumns(getApplicationContext())));
 
 	albumsAdapter.setOnClickListener(albumOnClickListener);
 	albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
@@ -376,7 +371,18 @@ public class MainActivity extends SharedMediaActivity {
 	mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
 	rvMedia.setAdapter(mediaAdapter);
 
+	int spanCount = SP.getInt("n_columns_folders", 2);
+	rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+	rvAlbums.addItemDecoration(rvAlbumsDecoration);
+	rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
+
+	spanCount = SP.getInt("n_columns_media", 3);
+	rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+	rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
+	rvMedia.addItemDecoration(rvMediaDecoration);
+
 	//set scale gesture detector
+	// TODO: 10/08/16 remove this
 	final ScaleGestureDetector mScaleGestureDetector = new ScaleGestureDetector(this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
 	  @Override
 	  public boolean onScaleBegin(ScaleGestureDetector detector) {
@@ -407,13 +413,13 @@ public class MainActivity extends SharedMediaActivity {
 	  }
 	});
 
-	rvMedia.setOnTouchListener(new View.OnTouchListener() {
+	/*rvMedia.setOnTouchListener(new View.OnTouchListener() {
 	  @Override
 	  public boolean onTouch(View v, MotionEvent event) {
 		mScaleGestureDetector.onTouchEvent(event);
 		return false;
 	  }
-	});
+	});*/
 
 
 	/**** SWIPE TO REFRESH ****/
@@ -521,8 +527,34 @@ public class MainActivity extends SharedMediaActivity {
 	}
   }
 
+  private void updateColumnsRvs() {
+	updateColumnsRvAlbums();
+	updateColumnsRvMedia();
+  }
+
+  private void updateColumnsRvAlbums() {
+	int spanCount = SP.getInt("n_columns_folders", 2);
+	if (spanCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
+	  rvAlbums.removeItemDecoration(rvAlbumsDecoration);
+	  rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+	  rvAlbums.addItemDecoration(rvAlbumsDecoration);
+	  rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
+	}
+  }
+  private void updateColumnsRvMedia() {
+	int spanCount = SP.getInt("n_columns_media", 3);
+	if (spanCount != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
+	  ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+	  rvMedia.removeItemDecoration(rvMediaDecoration);
+	  rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+	  rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
+	  rvMedia.addItemDecoration(rvMediaDecoration);
+	}
+  }
+
+
   @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-	if (!albumsMode) {
+	/*if (!albumsMode) {
 	  int spanCount = ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
 	  if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 		changeSpanCountRvMedia(spanCount - 1);
@@ -531,7 +563,7 @@ public class MainActivity extends SharedMediaActivity {
 		changeSpanCountRvMedia(spanCount + 1);
 		return true;
 	  }
-	}
+	}*/
 	return super.onKeyDown(keyCode, event);  }
 
   //region TESTING
@@ -584,6 +616,7 @@ public class MainActivity extends SharedMediaActivity {
 
   //region UI/GRAPHIC
   private void setupUI() {
+	updateColumnsRvs();
 	//TODO: MUST BE FIXED
 	toolbar.setPopupTheme(getPopupToolbarStyle());
 	toolbar.setBackgroundColor(getPrimaryColor());

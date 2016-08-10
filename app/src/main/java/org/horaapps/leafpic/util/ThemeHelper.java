@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.mikepenz.iconics.IconicsDrawable;
@@ -96,6 +97,11 @@ public class ThemeHelper {
 
   public static int getColor(Context context, @ColorRes int color) {
 	return ContextCompat.getColor(context, color);
+  }
+
+  public void themeSeekBar(SeekBar bar) {
+	bar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
+	bar.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
   }
 
   public int getBackgroundColor(){

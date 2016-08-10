@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -152,6 +153,14 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
+        /*** MULTI COLUMN DIALOG ***/
+        findViewById(R.id.ll_n_columns).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multiColumnsDialog();
+            }
+        });
+
         /*** SW Internal Player ***/
         swInternalBrowser = (SwitchCompat) findViewById(R.id.set_internal_player);
         swInternalBrowser.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
@@ -275,6 +284,76 @@ public class SettingsActivity extends ThemedActivity {
 
             }
         });
+    }
+
+    private void multiColumnsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_multi_column, null);
+
+        ((TextView) dialogLayout.findViewById(R.id.folders_title)).setTextColor(getTextColor());
+        ((TextView) dialogLayout.findViewById(R.id.media_title)).setTextColor(getTextColor());
+        ((CardView) dialogLayout.findViewById(R.id.multi_column_card)).setCardBackgroundColor(getCardBackgroundColor());
+
+        dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
+        final TextView nColFolders = (TextView) dialogLayout.findViewById(R.id.n_columns_folders);
+        final TextView nColMedia = (TextView) dialogLayout.findViewById(R.id.n_columns_media);
+        nColFolders.setTextColor(getSubTextColor());
+        nColMedia.setTextColor(getSubTextColor());
+        SeekBar barFolders = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_n_columns_folders);
+        SeekBar barMedia = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_n_columns_media);
+
+        themeSeekBar(barFolders); themeSeekBar(barMedia);
+
+        nColFolders.setText(String.valueOf(SP.getInt("n_columns_folders", 2)));
+        nColMedia.setText(String.valueOf(SP.getInt("n_columns_media", 3)));
+        barFolders.setProgress(SP.getInt("n_columns_folders", 2) -1);
+        barMedia.setProgress(SP.getInt("n_columns_media", 3) -1);
+        barFolders.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                nColFolders.setText(String.valueOf(i+1));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        barMedia.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                nColMedia.setText(String.valueOf(i+1));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        builder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int nFolders = Integer.parseInt(nColFolders.getText().toString());
+                int nMedia = Integer.parseInt(nColMedia.getText().toString());
+                SP.putInt("n_columns_folders", nFolders);
+                SP.putInt("n_columns_media", nMedia);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.setView(dialogLayout);
+        builder.show();
     }
 
     private void askPasswordDialog() {
@@ -703,6 +782,7 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.PrimaryColor_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.accentColor_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.basic_theme_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.n_columns_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.NavBar_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.Excluded_Album_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.internal_player_Icon)).setColor(color);
@@ -724,6 +804,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.PrimaryColor_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.accentColor_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.basic_theme_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.n_columns_Item_Title)).setTextColor(color);
         ((TextView) findViewById(R.id.NavBar_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.Excluded_Album_Item_Title)).setTextColor(color);
         ((TextView) findViewById(R.id.internal_player_Item)).setTextColor(color);
@@ -746,6 +827,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.PrimaryColor_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.accentColor_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.basic_theme_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.n_columns_Item_Title_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.NavBar_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.internal_player_Item_Sub)).setTextColor(color);

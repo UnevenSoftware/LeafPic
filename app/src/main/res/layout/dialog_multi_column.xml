@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/multi_column_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="2dp"
+    >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/affix_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/md_dark_appbar"
+                android:padding="24dp"
+                android:text="@string/multi_column"
+                android:textColor="@color/md_dark_primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbarSize="4dip"
+            >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical">
+
+                    <!-- FOLDERS -->
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/folders_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Folders columns"
+                            android:textColor="@color/md_grey_400"
+                            android:paddingBottom="3dp"
+                            android:textSize="16sp"
+                        />
+                        <TextView
+                            android:id="@+id/n_columns_folders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="2"
+                            android:textColor="@color/md_grey_400"
+                            android:paddingBottom="3dp"
+                            android:textSize="15sp"
+                        />
+                    </LinearLayout>
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="5"
+                        android:id="@+id/seek_bar_n_columns_folders"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                    />
+
+                    <!-- FOLDERS -->
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/media_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Media columns"
+                            android:textColor="@color/md_grey_400"
+                            android:paddingBottom="3dp"
+                            android:textSize="16sp"
+                        />
+                        <TextView
+                            android:id="@+id/n_columns_media"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="3"
+                            android:textColor="@color/md_grey_400"
+                            android:paddingBottom="3dp"
+                            android:textSize="15sp"
+                        />
+                    </LinearLayout>
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="7"
+                        android:layout_marginTop="8dp"
+                        android:id="@+id/seek_bar_n_columns_media"
+                    />
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
