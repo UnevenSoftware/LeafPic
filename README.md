@@ -17,9 +17,9 @@ LeafPic is now available in a beta release on the Play Store, you can join [here
         height="80"
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
-</div
-
+</div>
 </br></br>
+
 ## Screenshots
 <div style="display:flex;" >
 <img  src="screenshots/1.png" width="19%" >
