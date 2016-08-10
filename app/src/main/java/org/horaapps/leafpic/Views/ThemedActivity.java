@@ -53,7 +53,7 @@ public class ThemedActivity extends AppCompatActivity {
 
   public void updateTheme(){
 	themeHelper.updateTheme();
-	coloredNavBar = SP. getBoolean(getString(R.string.preference_colored_nav_bar), false);
+	coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
 	obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
 	applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
   }

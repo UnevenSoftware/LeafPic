@@ -23,7 +23,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 10
-        versionName "v0.5.1"
+        versionName "v0.5.2"
     }
     lintOptions {
         disable 'MissingTranslation'

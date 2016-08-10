@@ -250,7 +250,7 @@ public class SettingsActivity extends ThemedActivity {
 
         /*** SW TRANSLUCENT STATUS BAR ***/
         swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
-        swStatusBar.setChecked(isTranslucentStatusBar());
+        swStatusBar.setChecked(SP.getBoolean(getString(R.string.preference_translucent_status_bar), true));
         swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -263,7 +263,7 @@ public class SettingsActivity extends ThemedActivity {
 
         /*** SW COLORED NAV BAR ***/
         swNavBar = (SwitchCompat) findViewById(R.id.SetColoredNavBar);
-        swNavBar.setChecked(isNavigationBarColored());
+        swNavBar.setChecked(SP.getBoolean(getString(R.string.preference_colored_nav_bar), false));
         swNavBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -271,8 +271,7 @@ public class SettingsActivity extends ThemedActivity {
                 updateTheme();
                 updateSwitchColor(swNavBar, getAccentColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getWindow().setNavigationBarColor(
-                            isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+                    getWindow().setNavigationBarColor(isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
             }
         });
