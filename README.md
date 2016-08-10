@@ -3,13 +3,23 @@
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/HoraApps)
 # LeafPic
 <img src="/app/src/main/res/drawable/leaf_pic.png" align="left" width="200" hspace="10" vspace="10">
-LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, we also have in plan to add some useful feature.
+LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, we also have in plan to add some useful feature.</br>
+LeafPic is now available in a beta release on the Play Store, you can join [here](https://play.google.com/apps/testing/org.horaapps.leafpic)!</br>
 
+<div style="display:flex;" >
 <a href="https://f-droid.org/app/com.horaapps.leafpic">
     <img src="https://f-droid.org/badge/get-it-on.png"
          alt="Get it on F-Droid" height="80">
 </a>
+
+<a href="https://play.google.com/store/apps/details?id=org.horaapps.leafpic">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
+</div>
 </br></br>
+
 ## Screenshots
 <div style="display:flex;" >
 <img  src="screenshots/1.png" width="19%" >
