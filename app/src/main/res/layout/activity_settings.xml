@@ -401,7 +401,57 @@
                         </com.balysv.materialripple.MaterialRippleLayout>
                         </LinearLayout>
 
-                    </LinearLayout>
+                    <!-- SD CARD PERMISSION-->
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:mrl_rippleAlpha="0.05"
+                        app:mrl_rippleDelayClick="false">
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_sd_cards"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/sd_cards_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-sd-card"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="16dp"
+                                >
+                                <TextView
+                                    android:id="@+id/sd_cards_item_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/sd_cards"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/sd_cards_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/sd_cards_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.balysv.materialripple.MaterialRippleLayout>
+
+                </LinearLayout>
             </android.support.v7.widget.CardView>
 
                 <!--TODO: I WILL DO IT LATER-->

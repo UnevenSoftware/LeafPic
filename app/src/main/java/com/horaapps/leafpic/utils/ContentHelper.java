@@ -261,7 +261,7 @@ public class ContentHelper {
    * @param createDirectories flag indicating if intermediate path directories should be created if not existing.
    * @return The DocumentFile
    */
-  private static DocumentFile getDocumentFile(Context context, @NonNull final File file, final boolean isDirectory, final boolean createDirectories) {
+  public static DocumentFile getDocumentFile(Context context, @NonNull final File file, final boolean isDirectory, final boolean createDirectories) {
 	ArrayList<Uri> treeUris = getTreeUris(context);
 	Uri treeUri = null;
 
@@ -321,7 +321,7 @@ public class ContentHelper {
    * @return The tree URIs.
    * @param context context
    */
-  private static ArrayList<Uri> getTreeUris(Context context) {
+  public static ArrayList<Uri> getTreeUris(Context context) {
 	ArrayList<Uri> uris = new ArrayList<Uri>();
 
 	Uri uri1 = getSharedPreferenceUri(context, R.string.preference_internal_uri_extsdcard_photos);

@@ -105,8 +105,10 @@ public class ImageFragment extends Fragment {
 
             return photoView;*/
             imageView.setImage(ImageSource.uri(img.getUri()));
+            imageView.setMaxScale(5);
         } else {
             imageView.setImage(ImageSource.uri(img.getUri()).tilingEnabled());
+            imageView.setMaxScale(5);
         }
 
 

@@ -241,4 +241,7 @@ an Sie für das verwenden der App    </string>
         card on the left sidebar and confirm at the bottom, to grant the writing permission of
         the SD card.
     </string>
+  <string name="sd_cards"> SD-Karten</string>
+  <string name="sd_cards_sub">Geben den Zugriff auf externe SD-Karten.</string>
+  <string name="no_permission">SD-Karten-Zugang muss aus dem Einstellungsmenü gewährt werden.</string>
 </resources>

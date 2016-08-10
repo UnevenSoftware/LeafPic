@@ -305,5 +305,8 @@
     <string name="use_mediastore_provider">Use MediaStore Provider</string>
     <string name="use_media_store_sub">If disabled it fetch the storage recursively for media.
     </string>
+    <string name="sd_cards">SD Cards</string>
+    <string name="sd_cards_sub">Provide access to external SD cards.</string>
+    <string name="no_permission">SD card access must be granted from the settings menu.</string>
 
 </resources>

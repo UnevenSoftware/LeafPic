@@ -250,4 +250,7 @@ J’ai 20 ans. J’aime la musique, les jeux vidéo et les dessins.         Je s
         card on the left sidebar and confirm at the bottom, to grant the writing permission of
         the SD card.
     </string>
+  <string name="sd_cards">Cartes SD</string>
+  <string name="sd_cards_sub">Fournir l\'accès aux cartes SD externes.</string>
+  <string name="no_permission">Accès à la carte SD doit être accordé dans le menu de paramètres.</string>
 </resources>

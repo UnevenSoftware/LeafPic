@@ -1,10 +1,13 @@
 package com.horaapps.leafpic;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.horaapps.leafpic.Views.ThemedActivity;
+import com.horaapps.leafpic.utils.AlertDialogsHelper;
 import com.horaapps.leafpic.utils.ColorPalette;
+import com.horaapps.leafpic.utils.ContentHelper;
 import com.horaapps.leafpic.utils.PreferenceUtil;
 import com.horaapps.leafpic.utils.SecurityHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -189,6 +194,14 @@ public class SettingsActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 mapProviderDialog();
+            }
+        });
+
+        /*** SD Cards DIALOG ***/
+        findViewById(R.id.ll_sd_cards).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SDCards();
             }
         });
 
@@ -404,6 +417,22 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
         dialogBuilder.setView(dialogLayout);
+        dialogBuilder.show();
+    }
+
+    private void SDCards() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, getDialogStyle());
+
+        AlertDialogsHelper.getTextDialog(this, dialogBuilder,
+                R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
+
+        dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
+            }
+        });
         dialogBuilder.show();
     }
 
@@ -703,6 +732,24 @@ public class SettingsActivity extends ThemedActivity {
         securityObj.updateSecuritySetting();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 42) {
+                Uri treeUri = resultData.getData();
+                // Persist URI in shared preference so that you can use it later.
+                ContentHelper.setSharedPreferenceUri(getApplicationContext(),R.string
+                        .preference_internal_uri_extsdcard_photos, treeUri);
+
+                final int takeFlags = resultData.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
+                Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void setTheme(){
         toolbar.setBackgroundColor(getPrimaryColor());
         setSupportActionBar(toolbar);
@@ -764,6 +811,7 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.fab_options_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.map_provider_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.media_viewer_swipe_direction_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.sd_cards_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
@@ -785,6 +833,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.fab_options_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.media_viewer_swipe_direction_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.sd_cards_item_title)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
@@ -806,5 +855,6 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.fab_options_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.media_viewer_swipe_direction_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.sd_cards_item_sub)).setTextColor(color);
     }
 }
