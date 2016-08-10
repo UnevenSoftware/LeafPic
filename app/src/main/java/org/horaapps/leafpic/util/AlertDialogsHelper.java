@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.Activities.SettingsActivity;
+import org.horaapps.leafpic.SecretConstants;
 import org.horaapps.leafpic.Views.ThemedActivity;
 
 import java.lang.reflect.Field;

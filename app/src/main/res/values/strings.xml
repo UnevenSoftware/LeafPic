@@ -200,7 +200,7 @@
     <string name="thank_you">Thank you!</string>
     <string name="address_copied">Address copied to clipboard</string>
     <string name="coming_soon">Coming Soon!</string>
-    <string name="google_takes">Google takes 30% off every donation. (Coming Soon!)</string>
+    <string name="google_takes">Google takes 30% off every donation.</string>
     <string name="paypal_text">PayPal.Me allow you to send us money in seconds without charges,
         if you use a credit card PayPal takes 4% of donations and a standard fee 0.35€ </string>
 

@@ -123,12 +123,6 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         setRecentApp(getString(R.string.app_name));
         setupSystemUI();
 
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                hideSystemUI();
-            }
-        }, 1500);
-
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
                                            (new View.OnSystemUiVisibilityChangeListener() {
                                                @Override
@@ -171,11 +165,6 @@ public class PhotoPagerActivity extends SharedMediaActivity {
             public void onPageSelected(int position) {
                 getAlbum().setCurrentPhotoIndex(position);
                 toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
-                if (!fullScreenMode) new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        hideSystemUI();
-                    }
-                }, 1200);
                 invalidateOptionsMenu();
             }
 

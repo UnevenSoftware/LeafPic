@@ -2,19 +2,30 @@ package org.horaapps.leafpic.Activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.SecretConstants;
 import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.IabHelper;
 import org.horaapps.leafpic.util.IabResult;
+import org.horaapps.leafpic.util.Purchase;
 import org.horaapps.leafpic.util.StringUtils;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -26,20 +37,26 @@ import com.mikepenz.iconics.view.IconicsImageView;
 public class DonateActivity extends ThemedActivity {
 
     private Toolbar toolbar;
-
-    /**** Title Cards ***/
     private CustomTabService cts;
-
-    /**** Scroll View*/
     private ScrollView scr;
+    private IabHelper mHelper;
+    private SeekBar bar; private int progress = 2;
 
-    IabHelper mHelper;
+    private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+            = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            if (!result.isFailure()) {
+                Toast.makeText(DonateActivity.this, "thanks man!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
+        bar = (SeekBar) findViewById(R.id.seek_bar_donations);
 
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
@@ -95,6 +112,32 @@ public class DonateActivity extends ThemedActivity {
         setNavBarColor();
         setRecentApp(getString(org.horaapps.leafpic.R.string.donate));
 
+
+        final Button btnDonateIap = (Button) findViewById(R.id.button_donate_play_store);
+        btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate), progress));
+
+        bar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
+        bar.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (i == 0) progress = 2;
+                else progress = (i+1)*2;
+
+                btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate), progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         /**** Title Cards ***/
         ((TextView) findViewById(org.horaapps.leafpic.R.id.team_name)).setTextColor(getAccentColor());
         ((TextView) findViewById(org.horaapps.leafpic.R.id.donate_googleplay_item_title)).setTextColor(getAccentColor());
@@ -147,6 +190,20 @@ public class DonateActivity extends ThemedActivity {
                 clipboard.setPrimaryClip(clip);
                 StringUtils.showToast(getApplicationContext(),getString(org.horaapps.leafpic.R.string.address_copied));
                 return true;
+            }
+        });
+
+        findViewById(R.id.button_donate_play_store).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    if (mHelper != null) mHelper.flagEndAsync();
+
+                    mHelper.launchPurchaseFlow(DonateActivity.this, "donation_"+progress, 1312,
+                            mPurchaseFinishedListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
