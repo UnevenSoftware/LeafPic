@@ -66,7 +66,8 @@ public class HandlingAlbums {
       list = p.getAlbums(hidden);
       nameProvider = StorageProvider.class.getName();
     } else {
-      list.addAll(MediaStoreProvider.getAlbums(context, hidden));
+      MediaStoreProvider p = new MediaStoreProvider(context);
+      list.addAll(p.getAlbums(hidden));
       nameProvider = MediaStoreProvider.class.getName();
     }
     dispAlbums = list;

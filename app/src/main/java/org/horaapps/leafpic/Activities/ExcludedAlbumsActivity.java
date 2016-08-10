@@ -12,12 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.util.PreferenceUtil;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,9 +35,8 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 	super.onCreate(savedInstanceState);
 	setContentView(org.horaapps.leafpic.R.layout.activity_excluded);
 	h = new CustomAlbumsHandler(getApplicationContext());
-	PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
 
-	excludedFolders = h.getExcludedFolders(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_use_alternative_provider), false));
+	excludedFolders = h.getExcludedFolders();
 
 	checkNothing(excludedFolders);
 	initUI();

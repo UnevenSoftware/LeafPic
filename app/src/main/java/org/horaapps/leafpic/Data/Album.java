@@ -39,11 +39,13 @@ public class Album implements Serializable {
   public ArrayList<Media> media = new ArrayList<Media>();
   public ArrayList<Media> selectedMedias = new ArrayList<Media>();
 
-  public Album() { }
-
-  public Album(String path, String name) {
+  public Album() {
 	media = new ArrayList<Media>();
 	selectedMedias = new ArrayList<Media>();
+  }
+
+  public Album(String path, String name) {
+	super();
 	this.path = path;
 	this.name = name;
   }
@@ -61,14 +63,13 @@ public class Album implements Serializable {
   public Album(String path, long id, String name, int count) {
 	this(path, name, count);
 	this.id = id;
-	media = new ArrayList<Media>();
-	selectedMedias = new ArrayList<Media>();
+	//media = new ArrayList<Media>();
+	//selectedMedias = new ArrayList<Media>();
   }
 
   public Album(Context context, @NotNull File mediaPath) {
+	super();
 	File folder = mediaPath.getParentFile();
-	media = new ArrayList<Media>();
-	selectedMedias = new ArrayList<Media>();
 	this.path = folder.getPath();
 	this.name = folder.getName();
 	setSettings(context);
@@ -141,25 +142,16 @@ public class Album implements Serializable {
 
   public ArrayList<String> getParentsFolders() {
 	ArrayList<String> result = new ArrayList<String>();
-	String[] asd = getPath().split("/");
-	String[] asdroot  = storageRootPath.split("/");
 
-	String conc = storageRootPath;
-	result.add(conc);
-	for (int i = asdroot.length; i < asd.length; i++)
-	  result.add(conc += "/" + asd[i]);
+	File f = new File(getPath());
+	result.add(f.getPath());
+	while((f = f.getParentFile()).canRead())
+	  result.add(f.getPath());
 
-	Collections.sort(result, new Comparator<String>() {
-	  @Override
-	  public int compare(String lhs, String rhs) {
-		return Integer.compare(rhs.length(), lhs.length());
-	  }
-	});
 	return result;
   }
 
   public boolean isFromContentReoslver() {
-
 	return this.id != -1;
   }
 

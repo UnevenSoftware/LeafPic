@@ -25,21 +25,27 @@ import java.util.ArrayList;
 
 public class  MediaStoreProvider {
 
+  Context context;
 
-  public static ArrayList<Album> getAlbums(Context context, boolean hidden) {
-	return hidden ? getHiddenAlbums(context) : getAlbums(context);
+  public MediaStoreProvider(Context context) {
+	this.context = context;
   }
 
-  private static ArrayList<Album> getHiddenAlbums(Context context) {
+  public ArrayList<Album> getAlbums(boolean hidden) {
+	return hidden ? getHiddenAlbums() : getAlbums();
+  }
+
+  private  ArrayList<Album> getHiddenAlbums() {
 	ArrayList<Album> list = new ArrayList<Album>();
 	CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-	ArrayList<Long> excludedAlbums = h.getExcludedFolderIds();
+	//ArrayList<Long> excludedAlbums = h.getExcludedFolderIds();
+	ArrayList<String> excludedFolders = h.getExcludedFoldersPaths();
 	String[] projection = new String[]{ MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT };
 	String selection = MediaStore.Files.FileColumns.MEDIA_TYPE+"="+MediaStore.Files.FileColumns.MEDIA_TYPE_NONE+" and "+
 							   MediaStore.Files.FileColumns.DATA +" LIKE '%.nomedia'";
 	Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"), projection, selection, null, null);
 	if(cur.moveToFirst())
-	  do if (!excludedAlbums.contains(cur.getLong(1))) {
+	  do {
 		File folder = new File(cur.getString(0)).getParentFile();
 		File[] files = folder.listFiles(new ImageFileFilter(true));
 		if (files != null && files.length > 0) {
@@ -47,15 +53,15 @@ public class  MediaStoreProvider {
 		  album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
 
 		  long lastMod = Long.MIN_VALUE;
-		  File choice = null;
+		  File f = null;
 		  for (File file : files) {
 			if (file.lastModified() > lastMod) {
-			  choice = file;
+			  f = file;
 			  lastMod = file.lastModified();
 			}
 		  }
-		  if (choice != null) {
-			album.media.add(0, new Media(choice.getAbsolutePath(), choice.lastModified()));
+		  if (f != null && !isExcluded(excludedFolders, f.getPath())) {
+			album.media.add(0, new Media(f.getPath(), f.lastModified()));
 			list.add(album);
 		  }
 		}
@@ -64,12 +70,19 @@ public class  MediaStoreProvider {
 	return list;
   }
 
-  private static ArrayList<Album> getAlbums(Context context) {
+  private boolean isExcluded(ArrayList<String> excluded, String path) {
+	for(String s : excluded) {
+	  Log.d("isExcluded: ", s+" - "+path);
+	  if(path.startsWith(s)) return true;
+	}
+	return false;
+  }
+
+  private ArrayList<Album> getAlbums() {
 	ArrayList<Album> list = new ArrayList<Album>();
 
 	CustomAlbumsHandler h = new CustomAlbumsHandler(context);
-	ArrayList<Long> excludedAlbums = h.getExcludedFolderIds();
-
+	ArrayList<String> excludedFolders = h.getExcludedFoldersPaths();
 
 	String[] projection = new String[]{
 			MediaStore.Files.FileColumns.PARENT,
@@ -112,14 +125,18 @@ public class  MediaStoreProvider {
 	  if (cur.moveToFirst()) {
 		int idColumn = cur.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
 		int nameColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-		do if (!excludedAlbums.contains(cur.getLong(idColumn))) {
+		do {
 		  Media firstAlbumPhoto = getLastMedia(context, cur.getLong(idColumn));
 		  if (firstAlbumPhoto != null) {
 			String path = StringUtils.getBucketPathByImagePath(firstAlbumPhoto.getPath());
-			Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn),
-										   getAlbumCount(context, cur.getLong(idColumn)));
-			album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
-			if (album.addMedia(getLastMedia(context, album.getId()))) list.add(album);
+			boolean excluded = isExcluded(excludedFolders, path);
+			Log.d("getAlbums: ", excluded+"");
+			if (!excluded) {
+			  Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn),
+											 getAlbumCount(context, cur.getLong(idColumn)));
+			  album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
+			  if (album.addMedia(getLastMedia(context, album.getId()))) list.add(album);
+			}
 		  }
 		}
 		while (cur.moveToNext());
@@ -129,7 +146,7 @@ public class  MediaStoreProvider {
 	return list;
   }
 
-  private static int getAlbumCount(Context context, long id) {
+  private int getAlbumCount(Context context, long id) {
 	int c = 0;
 	String selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
 						+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";

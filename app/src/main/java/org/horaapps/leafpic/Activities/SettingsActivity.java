@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.horaapps.leafpic.MyApplication;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -204,11 +205,11 @@ public class SettingsActivity extends ThemedActivity {
 
         /*** SW MEDIA STORE ***/
         swUseMediaStore = (SwitchCompat) findViewById(R.id.sw_use_media_mediastore);
-        swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_media_store), false));
+        swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_alternative_provider), false));
         swUseMediaStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_use_media_store), isChecked);
+                SP.putBoolean(getString(R.string.preference_use_alternative_provider), isChecked);
                 updateSwitchColor(swUseMediaStore, getAccentColor());
             }
         });

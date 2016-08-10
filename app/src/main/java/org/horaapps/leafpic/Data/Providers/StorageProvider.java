@@ -52,7 +52,7 @@ public class StorageProvider {
         list.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
 
         CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
-        list.addAll(handler.getExcludedFolders(false));
+        list.addAll(handler.getExcludedFolders());
         return list;
     }
 

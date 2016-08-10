@@ -53,12 +53,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import org.horaapps.leafpic.Adapters.AlbumsAdapter;
 import org.horaapps.leafpic.Adapters.MediaAdapter;
 import org.horaapps.leafpic.Data.AlbumSettings;
 import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Data.ImageFileFilter;
 import org.horaapps.leafpic.Data.Media;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
@@ -71,9 +76,6 @@ import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.SecurityHelper;
 import org.horaapps.leafpic.util.StringUtils;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -537,11 +539,11 @@ public class MainActivity extends SharedMediaActivity {
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   @Override
   public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
-	if (resultCode == Activity.RESULT_OK) {
+	if (resultCode == RESULT_OK) {
 	  if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
 		Uri treeUri = resultData.getData();
 		// Persist URI in shared preference so that you can use it later.
-		ContentHelper.setSharedPreferenceUri(getApplicationContext(),R.string
+		ContentHelper.setSharedPreferenceUri(getApplicationContext(), R.string
 																			 .preference_internal_uri_extsdcard_photos, treeUri);
 
 		final int takeFlags = resultData.getFlags()
@@ -1070,7 +1072,7 @@ public class MainActivity extends SharedMediaActivity {
 		textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
 		textViewExcludeTitle.setText(getString(R.string.exclude));
 
-		if((albumsMode && getAlbums().getSelectedCount() > 1) || getAlbums().isContentFromMediaStore()) {
+		if((albumsMode && getAlbums().getSelectedCount() > 1)) {
 		  textViewExcludeMessage.setText(R.string.exclude_albums_message);
 		  spinnerParents.setVisibility(View.GONE);
 		} else {
@@ -1084,14 +1086,14 @@ public class MainActivity extends SharedMediaActivity {
 		excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int id) {
 
-			if ((albumsMode && getAlbums().getSelectedCount() > 1) || getAlbums().isContentFromMediaStore()) {
+			if ((albumsMode && getAlbums().getSelectedCount() > 1)) {
 			  getAlbums().excludeSelectedAlbums(getApplicationContext());
 			  albumsAdapter.notifyDataSetChanged();
 			  invalidateOptionsMenu();
 			} else {
 			  StringUtils.showToast(getApplicationContext(), spinnerParents.getSelectedItem().toString());
-			  // TODO: 24/07/16 fix for media store
-			  customAlbumsHandler.excludeAlbum(spinnerParents.getSelectedItem().toString(),getAlbum().getId());
+			  customAlbumsHandler.excludeAlbum(spinnerParents.getSelectedItem().toString(), getAlbum().getId());
+			  finishEditMode();
 			  displayAlbums(true);
 			}
 		  }

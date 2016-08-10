@@ -92,10 +92,10 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         return s;
     }
 
-    public ArrayList<File> getExcludedFolders(boolean alternativeProvider) {
+    public ArrayList<File> getExcludedFolders() {
         ArrayList<File> list = new ArrayList<File>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = alternativeProvider ? ALBUM_EXCLUDED + "=1 AND " + ALBUM_ID + "=-1" : ALBUM_EXCLUDED + "=1 AND " + ALBUM_ID + "!=-1";
+        String selection = ALBUM_EXCLUDED + "=1";
         Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, selection, null, null, null, null);
         if (cur.moveToFirst())
             do list.add(new File(cur.getString(0))); while (cur.moveToNext());
@@ -104,14 +104,13 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<Long> getExcludedFolderIds() {
-        ArrayList<Long> list = new ArrayList<Long>();
+    public ArrayList<String> getExcludedFoldersPaths() {
+        ArrayList<String> list = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ALBUM_ID}, ALBUM_EXCLUDED + "=1 AND "+ ALBUM_ID+"!=-1", null, null, null, null);
-
+        String selection = ALBUM_EXCLUDED + "=1";
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, selection, null, null, null, null);
         if (cur.moveToFirst())
-            do list.add(cur.getLong(0)); while (cur.moveToNext());
-
+            do list.add(cur.getString(0)); while (cur.moveToNext());
         cur.close();
         db.close();
         return list;
@@ -176,7 +175,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         checkAndCreateAlbum(path, id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ALBUM_DEFAULT_SORTMODE, asc ? 1 : 0);
+        values.put(ALBUM_DEFAULT_SORT_ASCENDING, asc ? 1 : 0);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, String.valueOf(id) });
         db.close();
     }

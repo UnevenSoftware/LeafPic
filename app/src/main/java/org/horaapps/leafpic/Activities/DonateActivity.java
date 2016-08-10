@@ -45,7 +45,7 @@ public class DonateActivity extends ThemedActivity {
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);
-        String base64EncodedPublicKey = "";
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsgBOXMloQet++IY1ims4/L88vgXHR+Ae0tf5QbNKyPyNRCA7EJ67OslkDBMQzHbu13Vds3mYcQI7hVKTvK8nfUhT5hWCtHJSYTW05FfYkL8usnTCPF606w7DHpsX5+58Pz/0MnOiZSiQ/6P5qfGAIytFriXIPDjc40gi14YWuqmRIeKKHjOM6inq8UEhWr3ngYD0rnbuUYMiRZEZUv+CErGk/tYAMO7wWgRZuM8fq6sBeRO9ZXam1EMDqAzhvM9fXt0DDv6byjybe1FSUUGkbd6Jcs0gGj/uzd40czqoE6AE8Oqjb4TAsDwQDula7xkUs5imdIHMMIwUDEfabCQ17wIDAQAB";
 
         mHelper = new IabHelper(this, base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
