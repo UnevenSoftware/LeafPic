@@ -34,20 +34,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.horaapps.leafpic.Data.Album;
-import com.horaapps.leafpic.Data.FoldersFileFilter;
-import com.horaapps.leafpic.Views.ThemedActivity;
-import com.horaapps.leafpic.utils.AlertDialogsHelper;
-import com.horaapps.leafpic.utils.ContentHelper;
-import com.horaapps.leafpic.utils.ThemeHelper;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.FoldersFileFilter;
 import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.ThemeHelper;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.io.IOException;

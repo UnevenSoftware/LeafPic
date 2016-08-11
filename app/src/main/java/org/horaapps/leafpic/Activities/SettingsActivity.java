@@ -24,19 +24,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.horaapps.leafpic.Views.ThemedActivity;
-import com.horaapps.leafpic.utils.AlertDialogsHelper;
-import com.horaapps.leafpic.utils.ColorPalette;
-import com.horaapps.leafpic.utils.ContentHelper;
-import com.horaapps.leafpic.utils.PreferenceUtil;
-import com.horaapps.leafpic.utils.SecurityHelper;
-import org.horaapps.leafpic.MyApplication;
-import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.ThemeHelper;
-
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import org.horaapps.leafpic.MyApplication;
+import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.ThemeHelper;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;

@@ -1,5 +1,3 @@
-def supportLib = "24.1.1"
-
 buildscript {
     repositories {
         jcenter()
@@ -19,7 +17,7 @@ repositories {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24'
+    buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
@@ -62,6 +60,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    //Support lib is defined in the project build.gradle
     compile "com.android.support:appcompat-v7:$supportLib"
     compile "com.android.support:cardview-v7:$supportLib"
     compile "com.android.support:recyclerview-v7:$supportLib"

@@ -17,4 +17,5 @@ allprojects {
         jcenter()
     }
 
+    project.ext.supportLib = "24.1.1"
 }

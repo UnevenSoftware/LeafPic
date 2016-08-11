@@ -17,9 +17,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
-import org.horaapps.leafpic.Data.Media;
+
 import org.horaapps.leafpic.Activities.SettingsActivity;
-import org.horaapps.leafpic.SecretConstants;
+import org.horaapps.leafpic.Data.Media;
+import org.horaapps.leafpic.SecretConstantsExample;
 import org.horaapps.leafpic.Views.ThemedActivity;
 
 import java.lang.reflect.Field;
@@ -177,17 +178,17 @@ public class AlertDialogsHelper {
                     break;
                 case SettingsActivity.OSM_MAP_BOX:
                     url = String.format(Locale.getDefault(),"https://api.mapbox.com/v4/mapbox.streets/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(),location.getLatitude(), SecretConstants.MAP_BOX_TOKEN);
+                            location.getLongitude(),location.getLatitude(), SecretConstantsExample.MAP_BOX_TOKEN);
 
                     break;
                 case SettingsActivity.OSM_MAP_BOX_DARK:
                     url = String.format(Locale.getDefault(),"https://api.mapbox.com/v4/mapbox.dark/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(),location.getLatitude(), SecretConstants.MAP_BOX_TOKEN);
+                            location.getLongitude(),location.getLatitude(), SecretConstantsExample.MAP_BOX_TOKEN);
 
                     break;
                 case SettingsActivity.OSM_MAP_BOX_LIGHT:
                     url = String.format(Locale.getDefault(),"https://api.mapbox.com/v4/mapbox.light/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(),location.getLatitude(), SecretConstants.MAP_BOX_TOKEN);
+                            location.getLongitude(),location.getLatitude(), SecretConstantsExample.MAP_BOX_TOKEN);
 
                     break;
                 case SettingsActivity.OSM_TYLER_PROVIDER:
