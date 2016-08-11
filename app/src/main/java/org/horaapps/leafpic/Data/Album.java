@@ -144,10 +144,10 @@ public class Album implements Serializable {
 	ArrayList<String> result = new ArrayList<String>();
 
 	File f = new File(getPath());
-	result.add(f.getPath());
-	while((f = f.getParentFile()).canRead())
+	while(f != null && f.canRead()) {
 	  result.add(f.getPath());
-
+	  f = f.getParentFile();
+	}
 	return result;
   }
 
@@ -456,18 +456,18 @@ public class Album implements Serializable {
 		if (ContentHelper.moveFile(context, from, to)) {
 		  scanFile(context, new String[]{from.getAbsolutePath() });
 		  scanFile(context, new String[]{ to.getAbsolutePath() }, new MediaScannerConnection.OnScanCompletedListener() {
-					@Override
-					public void onScanCompleted(String s, Uri uri) {
-					  // TODO: 05/08/16 it sucks! look for a better solution
+			@Override
+			public void onScanCompleted(String s, Uri uri) {
+			  // TODO: 05/08/16 it sucks! look for a better solution
 
-					  if (!found_id_album) {
-						id = MediaStoreProvider.getAlbumId(context, s);
-						found_id_album = true;
-					  }
-					  Log.d(s, "onScanCompleted: "+s);
-					  m.setPath(s); m.setUri(uri.toString());
-					}
-				  });
+			  if (!found_id_album) {
+				id = MediaStoreProvider.getAlbumId(context, s);
+				found_id_album = true;
+			  }
+			  Log.d(s, "onScanCompleted: "+s);
+			  m.setPath(s); m.setUri(uri.toString());
+			}
+		  });
 
 		} else success = false;
 	  }

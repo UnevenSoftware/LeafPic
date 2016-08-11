@@ -574,7 +574,7 @@ public class MainActivity extends SharedMediaActivity {
 		Uri treeUri = resultData.getData();
 		// Persist URI in shared preference so that you can use it later.
 		ContentHelper.setSharedPreferenceUri(getApplicationContext(), R.string
-																			 .preference_internal_uri_extsdcard_photos, treeUri);
+																			  .preference_internal_uri_extsdcard_photos, treeUri);
 
 		final int takeFlags = resultData.getFlags()
 									  & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -749,77 +749,47 @@ public class MainActivity extends SharedMediaActivity {
 
   private void updateSelectedStuff() {
 	int c;
-	try {
-	  if (albumsMode) {
-		if ((c = getAlbums().getSelectedCount()) != 0) {
-		  toolbar.setTitle(c + "/" + getAlbums().dispAlbums.size());
-		  toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-		  toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			  editMode = false;
-			  getAlbums().clearSelectedAlbums();
-			  albumsAdapter.notifyDataSetChanged();
-			  invalidateOptionsMenu();
-			}
-		  });
-		  toolbar.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			  if (getAlbums().getSelectedCount() == getAlbums().dispAlbums.size())
-				getAlbums().clearSelectedAlbums();
-			  else getAlbums().selectAllAlbums();
-			  albumsAdapter.notifyDataSetChanged();
-			  invalidateOptionsMenu();
-			}
-		  });
-		} else {
-		  toolbar.setTitle(getString(R.string.app_name));
-		  toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
-		  toolbar.setOnClickListener(null);
-		  toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			  mDrawerLayout.openDrawer(GravityCompat.START);
-			}
-		  });
-		}
-	  }  else {
-		if ((c = getAlbum().getSelectedCount()) != 0) {
-		  toolbar.setTitle(c + "/" + getAlbum().getMedia().size());
-		  toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-		  toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			  finishEditMode();
-			}
-		  });
-		  toolbar.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			  if (getAlbum().getSelectedCount() == getAlbum().getMedia().size())
-				getAlbum().clearSelectedPhotos();
-			  else getAlbum().selectAllPhotos();
-			  mediaAdapter.notifyDataSetChanged();
-			  invalidateOptionsMenu();
-			}
-		  });
-		} else {
-		  toolbar.setTitle(getAlbum().getName());
-		  toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-		  toolbar.setOnClickListener(null);
-		  toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			  displayAlbums();
-			}
-		  });
-		}
+	if (albumsMode) {
+	  if ((c = getAlbums().getSelectedCount()) != 0) {
+		toolbar.setTitle(c + "/" + getAlbums().dispAlbums.size());
+		toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+		  @Override
+		  public void onClick(View v) {
+			finishEditMode();
+		  }
+		});
+	  } else {
+		toolbar.setTitle(getString(R.string.app_name));
+		toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+		  @Override
+		  public void onClick(View v) {
+			mDrawerLayout.openDrawer(GravityCompat.START);
+		  }
+		});
 	  }
-	} catch (NullPointerException e) {
-	  e.printStackTrace();
+	} else {
+	  if ((c = getAlbum().getSelectedCount()) != 0) {
+		toolbar.setTitle(c + "/" + getAlbum().getMedia().size());
+		toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+		  @Override
+		  public void onClick(View v) {
+			finishEditMode();
+		  }
+		});
+	  } else {
+		toolbar.setTitle(getAlbum().getName());
+		toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+		  @Override
+		  public void onClick(View v) {
+			displayAlbums();
+		  }
+		});
+	  }
 	}
-
   }
 
   private void finishEditMode() {

@@ -34,7 +34,7 @@ public class DonateActivity extends ThemedActivity {
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setNavBarColor();
-        cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
+        cts = new CustomTabService(org.horaapps.leafpic.Activities.DonateActivity.this, getPrimaryColor());
         scr = (ScrollView)findViewById(R.id.donateAct_scrollView);
     }
 
@@ -80,7 +80,7 @@ public class DonateActivity extends ThemedActivity {
 
         /** Cards **/
         int color = getCardBackgroundColor();
-
+        ((CardView) findViewById(R.id.donate_header_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(R.id.donate_paypal_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(R.id.donate_bitcoin_card)).setCardBackgroundColor(color);
 
