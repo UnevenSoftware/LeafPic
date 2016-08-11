@@ -42,8 +42,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "LeafPic"
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "LeafPic (debug)"
         }
     }
+    productFlavors {
+        noGPlay { }
+
+        withGPlay { }
+    }
+
 }
 
 dependencies {
