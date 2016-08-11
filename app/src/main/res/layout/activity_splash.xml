@@ -14,25 +14,19 @@
         >
         <ImageView
             android:id="@+id/imgLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
             android:src="@drawable/leaf_pic"
             android:scaleType="fitXY"
         />
-
-
-        <TextView
-            android:id="@+id/txtLogo"
+        <ProgressBar
+            android:id="@+id/progress_splash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="LeafPic"
             android:paddingTop="40dp"
-            android:textColor="@color/md_white_1000"
-            android:textSize="50sp"
          />
     </LinearLayout>
-
 
     <!--
     <TextView

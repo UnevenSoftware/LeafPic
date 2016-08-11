@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.horaapps.leafpic.Views.SquareRelativeLayout
+<org.horaapps.leafpic.Views.SquareRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -54,4 +54,4 @@
         app:iiv_icon="gmd-play-circle-filled"
         tools:targetApi="lollipop"
     />
-</com.horaapps.leafpic.Views.SquareRelativeLayout>
+</org.horaapps.leafpic.Views.SquareRelativeLayout>

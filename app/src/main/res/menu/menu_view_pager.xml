@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".PhotoPagerActivity"
+    tools:context="org.horaapps.leafpic.Activities.PhotoPagerActivity"
 >
 
     <group android:id="@+id/only_photos_options">
