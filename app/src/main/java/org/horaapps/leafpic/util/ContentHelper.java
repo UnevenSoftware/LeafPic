@@ -1,6 +1,5 @@
 package org.horaapps.leafpic.util;
 
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -10,7 +9,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.storage.StorageManager;
 import android.provider.BaseColumns;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -26,8 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -360,7 +356,9 @@ public class ContentHelper {
 	DocumentFile document = DocumentFile.fromTreeUri(context, treeUri);
 
 	String[] parts = file.getPath().split("/");
-	for (int i = 3; i < parts.length; i++) { // 3 is the magic number todo change this
+	for (int i = findMagicNumber(parts, treeUri); i < parts.length; i++) { // 3 is the magic number todo
+	  // change
+	  // this
 	  DocumentFile tmp = document.findFile(parts[i]);
 	  if (tmp != null)
 		document = document.findFile(parts[i]);
@@ -375,6 +373,10 @@ public class ContentHelper {
 	}
 
 	return document;
+  }
+
+  private static int findMagicNumber(String[] parts, Uri treUri){
+	return 3;
   }
 
   /**

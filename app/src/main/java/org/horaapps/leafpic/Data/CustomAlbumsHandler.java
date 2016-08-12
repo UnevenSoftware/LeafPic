@@ -68,7 +68,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         if (cursor.getCount() == 0) {
             ContentValues values = new ContentValues();
             values.put(ALBUM_ID, id);
-            values.put(ALBUM_PATH, StringUtils.quoteReplace(path));
+            values.put(ALBUM_PATH, path);
             values.put(ALBUM_EXCLUDED, 0);
             db.insert(TABLE_ALBUMS, null, values);
         }

@@ -71,10 +71,7 @@ public class  MediaStoreProvider {
   }
 
   private boolean isExcluded(ArrayList<String> excluded, String path) {
-	for(String s : excluded) {
-	  Log.d("isExcluded: ", s+" - "+path);
-	  if(path.startsWith(s)) return true;
-	}
+	for(String s : excluded) if (path.startsWith(s)) return true;
 	return false;
   }
 
@@ -126,14 +123,12 @@ public class  MediaStoreProvider {
 		int idColumn = cur.getColumnIndex(MediaStore.Files.FileColumns.PARENT);
 		int nameColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 		do {
-		  Media firstAlbumPhoto = getLastMedia(context, cur.getLong(idColumn));
-		  if (firstAlbumPhoto != null) {
-			String path = StringUtils.getBucketPathByImagePath(firstAlbumPhoto.getPath());
+		  Media media = getLastMedia(context, cur.getLong(idColumn));
+		  if (media != null && media.getPath() != null) {
+			String path = StringUtils.getBucketPathByImagePath(media.getPath());
 			boolean excluded = isExcluded(excludedFolders, path);
-			Log.d("getAlbums: ", excluded+"");
 			if (!excluded) {
-			  Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn),
-											 getAlbumCount(context, cur.getLong(idColumn)));
+			  Album album = new Album(path, cur.getLong(idColumn), cur.getString(nameColumn), getAlbumCount(context, cur.getLong(idColumn)));
 			  album.setCoverPath(h.getCoverPathAlbum(album.getPath(), album.getId()));
 			  if (album.addMedia(getLastMedia(context, album.getId()))) list.add(album);
 			}
