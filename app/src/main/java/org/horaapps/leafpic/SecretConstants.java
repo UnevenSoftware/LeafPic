@@ -14,6 +14,8 @@ public class SecretConstants {
 
   private static String base64EncodedPublicKey;
 
+  public static String MAP_BOX_TOKEN = "pk.eyJ1IjoiZG5sZCIsImEiOiJjaXJycmVham4wMGRsaGpuaHQ4Y3Fhb2MzIn0.kUn2aNbfpS3-wDJ-s0DLFw";
+
   public static String getBase64EncodedPublicKey(Context context) {
     if (base64EncodedPublicKey == null) {
       InputStream input;

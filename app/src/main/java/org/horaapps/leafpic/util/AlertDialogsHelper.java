@@ -27,6 +27,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static org.horaapps.leafpic.SecretConstants.MAP_BOX_TOKEN;
+
 /**
  * Created by dnld on 19/05/16.
  */
@@ -166,7 +168,7 @@ public class AlertDialogsHelper {
         final GeoLocation location;
         if((location = f.getGeoLocation()) != null) {
             PreferenceUtil SP = PreferenceUtil.getInstance(activity.getApplicationContext());
-            String MAP_BOX_TOKEN = "pk.eyJ1IjoiZG5sZCIsImEiOiJjaXF2NmwzMHUwMDd2aHNtMzlscHVseTVnIn0.oCeek-FdSfAU4yoELHzJYA";
+
             String url;
             switch (SP.getInt(activity.getString(org.horaapps.leafpic.R.string.preference_map_provider),
                     SettingsActivity.GOOGLE_MAPS_PROVIDER)) {

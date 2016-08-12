@@ -185,9 +185,6 @@ public class MainActivity extends SharedMediaActivity {
 	securityObj = new SecurityHelper(MainActivity.this);
 
 	initUI();
-	setupUI();
-
-	Toast.makeText(this, SecretConstants.getBase64EncodedPublicKey(getApplicationContext()), Toast.LENGTH_SHORT).show();
 
 	displayPreFetchedData(getIntent().getExtras());
   }
@@ -514,6 +511,7 @@ public class MainActivity extends SharedMediaActivity {
 	  configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
 	  onConfigurationChanged(configuration);
 	}
+	setupUI();
   }
 
   private void changeSpanCountRvMedia(int spanCount) {
