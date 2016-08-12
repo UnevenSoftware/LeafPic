@@ -259,9 +259,6 @@
                         />
                     </LinearLayout>
 
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/donate_bitcoin_item"
                             android:layout_width="match_parent"
@@ -271,8 +268,9 @@
                             android:text="13psCBkxAjvvssSDHHGGagG2R8b4SraVyu"
                             android:textColor="@color/md_dark_background"
                             android:textSize="@dimen/sub_medium_text"
-                        />
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
