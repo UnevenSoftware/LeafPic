@@ -40,13 +40,12 @@
                     android:layout_marginBottom="10dp"
                     app:cardCornerRadius="1dp"
                     app:cardElevation="5dp"
-                >
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
                         <TextView
                             android:id="@+id/general_setting_title"
                             android:layout_width="match_parent"
@@ -57,157 +56,145 @@
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                        />
+                            />
 
                         <!-- SECURITY -->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_security"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false">
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/security_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="faw-user-secret"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_security"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                            >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/security_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="faw-user-secret"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="16dp"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="16dp"
                                 >
-                                    <TextView
-                                        android:id="@+id/security_item_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/security"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
+                                <TextView
+                                    android:id="@+id/security_item_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/security"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
                                     />
-                                    <TextView
-                                        android:id="@+id/security_item_sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/security_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
+                                <TextView
+                                    android:id="@+id/security_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/security_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
                                     />
-                                </LinearLayout>
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!-- NUMBER OF COLUMNS -->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_n_columns"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false">
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_n_columns"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
                             >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/n_columns_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-view-column"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/n_columns_Icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-view-column"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
-                                <LinearLayout
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
+                                >
+                                <TextView
+                                    android:id="@+id/n_columns_Item_Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                >
-                                    <TextView
-                                        android:id="@+id/n_columns_Item_Title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/multi_column"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
+                                    android:text="@string/multi_column"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
                                     />
-                                    <TextView
-                                        android:id="@+id/n_columns_Item_Title_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/multi_column_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
+                                <TextView
+                                    android:id="@+id/n_columns_Item_Title_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/multi_column_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
                                     />
-                                </LinearLayout>
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!-- EXCLUDED ALBUM-->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_excluded_album"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false">
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_excluded_album"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
                             >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/Excluded_Album_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-folder"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/Excluded_Album_Icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-folder"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
-                                <LinearLayout
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
+                                >
+                                <TextView
+                                    android:id="@+id/Excluded_Album_Item_Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                >
-                                    <TextView
-                                        android:id="@+id/Excluded_Album_Item_Title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/excluded_albums"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
+                                    android:text="@string/excluded_albums"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
                                     />
-                                    <TextView
-                                        android:id="@+id/Excluded_Album_Item_Title_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/excluded_albums_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
+                                <TextView
+                                    android:id="@+id/Excluded_Album_Item_Title_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excluded_albums_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
                                     />
-                                </LinearLayout>
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!-- USE MEDIA STORE -->
                         <LinearLayout
@@ -216,7 +203,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                        >
+                            >
+
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/use_media_mediastore_Icon"
                                 android:layout_width="@dimen/icon_width_height"
@@ -225,7 +213,7 @@
                                 app:iiv_icon="gmd-photo-library"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"
-                            />
+                                />
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -234,7 +222,7 @@
                                 android:paddingTop="16dp"
                                 android:paddingRight="16dp"
                                 android:paddingBottom="8dp"
-                            >
+                                >
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -242,7 +230,7 @@
                                     android:layout_centerVertical="true"
                                     android:orientation="vertical"
                                     android:layout_marginEnd="44dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/use_media_mediastore_Item"
                                         android:layout_width="wrap_content"
@@ -250,7 +238,7 @@
                                         android:text="@string/use_mediastore_provider"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/use_media_mediastore_Item_sub"
                                         android:layout_width="wrap_content"
@@ -258,7 +246,7 @@
                                         android:text="@string/use_media_store_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/sw_use_media_mediastore"
@@ -274,182 +262,161 @@
                         </LinearLayout>
 
                         <!-- MAPS PROVIDER-->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_map_provider"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                        >
-
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/map_provider_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="faw-map-signs"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_map_provider"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                            >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/map_provider_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="faw-map-signs"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="16dp"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="16dp"
                                 >
-                                    <TextView
-                                        android:id="@+id/map_provider_item_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/map_provider"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
+                                <TextView
+                                    android:id="@+id/map_provider_item_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/map_provider"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
                                     />
-                                    <TextView
-                                        android:id="@+id/map_provider_item_sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/map_provider_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
+                                <TextView
+                                    android:id="@+id/map_provider_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/map_provider_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
                                     />
-                                </LinearLayout>
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!-- AUTO UPDATE MEDIA -->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_auto_update_media"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                        >
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_auto_update_media"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/auto_update_media_Icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-update"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                            >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/auto_update_media_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-update"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                />
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="16dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
+                                android:paddingTop="16dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:orientation="vertical"
-                                        android:layout_marginEnd="44dp"
-                                    >
-                                        <TextView
-                                            android:id="@+id/auto_update_media_Item"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/auto_update_media"
-                                            android:textColor="@color/md_dark_background"
-                                            android:textSize="16sp"
-                                        />
-                                        <TextView
-                                            android:id="@+id/auto_update_media_Item_sub"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/auto_update_media_sub"
-                                            android:textColor="@color/md_grey_400"
-                                            android:textSize="14sp"
-                                        />
-                                    </LinearLayout>
-                                    <android.support.v7.widget.SwitchCompat
-                                        android:id="@+id/SetAutoUpdateMedia"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:button="@null"
-                                        android:hapticFeedbackEnabled="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_alignParentEnd="true" />
-                                </RelativeLayout>
-
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
-
-
-                        <!-- FAB OPTIONS -->
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                            android:visibility="gone"
-                        >
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_fab_options"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                            >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/fab_options_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-add-circle"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                />
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
                                     android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                >
+                                    android:layout_marginEnd="44dp"
+                                    >
                                     <TextView
-                                        android:id="@+id/fab_options_item_title"
+                                        android:id="@+id/auto_update_media_Item"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/fab_options"
+                                        android:text="@string/auto_update_media"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
-                                        android:id="@+id/fab_options_item_sub"
+                                        android:id="@+id/auto_update_media_Item_sub"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/fab_options_sub"
+                                        android:text="@string/auto_update_media_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                                <android.support.v7.widget.SwitchCompat
+                                    android:id="@+id/SetAutoUpdateMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:button="@null"
+                                    android:hapticFeedbackEnabled="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentEnd="true" />
+                            </RelativeLayout>
 
+                        </LinearLayout>
+
+                        <!-- FAB OPTIONS -->
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_fab_options"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/fab_options_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-add-circle"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
+                                >
+                                <TextView
+                                    android:id="@+id/fab_options_item_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fab_options"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/fab_options_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fab_options_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -467,7 +434,7 @@
                     android:scaleType="centerInside"
                     android:layout_marginBottom="0dp"
                     app:elevation="5dp"
-                />
+                    />
 
             </FrameLayout>
 
@@ -501,211 +468,192 @@
                             android:textStyle="bold"
                             />
                         <!--BASIC THEME-->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_basic_theme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
                             >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/basic_theme_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-invert-colors"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_basic_theme"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:orientation="vertical"
+                                android:paddingTop="16dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/basic_theme_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-invert-colors"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <TextView
+                                    android:id="@+id/basic_theme_item"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="16dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/basic_theme_item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/basic_theme"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/basic_theme_item_sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/basic_theme_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
+                                    android:text="@string/basic_theme"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/basic_theme_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/basic_theme_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
 
                         <!--PRIMARY COLOR-->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_primaryColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
                             >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/PrimaryColor_Icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-color-lens"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_primaryColor"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/PrimaryColor_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-color-lens"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <TextView
+                                    android:id="@+id/PrimaryColor_Item"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/PrimaryColor_Item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/primary_color"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/PrimaryColor_Item_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/primary_color_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
+                                    android:text="@string/primary_color"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/PrimaryColor_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/primary_color_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!--ACCENT COLOR-->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_accentColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false">
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/accentColor_Icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="cmd-format-color-fill"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_accentColor"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/accentColor_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="cmd-format-color-fill"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <TextView
+                                    android:id="@+id/accentColor_Item"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/accentColor_Item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/accent_color"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/accentColor_Item_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/accent_color_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
+                                    android:text="@string/accent_color"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/accentColor_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/accent_color_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!-- APPLY THEME ON 3TH ACT -->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_custom_thirdAct"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
                             >
+
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/custom_3thAct_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="faw-paint-brush"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_custom_thirdAct"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:orientation="vertical"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="8dp"
                                 >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/custom_3thAct_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="faw-paint-brush"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <TextView
+                                    android:id="@+id/custom_3thAct_title"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/custom_3thAct_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/custom_3thAct"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/custom_3thAct_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/custom_3thAct_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
+                                    android:text="@string/custom_3thAct"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/custom_3thAct_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/custom_3thAct_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
                             </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
 
                         <!--ADVANCED SETTING
                         android:visibility="gone"
@@ -848,7 +796,7 @@
 
                 </android.support.v7.widget.CardView>
 
-                 <!--TODO: I WILL WORK ON IT LATER-->
+                <!--TODO: I WILL WORK ON IT LATER-->
 
                 <android.support.design.widget.FloatingActionButton
                     android:visibility="gone"
@@ -878,7 +826,7 @@
                     android:layout_marginBottom="10dp"
                     app:cardCornerRadius="1dp"
                     app:cardElevation="5dp"
-                >
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -896,22 +844,22 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
-                    <!--MAX BRIGHTNESS-->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_max_luminosity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_switch_max_luminosity_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-settings-brightness"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                        <!--MAX BRIGHTNESS-->
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_switch_max_luminosity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/ll_switch_max_luminosity_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-settings-brightness"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
+                                />
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -920,51 +868,51 @@
                                 android:paddingTop="16dp"
                                 android:paddingRight="16dp"
                                 android:paddingBottom="8dp"
-                            >
+                                >
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
                                     android:orientation="vertical"
                                     android:layout_marginEnd="45dp"
-                                >
-                                <TextView
-                                    android:id="@+id/max_luminosity_Item"
+                                    >
+                                    <TextView
+                                        android:id="@+id/max_luminosity_Item"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/max_brightness"
+                                        android:textColor="@color/md_dark_background"
+                                        android:textSize="16sp"
+                                        />
+                                    <TextView
+                                        android:id="@+id/max_luminosity_Item_Sub"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/max_brightness_sub"
+                                        android:textColor="@color/md_grey_400"
+                                        android:textSize="14sp"
+                                        />
+                                </LinearLayout>
+                                <android.support.v7.widget.SwitchCompat
+                                    android:id="@+id/set_max_luminosity"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/max_brightness"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
+                                    android:layout_gravity="center_vertical"
+                                    android:button="@null"
+                                    android:hapticFeedbackEnabled="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentEnd="true"
                                     />
-                                <TextView
-                                    android:id="@+id/max_luminosity_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/max_brightness_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_max_luminosity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                />
                             </RelativeLayout>
                         </LinearLayout>
 
                         <!-- PICTURE ORIENTATION-->
                         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                      android:id="@+id/ll_switch_picture_orientation"
-                                      android:layout_width="match_parent"
-                                      android:layout_height="wrap_content"
-                                      android:orientation="horizontal"
-                        >
+                            android:id="@+id/ll_switch_picture_orientation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/ll_switch_picture_orientation_icon"
                                 android:layout_width="@dimen/icon_width_height"
@@ -973,7 +921,7 @@
                                 app:iiv_icon="gmd-screen-rotation"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"
-                            />
+                                />
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -982,13 +930,13 @@
                                 android:paddingTop="8dp"
                                 android:paddingRight="16dp"
                                 android:paddingBottom="8dp"
-                            >
+                                >
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
                                     android:layout_marginEnd="45dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/picture_orientation_Item"
                                         android:layout_width="wrap_content"
@@ -996,7 +944,7 @@
                                         android:text="@string/picture_orientation"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/picture_orientation_Item_Sub"
                                         android:layout_width="wrap_content"
@@ -1004,7 +952,7 @@
                                         android:text="@string/picture_orientation_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/set_picture_orientation"
@@ -1015,76 +963,71 @@
                                     android:hapticFeedbackEnabled="true"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentEnd="true"
-                                />
+                                    />
                             </RelativeLayout>
                         </LinearLayout>
 
                         <!-- FULL resolution TODO: remove -->
-                        <com.balysv.materialripple.MaterialRippleLayout
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/ll_switch_full_resolution"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            android:visibility="gone"
-                            app:mrl_rippleDelayClick="false">
-                            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                          android:id="@+id/ll_switch_full_resolution"
-                                          android:layout_width="match_parent"
-                                          android:layout_height="wrap_content"
-                                          android:orientation="horizontal"
+                            android:orientation="horizontal"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
                             >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/ll_switch_full_resolution_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-image"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
+                            <com.mikepenz.iconics.view.IconicsImageView
+                                android:id="@+id/ll_switch_full_resolution_icon"
+                                android:layout_width="@dimen/icon_width_height"
+                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_gravity="center_vertical"
+                                app:iiv_icon="gmd-image"
+                                android:layout_marginLeft="@dimen/big_spacing"
+                                android:layout_marginRight="@dimen/big_spacing"
                                 />
-                                <RelativeLayout
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="8dp"
+                                android:paddingRight="16dp"
+                                android:paddingBottom="16dp"
+                                >
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="16dp"
-                                >
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-                                        android:layout_marginEnd="45dp"
+                                    android:orientation="vertical"
+                                    android:layout_marginEnd="45dp"
                                     >
-                                        <TextView
-                                            android:id="@+id/full_resolution_Item"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/delay_load_full_size_image"
-                                            android:textColor="@color/md_dark_background"
-                                            android:textSize="16sp"
-                                        />
-                                        <TextView
-                                            android:id="@+id/full_resolution_Item_Sub"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/load_full_image_when_zoom_in"
-                                            android:textColor="@color/md_grey_400"
-                                            android:textSize="14sp" />
-                                    </LinearLayout>
-                                    <android.support.v7.widget.SwitchCompat
-                                        android:id="@+id/set_full_resolution"
+                                    <TextView
+                                        android:id="@+id/full_resolution_Item"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:button="@null"
-                                        android:hapticFeedbackEnabled="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_alignParentEnd="true"
+                                        android:text="@string/delay_load_full_size_image"
+                                        android:textColor="@color/md_dark_background"
+                                        android:textSize="16sp"
+                                        />
+                                    <TextView
+                                        android:id="@+id/full_resolution_Item_Sub"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/load_full_image_when_zoom_in"
+                                        android:textColor="@color/md_grey_400"
+                                        android:textSize="14sp" />
+                                </LinearLayout>
+                                <android.support.v7.widget.SwitchCompat
+                                    android:id="@+id/set_full_resolution"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:button="@null"
+                                    android:hapticFeedbackEnabled="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentEnd="true"
                                     />
-                                </RelativeLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
 
                         <!--SWIPE ORIENTATION-->
                         <LinearLayout
@@ -1092,9 +1035,10 @@
                             android:id="@+id/ll_media_viewer_swipe_direction"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:visibility="gone"
-                        >
+                            >
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/media_viewer_swipe_direction_Icon"
                                 android:layout_width="@dimen/icon_width_height"
@@ -1103,7 +1047,7 @@
                                 app:iiv_icon="gmd-compare-arrows"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"
-                            />
+                                />
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1112,14 +1056,14 @@
                                 android:paddingTop="16dp"
                                 android:paddingRight="16dp"
                                 android:paddingBottom="16dp"
-                            >
+                                >
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
                                     android:orientation="vertical"
                                     android:layout_marginEnd="44dp"
-                                >
+                                    >
                                     <TextView
                                         android:id="@+id/media_viewer_swipe_direction_Item"
                                         android:layout_width="wrap_content"
@@ -1127,7 +1071,7 @@
                                         android:text="@string/media_viewer_swipe_direction"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp"
-                                    />
+                                        />
                                     <TextView
                                         android:id="@+id/media_viewer_swipe_direction_sub"
                                         android:layout_width="wrap_content"
@@ -1135,7 +1079,7 @@
                                         android:text="@string/media_viewer_swipe_direction_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp"
-                                    />
+                                        />
                                 </LinearLayout>
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/Set_media_viewer_swipe_direction"
@@ -1148,6 +1092,7 @@
                                     android:layout_alignParentEnd="true" />
                             </RelativeLayout>
                         </LinearLayout>
+
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </FrameLayout>

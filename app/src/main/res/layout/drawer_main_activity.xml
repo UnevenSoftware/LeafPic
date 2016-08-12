@@ -59,18 +59,15 @@
                 >
 
                 <!-- DEFAULT ALBUMS -->
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false"
-                    >
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Default"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -93,21 +90,16 @@
                             android:paddingBottom="16dp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
 
                 <!-- HIDDEN ALBUMS -->
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false"
-                    >
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_hidden"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -130,21 +122,17 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
 
                 <!-- TAGS ALBUMS -->
                 <!--
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false">
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Tags"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -167,21 +155,17 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
                 -->
                 <!-- TIMELINE -->
                 <!--
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false">
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Moments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -203,21 +187,16 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
                 -->
 
                 <!-- WALLPAPERS -->
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false">
-
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Wallpapers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
 
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/Drawer_wallpapers_Icon"
@@ -238,7 +217,6 @@
                             android:textColor="@color/md_dark_background"
                             android:textSize="16sp" />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
 
                 <!--TODO: FIX THE LITTLE GRADIENT SHADOW-->
 
@@ -253,17 +231,14 @@
 
 
                 <!--DONATE-->
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false">
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Donate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -286,20 +261,16 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
 
                 <!-- SETTING -->
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false">
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_Setting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -322,20 +293,16 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
 
                 <!-- ABOUT -->
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleAlpha="0.05"
-                    app:mrl_rippleDelayClick="false">
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_drawer_About"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
                         >
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -358,7 +325,6 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                </com.balysv.materialripple.MaterialRippleLayout>
 
             </LinearLayout>
         </LinearLayout>

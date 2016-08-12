@@ -365,7 +365,7 @@
                             android:textColor="@color/md_grey_400"
                             android:layout_marginTop="@dimen/small_spacing"
                             android:textSize="14sp"
-                        />
+                            />
                         <TextView
                             android:id="@+id/about_community_you_sub"
                             android:layout_width="wrap_content"
@@ -375,7 +375,7 @@
                             android:textColor="@color/md_grey_400"
                             android:textSize="14sp"
                             android:layout_marginBottom="16dp"
-                        />
+                            />
                         <!--<TextView
                             android:id="@+id/about_patryk_goworowski_googleplus_item"
                             android:layout_width="wrap_content"
@@ -419,253 +419,235 @@
                         />
 
                     <!--REPORT BUG-->
-                    <com.balysv.materialripple.MaterialRippleLayout
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_report_bug"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_report_bug_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-bug-report"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_report_bug"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_report_bug_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-bug-report"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_report_bug_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="16dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_report_bug_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_report_bug"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_report_bug_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_report_bug_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_report_bug"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_report_bug_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_report_bug_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
                     <!-- TRANSLATE -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_translate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_translate_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-flag"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_translate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_translate_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-flag"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_translate_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_translate_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_translate"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_translate_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_translate_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_translate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_translate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_translate_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
                     <!-- RATE -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_rate_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-star"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_rate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_rate_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-star"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_rate_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_rate_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_rate"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_rate_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_rate_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_rate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_rate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_rate_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
+
                     <!-- GIT HUB -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_github"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_github_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="faw-github"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_github"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_github_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="faw-github"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_github_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_github_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_github"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_github_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_github_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_github"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_github_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_github_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
                     <!-- DONATE -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_donate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_donate_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="faw-gift"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_donate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="16dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_donate_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="faw-gift"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_donate_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="16dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_donate_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/donate"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_donate_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/donate_sub_text"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/donate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_donate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/donate_sub_text"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -694,104 +676,97 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         />
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_license"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_license_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-insert-drive-file"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_license"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="8dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_license_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-insert-drive-file"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_license_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_license_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_license"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_license_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_license_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_license"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_license_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_license_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
-                    <com.balysv.materialripple.MaterialRippleLayout
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_libs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_libs_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-insert-drive-file"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_libs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="16dp"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_libs_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-insert-drive-file"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_libs_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="16dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_libs_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_library_license"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_libs_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_library_license_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_library_license"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/about_libs_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_library_license_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-               </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>

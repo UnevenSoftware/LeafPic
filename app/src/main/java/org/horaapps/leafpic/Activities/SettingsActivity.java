@@ -93,7 +93,7 @@ public class SettingsActivity extends ThemedActivity {
         scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
 
 
-        /*** EXCLUDED ALBUMS ***/
+        /*** BASIC THEME ***/
         findViewById(R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
