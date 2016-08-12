@@ -10,5 +10,4 @@
 /build
 /captures
 /scripts/crowdin.key
-/app/src/main/java/com/horaapps/leafpic/SecretConstants.java
-app/src/main/java/org/horaapps/leafpic/SecretConstants.java
+/app/src/main/assets/secretconstants.properties

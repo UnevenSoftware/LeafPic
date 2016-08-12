@@ -63,6 +63,7 @@ import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Data.ImageFileFilter;
 import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.SecretConstants;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.Views.GridSpacingItemDecoration;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
@@ -186,6 +187,7 @@ public class MainActivity extends SharedMediaActivity {
 	initUI();
 	setupUI();
 
+	Toast.makeText(this, SecretConstants.getBase64EncodedPublicKey(getApplicationContext()), Toast.LENGTH_SHORT).show();
 
 	displayPreFetchedData(getIntent().getExtras());
   }

@@ -62,7 +62,7 @@ public class DonateActivity extends ThemedActivity {
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);
 
-        mHelper = new IabHelper(this, SecretConstants.PLAY_STORE_KEY);
+        mHelper = new IabHelper(this, SecretConstants.getBase64EncodedPublicKey(getApplicationContext()));
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
