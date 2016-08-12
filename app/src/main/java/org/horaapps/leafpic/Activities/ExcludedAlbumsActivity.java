@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -107,15 +106,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 	public ExcludedAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 	  View v = LayoutInflater.from(parent.getContext()).inflate(org.horaapps.leafpic.R.layout.card_excluded_album, parent, false);
 	  v.findViewById(org.horaapps.leafpic.R.id.UnExclude_icon).setOnClickListener(listener);
-	  return new ViewHolder(
-								   MaterialRippleLayout.on(v)
-										   .rippleOverlay(true)
-										   .rippleAlpha(0.2f)
-										   .rippleColor(0xFF585858)
-										   .rippleHover(true)
-										   .rippleDuration(1)
-										   .create()
-	  );
+	  return new ViewHolder(v);
 	}
 
 	@Override

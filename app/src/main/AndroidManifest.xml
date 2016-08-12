@@ -111,6 +111,7 @@
         <activity
             android:name="org.horaapps.leafpic.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
+            android:label="@string/settings"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SETTING" />
@@ -121,6 +122,7 @@
         <activity
             android:name="org.horaapps.leafpic.Activities.AboutActivity"
             android:configChanges="orientation|screenSize"
+            android:label="@string/about"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.ABOUT" />
@@ -141,6 +143,7 @@
 
         <activity
             android:name="org.horaapps.leafpic.Activities.DonateActivity"
+            android:label="@string/donate"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.DONATE" />

@@ -7,18 +7,17 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
+
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.util.ThemeHelper;
@@ -52,18 +51,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(org.horaapps.leafpic.R.layout.card_album, parent, false);
-
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
-        return new ViewHolder(
-                                     MaterialRippleLayout.on(v)
-                                             .rippleOverlay(true)
-                                             .rippleAlpha(0.2f)
-                                             .rippleColor(0xFF585858)
-                                             .rippleHover(true)
-                                             .rippleDuration(1)
-                                             .create()
-        );
+        return new ViewHolder(v);
     }
 
     @Override

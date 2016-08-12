@@ -23,7 +23,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.FoldersFileFilter;
 import org.horaapps.leafpic.Views.ThemedActivity;
@@ -212,14 +211,16 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 	public BottomSheetAlbumsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 	  View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_folder_bottom_sheet_item, parent, false);
 	  v.setOnClickListener(onClickListener);
-	  return new ViewHolder(MaterialRippleLayout.on(v)
+
+	  return new ViewHolder(v);
+	  /*return new ViewHolder(MaterialRippleLayout.on(v)
 								 .rippleOverlay(true)
 								 .rippleAlpha(0.2f)
 								 .rippleColor(0xFF585858)
 								 .rippleHover(true)
 								 .rippleDuration(1)
 								 .create()
-	  );
+	  );*/
 	}
 
 	@Override

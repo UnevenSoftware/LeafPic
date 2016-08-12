@@ -76,7 +76,7 @@ public class AboutActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
-        toolbar.setTitle(getString(org.horaapps.leafpic.R.string.about));
+        //toolbar.setTitle(getString(org.horaapps.leafpic.R.string.about));
 
         /**** Status Bar ****/
         setStatusBarColor();

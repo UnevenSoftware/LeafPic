@@ -10,6 +10,7 @@
         android:orientation="horizontal"
         android:weightSum="10"
         android:paddingTop="5dp"
+        android:foreground="@drawable/ripple"
         android:paddingBottom="5dp"
         >
         <com.mikepenz.iconics.view.IconicsImageView
