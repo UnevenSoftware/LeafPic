@@ -58,7 +58,7 @@ android {
 
     productFlavors {
         noGPlay {
-            versionNameSuffix '-fdroid'
+            //versionNameSuffix '-fdroid'
         }
         withGPlay {
             //signingConfig signingConfigs.GPlayConfig
