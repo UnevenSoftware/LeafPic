@@ -59,7 +59,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         db.insert(TABLE_ALBUMS, null, values);
     }
 
-    void createAlbumsTable(SQLiteDatabase db) {
+    private void createAlbumsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
                 TABLE_ALBUMS + "(" +
                 ALBUM_PATH + " TEXT," +
@@ -71,7 +71,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
                 ALBUM_COLUMN_COUNT + " TEXT)");
     }
 
-    void createMediaTable(SQLiteDatabase db) {
+    private void createMediaTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
                 TABLE_MEDIA + "(" +
                 ALBUM_ID + " INTEGER," +
@@ -214,9 +214,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
                                 albumId, mediaPath);
                         mediaList.add(newIdentifier);
 
-                    } catch (JSONException e) {
-                        continue;
-                    }
+                    } catch (JSONException ignored) { }
                 }
             } catch (JSONException e) {
                 continue;
@@ -224,10 +222,11 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
             cursor.moveToNext();
         }
+        cursor.close();
         return mediaList;
     }
 
-    public Set<String> getExcludedPhotos(String albumPath, long albumId) {
+    Set<String> getExcludedPhotos(String albumPath, long albumId) {
         checkAndCreateAlbum(albumPath, albumId);
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -239,17 +238,13 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
             JSONArray excludedPhotoJsonBlob = null;
             try {
                 excludedPhotoJsonBlob = new JSONArray(cursor.getString(0));
-            } catch (JSONException e) {
-                // Shouldnt happen -- ignore for now
-            }
+            } catch (JSONException ignored) {  }
 
             if (excludedPhotoJsonBlob != null) {
                 for (int i = 0; i < excludedPhotoJsonBlob.length(); i++)
                     try {
                         excludedPhotos.add(excludedPhotoJsonBlob.getString(i));
-                    } catch (JSONException e) {
-                        //Ignore for now
-                    }
+                    } catch (JSONException ignored) {  }
             }
         }
 
@@ -258,7 +253,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         return excludedPhotos;
     }
 
-    public void writeExcludedPhotoArrayToDatabase(String[] excludedPhotoPaths, String albumPath, long albumId) {
+    private void writeExcludedPhotoArrayToDatabase(String[] excludedPhotoPaths, String albumPath, long albumId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -274,14 +269,14 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void excludePhoto(Media photo, long albumId, String albumPath) {
+    void excludePhoto(Media photo, long albumId, String albumPath) {
         List<Media> singlePhotoList = new ArrayList<Media>();
         singlePhotoList.add(photo);
 
         this.excludePhotos(singlePhotoList, albumId, albumPath);
     }
 
-    public void excludePhotos(List<Media> photos, long albumId, String albumPath) {
+    void excludePhotos(List<Media> photos, long albumId, String albumPath) {
         Set<String> currentExcludedPaths = getExcludedPhotos(albumPath, albumId);
 
         for (Media photo : photos) {

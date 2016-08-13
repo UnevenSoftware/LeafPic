@@ -17,6 +17,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Data.SimpleMediaIdentifier;
 import org.horaapps.leafpic.MyApplication;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
 
 import java.io.File;
@@ -29,7 +30,7 @@ import java.util.List;
 public class ExcludedAlbumsActivity extends ThemedActivity {
 
   private ArrayList<File> excludedFolders = new ArrayList<File>();
-	private List<SimpleMediaIdentifier> excludedMedia = new ArrayList<SimpleMediaIdentifier>();
+  private List<SimpleMediaIdentifier> excludedMedia = new ArrayList<SimpleMediaIdentifier>();
   private CustomAlbumsHandler h;
 
   @Override
@@ -40,7 +41,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 	h = new CustomAlbumsHandler(getApplicationContext());
 
 	excludedFolders = h.getExcludedFolders();
-	  excludedMedia = h.getExcludedMedias();
+	excludedMedia = h.getExcludedMedias();
 
 	checkNothing();
 	initUI();
@@ -95,12 +96,12 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 		String path = v.getTag().toString();
 		int pos;
 		if((pos = getIndex(path)) !=-1) {
-			if (pos < excludedFolders.size())
-              h.clearAlbumExclude(excludedFolders.remove(pos).getAbsolutePath());
-			else {
-				SimpleMediaIdentifier identifier = excludedMedia.remove(pos - excludedFolders.size());
-				h.unexcludePhoto(identifier.getMediaPath(), identifier.getAlbumPath(), identifier.getAlbumId());
-			}
+		  if (pos < excludedFolders.size())
+			h.clearAlbumExclude(excludedFolders.remove(pos).getAbsolutePath());
+		  else {
+			SimpleMediaIdentifier identifier = excludedMedia.remove(pos - excludedFolders.size());
+			h.unexcludePhoto(identifier.getMediaPath(), identifier.getAlbumPath(), identifier.getAlbumId());
+		  }
 		  new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -121,18 +122,20 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
 	@Override
 	public void onBindViewHolder(final ExcludedItemsAdapter.ViewHolder holder, final int position) {
-		if (position < excludedFolders.size()) {
-			File excludedFolder = excludedFolders.get(position);
-			holder.album_path.setText(excludedFolder.getAbsolutePath());
-			holder.album_name.setText(excludedFolder.getName());
-			holder.imgUnExclude.setTag(excludedFolder.getAbsolutePath());
-		}
-		else {
-			SimpleMediaIdentifier identifier = excludedMedia.get(position - excludedFolders.size());
-			holder.album_path.setText(identifier.getMediaPath());
-			holder.album_name.setText("Media");
-			holder.imgUnExclude.setTag(identifier.getMediaPath());
-		}
+	  if (position < excludedFolders.size()) {
+		File excludedFolder = excludedFolders.get(position);
+		holder.album_path.setText(excludedFolder.getAbsolutePath());
+		holder.album_name.setText(excludedFolder.getName());
+		holder.imgUnExclude.setTag(excludedFolder.getAbsolutePath());
+		holder.imgFolder.setIcon(GoogleMaterial.Icon.gmd_folder);
+	  }
+	  else {
+		SimpleMediaIdentifier identifier = excludedMedia.get(position - excludedFolders.size());
+		holder.album_path.setText(identifier.getMediaPath());
+		holder.album_name.setText(R.string.media);
+		holder.imgUnExclude.setTag(identifier.getMediaPath());
+		holder.imgFolder.setIcon(GoogleMaterial.Icon.gmd_photo);
+	  }
 
 	  /**SET LAYOUT THEME**/
 	  holder.album_name.setTextColor(getTextColor());
@@ -149,8 +152,8 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 	int getIndex(String path) {
 	  for (int i = 0; i < excludedFolders.size(); i++)
 		if (excludedFolders.get(i).getAbsolutePath().equals(path)) return i;
-		for (int i = 0; i < excludedMedia.size(); i++)
-			if (excludedMedia.get(i).getMediaPath().equals(path)) return excludedFolders.size() + i;
+	  for (int i = 0; i < excludedMedia.size(); i++)
+		if (excludedMedia.get(i).getMediaPath().equals(path)) return excludedFolders.size() + i;
 	  return -1;
 	}
 
