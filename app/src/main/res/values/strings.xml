@@ -148,7 +148,7 @@
     <string name="auto_update_media_sub">You should disable in case of huge number of images.</string>
     <string name="traslucent_statusbar">Translucent Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
-    <string name="excluded_albums">Excluded Albums</string>
+    <string name="excluded_albums">Excluded Items</string>
     <string name="excluded_albums_sub">Restore the excluded albums.</string>
 
 

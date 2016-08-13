@@ -35,6 +35,7 @@ import org.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.Animations.DepthPageTransformer;
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.AlbumSettings;
+import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Fragments.ImageFragment;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
@@ -347,6 +348,12 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 }
                 break;
 
+            case R.id.action_exclude:
+                this.getAlbum().excludeCurrentMedia(this);
+                adapter.notifyDataSetChanged();
+                toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+                break;
+
             case R.id.action_copy:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();
                 bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
@@ -446,8 +453,6 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (securityObj.checkPassword(editTextPassword.getText().toString())) {
                                         deleteCurrentMedia();
-                                        adapter.notifyDataSetChanged();
-                                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
                                     } else
                                         Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
 

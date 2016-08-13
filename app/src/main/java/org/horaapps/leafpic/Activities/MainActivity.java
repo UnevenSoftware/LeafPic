@@ -878,6 +878,7 @@ public class MainActivity extends SharedMediaActivity {
 	togglePrimaryToolbarOptions(menu);
 	updateSelectedStuff();
 
+	  menu.findItem(R.id.excludeAlbumButton).setVisible(editMode);
 	menu.findItem(R.id.select_all).setVisible(editMode);
 	menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
 	menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
@@ -1059,6 +1060,13 @@ public class MainActivity extends SharedMediaActivity {
 
 		return true;
 	  case R.id.excludeAlbumButton:
+		  if (!this.albumsMode && this.editMode) {
+			  getAlbum().excludeSelectedPhotos(this);
+
+			  mediaAdapter.notifyDataSetChanged();
+			  albumsAdapter.notifyDataSetChanged();
+			  return true;
+		  }
 
 		final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
