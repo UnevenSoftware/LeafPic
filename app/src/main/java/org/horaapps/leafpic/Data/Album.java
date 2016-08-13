@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dnld on 26/04/16.
@@ -49,6 +51,7 @@ public class Album implements Serializable {
 	this.path = path;
 	this.name = name;
   }
+
 
   public Album(String path, String name, int count, String storageRootPath) {
 	this(path, name, count);
@@ -107,7 +110,15 @@ public class Album implements Serializable {
 	return mediaArrayList;
   }
 
+	public void excludeSelectedPhotos(Context context) {
+		CustomAlbumsHandler albumHandler = new CustomAlbumsHandler(context);
+		albumHandler.excludePhotos(this.selectedMedias, this.getId(), this.getPath());
+		this.media.removeAll(this.selectedMedias);
+	}
+
   public void updatePhotos(Context context) {
+	  CustomAlbumsHandler albumHandler = new CustomAlbumsHandler(context);
+	  Set<String> excludedPhotoPaths = albumHandler.getExcludedPhotos(this.getPath(), this.getId());
 	PreferenceUtil SP = PreferenceUtil.getInstance(context);
 	ArrayList<Media> mediaArrayList = new ArrayList<Media>();
 	if (isFromMediaStore()) {
@@ -119,6 +130,12 @@ public class Album implements Serializable {
 			  getPath(),filter,
 			  SP.getBoolean("set_include_video", true)));
 	}
+
+	  for (int i = mediaArrayList.size() - 1; i >= 0; i--) {
+		  if (excludedPhotoPaths.contains(mediaArrayList.get(i).getPath()))
+			  mediaArrayList.remove(i);
+	  }
+
 	media = mediaArrayList;
 	sortPhotos();
 	setCount(media.size());
@@ -418,6 +435,13 @@ public class Album implements Serializable {
 	}
 	return success;
   }
+
+	public void excludeCurrentMedia(Context context) {
+		CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
+		handler.excludePhoto(this.getCurrentMedia(), this.getId(), this.getPath());
+		media.remove(getCurrentMediaIndex());
+		setCount(media.size());
+	}
 
   private boolean deleteMedia(Context context, Media media) {
 	boolean success;

@@ -4,13 +4,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
+import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dnld on 2/1/16.
@@ -30,20 +39,16 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     private static final String ALBUM_DEFAULT_SORT_ASCENDING = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "column_count";
 
+    private static final String TABLE_MEDIA = "media";
+    private static final String EXCLUDED_MEDIA = "excluded";
+
     public CustomAlbumsHandler(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " +
-                TABLE_ALBUMS + "(" +
-                ALBUM_PATH + " TEXT," +
-                ALBUM_ID + " INTEGER," +
-                ALBUM_EXCLUDED + " INTEGER," +
-                ALBUM_COVER + " TEXT, " +
-                ALBUM_DEFAULT_SORTMODE + " INTEGER, " +
-                ALBUM_DEFAULT_SORT_ASCENDING + " INTEGER, " +
-                ALBUM_COLUMN_COUNT + " TEXT)");
+        this.createAlbumsTable(db);
+        this.createMediaTable(db);
 
         // NOTE: excluded music folder by default
         ContentValues values = new ContentValues();
@@ -53,6 +58,28 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_ALBUMS, null, values);
     }
+
+    void createAlbumsTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " +
+                TABLE_ALBUMS + "(" +
+                ALBUM_PATH + " TEXT," +
+                ALBUM_ID + " INTEGER," +
+                ALBUM_EXCLUDED + " INTEGER," +
+                ALBUM_COVER + " TEXT, " +
+                ALBUM_DEFAULT_SORTMODE + " INTEGER, " +
+                ALBUM_DEFAULT_SORT_ASCENDING + " INTEGER, " +
+                ALBUM_COLUMN_COUNT + " TEXT)");
+    }
+
+    void createMediaTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " +
+                TABLE_MEDIA + "(" +
+                ALBUM_ID + " INTEGER," +
+                ALBUM_PATH + " TEXT," +
+                EXCLUDED_MEDIA + " TEXT," +
+                "PRIMARY KEY (" + ALBUM_ID + "))");
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -72,6 +99,29 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
             values.put(ALBUM_EXCLUDED, 0);
             db.insert(TABLE_ALBUMS, null, values);
         }
+        cursor.close();
+
+        // Check to see if the media table entry exists
+        cursor = null;
+        try {
+            cursor = db.query(TABLE_MEDIA, null, ALBUM_PATH + "=? AND " + ALBUM_ID + "=?",
+                    new String[]{path, String.valueOf(id)}, null, null, null);
+        }
+        catch (SQLiteException ex) {
+            this.createMediaTable(db);
+
+            cursor = db.query(TABLE_MEDIA, null, ALBUM_PATH + "=? AND " + ALBUM_ID + "=?",
+                    new String[]{path, String.valueOf(id)}, null, null, null);
+        }
+
+        if (cursor.getCount() == 0) {
+            ContentValues values = new ContentValues();
+            values.put(ALBUM_ID, id);
+            values.put(ALBUM_PATH, path);
+            values.put(EXCLUDED_MEDIA, new JSONArray().toString());
+            db.insert(TABLE_MEDIA, null, values);
+        }
+
         cursor.close();
         db.close();
     }
@@ -131,6 +181,118 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         values.put(ALBUM_EXCLUDED, 1);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, id+"" });
         db.close();
+    }
+
+    public void unexcludePhoto(String photoPath, String albumPath, long albumId) {
+        Set<String> excludedPhotos = this.getExcludedPhotos(albumPath, albumId);
+        if (!excludedPhotos.contains(photoPath))
+            return;
+
+        excludedPhotos.remove(photoPath);
+
+        Object[] currentExcludedPathObjects = excludedPhotos.toArray();
+        String[] currentExcludedPathStrings = Arrays.copyOf(currentExcludedPathObjects, currentExcludedPathObjects.length, String[].class);
+        writeExcludedPhotoArrayToDatabase(currentExcludedPathStrings, albumPath, albumId);
+    }
+
+    public List<SimpleMediaIdentifier> getExcludedMedias() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_MEDIA, new String[] {ALBUM_PATH, ALBUM_ID, EXCLUDED_MEDIA},
+                null, null, null, null, null);
+
+        List<SimpleMediaIdentifier> mediaList = new ArrayList<SimpleMediaIdentifier>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String albumPath = cursor.getString(0);
+            long albumId = cursor.getLong(1);
+            try {
+                JSONArray excludedMedia = new JSONArray(cursor.getString(2));
+                for (int i = 0; i < excludedMedia.length(); i++) {
+                    try {
+                        String mediaPath = excludedMedia.getString(i);
+                        SimpleMediaIdentifier newIdentifier = new SimpleMediaIdentifier(albumPath,
+                                albumId, mediaPath);
+                        mediaList.add(newIdentifier);
+
+                    } catch (JSONException e) {
+                        continue;
+                    }
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+
+            cursor.moveToNext();
+        }
+        return mediaList;
+    }
+
+    public Set<String> getExcludedPhotos(String albumPath, long albumId) {
+        checkAndCreateAlbum(albumPath, albumId);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_MEDIA, new String[] {EXCLUDED_MEDIA},
+                ALBUM_PATH + "=? AND " + ALBUM_ID + "=?", new String[] {albumPath, String.valueOf(albumId)}, null, null, null);
+
+        Set<String> excludedPhotos = new HashSet<String>();
+        if (cursor.moveToFirst()) {
+            JSONArray excludedPhotoJsonBlob = null;
+            try {
+                excludedPhotoJsonBlob = new JSONArray(cursor.getString(0));
+            } catch (JSONException e) {
+                // Shouldnt happen -- ignore for now
+            }
+
+            if (excludedPhotoJsonBlob != null) {
+                for (int i = 0; i < excludedPhotoJsonBlob.length(); i++)
+                    try {
+                        excludedPhotos.add(excludedPhotoJsonBlob.getString(i));
+                    } catch (JSONException e) {
+                        //Ignore for now
+                    }
+            }
+        }
+
+        cursor.close();
+        db.close();
+        return excludedPhotos;
+    }
+
+    public void writeExcludedPhotoArrayToDatabase(String[] excludedPhotoPaths, String albumPath, long albumId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String newValue = null;
+        try {
+            newValue = new JSONArray(excludedPhotoPaths).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        values.put(EXCLUDED_MEDIA, newValue);
+
+        db.update(TABLE_MEDIA, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ albumPath, albumId+"" });
+        db.close();
+    }
+
+    public void excludePhoto(Media photo, long albumId, String albumPath) {
+        List<Media> singlePhotoList = new ArrayList<Media>();
+        singlePhotoList.add(photo);
+
+        this.excludePhotos(singlePhotoList, albumId, albumPath);
+    }
+
+    public void excludePhotos(List<Media> photos, long albumId, String albumPath) {
+        Set<String> currentExcludedPaths = getExcludedPhotos(albumPath, albumId);
+
+        for (Media photo : photos) {
+            if (!currentExcludedPaths.contains(photo.getPath())) {
+                currentExcludedPaths.add(photo.getPath());
+            }
+        }
+
+        Object[] currentExcludedPathObjects = currentExcludedPaths.toArray();
+        String[] currentExcludedPathStrings = Arrays.copyOf(currentExcludedPathObjects, currentExcludedPathObjects.length, String[].class);
+        writeExcludedPhotoArrayToDatabase(currentExcludedPathStrings, albumPath, albumId);
     }
 
     public String getCoverPathAlbum(String path, long id) {
