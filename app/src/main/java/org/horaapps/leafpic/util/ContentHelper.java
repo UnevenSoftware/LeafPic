@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public class ContentHelper {
   }
 
   public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File targetDir) {
-	FileInputStream inStream = null;
+	InputStream inStream = null;
 	OutputStream outStream = null;
 	FileChannel inChannel = null;
 	FileChannel outChannel = null;
@@ -111,12 +112,18 @@ public class ContentHelper {
 	  if (isWritable(target)) {
 		// standard way
 		outStream = new FileOutputStream(target);
-		inChannel = inStream.getChannel();
+		inChannel = ((FileInputStream) inStream).getChannel();
 		outChannel = ((FileOutputStream) outStream).getChannel();
 		inChannel.transferTo(0, inChannel.size(), outChannel);
 		success = true;
 	  } else {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+		  if (isFileOnSdCard(context, source)) {
+			DocumentFile sourceDocument = getDocumentFile(context, source, false, false);
+			if (sourceDocument != null) {
+			 	inStream = context.getContentResolver().openInputStream(sourceDocument.getUri());
+			}
+		  }
 		  // Storage Access Framework
 		  DocumentFile targetDocument = getDocumentFile(context, target, false, false);
 		  if (targetDocument != null) {
@@ -124,6 +131,7 @@ public class ContentHelper {
 		  }
 		}
 		else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+		  // TODO: 13/08/16 test this
 		  // Workaround for Kitkat ext SD card
 		  Uri uri = getUriFromFile(context,target.getAbsolutePath());
 		  if (uri != null) {
@@ -153,6 +161,14 @@ public class ContentHelper {
 
 	if (success) scanFile(context, new String[] { target.getPath() });
 	return success;
+  }
+
+  public static boolean isFileOnSdCard(Context context, File file) {
+	String[] extSdCardPaths = getExtSdCardPaths(context);
+	for(String extSdCardPath : extSdCardPaths) {
+	  if(file.getPath().startsWith(extSdCardPath)) return true;
+	}
+	return false;
   }
 
   /**
