@@ -243,8 +243,6 @@ public class AlertDialogsHelper {
             }
         }
 
-
-
         final TextView showMoreText = (TextView) dialogLayout.findViewById(R.id.details_showmore);
         showMoreText.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -329,7 +329,7 @@
             android:layout_width="match_parent"
             android:id="@+id/details_showmore"
             android:layout_below="@id/details_scrollview"
-            android:text="Show More"
+            android:text="@string/show_more"
             android:textSize="16dp"
             android:textColor="@color/accent_blue"
             android:gravity="center"
