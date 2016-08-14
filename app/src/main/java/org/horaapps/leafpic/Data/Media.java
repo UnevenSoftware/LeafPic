@@ -29,6 +29,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.Serializable;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -191,6 +192,11 @@ public class Media implements Parcelable, Serializable {
         return StringUtils.getPhotoNameByPath(path);
     }
 
+    public Map<String, Object> getAllDetails() {
+        loadMetadata();
+        return this.metadataMap;
+    }
+
     public GeoLocation getGeoLocation()  {
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
@@ -209,6 +215,7 @@ public class Media implements Parcelable, Serializable {
                         //Log.wtf("asd", tag.getTagName());
                     }
             } catch (Exception e){ e.printStackTrace(); }
+
         }
     }
     public long getSize() {

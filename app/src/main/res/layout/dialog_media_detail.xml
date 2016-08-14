@@ -7,14 +7,11 @@
     app:cardCornerRadius="2dp"
     android:id="@+id/photo_details_card"
 >
-    <ScrollView
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
-            android:id="@+id/rl_photo_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
 
             <RelativeLayout
                 android:id="@+id/header_photo_details"
@@ -39,10 +36,21 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     />
-
             </RelativeLayout>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/details_scrollview"
+            android:layout_below="@id/header_photo_details">
 
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <TableLayout
                 android:id="@+id/ll_detail_dialog"
@@ -51,8 +59,7 @@
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:orientation="vertical"
-                android:layout_below="@id/header_photo_details">
+                android:orientation="vertical">
 
                 <!--PATH-->
                 <TableRow
@@ -314,6 +321,21 @@
                 >
 
             </LinearLayout>-->
-        </RelativeLayout>
-    </ScrollView>
+            </LinearLayout>
+            </HorizontalScrollView>
+     </ScrollView>
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/details_showmore"
+            android:layout_below="@id/details_scrollview"
+            android:text="@string/show_more"
+            android:textSize="16dp"
+            android:textColor="@color/accent_blue"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+        </TextView>
+
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

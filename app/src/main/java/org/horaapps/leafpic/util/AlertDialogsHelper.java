@@ -1,11 +1,15 @@
 package org.horaapps.leafpic.util;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.StringRes;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -13,12 +17,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.Activities.SettingsActivity;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
 
 import java.lang.reflect.Field;
@@ -26,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.horaapps.leafpic.SecretConstants.MAP_BOX_TOKEN;
 
@@ -96,9 +104,9 @@ public class AlertDialogsHelper {
         return progressDialog.create();
     }
 
-    public static AlertDialog getDetailsDialog(final ThemedActivity activity, AlertDialog.Builder detailsDialogBuilder, Media f) {
+    public static AlertDialog getDetailsDialog(final ThemedActivity activity, AlertDialog.Builder detailsDialogBuilder, final Media f) {
 
-        View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_detail, null);
+        final View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_detail, null);
 
         TextView textViewSize = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_size);
         TextView textViewType = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_type);
@@ -166,7 +174,7 @@ public class AlertDialogsHelper {
 
 
         final GeoLocation location;
-        if((location = f.getGeoLocation()) != null) {
+        if ((location = f.getGeoLocation()) != null) {
             PreferenceUtil SP = PreferenceUtil.getInstance(activity.getApplicationContext());
 
             String url;
@@ -174,28 +182,28 @@ public class AlertDialogsHelper {
                     SettingsActivity.GOOGLE_MAPS_PROVIDER)) {
                 case SettingsActivity.GOOGLE_MAPS_PROVIDER:
                 default:
-                    url = String.format(Locale.getDefault(),"http://maps.google.com/maps/api/staticmap" +
-                        "?center=%f,%f&zoom=15&size=500x300&scale=2&sensor=false", location.getLatitude(), location.getLongitude());
+                    url = String.format(Locale.getDefault(), "http://maps.google.com/maps/api/staticmap" +
+                            "?center=%f,%f&zoom=15&size=500x300&scale=2&sensor=false", location.getLatitude(), location.getLongitude());
                     break;
                 case SettingsActivity.OSM_MAP_BOX:
-                    url = String.format(Locale.getDefault(),"https://api.mapbox.com/v4/mapbox.streets/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(),location.getLatitude(), MAP_BOX_TOKEN);
+                    url = String.format(Locale.getDefault(), "https://api.mapbox.com/v4/mapbox.streets/%f,%f,15/500x300.jpg?access_token=%s",
+                            location.getLongitude(), location.getLatitude(), MAP_BOX_TOKEN);
 
                     break;
                 case SettingsActivity.OSM_MAP_BOX_DARK:
-                    url = String.format(Locale.getDefault(),"https://api.mapbox.com/v4/mapbox.dark/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(),location.getLatitude(), MAP_BOX_TOKEN);
+                    url = String.format(Locale.getDefault(), "https://api.mapbox.com/v4/mapbox.dark/%f,%f,15/500x300.jpg?access_token=%s",
+                            location.getLongitude(), location.getLatitude(), MAP_BOX_TOKEN);
 
                     break;
                 case SettingsActivity.OSM_MAP_BOX_LIGHT:
-                    url = String.format(Locale.getDefault(),"https://api.mapbox.com/v4/mapbox.light/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(),location.getLatitude(), MAP_BOX_TOKEN);
+                    url = String.format(Locale.getDefault(), "https://api.mapbox.com/v4/mapbox.light/%f,%f,15/500x300.jpg?access_token=%s",
+                            location.getLongitude(), location.getLatitude(), MAP_BOX_TOKEN);
 
                     break;
                 case SettingsActivity.OSM_TYLER_PROVIDER:
-                    url = String.format(Locale.getDefault(),"https://tyler-demo.herokuapp.com/" +
-                        "?greyscale=false&lat=%f&lon=%f&zoom=15&width=500&height=300" +
-                        "&tile_url=http://[abcd].tile.stamen.com/watercolor/{zoom}/{x}/{y}.jpg", location.getLatitude(), location.getLongitude());
+                    url = String.format(Locale.getDefault(), "https://tyler-demo.herokuapp.com/" +
+                            "?greyscale=false&lat=%f&lon=%f&zoom=15&width=500&height=300" +
+                            "&tile_url=http://[abcd].tile.stamen.com/watercolor/{zoom}/{x}/{y}.jpg", location.getLatitude(), location.getLongitude());
 
                     break;
             }
@@ -227,17 +235,53 @@ public class AlertDialogsHelper {
         long dateTake = f.getDateTaken();
         if (dateTake != -1) {
             Calendar c = Calendar.getInstance(), c2 = Calendar.getInstance();
-            c.setTimeInMillis(dateTake); c2.setTimeInMillis(f.getDateModified());
+            c.setTimeInMillis(dateTake);
+            c2.setTimeInMillis(f.getDateModified());
             if (!(c.get(Calendar.YEAR) == c2.get(Calendar.YEAR)) && !(c.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR))) {
                 textViewDateTaken.setText(SimpleDateFormat.getDateTimeInstance().format(new Date(dateTake)));
                 dialogLayout.findViewById(org.horaapps.leafpic.R.id.ll_date_taken).setVisibility(View.VISIBLE);
             }
         }
+
+        final TextView showMoreText = (TextView) dialogLayout.findViewById(R.id.details_showmore);
+        showMoreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMoreDetails(dialogLayout, activity, f);
+                showMoreText.setVisibility(View.INVISIBLE);
+            }
+        });
+
         ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_details_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
         detailsDialogBuilder.setView(dialogLayout);
-
         return detailsDialogBuilder.create();
     }
 
+    static void showMoreDetails(View dialogLayout, ThemedActivity activity, Media media) {
+        Map<String, Object> metadata = media.getAllDetails();
+        TableLayout detailsTable = (TableLayout) dialogLayout.findViewById(R.id.ll_detail_dialog);
+        float scale = activity.getResources().getDisplayMetrics().density;
+        int tenPxInDp = (int) (10 * scale + 0.5f);
 
+        for (String metadataKey : metadata.keySet()) {
+            TableRow row = new TableRow(activity.getApplicationContext());
+
+            TextView metaDataKey = new TextView(activity.getApplicationContext());
+            TextView metaDataValue = new TextView(activity.getApplicationContext());
+            metaDataKey.setText(metadataKey);
+            metaDataKey.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            metaDataValue.setText(metadata.get(metadataKey).toString());
+            metaDataValue.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            metaDataKey.setTextColor(activity.getTextColor());
+            metaDataKey.setTypeface(null, Typeface.BOLD);
+            metaDataKey.setGravity(Gravity.END);
+            metaDataValue.setTextColor(activity.getTextColor());
+            metaDataValue.setTextSize(16);
+            metaDataValue.setPaddingRelative(tenPxInDp, 0, 0, 0);
+            row.addView(metaDataKey);
+            row.addView(metaDataValue);
+            detailsTable.addView(row, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+        }
+
+    }
 }

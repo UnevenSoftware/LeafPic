@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
@@ -28,6 +30,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -52,6 +57,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Created by dnld on 18/02/16.
@@ -125,13 +131,13 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         setupSystemUI();
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
-                                           (new View.OnSystemUiVisibilityChangeListener() {
-                                               @Override
-                                               public void onSystemUiVisibilityChange(int visibility) {
-                                                   if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
-                                                   else hideSystemUI();
-                                               }
-                                           });
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showSystemUI();
+                        else hideSystemUI();
+                    }
+                });
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
 
         adapter.setVideoOnClickListener(new View.OnClickListener() {
@@ -139,7 +145,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
             public void onClick(View v) {
                 if (SP.getBoolean("set_internal_player", false)) {
                     Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
-                                               .setData(getAlbum().getCurrentMedia().getUri());
+                            .setData(getAlbum().getCurrentMedia().getUri());
                     startActivity(mpdIntent);
                 } else {
                     Intent intentOpenWith = new Intent(Intent.ACTION_VIEW);
@@ -255,7 +261,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                                                                                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
             params.setMargins(0,0,Measure.getNavigationBarSize(PhotoPagerActivity.this).x,0);
         else
@@ -447,7 +453,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
                             final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
                             final EditText editTextPassword = securityObj.getInsertPasswordDialog
-                                                                                  (PhotoPagerActivity.this, passwordDialogBuilder);
+                                    (PhotoPagerActivity.this, passwordDialogBuilder);
 
                             passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -462,7 +468,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                             final AlertDialog passwordDialog = passwordDialogBuilder.create();
                             passwordDialog.show();
                             passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
-                                                                                                                 .OnClickListener() {
+                                    .OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if (securityObj.checkPassword(editTextPassword.getText().toString())){
@@ -539,13 +545,14 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
             case R.id.action_details:
                 AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
-                AlertDialog detailsDialog =
+                final AlertDialog detailsDialog =
                         AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,getAlbum().getCurrentMedia());
 
                 detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
-                                                                                           .ok_action), new DialogInterface.OnClickListener() {
+                        .ok_action), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) { }});
+
                 detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -553,6 +560,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                             Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                     }
                 });
+
                 detailsDialog.show();
                 break;
 
