@@ -68,7 +68,7 @@ public class ImageFragment extends Fragment {
                 ((PhotoPagerActivity) getActivity()).toggleSystemUI();
             }
         });
-        photoView.setMaximumScale(10.0F);
+        //photoView.setMaximumScale(10.0F);
         return photoView;
     }
 

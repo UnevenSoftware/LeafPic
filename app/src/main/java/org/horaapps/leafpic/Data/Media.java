@@ -15,53 +15,29 @@ import android.webkit.MimeTypeMap;
 
 import com.bumptech.glide.signature.StringSignature;
 import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
-import com.drew.lang.Rational;
 import com.drew.lang.annotations.NotNull;
-import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import com.drew.metadata.exif.GpsDirectory;
+
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.StringUtils;
 
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.Serializable;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * Created by dnld on 26/04/16.
  */
 public class Media implements Parcelable, Serializable {
 
-    private static final String TAG_WIDTH = "Image Width";
-    private static final String TAG_HEIGHT = "Image Height";
-    private static final String TAG_DATE_TAKEN = "Date/Time Original";
-    private static final String TAG_MAKE = "Make";
-    private static final String TAG_MODEL = "Model";
-    private static final String TAG_F_NUMBER = "F-Number";
-    private static final String TAG_ISO = "ISO Speed Ratings";
-    private static final String TAG_EXPOSURE = "Exposure Time";
-    private static final String TAG_ORIENTATION = "Orientation";
-
-    //region ORIENTATION VALUES
-    private static final int ORIENTATION_NORMAL = 1;
-    private static final int ORIENTATION_ROTATE_180 = 3;
-    private static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
-    private static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
-    //endregion
-
-    private final Map<String, Object> metadataMap = new HashMap<String, Object>();
 
     private String path = null;
     private long dateModified = -1;
@@ -71,6 +47,7 @@ public class Media implements Parcelable, Serializable {
 
     private long size = 0;
     private boolean selected = false;
+    private MetadataItem metadata;
 
     public Media() { }
 
@@ -167,7 +144,7 @@ public class Media implements Parcelable, Serializable {
             return exif.getThumbnail();
         return null;
 
-        // NOTE: ExifInterface is faster than metadata-extractor to get the thumbnail data
+        // NOTE: ExifInterface is faster than metadata-extractor to getValue the thumbnail data
         /*try {
             Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
             ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
@@ -192,48 +169,57 @@ public class Media implements Parcelable, Serializable {
         return StringUtils.getPhotoNameByPath(path);
     }
 
-    public Map<String, Object> getAllDetails() {
-        loadMetadata();
-        return this.metadataMap;
-    }
-
-    public GeoLocation getGeoLocation()  {
+    public MediaDetailsMap<String, String> getAllDetails() {
+        MediaDetailsMap<String, String> data = new MediaDetailsMap<String, String>();
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
-            GpsDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
-            return thumbnailDirectory.getGeoLocation();
-        } catch (Exception e) { return null; }
+            for(Directory directory : metadata.getDirectories()) {
+
+                for(Tag tag : directory.getTags()) {
+                    data.put(tag.getTagName(), directory.getObject(tag.getTagType())+"");
+                }
+            }
+        } catch (ImageProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+
     }
 
-    private void loadMetadata() {
-        if (hasPath() && metadataMap.isEmpty()) {
-            try {
-                Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
-                for (Directory directory : metadata.getDirectories())
-                    for (Tag tag : directory.getTags()) {
-                        metadataMap.put(tag.getTagName(), directory.getObject(tag.getTagType()));
-                        //Log.wtf("asd", tag.getTagName());
-                    }
-            } catch (Exception e){ e.printStackTrace(); }
+    public MediaDetailsMap<String, String> getMainDetails(Context context){
+        metadata = new MetadataItem(new File(getPath()));
+        MediaDetailsMap<String, String> details = new MediaDetailsMap<String, String>();
+        details.put(context.getString(R.string.path), getDisplayName());
+        details.put(context.getString(R.string.type), getMIME());
+        String tmp;
+        if ((tmp = metadata.getResolution()) != null)
+            details.put(context.getString(R.string.resolution), tmp);
 
-        }
+        details.put(context.getString(R.string.size), getHumanReadableSize());
+        details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
+        if (metadata.getOrientation() != -1)
+            details.put(context.getString(R.string.orientation), metadata.getOrientation()+"");
+        if (metadata.getDateOriginal() != null)
+            details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
+
+        if ((tmp = metadata.getCameraInfo()) != null)
+            details.put(context.getString(R.string.camera), tmp);
+        if ((tmp = metadata.getExifInfo()) != null)
+            details.put(context.getString(R.string.exif), tmp);
+        GeoLocation location;
+        if ((location = metadata.getLocation()) != null)
+            details.put(context.getString(R.string.location), location.toDMSString());
+
+        return details;
     }
     public long getSize() {
         return size;
     }
 
-    public int getOrientation() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_ORIENTATION)) {
-            switch (Integer.parseInt(metadataMap.get(TAG_ORIENTATION).toString())) {
-                case ORIENTATION_NORMAL: return 0;
-                case ORIENTATION_ROTATE_90: return 90;
-                case ORIENTATION_ROTATE_180: return 180;
-                case ORIENTATION_ROTATE_270: return 270;
-                default: return -1;
-            }
-        }
-        return -1;
+    public GeoLocation getGeoLocation()  {
+        return metadata.getLocation();
     }
 
     public boolean setOrientation(int orientation) {
@@ -264,104 +250,16 @@ public class Media implements Parcelable, Serializable {
         return uri != null;
     }
 
-    @Nullable public String getExifInfo() {
-        StringBuilder result = new StringBuilder();
-        String asd;
-        if((asd = getFNumber()) != null) result.append(asd).append(" ");
-        if((asd = getExposureTime()) != null) result.append(asd).append(" ");
-        if((asd = getISO()) != null) result.append(asd).append(" ");
-        return result.length() == 0 ? null : result.toString();
-    }
 
-    private Rational getRational(Object o)
-    {
-        if (o == null)
-            return null;
-
-        if (o instanceof Rational)
-            return (Rational)o;
-        if (o instanceof Integer)
-            return new Rational((Integer)o, 1);
-        if (o instanceof Long)
-            return new Rational((Long)o, 1);
-
-        // NOTE not doing conversions for real number types
-
-        return null;
-    }
-
-    @Nullable private String getFNumber() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_F_NUMBER)) {
-            DecimalFormat format = new DecimalFormat("0.0");
-            format.setRoundingMode(RoundingMode.HALF_UP);
-            Rational f = getRational(metadataMap.get(TAG_F_NUMBER));
-
-            return "f/" + format.format(f.doubleValue());
-        }
-        return null;
-    }
-
-    @Nullable private String getExposureTime() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_EXPOSURE)){
-            DecimalFormat format = new DecimalFormat("0.000");
-            format.setRoundingMode(RoundingMode.HALF_UP);
-            Rational f = getRational(metadataMap.get(TAG_EXPOSURE));
-            return format.format(f.doubleValue())+"s";
-        }
-        return null;
-    }
-
-    @Nullable private String getISO() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_ISO))
-            return "ISO-"+metadataMap.get(TAG_ISO).toString();
-        return null;
-    }
-
-    public String getCameraInfo() {
-        String make;
-        if ((make = getMake()) != null)
-            return String.format("%s %s", make, getModel());
-        return null;
-    }
-
-    private String getMake() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_MAKE))
-            return metadataMap.get(TAG_MAKE).toString();
-        return null;
-    }
-
-    private String getModel() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_MODEL))
-            return metadataMap.get(TAG_MODEL).toString();
-        return null;
-    }
-
-
-    private int getWidth() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_WIDTH))
-            return Integer.parseInt(metadataMap.get(TAG_WIDTH).toString());
-        return -1;
-    }
-
-    private int getHeight() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_HEIGHT))
-            return Integer.parseInt(metadataMap.get(TAG_HEIGHT).toString());
-        return -1;
-    }
-
-    public long getDateTaken() {
-        loadMetadata();
-        if (metadataMap.containsKey(TAG_DATE_TAKEN))
-            try { return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(metadataMap.get(TAG_DATE_TAKEN).toString()).getTime(); }
+    private long getDateTaken() {
+        /*if (metadataMap.containsKey(TAG_DATE_TAKEN))
+            try { return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(metadataMap.getValue(TAG_DATE_TAKEN).toString()).getTime(); }
             catch (ParseException e) { return -1; }
             catch (NullPointerException e) { return -1; }
+        return -1;*/
+        // TODO: 16/08/16 improved
+        Date dateOriginal = metadata.getDateOriginal();
+        if (dateOriginal != null) return metadata.getDateOriginal().getTime();
         return -1;
     }
 
@@ -377,13 +275,8 @@ public class Media implements Parcelable, Serializable {
         return false;
     }
 
-    @Nullable public String getResolution() {
-        if (getWidth() != -1 && getHeight() != -1)
-            return String.format(Locale.getDefault(), "%dx%d", getWidth(), getHeight());
-        else return null;
-    }
 
-    public String getHumanReadableSize() {
+    private String getHumanReadableSize() {
         return StringUtils.humanReadableByteCount(size, true);
     }
 
@@ -391,7 +284,7 @@ public class Media implements Parcelable, Serializable {
         return path;
     }
 
-    public String getDisplayName() {
+    private String getDisplayName() {
         return  hasPath() ? getPath() : getUri().getEncodedPath();
     }
 

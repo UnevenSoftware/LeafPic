@@ -40,7 +40,6 @@ import org.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.Animations.DepthPageTransformer;
 import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.Data.AlbumSettings;
-import org.horaapps.leafpic.Data.CustomAlbumsHandler;
 import org.horaapps.leafpic.Fragments.ImageFragment;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;

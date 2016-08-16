@@ -500,7 +500,7 @@ public class Album implements Serializable {
 	  path = dir.getAbsolutePath();
 	  name = newName;
 	  // NOTE: the following line doesn't work
-	  //id = MediaStoreProvider.getAlbumId(context, media.get(0).getPath());
+	  //id = MediaStoreProvider.getAlbumId(context, media.getValue(0).getPath());
 
 	}
 	return success;
