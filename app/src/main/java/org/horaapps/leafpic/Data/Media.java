@@ -272,10 +272,11 @@ public class Media implements Parcelable, Serializable {
     }
     
     public void copyExif(ExifInterface exif) {
-        Field[] fields = ExifInterface.class.getFields();
+        Field[] fields = exif.getClass().getFields();
         for (Field field : fields) {
-            String name = field.getName();
-            if (name.startsWith("TAG")) {
+            if (field.getName().startsWith("TAG")) {
+                field.setAccessible(true);
+                String tag = (String) field.get(exif);
                 String value = exif.getAttribute(tag);
                 exif.setAttribute(tag, value);
             }
