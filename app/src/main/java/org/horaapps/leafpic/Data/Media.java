@@ -247,7 +247,7 @@ public class Media implements Parcelable, Serializable {
         ExifInterface exif = null;
         try { 
             exif = new ExifInterface(getPath()); 
-        } catch (IOException ex) { 
+        } catch (IOException e) { 
             return false; 
         }  
         
@@ -272,15 +272,36 @@ public class Media implements Parcelable, Serializable {
     }
     
     public void copyExif(ExifInterface exif) {
+        ArrayList<String> tags = getExifTags(exif);
+        for (String tag : tags) {
+            String value = exif.getAttribute(tag);
+            exif.setAttribute(tag, value);
+        }
+    }
+    
+    private ArrayList<String> getExifTags(ExifInterface exif) {
+        if (exif == null) return null;
+        ArrayList<String> tags = new ArrayList<>();
         Field[] fields = exif.getClass().getFields();
         for (Field field : fields) {
             if (field.getName().startsWith("TAG")) {
                 field.setAccessible(true);
                 String tag = (String) field.get(exif);
-                String value = exif.getAttribute(tag);
-                exif.setAttribute(tag, value);
+                tags.add(tag);
             }
         }
+        return tags;
+    }
+    
+    public ArrayList<String> getExifTags() {
+        ExifInterface exif = null;
+        try { 
+            exif = new ExifInterface(getPath()); 
+        } catch (IOException e) { 
+            return null; 
+        }  
+        
+        return getExifTags(exif);
     }
 
     private boolean hasPath() {
