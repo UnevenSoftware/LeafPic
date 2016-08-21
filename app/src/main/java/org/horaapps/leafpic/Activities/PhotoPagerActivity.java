@@ -555,16 +555,22 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!getAlbum().getCurrentMedia().fixDate())
+                        if (getAlbum().getCurrentMedia().fixDate()) {
+                            Toast.makeText(PhotoPagerActivity.this, R.string.done, Toast.LENGTH_SHORT).show();
+                        } else {
                             Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 
                 detailsDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.remove_location), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!getAlbum().getCurrentMedia().removeLocation())
+                        if (getAlbum().getCurrentMedia().removeLocation()) {
+                            Toast.makeText(PhotoPagerActivity.this, R.string.done, Toast.LENGTH_SHORT).show();
+                        } else {
                             Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_remove_location, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
