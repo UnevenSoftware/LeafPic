@@ -53,6 +53,7 @@
     <string name="use_as">Use as</string>
     <string name="edit">Edit</string>
     <string name="fix_date">Fix date</string>
+    <string name="remove_location">Remove location</string>
     <string name="rename">Rename</string>
     <string name="rename_album">Rename album</string>
     <string name="details">Details</string>
