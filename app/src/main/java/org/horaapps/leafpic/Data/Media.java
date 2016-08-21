@@ -242,27 +242,30 @@ public class Media implements Parcelable, Serializable {
         return false;
     }
     
-    public void removeLocationData() {
+    public boolean removeLocation() {
         ExifInterface exif = null;
         try { 
             exif = new ExifInterface(getPath()); 
         } catch (IOException ex) { 
-            return; 
+            return false; 
         }  
         
-        if (exit == null) return;
+        if (exit == null) return false;
         
         exif.setAttribute(ExifInterface.TAG_GPS_ALTITUDE, "0/0");
         exif.setAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF, "0");
         exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, "0/0,0/0000,00000000/00000");
-        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "0");)
-        exif.setAttribute((ExifInterface.TAG_GPS_LONGITUDE, "0/0,0/0,000000/00000 ");
+        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "0");
+        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, "0/0,0/0,000000/00000 ");
         exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "0");
+        
         try {  
-            exif.saveAttributes(); }
-        catch (IOException e) {
-            // cant save
+            exif.saveAttributes(); 
+        } catch (IOException e) {
+            return false;
         }
+        
+        return true;
     }
 
     private boolean hasPath() {
