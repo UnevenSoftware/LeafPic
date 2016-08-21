@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -20,7 +18,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
@@ -30,21 +27,22 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.yalantis.ucrop.UCrop;
+
 import org.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.Animations.DepthPageTransformer;
-import org.horaapps.leafpic.Data.Album;
-import org.horaapps.leafpic.Data.AlbumSettings;
 import org.horaapps.leafpic.Fragments.ImageFragment;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.Views.HackyViewPager;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.base.SortingMode;
+import org.horaapps.leafpic.data.base.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
@@ -52,15 +50,13 @@ import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.SecurityHelper;
 import org.horaapps.leafpic.util.StringUtils;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.util.Map;
 
 /**
  * Created by dnld on 18/02/16.
  */
+@SuppressWarnings("ResourceAsColor")
 public class PhotoPagerActivity extends SharedMediaActivity {
 
     private static final String ISLOCKED_ARG = "isLocked";
@@ -119,7 +115,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+        toolbar.setNavigationIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_arrow_left));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +146,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                     Intent intentOpenWith = new Intent(Intent.ACTION_VIEW);
                     intentOpenWith.setDataAndType(
                             getAlbum().getMedia().get(mViewPager.getCurrentItem()).getUri(),
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMIME());
+                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMimeType());
                     startActivity(intentOpenWith);
                 }
             }
@@ -246,12 +242,12 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_view_pager, menu);
 
-        menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
-        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
-        menu.findItem(R.id.action_rotate).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_rotate_right));
-        menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_rotate_right).color(getIconColor()));
-        menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_rotate_left).color(getIconColor()));
-        menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_replay).color(getIconColor()));
+        menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
+        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_share));
+        menu.findItem(R.id.action_rotate).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right));
+        menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right).color(getIconColor()));
+        menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_left).color(getIconColor()));
+        menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_replay).color(getIconColor()));
 
         return true;
     }
@@ -374,35 +370,35 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 break;
 
             case R.id.name_sort_action:
-                getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_NAME);
+                getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NAME);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_action:
-                getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_DATE);
+                getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.DATE);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_action:
-                getAlbum().setDefaultSortingMode(getApplicationContext(),AlbumSettings.SORT_BY_SIZE);
+                getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.SIZE);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.type_sort_action:
-                getAlbum().setDefaultSortingMode(getApplicationContext(), AlbumSettings.SORT_BY_TYPE);
+                getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.TYPE);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
             case R.id.ascending_sort_action:
-                getAlbum().setDefaultSortingAscending(getApplicationContext(), !item.isChecked());
+                getAlbum().setDefaultSortingAscending(getApplicationContext(), !item.isChecked() ? SortingOrder.ASCENDING : SortingOrder.DESCENDING);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
 
@@ -412,7 +408,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(getAlbum().getCurrentMedia().getMIME());
+                share.setType(getAlbum().getCurrentMedia().getMimeType());
                 share.putExtra(Intent.EXTRA_STREAM, getAlbum().getCurrentMedia().getUri());
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
@@ -428,14 +424,14 @@ public class PhotoPagerActivity extends SharedMediaActivity {
             case R.id.action_use_as:
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
                 intent.setDataAndType(
-                        getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMIME());
+                        getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMimeType());
                 startActivity(Intent.createChooser(intent, getString(R.string.use_as)));
                 return true;
 
             case R.id.action_open_with:
                 Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
                 intentopenWith.setDataAndType(
-                        getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMIME());
+                        getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMimeType());
                 startActivity(Intent.createChooser(intentopenWith, getString(R.string.open_with)));
                 break;
 
@@ -537,7 +533,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
             case R.id.action_edit_with:
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMIME());
+                editIntent.setDataAndType(getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMimeType());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(editIntent, "Edit with"));
                 break;
@@ -582,6 +578,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         getWindow().setAttributes(lp);
     }
 
+    @SuppressWarnings("ResourceAsColor")
     private UCrop.Options getUcropOptions() {
 
         UCrop.Options options = new UCrop.Options();

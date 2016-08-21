@@ -21,6 +21,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
@@ -28,10 +32,6 @@ import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.SecurityHelper;
 import org.horaapps.leafpic.util.ThemeHelper;
-
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -43,6 +43,7 @@ import static org.horaapps.leafpic.util.ThemeHelper.LIGHT_THEME;
 /**
  * Created by Jibo on 02/03/2016.
  */
+@SuppressWarnings("ResourceAsColor")
 public class SettingsActivity extends ThemedActivity {
 
     public static final int GOOGLE_MAPS_PROVIDER = 0;
@@ -61,6 +62,7 @@ public class SettingsActivity extends ThemedActivity {
     private TextView txtTT;
     private TextView txtPT;
     private TextView txtVT;
+    private TextView txtAT;
 
     private SwitchCompat swNavBar;
     private SwitchCompat swStatusBar;
@@ -89,6 +91,7 @@ public class SettingsActivity extends ThemedActivity {
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
         txtVT = (TextView) findViewById(R.id.video_setting_title);
+        txtAT = (TextView) findViewById(R.id.advanced_setting_title);
 
         scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
 
@@ -719,6 +722,7 @@ public class SettingsActivity extends ThemedActivity {
         txtTT.setTextColor(color);
         txtPT.setTextColor(color);
         txtVT.setTextColor(color);
+        txtAT.setTextColor(color);
 
         updateSwitchColor(swDelayFullImage, color);
         updateSwitchColor(swNavBar, color);
@@ -750,12 +754,13 @@ public class SettingsActivity extends ThemedActivity {
         ((CardView) findViewById(org.horaapps.leafpic.R.id.theme_setting_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(org.horaapps.leafpic.R.id.preview_picture_setting_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(org.horaapps.leafpic.R.id.video_setting_card)).setCardBackgroundColor(color);
+        ((CardView) findViewById(R.id.advanced_setting_card)).setCardBackgroundColor(color);
 
         toolbar.setBackgroundColor(getPrimaryColor());
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(
                 new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                        .icon(CommunityMaterial.Icon.cmd_arrow_left)
                         .color(Color.WHITE)
                         .sizeDp(19));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

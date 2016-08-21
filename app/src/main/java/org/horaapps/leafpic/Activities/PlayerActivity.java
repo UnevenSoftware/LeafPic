@@ -61,9 +61,9 @@ import com.google.android.exoplayer.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer.util.Util;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
-import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.player.DemoPlayer;
 import org.horaapps.leafpic.player.ExtractorRendererBuilder;
 import org.horaapps.leafpic.player.HlsRendererBuilder;
@@ -181,7 +181,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
       case org.horaapps.leafpic.R.id.action_share:
         Intent share = new Intent(Intent.ACTION_SEND);
         Media m = new Media(ContentHelper.getMediaPath(getApplicationContext() ,getIntent().getData()));
-        share.setType(m.getMIME());
+        share.setType(m.getMimeType());
         share.putExtra(Intent.EXTRA_STREAM, getIntent().getData());
         startActivity(Intent.createChooser(share, getString(org.horaapps.leafpic.R.string.send_to)));
         return true;
@@ -249,7 +249,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
       }
     });
 
-    root.setBackgroundColor(org.horaapps.leafpic.R.color.md_black_1000);
+    root.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
 
     shutterView = findViewById(org.horaapps.leafpic.R.id.shutter);
 

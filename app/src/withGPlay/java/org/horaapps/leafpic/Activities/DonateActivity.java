@@ -2,12 +2,8 @@ package org.horaapps.leafpic.Activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,18 +14,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SecretConstants;
 import org.horaapps.leafpic.Views.ThemedActivity;
-import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.IabHelper;
 import org.horaapps.leafpic.util.IabResult;
 import org.horaapps.leafpic.util.Purchase;
 import org.horaapps.leafpic.util.StringUtils;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 /**
  * Created by Jibo on 02/03/2016.
@@ -97,7 +93,7 @@ public class DonateActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(
                 new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_arrow_back)
+                        .icon(CommunityMaterial.Icon.cmd_arrow_left)
                         .color(Color.WHITE)
                         .sizeDp(19));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

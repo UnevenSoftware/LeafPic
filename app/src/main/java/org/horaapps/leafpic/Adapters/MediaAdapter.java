@@ -13,13 +13,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.koushikdutta.ion.Ion;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.Data.Media;
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ThemeHelper;
-import com.koushikdutta.ion.Ion;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
@@ -88,7 +88,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             holder.path.setBackgroundColor(
                     ColorPalette.getTransparentColor(
                             ContextCompat.getColor(holder.path.getContext(), org.horaapps.leafpic.R.color.md_black_1000), 100));
-            holder.icon.setIcon(GoogleMaterial.Icon.gmd_play_circle_filled);
+            holder.icon.setIcon(CommunityMaterial.Icon.cmd_play_circle);
         } else {
             holder.icon.setVisibility(View.GONE);
             holder.path.setVisibility(View.GONE);
@@ -96,7 +96,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         holder.path.setTag(position);
 
         if (f.isSelected()) {
-            holder.icon.setIcon(GoogleMaterial.Icon.gmd_done);
+            holder.icon.setIcon(CommunityMaterial.Icon.cmd_check);
             holder.icon.setVisibility(View.VISIBLE);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
             holder.layout.setPadding(15,15,15,15);

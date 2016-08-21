@@ -16,10 +16,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.StringSignature;
 
-import org.horaapps.leafpic.Data.Album;
-import org.horaapps.leafpic.Data.Media;
+import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .priority(Priority.HIGH)
-                .signature(new StringSignature(f.getPath() +"-"+ f.getDateModified()))
+                .signature(f.getSignature())
                 .centerCrop()
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
                 .placeholder(placeholder)
@@ -101,10 +101,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.layout.setBackgroundColor(theme.getCardBackgroundColor());
         }
 
-        // TODO 09/08/16 Html.fromHtml(String) is deprecated
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " +a.getContentDescription(c) + "</font>";
+                "color='" + textColor + "'> " + c.getString(R.string.media) + "</font>";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             holder.name.setText(Html.fromHtml(albumNameHtml, Html.FROM_HTML_MODE_LEGACY));

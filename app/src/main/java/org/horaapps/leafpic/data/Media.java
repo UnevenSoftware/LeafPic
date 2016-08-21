@@ -1,17 +1,14 @@
-package org.horaapps.leafpic.Data;
+package org.horaapps.leafpic.data;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.webkit.MimeTypeMap;
 
 import com.bumptech.glide.signature.StringSignature;
 import com.drew.imaging.ImageMetadataReader;
@@ -23,8 +20,8 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.data.base.MediaDetailsMap;
 import org.horaapps.leafpic.util.StringUtils;
-
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
@@ -38,12 +35,11 @@ import java.util.Date;
  */
 public class Media implements Parcelable, Serializable {
 
-
     private String path = null;
     private long dateModified = -1;
-    private String mime = null;
+    private String mimeType = null;
+
     private String uri = null;
-    private long id;
 
     private long size = 0;
     private boolean selected = false;
@@ -54,34 +50,30 @@ public class Media implements Parcelable, Serializable {
     public Media(String path, long dateModified) {
         this.path = path;
         this.dateModified = dateModified;
-        setMIME();
+        mimeType = StringUtils.getMimeType(path);
     }
 
     public Media(File file) {
-        this.path = file.getAbsolutePath();
-        this.dateModified = file.lastModified();
+        this(file.getPath(), file.lastModified());
         this.size = file.length();
-        setMIME();
+        mimeType = StringUtils.getMimeType(path);
     }
 
     public Media(String path) {
-        this.path = path;
-        setMIME();
+        this(path, -1);
     }
 
     public Media(Context context, Uri mediaUri) {
         this.uri = mediaUri.toString();
         this.path = null;
-        setMIME(context.getContentResolver().getType(getUri()));
+        mimeType = context.getContentResolver().getType(getUri());
     }
 
     public Media(@NotNull Cursor cur) {
         this.path = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.DATA));
         this.size = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.SIZE));
         this.dateModified = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
-        setMIME(cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
-        this.id = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media._ID));
-        this.uri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), getId()).toString();
+        mimeType = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
     }
 
     public void setUri(String uriString) {
@@ -92,81 +84,63 @@ public class Media implements Parcelable, Serializable {
         this.path = path;
     }
 
-    private long getId() {
-        return id;
+    public String getMimeType() {
+        return mimeType;
     }
 
-    public String getMIME() {
-        return mime;
-    }
-
-    private void setMIME() {
-        String extension = path.substring(path.lastIndexOf('.')+1);
-        setMIME(MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase()));
-    }
-
-    public StringSignature getSignature() {
-        return new StringSignature(getPath() + "-" + getDateModified());
-    }
-
-    public StringSignature getSignature(String salt) {
-        return new StringSignature(getPath() + "-" + getDateModified() + salt );
-    }
-
-    private void setMIME(String mime) {
-        this.mime = (mime != null) ? mime : "unknown";
+    public boolean isSelected() {
+        return selected;
     }
 
     void setSelected(boolean selected) {
         this.selected = selected;
     }
 
-    public boolean isGif() { return getMIME().endsWith("gif"); }
+    public boolean isGif() { return getMimeType().endsWith("gif"); }
 
-    public boolean isImage() { return getMIME().startsWith("image"); }
+    public boolean isImage() { return getMimeType().startsWith("image"); }
 
-    public boolean isVideo() { return getMIME().startsWith("video"); }
+    public boolean isVideo() { return getMimeType().startsWith("video"); }
 
     public Uri getUri() {
         return hasUri() ? Uri.parse(uri) : Uri.fromFile(new File(path));
     }
 
-    @TestOnly
-    public byte[] getThumbnail() {
-
-        ExifInterface exif;
-        try {
-            exif = new ExifInterface(getPath());
-        } catch (IOException e) {
-            return null;
-        }
-        if (exif.hasThumbnail())
-            return exif.getThumbnail();
-        return null;
-
-        // NOTE: ExifInterface is faster than metadata-extractor to getValue the thumbnail data
-        /*try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
-            ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
-            if (thumbnailDirectory.hasThumbnailData())
-                return thumbnailDirectory.getThumbnailData();
-        } catch (Exception e) { return null; }*/
-    }
-
-    @TestOnly
-    public String getThumbnail(Context context) {
-        Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
-                context.getContentResolver(), id,
-                MediaStore.Images.Thumbnails.MINI_KIND,
-                new String[]{ MediaStore.Images.Thumbnails.DATA } );
-        if(cursor.moveToFirst())
-            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
-        return null;
-    }
-
-
     public String getName() {
         return StringUtils.getPhotoNameByPath(path);
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    private boolean hasUri() {
+        return uri != null;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Long getDateModified() {
+        return dateModified;
+    }
+
+
+    public Bitmap getBitmap(){
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(path,bmOptions);
+        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
+        return bitmap;
+    }
+
+    public StringSignature getSignature() {
+        return new StringSignature(getPath() + "-" + getDateModified());
+    }
+
+    //<editor-fold desc="Exif & More">
+    public GeoLocation getGeoLocation()  {
+        return metadata.getLocation();
     }
 
     public MediaDetailsMap<String, String> getAllDetails() {
@@ -191,8 +165,8 @@ public class Media implements Parcelable, Serializable {
     public MediaDetailsMap<String, String> getMainDetails(Context context){
         metadata = new MetadataItem(new File(getPath()));
         MediaDetailsMap<String, String> details = new MediaDetailsMap<String, String>();
-        details.put(context.getString(R.string.path), getDisplayName());
-        details.put(context.getString(R.string.type), getMIME());
+        details.put(context.getString(R.string.path), getDisplayPath());
+        details.put(context.getString(R.string.type), getMimeType());
         String tmp;
         if ((tmp = metadata.getResolution()) != null)
             details.put(context.getString(R.string.resolution), tmp);
@@ -213,13 +187,6 @@ public class Media implements Parcelable, Serializable {
             details.put(context.getString(R.string.location), location.toDMSString());
 
         return details;
-    }
-    public long getSize() {
-        return size;
-    }
-
-    public GeoLocation getGeoLocation()  {
-        return metadata.getLocation();
     }
 
     public boolean setOrientation(int orientation) {
@@ -242,21 +209,7 @@ public class Media implements Parcelable, Serializable {
         return false;
     }
 
-    private boolean hasPath() {
-        return path != null;
-    }
-
-    private boolean hasUri() {
-        return uri != null;
-    }
-
-
     private long getDateTaken() {
-        /*if (metadataMap.containsKey(TAG_DATE_TAKEN))
-            try { return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(metadataMap.getValue(TAG_DATE_TAKEN).toString()).getTime(); }
-            catch (ParseException e) { return -1; }
-            catch (NullPointerException e) { return -1; }
-        return -1;*/
         // TODO: 16/08/16 improved
         Date dateOriginal = metadata.getDateOriginal();
         if (dateOriginal != null) return metadata.getDateOriginal().getTime();
@@ -274,34 +227,53 @@ public class Media implements Parcelable, Serializable {
         }
         return false;
     }
-
-
     private String getHumanReadableSize() {
         return StringUtils.humanReadableByteCount(size, true);
     }
-
-    public String getPath() {
-        return path;
-    }
-
-    private String getDisplayName() {
+    private String getDisplayPath() {
         return  hasPath() ? getPath() : getUri().getEncodedPath();
     }
+    private boolean hasPath() {
+        return path != null;
+    }
+    //</editor-fold>
 
-    public long getDateModified() {
-        return dateModified;
+    //<editor-fold desc="Thumbnail Tests">
+    @TestOnly
+    public byte[] getThumbnail() {
+
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(getPath());
+        } catch (IOException e) {
+            return null;
+        }
+        if (exif.hasThumbnail())
+            return exif.getThumbnail();
+        return null;
+
+        // NOTE: ExifInterface is faster than metadata-extractor to getValue the thumbnail data
+        /*try {
+            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
+            ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
+            if (thumbnailDirectory.hasThumbnailData())
+                return thumbnailDirectory.getThumbnailData();
+        } catch (Exception e) { return null; }*/
     }
 
-    public boolean isSelected() {
-        return selected;
+    @TestOnly
+    public String getThumbnail(Context context) {
+        /*Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                context.getContentResolver(), id,
+                MediaStore.Images.Thumbnails.MINI_KIND,
+                new String[]{ MediaStore.Images.Thumbnails.DATA } );
+        if(cursor.moveToFirst())
+            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+        return null;*/
+        return null;
     }
+    //</editor-fold>
 
-    public Bitmap getBitmap(){
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(path,bmOptions);
-        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
-        return bitmap;
-    }
 
     @Override
     public int describeContents() {
@@ -312,8 +284,7 @@ public class Media implements Parcelable, Serializable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.path);
         dest.writeLong(this.dateModified);
-        dest.writeString(this.mime);
-        dest.writeLong(this.id);
+        dest.writeString(this.mimeType);
         dest.writeLong(this.size);
         dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
     }
@@ -321,8 +292,7 @@ public class Media implements Parcelable, Serializable {
     protected Media(Parcel in) {
         this.path = in.readString();
         this.dateModified = in.readLong();
-        this.mime = in.readString();
-        this.id = in.readLong();
+        this.mimeType = in.readString();
         this.size = in.readLong();
         this.selected = in.readByte() != 0;
     }

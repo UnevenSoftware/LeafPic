@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import org.horaapps.leafpic.Data.Album;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
+import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -85,9 +85,11 @@ public class SplashScreen extends SharedMediaActivity {
                 Bundle data = getIntent().getExtras();
                 if (data != null) {
                     String ab = data.getString("albumPath");
+
                     if (ab != null) {
                         File dir = new File(ab);
-                        album = new Album(dir.getAbsolutePath(),dir.getName());
+                        // TODO: 19/08/16 look for id
+                        album = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
                         new PrefetchPhotosData().execute();
                     }
                 } else StringUtils.showToast(getApplicationContext(), "Album not found");

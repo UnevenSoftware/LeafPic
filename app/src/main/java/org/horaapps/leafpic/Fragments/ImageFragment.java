@@ -10,9 +10,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 
-import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.Activities.PhotoPagerActivity;
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.data.Media;
 
 import java.util.Date;
 

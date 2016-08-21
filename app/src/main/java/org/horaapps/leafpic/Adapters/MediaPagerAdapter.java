@@ -8,10 +8,10 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.horaapps.leafpic.Data.Media;
 import org.horaapps.leafpic.Fragments.GifFragment;
 import org.horaapps.leafpic.Fragments.ImageFragment;
 import org.horaapps.leafpic.Fragments.VideoFragment;
+import org.horaapps.leafpic.data.Media;
 
 import java.util.ArrayList;
 

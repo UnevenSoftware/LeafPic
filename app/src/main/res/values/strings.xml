@@ -311,5 +311,6 @@
     <string name="multi_column_sub">Chose how many columns you want for your folders and media
     </string>
     <string name="columns">columns</string>
+    <string name="advanced">Advanced</string>
 
 </resources>

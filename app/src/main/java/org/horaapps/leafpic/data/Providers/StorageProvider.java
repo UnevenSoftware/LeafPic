@@ -1,13 +1,13 @@
-package org.horaapps.leafpic.Data.Providers;
+package org.horaapps.leafpic.data.Providers;
 
 import android.content.Context;
 import android.os.Environment;
 
-import org.horaapps.leafpic.Data.Album;
-import org.horaapps.leafpic.Data.CustomAlbumsHandler;
-import org.horaapps.leafpic.Data.FoldersFileFilter;
-import org.horaapps.leafpic.Data.ImageFileFilter;
-import org.horaapps.leafpic.Data.Media;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.CustomAlbumsHelper;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.base.FoldersFileFilter;
+import org.horaapps.leafpic.data.base.ImageFileFilter;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
@@ -23,26 +23,25 @@ public class StorageProvider {
     private HashSet<File> roots;
     private ArrayList<File> excludedFolders;
     private boolean includeVideo = true;
-    private CustomAlbumsHandler customAlbumsHandler;
-
+    private CustomAlbumsHelper customAlbumsHelper;
     private PreferenceUtil SP;
 
     public StorageProvider(Context context) {
         SP = PreferenceUtil.getInstance(context);
-        customAlbumsHandler = new CustomAlbumsHandler(context);
+        customAlbumsHelper = CustomAlbumsHelper.getInstance(context);
         roots = getRoots(context);
         excludedFolders = getExcludedFolders(context);
     }
 
-    public ArrayList<Album> getAlbums(boolean hidden) {
+    public ArrayList<Album> getAlbums(Context context, boolean hidden) {
         ArrayList<Album> list = new ArrayList<Album>();
         includeVideo = SP.getBoolean("set_include_video", false);
         if (hidden)
             for (File storage : roots)
-                fetchRecursivelyHiddenFolder(storage, list, storage.getAbsolutePath());
+                fetchRecursivelyHiddenFolder(context, storage, list);
         else
             for (File storage : roots)
-                fetchRecursivelyFolder(storage, list, storage.getAbsolutePath());
+                fetchRecursivelyFolder(context, storage, list);
         return list;
     }
 
@@ -51,48 +50,48 @@ public class StorageProvider {
         //forced excluded folder
         list.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
 
-        CustomAlbumsHandler handler = new CustomAlbumsHandler(context);
+        CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
         list.addAll(handler.getExcludedFolders());
         return list;
     }
 
-    private void fetchRecursivelyHiddenFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
+    private void fetchRecursivelyHiddenFolder(Context context, File dir, ArrayList<Album> albumArrayList) {
         if (!excludedFolders.contains(dir)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             if (folders != null) {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedFolders.contains(temp) && (nomedia.exists() || temp.isHidden()))
-                        checkAndAddFolder(temp, albumArrayList, rootExternalStorage);
+                        checkAndAddFolder(context, temp, albumArrayList);
 
-                    fetchRecursivelyHiddenFolder(temp, albumArrayList, rootExternalStorage);
+                    fetchRecursivelyHiddenFolder(context, temp, albumArrayList);
                 }
             }
         }
     }
 
-    private void fetchRecursivelyFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
+    private void fetchRecursivelyFolder(Context context, File dir, ArrayList<Album> albumArrayList) {
         if (!excludedFolders.contains(dir)) {
-            checkAndAddFolder(dir, albumArrayList, rootExternalStorage);
+            checkAndAddFolder(context, dir, albumArrayList);
             File[] children = dir.listFiles(new FoldersFileFilter());
             if (children != null) {
                 for (File temp : children) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!excludedFolders.contains(temp) && !temp.isHidden() && !nomedia.exists()) {
                         //not excluded/hidden folder
-                        fetchRecursivelyFolder(temp, albumArrayList, rootExternalStorage);
+                        fetchRecursivelyFolder(context, temp, albumArrayList);
                     }
                 }
             }
         }
     }
 
-    private void checkAndAddFolder(File dir, ArrayList<Album> albumArrayList, String rootExternalStorage) {
+    private void checkAndAddFolder(Context context, File dir, ArrayList<Album> albumArrayList) {
         File[] files = dir.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
-            Album asd = new Album(dir.getAbsolutePath(), dir.getName(), files.length, rootExternalStorage);
-            asd.setCoverPath(customAlbumsHandler.getCoverPathAlbum(asd.getPath(), asd.getId()));
+            Album asd = new Album(context, dir.getAbsolutePath(), -1, dir.getName(), files.length);
+            asd.setCoverPath(customAlbumsHelper.getCoverPathAlbum(asd.getPath(), asd.getId()));
 
             long lastMod = Long.MIN_VALUE;
             File choice = null;
@@ -126,9 +125,9 @@ public class StorageProvider {
     }
 
 
-    public static ArrayList<Media> getMedia(String path, int filter, boolean includeVideo) {
+    public static ArrayList<Media> getMedia(String path, boolean includeVideo) {
         ArrayList<Media> list = new ArrayList<Media>();
-        File[] images = new File(path).listFiles(new ImageFileFilter(filter, includeVideo));
+        File[] images = new File(path).listFiles(new ImageFileFilter(includeVideo));
         for (File image : images)
             list.add(new Media(image));
         return list;

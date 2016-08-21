@@ -20,11 +20,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
-import org.horaapps.leafpic.Data.Media;
+
 import org.horaapps.leafpic.Activities.SettingsActivity;
-import org.horaapps.leafpic.Data.MediaDetailsMap;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.base.MediaDetailsMap;
 
 import java.lang.reflect.Field;
 import java.util.Locale;

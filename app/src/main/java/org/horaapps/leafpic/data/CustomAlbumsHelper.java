@@ -1,18 +1,16 @@
-package org.horaapps.leafpic.Data;
+package org.horaapps.leafpic.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
-import org.horaapps.leafpic.util.PermissionUtils;
-import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.data.base.SortingMode;
+import org.horaapps.leafpic.data.base.SortingOrder;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,23 +24,35 @@ import java.util.Set;
  */
 
 
-public class CustomAlbumsHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 11;
-    private static final String DATABASE_NAME = "CustomAlbums";
+public class CustomAlbumsHelper extends SQLiteOpenHelper {
+    private static final int DATABASE_VERSION = 13;
+    private static final String DATABASE_NAME = "album_settings.db";
 
     private static final String TABLE_ALBUMS = "albums";
     private static final String ALBUM_PATH = "path";
     private static final String ALBUM_ID = "id";
     private static final String ALBUM_EXCLUDED = "excluded";
-    private static final String ALBUM_COVER = "cover_path";
-    private static final String ALBUM_DEFAULT_SORTMODE = "sort_mode";
-    private static final String ALBUM_DEFAULT_SORT_ASCENDING = "sort_ascending";
-    private static final String ALBUM_COLUMN_COUNT = "column_count";
+    private static final String ALBUM_COVER_PATH = "cover_path";
+    private static final String ALBUM_SORTING_MODE = "sorting_mode";
+    private static final String ALBUM_SORTING_ORDER = "sort_ascending";
+    private static final String ALBUM_COLUMN_COUNT = "sorting_order";
 
     private static final String TABLE_MEDIA = "media";
     private static final String EXCLUDED_MEDIA = "excluded";
 
-    public CustomAlbumsHandler(Context ctx) {
+    private static CustomAlbumsHelper instance;
+
+    public static CustomAlbumsHelper getInstance(Context context) {
+        if (instance == null) {
+            synchronized (CustomAlbumsHelper.class) {
+                if (instance == null)
+                    instance = new CustomAlbumsHelper(context);
+            }
+        }
+        return instance;
+    }
+
+    private CustomAlbumsHelper(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -61,58 +71,51 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
 
     private void createAlbumsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
-                TABLE_ALBUMS + "(" +
-                ALBUM_PATH + " TEXT," +
-                ALBUM_ID + " INTEGER," +
-                ALBUM_EXCLUDED + " INTEGER," +
-                ALBUM_COVER + " TEXT, " +
-                ALBUM_DEFAULT_SORTMODE + " INTEGER, " +
-                ALBUM_DEFAULT_SORT_ASCENDING + " INTEGER, " +
-                ALBUM_COLUMN_COUNT + " TEXT)");
+                           TABLE_ALBUMS + "(" +
+                           ALBUM_PATH + " TEXT," +
+                           ALBUM_ID + " INTEGER," +
+                           ALBUM_EXCLUDED + " INTEGER," +
+                           ALBUM_COVER_PATH + " TEXT, " +
+                           ALBUM_SORTING_MODE + " INTEGER, " +
+                           ALBUM_SORTING_ORDER + " INTEGER, " +
+                           ALBUM_COLUMN_COUNT + " TEXT)");
     }
 
     private void createMediaTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +
-                TABLE_MEDIA + "(" +
-                ALBUM_ID + " INTEGER," +
-                ALBUM_PATH + " TEXT," +
-                EXCLUDED_MEDIA + " TEXT," +
-                "PRIMARY KEY (" + ALBUM_ID + "))");
+                           TABLE_MEDIA + "(" +
+                           ALBUM_ID + " INTEGER," +
+                           ALBUM_PATH + " TEXT," +
+                           EXCLUDED_MEDIA + " TEXT)");
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALBUMS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDIA);
         onCreate(db);
     }
 
-    private void checkAndCreateAlbum(String path, long id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    private void checkAndCreateAlbum(SQLiteDatabase db, String path, long id) {
 
         Cursor cursor = db.query(TABLE_ALBUMS, null,  ALBUM_PATH+"=? AND "+ALBUM_ID+"=?",
                 new String[]{ path, String.valueOf(id) }, null, null, null);
+
         if (cursor.getCount() == 0) {
             ContentValues values = new ContentValues();
             values.put(ALBUM_ID, id);
             values.put(ALBUM_PATH, path);
+            values.put(ALBUM_SORTING_MODE, SortingMode.DATE.getValue());
+            values.put(ALBUM_SORTING_ORDER, SortingOrder.DESCENDING.getValue());
             values.put(ALBUM_EXCLUDED, 0);
             db.insert(TABLE_ALBUMS, null, values);
         }
         cursor.close();
 
-        // Check to see if the media table entry exists
-        cursor = null;
-        try {
-            cursor = db.query(TABLE_MEDIA, null, ALBUM_PATH + "=? AND " + ALBUM_ID + "=?",
-                    new String[]{path, String.valueOf(id)}, null, null, null);
-        }
-        catch (SQLiteException ex) {
-            this.createMediaTable(db);
 
-            cursor = db.query(TABLE_MEDIA, null, ALBUM_PATH + "=? AND " + ALBUM_ID + "=?",
-                    new String[]{path, String.valueOf(id)}, null, null, null);
-        }
+        cursor = db.query(TABLE_MEDIA, null, ALBUM_PATH + "=? AND " + ALBUM_ID + "=?",
+                new String[]{ path, String.valueOf(id)}, null, null, null);
 
         if (cursor.getCount() == 0) {
             ContentValues values = new ContentValues();
@@ -123,20 +126,20 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        db.close();
     }
 
     AlbumSettings getSettings(String path, long id) {
-        checkAndCreateAlbum(path, id);
-        AlbumSettings s = new AlbumSettings();
         SQLiteDatabase db = this.getWritableDatabase();
+        checkAndCreateAlbum(db, path, id);
 
-        String[] selection = new  String[] { ALBUM_COVER, ALBUM_DEFAULT_SORTMODE, ALBUM_DEFAULT_SORT_ASCENDING};
+        AlbumSettings s = null;
+
+        String[] selection = new  String[] {ALBUM_COVER_PATH, ALBUM_SORTING_MODE, ALBUM_SORTING_ORDER };
         Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?",
                 new String[]{ path, String.valueOf(id) }, null, null, null);
 
         if (cursor.moveToFirst())
-            s = new AlbumSettings(cursor.getString(0), cursor.getInt(1), cursor.getInt(2) == 1);
+            s = new AlbumSettings(path, id, cursor.getString(0), cursor.getInt(1), cursor.getInt(2));
         cursor.close();
         db.close();
         return s;
@@ -175,15 +178,15 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     }
 
     public void excludeAlbum(String path, long id) {
-        checkAndCreateAlbum(path, id);
         SQLiteDatabase db = this.getWritableDatabase();
+        checkAndCreateAlbum(db, path, id);
         ContentValues values = new ContentValues();
         values.put(ALBUM_EXCLUDED, 1);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, id+"" });
         db.close();
     }
 
-    public void unexcludePhoto(String photoPath, String albumPath, long albumId) {
+    public void unExcludePhoto(String photoPath, String albumPath, long albumId) {
         Set<String> excludedPhotos = this.getExcludedPhotos(albumPath, albumId);
         if (!excludedPhotos.contains(photoPath))
             return;
@@ -211,7 +214,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
                     try {
                         String mediaPath = excludedMedia.getString(i);
                         SimpleMediaIdentifier newIdentifier = new SimpleMediaIdentifier(albumPath,
-                                albumId, mediaPath);
+                                                                                               albumId, mediaPath);
                         mediaList.add(newIdentifier);
 
                     } catch (JSONException ignored) { }
@@ -227,9 +230,9 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     }
 
     Set<String> getExcludedPhotos(String albumPath, long albumId) {
-        checkAndCreateAlbum(albumPath, albumId);
-
         SQLiteDatabase db = this.getWritableDatabase();
+        checkAndCreateAlbum(db, albumPath, albumId);
+
         Cursor cursor = db.query(TABLE_MEDIA, new String[] {EXCLUDED_MEDIA},
                 ALBUM_PATH + "=? AND " + ALBUM_ID + "=?", new String[] {albumPath, String.valueOf(albumId)}, null, null, null);
 
@@ -294,7 +297,7 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
         String s = null;
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String[] selection = new  String[] { ALBUM_COVER };
+        String[] selection = new  String[] {ALBUM_COVER_PATH};
 
         Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?",
                 new String[]{ path, String.valueOf(id) }, null, null, null);
@@ -307,32 +310,29 @@ public class CustomAlbumsHandler extends SQLiteOpenHelper {
     }
 
     void setAlbumPhotoPreview(String path, long id, String mediaPath) {
-        checkAndCreateAlbum(path, id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ALBUM_COVER, mediaPath);
+        values.put(ALBUM_COVER_PATH, mediaPath);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, id+"" });
         db.close();
     }
 
-    public void clearAlbumPreview(String path, long id) {
+    void clearAlbumPreview(String path, long id) {
         setAlbumPhotoPreview(path, id, null);
     }
 
     void setAlbumSortingMode(String path, long id, int column) {
-        checkAndCreateAlbum(path, id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ALBUM_DEFAULT_SORTMODE, column);
+        values.put(ALBUM_SORTING_MODE, column);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, String.valueOf(id) });
         db.close();
     }
 
-    void setAlbumSortingAscending(String path, long id, boolean asc) {
-        checkAndCreateAlbum(path, id);
+    void setAlbumSortingOrder(String path, long id, int sortingOrder) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ALBUM_DEFAULT_SORT_ASCENDING, asc ? 1 : 0);
+        values.put(ALBUM_SORTING_ORDER, sortingOrder);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, String.valueOf(id) });
         db.close();
     }

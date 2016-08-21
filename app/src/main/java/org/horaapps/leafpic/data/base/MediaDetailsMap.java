@@ -1,10 +1,6 @@
-package org.horaapps.leafpic.Data;
-
-import android.support.annotation.NonNull;
+package org.horaapps.leafpic.data.base;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**

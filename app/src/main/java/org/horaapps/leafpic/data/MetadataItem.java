@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.Data;
+package org.horaapps.leafpic.data;
 
 import android.util.Log;
 
@@ -8,25 +8,13 @@ import com.drew.lang.GeoLocation;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
-import com.drew.metadata.Tag;
-import com.drew.metadata.adobe.AdobeJpegDirectory;
 import com.drew.metadata.bmp.BmpHeaderDirectory;
-import com.drew.metadata.exif.ExifDescriptorBase;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
-import com.drew.metadata.file.FileMetadataDirectory;
 import com.drew.metadata.gif.GifHeaderDirectory;
-import com.drew.metadata.icc.IccDirectory;
-import com.drew.metadata.iptc.IptcDirectory;
-import com.drew.metadata.jfif.JfifDirectory;
-import com.drew.metadata.jfxx.JfxxDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
-import com.drew.metadata.pcx.PcxDirectory;
-import com.drew.metadata.photoshop.DuckyDirectory;
-import com.drew.metadata.photoshop.PhotoshopDirectory;
-import com.drew.metadata.photoshop.PsdHeaderDescriptor;
 import com.drew.metadata.png.PngDirectory;
 import com.drew.metadata.webp.WebpDirectory;
 import com.drew.metadata.xmp.XmpDirectory;
@@ -34,7 +22,6 @@ import com.drew.metadata.xmp.XmpDirectory;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +35,7 @@ import java.util.TimeZone;
 
 
 
-public class MetadataItem {
+class MetadataItem {
 
   private static Set<Class<?>> usefullDirectories = new HashSet<Class<?>>();
 
@@ -61,7 +48,6 @@ public class MetadataItem {
     usefullDirectories.add(ExifIFD0Directory.class);
     usefullDirectories.add(ExifSubIFDDirectory.class);
     usefullDirectories.add(BmpHeaderDirectory.class);
-
     usefullDirectories.add(GifHeaderDirectory.class);
     usefullDirectories.add(JpegDirectory.class);
     usefullDirectories.add(PngDirectory.class);
@@ -85,9 +71,8 @@ public class MetadataItem {
   MetadataItem(File file) {
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
-
+      // TODO: 21/08/16 it sucks a bit
       for(Directory directory : metadata.getDirectories()) {
-
         if (usefullDirectories.contains(directory.getClass())) {
           if (directory.getClass().equals(ExifSubIFDDirectory.class) || directory.getClass().equals(ExifIFD0Directory.class)) {
             ExifDirectoryBase d = (ExifDirectoryBase) directory;
@@ -177,11 +162,11 @@ public class MetadataItem {
     }
   }
 
-  public Date getDateOriginal() {
+  Date getDateOriginal() {
     return dateOriginal;
   }
 
-  public void setDateOriginal(Date dateOriginal) {
+  private void setDateOriginal(Date dateOriginal) {
     this.dateOriginal = dateOriginal;
   }
   public GeoLocation getLocation() {
@@ -192,11 +177,11 @@ public class MetadataItem {
     this.location = location;
   }
 
-  public int getWidth() {
+  private int getWidth() {
     return width;
   }
 
-  public void setWidth(int width) {
+  private void setWidth(int width) {
     this.width = width;
   }
 
@@ -210,7 +195,7 @@ public class MetadataItem {
     return null;
   }
 
-  public String getCameraInfo() {
+  String getCameraInfo() {
 
     if (make != null && model != null) {
       if (model.contains(make)) return model;
@@ -219,7 +204,7 @@ public class MetadataItem {
     return null;
   }
 
-  public String getExifInfo() {
+  String getExifInfo() {
     StringBuilder result = new StringBuilder();
     String asd;
     if((asd = getfNumber()) != null) result.append(asd).append(" ");
@@ -240,41 +225,37 @@ public class MetadataItem {
     this.make = make;
   }
 
-  public String getModel() {
-    return model;
-  }
-
-  public void setModel(String model) {
+  private void setModel(String model) {
     this.model = model;
   }
 
-  public String getfNumber() {
+  private String getfNumber() {
     if(fNumber != null)
       return String.format("f/%s", fNumber);
     return null;
   }
 
-  public void setfNumber(String fNumber) {
+  private void setfNumber(String fNumber) {
     this.fNumber = fNumber;
   }
 
-  public String getIso() {
+  private String getIso() {
     if(iso != null)
       return String.format("ISO-%s", iso);
     return null;
   }
 
-  public void setIso(String iso) {
+  private void setIso(String iso) {
     this.iso = iso;
   }
 
-  public String getExposureTime() {
+  private String getExposureTime() {
     if(exposureTime != null)
       return String.format("%ss", exposureTime);
     return null;
   }
 
-  public void setExposureTime(String exposureTime) {
+  private void setExposureTime(String exposureTime) {
     this.exposureTime = exposureTime;
   }
 }

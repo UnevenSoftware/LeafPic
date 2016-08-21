@@ -23,13 +23,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.horaapps.leafpic.Data.Album;
-import org.horaapps.leafpic.Data.FoldersFileFilter;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.base.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ThemeHelper;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -191,14 +192,14 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 	setExploreMode(enabled);
 	if(enabled) {
 	  displayContentFolder(Environment.getExternalStorageDirectory());
-	  imgExploreMode.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_folder));
+	  imgExploreMode.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_folder));
 	  exploreModePanel.setVisibility(View.VISIBLE);
 	} else {
 	  currentFolderPath.setText(R.string.local_folder);
 	  for (Album album : ((MyApplication) getActivity().getApplicationContext()).getAlbums().dispAlbums) {
 		folders.add(new File(album.getPath()));
 	  }
-	  imgExploreMode.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_explore));
+	  imgExploreMode.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_compass_outline));
 	  exploreModePanel.setVisibility(View.GONE);
 	}
 	adapter.notifyDataSetChanged();
@@ -237,12 +238,12 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 	  String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
 	  holder.folderCount.setText(Html.fromHtml("<b><font color='" + hexAccentColor + "'>" + count + "</font></b>" + "<font " + "color='" + theme.getSubTextColor() + "'> Media</font>"));
 	  holder.imgFolder.setColor(theme.getIconColor());
-	  holder.imgFolder.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_folder));
+	  holder.imgFolder.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_folder));
 
 	  if(canGoBack() && position == 0) { // go to parent folder
 		holder.folderName.setText("..");
 		holder.folderCount.setText(Html.fromHtml("<font color='" + theme.getSubTextColor() + "'>Go to parent</font>"));
-		holder.imgFolder.setIcon(theme.getIcon(GoogleMaterial.Icon.gmd_keyboard_arrow_up));
+		holder.imgFolder.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_arrow_up));
 	  }
 	}
 

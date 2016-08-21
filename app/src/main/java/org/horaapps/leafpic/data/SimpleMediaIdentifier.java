@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.Data;
+package org.horaapps.leafpic.data;
 
 /**
  * Created by brand on 8/12/2016.

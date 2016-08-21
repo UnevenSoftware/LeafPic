@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.Data;
+package org.horaapps.leafpic.data;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,13 @@ import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import org.horaapps.leafpic.Data.Providers.StorageProvider;
-import org.horaapps.leafpic.Data.Providers.MediaStoreProvider;
 import org.horaapps.leafpic.Activities.SplashScreen;
+import org.horaapps.leafpic.data.Providers.MediaStoreProvider;
+import org.horaapps.leafpic.data.Providers.StorageProvider;
+import org.horaapps.leafpic.data.base.AlbumsComparators;
+import org.horaapps.leafpic.data.base.FoldersFileFilter;
+import org.horaapps.leafpic.data.base.SortingMode;
+import org.horaapps.leafpic.data.base.SortingOrder;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
@@ -63,7 +67,7 @@ public class HandlingAlbums {
     clearCameraIndex();
     if (SP.getBoolean(context.getString(org.horaapps.leafpic.R.string.preference_use_alternative_provider), false)) {
       StorageProvider p = new StorageProvider(context);
-      list = p.getAlbums(hidden);
+      list = p.getAlbums(context, hidden);
       nameProvider = StorageProvider.class.getName();
     } else {
       MediaStoreProvider p = new MediaStoreProvider(context);
@@ -189,6 +193,8 @@ public class HandlingAlbums {
       shortcutIntent = new Intent(appCtx, SplashScreen.class);
       shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
       shortcutIntent.putExtra("albumPath", selectedAlbum.getPath());
+      // TODO: 19/08/16 check this later
+      shortcutIntent.putExtra("albumId", selectedAlbum.getId());
       shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -310,43 +316,35 @@ public class HandlingAlbums {
 
 
   private void excludeAlbum(Context context, Album a) {
-    CustomAlbumsHandler h = new CustomAlbumsHandler(context);
+    // TODO: 19/08/16
+    CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
     Log.wtf("excluded:::", a.getPath() + " - " + a.getId());
     h.excludeAlbum(a.getPath(), a.getId());
     dispAlbums.remove(a);
   }
 
-  public int getColumnSortingMode() {
-    return SP.getInt("column_sort", AlbumSettings.SORT_BY_DATE);
+  public SortingMode getSortingMode() {
+    return SortingMode.fromValue(SP.getInt("albums_sorting_mode", SortingMode.DATE.getValue()));
   }
 
-  public boolean isAscending() {
-    return SP.getBoolean("ascending_mode", false);
+  public SortingOrder getSortingOrder() {
+    return SortingOrder.fromValue(SP.getInt("albums_sorting_order", SortingOrder.DESCENDING.getValue()));
   }
 
 
-  public void setDefaultSortingMode(int column) {
-    SP.putInt("column_sort", column);
+  public void setDefaultSortingMode(SortingMode sortingMode) {
+    SP.putInt("albums_sorting_mode", sortingMode.getValue());
   }
 
-  public void setDefaultSortingAscending(Boolean ascending) {
-    SP.putBoolean("ascending_mode", ascending);
+  public void setDefaultSortingAscending(SortingOrder sortingOrder) {
+    SP.putInt("albums_sorting_order", sortingOrder.getValue());
   }
 
   public void sortAlbums(final Context context) {
-    AlbumsComparators albumsComparators = new AlbumsComparators(isAscending());
 
-    switch (getColumnSortingMode()) {
-      case AlbumSettings.SORT_BY_NAME:
-        Collections.sort(dispAlbums, albumsComparators.getNameComparator());
-        break;
-      case AlbumSettings.SORT_BY_SIZE:
-        Collections.sort(dispAlbums, albumsComparators.getSizeComparator());
-        break;
-      case AlbumSettings.SORT_BY_DATE: default:
-        Collections.sort(dispAlbums, albumsComparators.getDateComparator());
-        break;
-    }
+    Collections.sort(dispAlbums, AlbumsComparators.getComparator(getSortingMode(), getSortingOrder()));
+
+    // TODO: 19/08/16 look a way to pin albums
 
     new Thread(new Runnable() {
       @Override
