@@ -58,7 +58,7 @@
     <string name="rename_album">Rename album</string>
     <string name="details">Details</string>
     <string name="more">More</string>
-    <string name="show_more">Show More</string>
+    <string name="show_more">Show more</string>
     <string name="edit_with">Edit with</string>
     <string name="open_with">Open with</string>
     <string name="upload">Upload</string>
@@ -92,7 +92,7 @@
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>
     <string name="plural_photos">Photos</string>
-    <string name="video_player">Video Player</string>
+    <string name="video_player">Video player</string>
     <string name="media">Media</string>
     <string name="send_to">Send to</string>
     <string name="search_menu">search</string>
@@ -101,7 +101,7 @@
 
     <!-- AFFIX -->
     <string name="affix">Affix</string>
-    <string name="affix_vertical">Affix Vertical</string>
+    <string name="affix_vertical">Affix vertical</string>
     <string name="affix_vertical_sub">Set the orientation, horizontal by default.</string>
     <string name="affix_save_here">Save in this album</string>
     <string name="affix_save_here_sub">The result will be saved in this album</string>
@@ -113,17 +113,17 @@
 
 
     <!-- RANDOM -->
-    <string name="done">Done!</string>
-    <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
+    <string name="done">Done</string>
+    <string name="there_is_nothing_to_show">There\'s nothing to show</string>
     <string name="insert_a_name">Insert something</string>
-    <string name="nothing_changed">Nothing changed!</string>
+    <string name="nothing_changed">Nothing changed</string>
     <string name="install_shortcut">Install shortcut</string>
 
     <!--SETTINGS PREFERENCES-->
-    <string name="general_setting">General Setting</string>
+    <string name="general_setting">General setting</string>
     <string name="folder">Folder</string>
-    <string name="color_palette">Color Palette</string>
-    <string name="app_intro_skip">Introduction Skipped!</string>
+    <string name="color_palette">Color palette</string>
+    <string name="app_intro_skip">Introduction skipped!</string>
 
     <!-- SECURITY-->
     <string name="security">Security</string>
@@ -139,7 +139,7 @@
     <string name="apply_password_on">Use password for</string>
 
     <string name="fingerprint">Fingerprint</string>
-    <string name="clear_password">Clear Password</string>
+    <string name="clear_password">Clear password</string>
     <string name="error_password_length">The minimum password length is 4 character</string>
 
     <!-- SETTINGS -->
@@ -288,6 +288,7 @@
     <string name="storage_permission_denied">Permission to access storage was denied!\n I\'m not able to get your images!</string>
     <string name="error_querying_decoders">Unable to query device decoders</string>
     <string name="unable_to_fix_date">Unable to fix date</string>
+    <string name="unable_to_remove_location">Unable to remove location</string>
     <string name="compression_settings">Compression settings</string>
     <string name="include_video">Include Video</string>
     <string name="fab_options">FAB options</string>
