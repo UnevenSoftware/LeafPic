@@ -250,7 +250,7 @@ public class Media implements Parcelable, Serializable {
             return false; 
         }  
         
-        if (exit == null) return false;
+        if (exif == null) return false;
         
         copyExif(exif);
         
