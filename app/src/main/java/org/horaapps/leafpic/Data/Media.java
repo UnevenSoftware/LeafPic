@@ -252,11 +252,13 @@ public class Media implements Parcelable, Serializable {
         
         if (exit == null) return false;
         
+        copyExif(exif);
+        
         exif.setAttribute(ExifInterface.TAG_GPS_ALTITUDE, "0/0");
         exif.setAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF, "0");
         exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, "0/0,0/0000,00000000/00000");
         exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "0");
-        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, "0/0,0/0,000000/00000 ");
+        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, "0/0,0/0,000000/00000");
         exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "0");
         
         try {  
@@ -266,6 +268,17 @@ public class Media implements Parcelable, Serializable {
         }
         
         return true;
+    }
+    
+    public void copyExif(ExifInterface exif) {
+        Field[] fields = ExifInterface.class.getFields();
+        for (Field field : fields) {
+            String name = field.getName();
+            if (name.startsWith("TAG")) {
+                String value = exif.getAttribute(tag);
+                exif.setAttribute(tag, value);
+            }
+        }
     }
 
     private boolean hasPath() {
