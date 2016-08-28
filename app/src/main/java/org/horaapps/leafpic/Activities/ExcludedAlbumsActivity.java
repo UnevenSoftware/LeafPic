@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -24,6 +25,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
+
 /**
  * Created by Jibo on 04/04/2016.
  */
@@ -36,6 +39,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+	  Fabric.with(this, new Crashlytics());
 	setContentView(org.horaapps.leafpic.R.layout.activity_excluded);
 
 	h = CustomAlbumsHelper.getInstance(getApplicationContext());

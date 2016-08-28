@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.crashlytics.android.Crashlytics;
 import com.koushikdutta.ion.Ion;
 import org.horaapps.leafpic.Activities.PhotoPagerActivity;
 
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by dnld on 18/02/16.
@@ -38,6 +41,7 @@ public class VideoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(getContext(), new Crashlytics());
         path = getArguments().getString("path");
     }
 
@@ -65,4 +69,5 @@ public class VideoFragment extends Fragment {
         });
         return view;
     }
+
 }

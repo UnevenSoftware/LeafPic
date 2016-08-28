@@ -21,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -33,6 +34,7 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.SecurityHelper;
 import org.horaapps.leafpic.util.ThemeHelper;
 
+import io.fabric.sdk.android.Fabric;
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
 
@@ -80,6 +82,7 @@ public class SettingsActivity extends ThemedActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        Fabric.with(this, new Crashlytics());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceUtil.getInstance(getApplicationContext());
 

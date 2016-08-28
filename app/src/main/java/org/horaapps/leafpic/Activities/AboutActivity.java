@@ -19,6 +19,8 @@ import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.util.CustomTabService;
+
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -29,6 +31,7 @@ import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
 import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Jibo on 02/03/2016.
@@ -47,6 +50,7 @@ public class AboutActivity extends ThemedActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_about);
+        Fabric.with(this, new Crashlytics());
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
 
         setNavBarColor();
