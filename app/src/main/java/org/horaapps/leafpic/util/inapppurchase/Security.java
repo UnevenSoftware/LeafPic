@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.horaapps.leafpic.util;
+package org.horaapps.leafpic.util.inapppurchase;
 
 import android.text.TextUtils;
 import android.util.Base64;

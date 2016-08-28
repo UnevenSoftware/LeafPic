@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.Views;
+package org.horaapps.leafpic.Activities.base;
 
 import android.os.Bundle;
 

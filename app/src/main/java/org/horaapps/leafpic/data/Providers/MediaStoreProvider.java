@@ -163,14 +163,12 @@ public class  MediaStoreProvider {
 		String limit = n == -1 ? "" : "LIMIT " + n;
 		ArrayList<Media> list = new ArrayList<Media>();
 
+
 		String[] projection = new String[]{
-						MediaStore.Images.Media._ID,
-						MediaStore.Images.Media.DATE_TAKEN,
+						// NOTE: don't change the order!
 						MediaStore.Images.Media.DATA,
+						MediaStore.Images.Media.DATE_TAKEN,
 						MediaStore.Images.Media.MIME_TYPE,
-						MediaStore.Images.Media.WIDTH,
-						MediaStore.Images.Media.DATE_MODIFIED,
-						MediaStore.Images.Media.HEIGHT,
 						MediaStore.Images.Media.SIZE,
 						MediaStore.Images.Media.ORIENTATION
 		};

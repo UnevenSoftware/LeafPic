@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.Activities.base.ThemedActivity;
 
 /**
  * Created by Jibo on 06/05/2016.

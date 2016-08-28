@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.koushikdutta.ion.Ion;
-import org.horaapps.leafpic.Activities.PhotoPagerActivity;
+
+import org.horaapps.leafpic.Activities.SingleMediaActivity;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -48,12 +49,12 @@ public class GifFragment extends Fragment {
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
             }
 
             @Override
             public void onOutsidePhotoTap() {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
             }
         });
 

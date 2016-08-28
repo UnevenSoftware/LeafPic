@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import org.horaapps.leafpic.util.Measure;
-
 /**
  * Created by dnld on 06/03/16.
  */
@@ -26,7 +24,8 @@ public class FabScrollBehaviour extends FloatingActionButton.Behavior {
         if (dyConsumed > 0)
             child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
         else
-            child.animate().translationY(-Measure.getNavigationBarSize(coordinatorLayout.getContext()).y).setInterpolator(new DecelerateInterpolator(2)).start();
+            child.animate().translationY(/*-Measure.getNavigationBarSize(coordinatorLayout
+            .getContext()).y*/0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     @Override

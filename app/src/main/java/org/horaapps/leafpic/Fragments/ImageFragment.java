@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 
-import org.horaapps.leafpic.Activities.PhotoPagerActivity;
+import org.horaapps.leafpic.Activities.SingleMediaActivity;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 
@@ -60,12 +60,12 @@ public class ImageFragment extends Fragment {
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
             }
 
             @Override
             public void onOutsidePhotoTap() {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
             }
         });
         //photoView.setMaximumScale(10.0F);
@@ -93,8 +93,7 @@ public class ImageFragment extends Fragment {
                 .load(img.getUri())
                 .asBitmap()
                 .signature(useCache ? img.getSignature(): new StringSignature(new Date().getTime()+""))
-                //.centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .thumbnail(0.5f)
                 .animate(R.anim.fade_in)
                 .into(photoView);
@@ -121,13 +120,24 @@ public class ImageFragment extends Fragment {
     }
 
     public boolean rotatePicture(int rotation) {
-        //PhotoView photoView = (PhotoView) getView();
-        //int orienatation = Measure.rotateBy(img.getOrientation(),rotation);
-        //photoView.setRotationBy(rotation);
-                //photoView.setRotationBy(rotation);
-                //photoView.refreshDrawableState();
-                //photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        // TODO: 28/08/16 not working yet
+        /*PhotoView photoView = (PhotoView) getView();
+        int orientation = Measure.rotateBy(img.getOrientation(), rotation);
 
+        if(photoView != null && img.setOrientation(orientation)) {
+            Glide.clear(photoView);
+            Glide.with(getContext())
+                    .load(img.getUri())
+                    .asBitmap()
+                    //.signature(img.getSignature())
+                    //.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    //.thumbnail(0.5f)
+                    .transform(new RotateTransformation(getContext(), orientation))
+                    //.animate(R.anim.fade_in)
+                    .into(photoView);
+
+            return true;
+        }*/
         return false;
     }
 }

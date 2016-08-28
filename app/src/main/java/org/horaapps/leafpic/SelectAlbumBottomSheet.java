@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.Views.ThemedActivity;
+import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.base.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;

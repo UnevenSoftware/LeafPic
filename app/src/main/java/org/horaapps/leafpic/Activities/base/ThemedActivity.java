@@ -1,7 +1,8 @@
-package org.horaapps.leafpic.Views;
+package org.horaapps.leafpic.Activities.base;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -15,12 +16,14 @@ import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.context.IconicsContextWrapper;
+import com.mikepenz.iconics.typeface.IIcon;
+
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.IIcon;
 
 import java.util.ArrayList;
 
@@ -57,6 +60,12 @@ public class ThemedActivity extends AppCompatActivity {
 	coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
 	obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
 	applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
+  }
+
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    // NOTE: icons stuff
+    super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)

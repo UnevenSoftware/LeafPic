@@ -8,9 +8,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.MediaStore;
 
-import com.bumptech.glide.signature.StringSignature;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
@@ -21,6 +19,7 @@ import com.drew.metadata.Tag;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.base.MediaDetailsMap;
+import org.horaapps.leafpic.util.MediaSignature;
 import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
@@ -38,6 +37,7 @@ public class Media implements Parcelable, Serializable {
     private String path = null;
     private long dateModified = -1;
     private String mimeType = null;
+    private int orientation = 0;
 
     private String uri = null;
 
@@ -50,13 +50,13 @@ public class Media implements Parcelable, Serializable {
     public Media(String path, long dateModified) {
         this.path = path;
         this.dateModified = dateModified;
-        mimeType = StringUtils.getMimeType(path);
+        this.mimeType = StringUtils.getMimeType(path);
     }
 
     public Media(File file) {
         this(file.getPath(), file.lastModified());
         this.size = file.length();
-        mimeType = StringUtils.getMimeType(path);
+        this.mimeType = StringUtils.getMimeType(path);
     }
 
     public Media(String path) {
@@ -66,14 +66,24 @@ public class Media implements Parcelable, Serializable {
     public Media(Context context, Uri mediaUri) {
         this.uri = mediaUri.toString();
         this.path = null;
-        mimeType = context.getContentResolver().getType(getUri());
+        this.mimeType = context.getContentResolver().getType(getUri());
     }
 
     public Media(@NotNull Cursor cur) {
-        this.path = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.DATA));
-        this.size = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.SIZE));
-        this.dateModified = cur.getLong(cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
-        mimeType = cur.getString(cur.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
+        this.path = cur.getString(0);
+        this.dateModified = cur.getLong(1);
+        this.mimeType = cur.getString(2);
+        this.size = cur.getLong(3);
+        this.orientation = cur.getInt(4);
+    }
+
+    private static int findOrientation(int exifOrientation){
+        switch (exifOrientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90: return 90;
+            case ExifInterface.ORIENTATION_ROTATE_180: return 180;
+            case ExifInterface.ORIENTATION_ROTATE_270: return 270;
+        }
+        return 0;
     }
 
     public void setUri(String uriString) {
@@ -134,8 +144,8 @@ public class Media implements Parcelable, Serializable {
         return bitmap;
     }
 
-    public StringSignature getSignature() {
-        return new StringSignature(getPath() + "-" + getDateModified());
+    public MediaSignature getSignature() {
+        return new MediaSignature(this);
     }
 
     //<editor-fold desc="Exif & More">
@@ -173,8 +183,7 @@ public class Media implements Parcelable, Serializable {
 
         details.put(context.getString(R.string.size), getHumanReadableSize());
         details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
-        if (metadata.getOrientation() != -1)
-            details.put(context.getString(R.string.orientation), metadata.getOrientation()+"");
+        details.put(context.getString(R.string.orientation), getOrientation()+"");
         if (metadata.getDateOriginal() != null)
             details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
 
@@ -189,24 +198,29 @@ public class Media implements Parcelable, Serializable {
         return details;
     }
 
-    public boolean setOrientation(int orientation) {
-        // TODO: 06/08/16 implement this method
-        /*int asd;
-        ExifInterface exif;
-        try { exif = new ExifInterface(getPath()); }
-        catch (IOException ex) { return false; }
-        switch (orientation) {
-            case 90: asd = ExifInterface.ORIENTATION_ROTATE_90; break;
-            case 180: asd = ExifInterface.ORIENTATION_ROTATE_180; break;
-            case 270: asd = ExifInterface.ORIENTATION_ROTATE_270; break;
-            case 0: asd = 1; break;
-            default: return false;
-        }
-        exif.setAttribute(ExifInterface.TAG_ORIENTATION, asd+"");
-        try {  exif.saveAttributes(); }
-        catch (IOException e) {  return false;}
-        return true;*/
-        return false;
+    public boolean setOrientation(final int orientation) {
+        this.orientation = orientation;
+        // TODO: 28/08/16  find a better way
+        new Thread(new Runnable() {
+            public void run() {
+                int exifOrientation = -1;
+                try {
+                    ExifInterface  exif = new ExifInterface(getPath());
+                    switch (orientation) {
+                        case 90: exifOrientation = ExifInterface.ORIENTATION_ROTATE_90; break;
+                        case 180: exifOrientation = ExifInterface.ORIENTATION_ROTATE_180; break;
+                        case 270: exifOrientation = ExifInterface.ORIENTATION_ROTATE_270; break;
+                        case 0: exifOrientation = ExifInterface.ORIENTATION_NORMAL; break;
+                    }
+                    if (exifOrientation != -1) {
+                        exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(exifOrientation));
+                        exif.saveAttributes();
+                    }
+                }
+                catch (IOException ignored) {  }
+            }
+        }).start();
+        return true;
     }
 
     private long getDateTaken() {
@@ -308,4 +322,8 @@ public class Media implements Parcelable, Serializable {
             return new Media[size];
         }
     };
+
+    public int getOrientation() {
+        return orientation;
+    }
 }

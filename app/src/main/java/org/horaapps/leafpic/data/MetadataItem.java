@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.data;
 
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.drew.imaging.ImageMetadataReader;
@@ -7,16 +8,10 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
-import com.drew.metadata.bmp.BmpHeaderDirectory;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
-import com.drew.metadata.gif.GifHeaderDirectory;
-import com.drew.metadata.jpeg.JpegDirectory;
-import com.drew.metadata.png.PngDirectory;
-import com.drew.metadata.webp.WebpDirectory;
 import com.drew.metadata.xmp.XmpDirectory;
 
 import java.io.File;
@@ -39,19 +34,19 @@ class MetadataItem {
 
   private static Set<Class<?>> usefullDirectories = new HashSet<Class<?>>();
 
-  private static final int ORIENTATION_NORMAL = 1;
-  private static final int ORIENTATION_ROTATE_180 = 3;
-  private static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
-  private static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
+  public static final int ORIENTATION_NORMAL = 1;
+  public static final int ORIENTATION_ROTATE_180 = 3;
+  public static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
+  public static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
 
   static {
     usefullDirectories.add(ExifIFD0Directory.class);
     usefullDirectories.add(ExifSubIFDDirectory.class);
-    usefullDirectories.add(BmpHeaderDirectory.class);
-    usefullDirectories.add(GifHeaderDirectory.class);
-    usefullDirectories.add(JpegDirectory.class);
-    usefullDirectories.add(PngDirectory.class);
-    usefullDirectories.add(WebpDirectory.class);
+    //usefullDirectories.add(BmpHeaderDirectory.class);
+    //usefullDirectories.add(GifHeaderDirectory.class);
+    //usefullDirectories.add(JpegDirectory.class);
+    //usefullDirectories.add(PngDirectory.class);
+    //usefullDirectories.add(WebpDirectory.class);
     usefullDirectories.add(GpsDirectory.class);
     usefullDirectories.add(XmpDirectory.class);
 
@@ -69,18 +64,20 @@ class MetadataItem {
   private int orientation = -1;
 
   MetadataItem(File file) {
+
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+    setWidth(options.outWidth);
+    setHeight(options.outHeight);
+
     try {
       Metadata metadata = ImageMetadataReader.readMetadata(file);
-      // TODO: 21/08/16 it sucks a bit
+      // TODO: 21/08/16 should I switch to ExifInterface or to any other lib?
       for(Directory directory : metadata.getDirectories()) {
         if (usefullDirectories.contains(directory.getClass())) {
           if (directory.getClass().equals(ExifSubIFDDirectory.class) || directory.getClass().equals(ExifIFD0Directory.class)) {
             ExifDirectoryBase d = (ExifDirectoryBase) directory;
-
-            if (d.containsTag(ExifDirectoryBase.TAG_IMAGE_WIDTH))
-              setWidth(d.getInt(ExifDirectoryBase.TAG_IMAGE_WIDTH));
-            if (d.containsTag(ExifDirectoryBase.TAG_IMAGE_HEIGHT))
-              setHeight(d.getInt(ExifDirectoryBase.TAG_IMAGE_HEIGHT));
 
             if (d.containsTag(ExifDirectoryBase.TAG_MAKE))
               setMake(d.getString(ExifDirectoryBase.TAG_MAKE));
@@ -97,28 +94,8 @@ class MetadataItem {
             if (d.containsTag(ExifDirectoryBase.TAG_DATETIME_ORIGINAL))
               setDateOriginal(d.getDate(ExifDirectoryBase.TAG_DATETIME_ORIGINAL));
 
-          } else if (directory.getClass().equals(JpegDirectory.class)) {
-            JpegDirectory d = (JpegDirectory) directory;
-
-            setWidth(d.getInt(JpegDirectory.TAG_IMAGE_WIDTH));
-            setHeight(d.getInt(JpegDirectory.TAG_IMAGE_HEIGHT));
-          } else if (directory.getClass().equals(PngDirectory.class)) {
-            PngDirectory d = (PngDirectory) directory;
-
-            setWidth(d.getInt(PngDirectory.TAG_IMAGE_WIDTH));
-            setHeight(d.getInt(PngDirectory.TAG_IMAGE_HEIGHT));
-          } else if (directory.getClass().equals(GifHeaderDirectory.class)) {
-            GifHeaderDirectory d = (GifHeaderDirectory) directory;
-
-            setWidth(d.getInt(GifHeaderDirectory.TAG_IMAGE_WIDTH));
-            setHeight(d.getInt(GifHeaderDirectory.TAG_IMAGE_HEIGHT));
           } else if (directory.getClass().equals(ExifSubIFDDirectory.class)) {
             setDateOriginal(((ExifSubIFDDirectory) directory).getDateOriginal(TimeZone.getDefault()));
-          } else if (directory.getClass().equals(WebpDirectory.class)) {
-            WebpDirectory d = (WebpDirectory) directory;
-
-            setWidth(d.getInt(WebpDirectory.TAG_IMAGE_WIDTH));
-            setHeight(d.getInt(WebpDirectory.TAG_IMAGE_HEIGHT));
           } else if (directory.getClass().equals(XmpDirectory.class)) {
             XmpDirectory d = (XmpDirectory) directory;
 
@@ -144,8 +121,6 @@ class MetadataItem {
       Log.wtf("asd", "logMainTags: ImageProcessingException", e);
     } catch (IOException e) {
       Log.wtf("asd", "logMainTags: IOException", e);
-    } catch (MetadataException e) {
-      e.printStackTrace();
     }
   }
 

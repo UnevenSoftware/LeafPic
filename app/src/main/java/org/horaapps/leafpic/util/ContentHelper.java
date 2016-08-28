@@ -100,8 +100,7 @@ public class ContentHelper {
 	public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File targetDir) {
 		InputStream inStream = null;
 		OutputStream outStream = null;
-		FileChannel inChannel = null;
-		FileChannel outChannel = null;
+
 		boolean success = false;
 		File target = new File(targetDir, source.getName());
 
@@ -111,13 +110,16 @@ public class ContentHelper {
 			// First try the normal way
 			if (isWritable(target)) {
 				// standard way
-				outStream = new FileOutputStream(target);
-				inChannel = ((FileInputStream) inStream).getChannel();
-				outChannel = ((FileOutputStream) outStream).getChannel();
+				FileChannel inChannel = new FileInputStream(source).getChannel();
+				FileChannel outChannel = new FileOutputStream(target).getChannel();
 				inChannel.transferTo(0, inChannel.size(), outChannel);
 				success = true;
+				try { inChannel.close(); } catch (Exception ignored) { }
+				try { outChannel.close(); } catch (Exception ignored) { }
 			} else {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+					//inStream = context.getContentResolver().openInputStream(Uri.fromFile(source));
+					//outStream = context.getContentResolver().openOutputStream(Uri.fromFile(target));
 					if (isFileOnSdCard(context, source)) {
 						DocumentFile sourceDocument = getDocumentFile(context, source, false, false);
 						if (sourceDocument != null) {
@@ -155,8 +157,6 @@ public class ContentHelper {
 		finally {
 			try { inStream.close(); } catch (Exception ignored) { }
 			try { outStream.close(); } catch (Exception ignored) { }
-			try { inChannel.close(); } catch (Exception ignored) { }
-			try { outChannel.close(); } catch (Exception ignored) { }
 		}
 
 		if (success) scanFile(context, new String[] { target.getPath() });

@@ -18,14 +18,14 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SecretConstants;
-import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.util.CustomTabService;
-import org.horaapps.leafpic.util.IabHelper;
-import org.horaapps.leafpic.util.IabResult;
-import org.horaapps.leafpic.util.Purchase;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.inapppurchase.IabHelper;
+import org.horaapps.leafpic.util.inapppurchase.IabResult;
+import org.horaapps.leafpic.util.inapppurchase.Purchase;
 
 /**
  * Created by Jibo on 02/03/2016.

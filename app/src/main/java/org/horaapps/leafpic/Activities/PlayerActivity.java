@@ -61,8 +61,8 @@ import com.google.android.exoplayer.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer.util.Util;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
+import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.player.DemoPlayer;
 import org.horaapps.leafpic.player.ExtractorRendererBuilder;

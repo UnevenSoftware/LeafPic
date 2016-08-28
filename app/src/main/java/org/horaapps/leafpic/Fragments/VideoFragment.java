@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.koushikdutta.ion.Ion;
-import org.horaapps.leafpic.Activities.PhotoPagerActivity;
-
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import org.horaapps.leafpic.Activities.SingleMediaActivity;
 
 /**
  * Created by dnld on 18/02/16.
@@ -60,7 +60,7 @@ public class VideoFragment extends Fragment {
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((PhotoPagerActivity) getActivity()).toggleSystemUI();
+                ((SingleMediaActivity) getActivity()).toggleSystemUI();
             }
         });
         return view;

@@ -22,8 +22,8 @@ import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 
 import org.horaapps.leafpic.Activities.SettingsActivity;
+import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.base.MediaDetailsMap;
 

@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.data.CustomAlbumsHelper;
 import org.horaapps.leafpic.data.SimpleMediaIdentifier;
 

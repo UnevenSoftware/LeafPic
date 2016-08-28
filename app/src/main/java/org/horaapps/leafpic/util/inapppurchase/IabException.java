@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.horaapps.leafpic.util;
+package org.horaapps.leafpic.util.inapppurchase;
 
 /**
  * Exception thrown when something went wrong with in-app billing.

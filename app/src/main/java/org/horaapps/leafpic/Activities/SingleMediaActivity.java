@@ -31,15 +31,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.yalantis.ucrop.UCrop;
 
+import org.horaapps.leafpic.Activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.Adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.Animations.DepthPageTransformer;
 import org.horaapps.leafpic.Fragments.ImageFragment;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.Views.HackyViewPager;
-import org.horaapps.leafpic.Views.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.base.SortingMode;
 import org.horaapps.leafpic.data.base.SortingOrder;
@@ -57,7 +58,7 @@ import java.io.File;
  * Created by dnld on 18/02/16.
  */
 @SuppressWarnings("ResourceAsColor")
-public class PhotoPagerActivity extends SharedMediaActivity {
+public class SingleMediaActivity extends SharedMediaActivity {
 
     private static final String ISLOCKED_ARG = "isLocked";
     static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
@@ -67,7 +68,6 @@ public class PhotoPagerActivity extends SharedMediaActivity {
     private MediaPagerAdapter adapter;
     private PreferenceUtil SP;
     private RelativeLayout ActivityBackground;
-    //private Album album;
     private SelectAlbumBottomSheet bottomSheetDialogFragment;
     private SecurityHelper securityObj;
     private Toolbar toolbar;
@@ -81,7 +81,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         SP = PreferenceUtil.getInstance(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
-        securityObj= new SecurityHelper(PhotoPagerActivity.this);
+        securityObj= new SecurityHelper(SingleMediaActivity.this);
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -139,7 +139,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
             @Override
             public void onClick(View v) {
                 if (SP.getBoolean("set_internal_player", false)) {
-                    Intent mpdIntent = new Intent(PhotoPagerActivity.this, PlayerActivity.class)
+                    Intent mpdIntent = new Intent(SingleMediaActivity.this, PlayerActivity.class)
                             .setData(getAlbum().getCurrentMedia().getUri());
                     startActivity(mpdIntent);
                 } else {
@@ -243,7 +243,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         getMenuInflater().inflate(R.menu.menu_view_pager, menu);
 
         menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
-        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_share));
+        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
         menu.findItem(R.id.action_rotate).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right));
         menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right).color(getIconColor()));
         menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_left).color(getIconColor()));
@@ -258,7 +258,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            params.setMargins(0,0,Measure.getNavigationBarSize(PhotoPagerActivity.this).x,0);
+            params.setMargins(0,0,Measure.getNavigationBarSize(SingleMediaActivity.this).x,0);
         else
             params.setMargins(0,0,0,0);
 
@@ -288,6 +288,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                     if (imageUri != null && imageUri.getScheme().equals("file")) {
                         try {
                             //copyFileToDownloads(imageUri);
+                            // TODO: 21/08/16 handle this better
                             if(ContentHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(getAlbum().getCurrentMedia().getPath()))) {
                                 ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).displayMedia(true);
                             }
@@ -306,7 +307,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
 
 
     private void displayAlbums(boolean reload) {
-        Intent i = new Intent(PhotoPagerActivity.this, MainActivity.class);
+        Intent i = new Intent(SingleMediaActivity.this, MainActivity.class);
         Bundle b = new Bundle();
         b.putInt(SplashScreen.CONTENT, SplashScreen.ALBUMS_PREFETCHED);
         if (!reload) i.putExtras(b);
@@ -418,7 +419,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 Uri uri = Uri.fromFile(new File(getAlbum().getCurrentMedia().getPath()));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
                 uCrop.withOptions(getUcropOptions());
-                uCrop.start(PhotoPagerActivity.this);
+                uCrop.start(SingleMediaActivity.this);
                 break;
 
             case R.id.action_use_as:
@@ -436,9 +437,9 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 break;
 
             case R.id.action_delete:
-                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
 
-                AlertDialogsHelper.getTextDialog(PhotoPagerActivity.this,deleteDialog,
+                AlertDialogsHelper.getTextDialog(SingleMediaActivity.this,deleteDialog,
                         R.string.delete, R.string.delete_photo_message);
 
                 deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
@@ -446,9 +447,9 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
 
-                            final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                            final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
                             final EditText editTextPassword = securityObj.getInsertPasswordDialog
-                                    (PhotoPagerActivity.this, passwordDialogBuilder);
+                                    (SingleMediaActivity.this, passwordDialogBuilder);
 
                             passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -509,7 +510,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.action_rename:
-                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
                 final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(StringUtils.getPhotoNameByPath(getAlbum().getCurrentMedia().getPath()));
 
@@ -539,7 +540,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                 break;
 
             case R.id.action_details:
-                AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(PhotoPagerActivity.this, getDialogStyle());
+                AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
                 final AlertDialog detailsDialog =
                         AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,getAlbum().getCurrentMedia());
 
@@ -552,7 +553,7 @@ public class PhotoPagerActivity extends SharedMediaActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (!getAlbum().getCurrentMedia().fixDate())
-                            Toast.makeText(PhotoPagerActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SingleMediaActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -682,9 +683,9 @@ public class PhotoPagerActivity extends SharedMediaActivity {
         int colorFrom;
         if (fullScreenMode) {
             colorFrom = getBackgroundColor();
-            colorTo = (ContextCompat.getColor(PhotoPagerActivity.this, R.color.md_black_1000));
+            colorTo = (ContextCompat.getColor(SingleMediaActivity.this, R.color.md_black_1000));
         } else {
-            colorFrom = (ContextCompat.getColor(PhotoPagerActivity.this, R.color.md_black_1000));
+            colorFrom = (ContextCompat.getColor(SingleMediaActivity.this, R.color.md_black_1000));
             colorTo = getBackgroundColor();
         }
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
