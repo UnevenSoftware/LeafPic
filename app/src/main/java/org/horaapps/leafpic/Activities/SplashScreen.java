@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
@@ -23,6 +25,8 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by dnld on 01/04/16.
@@ -50,6 +54,7 @@ public class SplashScreen extends SharedMediaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_splash);
+        Fabric.with(this, new Crashlytics());
         SP = PreferenceUtil.getInstance(getApplicationContext());
         /**** START APP ****/
 

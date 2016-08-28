@@ -3,7 +3,18 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-beta1'
+        classpath 'com.android.tools.build:gradle:2.2.0-beta3'
+    }
+}
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // The Fabric Gradle plugin uses an open ended version to react
+        // quickly to Android tooling updates
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
@@ -15,15 +26,20 @@ repositories {
     maven {  url  "http://dl.bintray.com/dasar/maven" }
 }
 
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 android {
 
     compileSdkVersion 24
-    buildToolsVersion '24'
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 11
         versionName "v0.5.4"
     }
@@ -89,5 +105,8 @@ dependencies {
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
+        transitive = true;
+    }
     compile project(':photoview')
 }

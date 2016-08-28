@@ -174,5 +174,10 @@
             android:name="org.horaapps.leafpic.CustomGlideModule"
             android:value="GlideModule" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b7827cffc6081b20c5770aa840591db4a3252ca0"
+            />
+
     </application>
 </manifest>

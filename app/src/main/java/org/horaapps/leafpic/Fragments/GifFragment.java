@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crashlytics.android.Crashlytics;
 import com.koushikdutta.ion.Ion;
 import org.horaapps.leafpic.Activities.PhotoPagerActivity;
 
+import io.fabric.sdk.android.Fabric;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -33,6 +35,7 @@ public class GifFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(getContext(), new Crashlytics());
         path = getArguments().getString("path");
     }
 

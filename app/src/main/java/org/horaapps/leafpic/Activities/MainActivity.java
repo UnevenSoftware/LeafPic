@@ -52,6 +52,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -80,6 +81,8 @@ import org.horaapps.leafpic.util.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends SharedMediaActivity {
@@ -178,12 +181,11 @@ public class MainActivity extends SharedMediaActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		Fabric.with(this, new Crashlytics());
 		SP = PreferenceUtil.getInstance(getApplicationContext());
 		albumsMode = true;
 		editMode = false;
 		securityObj = new SecurityHelper(MainActivity.this);
-
 		initUI();
 
 		displayPreFetchedData(getIntent().getExtras());

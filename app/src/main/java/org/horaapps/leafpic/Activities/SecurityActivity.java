@@ -19,9 +19,13 @@ import android.widget.Toast;
 import org.horaapps.leafpic.Views.ThemedActivity;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.SecurityHelper;
+
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by dnld on 22/05/16.
@@ -41,6 +45,7 @@ public class SecurityActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_security_layout);
+        Fabric.with(this, new Crashlytics());
         SP = PreferenceUtil.getInstance(getApplicationContext());
         securityObj = new SecurityHelper(SecurityActivity.this);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
