@@ -46,6 +46,7 @@ import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
@@ -75,6 +76,8 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Callback,
@@ -228,7 +231,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(org.horaapps.leafpic.R.layout.activity_player);
-
+    Fabric.with(this, new Crashlytics());
     FrameLayout root = (FrameLayout) findViewById(org.horaapps.leafpic.R.id.root);
     root.setOnTouchListener(new OnTouchListener() {
       @Override

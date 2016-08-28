@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.yalantis.ucrop.UCrop;
 
@@ -52,6 +53,8 @@ import org.horaapps.leafpic.util.SecurityHelper;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by dnld on 18/02/16.
@@ -77,9 +80,10 @@ public class PhotoPagerActivity extends SharedMediaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
-
+        Fabric.with(this, new Crashlytics());
         SP = PreferenceUtil.getInstance(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
         securityObj= new SecurityHelper(PhotoPagerActivity.this);
 
