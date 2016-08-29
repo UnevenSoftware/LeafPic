@@ -76,7 +76,6 @@
         </LinearLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_camera"
-            style="@style/fab_camera"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
@@ -85,6 +84,7 @@
             app:borderWidth="0dp"
             app:elevation="@dimen/card_elevation"
             app:layout_behavior="org.horaapps.leafpic.Views.FabScrollBehaviour"
+            style="@style/fab_camera"
             />
     </android.support.design.widget.CoordinatorLayout>
     <include

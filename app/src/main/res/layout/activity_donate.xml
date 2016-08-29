@@ -32,6 +32,8 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
             >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,6 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
             >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -163,6 +167,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
             >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -226,6 +232,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
             >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -264,9 +272,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:paddingStart="@dimen/medium_spacing"
-                            android:paddingEnd="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing"
+                            android:padding="@dimen/medium_spacing"
                             android:text="13psCBkxAjvvssSDHHGGagG2R8b4SraVyu"
                             android:textColor="@color/md_dark_background"
                             android:textSize="@dimen/medium_text"
