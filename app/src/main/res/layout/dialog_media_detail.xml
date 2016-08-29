@@ -32,14 +32,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/details_scrollview">
 
-        <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:id="@+id/ll_list_details"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical"
+                android:paddingTop="@dimen/medium_spacing"
+                />
 
             <!-- TODO find a better place  -->
             <TextView
@@ -51,8 +54,11 @@
                 android:visibility="gone"
                 android:textColor="@color/accent_blue"
                 android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp" />
+                android:paddingBottom="@dimen/medium_spacing"
+                android:paddingTop="@dimen/medium_spacing"
+                android:clickable="true"
+                android:background="@drawable/ripple"
+                />
         </LinearLayout>
     </ScrollView>
     </LinearLayout>

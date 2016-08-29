@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/ll_album_bottom_sheet_item"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:foreground="@drawable/ripple"
-              android:orientation="horizontal"
->
-
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_album_bottom_sheet_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/ripple"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:background="@drawable/ripple"
+    >
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/folder_icon_bottom_sheet_item"
         android:layout_height="@dimen/icon_width_height"
@@ -25,7 +27,7 @@
         android:layout_marginTop="@dimen/small_spacing"
         android:layout_marginBottom="@dimen/small_spacing"
         android:layout_marginRight="@dimen/big_spacing"
-    >
+        >
         <TextView
             android:id="@+id/name_folder"
             android:layout_width="wrap_content"

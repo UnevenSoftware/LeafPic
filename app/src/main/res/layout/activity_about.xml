@@ -36,6 +36,8 @@
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="1dp"
                 app:cardElevation="5dp"
+                android:background="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -106,6 +108,8 @@
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="5dp"
+                android:background="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -178,8 +182,8 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:padding="10dp"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_donald_googleplus_item"
@@ -188,8 +192,8 @@
                             android:text="GOOGLE +"
                             android:textSize="16sp"
                             android:padding="10dp"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_donald_github_item"
@@ -198,8 +202,8 @@
                             android:text="GITHUB"
                             android:textSize="16sp"
                             android:padding="10dp"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -213,6 +217,8 @@
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="5dp"
+                android:background="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -286,8 +292,8 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:padding="10dp"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_gilbert_googleplus_item"
@@ -296,8 +302,8 @@
                             android:text="GOOGLE +"
                             android:textSize="16sp"
                             android:padding="10dp"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_gilbert_github_item"
@@ -306,8 +312,8 @@
                             android:text="GITHUB"
                             android:textSize="16sp"
                             android:padding="10dp"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -321,6 +327,8 @@
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="5dp"
+                android:background="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -376,18 +384,6 @@
                             android:textSize="14sp"
                             android:layout_marginBottom="16dp"
                             />
-                        <!--<TextView
-                            android:id="@+id/about_patryk_goworowski_googleplus_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="GOOGLE+"
-                            android:textSize="16sp"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
-                        />-->
-
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -400,6 +396,8 @@
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="5dp"
+                android:background="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"

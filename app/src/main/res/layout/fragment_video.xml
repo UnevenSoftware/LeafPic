@@ -8,8 +8,10 @@
     <ImageView
         android:id="@+id/media_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple"
+        android:clickable="true"
+        />
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/icon"
         android:layout_width="50dp"
