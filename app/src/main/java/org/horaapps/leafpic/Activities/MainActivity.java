@@ -979,7 +979,7 @@ public class MainActivity extends SharedMediaActivity {
 				intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
 				intent.setType(StringUtils.getGenericMIME(getAlbum().selectedMedias.get(0).getMimeType()));
 				finishEditMode();
-				startActivity(intent);
+				startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
 				return true;
 
 			case R.id.all_media_filter:
