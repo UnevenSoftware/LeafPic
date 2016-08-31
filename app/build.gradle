@@ -1,19 +1,5 @@
-/*buildscript {
-    repositories {
-        jcenter()
-
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-beta1'
-
-    }
-}*/
-
-/*plugins {
-    id "com.gladed.androidgitversion" version "0.2.2"
-}*/
-
 apply plugin: 'com.android.application'
+apply plugin: "com.gladed.androidgitversion"
 
 repositories {
     jcenter()

@@ -13,8 +13,6 @@ buildscript {
     }
 }
 
-apply plugin: "com.gladed.androidgitversion"
-
 allprojects {
     repositories {
         jcenter()
