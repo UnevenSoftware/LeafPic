@@ -21,9 +21,9 @@
                 android:id="@+id/Drawer_Header"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:elevation="8dp"
+                android:elevation="@dimen/card_elevation"
                 android:orientation="vertical"
-                android:background="@drawable/ripple"
+                android:foreground="@drawable/ripple"
                 android:clickable="true"
                 >
                 <LinearLayout
@@ -54,11 +54,10 @@
                 android:id="@+id/Drawer_Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/sub_small_spacing"
                 android:orientation="vertical"
                 android:scrollbars="vertical"
                 >
-
                 <!-- DEFAULT ALBUMS -->
 
                     <LinearLayout
