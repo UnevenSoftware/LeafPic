@@ -1,11 +1,17 @@
-buildscript {
+/*buildscript {
     repositories {
         jcenter()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.0-beta1'
+
     }
-}
+}*/
+
+/*plugins {
+    id "com.gladed.androidgitversion" version "0.2.2"
+}*/
 
 apply plugin: 'com.android.application'
 
@@ -24,8 +30,8 @@ android {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 11
-        versionName "v0.5.4"
+        versionName androidGitVersion.name()
+        versionCode androidGitVersion.code()
     }
 
     lintOptions {
