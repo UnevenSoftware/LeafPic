@@ -32,13 +32,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -58,16 +56,17 @@ import com.google.android.exoplayer.metadata.id3.GeobFrame;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
 import com.google.android.exoplayer.metadata.id3.PrivFrame;
 import com.google.android.exoplayer.metadata.id3.TxxxFrame;
+import com.google.android.exoplayer.util.PlayerControl;
 import com.google.android.exoplayer.util.Util;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.Views.VideoControllerView;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.player.DemoPlayer;
 import org.horaapps.leafpic.player.ExtractorRendererBuilder;
 import org.horaapps.leafpic.player.HlsRendererBuilder;
-import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 
@@ -89,12 +88,13 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   private static final String TAG = "PlayerActivity";
 
   private static final CookieManager defaultCookieManager;
+
   static {
     defaultCookieManager = new CookieManager();
     defaultCookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
   }
 
-  private MediaController mediaController;
+  private CustomMediaController mediaController;
   private View mediController_anchor;
   private View shutterView;
   private AspectRatioFrameLayout videoFrame;
@@ -114,14 +114,11 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
 
   // Activity lifecycle
 
+  @SuppressWarnings("ResourceAsColor")
   private void initUI(){
 
-    toolbar.setBackgroundColor(
-            isApplyThemeOnImgAct()
-            ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
-            : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
-
     setSupportActionBar(toolbar);
+    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
@@ -129,34 +126,96 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         onBackPressed();
       }
     });
-    //toolbar.setTitle(contentUri.getPath().substring(contentUri.getPath().lastIndexOf("/")+1));
-    toolbar.setTitle(R.string.video_player);
-    //getSupportActionBar().setDisplayShowTitleEnabled(false);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                   // | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                     | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-    getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
+    /*getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
             (new View.OnSystemUiVisibilityChangeListener() {
               @Override
               public void onSystemUiVisibilityChange(int visibility) {
                 if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showControls();
                 else hideControls();
               }
-            });
+            });*/
     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
             .setDuration(0).start();
     mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
 
+    /*mediaController.post(new Runnable() {
+      @Override
+      public void run() {
+        styleMediaController(mediaController);
+      }
+    });*/
+    mediaController.setBackgroundColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
+
     setStatusBarColor();
     setNavBarColor();
     setRecentApp(getString(org.horaapps.leafpic.R.string.app_name));
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (!fullscreen) finish();
+    else super.onBackPressed();
+  }
+
+  private void styleMediaController(MediaController view) {
+
+
+
+    /*if (view instanceof MediaController) {
+      MediaController v = (MediaController) view;
+      for (int i = 0; i < v.getChildCount(); i++) {
+        styleMediaController(v.getChildAt(i));
+      }
+    }*/
+
+
+    /*Log.wtf("asd", view.getClass()+"");
+    if (view instanceof MediaController) {
+      MediaController v = (MediaController) view;
+      for (int i = 0; i < v.getChildCount(); i++) {
+        styleMediaController(v.getChildAt(i));
+      }
+    } else if (view instanceof LinearLayout) {
+      LinearLayout ll = (LinearLayout) view;
+      //ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
+      for (int i = 0; i < ll.getChildCount(); i++) {
+        styleMediaController(ll.getChildAt(i));
+      }
+    } else if (view instanceof SeekBar) {
+      themeSeekBar(((SeekBar) view));
+
+    } else if (view instanceof AppCompatImageButton) {
+      AppCompatImageButton button = (AppCompatImageButton) view;
+      button.setImageDrawable(getToolbarIcon(GoogleMaterial.Icon.gmd_accessibility));
+
+      //button.setBackgroundDrawable(getToolbarIcon(GoogleMaterial.Icon.gmd_accessibility));
+
+    }*/
+  }
+
+  @Override
+  public void setNavBarColor() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
+    }
+  }
+
+  @Override
+  protected void setStatusBarColor() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
+    }
   }
 
   @Override
@@ -204,41 +263,15 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   }
 
   @Override
-  public void setNavBarColor() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (isNavigationBarColored())
-        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
-      else
-        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), getTransparency()));
-    }
-  }
-
-
-  @Override
-  protected void setStatusBarColor() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (isTranslucentStatusBar() && isTransparencyZero())
-        getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
-      else
-        getWindow().setStatusBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
-    }
-  }
-
-  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(org.horaapps.leafpic.R.layout.activity_player);
 
     FrameLayout root = (FrameLayout) findViewById(org.horaapps.leafpic.R.id.root);
-    root.setOnTouchListener(new OnTouchListener() {
+    findViewById(R.id.video_frame).setOnClickListener(new View.OnClickListener() {
       @Override
-      public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-          toggleControlsVisibility();
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-          //view.performClick();
-        }
-        return true;
+      public void onClick(View view) {
+        toggleControlsVisibility();
       }
     });
 
@@ -257,11 +290,11 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     surfaceView = (SurfaceView) findViewById(org.horaapps.leafpic.R.id.surface_view);
     surfaceView.getHolder().addCallback(this);
 
-    mediaController = new KeyCompatibleMediaController(this);
+    mediaController = new CustomMediaController(this, this);
 
-    mediController_anchor = findViewById(org.horaapps.leafpic.R.id.media_player_anchor);
-    mediaController.setAnchorView(mediController_anchor);
-    mediaController.setPaddingRelative(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
+    mediController_anchor =  findViewById(org.horaapps.leafpic.R.id.media_player_anchor);
+    mediaController.setAnchorView(root);
+    //mediaController.setPaddingRelative(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
     toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
     initUI();
 
@@ -494,6 +527,9 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
 
   private void hideControls() {
     mediaController.hide();
+  }
+
+  private void hideSystemBars() {
     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
             .setDuration(200).start();
 
@@ -504,10 +540,9 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                     | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
-    fullscreen=true;
   }
 
-  private void showControls() {
+  private void showSystemBars(){
     int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
     if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) { //Landscape
       getWindow().getDecorView().setSystemUiVisibility(
@@ -521,12 +556,12 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
                       | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
       mediaController.setPaddingRelative(0,0,0, Measure.getNavBarHeight(getApplicationContext()));
     }
-
-    fullscreen = false;
-    mediaController.show();
     toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
             .setDuration(240).start();
+  }
 
+  private void showControls() {
+    mediaController.show();
   }
 
   // DemoPlayer.MetadataListener implementation
@@ -586,16 +621,32 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     return Util.inferContentType(lastPathSegment);
   }
 
-  private static final class KeyCompatibleMediaController extends MediaController {
+  private static final class CustomMediaController extends VideoControllerView {
 
-    private MediaPlayerControl playerControl;
+    private PlayerActivity activity;
+    private PlayerControl playerControl;
 
-    public KeyCompatibleMediaController(Context context) {
+    CustomMediaController(Context context, PlayerActivity activity) {
       super(context);
+      this.activity  = activity;
     }
 
     @Override
-    public void setMediaPlayer(MediaPlayerControl playerControl) {
+    public void hide() {
+     super.hide();
+      activity.hideSystemBars();
+      activity.fullscreen = true;
+    }
+
+    @Override
+    public void show() {
+      super.show();
+      activity.showSystemBars();
+      activity.fullscreen = false;
+    }
+
+    @Override
+    public void setMediaPlayer(PlayerControl playerControl) {
       super.setMediaPlayer(playerControl);
       this.playerControl = playerControl;
     }
