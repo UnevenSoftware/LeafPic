@@ -21,6 +21,6 @@ public class SharedMediaActivity extends ThemedActivity {
   }
 
   public Album getAlbum() {
-	return ((MyApplication) getApplicationContext()).getCurrentAlbum();
+	return ((MyApplication) getApplicationContext()).getAlbum();
   }
 }

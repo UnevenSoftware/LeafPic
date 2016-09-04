@@ -72,7 +72,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                     .asBitmap()
                     .signature(f.getSignature())
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .thumbnail(0.5f)
                     .placeholder(drawable)
                     .animate(org.horaapps.leafpic.R.anim.fade_in)

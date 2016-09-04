@@ -123,6 +123,7 @@ public class Album implements Serializable {
 							getPath(), SP.getBoolean("set_include_video", true)));
 		}
 
+
 		for (int i = mediaArrayList.size() - 1; i >= 0; i--) {
 			if (excludedPhotoPaths.contains(mediaArrayList.get(i).getPath()))
 				mediaArrayList.remove(i);

@@ -31,6 +31,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.StaticMapProvider;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import uz.shift.colorpicker.LineColorPicker;
@@ -45,12 +46,6 @@ import static org.horaapps.leafpic.util.ThemeHelper.LIGHT_THEME;
  */
 @SuppressWarnings("ResourceAsColor")
 public class SettingsActivity extends ThemedActivity {
-
-    public static final int GOOGLE_MAPS_PROVIDER = 0;
-    public static final int OSM_MAP_BOX = 1;
-    public static final int OSM_MAP_BOX_DARK = 12;
-    public static final int OSM_MAP_BOX_LIGHT = 13;
-    public static final int OSM_TYLER_PROVIDER = 2;
 
     private PreferenceUtil SP;
     private SecurityHelper securityObj;
@@ -412,13 +407,14 @@ public class SettingsActivity extends ThemedActivity {
 
         ((TextView) dialogLayout.findViewById(R.id.header_proprietary_maps)).setTextColor(getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.header_free_maps)).setTextColor(getTextColor());
-        switch (SP.getInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER)) {
-            case GOOGLE_MAPS_PROVIDER:
+        switch (StaticMapProvider.fromValue(SP.getInt(getString(R.string.preference_map_provider),
+                StaticMapProvider.GOOGLE_MAPS.getValue()))) {
+            case GOOGLE_MAPS:
                 default: radioGoogleMaps.setChecked(true); break;
-            case OSM_MAP_BOX: radioMapBoxStreets.setChecked(true); break;
-            case OSM_MAP_BOX_DARK: radioMapBoxDark.setChecked(true); break;
-            case OSM_MAP_BOX_LIGHT: radioMapBoxLight.setChecked(true); break;
-            case OSM_TYLER_PROVIDER: radioTyler.setChecked(true); break;
+            case MAP_BOX: radioMapBoxStreets.setChecked(true); break;
+            case MAP_BOX_DARK: radioMapBoxDark.setChecked(true); break;
+            case MAP_BOX_LIGHT: radioMapBoxLight.setChecked(true); break;
+            case TYLER: radioTyler.setChecked(true); break;
         }
 
         dialogBuilder.setNegativeButton(R.string.cancel, null);
@@ -427,11 +423,11 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (mapProvider.getCheckedRadioButtonId()) {
                     case R.id.radio_google_maps:
-                    default: SP.putInt(getString(R.string.preference_map_provider), GOOGLE_MAPS_PROVIDER); break;
-                    case R.id.radio_mapb_streets: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX); break;
-                    case R.id.radio_osm_tyler: SP.putInt(getString(R.string.preference_map_provider), OSM_TYLER_PROVIDER); break;
-                    case R.id.radio_mapb_dark: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX_DARK); break;
-                    case R.id.radio_mapb_light: SP.putInt(getString(R.string.preference_map_provider), OSM_MAP_BOX_LIGHT); break;
+                    default: SP.putInt(getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue()); break;
+                    case R.id.radio_mapb_streets: SP.putInt(getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX.getValue()); break;
+                    case R.id.radio_osm_tyler: SP.putInt(getString(R.string.preference_map_provider), StaticMapProvider.TYLER.getValue()); break;
+                    case R.id.radio_mapb_dark: SP.putInt(getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX_DARK.getValue()); break;
+                    case R.id.radio_mapb_light: SP.putInt(getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX_LIGHT.getValue()); break;
                 }
             }
         });

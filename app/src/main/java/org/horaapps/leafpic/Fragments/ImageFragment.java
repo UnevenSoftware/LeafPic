@@ -2,6 +2,7 @@ package org.horaapps.leafpic.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 
 import org.horaapps.leafpic.Activities.SingleMediaActivity;
+import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.Views.OrientationTransformation;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.util.Measure;
 
 import java.util.Date;
 
@@ -26,7 +30,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 @SuppressWarnings("ResourceType")
 public class ImageFragment extends Fragment {
 
-    private Media img;
+    //private Media img;
 
     public static ImageFragment newInstance(Media asd) {
         ImageFragment fragmentFirst = new ImageFragment();
@@ -42,7 +46,8 @@ public class ImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        img = getArguments().getParcelable("image");
+        //img = getArguments().getParcelable("image");
+        ((MyApplication) getContext().getApplicationContext()).getAlbum().getCurrentMedia();
     }
 
     @Override
@@ -88,6 +93,7 @@ public class ImageFragment extends Fragment {
 
     private void displayMedia(PhotoView photoView, boolean useCache) {
         //PreferenceUtil SP = PreferenceUtil.getInstance(getContext());
+        Media img = ((MyApplication) getContext().getApplicationContext()).getAlbum().getCurrentMedia();
 
         Glide.with(getContext())
                 .load(img.getUri())
@@ -121,23 +127,25 @@ public class ImageFragment extends Fragment {
 
     public boolean rotatePicture(int rotation) {
         // TODO: 28/08/16 not working yet
-        /*PhotoView photoView = (PhotoView) getView();
+        PhotoView photoView = (PhotoView) getView();
+
+        Media img = ((MyApplication) getContext().getApplicationContext()).getAlbum().getCurrentMedia();
         int orientation = Measure.rotateBy(img.getOrientation(), rotation);
+        Log.wtf("asd", img.getOrientation()+" + "+ rotation+" = " +orientation);
 
         if(photoView != null && img.setOrientation(orientation)) {
             Glide.clear(photoView);
             Glide.with(getContext())
                     .load(img.getUri())
                     .asBitmap()
-                    //.signature(img.getSignature())
-                    //.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .signature(img.getSignature())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     //.thumbnail(0.5f)
-                    .transform(new RotateTransformation(getContext(), orientation))
-                    //.animate(R.anim.fade_in)
+                    .transform(new OrientationTransformation(getContext(), orientation))
                     .into(photoView);
 
             return true;
-        }*/
+        }
         return false;
     }
 }

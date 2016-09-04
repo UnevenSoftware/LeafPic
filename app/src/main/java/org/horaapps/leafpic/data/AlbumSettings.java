@@ -18,6 +18,7 @@ public class AlbumSettings implements Serializable {
     private String coverPath;
     private int sortingMode;
     private int sortingOrder;
+
     private FilterMode filterMode = FilterMode.ALL;
 
     static AlbumSettings getSettings(Context context, Album album) {

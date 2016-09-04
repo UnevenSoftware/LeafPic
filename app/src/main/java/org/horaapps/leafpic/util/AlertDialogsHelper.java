@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 
-import org.horaapps.leafpic.Activities.SettingsActivity;
 import org.horaapps.leafpic.Activities.base.ThemedActivity;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
@@ -29,8 +28,6 @@ import org.horaapps.leafpic.data.base.MediaDetailsMap;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
-
-import static org.horaapps.leafpic.SecretConstants.MAP_BOX_TOKEN;
 
 /**
  * Created by dnld on 19/05/16.
@@ -110,39 +107,11 @@ public class AlertDialogsHelper {
         if ((location = f.getGeoLocation()) != null) {
             PreferenceUtil SP = PreferenceUtil.getInstance(activity.getApplicationContext());
 
-            String url;
-            switch (SP.getInt(activity.getString(org.horaapps.leafpic.R.string.preference_map_provider),
-                    SettingsActivity.GOOGLE_MAPS_PROVIDER)) {
-                case SettingsActivity.GOOGLE_MAPS_PROVIDER:
-                default:
-                    url = String.format(Locale.getDefault(), "http://maps.google.com/maps/api/staticmap" +
-                                                                     "?center=%f,%f&zoom=15&size=500x300&scale=2&sensor=false", location.getLatitude(), location.getLongitude());
-                    break;
-                case SettingsActivity.OSM_MAP_BOX:
-                    url = String.format(Locale.getDefault(), "https://api.mapbox.com/v4/mapbox.streets/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(), location.getLatitude(), MAP_BOX_TOKEN);
-
-                    break;
-                case SettingsActivity.OSM_MAP_BOX_DARK:
-                    url = String.format(Locale.getDefault(), "https://api.mapbox.com/v4/mapbox.dark/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(), location.getLatitude(), MAP_BOX_TOKEN);
-
-                    break;
-                case SettingsActivity.OSM_MAP_BOX_LIGHT:
-                    url = String.format(Locale.getDefault(), "https://api.mapbox.com/v4/mapbox.light/%f,%f,15/500x300.jpg?access_token=%s",
-                            location.getLongitude(), location.getLatitude(), MAP_BOX_TOKEN);
-
-                    break;
-                case SettingsActivity.OSM_TYLER_PROVIDER:
-                    url = String.format(Locale.getDefault(), "https://tyler-demo.herokuapp.com/" +
-                                                                     "?greyscale=false&lat=%f&lon=%f&zoom=15&width=500&height=300" +
-                                                                     "&tile_url=http://[abcd].tile.stamen.com/watercolor/{zoom}/{x}/{y}.jpg", location.getLatitude(), location.getLongitude());
-
-                    break;
-            }
+            StaticMapProvider staticMapProvider = StaticMapProvider.fromValue(
+                    SP.getInt(activity.getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue()));
 
             Glide.with(activity.getApplicationContext())
-                    .load(url)
+                    .load(staticMapProvider.getUrl(location))
                     .asBitmap()
                     .centerCrop()
                     .animate(org.horaapps.leafpic.R.anim.fade_in)
