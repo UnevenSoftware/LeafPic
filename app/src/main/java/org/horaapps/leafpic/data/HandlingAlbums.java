@@ -111,22 +111,24 @@ public class HandlingAlbums {
   }
 
   public void saveBackup(final Context context) {
-    new Thread(new Runnable() {
-      public void run() {
-        FileOutputStream outStream;
-        try {
-          File f = new File(context.getCacheDir(), backupFile);
-          outStream = new FileOutputStream(f);
-          ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
-          objectOutStream.writeObject(dispAlbums);
-          objectOutStream.close();
-        } catch (FileNotFoundException e1) {
-          e1.printStackTrace();
-        } catch (IOException e1) {
-          e1.printStackTrace();
+    if (!hidden) {
+      new Thread(new Runnable() {
+        public void run() {
+          FileOutputStream outStream;
+          try {
+            File f = new File(context.getCacheDir(), backupFile);
+            outStream = new FileOutputStream(f);
+            ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
+            objectOutStream.writeObject(dispAlbums);
+            objectOutStream.close();
+          } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+          } catch (IOException e1) {
+            e1.printStackTrace();
+          }
         }
-      }
-    }).start();
+      }).start();
+    }
   }
 
 
