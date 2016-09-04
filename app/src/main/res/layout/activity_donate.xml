@@ -220,6 +220,8 @@
                         android:layout_gravity="right"
                         android:id="@+id/button_donate_paypal"
                         android:text="@string/donate"
+                        android:textAllCaps="true"
+
                     />
                 </LinearLayout>
 

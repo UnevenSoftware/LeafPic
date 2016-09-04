@@ -285,14 +285,14 @@ public class SettingsActivity extends ThemedActivity {
     }
 
     private void multiColumnsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
+        AlertDialog.Builder multiColumnDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_multi_column, null);
 
         ((TextView) dialogLayout.findViewById(R.id.folders_title)).setTextColor(getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.media_title)).setTextColor(getTextColor());
         ((CardView) dialogLayout.findViewById(R.id.multi_column_card)).setCardBackgroundColor(getCardBackgroundColor());
 
-        dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
+        dialogLayout.findViewById(R.id.multi_column_title).setBackgroundColor(getPrimaryColor());
         final TextView nColFolders = (TextView) dialogLayout.findViewById(R.id.n_columns_folders);
         final TextView nColMedia = (TextView) dialogLayout.findViewById(R.id.n_columns_media);
         nColFolders.setTextColor(getSubTextColor());
@@ -340,7 +340,7 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
-        builder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+        multiColumnDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 int nFolders = Integer.parseInt(nColFolders.getText().toString());
@@ -349,17 +349,17 @@ public class SettingsActivity extends ThemedActivity {
                 SP.putInt("n_columns_media", nMedia);
             }
         });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setView(dialogLayout);
-        builder.show();
+        multiColumnDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+        multiColumnDialogBuilder.setView(dialogLayout);
+        multiColumnDialogBuilder.show();
     }
 
     private void askPasswordDialog() {
         AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingsActivity.this,passwordDialogBuilder);
-        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
 
-        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //This should br empty it will be overwrite later
@@ -417,8 +417,8 @@ public class SettingsActivity extends ThemedActivity {
             case TYLER: radioTyler.setChecked(true); break;
         }
 
-        dialogBuilder.setNegativeButton(R.string.cancel, null);
-        dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (mapProvider.getCheckedRadioButtonId()) {
@@ -502,13 +502,13 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
         dialogBuilder.setView(dialogLayout);
-        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SP.putInt(getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme());
                 setTheme();
             }
         });
-        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 setBaseTheme(ThemeHelper.getBaseTheme(getApplicationContext()), false);
@@ -573,7 +573,7 @@ public class SettingsActivity extends ThemedActivity {
         });
         dialogBuilder.setView(dialogLayout);
 
-        dialogBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNeutralButton(getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -586,7 +586,7 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
-        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SP.putInt(getString(R.string.preference_primary_color), colorPicker2.getColor());
                 updateTheme();
@@ -643,14 +643,14 @@ public class SettingsActivity extends ThemedActivity {
         });
         dialogBuilder.setView(dialogLayout);
 
-        dialogBuilder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNeutralButton(getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 updateViewswithAccentColor(getAccentColor());
             }
         });
-        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SP.putInt(getString(R.string.preference_accent_color), colorPicker.getColor());
                 updateTheme();
@@ -698,8 +698,8 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) dialogLayout.findViewById(R.id.seek_bar_alpha_title_Sub)).setTextColor(getSubTextColor());
 
         dialogBuilder.setView(dialogLayout);
-        dialogBuilder.setNeutralButton(getString(R.string.cancel), null);
-        dialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNeutralButton(getString(R.string.cancel).toUpperCase(), null);
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SP.getEditor();
                 editor.putBoolean(getString(R.string.preference_apply_theme_pager), swApplyTheme_Viewer.isChecked());

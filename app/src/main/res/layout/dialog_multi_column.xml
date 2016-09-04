@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/affix_title"
+                android:id="@+id/multi_column_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/md_dark_appbar"

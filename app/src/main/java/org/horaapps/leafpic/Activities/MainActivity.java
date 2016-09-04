@@ -453,7 +453,7 @@ public class MainActivity extends SharedMediaActivity {
 		AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
 						R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
 
-		dialogBuilder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+		dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialogInterface, int i) {
 				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -566,11 +566,11 @@ public class MainActivity extends SharedMediaActivity {
 
 					AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder (MainActivity.this, getDialogStyle());
 					final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder);
-					passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+					passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {}
 					});
 
-					passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+					passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
 
 					final AlertDialog passwordDialog = passwordDialogBuilder.create();
 					passwordDialog.show();
@@ -798,7 +798,7 @@ public class MainActivity extends SharedMediaActivity {
 								hidden ? R.string.unhide : R.string.hide,
 								hidden ? R.string.unhide_album_message : R.string.hide_album_message);
 
-				hideDialogBuilder.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide), new DialogInterface.OnClickListener() {
+				hideDialogBuilder.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide).toUpperCase(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						if (albumsMode) {
 							if (hidden) getAlbums().unHideSelectedAlbums(getApplicationContext());
@@ -813,7 +813,7 @@ public class MainActivity extends SharedMediaActivity {
 					}
 				});
 				if (!hidden) {
-					hideDialogBuilder.setNeutralButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+					hideDialogBuilder.setNeutralButton(this.getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if (albumsMode) {
@@ -827,7 +827,7 @@ public class MainActivity extends SharedMediaActivity {
 						}
 					});
 				}
-				hideDialogBuilder.setNegativeButton(this.getString(R.string.cancel), null);
+				hideDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
 				hideDialogBuilder.show();
 				return true;
 
@@ -879,15 +879,15 @@ public class MainActivity extends SharedMediaActivity {
 				AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 				AlertDialogsHelper.getTextDialog(this, deleteDialog, R.string.delete, albumsMode || !editMode ? R.string.delete_album_message : R.string.delete_photos_message);
 
-				deleteDialog.setNegativeButton(this.getString(R.string.cancel), null);
-				deleteDialog.setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+				deleteDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
+				deleteDialog.setPositiveButton(this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						if (securityObj.isActiveSecurity() && securityObj.isPasswordOnDelete()) {
 							AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 							final EditText editTextPassword  = securityObj.getInsertPasswordDialog(MainActivity.this,passwordDialogBuilder);
-							passwordDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+							passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
 
-							passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+							passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									//This should br empty it will be overwrite later
@@ -949,7 +949,7 @@ public class MainActivity extends SharedMediaActivity {
 				textViewExcludeMessage.setTextColor(getTextColor());
 				excludeDialogBuilder.setView(excludeDialogLayout);
 
-				excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude), new DialogInterface.OnClickListener() {
+				excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 
 						if ((albumsMode && getAlbums().getSelectedCount() > 1)) {
@@ -963,7 +963,7 @@ public class MainActivity extends SharedMediaActivity {
 						}
 					}
 				});
-				excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel), null);
+				excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
 				excludeDialogBuilder.show();
 				return true;
 
@@ -1218,7 +1218,7 @@ public class MainActivity extends SharedMediaActivity {
 				}
 				//Dialog Buttons
 				AffixDialog.setView(dialogLayout);
-				AffixDialog.setPositiveButton(this.getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+				AffixDialog.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						Bitmap.CompressFormat compressFormat;
 						switch (radioFormatGroup.getCheckedRadioButtonId()) {
@@ -1237,7 +1237,7 @@ public class MainActivity extends SharedMediaActivity {
 																			   swVertical.isChecked());
 						new affixMedia().execute(options);
 					}});
-				AffixDialog.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+				AffixDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {}});
 				AffixDialog.show();
 				return true;
@@ -1293,9 +1293,9 @@ public class MainActivity extends SharedMediaActivity {
 				AlertDialogsHelper.getInsertTextDialog(MainActivity.this, renameDialogBuilder,
 								editTextNewName, R.string.rename_album);
 
-				renameDialogBuilder.setNegativeButton(getString(R.string.cancel), null);
+				renameDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
 
-				renameDialogBuilder.setPositiveButton(getString(R.string.ok_action), new DialogInterface.OnClickListener() {
+				renameDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						//This should br empty it will be overwrite later

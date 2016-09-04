@@ -329,11 +329,8 @@ public class AboutActivity extends ThemedActivity {
                 + "Copyright 2016 Maximilian Narr", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("uCrop", "http://github.com/Yalantis/uCrop", "Copyright 2016, Yalantis", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("ShiftColorPicker", "http://github.com/DASAR/ShiftColorPicker", "Copyright (c) 2015 Bogdasarov Bogdan", new MITLicense()));
-        notices.addNotice(new Notice("material-ripple", "http://github.com/balysv/material-ripple", "Copyright 2015 Balys Valentukevicius", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("PhotoView", "http://github.com/chrisbanes/PhotoView", "Copyright 2011, 2012 Chris Banes.", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("CircleImageView", "https://github.com/hdodenhof/CircleImageView", "Copyright 2014 - 2015 Henning Dodenhof", new ApacheSoftwareLicense20()));
-
-        notices.addNotice(new Notice("Material Scroll Bar", "https://github.com/krimin-killr21/MaterialScrollBar", "Copyright 2016 Turing Technologies, an unincorporated orginisation of Wynne Plaga.", new ApacheSoftwareLicense20()));
 
         new LicensesDialog.Builder(this)
                 .setNotices(notices)
