@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.data.base;
 
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.util.NumericComparator;
 
 import java.util.Comparator;
 
@@ -20,6 +21,8 @@ public class MediaComparators {
                 return getSizeComparator(sortingOrder);
             case TYPE:
                 return getTypeComparator(sortingOrder);
+            case NUMERIC:
+                return getNumericComparator(sortingOrder);
         }
     }
 
@@ -63,7 +66,7 @@ public class MediaComparators {
         };
     }
 
-    static Comparator<Media> getTypeComparator(final SortingOrder sortingOrder) {
+    private static Comparator<Media> getTypeComparator(final SortingOrder sortingOrder) {
         return new Comparator<Media>() {
             public int compare(Media f1, Media f2) {
                 switch (sortingOrder){
@@ -71,6 +74,19 @@ public class MediaComparators {
                         return f1.getMimeType().compareTo(f2.getMimeType());
                     case DESCENDING: default:
                         return f2.getMimeType().compareTo(f1.getMimeType());
+                }
+            }
+        };
+    }
+
+    private static Comparator<Media> getNumericComparator(final SortingOrder sortingOrder) {
+        return new Comparator<Media>() {
+            public int compare(Media f1, Media f2) {
+                switch (sortingOrder) {
+                    case ASCENDING:
+                        return NumericComparator.filevercmp(f1.getPath(), f2.getPath());
+                    case DESCENDING: default:
+                        return NumericComparator.filevercmp(f2.getPath(), f1.getPath());
                 }
             }
         };

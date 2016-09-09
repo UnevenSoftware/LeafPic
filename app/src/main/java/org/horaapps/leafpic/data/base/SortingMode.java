@@ -5,7 +5,7 @@ package org.horaapps.leafpic.data.base;
  */
 
 public enum SortingMode {
-  NAME (0), DATE (1), SIZE(2), TYPE(3);
+  NAME (0), DATE (1), SIZE(2), TYPE(3), NUMERIC(4);
 
   int value;
 
@@ -23,6 +23,7 @@ public enum SortingMode {
       case 1: default: return DATE;
       case 2: return SIZE;
       case 3: return TYPE;
+      case 4: return NUMERIC;
     }
   }
 }

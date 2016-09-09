@@ -690,6 +690,7 @@ public class MainActivity extends SharedMediaActivity {
 				case SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
 				case DATE: default:
 					menu.findItem(R.id.date_taken_sort_action).setChecked(true); break;
+				case NUMERIC:  menu.findItem(R.id.numeric_sort_action).setChecked(true); break;
 			}
 
 		} else {
@@ -704,6 +705,7 @@ public class MainActivity extends SharedMediaActivity {
 				case TYPE:  menu.findItem(R.id.type_sort_action).setChecked(true); break;
 				case DATE: default:
 					menu.findItem(R.id.date_taken_sort_action).setChecked(true); break;
+				case NUMERIC:  menu.findItem(R.id.numeric_sort_action).setChecked(true); break;
 			}
 		}
 
@@ -1072,6 +1074,19 @@ public class MainActivity extends SharedMediaActivity {
 					item.setChecked(true);
 				}
 
+				return true;
+
+			case R.id.numeric_sort_action:
+				if (albumsMode) {
+					getAlbums().setDefaultSortingMode(SortingMode.NUMERIC);
+					getAlbums().sortAlbums(getApplicationContext());
+					albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+				} else {
+					getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
+					getAlbum().sortPhotos();
+					mediaAdapter.swapDataSet(getAlbum().getMedia());
+				}
+				item.setChecked(true);
 				return true;
 
 			case R.id.ascending_sort_action:

@@ -398,6 +398,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 item.setChecked(true);
                 return true;
 
+            case R.id.numeric_sort_action:
+                getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
+                getAlbum().sortPhotos();
+                adapter.swapDataSet(getAlbum().getMedia());
+                item.setChecked(true);
+                return true;
+
             case R.id.ascending_sort_action:
                 getAlbum().setDefaultSortingAscending(getApplicationContext(), !item.isChecked() ? SortingOrder.ASCENDING : SortingOrder.DESCENDING);
                 getAlbum().sortPhotos();
