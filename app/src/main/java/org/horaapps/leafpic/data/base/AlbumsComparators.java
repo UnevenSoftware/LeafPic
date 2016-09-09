@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.data.base;
 
 import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.util.NumericComparator;
 
 import java.util.Comparator;
 
@@ -17,6 +18,8 @@ public class AlbumsComparators {
                 return getSizeComparator(sortingOrder);
             case DATE: default:
                 return getDateComparator(sortingOrder);
+            case NUMERIC:
+                return getNumericComparator(sortingOrder);
         }
     }
 
@@ -56,6 +59,20 @@ public class AlbumsComparators {
 
                     case DESCENDING: default:
                         return f2.getCount() - f1.getCount();
+                }
+            }
+        };
+    }
+
+    private static Comparator<Album> getNumericComparator(final SortingOrder sortingOrder) {
+        return new Comparator<Album>() {
+            public int compare(Album f1, Album f2) {
+                switch (sortingOrder) {
+                    case ASCENDING:
+                        return NumericComparator.filevercmp(f1.getName().toLowerCase(), f2.getName().toLowerCase());
+
+                    case DESCENDING: default:
+                        return NumericComparator.filevercmp(f2.getName().toLowerCase(), f1.getName().toLowerCase());
                 }
             }
         };

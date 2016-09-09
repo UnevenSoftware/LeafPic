@@ -38,6 +38,7 @@
     <string name="date_taken">Date taken</string>
 
     <string name="size">Size</string>
+    <string name="numeric">As number</string>
     <string name="ascending">Ascending</string>
 
     <string name="select_all">Select All</string>
