@@ -39,12 +39,12 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int pos) {
         Media p = media.get(pos);
         if (p.isVideo()) {
-            VideoFragment fragment = VideoFragment.newInstance(p.getPath());
+            VideoFragment fragment = VideoFragment.newInstance();
             fragment.setOnClickListener(videoOnClickListener);
             return fragment;
         }
-        if (p.isGif()) return GifFragment.newInstance(p.getPath());
-        else return ImageFragment.newInstance(p);
+        if (p.isGif()) return GifFragment.newInstance();
+        else return ImageFragment.newInstance();
     }
 
     @Override

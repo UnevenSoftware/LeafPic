@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.Fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +15,12 @@ import org.horaapps.leafpic.Activities.SingleMediaActivity;
  * Created by dnld on 18/02/16.
  */
 
-public class VideoFragment extends Fragment {
+public class VideoFragment extends MediaFragment {
 
-    private String path;
     private View.OnClickListener onClickListener;
 
-    public static VideoFragment newInstance(String path) {
-        VideoFragment fragmentFirst = new VideoFragment();
-
-        Bundle args = new Bundle();
-        args.putString("path", path);
-        fragmentFirst.setArguments(args);
-
-        return fragmentFirst;
+    public static VideoFragment newInstance() {
+        return new VideoFragment();
     }
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
@@ -38,7 +30,6 @@ public class VideoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        path = getArguments().getString("path");
     }
 
 
@@ -54,7 +45,7 @@ public class VideoFragment extends Fragment {
         videoInd.setOnClickListener(onClickListener);
 
         Ion.with(getContext())
-                .load(path)
+                .load(getMedia().getPath())
                 .withBitmap()
                 .intoImageView(picture);
         picture.setOnClickListener(new View.OnClickListener() {

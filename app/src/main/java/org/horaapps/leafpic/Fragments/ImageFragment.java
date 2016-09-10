@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.Fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 
 import org.horaapps.leafpic.Activities.SingleMediaActivity;
-import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Views.OrientationTransformation;
 import org.horaapps.leafpic.data.Media;
@@ -28,34 +26,15 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 
 @SuppressWarnings("ResourceType")
-public class ImageFragment extends Fragment {
+public class ImageFragment extends MediaFragment {
 
-    //private Media img;
-
-    public static ImageFragment newInstance(Media asd) {
-        ImageFragment fragmentFirst = new ImageFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelable("image", asd);
-        fragmentFirst.setArguments(args);
-
-        return fragmentFirst;
+    public static ImageFragment newInstance() {
+        return new ImageFragment();
     }
 
-    //public void setOnTouchListener(View.OnTouchListener l){onTouchListener = l;}
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //img = getArguments().getParcelable("image");
-        ((MyApplication) getContext().getApplicationContext()).getAlbum().getCurrentMedia();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // Need to call clean-up
-
     }
 
     @Override
@@ -93,7 +72,7 @@ public class ImageFragment extends Fragment {
 
     private void displayMedia(PhotoView photoView, boolean useCache) {
         //PreferenceUtil SP = PreferenceUtil.getInstance(getContext());
-        Media img = ((MyApplication) getContext().getApplicationContext()).getAlbum().getCurrentMedia();
+        Media img = getMedia();
 
         Glide.with(getContext())
                 .load(img.getUri())
@@ -129,11 +108,11 @@ public class ImageFragment extends Fragment {
         // TODO: 28/08/16 not working yet
         PhotoView photoView = (PhotoView) getView();
 
-        Media img = ((MyApplication) getContext().getApplicationContext()).getAlbum().getCurrentMedia();
+        Media img = getMedia();
         int orientation = Measure.rotateBy(img.getOrientation(), rotation);
         Log.wtf("asd", img.getOrientation()+" + "+ rotation+" = " +orientation);
 
-        if(photoView != null && img.setOrientation(orientation)) {
+        if(photoView != null && getMedia().setOrientation(orientation)) {
             Glide.clear(photoView);
             Glide.with(getContext())
                     .load(img.getUri())
