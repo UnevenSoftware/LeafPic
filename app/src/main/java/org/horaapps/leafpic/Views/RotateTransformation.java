@@ -11,21 +11,27 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
  * Created by dnld on 21/08/16.
  */
 
-public class OrientationTransformation extends BitmapTransformation {
+public class RotateTransformation extends BitmapTransformation {
 
   private float rotateRotationAngle = 0f;
+  private boolean increment = false;
 
-  public OrientationTransformation(Context context, float rotateRotationAngle) {
+  public RotateTransformation(Context context, float rotateRotationAngle, boolean increment) {
     super(context);
     this.rotateRotationAngle = rotateRotationAngle;
+    this.increment = increment;
   }
 
   @Override
   protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
     Matrix matrix = new Matrix();
 
-    matrix.setRotate(rotateRotationAngle);
-    /*if (rotateRotationAngle > 0) matrix.setRotate(rotateRotationAngle);
+    if (increment) {
+      if (rotateRotationAngle > 0) matrix.postRotate(rotateRotationAngle);
+      else matrix.preRotate(rotateRotationAngle * -1);
+    } else
+      matrix.setRotate(rotateRotationAngle);
+    /*if (rotateRotationAngle > 0) matrix.postRotate(rotateRotationAngle);
     else matrix.preRotate(rotateRotationAngle * -1);*/
 
     return Bitmap.createBitmap(toTransform, 0, 0, toTransform.getWidth(), toTransform.getHeight(), matrix, true);

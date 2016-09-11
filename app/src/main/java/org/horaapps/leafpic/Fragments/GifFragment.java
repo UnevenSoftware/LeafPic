@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.Fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import com.koushikdutta.ion.Ion;
 
 import org.horaapps.leafpic.Activities.SingleMediaActivity;
+import org.horaapps.leafpic.data.Media;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -15,28 +17,32 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * Created by dnld on 18/02/16.
  */
-public class GifFragment extends MediaFragment {
+public class GifFragment extends Fragment {
 
+    private Media gif;
 
-    // newInstance constructor for creating fragment with arguments
-    public static GifFragment newInstance() {
-        return new GifFragment();
+    public static GifFragment newInstance(Media media) {
+        GifFragment gifFragment = new GifFragment();
+
+        Bundle args = new Bundle();
+        args.putParcelable("gif", media);
+        gifFragment.setArguments(args);
+
+        return gifFragment;
+
     }
 
-
-    // Store instance variables based on arguments passed
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gif =  getArguments().getParcelable("gif");
     }
 
-    // Inflate the view for the fragment based on layout XML
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PhotoView photoView = new PhotoView(container.getContext());
 
         Ion.with(getContext())
-                .load(getMedia().getPath())
+                .load(gif.getPath())
                 .intoImageView(photoView);
 
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {

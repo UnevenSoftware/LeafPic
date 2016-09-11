@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
 
 /**
  * Created by dnld on 26/04/16.
@@ -109,8 +108,8 @@ public class Album implements Serializable {
 
 	public void updatePhotos(Context context) {
 
-		CustomAlbumsHelper albumHandler = CustomAlbumsHelper.getInstance(context);
-		Set<String> excludedPhotoPaths = albumHandler.getExcludedPhotos(this.getPath(), this.getId());
+		//CustomAlbumsHelper albumHandler = CustomAlbumsHelper.getInstance(context);
+		//Set<String> excludedPhotoPaths = albumHandler.getExcludedPhotos(this.getPath(), this.getId());
 		PreferenceUtil SP = PreferenceUtil.getInstance(context);
 		ArrayList<Media> mediaArrayList = new ArrayList<Media>();
 		// TODO: 18/08/16
@@ -124,10 +123,10 @@ public class Album implements Serializable {
 		}
 
 
-		for (int i = mediaArrayList.size() - 1; i >= 0; i--) {
+		/*for (int i = mediaArrayList.size() - 1; i >= 0; i--) {
 			if (excludedPhotoPaths.contains(mediaArrayList.get(i).getPath()))
 				mediaArrayList.remove(i);
-		}
+		}*/
 
 		media = mediaArrayList;
 		sortPhotos();

@@ -15,7 +15,6 @@ import org.horaapps.leafpic.Activities.SplashScreen;
 import org.horaapps.leafpic.data.Providers.MediaStoreProvider;
 import org.horaapps.leafpic.data.Providers.StorageProvider;
 import org.horaapps.leafpic.data.base.AlbumsComparators;
-import org.horaapps.leafpic.data.base.FoldersFileFilter;
 import org.horaapps.leafpic.data.base.SortingMode;
 import org.horaapps.leafpic.data.base.SortingOrder;
 import org.horaapps.leafpic.util.ContentHelper;
@@ -98,16 +97,6 @@ public class HandlingAlbums {
 
   public boolean isContentFromMediaStore() {
     return nameProvider.equals(MediaStoreProvider.class.getName());
-  }
-
-
-  public static ArrayList<String> getSubFolders(File dir) {
-    ArrayList<String> array = new ArrayList<String>();
-    File[] children = dir.listFiles(new FoldersFileFilter());
-    if (children != null)
-      for (File child : children)
-        array.add(child.getName());
-    return array;
   }
 
   public void saveBackup(final Context context) {
