@@ -41,7 +41,6 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.google.android.exoplayer.AspectRatioFrameLayout;
@@ -99,24 +98,17 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   private View shutterView;
   private AspectRatioFrameLayout videoFrame;
   private SurfaceView surfaceView;
-
   private DemoPlayer player;
   private boolean playerNeedsPrepare;
   private long playerPosition;
-
   private Uri contentUri;
   private int contentType;
-
   private AudioCapabilitiesReceiver audioCapabilitiesReceiver;
   private Toolbar toolbar;
-
   private boolean fullscreen = false;
-
-  // Activity lifecycle
 
   @SuppressWarnings("ResourceAsColor")
   private void initUI(){
-
     setSupportActionBar(toolbar);
     toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
@@ -128,7 +120,6 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     });
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -137,24 +128,10 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
                     | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-    /*getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
-            (new View.OnSystemUiVisibilityChangeListener() {
-              @Override
-              public void onSystemUiVisibilityChange(int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) showControls();
-                else hideControls();
-              }
-            });*/
     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
             .setDuration(0).start();
     mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
 
-    /*mediaController.post(new Runnable() {
-      @Override
-      public void run() {
-        styleMediaController(mediaController);
-      }
-    });*/
     mediaController.setBackgroundColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
 
     setStatusBarColor();
@@ -166,42 +143,6 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   public void onBackPressed() {
     if (!fullscreen) finish();
     else super.onBackPressed();
-  }
-
-  private void styleMediaController(MediaController view) {
-
-
-
-    /*if (view instanceof MediaController) {
-      MediaController v = (MediaController) view;
-      for (int i = 0; i < v.getChildCount(); i++) {
-        styleMediaController(v.getChildAt(i));
-      }
-    }*/
-
-
-    /*Log.wtf("asd", view.getClass()+"");
-    if (view instanceof MediaController) {
-      MediaController v = (MediaController) view;
-      for (int i = 0; i < v.getChildCount(); i++) {
-        styleMediaController(v.getChildAt(i));
-      }
-    } else if (view instanceof LinearLayout) {
-      LinearLayout ll = (LinearLayout) view;
-      //ll.setBackgroundColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
-      for (int i = 0; i < ll.getChildCount(); i++) {
-        styleMediaController(ll.getChildAt(i));
-      }
-    } else if (view instanceof SeekBar) {
-      themeSeekBar(((SeekBar) view));
-
-    } else if (view instanceof AppCompatImageButton) {
-      AppCompatImageButton button = (AppCompatImageButton) view;
-      button.setImageDrawable(getToolbarIcon(GoogleMaterial.Icon.gmd_accessibility));
-
-      //button.setBackgroundDrawable(getToolbarIcon(GoogleMaterial.Icon.gmd_accessibility));
-
-    }*/
   }
 
   @Override

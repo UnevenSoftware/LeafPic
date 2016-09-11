@@ -69,6 +69,7 @@ public class SettingsActivity extends ThemedActivity {
     private SwitchCompat swUseMediaStore;
     private SwitchCompat swIncludeVideo;
     private SwitchCompat swSwipeDirection;
+    private SwitchCompat swShowFab;
 
 
     @Override
@@ -77,8 +78,6 @@ public class SettingsActivity extends ThemedActivity {
         setContentView(R.layout.activity_settings);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceUtil.getInstance(getApplicationContext());
-
-
 
         securityObj = new SecurityHelper(SettingsActivity.this);
 
@@ -89,7 +88,6 @@ public class SettingsActivity extends ThemedActivity {
         txtAT = (TextView) findViewById(R.id.advanced_setting_title);
 
         scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
-
 
         /*** BASIC THEME ***/
         findViewById(R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
@@ -159,6 +157,17 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
+        /*** SW Show Fab ***/
+        swShowFab = (SwitchCompat) findViewById(R.id.sw_show_fab);
+        swShowFab.setChecked(SP.getBoolean(getString(R.string.preference_show_fab), false));
+        swShowFab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SP.putBoolean(getString(R.string.preference_show_fab), isChecked);
+                updateSwitchColor(swShowFab, getAccentColor());
+            }
+        });
+
         /*** SW Internal Player ***/
         swInternalBrowser = (SwitchCompat) findViewById(R.id.set_internal_player);
         swInternalBrowser.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
@@ -172,7 +181,6 @@ public class SettingsActivity extends ThemedActivity {
                         ((MyApplication) getApplicationContext()).updateAlbums();
                     }
                 }).start();
-
                 updateSwitchColor(swInternalBrowser, getAccentColor());
             }
         });
@@ -475,8 +483,9 @@ public class SettingsActivity extends ThemedActivity {
                 darkSelect.setVisibility(View.GONE);
                 darkAmoledSelect.setVisibility(View.GONE);
                 setBaseTheme(LIGHT_THEME, false);
-                dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
-                setTheme();
+                //dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
+                //setTheme();
+
             }
         });
         dialogLayout.findViewById(R.id.ll_dark_basic_theme).setOnClickListener(new View.OnClickListener() {
@@ -486,8 +495,8 @@ public class SettingsActivity extends ThemedActivity {
                 darkSelect.setVisibility(View.VISIBLE);
                 darkAmoledSelect.setVisibility(View.GONE);
                 setBaseTheme(DARK_THEME, false);
-                dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
-                setTheme();
+                //dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
+                //setTheme();
             }
         });
         dialogLayout.findViewById(R.id.ll_dark_amoled_basic_theme).setOnClickListener(new View.OnClickListener() {
@@ -497,8 +506,9 @@ public class SettingsActivity extends ThemedActivity {
                 darkSelect.setVisibility(View.GONE);
                 darkAmoledSelect.setVisibility(View.VISIBLE);
                 setBaseTheme(AMOLED_THEME, false);
-                dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
-                setTheme();
+                //dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
+                //setTheme();
+
             }
         });
         dialogBuilder.setView(dialogLayout);
@@ -730,6 +740,7 @@ public class SettingsActivity extends ThemedActivity {
         updateSwitchColor(swIncludeVideo, color);
         updateSwitchColor(swSwipeDirection, color);
         updateSwitchColor(swUseMediaStore, color);
+        updateSwitchColor(swShowFab, color);
     }
 
     @Override

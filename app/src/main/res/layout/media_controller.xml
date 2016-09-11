@@ -44,11 +44,10 @@
 
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/pause"
-            android:layout_height="35dp"
-            android:layout_width="35dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginEnd="22dp"
-            app:iiv_icon="gmd-pause-circle-outline"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:layout_margin="22dp"
+            app:iiv_icon="gmd-pause"
             app:iiv_color="@color/md_white_1000" />
 
         <com.mikepenz.iconics.view.IconicsImageView

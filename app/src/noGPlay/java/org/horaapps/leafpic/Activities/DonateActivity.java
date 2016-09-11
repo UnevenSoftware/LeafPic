@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -14,8 +15,8 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.Activities.base.ThemedActivity;
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -102,6 +103,8 @@ public class DonateActivity extends ThemedActivity {
         setScrollViewColor(scr);
 
         /** ACTIONS **/
+        ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
+        ((Button) findViewById(R.id.button_donate_play_store)).setText(getString(R.string.donate).toUpperCase());
         findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

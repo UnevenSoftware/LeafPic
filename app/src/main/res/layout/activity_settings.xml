@@ -194,28 +194,45 @@
                             app:iiv_icon="gmd-add-circle"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
                             android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <TextView
-                                android:id="@+id/fab_options_item_title"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/fab_options_item_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fab_options"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp" />
+                                <TextView
+                                    android:id="@+id/fab_options_item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fab_options_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/sw_show_fab"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/fab_options"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="16sp" />
-                            <TextView
-                                android:id="@+id/fab_options_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/fab_options_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="14sp" />
-                        </LinearLayout>
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>

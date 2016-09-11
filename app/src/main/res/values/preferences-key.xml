@@ -22,4 +22,5 @@
     <string name="preference_use_password_on_hidden">password_on_hidden</string>
     <string name="preference_use_password_on_delete">password_on_delete</string>
     <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
+    <string name="preference_show_fab">show_fab</string>
 </resources>

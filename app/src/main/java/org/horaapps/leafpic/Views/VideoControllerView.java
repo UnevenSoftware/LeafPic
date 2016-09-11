@@ -397,7 +397,7 @@ public class VideoControllerView extends FrameLayout {
     if (mRoot == null || mPauseButton == null || mPlayer == null) {
       return;
     }
-    mPauseButton.setIcon(mPlayer.isPlaying() ? GoogleMaterial.Icon.gmd_pause_circle_outline : GoogleMaterial.Icon.gmd_play_circle_outline);
+    mPauseButton.setIcon(mPlayer.isPlaying() ? GoogleMaterial.Icon.gmd_pause : GoogleMaterial.Icon.gmd_play_arrow);
 
 
 
