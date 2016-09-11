@@ -371,10 +371,10 @@ public class ContentHelper {
 
 		DocumentFile document = DocumentFile.fromTreeUri(context, treeUri);
 
+
 		String[] parts = file.getPath().split("/");
-		for (int i = findMagicNumber(parts, treeUri); i < parts.length; i++) { // 3 is the magic number todo
-			// change
-			// this
+		for (int i = findMagicNumber(file.getPath(), treeUri); i < parts.length; i++) { // 3 is the
+
 			DocumentFile tmp = document.findFile(parts[i]);
 			if (tmp != null)
 				document = document.findFile(parts[i]);
@@ -391,7 +391,7 @@ public class ContentHelper {
 		return document;
 	}
 
-	private static int findMagicNumber(String[] parts, Uri treUri){
+	private static int findMagicNumber(String path, Uri treUri) {
 		return 3;
 	}
 
@@ -412,11 +412,10 @@ public class ContentHelper {
 	 * Set a shared preference for an Uri.
 	 *
 	 * @param context context
-	 * @param preferenceId the id of the shared preference.
 	 * @param uri          the target value of the preference.
 	 */
-	public static void setSharedPreferenceUri(Context context, final int preferenceId, @Nullable final Uri uri) {
-		PreferenceUtil.getInstance(context).putString(context.getString(preferenceId), uri == null ? null :uri.toString());
+	public static void setSharedPreferenceUri(Context context, @Nullable final Uri uri) {
+		PreferenceUtil.getInstance(context).putString(context.getString(R.string.preference_internal_uri_extsdcard_photos), uri == null ? null : uri.toString());
 	}
 
 

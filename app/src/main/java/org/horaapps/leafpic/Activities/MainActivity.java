@@ -435,11 +435,7 @@ public class MainActivity extends SharedMediaActivity {
 			if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
 				Uri treeUri = resultData.getData();
 				// Persist URI in shared preference so that you can use it later.
-				ContentHelper.setSharedPreferenceUri(getApplicationContext(), R.string
-																							  .preference_internal_uri_extsdcard_photos, treeUri);
-
-				/*final int takeFlags = resultData.getFlags()
-													  & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
+				ContentHelper.setSharedPreferenceUri(getApplicationContext(), treeUri);
 				getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 				Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
 			}

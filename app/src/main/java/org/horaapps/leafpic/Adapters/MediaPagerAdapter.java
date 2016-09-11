@@ -24,8 +24,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
     private ArrayList<Media> media;
     private View.OnClickListener videoOnClickListener;
     private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
-
-
+    
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> media) {
         super(fm);
         this.media = media;
@@ -35,8 +34,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         this.videoOnClickListener = videoOnClickListener;
     }
 
-    @Override
-    public Fragment getItem(int pos) {
+    @Override public Fragment getItem(int pos) {
         Media media = this.media.get(pos);
         if (media.isVideo()) {
             VideoFragment fragment = VideoFragment.newInstance(media);
@@ -47,15 +45,13 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         else return ImageFragment.newInstance(media);
     }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    @Override public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
         registeredFragments.put(position, fragment);
         return fragment;
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    @Override public void destroyItem(ViewGroup container, int position, Object object) {
         registeredFragments.remove(position);
         super.destroyItem(container, position, object);
     }
@@ -69,13 +65,11 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    @Override
-    public int getItemPosition(Object object) {
+    @Override public int getItemPosition(Object object) {
         return PagerAdapter.POSITION_NONE;
     }
 
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
         return media.size();
     }
 }
