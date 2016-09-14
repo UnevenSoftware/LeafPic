@@ -249,13 +249,13 @@ public class MainActivity extends SharedMediaActivity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// TODO: 28/08/16 handle more stuff
-
-		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			fabCamera.setVisibility(View.GONE);
-		} else {
-			fabCamera.setVisibility(View.VISIBLE);
-			fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
+		if (SP.getBoolean(getString(R.string.preference_include_video), true)) {
+			if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				fabCamera.setVisibility(View.GONE);
+			} else {
+				fabCamera.setVisibility(View.VISIBLE);
+				fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
+			}
 		}
 	}
 
@@ -374,13 +374,7 @@ public class MainActivity extends SharedMediaActivity {
 		fabCamera.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (!albumsMode && getAlbum().areFiltersActive()) {
-					getAlbum().filterMedias(FilterMode.ALL);
-					mediaAdapter.swapDataSet(getAlbum().getMedia());
-					checkNothing();
-					toolbar.getMenu().findItem(R.id.all_media_filter).setChecked(true);
-					fabCamera.setImageDrawable(new IconicsDrawable(MainActivity.this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-				} else startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+				startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
 			}
 		});
 
@@ -485,6 +479,7 @@ public class MainActivity extends SharedMediaActivity {
 		setNavBarColor();
 
 		fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+		fabCamera.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab),false) ? View.VISIBLE : View.GONE);
 		setDrawerTheme();
 		rvAlbums.setBackgroundColor(getBackgroundColor());
 		rvMedia.setBackgroundColor(getBackgroundColor());
@@ -707,8 +702,6 @@ public class MainActivity extends SharedMediaActivity {
 
 
 		menu.findItem(R.id.hideAlbumButton).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
-		// TODO: 14/09/16
-		//menu.findItem(R.id.set_pin_album).setTitle();
 		menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
 		menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
 		menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
@@ -747,6 +740,7 @@ public class MainActivity extends SharedMediaActivity {
 		menu.findItem(R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));
 		if (getAlbums().getSelectedCount() == 1)
 			menu.findItem(R.id.set_pin_album).setTitle(getAlbums().getSelectedAlbum(0).isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
+		menu.findItem(R.id.set_pin_album).setVisible(albumsMode && getAlbums().getSelectedCount() == 1);
 		menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode);
 		menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedCount() > 1);
 		return super.onPrepareOptionsMenu(menu);
@@ -999,8 +993,6 @@ public class MainActivity extends SharedMediaActivity {
 					mediaAdapter.swapDataSet(getAlbum().getMedia());
 					item.setChecked(true);
 					checkNothing();
-					//TODO improve
-					//fabCamera.setImageDrawable(new IconicsDrawable(this).icon(CommunityMaterial.Icon.cmd_camera).color(Color.WHITE));
 				}
 				return true;
 
@@ -1010,8 +1002,6 @@ public class MainActivity extends SharedMediaActivity {
 					mediaAdapter.swapDataSet(getAlbum().getMedia());
 					item.setChecked(true);
 					checkNothing();
-					//TODO look for fab options
-					//fabCamera.setImageDrawable(new IconicsDrawable(this).icon(CommunityMaterial.Icon.cmd_notification_clear_all).color(Color.WHITE));
 				}
 				return true;
 
@@ -1021,8 +1011,6 @@ public class MainActivity extends SharedMediaActivity {
 					mediaAdapter.swapDataSet(getAlbum().getMedia());
 					item.setChecked(true);
 					checkNothing();
-					//TODO look for fab options
-					//fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));
 				}
 				return true;
 
@@ -1032,7 +1020,6 @@ public class MainActivity extends SharedMediaActivity {
 					mediaAdapter.swapDataSet(getAlbum().getMedia());
 					item.setChecked(true);
 					checkNothing();
-					/*fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_clear_all).color(Color.WHITE));*/
 				}
 				return true;
 

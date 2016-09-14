@@ -160,18 +160,6 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<String> getPinnedAlbums() {
-        ArrayList<String> list = new ArrayList<String>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String selection = ALBUM_PINNED + "=1";
-        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, selection, null, null, null, null);
-        if (cur.moveToFirst())
-            do list.add(cur.getString(0)); while (cur.moveToNext());
-        cur.close();
-        db.close();
-        return list;
-    }
-
     public ArrayList<String> getExcludedFoldersPaths() {
         ArrayList<String> list = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
