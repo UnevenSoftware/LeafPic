@@ -59,8 +59,7 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.base.FilterMode;
 import org.horaapps.leafpic.data.base.SortingMode;
 import org.horaapps.leafpic.data.base.SortingOrder;
-import org.horaapps.leafpic.util.AffixMedia;
-import org.horaapps.leafpic.util.AffixOptions;
+import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
@@ -1100,9 +1099,51 @@ public class MainActivity extends SharedMediaActivity {
 
 			//region Affix
 			case  R.id.affixPhoto:
-				// TODO: 03/08/16 move this away from this activity
 
-				final AlertDialog.Builder AffixDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+				//region Async MediaAffix
+				class affixMedia extends AsyncTask<Affix.Options, Integer, Void> {
+					private AlertDialog dialog;
+					@Override
+					protected void onPreExecute() {
+						AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+						dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, progressDialog,
+										getString(R.string.affix), getString(R.string.affix_text));
+						dialog.show();
+						super.onPreExecute();
+					}
+
+					@Override
+					protected Void doInBackground(Affix.Options... arg0) {
+						ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
+						for (int i=0;i<getAlbum().getSelectedCount();i++) {
+							if(!getAlbum().selectedMedias.get(i).isVideo())
+								bitmapArray.add(getAlbum().selectedMedias.get(i).getBitmap());
+						}
+
+						if (bitmapArray.size() > 1)
+							Affix.AffixBitmapList(getApplicationContext(), bitmapArray, arg0[0]);
+						else runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(getApplicationContext(), R.string.affix_error, Toast.LENGTH_SHORT).show();
+							}
+						});
+						return null;
+					}
+					@Override
+					protected void onPostExecute(Void result) {
+						editMode = false;
+						getAlbum().clearSelectedPhotos();
+						dialog.dismiss();
+						invalidateOptionsMenu();
+						mediaAdapter.notifyDataSetChanged();
+						new PreparePhotosTask().execute();
+					}
+				}
+				//endregion
+
+				final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 				final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
 
 				dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
@@ -1113,15 +1154,12 @@ public class MainActivity extends SharedMediaActivity {
 				final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
 
 				final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
-				final RadioButton radio_jpg = (RadioButton) dialogLayout.findViewById(R.id.radio_jpeg);
-				final RadioButton radio_png = (RadioButton) dialogLayout.findViewById(R.id.radio_png);
-				final RadioButton radio_webp = (RadioButton) dialogLayout.findViewById(R.id.radio_webp);
 
 				final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
 				final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
 
-				final ScrollView scrollView = (ScrollView) dialogLayout.findViewById(R.id.affix_scrollView);
-				setScrollViewColor(scrollView);
+				//region THEME STUFF
+				setScrollViewColor((ScrollView) dialogLayout.findViewById(R.id.affix_scrollView));
 
 				/** TextViews **/
 				int color = getTextColor();
@@ -1146,6 +1184,14 @@ public class MainActivity extends SharedMediaActivity {
 				seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
 				seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
 
+				updateRadioButtonColor((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
+				updateRadioButtonColor((RadioButton) dialogLayout.findViewById(R.id.radio_png));
+				updateRadioButtonColor((RadioButton) dialogLayout.findViewById(R.id.radio_webp));
+
+				updateSwitchColor(swVertical, getAccentColor());
+				updateSwitchColor(swSaveHere, getAccentColor());
+				//endregion
+
 				seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 					@Override
 					public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -1163,14 +1209,6 @@ public class MainActivity extends SharedMediaActivity {
 				});
 				seekQuality.setProgress(90); //DEFAULT
 
-				updateRadioButtonColor(radio_jpg);
-				updateRadioButtonColor(radio_png);
-				updateRadioButtonColor(radio_webp);
-
-				//SWITCH
-				updateSwitchColor(swVertical, getAccentColor());
-				updateSwitchColor(swSaveHere, getAccentColor());
-
 				swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1184,52 +1222,8 @@ public class MainActivity extends SharedMediaActivity {
 						updateSwitchColor(swSaveHere, getAccentColor());
 					}
 				});
-
-				//Affixing On Background//
-				class affixMedia extends AsyncTask<AffixOptions, Integer, Void> {
-					private AlertDialog dialog;
-					@Override
-					protected void onPreExecute() {
-						AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-						dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, progressDialog,
-										getString(R.string.affix), getString(R.string.affix_text));
-						dialog.show();
-						super.onPreExecute();
-					}
-
-					@Override
-					protected Void doInBackground(AffixOptions... arg0) {
-						ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-						for (int i=0;i<getAlbum().getSelectedCount();i++){
-							if(!getAlbum().selectedMedias.get(i).isVideo())
-								bitmapArray.add(getAlbum().selectedMedias.get(i).getBitmap());
-						}
-
-						if (bitmapArray.size() > 1)
-							AffixMedia.AffixBitmapList(getApplicationContext(), bitmapArray, arg0[0]);
-						else runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								Toast.makeText(getApplicationContext(), R.string.affix_error, Toast.LENGTH_SHORT).show();
-							}
-						});
-						return null;
-					}
-					@Override
-					protected void onPostExecute(Void result) {
-						editMode = false;
-						getAlbum().clearSelectedPhotos();
-						dialog.dismiss();
-						invalidateOptionsMenu();
-						mediaAdapter.notifyDataSetChanged();
-						// TODO: 21/08/16 update folder content
-						//new PreparePhotosTask().execute();
-					}
-				}
-				//Dialog Buttons
-				AffixDialog.setView(dialogLayout);
-				AffixDialog.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+				builder.setView(dialogLayout);
+				builder.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						Bitmap.CompressFormat compressFormat;
 						switch (radioFormatGroup.getCheckedRadioButtonId()) {
@@ -1241,16 +1235,17 @@ public class MainActivity extends SharedMediaActivity {
 								compressFormat = Bitmap.CompressFormat.WEBP; break;
 						}
 
-						AffixOptions options = new AffixOptions(
-																			   swSaveHere.isChecked() ? getAlbum().getPath() : AffixMedia.getDefaultDirectoryPath(),
-																			   compressFormat,
-																			   seekQuality.getProgress(),
-																			   swVertical.isChecked());
+						Affix.Options options = new Affix.Options(
+											   swSaveHere.isChecked() ? getAlbum().getPath() : Affix.getDefaultDirectoryPath(),
+											   compressFormat,
+											   seekQuality.getProgress(),
+											   swVertical.isChecked());
 						new affixMedia().execute(options);
 					}});
-				AffixDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {}});
-				AffixDialog.show();
+				builder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
+				builder.show();
+
+
 				return true;
 			//endregion
 
@@ -1346,7 +1341,6 @@ public class MainActivity extends SharedMediaActivity {
 
 			case R.id.clear_album_preview:
 				if (!albumsMode) {
-
 					getAlbum().setCoverPath(null);
 				}
 				return true;
