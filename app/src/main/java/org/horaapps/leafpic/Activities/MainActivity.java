@@ -435,11 +435,7 @@ public class MainActivity extends SharedMediaActivity {
 			if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
 				Uri treeUri = resultData.getData();
 				// Persist URI in shared preference so that you can use it later.
-				ContentHelper.setSharedPreferenceUri(getApplicationContext(), R.string
-																							  .preference_internal_uri_extsdcard_photos, treeUri);
-
-				/*final int takeFlags = resultData.getFlags()
-													  & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
+				ContentHelper.setSharedPreferenceUri(getApplicationContext(), treeUri);
 				getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 				Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
 			}
@@ -711,6 +707,8 @@ public class MainActivity extends SharedMediaActivity {
 
 
 		menu.findItem(R.id.hideAlbumButton).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
+		// TODO: 14/09/16
+		//menu.findItem(R.id.set_pin_album).setTitle();
 		menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
 		menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
 		menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
@@ -744,9 +742,12 @@ public class MainActivity extends SharedMediaActivity {
 		menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
 		menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
 		menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
-		menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && getAlbum().getSelectedCount() == 1);
+
 		menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCustomCover());
 		menu.findItem(R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));
+		if (getAlbums().getSelectedCount() == 1)
+			menu.findItem(R.id.set_pin_album).setTitle(getAlbums().getSelectedAlbum(0).isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
+		menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode);
 		menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedCount() > 1);
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -781,6 +782,14 @@ public class MainActivity extends SharedMediaActivity {
 					} else getAlbum().selectAllPhotos();
 					mediaAdapter.notifyDataSetChanged();
 				}
+				invalidateOptionsMenu();
+				return true;
+
+			case R.id.set_pin_album:
+				getAlbums().getSelectedAlbum(0).settings.togglePin(getApplicationContext());
+				getAlbums().sortAlbums(getApplicationContext());
+				getAlbums().clearSelectedAlbums();
+				albumsAdapter.swapDataSet(getAlbums().dispAlbums);
 				invalidateOptionsMenu();
 				return true;
 

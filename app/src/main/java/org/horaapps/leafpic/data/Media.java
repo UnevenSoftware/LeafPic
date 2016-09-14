@@ -252,43 +252,6 @@ public class Media implements Parcelable, Serializable {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Thumbnail Tests">
-    @TestOnly
-    public byte[] getThumbnail() {
-
-        ExifInterface exif;
-        try {
-            exif = new ExifInterface(getPath());
-        } catch (IOException e) {
-            return null;
-        }
-        if (exif.hasThumbnail())
-            return exif.getThumbnail();
-        return null;
-
-        // NOTE: ExifInterface is faster than metadata-extractor to getValue the thumbnail data
-        /*try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
-            ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
-            if (thumbnailDirectory.hasThumbnailData())
-                return thumbnailDirectory.getThumbnailData();
-        } catch (Exception e) { return null; }*/
-    }
-
-    @TestOnly
-    public String getThumbnail(Context context) {
-        /*Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
-                context.getContentResolver(), id,
-                MediaStore.Images.Thumbnails.MINI_KIND,
-                new String[]{ MediaStore.Images.Thumbnails.DATA } );
-        if(cursor.moveToFirst())
-            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
-        return null;*/
-        return null;
-    }
-    //</editor-fold>
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -326,4 +289,38 @@ public class Media implements Parcelable, Serializable {
     public int getOrientation() {
         return orientation;
     }
+
+    //<editor-fold desc="Thumbnail Tests">
+    @TestOnly public byte[] getThumbnail() {
+
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(getPath());
+        } catch (IOException e) {
+            return null;
+        }
+        if (exif.hasThumbnail())
+            return exif.getThumbnail();
+        return null;
+
+        // NOTE: ExifInterface is faster than metadata-extractor to getValue the thumbnail data
+        /*try {
+            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
+            ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
+            if (thumbnailDirectory.hasThumbnailData())
+                return thumbnailDirectory.getThumbnailData();
+        } catch (Exception e) { return null; }*/
+    }
+
+    @TestOnly public String getThumbnail(Context context) {
+        /*Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                context.getContentResolver(), id,
+                MediaStore.Images.Thumbnails.MINI_KIND,
+                new String[]{ MediaStore.Images.Thumbnails.DATA } );
+        if(cursor.moveToFirst())
+            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+        return null;*/
+        return null;
+    }
+    //</editor-fold>
 }

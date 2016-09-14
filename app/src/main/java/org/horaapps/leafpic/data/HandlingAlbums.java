@@ -32,6 +32,7 @@ import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by dnld on 27/04/16.
@@ -353,6 +354,10 @@ public class HandlingAlbums {
         }
       }
     }).start();
+  }
+
+  private void sort(ArrayList<ArrayList> albums, Comparator<ArrayList> comparator) {
+    Collections.sort(albums, comparator);
   }
 
   public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
