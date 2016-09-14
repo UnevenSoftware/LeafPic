@@ -4,6 +4,9 @@ import com.drew.lang.GeoLocation;
 
 import org.horaapps.leafpic.SecretConstants;
 
+// needed for Local.US
+import java.util.Locale;
+
 /**
  * Created by dnld on 04/09/16.
  */
@@ -20,10 +23,12 @@ public enum StaticMapProvider {
 
   public int getValue() { return value;}
 
+// String.format is locale dependent, we need to force a locale with point instead of comma in decimals,
+// otherwise (at least) mapbox does not work in some countries
   public String getUrl(GeoLocation location) {
     if (value>=1 && value <=3) //MAP_MOX invert coordinates
-      return String.format(getUrl(value), location.getLongitude(), location.getLatitude());
-    return String.format(getUrl(value), location.getLatitude(), location.getLongitude());
+      return String.format(Locale.US, getUrl(value), location.getLongitude(), location.getLatitude());
+    return String.format(Locale.US, getUrl(value), location.getLatitude(), location.getLongitude());
   }
 
   private String getUrl(int value) {
