@@ -25,13 +25,14 @@ import java.util.Set;
 
 
 public class CustomAlbumsHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 15;
     private static final String DATABASE_NAME = "album_settings.db";
 
     private static final String TABLE_ALBUMS = "albums";
     private static final String ALBUM_PATH = "path";
     private static final String ALBUM_ID = "id";
     private static final String ALBUM_EXCLUDED = "excluded";
+    private static final String ALBUM_PINNED = "pinned";
     private static final String ALBUM_COVER_PATH = "cover_path";
     private static final String ALBUM_SORTING_MODE = "sorting_mode";
     private static final String ALBUM_SORTING_ORDER = "sort_ascending";
@@ -75,6 +76,7 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
                            ALBUM_PATH + " TEXT," +
                            ALBUM_ID + " INTEGER," +
                            ALBUM_EXCLUDED + " INTEGER," +
+                           ALBUM_PINNED + " INTEGER," +
                            ALBUM_COVER_PATH + " TEXT, " +
                            ALBUM_SORTING_MODE + " INTEGER, " +
                            ALBUM_SORTING_ORDER + " INTEGER, " +
@@ -134,12 +136,13 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
 
         AlbumSettings s = null;
 
-        String[] selection = new  String[] {ALBUM_COVER_PATH, ALBUM_SORTING_MODE, ALBUM_SORTING_ORDER };
+        String[] selection = new  String[] { ALBUM_COVER_PATH, ALBUM_SORTING_MODE,
+                ALBUM_SORTING_ORDER, ALBUM_PINNED };
         Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?",
                 new String[]{ path, String.valueOf(id) }, null, null, null);
 
         if (cursor.moveToFirst())
-            s = new AlbumSettings(path, id, cursor.getString(0), cursor.getInt(1), cursor.getInt(2));
+            s = new AlbumSettings(path, id, cursor.getString(0), cursor.getInt(1), cursor.getInt(2),cursor.getInt(3));
         cursor.close();
         db.close();
         return s;
@@ -152,6 +155,18 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, selection, null, null, null, null);
         if (cur.moveToFirst())
             do list.add(new File(cur.getString(0))); while (cur.moveToNext());
+        cur.close();
+        db.close();
+        return list;
+    }
+
+    public ArrayList<String> getPinnedAlbums() {
+        ArrayList<String> list = new ArrayList<String>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = ALBUM_PINNED + "=1";
+        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, selection, null, null, null, null);
+        if (cur.moveToFirst())
+            do list.add(cur.getString(0)); while (cur.moveToNext());
         cur.close();
         db.close();
         return list;
@@ -182,6 +197,15 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         checkAndCreateAlbum(db, path, id);
         ContentValues values = new ContentValues();
         values.put(ALBUM_EXCLUDED, 1);
+        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, id+"" });
+        db.close();
+    }
+
+    public void pinAlbum(String path, long id, boolean status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        checkAndCreateAlbum(db, path, id);
+        ContentValues values = new ContentValues();
+        values.put(ALBUM_PINNED, status ? 1 : 0);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=? AND "+ALBUM_ID+"=?", new String[]{ path, id+"" });
         db.close();
     }

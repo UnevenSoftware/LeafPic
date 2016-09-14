@@ -18,6 +18,7 @@ public class AlbumSettings implements Serializable {
     private String coverPath;
     private int sortingMode;
     private int sortingOrder;
+    private boolean pinned;
 
     private FilterMode filterMode = FilterMode.ALL;
 
@@ -26,12 +27,13 @@ public class AlbumSettings implements Serializable {
         return h.getSettings(album.getPath(), album.getId());
     }
 
-    AlbumSettings(String path, long id, String cover, int sortingMode, int sortingOrder) {
+    AlbumSettings(String path, long id, String cover, int sortingMode, int sortingOrder, int pinned) {
         this.id = id;
         this.path = path;
         this.coverPath = cover;
         this.sortingMode = sortingMode;
         this.sortingOrder = sortingOrder;
+        this.pinned = pinned == 1;
     }
 
     FilterMode getFilterMode() {
@@ -72,5 +74,15 @@ public class AlbumSettings implements Serializable {
         if (coverPath != null)
             h.setAlbumPhotoPreview(path, id, coverPath);
         else h.clearAlbumPreview(path, id);
+    }
+
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    public void togglePin(Context context) {
+        this.pinned = !pinned;
+        CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
+        h.pinAlbum(path, id, pinned);
     }
 }

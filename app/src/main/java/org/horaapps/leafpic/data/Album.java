@@ -160,6 +160,8 @@ public class Album implements Serializable {
 		return result;
 	}
 
+	public boolean isPinned(){ return settings.isPinned(); }
+
 	public boolean isFromContentReoslver() {
 		return this.id != -1;
 	}

@@ -128,6 +128,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/set_pin_album"
+        android:title="@string/pin"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/setAsAlbumPreview"
         android:title="@string/set_preview"
         android:visible="false"
