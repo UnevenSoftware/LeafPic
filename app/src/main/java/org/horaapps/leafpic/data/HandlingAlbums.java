@@ -11,7 +11,7 @@ import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import org.horaapps.leafpic.Activities.SplashScreen;
+import org.horaapps.leafpic.activities.SplashScreen;
 import org.horaapps.leafpic.data.Providers.MediaStoreProvider;
 import org.horaapps.leafpic.data.Providers.StorageProvider;
 import org.horaapps.leafpic.data.base.AlbumsComparators;

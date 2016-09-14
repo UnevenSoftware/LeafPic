@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.horaapps.leafpic.Activities.MainActivity">
+    tools:context="org.horaapps.leafpic.activities.MainActivity">
 
     <group android:id="@+id/general_action">
 
@@ -17,7 +17,7 @@
             app:showAsAction="ifRoom">
             <menu xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                tools:context="org.horaapps.leafpic.Activities.MainActivity">
+                tools:context="org.horaapps.leafpic.activities.MainActivity">
                 <group android:checkableBehavior="single">
                     <item
                         android:id="@+id/all_media_filter"

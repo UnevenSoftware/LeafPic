@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.horaapps.leafpic.Adapters.MediaAdapter;
+import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.data.Providers.MediaStoreProvider;
 import org.horaapps.leafpic.data.Providers.StorageProvider;
 import org.horaapps.leafpic.data.base.FilterMode;

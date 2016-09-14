@@ -83,7 +83,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
             app:elevation="@dimen/card_elevation"
-            app:layout_behavior="org.horaapps.leafpic.Views.FabScrollBehaviour"
+            app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"
             style="@style/fab_camera"
             />
     </android.support.design.widget.CoordinatorLayout>
