@@ -97,12 +97,21 @@ public class ContentHelper {
 		return success;
 	}
 
+	private static File getTargetFile(File source, File targetDir) {
+		File file = new File(targetDir, source.getName());
+		if (!source.getParentFile().equals(targetDir) && !file.exists())
+			return file;
+
+
+		return new File(targetDir, StringUtils.incrementFileNameSuffix(source.getName()));
+	}
+
 	public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File targetDir) {
 		InputStream inStream = null;
 		OutputStream outStream = null;
 
 		boolean success = false;
-		File target = new File(targetDir, source.getName());
+		File target = getTargetFile(source, targetDir);
 
 		try {
 			inStream = new FileInputStream(source);

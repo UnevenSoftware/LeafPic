@@ -1,11 +1,12 @@
 package org.horaapps.leafpic.util;
 
 import android.content.Context;
-import android.media.ExifInterface;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-import java.io.IOException;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by dnld on 1/3/16.
@@ -34,6 +35,22 @@ public class StringUtils {
         String name = b[b.length - 1];
         c += name.substring(name.lastIndexOf('.'));
         return c;
+    }
+
+    static String incrementFileNameSuffix(String name) {
+        StringBuilder builder = new StringBuilder();
+
+        int dot = name.lastIndexOf('.');
+        String baseName = dot != -1 ? name.subSequence(0, dot).toString() : name;
+        String nameWoSuffix = baseName;
+        Matcher matcher = Pattern.compile("_\\d").matcher(baseName);
+        if(matcher.find()) {
+            int i = baseName.lastIndexOf("_");
+            if (i != -1) nameWoSuffix = baseName.subSequence(0, i).toString();
+        }
+        builder.append(nameWoSuffix).append("_").append(new Date().getTime());
+        builder.append(name.substring(dot));
+        return builder.toString();
     }
 
     public static String getPhotoPathRenamedAlbumChange(String olderPath, String albumNewName) {
