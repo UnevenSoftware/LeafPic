@@ -40,7 +40,7 @@ import java.util.Comparator;
 public class HandlingAlbums {
 
   public final static String TAG = "HandlingAlbums";
-  private String backupFile = "albums.dat";
+  private static String backupFile = "albums.dat";
 
   public ArrayList<Album> dispAlbums;
   private ArrayList<Album> selectedAlbums;
@@ -119,6 +119,43 @@ public class HandlingAlbums {
         }
       }).start();
     }
+  }
+
+  public static void addAlbumToBackup(final Context context, final Album album) {
+     new Thread(new Runnable() {
+      public void run() {
+        try {
+          boolean success = false;
+          File f = new File(context.getCacheDir(), backupFile);
+          ObjectInputStream reader = new ObjectInputStream(new FileInputStream(f));
+          Object o = reader.readObject();
+          ArrayList<Album> list = null;
+          if (o != null) {
+            list = (ArrayList<Album>) o;
+            for(int i = 0; i < list.size(); i++) {
+              if (list.get(i).equals(album)) {
+                list.remove(i);
+                list.add(i, album);
+                success = true;
+              }
+            }
+          }
+
+          if (success) {
+            ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(f));
+            objectOutStream.writeObject(list);
+            objectOutStream.close();
+          }
+
+        } catch (FileNotFoundException e1) {
+          e1.printStackTrace();
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+      }
+    }).start();
   }
 
 

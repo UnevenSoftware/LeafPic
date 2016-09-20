@@ -54,6 +54,7 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.data.CustomAlbumsHelper;
+import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.base.FilterMode;
 import org.horaapps.leafpic.data.base.SortingMode;
@@ -201,11 +202,8 @@ public class MainActivity extends SharedMediaActivity {
     toolbar.setTitle(getAlbum().getName());
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    if (reload) {
-      //display available medias before reload
-      mediaAdapter.swapDataSet(getAlbum().getMedia());
-      new PreparePhotosTask().execute();
-    }
+    mediaAdapter.swapDataSet(getAlbum().getMedia());
+    if (reload) new PreparePhotosTask().execute();
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -221,7 +219,6 @@ public class MainActivity extends SharedMediaActivity {
       displayAlbums(true);
     else {
       displayAlbums(false);
-      albumsAdapter.swapDataSet(getAlbums().dispAlbums);
       toggleRecyclersVisibility(true);
     }
   }
@@ -230,9 +227,8 @@ public class MainActivity extends SharedMediaActivity {
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
     toolbar.setTitle(getString(R.string.app_name));
     mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
+    albumsAdapter.swapDataSet(getAlbums().dispAlbums);
     if (reload) new PrepareAlbumTask().execute();
-
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) { mDrawerLayout.openDrawer(GravityCompat.START); }
@@ -266,12 +262,10 @@ public class MainActivity extends SharedMediaActivity {
           case SplashScreen.ALBUMS_PREFETCHED:
             displayAlbums(false);
             pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-            albumsAdapter.swapDataSet(getAlbums().dispAlbums);
             toggleRecyclersVisibility(true);
             break;
 
           case SplashScreen.ALBUMS_BACKUP:
-            albumsAdapter.swapDataSet(getAlbums().dispAlbums);
             displayAlbums(true);
             pickMode = data.getBoolean(SplashScreen.PICK_MODE);
             toggleRecyclersVisibility(true);
@@ -286,7 +280,6 @@ public class MainActivity extends SharedMediaActivity {
               }
             }).start();
             displayCurrentAlbumMedia(false);
-            mediaAdapter.swapDataSet(getAlbum().getMedia());
             toggleRecyclersVisibility(false);
             break;
         }
@@ -1423,6 +1416,8 @@ public class MainActivity extends SharedMediaActivity {
     @Override
     protected void onPostExecute(Void result) {
       mediaAdapter.swapDataSet(getAlbum().getMedia());
+      if (!hidden)
+        HandlingAlbums.addAlbumToBackup(getApplicationContext(), getAlbum());
       checkNothing();
       swipeRefreshLayout.setRefreshing(false);
     }

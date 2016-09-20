@@ -421,6 +421,14 @@ public class Album implements Serializable {
 		return success;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Album) {
+			return getPath().equals(((Album) obj).getPath());
+		}
+		return super.equals(obj);
+	}
+
 	public boolean deleteSelectedMedia(Context context) {
 		boolean success = true;
 		for (Media selectedMedia : selectedMedias) {
