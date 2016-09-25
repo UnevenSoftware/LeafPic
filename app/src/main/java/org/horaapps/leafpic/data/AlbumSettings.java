@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.data;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import org.horaapps.leafpic.data.base.FilterMode;
 import org.horaapps.leafpic.data.base.SortingMode;
@@ -14,7 +15,6 @@ import java.io.Serializable;
 public class AlbumSettings implements Serializable {
 
     private String path;
-    private long id;
     private String coverPath;
     private int sortingMode;
     private int sortingOrder;
@@ -24,11 +24,10 @@ public class AlbumSettings implements Serializable {
 
     static AlbumSettings getSettings(Context context, Album album) {
         CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        return h.getSettings(album.getPath(), album.getId());
+        return h.getSettings(album.getPath());
     }
 
-    AlbumSettings(String path, long id, String cover, int sortingMode, int sortingOrder, int pinned) {
-        this.id = id;
+    AlbumSettings(String path, String cover, int sortingMode, int sortingOrder, int pinned) {
         this.path = path;
         this.coverPath = cover;
         this.sortingMode = sortingMode;
@@ -59,30 +58,28 @@ public class AlbumSettings implements Serializable {
     void changeSortingMode(Context context, SortingMode sortingMode) {
         this.sortingMode = sortingMode.getValue();
         CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.setAlbumSortingMode(path, id, sortingMode.getValue());
+        h.setAlbumSortingMode(path, sortingMode.getValue());
     }
 
     void changeSortingOrder(Context context, SortingOrder sortingOrder) {
         this.sortingOrder = sortingOrder.getValue();
         CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.setAlbumSortingOrder(path, id, sortingOrder.getValue());
+        h.setAlbumSortingOrder(path, sortingOrder.getValue());
     }
 
-    void changeCoverPath(Context context, String coverPath) {
+    void changeCoverPath(Context context, @Nullable String coverPath) {
         this.coverPath = coverPath;
         CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        if (coverPath != null)
-            h.setAlbumPhotoPreview(path, id, coverPath);
-        else h.clearAlbumPreview(path, id);
+        h.setAlbumPhotoPreview(path, coverPath);
     }
 
-    public boolean isPinned() {
+    boolean isPinned() {
         return pinned;
     }
 
     public void togglePin(Context context) {
         this.pinned = !pinned;
         CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.pinAlbum(path, id, pinned);
+        h.pinAlbum(path, pinned);
     }
 }

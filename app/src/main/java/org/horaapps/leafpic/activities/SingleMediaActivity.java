@@ -350,11 +350,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 }
                 break;
 
-            case R.id.action_exclude:
-                this.getAlbum().excludeCurrentMedia(this);
-                adapter.notifyDataSetChanged();
-                toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
-                break;
 
             case R.id.action_copy:
                 bottomSheetDialogFragment = new SelectAlbumBottomSheet();

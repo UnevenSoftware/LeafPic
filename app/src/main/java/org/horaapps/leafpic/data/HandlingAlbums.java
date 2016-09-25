@@ -12,11 +12,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import org.horaapps.leafpic.activities.SplashScreen;
-import org.horaapps.leafpic.data.Providers.MediaStoreProvider;
-import org.horaapps.leafpic.data.Providers.StorageProvider;
 import org.horaapps.leafpic.data.base.AlbumsComparators;
 import org.horaapps.leafpic.data.base.SortingMode;
 import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.data.providers.MediaStoreProvider;
+import org.horaapps.leafpic.data.providers.StorageProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
@@ -348,7 +348,7 @@ public class HandlingAlbums {
     // TODO: 19/08/16
     CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
     Log.wtf("excluded:::", a.getPath() + " - " + a.getId());
-    h.excludeAlbum(a.getPath(), a.getId());
+    h.excludeAlbum(a.getPath());
     dispAlbums.remove(a);
   }
 

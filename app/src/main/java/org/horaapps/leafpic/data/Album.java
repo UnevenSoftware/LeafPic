@@ -7,12 +7,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.data.Providers.MediaStoreProvider;
-import org.horaapps.leafpic.data.Providers.StorageProvider;
 import org.horaapps.leafpic.data.base.FilterMode;
 import org.horaapps.leafpic.data.base.MediaComparators;
 import org.horaapps.leafpic.data.base.SortingMode;
 import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.data.providers.MediaStoreProvider;
+import org.horaapps.leafpic.data.providers.StorageProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
@@ -97,13 +97,6 @@ public class Album implements Serializable {
 				break;
 		}
 		return mediaArrayList;
-	}
-
-	public void excludeSelectedPhotos(Context context) {
-		// TODO: 18/08/16
-		CustomAlbumsHelper albumHandler = CustomAlbumsHelper.getInstance(context);
-		albumHandler.excludePhotos(this.selectedMedias, this.getId(), this.getPath());
-		this.media.removeAll(this.selectedMedias);
 	}
 
 	public void updatePhotos(Context context) {
@@ -216,10 +209,6 @@ public class Album implements Serializable {
 		return count;
 	}
 
-	public void setCoverPath(@Nullable String path) {
-
-	}
-
 	public boolean isHidden() {
 		return new File(getPath(), ".nomedia").exists();
 	}
@@ -230,6 +219,10 @@ public class Album implements Serializable {
 		if (media.size() > 0)
 			return media.get(0);
 		return new Media();
+	}
+
+	public void removeCoverAlbum(Context context) {
+		settings.changeCoverPath(context, null);
 	}
 
 	public void setSelectedPhotoAsPreview(Context context) {
@@ -401,13 +394,6 @@ public class Album implements Serializable {
 			setCount(media.size());
 		}
 		return success;
-	}
-
-	public void excludeCurrentMedia(Context context) {
-		CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
-		handler.excludePhoto(this.getCurrentMedia(), this.getId(), this.getPath());
-		media.remove(getCurrentMediaIndex());
-		setCount(media.size());
 	}
 
 	private boolean deleteMedia(Context context, Media media) {

@@ -305,9 +305,9 @@
         the SD card.
     </string>
     <string name="got_permission_wr_sdcard">Obtained permission to write on the SD-Card.</string>
-    <string name="use_mediastore_provider">Use MediaStore Provider</string>
-    <string name="use_media_store_sub">If disabled it will fetch the storage recursively for media.
-    </string>
+    <string name="use_mediastore_provider">Alternative media provider</string>
+    <string name="use_media_store_sub">If you miss some folders or if you have any issue
+        with the albums enable this option</string>
     <string name="multi_column">Multi column</string>
     <string name="multi_column_sub">Chose how many columns you want for your folders and media
     </string>

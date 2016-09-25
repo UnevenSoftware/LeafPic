@@ -1,7 +1,6 @@
-package org.horaapps.leafpic.data.Providers;
+package org.horaapps.leafpic.data.providers;
 
 import android.content.Context;
-import android.os.Environment;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.CustomAlbumsHelper;
@@ -20,7 +19,6 @@ import java.util.HashSet;
  */
 public class StorageProvider {
 
-    private HashSet<File> roots;
     private ArrayList<File> excludedFolders;
     private boolean includeVideo = true;
     private CustomAlbumsHelper customAlbumsHelper;
@@ -29,7 +27,6 @@ public class StorageProvider {
     public StorageProvider(Context context) {
         SP = PreferenceUtil.getInstance(context);
         customAlbumsHelper = CustomAlbumsHelper.getInstance(context);
-        roots = getRoots(context);
         excludedFolders = getExcludedFolders(context);
     }
 
@@ -37,10 +34,10 @@ public class StorageProvider {
         ArrayList<Album> list = new ArrayList<Album>();
         includeVideo = SP.getBoolean("set_include_video", false);
         if (hidden)
-            for (File storage : roots)
+            for (File storage : ContentHelper.getStorageRoots(context))
                 fetchRecursivelyHiddenFolder(context, storage, list);
         else
-            for (File storage : roots)
+            for (File storage : ContentHelper.getStorageRoots(context))
                 fetchRecursivelyFolder(context, storage, list);
         return list;
     }
@@ -48,7 +45,10 @@ public class StorageProvider {
     private ArrayList<File> getExcludedFolders(Context context) {
         ArrayList<File>  list = new ArrayList<File>();
         //forced excluded folder
-        list.add(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android"));
+        HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
+        for(File file : storageRoots) {
+            list.add(new File(file.getPath(), "Android"));
+        }
 
         CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
         list.addAll(handler.getExcludedFolders());
@@ -91,7 +91,6 @@ public class StorageProvider {
         if (files != null && files.length > 0) {
             //valid folder
             Album asd = new Album(context, dir.getAbsolutePath(), -1, dir.getName(), files.length);
-            asd.setCoverPath(customAlbumsHelper.getCoverPathAlbum(asd.getPath(), asd.getId()));
 
             long lastMod = Long.MIN_VALUE;
             File choice = null;
@@ -107,23 +106,6 @@ public class StorageProvider {
             albumArrayList.add(asd);
         }
     }
-
-    private HashSet<File> getRoots(Context context) {
-        HashSet<File> roots = new HashSet<File>();
-        roots.add(Environment.getExternalStorageDirectory());
-
-        String[] extSdCardPaths = ContentHelper.getExtSdCardPaths(context);
-        for (String extSdCardPath : extSdCardPaths) {
-            File mas = new File(extSdCardPath);
-            if (mas.canRead())
-                roots.add(mas);
-        }
-
-        String sdCard = System.getenv("SECONDARY_STORAGE");
-        if (sdCard != null) roots.add(new File(sdCard));
-        return roots;
-    }
-
 
     public static ArrayList<Media> getMedia(String path, boolean includeVideo) {
         ArrayList<Media> list = new ArrayList<Media>();

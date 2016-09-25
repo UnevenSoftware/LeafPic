@@ -421,7 +421,7 @@ public class MainActivity extends SharedMediaActivity {
       if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
         Uri treeUri = resultData.getData();
         // Persist URI in shared preference so that you can use it later.
-        ContentHelper.setSharedPreferenceUri(getApplicationContext(), treeUri);
+        ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
         getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
       }
@@ -818,7 +818,7 @@ public class MainActivity extends SharedMediaActivity {
                 albumsAdapter.notifyDataSetChanged();
                 invalidateOptionsMenu();
               } else {
-                customAlbumsHelper.excludeAlbum(getAlbum().getPath(), getAlbum().getId());
+                customAlbumsHelper.excludeAlbum(getAlbum().getPath());
                 displayAlbums(true);
               }
             }
@@ -915,13 +915,6 @@ public class MainActivity extends SharedMediaActivity {
 
         return true;
       case R.id.excludeAlbumButton:
-        if (!this.albumsMode && this.editMode) {
-          getAlbum().excludeSelectedPhotos(this);
-          finishEditMode();
-          mediaAdapter.notifyDataSetChanged();
-          return true;
-        }
-
         final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
 
         final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
@@ -954,7 +947,7 @@ public class MainActivity extends SharedMediaActivity {
               albumsAdapter.notifyDataSetChanged();
               invalidateOptionsMenu();
             } else {
-              customAlbumsHelper.excludeAlbum(spinnerParents.getSelectedItem().toString(), getAlbum().getId());
+              customAlbumsHelper.excludeAlbum(spinnerParents.getSelectedItem().toString());
               finishEditMode();
               displayAlbums(true);
             }
@@ -1334,7 +1327,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.clear_album_preview:
         if (!albumsMode) {
-          getAlbum().setCoverPath(null);
+          getAlbum().removeCoverAlbum(getApplicationContext());
         }
         return true;
 

@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -26,8 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * Created by dnld on 26/05/16.
@@ -173,10 +173,10 @@ public class ContentHelper {
 	}
 
 	public static boolean isFileOnSdCard(Context context, File file) {
-		String[] extSdCardPaths = getExtSdCardPaths(context);
-		for(String extSdCardPath : extSdCardPaths) {
-			if(file.getPath().startsWith(extSdCardPath)) return true;
-		}
+		String sdcardPath = getSdcardPath(context);
+		if (sdcardPath != null)
+		 	return file.getPath().startsWith(sdcardPath);
+
 		return false;
 	}
 
@@ -304,22 +304,29 @@ public class ContentHelper {
 		return success;
 	}
 
-	public static String[] getExtSdCardPaths(Context context) {
-		List<String> paths = new ArrayList<String>();
+	public static HashSet<File> getStorageRoots(Context context) {
+		HashSet<File> paths = new HashSet<File>();
 		for (File file : context.getExternalFilesDirs("external")) {
+			if (file != null) {
+				int index = file.getAbsolutePath().lastIndexOf("/Android/data");
+				if (index < 0) Log.w("asd", "Unexpected external file dir: " + file.getAbsolutePath());
+				else
+					paths.add(new File(file.getAbsolutePath().substring(0, index)));
+			}
+		}
+		return paths;
+	}
+
+	public static String getSdcardPath(Context context) {
+		for(File file : context.getExternalFilesDirs("external")) {
 			if (file != null && !file.equals(context.getExternalFilesDir("external"))) {
 				int index = file.getAbsolutePath().lastIndexOf("/Android/data");
 				if (index < 0) Log.w("asd", "Unexpected external file dir: " + file.getAbsolutePath());
-				else {
-					String path = file.getAbsolutePath().substring(0, index);
-					try { path = new File(path).getCanonicalPath(); }
-					// Keep non-canonical path.
-					catch (IOException ignored) { }
-					paths.add(path);
-				}
+				else
+					return new File(file.getAbsolutePath().substring(0, index)).getPath();
 			}
 		}
-		return paths.toArray(new String[paths.size()]);
+		return null;
 	}
 
 	/**
@@ -379,10 +386,32 @@ public class ContentHelper {
 		if (treeUri == null) return null;
 
 		DocumentFile document = DocumentFile.fromTreeUri(context, treeUri);
+		String sdcardPath = getSavedSdcardPath(context);
+		String suffixPathPart = null;
 
+		if (sdcardPath != null) {
+			if((file.getPath().indexOf(sdcardPath)) != -1)
+				suffixPathPart = file.getAbsolutePath().substring(sdcardPath.length());
+		} else {
+			HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
+			for(File root : storageRoots) {
+				if (root != null) {
+					if ((file.getPath().indexOf(root.getPath())) != -1)
+						suffixPathPart = file.getAbsolutePath().substring(file.getPath().length());
+				}
+			}
+		}
 
-		String[] parts = file.getPath().split("/");
-		for (int i = findMagicNumber(file.getPath(), treeUri); i < parts.length; i++) { // 3 is the
+		if (suffixPathPart == null) {
+			Log.d(TAG, "unable to find the document file, filePath:"+ file.getPath()+ " root: " + ""+sdcardPath);
+			return null;
+		}
+
+		if (suffixPathPart.startsWith(File.separator)) suffixPathPart = suffixPathPart.substring(1);
+
+		String[] parts = suffixPathPart.split("/");
+
+		for (int i = 0; i < parts.length; i++) { // 3 is the
 
 			DocumentFile tmp = document.findFile(parts[i]);
 			if (tmp != null)
@@ -398,10 +427,6 @@ public class ContentHelper {
 		}
 
 		return document;
-	}
-
-	private static int findMagicNumber(String path, Uri treUri) {
-		return 3;
 	}
 
 	/**
@@ -423,8 +448,16 @@ public class ContentHelper {
 	 * @param context context
 	 * @param uri          the target value of the preference.
 	 */
-	public static void setSharedPreferenceUri(Context context, @Nullable final Uri uri) {
-		PreferenceUtil.getInstance(context).putString(context.getString(R.string.preference_internal_uri_extsdcard_photos), uri == null ? null : uri.toString());
+	public static void saveSdCardInfo(Context context, @Nullable final Uri uri) {
+		SharedPreferences.Editor editor = PreferenceUtil.getInstance(context).getEditor();
+		editor.putString(context.getString(R.string.preference_internal_uri_extsdcard_photos),
+						uri == null ? null : uri.toString());
+		editor.putString("sd_card_path", ContentHelper.getSdcardPath(context));
+		editor.commit();
+	}
+
+	private static String getSavedSdcardPath(Context context) {
+		return PreferenceUtil.getInstance(context).getString("sd_card_path", null);
 	}
 
 
@@ -568,7 +601,7 @@ public class ContentHelper {
 	 */
   /*@TargetApi(Build.VERSION_CODES.KITKAT)
   private static String getExtSdCardFolder(Context context, @NonNull final File file) {
-	String[] extSdPaths = getExtSdCardPaths(context);
+	String[] extSdPaths = getStorageRoots(context);
 	try {
 	  for (String extSdPath : extSdPaths)
 		if (file.getCanonicalPath().startsWith(extSdPath)) return extSdPath;

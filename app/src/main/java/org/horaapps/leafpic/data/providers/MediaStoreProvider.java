@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data.Providers;
+package org.horaapps.leafpic.data.providers;
 
 import android.content.Context;
 import android.database.Cursor;
