@@ -143,10 +143,10 @@ public class AlertDialogsHelper {
         return detailsDialogBuilder.create();
     }
 
-    static void loadDetails(View dialogLayout, ThemedActivity activity, MediaDetailsMap<String, String> metadata) {
+    private static void loadDetails(View dialogLayout, ThemedActivity activity, MediaDetailsMap<String, String> metadata) {
         LinearLayout detailsTable = (LinearLayout) dialogLayout.findViewById(R.id.ll_list_details);
-        float scale = activity.getResources().getDisplayMetrics().density;
-        int tenPxInDp = (int) (10 * scale + 0.5f);
+
+        int tenPxInDp = Measure.pxToDp (10, activity);
 
         for (int index : metadata.getKeySet()) {
             LinearLayout row = new LinearLayout(activity.getApplicationContext());
@@ -172,7 +172,7 @@ public class AlertDialogsHelper {
         }
     }
 
-    static void showMoreDetails(View dialogLayout, ThemedActivity activity, Media media) {
+    private static void showMoreDetails(View dialogLayout, ThemedActivity activity, Media media) {
 
         MediaDetailsMap<String, String> metadata = media.getAllDetails();
         loadDetails(dialogLayout ,activity , metadata);

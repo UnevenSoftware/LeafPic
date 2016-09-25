@@ -21,12 +21,10 @@ public class StorageProvider {
 
     private ArrayList<File> excludedFolders;
     private boolean includeVideo = true;
-    private CustomAlbumsHelper customAlbumsHelper;
     private PreferenceUtil SP;
 
     public StorageProvider(Context context) {
         SP = PreferenceUtil.getInstance(context);
-        customAlbumsHelper = CustomAlbumsHelper.getInstance(context);
         excludedFolders = getExcludedFolders(context);
     }
 

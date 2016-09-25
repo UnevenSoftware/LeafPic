@@ -61,7 +61,6 @@ import org.horaapps.leafpic.data.base.SortingMode;
 import org.horaapps.leafpic.data.base.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -445,16 +444,6 @@ public class MainActivity extends SharedMediaActivity {
     dialogBuilder.show();
   }
 
-  @Override
-  public void setNavBarColor() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (isNavigationBarColored())
-        super.setNavBarColor();
-      else
-        getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-                ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 110));
-    }
-  }
 
   //region UI/GRAPHIC
   private void setupUI() {

@@ -10,12 +10,14 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.CustomAlbumsHelper;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.base.ImageFileFilter;
+import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by dnld on 24/07/16.
@@ -23,20 +25,16 @@ import java.util.ArrayList;
 
 public class  MediaStoreProvider {
 
-	private Context context;
 
-	public MediaStoreProvider(Context context) {
-		this.context = context;
+	private static ArrayList<String> excludedAlbums;
+
+	public static ArrayList<Album> getAlbums(Context context, boolean hidden) {
+		excludedAlbums = getExcludedFolders(context);
+		return hidden ? getHiddenAlbums(context) : getAlbums(context);
 	}
 
-	public ArrayList<Album> getAlbums(boolean hidden) {
-		return hidden ? getHiddenAlbums() : getAlbums();
-	}
-
-	private  ArrayList<Album> getHiddenAlbums() {
+	private static   ArrayList<Album> getHiddenAlbums(Context context) {
 		ArrayList<Album> list = new ArrayList<Album>();
-		CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-		ArrayList<String> excludedFolders = h.getExcludedFoldersPaths();
 		String[] projection = new String[]{ MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT };
 		String selection = MediaStore.Files.FileColumns.MEDIA_TYPE+"="+MediaStore.Files.FileColumns.MEDIA_TYPE_NONE+" and "+
 										   MediaStore.Files.FileColumns.DATA +" LIKE '%.nomedia'";
@@ -57,7 +55,7 @@ public class  MediaStoreProvider {
 							lastMod = file.lastModified();
 						}
 					}
-					if (f != null && !isExcluded(excludedFolders, f.getPath())) {
+					if (f != null && !isExcluded(f.getPath())) {
 						album.media.add(0, new Media(f.getPath(), f.lastModified()));
 						list.add(album);
 					}
@@ -68,16 +66,13 @@ public class  MediaStoreProvider {
 		return list;
 	}
 
-	private boolean isExcluded(ArrayList<String> excluded, String path) {
-		for(String s : excluded) if (path.startsWith(s)) return true;
+	private static boolean isExcluded(String path) {
+		for(String s : excludedAlbums) if (path.startsWith(s)) return true;
 		return false;
 	}
 
-	private ArrayList<Album> getAlbums() {
+	private static ArrayList<Album> getAlbums(Context context) {
 		ArrayList<Album> list = new ArrayList<Album>();
-
-		CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-		ArrayList<String> excludedFolders = h.getExcludedFoldersPaths();
 
 		String[] projection = new String[]{
 						MediaStore.Files.FileColumns.PARENT,
@@ -114,7 +109,7 @@ public class  MediaStoreProvider {
 					Media media = getLastMedia(context, cur.getLong(idColumn));
 					if (media != null && media.getPath() != null) {
 						String path = StringUtils.getBucketPathByImagePath(media.getPath());
-						boolean excluded = isExcluded(excludedFolders, path);
+						boolean excluded = isExcluded( path);
 						if (!excluded) {
 							Album album = new Album(context, path, cur.getLong(idColumn), cur.getString(nameColumn), getAlbumCount(context, cur.getLong(idColumn)));
 							if (album.addMedia(getLastMedia(context, album.getId()))) list.add(album);
@@ -128,7 +123,20 @@ public class  MediaStoreProvider {
 		return list;
 	}
 
-	private int getAlbumCount(Context context, long id) {
+	private  static ArrayList<String> getExcludedFolders(Context context) {
+		ArrayList<String>  list = new ArrayList<String>();
+		//forced excluded folder
+		HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
+		for(File file : storageRoots) {
+			list.add(new File(file.getPath(), "Android").getPath());
+		}
+
+		CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
+		list.addAll(handler.getExcludedFoldersPaths());
+		return list;
+	}
+
+	private static int getAlbumCount(Context context, long id) {
 		int c = 0;
 		String selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
 										   + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";

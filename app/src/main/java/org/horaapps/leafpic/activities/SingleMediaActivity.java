@@ -289,7 +289,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         try {
                             //copyFileToDownloads(imageUri);
                             // TODO: 21/08/16 handle this better
-                            if(ContentHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(getAlbum().getCurrentMedia().getPath()))) {
+                            if(ContentHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(getAlbum().getPath()))) {
                                 ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).displayMedia(true);
                             }
                             //adapter.notifyDataSetChanged();
@@ -605,7 +605,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 else
                     getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), getTransparency()));
             else
-                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));//MUST BE SET BETTER
+                getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 175));
         }
     }
 

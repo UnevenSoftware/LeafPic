@@ -73,7 +73,7 @@ public class ThemedActivity extends AppCompatActivity {
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 	  if (isNavigationBarColored()) getWindow().setNavigationBarColor(getPrimaryColor());
 	  else
-		getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000), 255));
+		getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 	}
   }
 
