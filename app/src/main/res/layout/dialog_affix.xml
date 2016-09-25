@@ -90,7 +90,7 @@
                                 />
                         </LinearLayout>
 
-                        <!--SAVEHERE-->
+                        <!-- SAVE HERE -->
                         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/ll_save_here"
                             android:layout_width="match_parent"
@@ -239,6 +239,7 @@
                                 <SeekBar
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:progress="90"
                                     android:max="100"
                                     android:id="@+id/seek_bar_quality"
                                     />

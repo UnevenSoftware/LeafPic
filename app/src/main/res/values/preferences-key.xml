@@ -4,10 +4,11 @@
     <string name="preference_include_video">set_include_video</string>
     <string name="preference_swipe_direction_inverted">swipe_opposite</string>
     <string name="preference_auto_update_media">auto_update_media</string>
+    <string name="preference_use_alternative_provider">alternative_provider</string>
     <string name="preference_delay_full_image">set_delay_full_image</string>
     <string name="preference_auto_rotate">set_picture_orientation</string>
-    <string name="preference_max_brightness">set_max_luminosita</string>
-    <string name="preference_translucent_status_bar">set_traslucent_statusbar</string>
+    <string name="preference_max_brightness">set_max_luminosity</string>
+    <string name="preference_translucent_status_bar">set_translucent_statusbar</string>
     <string name="preference_colored_nav_bar">nav_bar</string>
     <string name="preference_base_theme">basic_theme</string>
     <string name="preference_primary_color">primary_color</string>
@@ -20,5 +21,6 @@
     <string name="preference_use_password">active_security</string>
     <string name="preference_use_password_on_hidden">password_on_hidden</string>
     <string name="preference_use_password_on_delete">password_on_delete</string>
-
+    <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
+    <string name="preference_show_fab">show_fab</string>
 </resources>

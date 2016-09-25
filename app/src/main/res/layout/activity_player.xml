@@ -32,7 +32,7 @@
 
   </com.google.android.exoplayer.AspectRatioFrameLayout>
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/media_player_anchor"

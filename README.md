@@ -11,7 +11,6 @@ LeafPic is now available in a beta release on the Play Store, you can join [here
     <img src="https://f-droid.org/badge/get-it-on.png"
          alt="Get it on F-Droid" height="80">
 </a>
-
 <a href="https://play.google.com/store/apps/details?id=org.horaapps.leafpic">
     <img alt="Get it on Google Play"
         height="80"

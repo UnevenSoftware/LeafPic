@@ -33,9 +33,12 @@
                 android:id="@+id/about_app_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="1dp"
-                app:cardElevation="5dp"
+                android:layout_marginBottom="@dimen/card_spacing"
+                android:paddingBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,7 +59,7 @@
                             android:layout_height="200dp"
                             android:src="@drawable/leaf_pic"
                             android:scaleType="fitXY"
-                            android:padding="10dp"
+                            android:padding="@dimen/sub_medium_spacing"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true" />
                     </RelativeLayout>
@@ -66,10 +69,10 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/md_dark_primary_text"
                         android:text="LeafPic Gallery"
-                        android:textSize="24sp"
+                        android:textSize="@dimen/big_text"
                         android:textStyle="bold"
                         android:layout_gravity="center"
-                        android:padding="5dp"
+                        android:padding="@dimen/sub_small_spacing"
                         />
                     <TextView
                         android:id="@+id/about_app_light_description"
@@ -77,9 +80,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/app_light_description"
                         android:textColor="@color/md_dark_primary_text"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         android:layout_gravity="center"
-                        android:padding="5dp"
+                        android:padding="@dimen/sub_small_spacing"
                         />
                     <TextView
                         android:id="@+id/about_version_item_sub"
@@ -87,12 +90,9 @@
                         android:layout_height="wrap_content"
                         android:text="v1.0"
                         android:textColor="@color/md_grey_400"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         android:layout_gravity="center"
-                        android:paddingTop="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingLeft="5dp"
-                        android:paddingBottom="15dp"
+                        android:padding="@dimen/sub_small_spacing"
                         />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -103,9 +103,11 @@
                 android:id="@+id/about_donald_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="5dp"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -129,64 +131,77 @@
                             android:layout_marginTop="105dp"
                             app:civ_border_width="1dp"
                             />
-                        <TextView
-                            android:id="@+id/donald_shtjefni"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/donald_profile_img"
-                            android:layout_toEndOf="@id/donald_profile_img"
+                            android:orientation="vertical"
                             android:layout_toRightOf="@id/donald_profile_img"
-                            android:textStyle="bold"
-                            android:textSize="20dp"
-                            android:text="Donald Shtjefni"/>
+                            android:layout_marginTop="158dp"
+                            >
+                            <TextView
+                                android:id="@+id/donald_shtjefni"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sub_big_text"
+                                android:textStyle="bold"
+                                android:text="Donald Shtjefni"/>
+
+                            <TextView
+                                android:id="@+id/donald_shtjefni_role"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/medium_text"
+                                android:text="@string/donald_role"/>
+
+                        </LinearLayout>
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/donald_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="@dimen/sub_big_spacing"
+                        android:layout_marginLeft="@dimen/sub_big_spacing"
+                        android:layout_marginRight="@dimen/sub_big_spacing"
                         android:text="@string/about_author_donald_description"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/sub_medium_text"
                         />
                     <!--DONALD LINKS  -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="10dp"
+                        android:padding="@dimen/sub_medium_spacing"
                         >
                         <TextView
                             android:id="@+id/about_author_donald_mail_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/send_email"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/medium_text"
                             android:textStyle="bold"
-                            android:padding="10dp"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_donald_googleplus_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GOOGLE +"
-                            android:textSize="16sp"
-                            android:padding="10dp"
+                            android:textSize="@dimen/medium_text"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_donald_github_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GITHUB"
-                            android:textSize="16sp"
-                            android:padding="10dp"
+                            android:textSize="@dimen/medium_text"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -197,9 +212,11 @@
                 android:id="@+id/about_gilbert_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="5dp"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -223,64 +240,78 @@
                             android:layout_marginTop="105dp"
                             app:civ_border_width="1dp"
                             />
-                        <TextView
-                            android:id="@+id/gilbert_ndresaj"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/gilbert_profile_img"
-                            android:layout_toEndOf="@id/gilbert_profile_img"
+                            android:orientation="vertical"
                             android:layout_toRightOf="@id/gilbert_profile_img"
-                            android:textSize="20dp"
-                            android:textStyle="bold"
-                            android:text="Gilbert Ndresaj"/>
+                            android:layout_marginTop="158dp"
+                            >
+                            <TextView
+                                android:id="@+id/gilbert_ndresaj"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sub_big_text"
+                                android:textStyle="bold"
+                                android:text="Gilbert Ndresaj"/>
+
+                            <TextView
+                                android:id="@+id/gilbert_ndresaj_role"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/medium_text"
+                                android:text="@string/gilbert_role"/>
+
+                        </LinearLayout>
+
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/gilbert_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="@dimen/sub_big_spacing"
+                        android:layout_marginLeft="@dimen/sub_big_spacing"
+                        android:layout_marginRight="@dimen/sub_big_spacing"
                         android:text="@string/about_author_gilbert_description"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/sub_medium_text"
                         />
                     <!--GILBERT LINKS  -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="10dp"
+                        android:padding="@dimen/sub_medium_spacing"
                         >
                         <TextView
                             android:id="@+id/about_author_gilbert_mail_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/send_email"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/medium_text"
                             android:textStyle="bold"
-                            android:padding="10dp"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_gilbert_googleplus_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GOOGLE +"
-                            android:textSize="16sp"
-                            android:padding="10dp"
+                            android:textSize="@dimen/medium_text"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                         <TextView
                             android:id="@+id/about_author_gilbert_github_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GITHUB"
-                            android:textSize="16sp"
-                            android:padding="10dp"
+                            android:textSize="@dimen/medium_text"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -291,9 +322,11 @@
                 android:id="@+id/about_special_thanks_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="5dp"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -303,11 +336,11 @@
                         android:id="@+id/about_special_thanks_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="16dp"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:text="@string/about_special_thanks"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         android:textStyle="bold"
                         />
 
@@ -316,8 +349,8 @@
                         android:id="@+id/ll_patryk_goworowski"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
+                        android:paddingStart="@dimen/sub_big_spacing"
+                        android:paddingEnd="@dimen/sub_big_spacing"
                         android:orientation="vertical"
                         >
                         <!--Patryk Goworowski -->
@@ -327,40 +360,28 @@
                             android:layout_height="wrap_content"
                             android:text="@string/about_special_thanks_patryk_goworowski_sub"
                             android:textColor="@color/md_grey_400"
+                            android:textSize="@dimen/sub_medium_text"
                             android:layout_marginTop="@dimen/small_spacing"
-                            android:textSize="14sp"
                             />
                         <TextView
-                            android:id="@+id/about_comunity_members_sub"
+                            android:id="@+id/about_community_members_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_special_thanks_members_sub"
                             android:textColor="@color/md_grey_400"
                             android:layout_marginTop="@dimen/small_spacing"
-                            android:textSize="14sp"
-                        />
+                            android:textSize="@dimen/sub_medium_text"
+                            />
                         <TextView
-                            android:id="@+id/about_comunity_you_sub"
+                            android:id="@+id/about_community_you_sub"
                             android:layout_width="wrap_content"
-                            android:layout_marginTop="@dimen/small_spacing"
                             android:layout_height="wrap_content"
                             android:text="@string/about_special_thanks_you_sub"
                             android:textColor="@color/md_grey_400"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="16dp"
-                        />
-                        <!--<TextView
-                            android:id="@+id/about_patryk_goworowski_googleplus_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="GOOGLE+"
-                            android:textSize="16sp"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:clickable="true"
-                            android:background="?attr/selectableItemBackground"
-                        />-->
-
+                            android:textSize="@dimen/sub_medium_text"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            android:layout_marginBottom="@dimen/medium_spacing"
+                            />
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -370,9 +391,11 @@
                 android:id="@+id/about_support_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="5dp"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -383,212 +406,242 @@
                         android:id="@+id/about_support_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="16dp"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:text="@string/about_support"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         android:textStyle="bold"
                         />
-
                     <!--REPORT BUG-->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_report_bug"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_report_bug_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-bug-report"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_report_bug"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_report_bug_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-bug-report"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_report_bug_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="16dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_report_bug_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_report_bug"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_report_bug_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_report_bug_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_report_bug"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_report_bug_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_report_bug_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
-                    <!-- TRANLATE -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <!-- TRANSLATE -->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_translate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_translate_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-flag"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_translate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_translate_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-flag"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_translate_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_translate_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_translate"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_translate_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_translate_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_translate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_translate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_translate_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
                     <!-- RATE -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_rate_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-star"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_rate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_rate_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-star"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_rate_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_rate_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_rate"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_rate_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_rate_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_rate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_rate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_rate_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
+
                     <!-- GIT HUB -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_github"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_github_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="faw-github"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_support_github"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_support_github_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="faw-github"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_support_github_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="16dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_support_github_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_github"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_support_github_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_support_github_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_support_github"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_github_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_support_github_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
+
+                    <!-- DONATE -->
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_support_donate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_support_donate_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="faw-gift"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing"
+                            >
+                            <TextView
+                                android:id="@+id/about_support_donate_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/donate"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_support_donate_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/donate_sub_text"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -598,9 +651,11 @@
                 android:id="@+id/about_license_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="1dp"
-                app:cardElevation="5dp"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -610,111 +665,103 @@
                         android:id="@+id/about_license_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="16dp"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:text="@string/about_license"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/medium_text"
                         android:textStyle="bold"
                         />
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_license"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_license_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-insert-drive-file"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_license"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_license_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-insert-drive-file"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_license_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_license_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_license"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_license_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_license_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_license"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_license_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_license_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                    </LinearLayout>
 
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_about_libs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        >
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/about_libs_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-insert-drive-file"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                            />
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_about_libs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing"
                             >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/about_libs_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-insert-drive-file"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/about_libs_item"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="16dp"
-                                >
-                                <TextView
-                                    android:id="@+id/about_libs_item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_library_license"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/about_libs_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/about_library_license_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
+                                android:text="@string/about_library_license"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"
+                                />
+                            <TextView
+                                android:id="@+id/about_libs_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about_library_license_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text"
+                                />
                         </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-               </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>

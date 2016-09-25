@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <RelativeLayout
+                    android:id="@+id/rl_main_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <android.support.v7.widget.RecyclerView
@@ -42,10 +43,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:scrollbars="vertical"
-                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                         android:clipToPadding="false"
                         />
+                    <!--
+                        android:scrollbars="vertical"
+                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
+                     -->
+                    <!--<com.turingtechnologies.materialscrollbar.TouchScrollBar
+                        android:id="@+id/touchScrollBar"
+                        android:layout_width="wrap_content"
+                        app:msb_recyclerView="@id/grid_photos"
+                        app:msb_lightOnTouch="true"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        />-->
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -64,7 +76,6 @@
         </LinearLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_camera"
-            style="@style/fab_camera"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
@@ -72,12 +83,13 @@
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:borderWidth="0dp"
             app:elevation="@dimen/card_elevation"
-            app:layout_behavior=".Views.FabScrollBehaviour"
+            app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"
+            style="@style/fab_camera"
             />
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/drawer_items"
-        layout="@layout/drawer_main_activity"/>
+        layout="@layout/activity_drawer"/>
 </android.support.v4.widget.DrawerLayout>
 
 

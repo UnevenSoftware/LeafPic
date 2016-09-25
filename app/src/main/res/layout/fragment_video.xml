@@ -8,16 +8,18 @@
     <ImageView
         android:id="@+id/media_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple"
+        android:clickable="true"
+        />
     <com.mikepenz.iconics.view.IconicsImageView
-        android:id="@+id/video_indicator"
+        android:id="@+id/icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:elevation="10dp"
         android:visibility="visible"
         app:iiv_color="@color/md_white_1000"
-        app:iiv_icon="gmd-play-circle-filled" />
+        app:iiv_icon="gmd-play-circle-outline" />
 
 </FrameLayout>

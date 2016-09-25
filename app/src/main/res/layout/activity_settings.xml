@@ -5,43 +5,36 @@
     android:id="@+id/setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <!--
-    TOOLBAR
-    -->
+    android:orientation="vertical">
+
+    <!--TOOLBAR-->
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
         android:background="@color/md_dark_appbar"
-        android:windowActionBarOverlay="true"
-        />
-
+        android:windowActionBarOverlay="true" />
     <ScrollView
         android:id="@+id/settingAct_scrollView"
         android:scrollbarSize="4dip"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <!--GENERAL-->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp">
+
             <android.support.v7.widget.CardView
                 android:id="@+id/general_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="1dp"
-                app:cardElevation="5dp"
-                >
-
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,66 +43,188 @@
                         android:id="@+id/general_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="16dp"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:text="@string/general"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        />
-                    <!-- AUTO UPDATE MEDIA -->
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold"/>
+
+                    <!-- SECURITY -->
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_auto_update_media"
+                        android:id="@+id/ll_security"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        >
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/auto_update_media_Icon"
+                            android:id="@+id/security_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-update"
+                            app:iiv_icon="faw-user-secret"
                             android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing">
+                            <TextView
+                                android:id="@+id/security_item_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/security"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/security_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/security_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- NUMBER OF COLUMNS -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_n_columns"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/n_columns_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-view-column"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/sub_small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/n_columns_Item_Title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/multi_column"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/n_columns_Item_Title_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/multi_column_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- EXCLUDED ALBUM-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_excluded_album"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Excluded_Album_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-folder"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/Excluded_Album_Item_Title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/excluded_albums"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/Excluded_Album_Item_Title_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/excluded_albums_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- FAB OPTIONS -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_fab_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/fab_options_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-add-circle"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="8dp"
-                            >
-
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="44dp"
-                                >
+                                android:layout_marginEnd="44dp">
                                 <TextView
-                                    android:id="@+id/auto_update_media_Item"
+                                    android:id="@+id/fab_options_item_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/auto_update_media"
+                                    android:text="@string/fab_options"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="16sp" />
                                 <TextView
-                                    android:id="@+id/auto_update_media_Item_sub"
+                                    android:id="@+id/fab_options_item_sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/auto_update_media_sub"
+                                    android:text="@string/fab_options_sub"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="14sp" />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/SetAutoUpdateMedia"
+                                android:id="@+id/sw_show_fab"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -118,735 +233,419 @@
                                 android:layout_centerVertical="true"
                                 android:layout_alignParentEnd="true" />
                         </RelativeLayout>
-
                     </LinearLayout>
-
-                    <!-- EXCLUDED ALBUM-->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_excluded_album"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/Excluded_Album_Icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-folder"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/Excluded_Album_Item_Title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/excluded_albums"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/Excluded_Album_Item_Title_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/excluded_albums_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-
-                    <!-- SECURITY -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_security"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/security_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="faw-user-secret"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="16dp"
-                                >
-                                <TextView
-                                    android:id="@+id/security_item_title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/security"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/security_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/security_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-
-                    <!-- FAB OPTIONS -->
-                    <com.balysv.materialripple.MaterialRippleLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false"
-                        android:visibility="gone"
-                        >
-                        <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_fab_options"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/fab_options_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-add-circle"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <TextView
-                                    android:id="@+id/fab_options_item_title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/fab_options"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
-                                <TextView
-                                    android:id="@+id/fab_options_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/fab_options_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
-
-                    <!-- ADVANCED OPTIONS
-                    android:visibility="gone"
-                    -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ll_more_options_general"
-                        android:orientation="vertical"
-                        >
-
-                        <!-- MAPS PROVIDER-->
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                            >
-
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_map_provider"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/map_provider_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="faw-map-signs"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="16dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/map_provider_item_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/map_provider"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/map_provider_item_sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/map_provider_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                    />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
-                        </LinearLayout>
-
-                    </LinearLayout>
+                </LinearLayout>
             </android.support.v7.widget.CardView>
 
-                <!--TODO: I WILL DO IT LATER-->
-                <android.support.design.widget.FloatingActionButton
-                    android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    style="@style/fab_expand"
-                    android:id="@+id/fab_more_general_options"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginTop="15dp"
-                    android:scaleType="centerInside"
-                    android:layout_marginBottom="0dp"
-                    app:elevation="5dp"
-                    />
-
-            </FrameLayout>
-
             <!--THEME-->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp">
-                <!--THEME-->
-                <android.support.v7.widget.CardView
-                    android:id="@+id/theme_setting_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="1dp"
-                    app:cardElevation="5dp"
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/theme_setting_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="16dp"
-                            android:paddingTop="16dp"
-                            android:text="@string/theme"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            />
-                        <!--BASIC THEME-->
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                            >
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_basic_theme"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/basic_theme_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-invert-colors"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="16dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/basic_theme_item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/basic_theme"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/basic_theme_item_sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/basic_theme_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
 
-
-                        <!--PRIMARY COLOR-->
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                            >
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_primaryColor"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/PrimaryColor_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-color-lens"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/PrimaryColor_Item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/primary_color"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/PrimaryColor_Item_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/primary_color_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
-
-                        <!--ACCENT COLOR-->
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false">
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_accentColor"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/accentColor_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="cmd-format-color-fill"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/accentColor_Item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/accent_color"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/accentColor_Item_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/accent_color_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
-
-                        <!-- APPLY THEME ON 3TH ACT -->
-                        <com.balysv.materialripple.MaterialRippleLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:mrl_rippleAlpha="0.05"
-                            app:mrl_rippleDelayClick="false"
-                            >
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_custom_thirdAct"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/custom_3thAct_icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="faw-paint-brush"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/custom_3thAct_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/custom_3thAct"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/custom_3thAct_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/custom_3thAct_sub"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </com.balysv.materialripple.MaterialRippleLayout>
-
-                        <!--ADVANCED SETTING
-                        android:visibility="gone"
-                        -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/ll_more_options_theme"
-                            android:visibility="visible"
-                            android:orientation="vertical">
-                            <!-- TRASLUCENT STATUS BAR-->
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_switch_TraslucentStatusBar"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/Traslucent_StatusBar_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-web-asset"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="8dp"
-                                    >
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:orientation="vertical"
-                                        android:layout_marginEnd="45dp"
-                                        >
-                                        <TextView
-                                            android:id="@+id/Traslucent_StatusBar_Item"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/traslucent_statusbar"
-                                            android:textColor="@color/md_dark_background"
-                                            android:textSize="16sp"
-                                            />
-                                        <TextView
-                                            android:id="@+id/Traslucent_StatusBar_Item_Sub"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/traslucent_statusbar_sub"
-                                            android:textColor="@color/md_grey_400"
-                                            android:textSize="14sp"
-                                            />
-                                    </LinearLayout>
-                                    <android.support.v7.widget.SwitchCompat
-                                        android:id="@+id/SetTraslucentStatusBar"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:button="@null"
-                                        android:hapticFeedbackEnabled="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_alignParentEnd="true"
-                                        />
-                                </RelativeLayout>
-                            </LinearLayout>
-                            <!--COLORED NAV BAR-->
-                            <LinearLayout
-                                xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/ll_switch_ColoredNavBar"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
-
-                                <com.mikepenz.iconics.view.IconicsImageView
-                                    android:id="@+id/NavBar_Icon"
-                                    android:layout_width="@dimen/icon_width_height"
-                                    android:layout_height="@dimen/icon_width_height"
-                                    android:layout_gravity="center_vertical"
-                                    app:iiv_icon="gmd-video-label"
-                                    android:layout_marginLeft="@dimen/big_spacing"
-                                    android:layout_marginRight="@dimen/big_spacing"
-                                    />
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="8dp"
-                                    android:paddingRight="16dp"
-                                    android:paddingBottom="16dp"
-                                    >
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:orientation="vertical"
-                                        android:layout_marginEnd="45dp"
-                                        >
-                                        <TextView
-                                            android:id="@+id/NavBar_Item"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/colored_navbar"
-                                            android:textColor="@color/md_dark_background"
-                                            android:textSize="16sp"
-                                            />
-                                        <TextView
-                                            android:id="@+id/NavBar_Item_Sub"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/colored_navbar_sub"
-                                            android:textColor="@color/md_grey_400"
-                                            android:textSize="14sp"
-                                            />
-                                    </LinearLayout>
-                                    <android.support.v7.widget.SwitchCompat
-                                        android:id="@+id/SetColoredNavBar"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:button="@null"
-                                        android:hapticFeedbackEnabled="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_alignParentEnd="true"
-                                        />
-                                </RelativeLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                 <!--TODO: I WILL WORK ON IT LATER-->
-
-                <android.support.design.widget.FloatingActionButton
-                    android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    style="@style/fab_expand"
-                    android:id="@+id/fab_more_theme_options"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginTop="15dp"
-                    android:scaleType="centerInside"
-                    android:layout_marginBottom="0dp"
-                    app:elevation="5dp"
-                    />
-
-            </FrameLayout>
-
-            <!--PICTURE SETTING-->
             <android.support.v7.widget.CardView
-                android:id="@+id/preview_picture_setting_card"
+                android:id="@+id/theme_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="1dp"
-                app:cardElevation="5dp"
-                >
-
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <TextView
-                        android:id="@+id/picture_setting_title"
+                        android:id="@+id/theme_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="15dp"
-                        android:text="@string/media_viewer"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
+                        android:text="@string/theme"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold"/>
 
-                    <!--MAX BRIGHTENESS-->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_max_luminosita"
+                    <!--BASIC THEME-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_basic_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        >
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_switch_max_luminosita_icon"
+                            android:id="@+id/basic_theme_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-settings-brightness"
+                            app:iiv_icon="gmd-invert-colors"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/basic_theme_item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/basic_theme"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text"/>
+                            <TextView
+                                android:id="@+id/basic_theme_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/basic_theme_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--PRIMARY COLOR-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_primaryColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/PrimaryColor_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-color-lens"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/PrimaryColor_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/primary_color"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/PrimaryColor_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/primary_color_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--ACCENT COLOR-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_accentColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/accentColor_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-format-color-fill"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/accentColor_Item"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/accent_color"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/accentColor_Item_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/accent_color_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- APPLY THEME ON 3TH ACT -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_custom_thirdAct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/custom_3thAct_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="faw-paint-brush"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/custom_3thAct_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/custom_3thAct"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/custom_3thAct_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/custom_3thAct_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- TRANSLUCENT STATUS BAR-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_TraslucentStatusBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/Traslucent_StatusBar_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-web-asset"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing"
-                            />
+                        />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="8dp"
-                            >
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="45dp"
-                                >
+                                android:layout_marginEnd="45dp">
                                 <TextView
-                                    android:id="@+id/max_luminosita_Item"
+                                    android:id="@+id/Traslucent_StatusBar_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/max_brightness"
+                                    android:text="@string/traslucent_statusbar"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="@dimen/medium_text" />
                                 <TextView
-                                    android:id="@+id/max_luminosita_Item_Sub"
+                                    android:id="@+id/Traslucent_StatusBar_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/max_brightness_sub"
+                                    android:text="@string/traslucent_statusbar_sub"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="@dimen/sub_medium_text" />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_max_luminosita"
+                                android:id="@+id/SetTraslucentStatusBar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:button="@null"
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                />
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <!--COLORED NAV BAR-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_ColoredNavBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/NavBar_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-video-label"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
+                        />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="45dp">
+                                <TextView
+                                    android:id="@+id/NavBar_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/colored_navbar"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/NavBar_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/colored_navbar_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/SetColoredNavBar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <!--MEDIA VIEWER SETTING-->
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/preview_picture_setting_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/picture_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
+                        android:text="@string/media_viewer"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
+
+                    <!--MAX BRIGHTNESS-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_max_luminosity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/ll_switch_max_luminosity_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-settings-brightness"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="45dp">
+                                <TextView
+                                    android:id="@+id/max_luminosity_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/max_brightness"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/max_luminosity_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/max_brightness_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_max_luminosity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                     </LinearLayout>
 
                     <!-- PICTURE ORIENTATION-->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_switch_picture_orientation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
                             android:layout_width="@dimen/icon_width_height"
@@ -854,39 +653,34 @@
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-screen-rotation"
                             android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                            android:layout_marginRight="@dimen/big_spacing" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="8dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="8dp"
-                            >
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="45dp"
-                                >
+                                android:layout_marginEnd="45dp">
                                 <TextView
                                     android:id="@+id/picture_orientation_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/picture_orientation"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="@dimen/medium_text" />
                                 <TextView
                                     android:id="@+id/picture_orientation_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/picture_orientation_sub"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="@dimen/sub_medium_text" />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/set_picture_orientation"
@@ -896,86 +690,81 @@
                                 android:button="@null"
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                />
+                                android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                     </LinearLayout>
 
-                    <!-- FULL resolution -->
-                    <com.balysv.materialripple.MaterialRippleLayout
+                    <!-- FULL resolution TODO: do something -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_full_resolution"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mrl_rippleAlpha="0.05"
-                        app:mrl_rippleDelayClick="false">
-                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/ll_switch_full_resolution"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        android:visibility="gone">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/ll_switch_full_resolution_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-image"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            >
-                            <com.mikepenz.iconics.view.IconicsImageView
-                                android:id="@+id/ll_switch_full_resolution_icon"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
-                                android:layout_gravity="center_vertical"
-                                app:iiv_icon="gmd-image"
-                                android:layout_marginLeft="@dimen/big_spacing"
-                                android:layout_marginRight="@dimen/big_spacing"
-                                />
-                            <RelativeLayout
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing">
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingTop="8dp"
-                                android:paddingRight="16dp"
-                                android:paddingBottom="8dp"
-                                >
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:layout_marginEnd="45dp"
-                                    >
-                                    <TextView
-                                        android:id="@+id/full_resolution_Item"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/delay_load_full_size_image"
-                                        android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/full_resolution_Item_Sub"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/load_full_image_when_zoom_in"
-                                        android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp" />
-                                </LinearLayout>
-                                <android.support.v7.widget.SwitchCompat
-                                    android:id="@+id/set_full_resolution"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="45dp">
+                                <TextView
+                                    android:id="@+id/full_resolution_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:button="@null"
-                                    android:hapticFeedbackEnabled="true"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentEnd="true"
-                                    />
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </com.balysv.materialripple.MaterialRippleLayout>
+                                    android:text="@string/delay_load_full_size_image"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/full_resolution_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/load_full_image_when_zoom_in"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_full_resolution"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
 
-                    <!--SWIPE ORIENTATION-->
+                    <!--SWIPE ORIENTATION TODO: implement feature -->
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_media_viewer_swipe_direction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:visibility="gone"
-                        >
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        android:visibility="gone">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/media_viewer_swipe_direction_Icon"
                             android:layout_width="@dimen/icon_width_height"
@@ -983,40 +772,35 @@
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-compare-arrows"
                             android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                            android:layout_marginRight="@dimen/big_spacing" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="16dp"
-                            >
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="44dp"
-                                >
+                                android:layout_marginEnd="44dp">
                                 <TextView
                                     android:id="@+id/media_viewer_swipe_direction_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/media_viewer_swipe_direction"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="@dimen/medium_text" />
                                 <TextView
                                     android:id="@+id/media_viewer_swipe_direction_sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/media_viewer_swipe_direction_sub"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="@dimen/sub_medium_text" />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/Set_media_viewer_swipe_direction"
@@ -1032,15 +816,17 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <!--Video-->
+            <!--VIDEO PLAYER SETTINGS-->
+
             <android.support.v7.widget.CardView
                 android:id="@+id/video_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="5dp"
-                >
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1049,22 +835,23 @@
                         android:id="@+id/video_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="16dp"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
                         android:text="@string/video"
                         android:textColor="@color/md_dark_background"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        />
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
 
                     <!-- INCLUDE VIDEO -->
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_switch_include_video"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        >
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_include_video"
                             android:layout_width="@dimen/icon_width_height"
@@ -1072,39 +859,34 @@
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-videocam"
                             android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                            android:layout_marginRight="@dimen/big_spacing" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="16dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="8dp"
-                            >
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="45dp"
-                                >
+                                android:layout_marginEnd="45dp">
                                 <TextView
                                     android:id="@+id/include_video_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/include_video"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="@dimen/medium_text" />
                                 <TextView
                                     android:id="@+id/include_video_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Display also video"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="@dimen/sub_medium_text" />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/set_include_video"
@@ -1114,18 +896,20 @@
                                 android:button="@null"
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                />
+                                android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                     </LinearLayout>
+
                     <!-- USE EXTERNAL Player-->
+
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_switch_internal_player"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        >
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_player_Icon"
                             android:layout_width="@dimen/icon_width_height"
@@ -1133,39 +917,34 @@
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-ondemand-video"
                             android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                            android:layout_marginRight="@dimen/big_spacing" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="8dp"
-                            android:paddingRight="16dp"
-                            android:paddingBottom="16dp"
-                            >
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:layout_marginEnd="45dp"
-                                >
+                                android:layout_marginEnd="45dp">
                                 <TextView
                                     android:id="@+id/internal_player_Item"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/internal_player"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="@dimen/medium_text" />
                                 <TextView
                                     android:id="@+id/internal_player_Item_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/internal_player_sub"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="@dimen/sub_medium_text" />
                             </LinearLayout>
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/set_internal_player"
@@ -1175,8 +954,195 @@
                                 android:button="@null"
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                />
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <!--ADVANCED SETTING-->
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/advanced_setting_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_spacing"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
+                android:clickable="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/advanced_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
+                        android:text="@string/advanced"
+                        android:textColor="@color/md_dark_background"
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
+
+                    <!-- USE MEDIA STORE -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_use_media_mediastore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/use_media_mediastore_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-photo-library"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_text"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/use_media_mediastore_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/use_mediastore_provider"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/use_media_mediastore_Item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/use_media_store_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/sw_use_media_mediastore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <!-- MAPS PROVIDER-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_map_provider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/map_provider_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="faw-map-signs"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_text"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/map_provider_item_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/map_provider"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/map_provider_item_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/map_provider_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- AUTO UPDATE MEDIA -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_auto_update_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/auto_update_media_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-update"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/auto_update_media_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/auto_update_media"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/auto_update_media_Item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/auto_update_media_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/SetAutoUpdateMedia"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>

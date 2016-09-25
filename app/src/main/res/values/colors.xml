@@ -321,4 +321,6 @@
     <color name="md_yellow_A400">#FFEA00</color>
     <color name="md_yellow_A700">#FFD600</color>
 
+    <color name="transparent_black">#c4000000</color>
+
 </resources>

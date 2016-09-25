@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context="org.horaapps.leafpic.activities.MainActivity">
 
     <group android:id="@+id/general_action">
 
@@ -17,7 +17,7 @@
             app:showAsAction="ifRoom">
             <menu xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                tools:context=".MainActivity">
+                tools:context="org.horaapps.leafpic.activities.MainActivity">
                 <group android:checkableBehavior="single">
                     <item
                         android:id="@+id/all_media_filter"
@@ -65,6 +65,10 @@
                         android:id="@+id/type_sort_action"
                         android:title="@string/type"
                         app:showAsAction="never" />
+                <item
+                    android:id="@+id/numeric_sort_action"
+                    android:title="@string/numeric"
+                    app:showAsAction="never" />
                 </group>
                 <group android:checkableBehavior="all">
                     <item
@@ -121,6 +125,11 @@
         android:id="@+id/clear_album_preview"
         android:title="@string/clear_preview"
         android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/set_pin_album"
+        android:title="@string/pin"
         app:showAsAction="never" />
 
     <item

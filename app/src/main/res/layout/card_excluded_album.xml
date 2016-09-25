@@ -10,6 +10,8 @@
         android:orientation="horizontal"
         android:weightSum="10"
         android:paddingTop="5dp"
+        android:foreground="@drawable/ripple"
+        android:clickable="true"
         android:paddingBottom="5dp"
         >
         <com.mikepenz.iconics.view.IconicsImageView
@@ -51,7 +53,7 @@
             android:layout_weight="2"
             app:iiv_icon="gmd-close"
             android:clickable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/ripple"
             />
 
     </LinearLayout>
