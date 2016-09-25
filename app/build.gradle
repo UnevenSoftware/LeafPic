@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: "com.gladed.androidgitversion"
 
 repositories {
     jcenter()
@@ -16,8 +15,8 @@ android {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion 24
-        versionName androidGitVersion.name()
-        versionCode androidGitVersion.code()
+        versionName "v0.5.8"
+        versionCode 11
     }
 
     lintOptions {
@@ -37,7 +36,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "LeafPic"
         }
