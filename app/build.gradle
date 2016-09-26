@@ -7,10 +7,8 @@ repositories {
 }
 
 android {
-
     compileSdkVersion 24
     buildToolsVersion '24'
-
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
@@ -18,7 +16,6 @@ android {
         versionName "v0.5.8"
         versionCode 11
     }
-
     lintOptions {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
@@ -28,15 +25,13 @@ android {
     aaptOptions {
         additionalParameters "--no-version-vectors"
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
     }
-
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "LeafPic"
         }
@@ -46,7 +41,6 @@ android {
             resValue "string", "app_name", "LeafPic (debug)"
         }
     }
-
     productFlavors {
         noGPlay {
             //versionNameSuffix '-fdroid'

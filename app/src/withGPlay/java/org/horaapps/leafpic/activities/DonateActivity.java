@@ -18,9 +18,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SecretConstants;
+import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.inapppurchase.IabHelper;
@@ -38,18 +38,24 @@ public class DonateActivity extends ThemedActivity {
     private IabHelper mHelper;
     private SeekBar bar; private int progress = 2;
 
-    private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
-            = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (!result.isFailure()) {
-                Toast.makeText(DonateActivity.this, "thanks man!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+    private final IabHelper.OnConsumeFinishedListener mPurchaseFinishedListener =
+            new IabHelper.OnConsumeFinishedListener() {
+                @Override
+                public void onConsumeFinished(Purchase purchase, IabResult result) {
+                    if (result.isFailure()) {
+                        Log.d("iap", "Error purchasing: " + result);
+
+
+                    } else if (purchase.getSku().contains("donation")) {
+                        Toast.makeText(DonateActivity.this, "Thanks!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            };
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         bar = (SeekBar) findViewById(R.id.seek_bar_donations);
@@ -74,9 +80,9 @@ public class DonateActivity extends ThemedActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mHelper != null) try {
+        if (mHelper != null)
             mHelper.dispose();
-        } catch (IabHelper.IabAsyncInProgressException ignored) { }
+
         mHelper = null;
     }
 
@@ -191,14 +197,15 @@ public class DonateActivity extends ThemedActivity {
         findViewById(R.id.button_donate_play_store).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    if (mHelper != null) mHelper.flagEndAsync();
 
-                    mHelper.launchPurchaseFlow(DonateActivity.this, "donation_"+progress, 1312,
-                            mPurchaseFinishedListener);
-                } catch (IabHelper.IabAsyncInProgressException e) {
-                    e.printStackTrace();
-                }
+                if (mHelper != null) mHelper.flagEndAsync();
+
+                mHelper.launchPurchaseFlow(DonateActivity.this, "donation_" + progress, 123, new IabHelper.OnIabPurchaseFinishedListener() {
+                    @Override
+                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                        mHelper.consumeAsync(info, mPurchaseFinishedListener);
+                    }
+                });
             }
         });
     }
