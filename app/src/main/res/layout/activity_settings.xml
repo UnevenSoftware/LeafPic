@@ -103,7 +103,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/n_columns_Icon"
+                            android:id="@+id/n_columns_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -145,7 +145,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/Excluded_Album_Icon"
+                            android:id="@+id/excluded_album_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -316,7 +316,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/PrimaryColor_Icon"
+                            android:id="@+id/primary_color_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -358,7 +358,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/accentColor_Icon"
+                            android:id="@+id/accent_color_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -400,7 +400,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/custom_3thAct_icon"
+                            android:id="@+id/custom_3thact_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -442,7 +442,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/Traslucent_StatusBar_Icon"
+                            android:id="@+id/traslucent_statusbar_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -502,7 +502,7 @@
                         android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/NavBar_Icon"
+                            android:id="@+id/nav_bar_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
@@ -985,6 +985,64 @@
                         android:textColor="@color/md_dark_background"
                         android:textSize="@dimen/medium_text"
                         android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_sub_scaling"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/sub_scaling_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-photo-library"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_text"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/sub_scaling_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/sub_scaling_image_view"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/sub_scaling_Item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/sub_scaling_image_view_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/sw_sub_scaling"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
 
                     <!-- USE MEDIA STORE -->
 

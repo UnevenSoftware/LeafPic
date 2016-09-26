@@ -290,7 +290,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
                             //copyFileToDownloads(imageUri);
                             // TODO: 21/08/16 handle this better
                             if(ContentHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(getAlbum().getPath()))) {
-                                ((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).displayMedia(true);
+                                //((ImageFragment) adapter.getRegisteredFragment(getAlbum().getCurrentMediaIndex())).displayMedia(true);
+                                Toast.makeText(this, R.string.new_file_created, Toast.LENGTH_SHORT).show();
                             }
                             //adapter.notifyDataSetChanged();
                         } catch (Exception e) {
@@ -648,6 +649,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
                 fullScreenMode = true;

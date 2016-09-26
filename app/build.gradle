@@ -75,4 +75,5 @@ dependencies {
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
     compile project(':photoview')
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
 }
