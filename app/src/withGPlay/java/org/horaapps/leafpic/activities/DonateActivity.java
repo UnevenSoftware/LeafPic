@@ -116,7 +116,7 @@ public class DonateActivity extends ThemedActivity {
 
 
         final Button btnDonateIap = (Button) findViewById(R.id.button_donate_play_store);
-        btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate), progress));
+        btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate).toUpperCase(), progress));
 
         themeSeekBar(bar);
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -125,7 +125,7 @@ public class DonateActivity extends ThemedActivity {
                 if (i == 0) progress = 2;
                 else progress = (i+1)*2;
 
-                btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate), progress));
+                btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate).toUpperCase(), progress));
             }
 
             @Override

@@ -252,6 +252,11 @@ public class Media implements Parcelable, Serializable {
     }
     //</editor-fold>
 
+    public File getFile() {
+        if (getPath() != null) return new File(getPath());
+        return null;
+    }
+
     @Override
     public int describeContents() {
         return 0;

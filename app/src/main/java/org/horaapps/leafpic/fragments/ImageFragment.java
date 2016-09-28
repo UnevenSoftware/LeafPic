@@ -2,7 +2,6 @@ package org.horaapps.leafpic.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,14 +45,6 @@ public class ImageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         img = getArguments().getParcelable("image");
-        Log.wtf("oncreate", "crezated+ " +img.getPath()) ;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.wtf("onresume", "crezated"+img.getPath());
-
     }
 
     @Override
