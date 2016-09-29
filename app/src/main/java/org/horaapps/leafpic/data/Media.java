@@ -169,7 +169,6 @@ public class Media implements Parcelable, Serializable {
             e.printStackTrace();
         }
         return data;
-
     }
 
     public MediaDetailsMap<String, String> getMainDetails(Context context){

@@ -197,8 +197,6 @@ public class MainActivity extends SharedMediaActivity {
     firstLaunch = false;
   }
 
-
-
   private void displayCurrentAlbumMedia(boolean reload) {
     toolbar.setTitle(getAlbum().getName());
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
@@ -954,18 +952,18 @@ public class MainActivity extends SharedMediaActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
         ArrayList<Uri> files = new ArrayList<Uri>();
-        for (Media f : getAlbum().selectedMedias)
+        for (Media f : getAlbum().getSelectedMedia())
           files.add(f.getUri());
 
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-        intent.setType(StringUtils.getGenericMIME(getAlbum().selectedMedias.get(0).getMimeType()));
+        intent.setType(StringUtils.getGenericMIME(getAlbum().getSelectedMedia(0).getMimeType()));
         finishEditMode();
         startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
         return true;
 
       case R.id.all_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.ALL);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.ALL);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -974,7 +972,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.video_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.VIDEO);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.VIDEO);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -983,7 +981,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.image_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.IMAGES);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.IMAGES);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -992,7 +990,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.gifs_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.GIF);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.GIF);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -1094,8 +1092,8 @@ public class MainActivity extends SharedMediaActivity {
           protected Void doInBackground(Affix.Options... arg0) {
             ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
             for (int i=0;i<getAlbum().getSelectedCount();i++) {
-              if(!getAlbum().selectedMedias.get(i).isVideo())
-                bitmapArray.add(getAlbum().selectedMedias.get(i).getBitmap());
+              if(!getAlbum().getSelectedMedia(i).isVideo())
+                bitmapArray.add(getAlbum().getSelectedMedia(i).getBitmap());
             }
 
             if (bitmapArray.size() > 1)
