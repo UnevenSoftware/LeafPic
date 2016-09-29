@@ -101,13 +101,14 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
     @Override
     public boolean onLongClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+      //int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+      Media m = (Media) v.findViewById(R.id.photo_path).getTag();
       if (!editMode) {
         // If it is the first long press
-        mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(index));
+        mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(m));
         editMode = true;
       } else
-        getAlbum().selectAllPhotosUpTo(index, mediaAdapter);
+        getAlbum().selectAllPhotosUpTo(getAlbum().getIndex(m), mediaAdapter);
 
       invalidateOptionsMenu();
       return true;
@@ -117,19 +118,20 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+      //int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+      Media m = (Media) v.findViewById(R.id.photo_path).getTag();
       if (!pickMode) {
         if (editMode) {
-          mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(index));
+          mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(m));
           invalidateOptionsMenu();
         } else {
-          getAlbum().setCurrentPhotoIndex(index);
+          getAlbum().setCurrentPhotoIndex(m);
           Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
           intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
           startActivity(intent);
         }
       } else {
-        setResult(RESULT_OK, new Intent().setData(getAlbum().getMedia(index).getUri()));
+        setResult(RESULT_OK, new Intent().setData(m.getUri()));
         finish();
       }
 

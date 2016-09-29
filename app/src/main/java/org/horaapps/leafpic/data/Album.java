@@ -185,6 +185,8 @@ public class Album implements Serializable {
 
 	public void setCurrentPhotoIndex(int index){ currentMediaIndex = index; }
 
+	public void setCurrentPhotoIndex(Media m){ setCurrentPhotoIndex(media.indexOf(m)); }
+
 	public Media getCurrentMedia() { return getMedia(currentMediaIndex); }
 
 	public int getCurrentMediaIndex() { return currentMediaIndex; }
@@ -259,6 +261,10 @@ public class Album implements Serializable {
 				selectedMedias.remove(media.get(index));
 		}
 		return index;
+	}
+
+	public int toggleSelectPhoto(Media m) {
+		return toggleSelectPhoto(media.indexOf(m));
 	}
 
 	public void setDefaultSortingMode(Context context, SortingMode column) {
@@ -356,6 +362,8 @@ public class Album implements Serializable {
 			}
 		}
 	}
+
+	public int getIndex(Media m) { return  media.indexOf(m); }
 
 	public void clearSelectedPhotos() {
 		for (Media m : media)

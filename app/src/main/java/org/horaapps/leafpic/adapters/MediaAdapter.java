@@ -59,6 +59,8 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
         Media f = medias.get(position);
 
+        holder.path.setTag(f);
+
         holder.icon.setVisibility(View.GONE);
 
         if (f.isGif()) {
@@ -93,7 +95,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             holder.icon.setVisibility(View.GONE);
             holder.path.setVisibility(View.GONE);
         }
-        holder.path.setTag(position);
 
         if (f.isSelected()) {
             holder.icon.setIcon(CommunityMaterial.Icon.cmd_check);
