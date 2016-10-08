@@ -53,6 +53,12 @@ public class ImageFragment extends Fragment {
         if (PreferenceUtil.getInstance(getContext()).getBoolean(getString(R.string.preference_sub_scaling) , false)) {
             SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(getContext());
             imageView.setImage(ImageSource.uri(img.getUri()));
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
+                }
+            });
             return imageView;
         } else {
             PhotoView photoView = new PhotoView(getContext());
@@ -84,10 +90,6 @@ public class ImageFragment extends Fragment {
             }
         }, 5);
     }*/
-
-    public void displayMedia(boolean changed) {
-        displayMedia(((PhotoView) getView()), !changed);
-    }
 
     private void displayMedia(PhotoView photoView, boolean useCache) {
         //PreferenceUtil SP = PreferenceUtil.getInstance(getContext());

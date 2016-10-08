@@ -79,7 +79,7 @@ public class Album implements Serializable {
 
 	public ArrayList<Media> getMedia() {
 		ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-		switch (settings.getFilterMode()) {
+		switch (getFilterMode()) {
 			case ALL:
 				mediaArrayList = media;
 			default:
@@ -431,9 +431,6 @@ public class Album implements Serializable {
 	private boolean deleteMedia(Context context, Media media) {
 		boolean success;
 		File file = new File(media.getPath());
-	/*if (isFromMediaStore()) {
-	  success = context.getContentResolver().delete(media.getUri(), null, null) == 1;
-	}*/
 		if (success = ContentHelper.deleteFile(context, file))
 			scanFile(context, new String[]{ file.getAbsolutePath() });
 		return success;
@@ -505,7 +502,7 @@ public class Album implements Serializable {
 		MediaScannerConnection.scanFile(context, path, null, onScanCompletedListener);
 	}
 
-	public boolean areFiltersActive() {
-		return settings.getFilterMode() != FilterMode.ALL;
+	public FilterMode getFilterMode() {
+		return settings != null ? settings.getFilterMode() : FilterMode.ALL;
 	}
 }
