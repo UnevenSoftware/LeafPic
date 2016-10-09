@@ -9,8 +9,8 @@ import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
-import android.util.Log;
 
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
 import org.horaapps.leafpic.data.base.AlbumsComparators;
 import org.horaapps.leafpic.data.base.SortingMode;
@@ -32,7 +32,6 @@ import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by dnld on 27/04/16.
@@ -44,12 +43,9 @@ public class HandlingAlbums {
 
   public ArrayList<Album> dispAlbums;
   private ArrayList<Album> selectedAlbums;
-  private String nameProvider = MediaStoreProvider.class.getName();
-
 
   private PreferenceUtil SP;
 
-  private int indexCamera = -1;
   private int current = 0;
   private boolean hidden;
 
@@ -64,14 +60,11 @@ public class HandlingAlbums {
     this.hidden = hidden;
 
     ArrayList<Album> list = new ArrayList<Album>();
-    clearCameraIndex();
     if (SP.getBoolean(context.getString(org.horaapps.leafpic.R.string.preference_use_alternative_provider), false)) {
       StorageProvider p = new StorageProvider(context);
       list = p.getAlbums(context, hidden);
-      nameProvider = StorageProvider.class.getName();
     } else {
       list.addAll(MediaStoreProvider.getAlbums(context, hidden));
-      nameProvider = MediaStoreProvider.class.getName();
     }
     dispAlbums = list;
     sortAlbums(context);
@@ -79,24 +72,17 @@ public class HandlingAlbums {
 
   public void addAlbum(int position, Album album) {
     dispAlbums.add(position, album);
-    setCurrentAlbumIndex(dispAlbums.indexOf(album));
+    setCurrentAlbum(album);
+
   }
 
-  public void setCurrentAlbumIndex(int index) {
-    current = index;
+  public void setCurrentAlbum(Album album) {
+    current = dispAlbums.indexOf(album);
   }
+
 
   public Album getCurrentAlbum() {
     return dispAlbums.get(current);
-  }
-
-  private void clearCameraIndex() {
-    indexCamera = -1;
-  }
-
-
-  public boolean isContentFromMediaStore() {
-    return nameProvider.equals(MediaStoreProvider.class.getName());
   }
 
   public void saveBackup(final Context context) {
@@ -121,7 +107,7 @@ public class HandlingAlbums {
   }
 
   public static void addAlbumToBackup(final Context context, final Album album) {
-     new Thread(new Runnable() {
+    new Thread(new Runnable() {
       public void run() {
         try {
           boolean success = false;
@@ -181,14 +167,17 @@ public class HandlingAlbums {
     }
   }
 
-
-  public int toggleSelectAlbum(int index) {
+  private int toggleSelectAlbum(int index) {
     if (dispAlbums.get(index) != null) {
       dispAlbums.get(index).setSelected(!dispAlbums.get(index).isSelected());
       if (dispAlbums.get(index).isSelected()) selectedAlbums.add(dispAlbums.get(index));
       else selectedAlbums.remove(dispAlbums.get(index));
     }
     return index;
+  }
+
+  public int toggleSelectAlbum(Album album) {
+    return toggleSelectAlbum(dispAlbums.indexOf(album));
   }
 
   public Album getAlbum(int index){ return dispAlbums.get(index); }
@@ -221,7 +210,6 @@ public class HandlingAlbums {
       shortcutIntent = new Intent(appCtx, SplashScreen.class);
       shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
       shortcutIntent.putExtra("albumPath", selectedAlbum.getPath());
-      // TODO: 19/08/16 check this later
       shortcutIntent.putExtra("albumId", selectedAlbum.getId());
       shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -342,11 +330,8 @@ public class HandlingAlbums {
     clearSelectedAlbums();
   }
 
-
   private void excludeAlbum(Context context, Album a) {
-    // TODO: 19/08/16
     CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-    Log.wtf("excluded:::", a.getPath() + " - " + a.getId());
     h.excludeAlbum(a.getPath());
     dispAlbums.remove(a);
   }
@@ -359,7 +344,6 @@ public class HandlingAlbums {
     return SortingOrder.fromValue(SP.getInt("albums_sorting_order", SortingOrder.DESCENDING.getValue()));
   }
 
-
   public void setDefaultSortingMode(SortingMode sortingMode) {
     SP.putInt("albums_sorting_mode", sortingMode.getValue());
   }
@@ -370,30 +354,20 @@ public class HandlingAlbums {
 
   public void sortAlbums(final Context context) {
 
+    Album camera = null;
+
+    for(Album album : dispAlbums)
+      if (album.getName().equals("Camera") && dispAlbums.remove(album)) {
+        camera = album;
+        break;
+      }
+
     Collections.sort(dispAlbums, AlbumsComparators.getComparator(getSortingMode(), getSortingOrder()));
 
-    // TODO: 19/08/16 look a way to pin albums
-
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        clearCameraIndex();
-        for (int i = 0; i < dispAlbums.size(); i++)
-          if (getAlbum(i).getName().equals("Camera")) {
-            indexCamera = i; break;
-          }
-
-        if (indexCamera != -1) {
-          Album camera = dispAlbums.remove(indexCamera);
-          camera.setName(context.getString(org.horaapps.leafpic.R.string.camera));
-          dispAlbums.add(0, camera);
-        }
-      }
-    }).start();
-  }
-
-  private void sort(ArrayList<ArrayList> albums, Comparator<ArrayList> comparator) {
-    Collections.sort(albums, comparator);
+    if (camera != null) {
+      camera.setName(context.getString(R.string.camera));
+      dispAlbums.add(0, camera);
+    }
   }
 
   public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }

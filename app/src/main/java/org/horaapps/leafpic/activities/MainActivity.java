@@ -53,6 +53,7 @@ import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
+import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.CustomAlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
@@ -101,7 +102,6 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
     @Override
     public boolean onLongClick(View v) {
-      //int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
       Media m = (Media) v.findViewById(R.id.photo_path).getTag();
       if (!editMode) {
         // If it is the first long press
@@ -118,7 +118,6 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-      //int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
       Media m = (Media) v.findViewById(R.id.photo_path).getTag();
       if (!pickMode) {
         if (editMode) {
@@ -141,8 +140,8 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
     @Override
     public boolean onLongClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
-      albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(index));
+
+      albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(((Album) v.findViewById(R.id.album_name).getTag())));
       editMode = true;
       invalidateOptionsMenu();
       return true;
@@ -152,12 +151,13 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
+      Album album = (Album) v.findViewById(R.id.album_name).getTag();
+      //int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
       if (editMode) {
-        albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(index));
+        albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(album));
         invalidateOptionsMenu();
       } else {
-        getAlbums().setCurrentAlbumIndex(index);
+        getAlbums().setCurrentAlbum(album);
         displayCurrentAlbumMedia(true);
         setRecentApp(getAlbums().getCurrentAlbum().getName());
       }
@@ -176,7 +176,7 @@ public class MainActivity extends SharedMediaActivity {
 
     initUI();
 
-    displayPreFetchedData(getIntent().getExtras());
+    displayData(getIntent().getExtras());
   }
 
   @Override
@@ -214,12 +214,7 @@ public class MainActivity extends SharedMediaActivity {
   }
 
   private void displayAlbums() {
-    if (SP.getBoolean("auto_update_media", false))
-      displayAlbums(true);
-    else {
-      displayAlbums(false);
-      toggleRecyclersVisibility(true);
-    }
+    displayAlbums(true);
   }
 
   private void displayAlbums(boolean reload) {
@@ -237,56 +232,52 @@ public class MainActivity extends SharedMediaActivity {
     editMode = false;
     invalidateOptionsMenu();
     mediaAdapter.swapDataSet(new ArrayList<Media>());
-    rvMedia.scrollToPosition(0);}
+    rvMedia.scrollToPosition(0);
+  }
 
 
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    if (SP.getBoolean(getString(R.string.preference_include_video), true)) {
-      if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        fabCamera.setVisibility(View.GONE);
-      } else {
-        fabCamera.setVisibility(View.VISIBLE);
-        fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
-      }
+    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+      fabCamera.setVisibility(View.GONE);
+    } else {
+      fabCamera.setVisibility(View.VISIBLE);
+      fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
     }
   }
 
-  private void displayPreFetchedData(Bundle data){
-    try {
-      if (data!=null) {
-        int content = data.getInt(SplashScreen.CONTENT);
-        switch (content) {
-          case SplashScreen.ALBUMS_PREFETCHED:
-            displayAlbums(false);
-            pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-            toggleRecyclersVisibility(true);
-            break;
+  private boolean displayData(Bundle data){
+    if (data!=null) {
+      switch (data.getInt(SplashScreen.CONTENT)) {
+        case SplashScreen.ALBUMS_PREFETCHED:
+          displayAlbums(false);
+          pickMode = data.getBoolean(SplashScreen.PICK_MODE);
+          toggleRecyclersVisibility(true);
+          return true;
 
-          case SplashScreen.ALBUMS_BACKUP:
-            displayAlbums(true);
-            pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-            toggleRecyclersVisibility(true);
-            break;
+        case SplashScreen.ALBUMS_BACKUP:
+          displayAlbums(true);
+          pickMode = data.getBoolean(SplashScreen.PICK_MODE);
+          toggleRecyclersVisibility(true);
+          return true;
 
-          case SplashScreen.PHOTOS_PREFETCHED:
-            //TODO ask password if hidden
-            new Thread(new Runnable() {
-              @Override
-              public void run() {
-                getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
-              }
-            }).start();
-            displayCurrentAlbumMedia(false);
-            toggleRecyclersVisibility(false);
-            break;
-        }
-      } else
-        displayAlbums(true);
+        case SplashScreen.PHOTOS_PREFETCHED:
+          //TODO ask password if hidden
+          new Thread(new Runnable() {
+            @Override
+            public void run() {
+              getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
+            }
+          }).start();
+          displayCurrentAlbumMedia(false);
+          toggleRecyclersVisibility(false);
+          return true;
+      }
+    }
 
-    } catch (NullPointerException e) { e.printStackTrace(); }
-
+    displayAlbums(true);
+    return false;
   }
 
   private void initUI() {
@@ -582,18 +573,9 @@ public class MainActivity extends SharedMediaActivity {
 
 
   private void updateSelectedStuff() {
-    int c;
     if (albumsMode) {
-      if ((c = getAlbums().getSelectedCount()) != 0) {
-        toolbar.setTitle(c + "/" + getAlbums().dispAlbums.size());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            finishEditMode();
-          }
-        });
-      } else {
+      if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().dispAlbums.size());
+      else {
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -604,16 +586,8 @@ public class MainActivity extends SharedMediaActivity {
         });
       }
     } else {
-      if ((c = getAlbum().getSelectedCount()) != 0) {
-        toolbar.setTitle(c + "/" + getAlbum().getMedia().size());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            finishEditMode();
-          }
-        });
-      } else {
+      if (editMode) toolbar.setTitle(getAlbum().getSelectedCount() + "/" + getAlbum().getMedia().size());
+      else {
         toolbar.setTitle(getAlbum().getName());
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -623,6 +597,16 @@ public class MainActivity extends SharedMediaActivity {
           }
         });
       }
+    }
+
+    if (editMode) {
+      toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
+      toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          finishEditMode();
+        }
+      });
     }
   }
 
