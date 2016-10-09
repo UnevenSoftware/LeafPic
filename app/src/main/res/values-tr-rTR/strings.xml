@@ -167,7 +167,7 @@ bu bizim ilk uygulamamız, bu nedenle sizlerin geri dönüşlerinden çok şey �
   <string name="address_copied">Adres panoya kopyalandı</string>
   <string name="coming_soon">Pek Yakında!</string>
   <string name="google_takes">Google her bağıştan %30 pay alır.</string>
-  <string name="paypal_text">Saniyeler içinde masraf olmadan bize para göndermek için izin verin bana, 
+  <string name="paypal_text">Saniyeler içinde masraf olmadan bize para göndermek için izin verin bana,
 Eğer kullandığınız kredi kartı PayPal ise bağış 0,35€ ve %4 standart bir ücret alıyor </string>
   <!--ABOUT STRINGS-->
   <string name="about">Hakkında</string>
@@ -187,7 +187,8 @@ Eğer kullandığınız kredi kartı PayPal ise bağış 0,35€ ve %4 standart 
   <string name="send_email">E-POSTA GÖNDER</string>
   <string name="send_mail_error">Kurulu e-posta istemcisi yok.</string>
   <string name="about_special_thanks">Teşekkürler</string>
-  <string name="about_special_thanks_patryk_goworowski_sub"><a href="https://plus.google.com/109304801957014561872/about"> Patryk Goworowski\'ye muhteşem simge için.    </string>
+  <string name="about_special_thanks_patryk_goworowski_sub"><a
+      href="https://plus.google.com/109304801957014561872/about"> Patryk Goworowski\'ye muhteşemsimge için.</a></string>
   <string name="about_special_thanks_members_sub">
 tüm çeviriler için Crowdin topluluğuna    </string>
   <string name="about_special_thanks_you_sub">
