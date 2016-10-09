@@ -27,6 +27,11 @@ public class AlbumSettings implements Serializable {
         return h.getSettings(album.getPath());
     }
 
+    static AlbumSettings getDefaults() {
+        return new AlbumSettings(null, null, SortingMode.DATE.getValue(), SortingOrder.DESCENDING.getValue(), 0);
+    }
+
+
     AlbumSettings(String path, String cover, int sortingMode, int sortingOrder, int pinned) {
         this.path = path;
         this.coverPath = cover;

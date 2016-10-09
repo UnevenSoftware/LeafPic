@@ -40,8 +40,7 @@ public class Album implements Serializable {
 	private ArrayList<Media> media;
 	private ArrayList<Media> selectedMedias;
 
-
-	public Album() {
+	private Album() {
 		media = new ArrayList<Media>();
 		selectedMedias = new ArrayList<Media>();
 	}
@@ -75,6 +74,12 @@ public class Album implements Serializable {
 		super();
 		media.add(0, new Media(context, mediaUri));
 		setCurrentPhotoIndex(0);
+	}
+
+	public static Album getEmptyAlbum() {
+		Album album = new Album();
+		album.settings = AlbumSettings.getDefaults();
+		return album;
 	}
 
 	public ArrayList<Media> getMedia() {

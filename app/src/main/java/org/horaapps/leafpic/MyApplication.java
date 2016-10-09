@@ -13,7 +13,7 @@ public class MyApplication extends Application {
     private HandlingAlbums albums = null;
 
     public Album getAlbum() {
-        return albums.dispAlbums.size() > 0 ? albums.getCurrentAlbum() : new Album();
+        return albums.dispAlbums.size() > 0 ? albums.getCurrentAlbum() : Album.getEmptyAlbum();
     }
 
     @Override
