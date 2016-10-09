@@ -53,6 +53,7 @@ import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
+import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.CustomAlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
@@ -101,13 +102,13 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
     @Override
     public boolean onLongClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+      Media m = (Media) v.findViewById(R.id.photo_path).getTag();
       if (!editMode) {
         // If it is the first long press
-        mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(index));
+        mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(m));
         editMode = true;
       } else
-        getAlbum().selectAllPhotosUpTo(index, mediaAdapter);
+        getAlbum().selectAllPhotosUpTo(getAlbum().getIndex(m), mediaAdapter);
 
       invalidateOptionsMenu();
       return true;
@@ -117,19 +118,19 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.photo_path).getTag().toString());
+      Media m = (Media) v.findViewById(R.id.photo_path).getTag();
       if (!pickMode) {
         if (editMode) {
-          mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(index));
+          mediaAdapter.notifyItemChanged(getAlbum().toggleSelectPhoto(m));
           invalidateOptionsMenu();
         } else {
-          getAlbum().setCurrentPhotoIndex(index);
+          getAlbum().setCurrentPhotoIndex(m);
           Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
           intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
           startActivity(intent);
         }
       } else {
-        setResult(RESULT_OK, new Intent().setData(getAlbum().getMedia(index).getUri()));
+        setResult(RESULT_OK, new Intent().setData(m.getUri()));
         finish();
       }
 
@@ -139,8 +140,8 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
     @Override
     public boolean onLongClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
-      albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(index));
+
+      albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(((Album) v.findViewById(R.id.album_name).getTag())));
       editMode = true;
       invalidateOptionsMenu();
       return true;
@@ -150,12 +151,13 @@ public class MainActivity extends SharedMediaActivity {
   private View.OnClickListener albumOnClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-      int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
+      Album album = (Album) v.findViewById(R.id.album_name).getTag();
+      //int index = Integer.parseInt(v.findViewById(R.id.album_name).getTag().toString());
       if (editMode) {
-        albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(index));
+        albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(album));
         invalidateOptionsMenu();
       } else {
-        getAlbums().setCurrentAlbumIndex(index);
+        getAlbums().setCurrentAlbum(album);
         displayCurrentAlbumMedia(true);
         setRecentApp(getAlbums().getCurrentAlbum().getName());
       }
@@ -174,7 +176,7 @@ public class MainActivity extends SharedMediaActivity {
 
     initUI();
 
-    displayPreFetchedData(getIntent().getExtras());
+    displayData(getIntent().getExtras());
   }
 
   @Override
@@ -195,8 +197,6 @@ public class MainActivity extends SharedMediaActivity {
     firstLaunch = false;
   }
 
-
-
   private void displayCurrentAlbumMedia(boolean reload) {
     toolbar.setTitle(getAlbum().getName());
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
@@ -214,12 +214,7 @@ public class MainActivity extends SharedMediaActivity {
   }
 
   private void displayAlbums() {
-    if (SP.getBoolean("auto_update_media", false))
-      displayAlbums(true);
-    else {
-      displayAlbums(false);
-      toggleRecyclersVisibility(true);
-    }
+    displayAlbums(true);
   }
 
   private void displayAlbums(boolean reload) {
@@ -237,56 +232,52 @@ public class MainActivity extends SharedMediaActivity {
     editMode = false;
     invalidateOptionsMenu();
     mediaAdapter.swapDataSet(new ArrayList<Media>());
-    rvMedia.scrollToPosition(0);}
+    rvMedia.scrollToPosition(0);
+  }
 
 
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    if (SP.getBoolean(getString(R.string.preference_include_video), true)) {
-      if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        fabCamera.setVisibility(View.GONE);
-      } else {
-        fabCamera.setVisibility(View.VISIBLE);
-        fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
-      }
+    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+      fabCamera.setVisibility(View.GONE);
+    } else {
+      fabCamera.setVisibility(View.VISIBLE);
+      fabCamera.animate().translationY(fabCamera.getHeight() * 2).start();
     }
   }
 
-  private void displayPreFetchedData(Bundle data){
-    try {
-      if (data!=null) {
-        int content = data.getInt(SplashScreen.CONTENT);
-        switch (content) {
-          case SplashScreen.ALBUMS_PREFETCHED:
-            displayAlbums(false);
-            pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-            toggleRecyclersVisibility(true);
-            break;
+  private boolean displayData(Bundle data){
+    if (data!=null) {
+      switch (data.getInt(SplashScreen.CONTENT)) {
+        case SplashScreen.ALBUMS_PREFETCHED:
+          displayAlbums(false);
+          pickMode = data.getBoolean(SplashScreen.PICK_MODE);
+          toggleRecyclersVisibility(true);
+          return true;
 
-          case SplashScreen.ALBUMS_BACKUP:
-            displayAlbums(true);
-            pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-            toggleRecyclersVisibility(true);
-            break;
+        case SplashScreen.ALBUMS_BACKUP:
+          displayAlbums(true);
+          pickMode = data.getBoolean(SplashScreen.PICK_MODE);
+          toggleRecyclersVisibility(true);
+          return true;
 
-          case SplashScreen.PHOTOS_PREFETCHED:
-            //TODO ask password if hidden
-            new Thread(new Runnable() {
-              @Override
-              public void run() {
-                getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
-              }
-            }).start();
-            displayCurrentAlbumMedia(false);
-            toggleRecyclersVisibility(false);
-            break;
-        }
-      } else
-        displayAlbums(true);
+        case SplashScreen.PHOTOS_PREFETCHED:
+          //TODO ask password if hidden
+          new Thread(new Runnable() {
+            @Override
+            public void run() {
+              getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
+            }
+          }).start();
+          displayCurrentAlbumMedia(false);
+          toggleRecyclersVisibility(false);
+          return true;
+      }
+    }
 
-    } catch (NullPointerException e) { e.printStackTrace(); }
-
+    displayAlbums(true);
+    return false;
   }
 
   private void initUI() {
@@ -582,18 +573,9 @@ public class MainActivity extends SharedMediaActivity {
 
 
   private void updateSelectedStuff() {
-    int c;
     if (albumsMode) {
-      if ((c = getAlbums().getSelectedCount()) != 0) {
-        toolbar.setTitle(c + "/" + getAlbums().dispAlbums.size());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            finishEditMode();
-          }
-        });
-      } else {
+      if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().dispAlbums.size());
+      else {
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -604,16 +586,8 @@ public class MainActivity extends SharedMediaActivity {
         });
       }
     } else {
-      if ((c = getAlbum().getSelectedCount()) != 0) {
-        toolbar.setTitle(c + "/" + getAlbum().getMedia().size());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            finishEditMode();
-          }
-        });
-      } else {
+      if (editMode) toolbar.setTitle(getAlbum().getSelectedCount() + "/" + getAlbum().getMedia().size());
+      else {
         toolbar.setTitle(getAlbum().getName());
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -623,6 +597,16 @@ public class MainActivity extends SharedMediaActivity {
           }
         });
       }
+    }
+
+    if (editMode) {
+      toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
+      toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          finishEditMode();
+        }
+      });
     }
   }
 
@@ -952,18 +936,18 @@ public class MainActivity extends SharedMediaActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
         ArrayList<Uri> files = new ArrayList<Uri>();
-        for (Media f : getAlbum().selectedMedias)
+        for (Media f : getAlbum().getSelectedMedia())
           files.add(f.getUri());
 
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-        intent.setType(StringUtils.getGenericMIME(getAlbum().selectedMedias.get(0).getMimeType()));
+        intent.setType(StringUtils.getGenericMIME(getAlbum().getSelectedMedia(0).getMimeType()));
         finishEditMode();
         startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
         return true;
 
       case R.id.all_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.ALL);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.ALL);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -972,7 +956,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.video_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.VIDEO);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.VIDEO);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -981,7 +965,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.image_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.IMAGES);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.IMAGES);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -990,7 +974,7 @@ public class MainActivity extends SharedMediaActivity {
 
       case R.id.gifs_media_filter:
         if (!albumsMode) {
-          getAlbum().filterMedias(FilterMode.GIF);
+          getAlbum().filterMedias(getApplicationContext(), FilterMode.GIF);
           mediaAdapter.swapDataSet(getAlbum().getMedia());
           item.setChecked(true);
           checkNothing();
@@ -1092,8 +1076,8 @@ public class MainActivity extends SharedMediaActivity {
           protected Void doInBackground(Affix.Options... arg0) {
             ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
             for (int i=0;i<getAlbum().getSelectedCount();i++) {
-              if(!getAlbum().selectedMedias.get(i).isVideo())
-                bitmapArray.add(getAlbum().selectedMedias.get(i).getBitmap());
+              if(!getAlbum().getSelectedMedia(i).isVideo())
+                bitmapArray.add(getAlbum().getSelectedMedia(i).getBitmap());
             }
 
             if (bitmapArray.size() > 1)

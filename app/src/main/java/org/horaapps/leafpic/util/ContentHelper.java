@@ -15,6 +15,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
@@ -104,6 +105,10 @@ public class ContentHelper {
 
 
 		return new File(targetDir, StringUtils.incrementFileNameSuffix(source.getName()));
+	}
+
+	public static Uri getUriForFile(Context context, File file) {
+		return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
 	}
 
 	public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File targetDir) {

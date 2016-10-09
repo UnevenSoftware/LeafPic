@@ -56,7 +56,7 @@ public class  MediaStoreProvider {
 						}
 					}
 					if (f != null && !isExcluded(f.getPath())) {
-						album.media.add(0, new Media(f.getPath(), f.lastModified()));
+						album.addMedia(new Media(f.getPath(), f.lastModified()));
 						list.add(album);
 					}
 				}

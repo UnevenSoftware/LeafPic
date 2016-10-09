@@ -69,7 +69,7 @@
                         android:gravity="center"
                         android:elevation="12dp"
                         android:layout_centerInParent="true"
-                        />
+                        tools:targetApi="lollipop"/>
                 </RelativeLayout>
             </android.support.v4.widget.SwipeRefreshLayout>
 

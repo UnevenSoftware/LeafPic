@@ -37,10 +37,10 @@ public class Album implements Serializable {
 	private boolean selected = false;
 	public AlbumSettings settings = null;
 
-	public ArrayList<Media> media;
-	public ArrayList<Media> selectedMedias;
+	private ArrayList<Media> media;
+	private ArrayList<Media> selectedMedias;
 
-	public Album() {
+	private Album() {
 		media = new ArrayList<Media>();
 		selectedMedias = new ArrayList<Media>();
 	}
@@ -76,9 +76,15 @@ public class Album implements Serializable {
 		setCurrentPhotoIndex(0);
 	}
 
+	public static Album getEmptyAlbum() {
+		Album album = new Album();
+		album.settings = AlbumSettings.getDefaults();
+		return album;
+	}
+
 	public ArrayList<Media> getMedia() {
 		ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-		switch (settings.getFilterMode()) {
+		switch (getFilterMode()) {
 			case ALL:
 				mediaArrayList = media;
 			default:
@@ -100,9 +106,40 @@ public class Album implements Serializable {
 	}
 
 	public void updatePhotos(Context context) {
+		media = getMedia(context);
+		sortPhotos();
+		setCount(media.size());
+	}
 
-		//CustomAlbumsHelper albumHandler = CustomAlbumsHelper.getInstance(context);
-		//Set<String> excludedPhotoPaths = albumHandler.getExcludedPhotos(this.getPath(), this.getId());
+	private void updatePhotos(Context context, FilterMode filterMode) {
+
+		ArrayList<Media> media = getMedia(context), mediaArrayList = new ArrayList<Media>();
+
+		switch (filterMode) {
+			case ALL:
+				mediaArrayList = media;
+			default:
+				break;
+			case GIF:
+				for (Media media1 : media)
+					if (media1.isGif()) mediaArrayList.add(media1);
+				break;
+			case IMAGES:
+				for (Media media1 : media)
+					if (media1.isImage()) mediaArrayList.add(media1);
+				break;
+			case VIDEO:
+				for (Media media1 : media)
+					if (media1.isVideo()) mediaArrayList.add(media1);
+				break;
+		}
+
+		this.media = mediaArrayList;
+		sortPhotos();
+		setCount(this.media.size());
+	}
+
+	private ArrayList<Media> getMedia(Context context) {
 		PreferenceUtil SP = PreferenceUtil.getInstance(context);
 		ArrayList<Media> mediaArrayList = new ArrayList<Media>();
 		// TODO: 18/08/16
@@ -114,16 +151,15 @@ public class Album implements Serializable {
 			mediaArrayList.addAll(StorageProvider.getMedia(
 							getPath(), SP.getBoolean("set_include_video", true)));
 		}
+		return mediaArrayList;
+	}
 
+	public ArrayList<Media> getSelectedMedia() {
+		return selectedMedias;
+	}
 
-		/*for (int i = mediaArrayList.size() - 1; i >= 0; i--) {
-			if (excludedPhotoPaths.contains(mediaArrayList.get(i).getPath()))
-				mediaArrayList.remove(i);
-		}*/
-
-		media = mediaArrayList;
-		sortPhotos();
-		setCount(media.size());
+	public Media getSelectedMedia(int index) {
+		return selectedMedias.get(index);
 	}
 
 	private boolean isFromMediaStore() {
@@ -155,12 +191,9 @@ public class Album implements Serializable {
 
 	public boolean isPinned(){ return settings.isPinned(); }
 
-	public boolean isFromContentReoslver() {
-		return this.id != -1;
-	}
-
-	public void filterMedias(FilterMode filter) {
+	public void filterMedias(Context context, FilterMode filter) {
 		settings.setFilterMode(filter);
+		updatePhotos(context, filter);
 	}
 
 	public boolean addMedia(@Nullable Media media) {
@@ -185,13 +218,11 @@ public class Album implements Serializable {
 
 	public void setCurrentPhotoIndex(int index){ currentMediaIndex = index; }
 
+	public void setCurrentPhotoIndex(Media m){ setCurrentPhotoIndex(media.indexOf(m)); }
+
 	public Media getCurrentMedia() { return getMedia(currentMediaIndex); }
 
 	public int getCurrentMediaIndex() { return currentMediaIndex; }
-
-	public String getContentDescription(Context c) {
-		return c.getString(org.horaapps.leafpic.R.string.media);
-	}
 
 	public String getName() {
 		return name;
@@ -250,7 +281,7 @@ public class Album implements Serializable {
 		}
 	}
 
-	public int toggleSelectPhoto(int index) {
+	private int toggleSelectPhoto(int index) {
 		if (media.get(index) != null) {
 			media.get(index).setSelected(!media.get(index).isSelected());
 			if (media.get(index).isSelected())
@@ -259,6 +290,10 @@ public class Album implements Serializable {
 				selectedMedias.remove(media.get(index));
 		}
 		return index;
+	}
+
+	public int toggleSelectPhoto(Media m) {
+		return toggleSelectPhoto(media.indexOf(m));
 	}
 
 	public void setDefaultSortingMode(Context context, SortingMode column) {
@@ -357,6 +392,8 @@ public class Album implements Serializable {
 		}
 	}
 
+	public int getIndex(Media m) { return  media.indexOf(m); }
+
 	public void clearSelectedPhotos() {
 		for (Media m : media)
 			m.setSelected(false);
@@ -399,9 +436,6 @@ public class Album implements Serializable {
 	private boolean deleteMedia(Context context, Media media) {
 		boolean success;
 		File file = new File(media.getPath());
-	/*if (isFromMediaStore()) {
-	  success = context.getContentResolver().delete(media.getUri(), null, null) == 1;
-	}*/
 		if (success = ContentHelper.deleteFile(context, file))
 			scanFile(context, new String[]{ file.getAbsolutePath() });
 		return success;
@@ -473,7 +507,7 @@ public class Album implements Serializable {
 		MediaScannerConnection.scanFile(context, path, null, onScanCompletedListener);
 	}
 
-	public boolean areFiltersActive() {
-		return settings.getFilterMode() != FilterMode.ALL;
+	public FilterMode getFilterMode() {
+		return settings != null ? settings.getFilterMode() : FilterMode.ALL;
 	}
 }

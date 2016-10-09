@@ -1,11 +1,8 @@
 package org.horaapps.leafpic.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +15,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.activities.PlayerActivity;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
 /**
@@ -65,12 +63,8 @@ public class VideoFragment extends Fragment {
                 Intent intent = PreferenceUtil.getInstance(getContext()).getBoolean("set_internal_player", false)
                         ? new Intent(getActivity(), PlayerActivity.class) : new Intent(Intent.ACTION_VIEW);
 
-                Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + "" +
-                                                                                  ".provider", video.getFile());
-
-                Log.wtf("asd", uri.toString());
                 intent.setDataAndType(
-                        FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", video.getFile()),
+                        ContentHelper.getUriForFile(getContext(), video.getFile()),
                         video.getMimeType());
                 startActivity(intent);
             }
