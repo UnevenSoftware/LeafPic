@@ -51,16 +51,6 @@ public class SplashScreen extends SharedMediaActivity {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_splash);
         SP = PreferenceUtil.getInstance(getApplicationContext());
-        /**** START APP ****/
-
-        //albums = new HandlingAlbums(getApplicationContext());
-
-        //TextView logo = (TextView) findViewById(org.horaapps.leafpic.R.id.txtLogo);
-        //logo.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Figa.ttf"));
-        //logo.setPadding(0,0,0,25+ Measure.getNavBarHeight(getApplicationContext()));
-        //logo.animate().translationY(-Measure.getNavBarHeight(getApplicationContext())).start();
-        //logo.setTextColor(getSubTextColor());
-        //logo.setLetterSpacing((float)0.2);
 
         ((ProgressBar) findViewById(R.id.progress_splash)).getIndeterminateDrawable().setColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP);
 
@@ -75,13 +65,7 @@ public class SplashScreen extends SharedMediaActivity {
         setStatusBarColor();
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
-            if (getIntent().getAction().equals(Intent.ACTION_MAIN))
-                new PrefetchAlbumsData().execute(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_auto_update_media), false));
-            else if (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT)
-                    || getIntent().getAction().equals(Intent.ACTION_PICK)) {
-                PICK_INTENT = true;
-                new PrefetchAlbumsData().execute(SP.getBoolean(getString(org.horaapps.leafpic.R.string.preference_auto_update_media), false));
-            } else if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 Bundle data = getIntent().getExtras();
                 if (data != null) {
                     String ab = data.getString("albumPath");
@@ -93,7 +77,11 @@ public class SplashScreen extends SharedMediaActivity {
                         new PrefetchPhotosData().execute();
                     }
                 } else StringUtils.showToast(getApplicationContext(), "Album not found");
-            }
+            } else
+                new PrefetchAlbumsData().execute();
+
+            if (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK))
+                PICK_INTENT = true;
 
         } else {
             String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -146,15 +134,12 @@ public class SplashScreen extends SharedMediaActivity {
 
         @Override
         protected Boolean doInBackground(Boolean... arg0) {
-            if (arg0[0])
+            getAlbums().restoreBackup(getApplicationContext());
+            if(getAlbums().dispAlbums.size() == 0) {
                 getAlbums().loadAlbums(getApplicationContext(), false);
-            else {
-                getAlbums().restoreBackup(getApplicationContext());
-                if(getAlbums().dispAlbums.size() == 0)
-                    getAlbums().loadAlbums(getApplicationContext(), false);
-                else return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
         @Override

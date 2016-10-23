@@ -59,10 +59,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
-        Context c = holder.picture.getContext();
         Media f = a.getCoverAlbum();
 
-        Glide.with(c)
+        Glide.with(holder.picture.getContext())
                 .load(f.getPath())
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -74,7 +73,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into(holder.picture);
 
-        holder.name.setTag(position);
+        holder.name.setTag(a);
 
         String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & theme.getPrimaryColor()));
         String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
@@ -103,7 +102,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + c.getString(R.string.media) + "</font>";
+                "color='" + textColor + "'> " + holder.nPhotos.getContext().getString(R.string.media) + "</font>";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             holder.name.setText(Html.fromHtml(albumNameHtml, Html.FROM_HTML_MODE_LEGACY));

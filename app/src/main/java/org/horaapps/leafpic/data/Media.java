@@ -106,14 +106,14 @@ public class Media implements Parcelable, Serializable {
         this.selected = selected;
     }
 
-    public boolean isGif() { return getMimeType().endsWith("gif"); }
+    public boolean isGif() { return mimeType.endsWith("gif"); }
 
-    public boolean isImage() { return getMimeType().startsWith("image"); }
+    public boolean isImage() { return mimeType.startsWith("image"); }
 
-    public boolean isVideo() { return getMimeType().startsWith("video"); }
+    public boolean isVideo() { return mimeType.startsWith("video"); }
 
     public Uri getUri() {
-        return hasUri() ? Uri.parse(uri) : Uri.fromFile(new File(path));
+        return uri != null ? Uri.parse(uri) : Uri.fromFile(new File(path));
     }
 
     public String getName() {
@@ -122,10 +122,6 @@ public class Media implements Parcelable, Serializable {
 
     public long getSize() {
         return size;
-    }
-
-    private boolean hasUri() {
-        return uri != null;
     }
 
     public String getPath() {
@@ -156,7 +152,7 @@ public class Media implements Parcelable, Serializable {
     public MediaDetailsMap<String, String> getAllDetails() {
         MediaDetailsMap<String, String> data = new MediaDetailsMap<String, String>();
         try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(getPath()));
+            Metadata metadata = ImageMetadataReader.readMetadata(new File(path));
             for(Directory directory : metadata.getDirectories()) {
 
                 for(Tag tag : directory.getTags()) {
@@ -172,15 +168,15 @@ public class Media implements Parcelable, Serializable {
     }
 
     public MediaDetailsMap<String, String> getMainDetails(Context context){
-        metadata = new MetadataItem(new File(getPath()));
+        metadata = new MetadataItem(new File(path));
         MediaDetailsMap<String, String> details = new MediaDetailsMap<String, String>();
-        details.put(context.getString(R.string.path), getDisplayPath());
+        details.put(context.getString(R.string.path), path != null ? path : getUri().getEncodedPath());
         details.put(context.getString(R.string.type), getMimeType());
         String tmp;
         if ((tmp = metadata.getResolution()) != null)
             details.put(context.getString(R.string.resolution), tmp);
 
-        details.put(context.getString(R.string.size), getHumanReadableSize());
+        details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
         details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
         details.put(context.getString(R.string.orientation), getOrientation()+"");
         if (metadata.getDateOriginal() != null)
@@ -204,7 +200,7 @@ public class Media implements Parcelable, Serializable {
             public void run() {
                 int exifOrientation = -1;
                 try {
-                    ExifInterface  exif = new ExifInterface(getPath());
+                    ExifInterface  exif = new ExifInterface(path);
                     switch (orientation) {
                         case 90: exifOrientation = ExifInterface.ORIENTATION_ROTATE_90; break;
                         case 180: exifOrientation = ExifInterface.ORIENTATION_ROTATE_180; break;
@@ -232,7 +228,7 @@ public class Media implements Parcelable, Serializable {
     public boolean fixDate(){
         long newDate = getDateTaken();
         if (newDate != -1){
-            File f = new File(getPath());
+            File f = new File(path);
             if (f.setLastModified(newDate)) {
                 dateModified = newDate;
                 return true;
@@ -240,19 +236,10 @@ public class Media implements Parcelable, Serializable {
         }
         return false;
     }
-    private String getHumanReadableSize() {
-        return StringUtils.humanReadableByteCount(size, true);
-    }
-    private String getDisplayPath() {
-        return  hasPath() ? getPath() : getUri().getEncodedPath();
-    }
-    private boolean hasPath() {
-        return path != null;
-    }
     //</editor-fold>
 
     public File getFile() {
-        if (getPath() != null) return new File(getPath());
+        if (path != null) return new File(path);
         return null;
     }
 
@@ -299,7 +286,7 @@ public class Media implements Parcelable, Serializable {
 
         ExifInterface exif;
         try {
-            exif = new ExifInterface(getPath());
+            exif = new ExifInterface(path);
         } catch (IOException e) {
             return null;
         }
