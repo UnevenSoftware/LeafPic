@@ -31,8 +31,8 @@ public class PreferenceUtil {
 	return SP.edit();
   }
 
-  public void putString(String key, String value) {
-	getEditor().putString(key, value).commit();
+  public boolean putString(String key, String value) {
+	return getEditor().putString(key, value).commit();
   }
 
   public String getString(String key, String defValue) {

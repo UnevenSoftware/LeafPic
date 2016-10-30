@@ -13,7 +13,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -30,7 +29,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StaticMapProvider;
 import org.horaapps.leafpic.util.ThemeHelper;
 
@@ -48,7 +47,6 @@ import static org.horaapps.leafpic.util.ThemeHelper.LIGHT_THEME;
 public class SettingsActivity extends ThemedActivity {
 
     private PreferenceUtil SP;
-    private SecurityHelper securityObj;
 
     private Toolbar toolbar;
     private ScrollView scr;
@@ -80,7 +78,6 @@ public class SettingsActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
-        securityObj = new SecurityHelper(SettingsActivity.this);
 
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
@@ -102,11 +99,10 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_security).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!securityObj.isActiveSecurity())
-                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
-                else
+                if(Security.isPasswordSet(getApplicationContext()))
                     askPasswordDialog();
-
+                else
+                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
             }
         });
 
@@ -376,34 +372,47 @@ public class SettingsActivity extends ThemedActivity {
     }
 
     private void askPasswordDialog() {
-        AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-        final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingsActivity.this,passwordDialogBuilder);
-        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
 
-        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+        Security.askPassword(SettingsActivity.this, new Security.PasswordInterface() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //This should br empty it will be overwrite later
-                //to avoid dismiss of the dialog on wrong password
+            public void onSuccess() {
+                startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
+            }
+
+            @Override
+            public void onError() {
+                Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+
             }
         });
-
-        final AlertDialog passwordDialog = passwordDialogBuilder.create();
-        passwordDialog.show();
-
-        passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (securityObj.checkPassword(editTextPassword.getText().toString())) {
-                    passwordDialog.dismiss();
-                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                    editTextPassword.getText().clear();
-                    editTextPassword.requestFocus();
-                }
-            }
-        });
+//        AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
+//        final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingsActivity.this,passwordDialogBuilder);
+//        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+//
+//        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                //This should br empty it will be overwrite later
+//                //to avoid dismiss of the dialog on wrong password
+//            }
+//        });
+//
+//        final AlertDialog passwordDialog = passwordDialogBuilder.create();
+//        passwordDialog.show();
+//
+//        passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (securityObj.checkPassword(editTextPassword.getText().toString())) {
+//                    passwordDialog.dismiss();
+//                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
+//                } else {
+//                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+//                    editTextPassword.getText().clear();
+//                    editTextPassword.requestFocus();
+//                }
+//            }
+//        });
     }
 
     private void mapProviderDialog() {
@@ -431,7 +440,7 @@ public class SettingsActivity extends ThemedActivity {
         switch (StaticMapProvider.fromValue(SP.getInt(getString(R.string.preference_map_provider),
                 StaticMapProvider.GOOGLE_MAPS.getValue()))) {
             case GOOGLE_MAPS:
-                default: radioGoogleMaps.setChecked(true); break;
+            default: radioGoogleMaps.setChecked(true); break;
             case MAP_BOX: radioMapBoxStreets.setChecked(true); break;
             case MAP_BOX_DARK: radioMapBoxDark.setChecked(true); break;
             case MAP_BOX_LIGHT: radioMapBoxLight.setChecked(true); break;
@@ -761,7 +770,6 @@ public class SettingsActivity extends ThemedActivity {
     public void onPostResume() {
         super.onPostResume();
         setTheme();
-        securityObj.updateSecuritySetting();
     }
 
     private void setTheme(){

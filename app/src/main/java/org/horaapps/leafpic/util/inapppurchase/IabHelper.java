@@ -82,7 +82,7 @@ public class IabHelper {
     public static final String ITEM_TYPE_INAPP = "inapp";
     public static final String GET_SKU_DETAILS_ITEM_TYPE_LIST = "ITEM_TYPE_LIST";
     private static final int BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE = 3;
-    // IAB Helper error codes
+    // IAB Helper onError codes
     private static final int IABHELPER_ERROR_BASE = -1000;
     private static final int IABHELPER_REMOTE_EXCEPTION = -1001;
     private static final int IABHELPER_BAD_RESPONSE = -1002;
@@ -173,7 +173,7 @@ public class IabHelper {
                                            "-1005:User cancelled/" +
                                            "-1006:Unknown purchase response/" +
                                            "-1007:Missing token/" +
-                                           "-1008:Unknown error/" +
+                                           "-1008:Unknown onError/" +
                                            "-1009:Subscriptions not available/" +
                                            "-1010:Invalid consumption attempt").split("/");
 
@@ -800,7 +800,7 @@ public class IabHelper {
                 logDebug("getSkuDetails() failed: " + getResponseDesc(response));
                 return response;
             } else {
-                logError("getSkuDetails() returned a bundle with neither an error nor a detail list.");
+                logError("getSkuDetails() returned a bundle with neither an onError nor a detail list.");
                 return IABHELPER_BAD_RESPONSE;
             }
         }
@@ -857,7 +857,7 @@ public class IabHelper {
     }
 
     private void logError(String msg) {
-        Log.e(mDebugTag, "In-app billing error: " + msg);
+        Log.e(mDebugTag, "In-app billing onError: " + msg);
     }
 
     private void logWarn(String msg) {
