@@ -3,9 +3,11 @@ package org.horaapps.leafpic.util;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -74,16 +76,24 @@ public class Security {
             }
         });
 
-        passwordDialogBuilder.setNegativeButton(activity.getString(R.string.cancel).toUpperCase(), null);
+        passwordDialogBuilder.setNegativeButton(activity.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideKeyboard(activity, editTextPassword.getWindowToken());
+            }
+        });
 
         final AlertDialog passwordDialog = passwordDialogBuilder.create();
         passwordDialog.show();
+        showKeyboard(activity);
+        editTextPassword.requestFocus();
 
         passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
                 .OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkPassword(activity, editTextPassword.getText().toString())){
+                    hideKeyboard(activity, editTextPassword.getWindowToken());
                     passwordDialog.dismiss();
                     passwordInterface.onSuccess();
                 } else {
@@ -93,6 +103,16 @@ public class Security {
                 }
             }
         });
+    }
+
+    private static void showKeyboard(Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    private static void hideKeyboard(Context context, IBinder token) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(token, 0);
     }
 
     private static String sha256(String base) {

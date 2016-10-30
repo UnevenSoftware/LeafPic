@@ -3,6 +3,7 @@ package org.horaapps.leafpic.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +12,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -641,7 +645,7 @@ public class SettingsActivity extends ThemedActivity {
             @Override
             public void onColorChanged(int c) {
                 dialogTitle.setBackgroundColor(c);
-                updateViewswithAccentColor(colorPicker.getColor());
+                updateViewsWithAccentColor(colorPicker.getColor());
 
             }
         });
@@ -651,26 +655,26 @@ public class SettingsActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                updateViewswithAccentColor(getAccentColor());
+                updateViewsWithAccentColor(getAccentColor());
             }
         });
         dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SP.putInt(getString(R.string.preference_accent_color), colorPicker.getColor());
                 updateTheme();
-                updateViewswithAccentColor(getAccentColor());
+                updateViewsWithAccentColor(getAccentColor());
             }
         });
         dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                updateViewswithAccentColor(getAccentColor());
+                updateViewsWithAccentColor(getAccentColor());
             }
         });
         dialogBuilder.show();
     }
 
-    private void customizePictureViewer(){
+    private void customizePictureViewer() {
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
 
@@ -717,7 +721,7 @@ public class SettingsActivity extends ThemedActivity {
         dialogBuilder.show();
     }
 
-    private void updateViewswithAccentColor(int color){
+    private void updateViewsWithAccentColor(int color){
         txtGT.setTextColor(color);
         txtTT.setTextColor(color);
         txtPT.setTextColor(color);
@@ -775,7 +779,7 @@ public class SettingsActivity extends ThemedActivity {
         setNavBarColor();
         setRecentApp(getString(org.horaapps.leafpic.R.string.settings));
         setScrollViewColor(scr);
-        updateViewswithAccentColor(getAccentColor());
+        updateViewsWithAccentColor(getAccentColor());
 
 
         /** Icons **/
@@ -846,5 +850,23 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.fab_options_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.media_viewer_swipe_direction_sub)).setTextColor(color);
+
+        //LIMITED OPTIONS
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.ll_switch_TraslucentStatusBar).setVisibility(View.VISIBLE);
+            if(hasNavBar()) findViewById(R.id.ll_switch_ColoredNavBar).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private boolean hasNavBar() {
+        Resources resources = getResources();
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (id > 0) {
+            return resources.getBoolean(id);
+        } else {    // Check for keys
+            boolean hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey();
+            boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+            return !hasMenuKey && !hasBackKey;
+        }
     }
 }
