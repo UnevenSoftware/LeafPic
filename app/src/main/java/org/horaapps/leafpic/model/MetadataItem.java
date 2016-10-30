@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data;
+package org.horaapps.leafpic.model;
 
 import android.graphics.BitmapFactory;
 import android.util.Log;

@@ -14,7 +14,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.PlayerActivity;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
-import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 

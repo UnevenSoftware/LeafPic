@@ -18,8 +18,8 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;

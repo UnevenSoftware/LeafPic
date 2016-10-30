@@ -1,6 +1,6 @@
-package org.horaapps.leafpic.data.base;
+package org.horaapps.leafpic.model.base;
 
-import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.util.NumericComparator;
 
 import java.util.Comparator;

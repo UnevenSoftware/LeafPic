@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data.providers;
+package org.horaapps.leafpic.model.providers;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,10 +6,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.CustomAlbumsHelper;
-import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.base.ImageFileFilter;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.CustomAlbumsHelper;
+import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;

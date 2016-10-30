@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data;
+package org.horaapps.leafpic.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 
 import java.io.File;
 import java.util.ArrayList;

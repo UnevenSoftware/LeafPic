@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data;
+package org.horaapps.leafpic.model;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -18,7 +18,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.data.base.MediaDetailsMap;
+import org.horaapps.leafpic.model.base.MediaDetailsMap;
 import org.horaapps.leafpic.util.MediaSignature;
 import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;

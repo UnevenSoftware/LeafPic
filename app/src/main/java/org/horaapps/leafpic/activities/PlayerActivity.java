@@ -61,7 +61,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.player.DemoPlayer;

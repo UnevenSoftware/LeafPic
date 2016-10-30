@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data;
+package org.horaapps.leafpic.model;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +12,11 @@ import android.provider.MediaStore;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
-import org.horaapps.leafpic.data.base.AlbumsComparators;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
-import org.horaapps.leafpic.data.providers.MediaStoreProvider;
-import org.horaapps.leafpic.data.providers.StorageProvider;
+import org.horaapps.leafpic.model.base.AlbumsComparators;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.model.providers.MediaStoreProvider;
+import org.horaapps.leafpic.model.providers.StorageProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;

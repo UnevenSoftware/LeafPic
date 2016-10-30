@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data.base;
+package org.horaapps.leafpic.model.base;
 
 import java.util.HashMap;
 import java.util.TreeMap;

@@ -2,8 +2,8 @@ package org.horaapps.leafpic;
 
 import android.app.Application;
 
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.HandlingAlbums;
 
 /**
  * Created by dnld on 28/04/16.

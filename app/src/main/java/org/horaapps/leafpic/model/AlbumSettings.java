@@ -1,11 +1,11 @@
-package org.horaapps.leafpic.data;
+package org.horaapps.leafpic.model;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import org.horaapps.leafpic.data.base.FilterMode;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.model.base.FilterMode;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 
 import java.io.Serializable;
 

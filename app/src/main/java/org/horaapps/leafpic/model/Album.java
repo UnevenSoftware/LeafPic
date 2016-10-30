@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.data;
+package org.horaapps.leafpic.model;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
@@ -7,12 +7,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.data.base.FilterMode;
-import org.horaapps.leafpic.data.base.MediaComparators;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
-import org.horaapps.leafpic.data.providers.MediaStoreProvider;
-import org.horaapps.leafpic.data.providers.StorageProvider;
+import org.horaapps.leafpic.model.base.FilterMode;
+import org.horaapps.leafpic.model.base.MediaComparators;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.model.providers.MediaStoreProvider;
+import org.horaapps.leafpic.model.providers.StorageProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
