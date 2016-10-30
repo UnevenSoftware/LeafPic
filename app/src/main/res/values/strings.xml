@@ -295,7 +295,7 @@
     <string name="map_provider">Map Provider</string>
     <string name="map_provider_sub">Chose the source of maps</string>
     <string name="insert_something">Insert something!</string>
-    <string name="password_dont_match">password doesn\'t match</string>
+    <string name="password_dont_match">Password doesn\'t match</string>
     <string name="chose_the_map_provider">Choose the map provider</string>
     <string name="use_google_static_maps_faster">Use Google static maps</string>
     <string name="use_openstreetmap_slower">Use OpenStreetMap</string>
@@ -321,4 +321,5 @@
         (TESTING) It allows you to have a better zoom management and a clear image but it isn\'t
         really optimized right now
     </string>
+    <string name="error_contact_developer">Something went wrong, please contact the developer,</string>
 </resources>

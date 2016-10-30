@@ -385,34 +385,6 @@ public class SettingsActivity extends ThemedActivity {
 
             }
         });
-//        AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-//        final EditText editTextPassword  = securityObj.getInsertPasswordDialog(SettingsActivity.this,passwordDialogBuilder);
-//        passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
-//
-//        passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //This should br empty it will be overwrite later
-//                //to avoid dismiss of the dialog on wrong password
-//            }
-//        });
-//
-//        final AlertDialog passwordDialog = passwordDialogBuilder.create();
-//        passwordDialog.show();
-//
-//        passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (securityObj.checkPassword(editTextPassword.getText().toString())) {
-//                    passwordDialog.dismiss();
-//                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
-//                } else {
-//                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-//                    editTextPassword.getText().clear();
-//                    editTextPassword.requestFocus();
-//                }
-//            }
-//        });
     }
 
     private void mapProviderDialog() {
