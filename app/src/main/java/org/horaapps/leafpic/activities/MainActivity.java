@@ -495,6 +495,7 @@ public class MainActivity extends SharedMediaActivity {
         startActivity(intent);
       }
     });
+
     findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

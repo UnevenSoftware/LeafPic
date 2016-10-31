@@ -25,7 +25,6 @@ import java.util.HashSet;
 
 public class  MediaStoreProvider {
 
-
 	private static ArrayList<String> excludedAlbums;
 
 	public static ArrayList<Album> getAlbums(Context context, boolean hidden) {
@@ -133,6 +132,12 @@ public class  MediaStoreProvider {
 
 		CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
 		list.addAll(handler.getExcludedFoldersPaths());
+		return list;
+	}
+
+	public static ArrayList<Media> getAllMedia(Context context) {
+		ArrayList<Media> list = new ArrayList<Media>();
+
 		return list;
 	}
 

@@ -121,7 +121,8 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     }
 
     public void swapDataSet(ArrayList<Media> asd) {
-        medias = asd;
+        medias.clear();
+        medias.addAll(asd);
         notifyDataSetChanged();
     }
 

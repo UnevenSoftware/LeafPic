@@ -124,9 +124,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     }
 
     public void swapDataSet(ArrayList<Album> asd) {
-        if (albums.equals(asd))
-            return;
-        albums = asd;
+
+        // TODO improve this
+        albums.clear();
+        albums.addAll(asd);
         notifyDataSetChanged();
     }
 
