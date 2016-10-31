@@ -517,9 +517,9 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingTop="@dimen/medium_spacing"
                             android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
+                            android:paddingBottom="@dimen/small_spacing">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -647,7 +647,9 @@
                         android:id="@+id/ll_switch_picture_orientation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
                             android:layout_width="@dimen/icon_width_height"

@@ -34,8 +34,8 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -1080,6 +1080,9 @@ public class MainActivity extends SharedMediaActivity {
         final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(R.id.affix_vertical_switch);
         final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
 
+        final LinearLayout llSwVertical = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_vertical);
+        final LinearLayout llSwSaveHere = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_save_here);
+
         final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
 
         final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
@@ -1095,7 +1098,7 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
 
         /** Sub TextViews **/
-        color = getTextColor();
+        color = getSubTextColor();
         ((TextView) dialogLayout.findViewById(R.id.save_here_sub)).setTextColor(color);
         ((TextView) dialogLayout.findViewById(R.id.affix_vertical_sub)).setTextColor(color);
         ((TextView) dialogLayout.findViewById(R.id.affix_format_sub)).setTextColor(color);
@@ -1134,21 +1137,26 @@ public class MainActivity extends SharedMediaActivity {
 
           }
         });
-        seekQuality.setProgress(90); //DEFAULT
+        seekQuality.setProgress(50); //DEFAULT
 
-        swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swVertical.setClickable(false);
+        llSwVertical.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            updateSwitchColor(swVertical, getAccentColor());
+          public void onClick(View v) {
+              swVertical.setChecked(!swVertical.isChecked());
+              updateSwitchColor(swVertical, getAccentColor());
           }
         });
 
-        swSaveHere.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swSaveHere.setClickable(false);
+        llSwSaveHere.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          public void onClick(View v) {
+            swSaveHere.setChecked(!swSaveHere.isChecked());
             updateSwitchColor(swSaveHere, getAccentColor());
           }
         });
+
         builder.setView(dialogLayout);
         builder.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {

@@ -66,7 +66,7 @@ public class SettingsActivity extends ThemedActivity {
     private SwitchCompat swMaxLuminosity;
     private SwitchCompat swPictureOrientation;
     private SwitchCompat swDelayFullImage;
-    private SwitchCompat swInternalBrowser;
+    private SwitchCompat swInternalPlayer;
     private SwitchCompat swAutoUpdate;
     private SwitchCompat swUseMediaStore;
     private SwitchCompat swIncludeVideo;
@@ -161,10 +161,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW Show Fab ***/
         swShowFab = (SwitchCompat) findViewById(R.id.sw_show_fab);
         swShowFab.setChecked(SP.getBoolean(getString(R.string.preference_show_fab), false));
-        swShowFab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swShowFab.setClickable(false);
+        findViewById(R.id.ll_fab_options).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_show_fab), isChecked);
+            public void onClick(View v) {
+                swShowFab.setChecked(!swShowFab.isChecked());
+                SP.putBoolean(getString(R.string.preference_show_fab), swShowFab.isChecked());
                 updateSwitchColor(swShowFab, getAccentColor());
             }
         });
@@ -173,38 +175,44 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW Show Fab ***/
         swSubScaling = (SwitchCompat) findViewById(R.id.sw_sub_scaling);
         swSubScaling.setChecked(SP.getBoolean(getString(R.string.preference_sub_scaling), false));
-        swSubScaling.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swSubScaling.setClickable(false);
+        findViewById(R.id.ll_sub_scaling).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_sub_scaling), isChecked);
+            public void onClick(View v) {
+                swSubScaling.setChecked(!swSubScaling.isChecked());
+                SP.putBoolean(getString(R.string.preference_sub_scaling), swSubScaling.isChecked());
                 updateSwitchColor(swSubScaling, getAccentColor());
             }
         });
 
         /*** SW Internal Player ***/
-        swInternalBrowser = (SwitchCompat) findViewById(R.id.set_internal_player);
-        swInternalBrowser.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
-        swInternalBrowser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swInternalPlayer = (SwitchCompat) findViewById(R.id.set_internal_player);
+        swInternalPlayer.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
+        swInternalPlayer.setClickable(false);
+        findViewById(R.id.ll_switch_internal_player).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_internal_player), isChecked);
+            public void onClick(View v) {
+                swInternalPlayer.setChecked(!swInternalPlayer.isChecked());
+                SP.putBoolean(getString(R.string.preference_internal_player), swInternalPlayer.isChecked());
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         ((MyApplication) getApplicationContext()).updateAlbums();
                     }
                 }).start();
-                updateSwitchColor(swInternalBrowser, getAccentColor());
+                updateSwitchColor(swInternalPlayer, getAccentColor());
             }
         });
 
         /*** SW INCLUDE VIDEO ***/
         swIncludeVideo = (SwitchCompat) findViewById(R.id.set_include_video);
         swIncludeVideo.setChecked(SP.getBoolean(getString(R.string.preference_include_video), true));
-        swIncludeVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swIncludeVideo.setClickable(false);
+        findViewById(R.id.ll_switch_include_video).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_include_video), isChecked);
+            public void onClick(View v) {
+                swIncludeVideo.setChecked(!swIncludeVideo.isChecked());
+                SP.putBoolean(getString(R.string.preference_include_video), swIncludeVideo.isChecked());
                 updateSwitchColor(swIncludeVideo, getAccentColor());
             }
         });
@@ -212,10 +220,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW SWIPE DIRECTION ***/
         swSwipeDirection = (SwitchCompat) findViewById(R.id.Set_media_viewer_swipe_direction);
         swSwipeDirection.setChecked(SP.getBoolean(getString(R.string.preference_swipe_direction_inverted), false));
-        swSwipeDirection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swSwipeDirection.setClickable(false);
+        findViewById(R.id.ll_media_viewer_swipe_direction).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_swipe_direction_inverted), isChecked);
+            public void onClick(View v) {
+                swSwipeDirection.setChecked(!swSwipeDirection.isChecked());
+                SP.putBoolean(getString(R.string.preference_swipe_direction_inverted), swSwipeDirection.isChecked());
                 updateSwitchColor(swSwipeDirection, getAccentColor());
             }
         });
@@ -223,10 +233,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW AUTO UPDATE MEDIA ***/
         swAutoUpdate = (SwitchCompat) findViewById(R.id.SetAutoUpdateMedia);
         swAutoUpdate.setChecked(SP.getBoolean(getString(R.string.preference_auto_update_media), false));
-        swAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swAutoUpdate.setClickable(false);
+        findViewById(R.id.ll_auto_update_media).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_auto_update_media), isChecked);
+            public void onClick(View v) {
+                swAutoUpdate.setChecked(!swAutoUpdate.isChecked());
+                SP.putBoolean(getString(R.string.preference_auto_update_media), swAutoUpdate.isChecked());
                 updateSwitchColor(swAutoUpdate, getAccentColor());
             }
         });
@@ -234,10 +246,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW MEDIA STORE ***/
         swUseMediaStore = (SwitchCompat) findViewById(R.id.sw_use_media_mediastore);
         swUseMediaStore.setChecked(SP.getBoolean(getString(R.string.preference_use_alternative_provider), false));
-        swUseMediaStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swUseMediaStore.setClickable(false);
+        findViewById(R.id.ll_use_media_mediastore).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_use_alternative_provider), isChecked);
+            public void onClick(View v) {
+                swUseMediaStore.setChecked(!swUseMediaStore.isChecked());
+                SP.putBoolean(getString(R.string.preference_use_alternative_provider), swUseMediaStore.isChecked());
                 updateSwitchColor(swUseMediaStore, getAccentColor());
             }
         });
@@ -245,10 +259,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW DELAY FULL-SIZE IMAGE ***/
         swDelayFullImage = (SwitchCompat) findViewById(R.id.set_full_resolution);
         swDelayFullImage.setChecked(SP.getBoolean(getString(R.string.preference_delay_full_image), true));
-        swDelayFullImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swDelayFullImage.setClickable(false);
+        findViewById(R.id.ll_switch_full_resolution).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_delay_full_image), isChecked);
+            public void onClick(View v) {
+                swDelayFullImage.setChecked(!swDelayFullImage.isChecked());
+                SP.putBoolean(getString(R.string.preference_delay_full_image), swDelayFullImage.isChecked());
                 updateSwitchColor(swDelayFullImage, getAccentColor());
             }
         });
@@ -256,10 +272,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW PICTURE ORIENTATION ***/
         swPictureOrientation = (SwitchCompat) findViewById(R.id.set_picture_orientation);
         swPictureOrientation.setChecked(SP.getBoolean(getString(R.string.preference_auto_rotate), false));
-        swPictureOrientation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swPictureOrientation.setClickable(false);
+        findViewById(R.id.ll_switch_picture_orientation).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_auto_rotate), isChecked);
+            public void onClick(View v) {
+                swPictureOrientation.setChecked(!swPictureOrientation.isChecked());
+                SP.putBoolean(getString(R.string.preference_auto_rotate), swPictureOrientation.isChecked());
                 updateSwitchColor(swPictureOrientation, getAccentColor());
             }
         });
@@ -267,10 +285,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW MAX LUMINOSITY ***/
         swMaxLuminosity = (SwitchCompat) findViewById(R.id.set_max_luminosity);
         swMaxLuminosity.setChecked(SP.getBoolean(getString(R.string.preference_max_brightness), false));
-        swMaxLuminosity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swMaxLuminosity.setClickable(false);
+        findViewById(R.id.ll_switch_max_luminosity).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_max_brightness), isChecked);
+            public void onClick(View v) {
+                swMaxLuminosity.setChecked(!swMaxLuminosity.isChecked());
+                SP.putBoolean(getString(R.string.preference_max_brightness), swMaxLuminosity.isChecked());
                 updateSwitchColor(swMaxLuminosity, getAccentColor());
             }
         });
@@ -279,10 +299,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW TRANSLUCENT STATUS BAR ***/
         swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
         swStatusBar.setChecked(SP.getBoolean(getString(R.string.preference_translucent_status_bar), true));
-        swStatusBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swStatusBar.setClickable(false);
+        findViewById(R.id.ll_switch_TraslucentStatusBar).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_translucent_status_bar), isChecked);
+            public void onClick(View v) {
+                swStatusBar.setChecked(!swStatusBar.isChecked());
+                SP.putBoolean(getString(R.string.preference_translucent_status_bar), swStatusBar.isChecked());
                 updateTheme();
                 setStatusBarColor();
                 updateSwitchColor(swStatusBar, getAccentColor());
@@ -292,10 +314,12 @@ public class SettingsActivity extends ThemedActivity {
         /*** SW COLORED NAV BAR ***/
         swNavBar = (SwitchCompat) findViewById(R.id.SetColoredNavBar);
         swNavBar.setChecked(SP.getBoolean(getString(R.string.preference_colored_nav_bar), false));
-        swNavBar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swNavBar.setClickable(false);
+        findViewById(R.id.ll_switch_ColoredNavBar).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(R.string.preference_colored_nav_bar), isChecked);
+            public void onClick(View v) {
+                swNavBar.setChecked(!swNavBar.isChecked());
+                SP.putBoolean(getString(R.string.preference_colored_nav_bar), swNavBar.isChecked());
                 updateTheme();
                 updateSwitchColor(swNavBar, getAccentColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -733,7 +757,7 @@ public class SettingsActivity extends ThemedActivity {
         updateSwitchColor(swStatusBar, color);
         updateSwitchColor(swMaxLuminosity, color);
         updateSwitchColor(swPictureOrientation, color);
-        updateSwitchColor(swInternalBrowser, color);
+        updateSwitchColor(swInternalPlayer, color);
         updateSwitchColor(swAutoUpdate, color);
         updateSwitchColor(swIncludeVideo, color);
         updateSwitchColor(swSwipeDirection, color);
