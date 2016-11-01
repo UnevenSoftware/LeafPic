@@ -274,6 +274,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             menu.setGroupVisible(R.id.on_internal_storage, false);
             menu.setGroupVisible(R.id.only_photos_options, false);
             menu.findItem(R.id.sort_action).setVisible(false);
+	    menu.findItem(R.id.action_details).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
 

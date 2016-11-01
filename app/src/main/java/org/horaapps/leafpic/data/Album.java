@@ -55,7 +55,7 @@ public class Album implements Serializable {
 	}
 
 	public Album(Context context, @NotNull File mediaPath) {
-		super();
+		this();
 		File folder = mediaPath.getParentFile();
 		this.path = folder.getPath();
 		this.name = folder.getName();
@@ -71,7 +71,9 @@ public class Album implements Serializable {
 	 * @param mediaUri uri of the media to display
    */
 	public Album(Context context, Uri mediaUri) {
-		super();
+		this();
+		this.path = mediaUri.toString();
+		this.name = mediaUri.getPath();
 		media.add(0, new Media(context, mediaUri));
 		setCurrentPhotoIndex(0);
 	}
