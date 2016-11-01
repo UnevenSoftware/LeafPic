@@ -16,7 +16,7 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -704,6 +704,7 @@ public class SettingsActivity extends ThemedActivity {
 
         View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_media_viewer_theme, null);
         final SwitchCompat swApplyTheme_Viewer = (SwitchCompat) dialogLayout.findViewById(R.id.apply_theme_3th_act_enabled);
+        final LinearLayout llApplyTheme_Viewer = (LinearLayout) dialogLayout.findViewById(R.id.ll_apply_theme_3thAct);
 
         ((CardView) dialogLayout.findViewById(R.id.third_act_theme_card)).setCardBackgroundColor(getCardBackgroundColor());
         dialogLayout.findViewById(R.id.third_act_theme_title).setBackgroundColor(getPrimaryColor());//or GetPrimary
@@ -712,14 +713,15 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) dialogLayout.findViewById(R.id.ll_apply_theme_3thAct_icon)).setColor(getIconColor());
 
         swApplyTheme_Viewer.setChecked(isApplyThemeOnImgAct());
-        swApplyTheme_Viewer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swApplyTheme_Viewer.setClickable(false);
+        llApplyTheme_Viewer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
+                swApplyTheme_Viewer.setChecked(!swApplyTheme_Viewer.isChecked());
                 updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
             }
         });
         updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
-
 
         final LineColorPicker transparencyColorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.pickerTransparent);
         transparencyColorPicker.setColors(ColorPalette.getTransparencyShadows(getPrimaryColor()));
