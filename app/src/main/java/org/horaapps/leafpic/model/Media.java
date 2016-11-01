@@ -146,7 +146,7 @@ public class Media implements Parcelable, Serializable {
 
     //<editor-fold desc="Exif & More">
     public GeoLocation getGeoLocation()  {
-        return metadata.getLocation();
+        return metadata != null ? metadata.getLocation() : null;
     }
 
     public MediaDetailsMap<String, String> getAllDetails() {
@@ -168,27 +168,32 @@ public class Media implements Parcelable, Serializable {
     }
 
     public MediaDetailsMap<String, String> getMainDetails(Context context){
-        metadata = new MetadataItem(new File(path));
+
         MediaDetailsMap<String, String> details = new MediaDetailsMap<String, String>();
         details.put(context.getString(R.string.path), path != null ? path : getUri().getEncodedPath());
         details.put(context.getString(R.string.type), getMimeType());
-        String tmp;
-        if ((tmp = metadata.getResolution()) != null)
-            details.put(context.getString(R.string.resolution), tmp);
 
-        details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
-        details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
-        details.put(context.getString(R.string.orientation), getOrientation()+"");
-        if (metadata.getDateOriginal() != null)
-            details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
+        if(path != null) {
+            metadata = new MetadataItem(new File(path));
 
-        if ((tmp = metadata.getCameraInfo()) != null)
-            details.put(context.getString(R.string.camera), tmp);
-        if ((tmp = metadata.getExifInfo()) != null)
-            details.put(context.getString(R.string.exif), tmp);
-        GeoLocation location;
-        if ((location = metadata.getLocation()) != null)
-            details.put(context.getString(R.string.location), location.toDMSString());
+            String tmp;
+            if ((tmp = metadata.getResolution()) != null)
+                details.put(context.getString(R.string.resolution), tmp);
+
+            details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
+            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
+            details.put(context.getString(R.string.orientation), getOrientation() + "");
+            if (metadata.getDateOriginal() != null)
+                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
+
+            if ((tmp = metadata.getCameraInfo()) != null)
+                details.put(context.getString(R.string.camera), tmp);
+            if ((tmp = metadata.getExifInfo()) != null)
+                details.put(context.getString(R.string.exif), tmp);
+            GeoLocation location;
+            if ((location = metadata.getLocation()) != null)
+                details.put(context.getString(R.string.location), location.toDMSString());
+        }
 
         return details;
     }
