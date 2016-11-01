@@ -1,12 +1,13 @@
 package org.horaapps.leafpic.model;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
-import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
@@ -16,10 +17,10 @@ import com.drew.metadata.xmp.XmpDirectory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -27,33 +28,22 @@ import java.util.TimeZone;
  * Created by dnld on 14/08/16.
  */
 
-
-
-
 class MetadataItem {
 
-  private static Set<Class<?>> usefullDirectories = new HashSet<Class<?>>();
+//  private static Set<Class<?>> usefullDirectories = new HashSet<Class<?>>();
 
-  public static final int ORIENTATION_NORMAL = 1;
-  public static final int ORIENTATION_ROTATE_180 = 3;
-  public static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
-  public static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
+  private static final int ORIENTATION_NORMAL = 1;
+  private static final int ORIENTATION_ROTATE_180 = 3;
+  private static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
+  private static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
 
-  static {
-    usefullDirectories.add(ExifIFD0Directory.class);
-    usefullDirectories.add(ExifSubIFDDirectory.class);
-    //usefullDirectories.add(BmpHeaderDirectory.class);
-    //usefullDirectories.add(GifHeaderDirectory.class);
-    //usefullDirectories.add(JpegDirectory.class);
-    //usefullDirectories.add(PngDirectory.class);
-    //usefullDirectories.add(WebpDirectory.class);
-    usefullDirectories.add(GpsDirectory.class);
-    usefullDirectories.add(XmpDirectory.class);
+//  static {
+//    usefullDirectories.add(ExifIFD0Directory.class);
+//    usefullDirectories.add(ExifSubIFDDirectory.class);
+//    usefullDirectories.add(GpsDirectory.class);
+//    usefullDirectories.add(XmpDirectory.class);
+//  }
 
-  }
-
-  private int width = -1;
-  private int height = -1;
   private String make = null;
   private String model = null;
   private String fNumber = null;
@@ -63,64 +53,75 @@ class MetadataItem {
   private GeoLocation location = null;
   private int orientation = -1;
 
-  MetadataItem(File file) {
+  static MetadataItem getMetadata(@NonNull File file) {
+    return new MetadataItem(file);
+  }
 
+  private static Point getResolutionPoint(InputStream stream) {
     BitmapFactory.Options options = new BitmapFactory.Options();
     options.inJustDecodeBounds = true;
-    BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-    setWidth(options.outWidth);
-    setHeight(options.outHeight);
+    BitmapFactory.decodeStream(stream, null, options);
+    return new Point(options.outWidth, options.outHeight);
+  }
+
+  static String getResolution(InputStream stream) {
+    Point point = getResolutionPoint(stream);
+    return String.format(Locale.getDefault(),"%dx%d", point.x, point.y);
+
+  }
+
+  private MetadataItem(File stream) {
 
     try {
-      Metadata metadata = ImageMetadataReader.readMetadata(file);
+      Metadata metadata = ImageMetadataReader.readMetadata(stream);
       // TODO: 21/08/16 should I switch to ExifInterface or to any other lib?
-      for(Directory directory : metadata.getDirectories()) {
-        if (usefullDirectories.contains(directory.getClass())) {
-          if (directory.getClass().equals(ExifSubIFDDirectory.class) || directory.getClass().equals(ExifIFD0Directory.class)) {
-            ExifDirectoryBase d = (ExifDirectoryBase) directory;
 
-            if (d.containsTag(ExifDirectoryBase.TAG_MAKE))
-              setMake(d.getString(ExifDirectoryBase.TAG_MAKE));
-            if (d.containsTag(ExifDirectoryBase.TAG_MODEL))
-              setModel(d.getString(ExifDirectoryBase.TAG_MODEL));
-
-            if (d.containsTag(ExifDirectoryBase.TAG_ISO_EQUIVALENT))
-              setIso(d.getString(ExifDirectoryBase.TAG_ISO_EQUIVALENT));
-            if (d.containsTag(ExifDirectoryBase.TAG_EXPOSURE_TIME) && d.getRational(ExifDirectoryBase.TAG_EXPOSURE_TIME) != null)
-              setExposureTime(new DecimalFormat("0.000").format(d.getRational(ExifDirectoryBase.TAG_EXPOSURE_TIME)));
-            if (d.containsTag(ExifDirectoryBase.TAG_FNUMBER))
-              setfNumber(d.getString(ExifDirectoryBase.TAG_FNUMBER));
-
-            if (d.containsTag(ExifDirectoryBase.TAG_DATETIME_ORIGINAL))
-              setDateOriginal(d.getDate(ExifDirectoryBase.TAG_DATETIME_ORIGINAL));
-
-          } else if (directory.getClass().equals(ExifSubIFDDirectory.class)) {
-            setDateOriginal(((ExifSubIFDDirectory) directory).getDateOriginal(TimeZone.getDefault()));
-          } else if (directory.getClass().equals(XmpDirectory.class)) {
-            XmpDirectory d = (XmpDirectory) directory;
-
-            if (d.containsTag(XmpDirectory.TAG_DATETIME_ORIGINAL))
-              setDateOriginal(d.getDate(XmpDirectory.TAG_DATETIME_ORIGINAL));
-
-            if (d.containsTag(XmpDirectory.TAG_MAKE))
-              setMake(d.getString(XmpDirectory.TAG_MAKE));
-            if (d.containsTag(XmpDirectory.TAG_MODEL))
-              setModel(d.getString(XmpDirectory.TAG_MODEL));
-
-            if (d.containsTag(XmpDirectory.TAG_F_NUMBER))
-              setfNumber(d.getString(XmpDirectory.TAG_F_NUMBER));
-          }
-          else if (directory.getClass().equals(GpsDirectory.class)) {
-            GpsDirectory d = (GpsDirectory) directory;
-            setLocation(d.getGeoLocation());
-          }
-        }
+      handleDirectoryBase(metadata.getFirstDirectoryOfType(ExifIFD0Directory.class));
+      ExifSubIFDDirectory dir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+      if(dir != null) {
+        dateOriginal = dir.getDateOriginal(TimeZone.getDefault());
+        handleDirectoryBase(dir);
       }
 
+      XmpDirectory dir1 = metadata.getFirstDirectoryOfType(XmpDirectory.class);
+      if(dir1 != null) {
+        if (dir1.containsTag(XmpDirectory.TAG_DATETIME_ORIGINAL))
+          dateOriginal = dir1.getDate(XmpDirectory.TAG_DATETIME_ORIGINAL);
+
+        if (dir1.containsTag(XmpDirectory.TAG_MAKE))
+          make = dir1.getString(XmpDirectory.TAG_MAKE);
+        if (dir1.containsTag(XmpDirectory.TAG_MODEL))
+          model = dir1.getString(XmpDirectory.TAG_MODEL);
+
+        if (dir1.containsTag(XmpDirectory.TAG_F_NUMBER))
+          fNumber = dir1.getString(XmpDirectory.TAG_F_NUMBER);
+      }
+
+      GpsDirectory d = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+      if(d != null) location  = d.getGeoLocation();
     } catch (ImageProcessingException e) {
       Log.wtf("asd", "logMainTags: ImageProcessingException", e);
     } catch (IOException e) {
       Log.wtf("asd", "logMainTags: IOException", e);
+    }
+  }
+
+  private void handleDirectoryBase(ExifDirectoryBase d) {
+    if(d != null) {
+      if (d.containsTag(ExifDirectoryBase.TAG_MAKE))
+        make =d.getString(ExifDirectoryBase.TAG_MAKE);
+      if (d.containsTag(ExifDirectoryBase.TAG_MODEL))
+        model = d.getString(ExifDirectoryBase.TAG_MODEL);
+
+      if (d.containsTag(ExifDirectoryBase.TAG_ISO_EQUIVALENT))
+        iso = d.getString(ExifDirectoryBase.TAG_ISO_EQUIVALENT);
+      if (d.containsTag(ExifDirectoryBase.TAG_EXPOSURE_TIME) && d.getRational(ExifDirectoryBase.TAG_EXPOSURE_TIME) != null)
+        exposureTime = new DecimalFormat("0.000").format(d.getRational(ExifDirectoryBase.TAG_EXPOSURE_TIME));
+      if (d.containsTag(ExifDirectoryBase.TAG_FNUMBER))
+        fNumber = d.getString(ExifDirectoryBase.TAG_FNUMBER);
+
+      if (d.containsTag(ExifDirectoryBase.TAG_DATETIME_ORIGINAL))
+        dateOriginal = d.getDate(ExifDirectoryBase.TAG_DATETIME_ORIGINAL);
     }
   }
 
@@ -141,37 +142,12 @@ class MetadataItem {
     return dateOriginal;
   }
 
-  private void setDateOriginal(Date dateOriginal) {
-    this.dateOriginal = dateOriginal;
-  }
   public GeoLocation getLocation() {
     return location;
   }
 
-  public void setLocation(GeoLocation location) {
-    this.location = location;
-  }
-
-  private int getWidth() {
-    return width;
-  }
-
-  private void setWidth(int width) {
-    this.width = width;
-  }
-
-  public int getHeight() {
-    return height;
-  }
-
-  public String getResolution() {
-    if(width !=-1 && height != -1)
-      return String.format("%dx%d", getWidth(), getHeight());
-    return null;
-  }
 
   String getCameraInfo() {
-
     if (make != null && model != null) {
       if (model.contains(make)) return model;
       return String.format("%s %s", make, model);
@@ -188,30 +164,10 @@ class MetadataItem {
     return result.length() == 0 ? null : result.toString();
   }
 
-  public void setHeight(int height) {
-    this.height = height;
-  }
-
-  public String getMake() {
-    return make;
-  }
-
-  public void setMake(String make) {
-    this.make = make;
-  }
-
-  private void setModel(String model) {
-    this.model = model;
-  }
-
   private String getfNumber() {
     if(fNumber != null)
       return String.format("f/%s", fNumber);
     return null;
-  }
-
-  private void setfNumber(String fNumber) {
-    this.fNumber = fNumber;
   }
 
   private String getIso() {
@@ -220,17 +176,9 @@ class MetadataItem {
     return null;
   }
 
-  private void setIso(String iso) {
-    this.iso = iso;
-  }
-
   private String getExposureTime() {
     if(exposureTime != null)
       return String.format("%ss", exposureTime);
     return null;
-  }
-
-  private void setExposureTime(String exposureTime) {
-    this.exposureTime = exposureTime;
   }
 }

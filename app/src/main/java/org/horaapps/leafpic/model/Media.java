@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.model;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -24,7 +25,9 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,7 +44,7 @@ public class Media implements Parcelable, Serializable {
 
     private String uri = null;
 
-    private long size = 0;
+    private long size = -1;
     private boolean selected = false;
     private MetadataItem metadata;
 
@@ -77,15 +80,6 @@ public class Media implements Parcelable, Serializable {
         this.orientation = cur.getInt(4);
     }
 
-    private static int findOrientation(int exifOrientation){
-        switch (exifOrientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90: return 90;
-            case ExifInterface.ORIENTATION_ROTATE_180: return 180;
-            case ExifInterface.ORIENTATION_ROTATE_270: return 270;
-        }
-        return 0;
-    }
-
     public void setUri(String uriString) {
         this.uri = uriString;
     }
@@ -114,6 +108,10 @@ public class Media implements Parcelable, Serializable {
 
     public Uri getUri() {
         return uri != null ? Uri.parse(uri) : Uri.fromFile(new File(path));
+    }
+
+    public InputStream getInputStream(ContentResolver contentResolver) throws FileNotFoundException {
+        return contentResolver.openInputStream(getUri());
     }
 
     public String getName() {
@@ -168,24 +166,30 @@ public class Media implements Parcelable, Serializable {
     }
 
     public MediaDetailsMap<String, String> getMainDetails(Context context){
-
         MediaDetailsMap<String, String> details = new MediaDetailsMap<String, String>();
         details.put(context.getString(R.string.path), path != null ? path : getUri().getEncodedPath());
         details.put(context.getString(R.string.type), getMimeType());
-
-        if(path != null) {
-            metadata = new MetadataItem(new File(path));
-
-            String tmp;
-            if ((tmp = metadata.getResolution()) != null)
-                details.put(context.getString(R.string.resolution), tmp);
-
+        if(size != -1)
             details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
+        // TODO should i add this always?
+        details.put(context.getString(R.string.orientation), getOrientation() + "");
+
+
+        try {
+            InputStream stream = getInputStream(context.getContentResolver());
+            details.put(context.getString(R.string.resolution), MetadataItem.getResolution(stream));
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
+
+        File file = getFile();
+
+        if(file != null) {
+            metadata = MetadataItem.getMetadata(file);
+
             details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
-            details.put(context.getString(R.string.orientation), getOrientation() + "");
             if (metadata.getDateOriginal() != null)
                 details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
 
+            String tmp;
             if ((tmp = metadata.getCameraInfo()) != null)
                 details.put(context.getString(R.string.camera), tmp);
             if ((tmp = metadata.getExifInfo()) != null)
@@ -193,6 +197,7 @@ public class Media implements Parcelable, Serializable {
             GeoLocation location;
             if ((location = metadata.getLocation()) != null)
                 details.put(context.getString(R.string.location), location.toDMSString());
+
         }
 
         return details;
@@ -201,6 +206,7 @@ public class Media implements Parcelable, Serializable {
     public boolean setOrientation(final int orientation) {
         this.orientation = orientation;
         // TODO: 28/08/16  find a better way
+        // TODO update also content provider
         new Thread(new Runnable() {
             public void run() {
                 int exifOrientation = -1;
@@ -244,7 +250,10 @@ public class Media implements Parcelable, Serializable {
     //</editor-fold>
 
     public File getFile() {
-        if (path != null) return new File(path);
+        if (path != null) {
+            File file = new File(path);
+            if (file.exists()) return file;
+        }
         return null;
     }
 
@@ -253,6 +262,8 @@ public class Media implements Parcelable, Serializable {
         return 0;
     }
 
+
+    //TODO add orientation
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.path);
