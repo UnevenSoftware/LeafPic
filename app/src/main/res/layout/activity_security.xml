@@ -5,9 +5,7 @@
               android:layout_width="match_parent"
               android:id="@+id/root"
               android:layout_height="match_parent">
-    <!--
-        TOOLBAR
-        -->
+    <!--TOOLBAR-->
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
@@ -29,6 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@drawable/ripple"
+                android:clickable="true"
                 >
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/active_security_icon"
@@ -144,8 +144,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
                     >
-
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/security_body_apply_hidden_icon"
                         android:layout_width="@dimen/icon_width_height"
@@ -193,8 +194,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
                     >
-
                     <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/security_body_apply_delete_icon"
                         android:layout_width="@dimen/icon_width_height"

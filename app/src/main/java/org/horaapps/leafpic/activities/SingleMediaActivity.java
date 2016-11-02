@@ -39,10 +39,10 @@ import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
+import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
-import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
@@ -87,7 +87,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         {
             Album album;
             if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW)) && getIntent().getData() != null) {
-
                 String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
 
                 File file = null;
