@@ -47,7 +47,7 @@
                             android:clickable="true">
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/affix_vertical_icon"
-                                app:iiv_icon="gmd-compare"
+                                app:iiv_icon="gmd-view-agenda"
                                 android:layout_width="@dimen/icon_width_height"
                                 android:layout_height="@dimen/icon_width_height"
                                 android:layout_gravity="center_vertical"
@@ -103,7 +103,7 @@
                             android:clickable="true">
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/save_here_icon"
-                                app:iiv_icon="gmd-photo-library"
+                                app:iiv_icon="gmd-save"
                                 android:layout_width="@dimen/icon_width_height"
                                 android:layout_height="@dimen/icon_width_height"
                                 android:layout_gravity="center_vertical"

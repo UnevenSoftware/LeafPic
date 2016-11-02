@@ -118,7 +118,8 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
         onBackPressed();
       }
     });
-    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    toolbar.setTitle(getIntent().getData().getPath());
+    //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE

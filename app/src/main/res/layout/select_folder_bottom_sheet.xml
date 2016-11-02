@@ -1,28 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/ll_select_folder"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto"
-                  android:id="@+id/ll_bottom_sheet_title"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:paddingStart="24dp"
-                  android:paddingEnd="24dp"
-                  android:paddingTop="16dp"
-                  android:paddingBottom="16dp"
-                  android:weightSum="10"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/rl_bottom_sheet_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/medium_spacing"
+        android:paddingRight="@dimen/medium_spacing"
+        android:paddingLeft="@dimen/medium_spacing"
+        android:paddingBottom="@dimen/medium_spacing"
+        android:foreground="@drawable/ripple"
+        android:clickable="true"
+        >
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:orientation="vertical">
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:layout_marginEnd="44dp"
+            >
             <TextView
                 android:id="@+id/bottom_sheet_title"
                 android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
                 android:textColor="@color/md_dark_primary_text"
                 android:textSize="18sp"
                 android:textStyle="bold"
-            />
+                />
             <TextView
                 android:id="@+id/bottom_sheet_sub_title"
                 android:layout_width="wrap_content"
@@ -40,74 +41,97 @@
                 android:text="@string/local_folder"
                 android:ellipsize="start"
                 android:textStyle="italic"
-            />
-
+                />
         </LinearLayout>
-
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/toggle_hidden_icon"
-            android:layout_height="20dp"
-            android:layout_width="0dp"
-            android:layout_gravity="center_vertical|end"
-            android:clickable="true"
-            android:background="@drawable/ripple"
-            android:layout_weight="1"
+            android:layout_height="@dimen/icon_width_height"
+            android:layout_width="@dimen/icon_width_height"
+            android:layout_gravity="center_vertical"
+            android:hapticFeedbackEnabled="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
             app:iiv_icon="gmd-folder"
-            app:iiv_color="@color/md_white_1000"
-        />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/explore_mode_panel"
-        android:gravity="center_vertical"
-        android:paddingTop="@dimen/medium_spacing"
-        android:paddingBottom="@dimen/small_spacing"
-        android:elevation="30dp"
-        tools:targetApi="lollipop"
-        android:weightSum="10">
-        <LinearLayout android:layout_width="0dp"
-                      android:layout_weight="9"
-                      android:orientation="horizontal"
-                      android:id="@+id/ll_create_new_folder"
-                      android:layout_height="wrap_content">
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:layout_height="@dimen/icon_width_height"
-                android:layout_width="@dimen/icon_width_height"
-                android:id="@+id/create_new_folder"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/big_spacing"
-                android:layout_marginRight="@dimen/big_spacing"
-                app:iiv_icon="gmd-create-new-folder"
             />
-            <TextView
-                android:id="@+id/create_new_folder_text"
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_select_folder"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/explore_mode_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="30dp"
+            tools:targetApi="lollipop">
+            <LinearLayout
+                android:id="@+id/ll_create_new_folder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_new_folder"
-                android:textSize="16sp"
-            />
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/medium_spacing"
+                android:paddingBottom="@dimen/medium_spacing"
+                android:paddingRight="@dimen/big_spacing"
+                android:background="@drawable/ripple"
+                android:clickable="true"
+                >
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:layout_height="@dimen/icon_width_height"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:id="@+id/create_new_folder"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/big_spacing"
+                    android:layout_marginRight="@dimen/big_spacing"
+                    app:iiv_icon="gmd-create-new-folder"
+                />
+                <TextView
+                    android:id="@+id/create_new_folder_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_new_folder"
+                    android:textSize="16sp"
+                />
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/rl_done"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium_spacing"
+                android:paddingBottom="@dimen/medium_spacing"
+                android:background="@drawable/ripple"
+                android:clickable="true"
+                >
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:id="@+id/done"
+                    android:layout_height="@dimen/icon_width_height"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_marginEnd="@dimen/big_spacing"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    app:iiv_icon="gmd-done"
+                />
+            </RelativeLayout>
         </LinearLayout>
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/done"
-            android:layout_height="@dimen/icon_width_height"
-            android:layout_width="0dp"
-            android:layout_marginEnd="@dimen/big_spacing"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:background="@drawable/ripple"
-            android:layout_weight="1"
-            app:iiv_icon="gmd-done"
-            app:iiv_color="@color/md_white_1000"
-        />
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/folders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:scrollbarThumbVertical="@drawable/ic_scrollbar"
+            />
+            <ProgressBar
+                android:id="@+id/progress_copy_move"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/big_spacing"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/folders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-    />
 </LinearLayout>

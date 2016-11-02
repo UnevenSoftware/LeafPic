@@ -25,11 +25,6 @@ import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.CustomTabService;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import de.psdev.licensesdialog.LicensesDialog;
-import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
-import de.psdev.licensesdialog.licenses.MITLicense;
-import de.psdev.licensesdialog.model.Notice;
-import de.psdev.licensesdialog.model.Notices;
 
 /**
  * Created by Jibo on 02/03/2016.
@@ -93,7 +88,6 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_app_title)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_special_thanks_title)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_title)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_license_title)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_special_thanks_title)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_author_donald_mail_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_author_gilbert_mail_item)).setTextColor(color);
@@ -249,19 +243,6 @@ public class AboutActivity extends ThemedActivity {
         /*** Patryk Goworowski ***/
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_patryk_goworowski_item_sub)).setMovementMethod(LinkMovementMethod.getInstance());
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_patryk_goworowski_item_sub)).setLinkTextColor(getAccentColor());
-
-        //License
-        findViewById(org.horaapps.leafpic.R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
-        });
-
-        //Libs
-        findViewById(org.horaapps.leafpic.R.id.ll_about_libs).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {licenseDialog();}
-        });
-
     }
 
     private void setThemeOnChangeListener(){
@@ -274,14 +255,11 @@ public class AboutActivity extends ThemedActivity {
         ((CardView) findViewById(org.horaapps.leafpic.R.id.about_app_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(org.horaapps.leafpic.R.id.about_special_thanks_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(org.horaapps.leafpic.R.id.about_support_card)).setCardBackgroundColor(color);
-        ((CardView) findViewById(org.horaapps.leafpic.R.id.about_license_card)).setCardBackgroundColor(color);
         //cvSpecialThanks.setBackgroundColor(color);
 
         /** Icons **/
         //ABOUT APP
         color = getIconColor();
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_libs_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_license_icon)).setColor(color);
 
         //ABOUT SUPPORT
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_support_translate_icon)).setColor(color);
@@ -292,12 +270,10 @@ public class AboutActivity extends ThemedActivity {
 
         /** TextViews **/
         color = getTextColor();
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_libs_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_app_light_description)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_rate_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_translate_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_github_item)).setTextColor(color);
-        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_license_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_report_bug_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_donate_item)).setTextColor(color);
 
@@ -305,38 +281,15 @@ public class AboutActivity extends ThemedActivity {
         color = getSubTextColor();
         ((TextView) findViewById(R.id.about_version_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_version_item_sub)).setText(BuildConfig.VERSION_NAME);
-        ((TextView) findViewById(R.id.about_libs_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_community_members_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_community_you_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_rate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_translate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_github_item_sub)).setTextColor(color);
-        ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_report_bug_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_donate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.donald_shtjefni_role)).setTextColor(color);
         ((TextView) findViewById(R.id.gilbert_ndresaj_role)).setTextColor(color);
-    }
-
-    private void licenseDialog() {
-        // TODO: 10/07/16 ~Jibe rifai sta roba please!
-        final Notices notices = new Notices();
-        notices.addNotice(new Notice("Glide", "http://github.com/bumptech/glide", "Copyright 2014 Google, Inc. All rights reserved.", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("Ion", "http://github.com/koush/ion", "Copyright 2013 Koushik Dutta (2013)", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("Android-Iconics", "http://github.com/mikepenz/Android-Iconics", "Copyright 2016 Mike Penz", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("AppIntro", "http://github.com/PaoloRotolo/AppIntro", "Copyright 2015 Paolo Rotolo\n"
-                + "Copyright 2016 Maximilian Narr", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("uCrop", "http://github.com/Yalantis/uCrop", "Copyright 2016, Yalantis", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("ShiftColorPicker", "http://github.com/DASAR/ShiftColorPicker", "Copyright (c) 2015 Bogdasarov Bogdan", new MITLicense()));
-        notices.addNotice(new Notice("PhotoView", "http://github.com/chrisbanes/PhotoView", "Copyright 2011, 2012 Chris Banes.", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("CircleImageView", "https://github.com/hdodenhof/CircleImageView", "Copyright 2014 - 2015 Henning Dodenhof", new ApacheSoftwareLicense20()));
-
-        new LicensesDialog.Builder(this)
-                .setNotices(notices)
-                .setIncludeOwnLicense(true)
-                .setThemeResourceId(getDialogStyle())
-                .build()
-                .show();
     }
 }

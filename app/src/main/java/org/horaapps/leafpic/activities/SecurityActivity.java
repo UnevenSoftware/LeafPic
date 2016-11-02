@@ -166,8 +166,7 @@ public class SecurityActivity extends ThemedActivity {
     }
 
     private void setupUI() {
-        setStatusBarColor();
-        setNavBarColor();
+        setRecentApp(getString(R.string.security));
         toolbar.setBackgroundColor(getPrimaryColor());
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(
@@ -181,7 +180,10 @@ public class SecurityActivity extends ThemedActivity {
                 onBackPressed();
             }
         });
-        toolbar.setTitle(getString(org.horaapps.leafpic.R.string.about));
+        toolbar.setTitle(getString(R.string.security));
+
+        setStatusBarColor();
+        setNavBarColor();
 
         IconicsImageView imgActiveSecurity = (IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_icon);
         TextView txtActiveSecurity = (TextView) findViewById(org.horaapps.leafpic.R.id.active_security_item_title);

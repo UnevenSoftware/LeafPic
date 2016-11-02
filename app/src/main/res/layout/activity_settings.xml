@@ -1063,7 +1063,7 @@
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-photo-library"
+                            app:iiv_icon="gmd-perm-media"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing" />
                         <RelativeLayout
