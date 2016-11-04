@@ -149,7 +149,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         });
 
-        getSupportActionBar().setTitle((getAlbum().getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+        updatePageTitle(getAlbum().getCurrentMediaIndex());
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(getAlbum().getCurrentMediaIndex());
@@ -163,7 +163,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             @Override
             public void onPageSelected(int position) {
                 getAlbum().setCurrentPhotoIndex(position);
-                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+                updatePageTitle(position);
                 invalidateOptionsMenu();
             }
 
@@ -216,6 +216,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+    }
+
+    private void updatePageTitle(int position) {
+        getSupportActionBar().setTitle((position + 1) + " " + getString(R.string.of) + " " + adapter.getCount());
     }
 
 
@@ -322,7 +326,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         }
         adapter.notifyDataSetChanged();
-        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+        updatePageTitle(mViewPager.getCurrentItem());
     }
 
     @Override
@@ -475,12 +479,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
                             if (customUri) finish();
                             else {
                                 getAlbums().removeCurrentAlbum();
-                                //((MyApplication) getApplicationContext()).removeCurrentAlbum();
                                 displayAlbums(false);
                             }
                         }
                         adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getCount());
+                        updatePageTitle(mViewPager.getCurrentItem());
                         bottomSheetDialogFragment.dismiss();
                     }
                 });
