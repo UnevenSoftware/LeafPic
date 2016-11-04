@@ -356,11 +356,12 @@ public class HandlingAlbums {
 
     Album camera = null;
 
-    for(Album album : dispAlbums)
+    for(Album album : dispAlbums) {
       if (album.getName().equals("Camera") && dispAlbums.remove(album)) {
         camera = album;
         break;
       }
+    }
 
     Collections.sort(dispAlbums, AlbumsComparators.getComparator(getSortingMode(), getSortingOrder()));
 

@@ -46,7 +46,7 @@ public class Media implements Parcelable, Serializable {
 
     private long size = -1;
     private boolean selected = false;
-    private MetadataItem metadata;
+    private MetaDataItem metadata;
 
     public Media() { }
 
@@ -110,7 +110,7 @@ public class Media implements Parcelable, Serializable {
         return uri != null ? Uri.parse(uri) : Uri.fromFile(new File(path));
     }
 
-    public InputStream getInputStream(ContentResolver contentResolver) throws FileNotFoundException {
+    private InputStream getInputStream(ContentResolver contentResolver) throws FileNotFoundException {
         return contentResolver.openInputStream(getUri());
     }
 
@@ -177,13 +177,13 @@ public class Media implements Parcelable, Serializable {
 
         try {
             InputStream stream = getInputStream(context.getContentResolver());
-            details.put(context.getString(R.string.resolution), MetadataItem.getResolution(stream));
+            details.put(context.getString(R.string.resolution), MetaDataItem.getResolution(stream));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         File file = getFile();
 
         if(file != null) {
-            metadata = MetadataItem.getMetadata(file);
+            metadata = MetaDataItem.getMetadata(file);
 
             details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
             if (metadata.getDateOriginal() != null)

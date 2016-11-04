@@ -7,15 +7,14 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-project.ext.supportLib = "24.2.1"
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionName "v0.6-beta-1"
         versionCode 13
     }
@@ -28,10 +27,7 @@ android {
     aaptOptions {
         additionalParameters "--no-version-vectors"
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
-    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -53,6 +49,8 @@ android {
         }
     }
 }
+
+project.ext.supportLib = "25.0.0"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
