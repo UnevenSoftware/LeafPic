@@ -28,7 +28,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.ColorPalette;
@@ -194,12 +193,6 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swInternalPlayer.setChecked(!swInternalPlayer.isChecked());
                 SP.putBoolean(getString(R.string.preference_internal_player), swInternalPlayer.isChecked());
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((MyApplication) getApplicationContext()).updateAlbums();
-                    }
-                }).start();
                 updateSwitchColor(swInternalPlayer, getAccentColor());
             }
         });

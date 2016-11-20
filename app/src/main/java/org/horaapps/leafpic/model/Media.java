@@ -39,7 +39,7 @@ public class Media implements Parcelable, Serializable {
 
     private String path = null;
     private long dateModified = -1;
-    private String mimeType = null;
+    private String mimeType = "unknown";
     private int orientation = 0;
 
     private String uri = null;

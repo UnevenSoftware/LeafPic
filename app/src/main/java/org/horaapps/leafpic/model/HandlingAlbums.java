@@ -40,21 +40,28 @@ public class HandlingAlbums {
 
   public final static String TAG = "HandlingAlbums";
   private static String backupFile = "albums.dat";
+  private static HandlingAlbums mInstance = null;
 
-  public ArrayList<Album> dispAlbums;
-  private ArrayList<Album> selectedAlbums;
+  public ArrayList<Album> dispAlbums = null;
+  private ArrayList<Album> selectedAlbums = null;
 
   private PreferenceUtil SP;
 
   private int current = 0;
   private boolean hidden;
 
-  public HandlingAlbums(Context context) {
+  private HandlingAlbums(Context context) {
     SP = PreferenceUtil.getInstance(context);
-    dispAlbums = new ArrayList<Album>();
-    selectedAlbums = new ArrayList<Album>();
+    dispAlbums = new ArrayList<>();
+    selectedAlbums = new ArrayList<>();
   }
 
+  public static HandlingAlbums getInstance(Context context) {
+    if(mInstance == null)
+      mInstance = new HandlingAlbums(context);
+
+    return mInstance;
+  }
 
   public void loadAlbums(Context context, boolean hidden) {
     this.hidden = hidden;
@@ -104,6 +111,11 @@ public class HandlingAlbums {
         }
       }).start();
     }
+  }
+
+  public int getCount() {
+    if(dispAlbums != null) return dispAlbums.size();
+    return 0;
   }
 
   public static void addAlbumToBackup(final Context context, final Album album) {

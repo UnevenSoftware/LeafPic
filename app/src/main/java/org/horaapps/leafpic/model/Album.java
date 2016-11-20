@@ -69,7 +69,7 @@ public class Album implements Serializable {
 	 *
 	 * @param context context
 	 * @param mediaUri uri of the media to display
-   */
+	 */
 	public Album(Context context, Uri mediaUri) {
 		this();
 		this.path = mediaUri.toString();
@@ -147,11 +147,11 @@ public class Album implements Serializable {
 		// TODO: 18/08/16
 		if (isFromMediaStore()) {
 			mediaArrayList.addAll(
-							MediaStoreProvider.getMedia(
-											context, id, SP.getBoolean("set_include_video", true)));
+					MediaStoreProvider.getMedia(
+							context, id, SP.getBoolean("set_include_video", true)));
 		} else {
 			mediaArrayList.addAll(StorageProvider.getMedia(
-							getPath(), SP.getBoolean("set_include_video", true)));
+					getPath(), SP.getBoolean("set_include_video", true)));
 		}
 		return mediaArrayList;
 	}
@@ -337,12 +337,12 @@ public class Album implements Serializable {
 				if (moveMedia(context, selectedMedias.get(i).getPath(), targetDir)) {
 					String from = selectedMedias.get(i).getPath();
 					scanFile(context, new String[]{ from, StringUtils.getPhotoPathMoved(selectedMedias.get(i).getPath(), targetDir) },
-									new MediaScannerConnection.OnScanCompletedListener() {
-										@Override
-										public void onScanCompleted(String s, Uri uri) {
-											Log.d("scanFile", "onScanCompleted: " + s);
-										}
-									});
+							new MediaScannerConnection.OnScanCompletedListener() {
+								@Override
+								public void onScanCompleted(String s, Uri uri) {
+									Log.d("scanFile", "onScanCompleted: " + s);
+								}
+							});
 					media.remove(selectedMedias.get(i));
 					n++;
 				}
