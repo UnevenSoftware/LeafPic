@@ -453,7 +453,7 @@ public class MainActivity extends SharedMediaActivity {
     rvAlbums.setBackgroundColor(getBackgroundColor());
     rvMedia.setBackgroundColor(getBackgroundColor());
     mediaAdapter.updatePlaceholder(getApplicationContext());
-    albumsAdapter.updateTheme();
+    albumsAdapter.updateTheme(getApplicationContext());
     /**** DRAWER ****/
     setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
 

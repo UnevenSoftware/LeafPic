@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import org.horaapps.leafpic.R;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -121,7 +123,7 @@ public class ThemeHelper {
 	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_light_background);break;
 	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_light_background);break;
 	  case LIGHT_THEME:
-	  default:color = getColor(org.horaapps.leafpic.R.color.md_black_1000);
+	  default:color = getColor(R.color.md_dark_background);
 	}
 	return color;
   }
@@ -255,6 +257,35 @@ public class ThemeHelper {
 									 }, new int[] { getTextColor(), getAccentColor() });
   }
 
+	public int getSwitchColor(boolean background){
+		int color;
+		if (background) {
+			switch (baseTheme) {
+				case AMOLED_THEME:
+				case DARK_THEME:
+					color = getColor(R.color.md_grey_900);
+					break;
+				default:
+				case LIGHT_THEME:
+					color = getColor(R.color.md_grey_400);
+					break;
+			}
+		} else {
+			switch (baseTheme) {
+				case AMOLED_THEME:
+				case DARK_THEME:
+					color = getColor(R.color.md_grey_600);
+					break;
+				default:
+				case LIGHT_THEME:
+					color = getColor(R.color.md_grey_200);
+					break;
+			}
+		}
+
+		return color;
+	}
+
   public void updateRadioButtonColor(RadioButton radioButton) {
 	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 	  radioButton.setButtonTintList(getRadioButtonColor());
@@ -269,8 +300,8 @@ public class ThemeHelper {
   }
 
   public void updateSwitchColor(SwitchCompat sw, int color){
-	sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getSubTextColor(), PorterDuff.Mode.MULTIPLY);
-	sw.getTrackDrawable().setColorFilter(sw.isChecked() ? ColorPalette.getTransparentColor(color,100): getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
+	sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getSwitchColor(false), PorterDuff.Mode.MULTIPLY);
+	sw.getTrackDrawable().setColorFilter(sw.isChecked() ? ColorPalette.getTransparentColor(color,100): getSwitchColor(true), PorterDuff.Mode.MULTIPLY);
   }
 
   public void setScrollViewColor(ScrollView scr){

@@ -74,7 +74,7 @@
                             android:orientation="vertical"
                             android:paddingTop="@dimen/medium_spacing"
                             android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
+                            android:paddingBottom="@dimen/small_spacing">
                             <TextView
                                 android:id="@+id/security_item_title"
                                 android:layout_width="wrap_content"
@@ -114,7 +114,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingTop="@dimen/sub_small_spacing"
+                            android:paddingTop="@dimen/small_spacing"
                             android:paddingRight="@dimen/medium_spacing"
                             android:paddingBottom="@dimen/small_spacing">
                             <TextView
@@ -199,7 +199,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingTop="@dimen/small_spacing"
                             android:paddingRight="@dimen/medium_spacing"
                             android:paddingBottom="@dimen/small_spacing">
                             <LinearLayout
@@ -404,7 +404,7 @@
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="faw-paint-brush"
+                            app:iiv_icon="gmd-colorize"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing" />
                         <LinearLayout
@@ -418,7 +418,7 @@
                                 android:id="@+id/custom_3thAct_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/custom_3thAct"
+                                android:text="@string/media_viewer"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="@dimen/medium_text" />
                             <TextView
@@ -426,6 +426,48 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/custom_3thAct_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="@dimen/sub_medium_text" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- CARD VIEW STYLE -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_card_view_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/card_view_style_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-dashboard"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <TextView
+                                android:id="@+id/card_view_style_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/album_card_view"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="@dimen/medium_text" />
+                            <TextView
+                                android:id="@+id/card_view_style_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/album_card_view_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="@dimen/sub_medium_text" />
                         </LinearLayout>

@@ -99,16 +99,37 @@ public class AboutActivity extends ThemedActivity {
                 .animate(R.anim.fade_in)
                 .into((ImageView) findViewById(R.id.leafpic_header));
         */
+
+        /***** Drawable *****/
+        //TODO:IT DOSENT WORK, GLIDE SUCK'S
+        /*
+        float[] NEGATIVE = {
+                -1.0f,     0,     0,    0, 255, // red
+                0, -1.0f,     0,    0, 255, // green
+                0,     0, -1.0f,    0, 255, // blue
+                0,     0,     0, 1.0f,   0  // alpha
+        };
+
+        Drawable dh = ContextCompat.getDrawable(getBaseContext(), R.drawable.donald_header_black);
+        Drawable gh = ContextCompat.getDrawable(getBaseContext(), R.drawable.gilbert_header_black);
+
+        if(getBaseTheme()==1) {
+            dh.setColorFilter(new ColorMatrixColorFilter(NEGATIVE));
+            gh.setColorFilter(new ColorMatrixColorFilter(NEGATIVE));
+        }
+        */
+
         /***** Donald Card *****/
         /***** Images *****/
         Glide.with(this)
-                .load("https://lh3.googleusercontent.com/-4lGmk-K4r4U/Vw1Vj8yERrI/AAAAAAAANww/FIsb58PcO-U-9AfD8FXfruK1c75SZ184QCL0B/w958-h539-no/asd.png")
+                //.load(getBaseTheme()==1? R.drawable.donald_header_white : R.drawable.donald_header_black)
+                .load(R.drawable.donald_header)
                 .placeholder(getPlaceHolder())
                 .priority(Priority.HIGH)
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into((ImageView) findViewById(org.horaapps.leafpic.R.id.donald_header_img));
         Glide.with(this)
-                .load("https://lh5.googleusercontent.com/-kp20brbsTS0/VLQv60zDLQI/AAAAAAAAD9s/Wu-g8p-OvdISYmyEC9aCQXNaxxUJYfD0QCL0B/w776-h779-no/IMG_20150112_164721.jpg")
+                .load(R.drawable.donald_profile)
                 .priority(Priority.HIGH)
                 .error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()).paddingDp(24))
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
@@ -126,12 +147,14 @@ public class AboutActivity extends ThemedActivity {
         /***** Gilbert Card *****/
         /***** Images *****/
         Glide.with(this)
-                .load("https://lh6.googleusercontent.com/-CQSWRHA3PMU/U1giCTxx3LI/AAAAAAAAAZU/YVnUYwwnNOEE7ob0LyHmRnbUtEtC5znIQCL0B/w958-h639-no/1397233014-game-over-samus.jpg")
+                //.load(getBaseTheme()==1? R.drawable.gilbert_header_white : R.drawable.gilbert_header_black)
+                .load(R.drawable.gilbert_header)
                 .priority(Priority.HIGH)
+                .placeholder(getPlaceHolder())
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into((ImageView) findViewById(org.horaapps.leafpic.R.id.gilbert_header_img));
         Glide.with(this)
-                .load("https://lh6.googleusercontent.com/-gucGwwJrFMg/U4IErjai3SI/AAAAAAAAANI/YGGxrdWO88cIsIpYrYxaq2KjSDfinLTmACL0B/s779-no/PicsArt_1387801769612.jpg")
+                .load(R.drawable.gilbert_profile)
                 .priority(Priority.HIGH)
                 .error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()).paddingDp(24))
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
@@ -184,6 +207,12 @@ public class AboutActivity extends ThemedActivity {
                 startActivity(intent);
                 finish();
             }
+        });
+
+        //License
+        findViewById(org.horaapps.leafpic.R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
         });
 
         /*** Donald Shtjefni ***/
@@ -267,6 +296,7 @@ public class AboutActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_support_github_icon)).setColor(color);
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_support_report_bug_icon)).setColor(color);
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_support_donate_icon)).setColor(color);
+        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.about_license_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
@@ -276,6 +306,7 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_github_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_report_bug_item)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.about_support_donate_item)).setTextColor(color);
+        ((TextView) findViewById(org.horaapps.leafpic.R.id.about_license_item)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
@@ -291,5 +322,6 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_donate_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.donald_shtjefni_role)).setTextColor(color);
         ((TextView) findViewById(R.id.gilbert_ndresaj_role)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
     }
 }

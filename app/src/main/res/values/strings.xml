@@ -113,6 +113,7 @@
 
 
     <!-- RANDOM -->
+    <string name="album">Album</string>
     <string name="done">Done!</string>
     <string name="there_is_nothing_to_show">There\'s nothing to show!</string>
     <string name="insert_a_name">Insert something</string>
@@ -156,8 +157,18 @@
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>
-    <string name="custom_3thAct">Customize Viewer</string>
-    <string name="custom_3thAct_sub">Apply theme on pictures viewer.</string>
+    <string name="custom_3thAct">Media Viewer</string>
+    <string name="custom_3thAct_sub">Customize theme transparency on media viewer.</string>
+
+    <string name="album_card_view">Album Card View</string>
+    <string name="album_card_view_sub">Change the album card view style</string>
+    <string name="card_type_material">Material Card</string>
+    <string name="card_type_flat">Flat Card</string>
+    <string name="card_type_compact">Compact Card</string>
+
+    <string name="card_type_material_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare mi velit, eget mattis neque egestas ornare. </string>
+    <string name="card_type_flat_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare mi velit, eget mattis neque egestas ornare. </string>
+    <string name="card_type_compact_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare mi velit, eget mattis neque egestas ornare. </string>
 
     <string name="max_brightness">High Brightness</string>
     <string name="max_brightness_sub">Maximum brightness when viewing a media.</string>

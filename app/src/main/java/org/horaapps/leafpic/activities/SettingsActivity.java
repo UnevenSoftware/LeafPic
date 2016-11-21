@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,11 +31,13 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
+import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StaticMapProvider;
 import org.horaapps.leafpic.util.ThemeHelper;
+import org.horaapps.leafpic.views.SquareImageView;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -81,7 +84,6 @@ public class SettingsActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
-
         txtTT = (TextView) findViewById(R.id.theme_setting_title);
         txtGT = (TextView) findViewById(R.id.general_setting_title);
         txtPT = (TextView) findViewById(R.id.picture_setting_title);
@@ -95,6 +97,14 @@ public class SettingsActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 baseThemeDialog();
+            }
+        });
+
+        /*** CARD VIEW STYLE ***/
+        findViewById(R.id.ll_card_view_style).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardViewStyleDialog();
             }
         });
 
@@ -169,7 +179,6 @@ public class SettingsActivity extends ThemedActivity {
                 updateSwitchColor(swShowFab, getAccentColor());
             }
         });
-
 
         /*** SW Show Fab ***/
         swSubScaling = (SwitchCompat) findViewById(R.id.sw_sub_scaling);
@@ -288,7 +297,6 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
-
         /*** SW TRANSLUCENT STATUS BAR ***/
         swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
         swStatusBar.setChecked(SP.getBoolean(getString(R.string.preference_translucent_status_bar), true));
@@ -349,16 +357,10 @@ public class SettingsActivity extends ThemedActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 nColFolders.setText(String.valueOf(i+1));
             }
-
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
+            public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         barMedia.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -366,16 +368,10 @@ public class SettingsActivity extends ThemedActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 nColMedia.setText(String.valueOf(i+1));
             }
-
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
+            public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         multiColumnDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
@@ -403,9 +399,129 @@ public class SettingsActivity extends ThemedActivity {
             @Override
             public void onError() {
                 Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-
             }
         });
+    }
+    private void cardViewStyleDialog() {
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
+        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_card_view_style, null);
+        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_card_view_style_title);
+        ((CardView) dialogLayout.findViewById(R.id.dialog_card_view_style)).setCardBackgroundColor(getCardBackgroundColor());
+        dialogTitle.setBackgroundColor(getPrimaryColor());
+
+        final RadioGroup cardStyle = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
+        final RadioButton radioCardMaterial = (RadioButton) dialogLayout.findViewById(R.id.radio_card_material);
+        RadioButton radioCardFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
+        RadioButton radioCardCompact = (RadioButton) dialogLayout.findViewById(R.id.radio_card_compact);
+
+        setRadioTextButtonColor(radioCardMaterial, getTextColor());
+        setRadioTextButtonColor(radioCardFlat, getTextColor());
+        setRadioTextButtonColor(radioCardCompact, getTextColor());
+
+        //PREVIEW ALBUM CARD STYLE
+        final SquareImageView imgPreviewAlbumCardStyle = (SquareImageView) dialogLayout.findViewById(R.id.preview_album_card_style_image);
+        imgPreviewAlbumCardStyle.setBackgroundColor(getPrimaryColor());
+
+        LinearLayout llPreview = (LinearLayout) dialogLayout.findViewById(R.id.ll_preview_album_card);
+        llPreview.setBackgroundColor(getInvertedBackgroundColor());
+
+        final LinearLayout llPreviewFlatCompactText = (LinearLayout) dialogLayout.findViewById(R.id.preview_album_card_style_linear_card_text2);
+        final TextView txtPreviewFlatCompactAlbum = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_name2);
+        final TextView txtPreviewFlatCompactMedia = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_photos_count2);
+
+        final LinearLayout llPreviewMaterialText = (LinearLayout) dialogLayout .findViewById(R.id.preview_album_card_style_linear_card_text);
+        final TextView txtPreviewMaterialAlbum = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_name);
+        final TextView txtPreviewMaterialMedia = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_photos_count);
+
+        llPreviewMaterialText.setBackgroundColor(getCardBackgroundColor());
+        llPreviewFlatCompactText.setBackgroundColor(ColorPalette.getTransparentColor(getCardBackgroundColor(), 150));
+
+        int color=getTextColor();
+        String albumNameHtml = "<i><font color='" + color+ "'>" + getString(R.string.album) + "</font></i>";
+        txtPreviewFlatCompactAlbum.setTextColor(color);
+        txtPreviewMaterialAlbum.setTextColor(color);
+        txtPreviewFlatCompactAlbum.setText(Html.fromHtml(albumNameHtml));
+        txtPreviewMaterialAlbum.setText(Html.fromHtml(albumNameHtml));
+
+        color=getSubTextColor();
+        String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
+        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + "n" + "</font></b>" + "<font " +
+                "color='" + color + "'> " + getString(R.string.media) + "</font>";
+        txtPreviewFlatCompactMedia.setTextColor(color);
+        txtPreviewMaterialMedia.setTextColor(color);
+        txtPreviewFlatCompactMedia.setText(Html.fromHtml(albumPhotoCountHtml));
+        txtPreviewMaterialMedia.setText(Html.fromHtml(albumPhotoCountHtml));
+
+        final TextView txtDescription = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_description);
+        txtDescription.setTextColor(getBackgroundColor());
+
+        //SP.putInt("card_view_style",CardViewStyle.CARD_MATERIAL.getValue());
+        switch (CardViewStyle.fromValue(SP.getInt("card_view_style", CardViewStyle.CARD_MATERIAL.getValue()))) {
+            case CARD_MATERIAL:
+            default:
+                radioCardMaterial.setChecked(true);
+                llPreviewFlatCompactText.setVisibility(View.GONE);
+                llPreviewMaterialText.setVisibility(View.VISIBLE);
+                txtDescription.setText(getString(R.string.card_type_material_description));
+                break;
+            case CARD_FLAT:
+                radioCardFlat.setChecked(true);
+                llPreviewFlatCompactText.setVisibility(View.VISIBLE);
+                txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
+                llPreviewMaterialText.setVisibility(View.GONE);
+                txtDescription.setText(getString(R.string.card_type_flat_description));
+                break;
+            case CARD_COMPACT:
+                radioCardCompact.setChecked(true);
+                llPreviewFlatCompactText.setVisibility(View.VISIBLE);
+                txtPreviewFlatCompactMedia.setVisibility(View.GONE);
+                llPreviewMaterialText.setVisibility(View.GONE);
+                txtDescription.setText(getString(R.string.card_type_compact_description));
+                break;
+        }
+
+        View.OnClickListener radioClickLIstener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.radio_card_material:
+                        llPreviewFlatCompactText.setVisibility(View.GONE);
+                        llPreviewMaterialText.setVisibility(View.VISIBLE);
+                        txtDescription.setText(getString(R.string.card_type_material_description));
+                        break;
+                    case R.id.radio_card_flat:
+                        llPreviewFlatCompactText.setVisibility(View.VISIBLE);
+                        txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
+                        llPreviewMaterialText.setVisibility(View.GONE);
+                        txtDescription.setText(getString(R.string.card_type_flat_description));
+                        break;
+                    case R.id.radio_card_compact:
+                        llPreviewFlatCompactText.setVisibility(View.VISIBLE);
+                        txtPreviewFlatCompactMedia.setVisibility(View.GONE);
+                        llPreviewMaterialText.setVisibility(View.GONE);
+                        txtDescription.setText(getString(R.string.card_type_compact_description));
+                        break;
+                }
+            }
+        };
+        radioCardMaterial.setOnClickListener(radioClickLIstener);
+        radioCardFlat.setOnClickListener(radioClickLIstener);
+        radioCardCompact.setOnClickListener(radioClickLIstener);
+
+        dialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (cardStyle.getCheckedRadioButtonId()) {
+                    case R.id.radio_card_material:
+                    default: SP.putInt("card_view_style", CardViewStyle.CARD_MATERIAL.getValue()); break;
+                    case R.id.radio_card_flat: SP.putInt("card_view_style", CardViewStyle.CARD_FLAT.getValue()); break;
+                    case R.id.radio_card_compact: SP.putInt("card_view_style", CardViewStyle.CARD_COMPACT.getValue()); break;
+                }
+            }
+        });
+        dialogBuilder.setView(dialogLayout);
+        dialogBuilder.show();
     }
 
     private void mapProviderDialog() {
@@ -823,6 +939,7 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.sub_scaling_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.map_provider_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.media_viewer_swipe_direction_Icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.card_view_style_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
@@ -846,6 +963,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.fab_options_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.media_viewer_swipe_direction_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.card_view_style_title)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
@@ -869,6 +987,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.fab_options_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.map_provider_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.media_viewer_swipe_direction_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.card_view_style_Sub)).setTextColor(color);
 
         //LIMITED OPTIONS
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
