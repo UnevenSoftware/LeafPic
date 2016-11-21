@@ -1,6 +1,9 @@
 package org.horaapps.leafpic.util;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -26,6 +29,17 @@ public class StringUtils {
         String b[] = path.split("/");
         String fi = b[b.length - 1];
         return fi.substring(0, fi.lastIndexOf('.'));
+    }
+
+    public static Spanned html(String s) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY);
+        else return Html.fromHtml(s);
+    }
+
+    public static String getNameByPath(String path) {
+        String b[] = path.split("/");
+        return b[b.length - 1];
     }
 
     public static String getPhotoPathRenamed(String olderPath, String newName) {

@@ -68,7 +68,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private MediaPagerAdapter adapter;
     private PreferenceUtil SP;
     private RelativeLayout ActivityBackground;
-    private SelectAlbumBottomSheet bottomSheetDialogFragment;
+
     private Toolbar toolbar;
     private boolean fullScreenMode, customUri = false;
 
@@ -162,7 +162,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             @Override
             public void onPageSelected(int position) {
-                getAlbum().setCurrentPhotoIndex(position);
+                getAlbum().setCurrentMedia(position);
                 updatePageTitle(position);
                 invalidateOptionsMenu();
             }
@@ -353,17 +353,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
 
             case R.id.action_copy:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
-                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
-                    @Override
-                    public void folderSelected(String path) {
-                        getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-
+                SelectAlbumBottomSheet copyToSheet = SelectAlbumBottomSheet.create(getString(R.string.copy_to),
+                        new SelectAlbumBottomSheet.SelectAlbumInterface() {
+                            @Override
+                            public void folderSelected(String path) {
+                                getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
+                            }
+                        });
+                copyToSheet.show(getSupportFragmentManager(), copyToSheet.getTag());
                 break;
 
             case R.id.name_sort_action:
@@ -468,27 +465,24 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.action_move:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
-                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
-                    @Override
-                    public void folderSelected(String path) {
-                        getAlbum().moveCurrentMedia(getApplicationContext(), path);
+                SelectAlbumBottomSheet moveToSheet = SelectAlbumBottomSheet.create(getString(R.string.move_to),
+                        new SelectAlbumBottomSheet.SelectAlbumInterface() {
+                            @Override
+                            public void folderSelected(String path) {
+                                getAlbum().moveCurrentMedia(getApplicationContext(), path);
 
-                        if (getAlbum().getMedia().size() == 0) {
-                            if (customUri) finish();
-                            else {
-                                getAlbums().removeCurrentAlbum();
-                                displayAlbums(false);
+                                if (getAlbum().getMedia().size() == 0) {
+                                    if (customUri) finish();
+                                    else {
+                                        getAlbums().removeCurrentAlbum();
+                                        displayAlbums(false);
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                                updatePageTitle(mViewPager.getCurrentItem());
                             }
-                        }
-                        adapter.notifyDataSetChanged();
-                        updatePageTitle(mViewPager.getCurrentItem());
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-
+                        });
+                moveToSheet.show(getSupportFragmentManager(), moveToSheet.getTag());
                 return true;
 
             case R.id.action_rename:

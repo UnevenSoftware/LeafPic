@@ -111,7 +111,7 @@ public class  MediaStoreProvider {
 						boolean excluded = isExcluded( path);
 						if (!excluded) {
 							Album album = new Album(context, path, cur.getLong(idColumn), cur.getString(nameColumn), getAlbumCount(context, cur.getLong(idColumn)));
-							if (album.addMedia(getLastMedia(context, album.getId()))) list.add(album);
+							if (album.addMedia(media)) list.add(album);
 						}
 					}
 				}
@@ -137,7 +137,7 @@ public class  MediaStoreProvider {
 
 	public static ArrayList<Media> getAllMedia(Context context) {
 		ArrayList<Media> list = new ArrayList<Media>();
-
+		// TODO: 11/21/16 implement
 		return list;
 	}
 
@@ -162,7 +162,7 @@ public class  MediaStoreProvider {
 		return c;
 	}
 
-	@Nullable private static Media getLastMedia(Context context, long albumId) {
+	@Nullable public static Media getLastMedia(Context context, long albumId) {
 		ArrayList<Media> list = getMedia(context, albumId, 1, true);
 		return list.size() > 0 ? list.get(0) : null;
 	}

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
@@ -104,13 +103,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
                 "color='" + textColor + "'> " + holder.nPhotos.getContext().getString(R.string.media) + "</font>";
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.name.setText(Html.fromHtml(albumNameHtml, Html.FROM_HTML_MODE_LEGACY));
-            holder.nPhotos.setText(Html.fromHtml(albumPhotoCountHtml, Html.FROM_HTML_MODE_LEGACY));
-        } else {
-            holder.name.setText(Html.fromHtml(albumNameHtml));
-            holder.nPhotos.setText(Html.fromHtml(albumPhotoCountHtml));
-        }
+        holder.name.setText(StringUtils.html(albumNameHtml));
+        holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
 
         // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }

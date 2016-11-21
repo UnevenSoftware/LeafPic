@@ -33,6 +33,7 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
 
     private static CustomAlbumsHelper instance;
 
+    @Deprecated
     public static CustomAlbumsHelper getInstance(Context context) {
         if (instance == null) {
             synchronized (CustomAlbumsHelper.class) {
@@ -94,24 +95,7 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    AlbumSettings getSettings(String path) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        checkAndCreateAlbum(db, path);
-
-        AlbumSettings s = null;
-
-        String[] selection = new  String[] { ALBUM_COVER_PATH, ALBUM_SORTING_MODE,
-                ALBUM_SORTING_ORDER, ALBUM_PINNED };
-        Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=?",
-                new String[]{ path }, null, null, null);
-
-        if (cursor.moveToFirst())
-            s = new AlbumSettings(path, cursor.getString(0), cursor.getInt(1), cursor.getInt(2),cursor.getInt(3));
-        cursor.close();
-        db.close();
-        return s;
-    }
-
+    @Deprecated
     public ArrayList<File> getExcludedFolders() {
         ArrayList<File> list = new ArrayList<File>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -124,6 +108,7 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    @Deprecated
     public ArrayList<String> getExcludedFoldersPaths() {
         ArrayList<String> list = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -136,6 +121,7 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    @Deprecated
     public void clearAlbumExclude(String path) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -144,61 +130,13 @@ public class CustomAlbumsHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    @Deprecated
     public void excludeAlbum(String path) {
         SQLiteDatabase db = this.getWritableDatabase();
         checkAndCreateAlbum(db, path);
         ContentValues values = new ContentValues();
         values.put(ALBUM_EXCLUDED, 1);
         db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path});
-        db.close();
-    }
-
-    void pinAlbum(String path, boolean status) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        checkAndCreateAlbum(db, path);
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_PINNED, status ? 1 : 0);
-        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
-        db.close();
-    }
-
-    public String getCoverPathAlbum(String path) {
-        String s = null;
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String[] selection = new  String[] {ALBUM_COVER_PATH};
-
-        Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=?",
-                new String[]{ path }, null, null, null);
-        if (cursor.moveToFirst())
-            s = cursor.getString(0);
-
-        cursor.close();
-        db.close();
-        return s;
-    }
-
-    void setAlbumPhotoPreview(String path, String mediaPath) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_COVER_PATH, mediaPath);
-        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path});
-        db.close();
-    }
-
-    void setAlbumSortingMode(String path, int column) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_SORTING_MODE, column);
-        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
-        db.close();
-    }
-
-    void setAlbumSortingOrder(String path, int sortingOrder) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_SORTING_ORDER, sortingOrder);
-        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
         db.close();
     }
 }

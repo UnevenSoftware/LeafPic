@@ -322,4 +322,7 @@
         really optimized right now
     </string>
     <string name="error_contact_developer">Something went wrong, please contact the developer,</string>
+    <string name="chose_folders">Chose Folders</string>
+    <string name="internal_storage">Internal Storage</string>
+    <string name="extrnal_storage">External Storage</string>
 </resources>

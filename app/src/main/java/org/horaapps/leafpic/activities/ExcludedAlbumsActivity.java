@@ -106,7 +106,7 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 
 		public ExcludedItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 			View v = LayoutInflater.from(parent.getContext()).inflate(org.horaapps.leafpic.R.layout.card_excluded_album, parent, false);
-			v.findViewById(org.horaapps.leafpic.R.id.UnExclude_icon).setOnClickListener(listener);
+			v.findViewById(org.horaapps.leafpic.R.id.tracked_status).setOnClickListener(listener);
 			return new ViewHolder(v);
 		}
 
@@ -147,10 +147,10 @@ public class ExcludedAlbumsActivity extends ThemedActivity {
 			ViewHolder(View itemView) {
 				super(itemView);
 				card_layout = (LinearLayout) itemView.findViewById(org.horaapps.leafpic.R.id.linear_card_excluded);
-				imgUnExclude = (IconicsImageView) itemView.findViewById(org.horaapps.leafpic.R.id.UnExclude_icon);
+				imgUnExclude = (IconicsImageView) itemView.findViewById(org.horaapps.leafpic.R.id.tracked_status);
 				imgFolder = (IconicsImageView) itemView.findViewById(org.horaapps.leafpic.R.id.folder_icon);
-				album_name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.Excluded_Title_Item);
-				album_path = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.Excluded_Path_Item);
+				album_name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.folder_name);
+				album_path = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.folder_path);
 			}
 		}
 	}

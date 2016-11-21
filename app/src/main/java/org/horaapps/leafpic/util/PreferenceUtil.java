@@ -55,7 +55,6 @@ public class PreferenceUtil {
 	return SP.getBoolean(key, defValue);
   }
 
-
   public void remove(String key) {
 	getEditor().remove(key).commit();
   }

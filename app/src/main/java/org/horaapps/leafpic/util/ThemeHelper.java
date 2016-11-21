@@ -232,8 +232,8 @@ public class ThemeHelper {
   public ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
 	switch (getBaseTheme()){
 	  case AMOLED_THEME:
-	  case DARK_THEME: return new ArrayAdapter<String>(context, org.horaapps.leafpic.R.layout.spinner_item_light, items);
-	  case LIGHT_THEME: default: return new ArrayAdapter<String>(context, org.horaapps.leafpic.R.layout.spinner_item_dark, items);
+	  case DARK_THEME: return new ArrayAdapter<>(context, org.horaapps.leafpic.R.layout.spinner_item_light, items);
+	  case LIGHT_THEME: default: return new ArrayAdapter<>(context, org.horaapps.leafpic.R.layout.spinner_item_dark, items);
 	}
   }
 

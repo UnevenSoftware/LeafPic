@@ -65,10 +65,10 @@
                         android:id="@+id/type_sort_action"
                         android:title="@string/type"
                         app:showAsAction="never" />
-                <item
-                    android:id="@+id/numeric_sort_action"
-                    android:title="@string/numeric"
-                    app:showAsAction="never" />
+                    <item
+                        android:id="@+id/numeric_sort_action"
+                        android:title="@string/numeric"
+                        app:showAsAction="never" />
                 </group>
                 <group android:checkableBehavior="all">
                     <item
@@ -150,5 +150,11 @@
     <item
         android:id="@+id/settings"
         android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <!--TODO: remove-->
+    <item
+        android:id="@+id/track"
+        android:title="Track"
         app:showAsAction="never" />
 </menu>

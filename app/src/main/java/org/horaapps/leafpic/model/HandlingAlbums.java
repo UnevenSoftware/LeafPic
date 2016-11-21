@@ -1,7 +1,11 @@
 package org.horaapps.leafpic.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,14 +13,15 @@ import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
+import org.horaapps.leafpic.activities.base.TrackAlbumsActivity;
 import org.horaapps.leafpic.model.base.AlbumsComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.model.providers.MediaStoreProvider;
-import org.horaapps.leafpic.model.providers.StorageProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
@@ -36,9 +41,20 @@ import java.util.Collections;
 /**
  * Created by dnld on 27/04/16.
  */
-public class HandlingAlbums {
+public class HandlingAlbums extends SQLiteOpenHelper {
 
-  public final static String TAG = "HandlingAlbums";
+  private static final int DATABASE_VERSION = 4;
+  private static final String DATABASE_NAME = "tracked_albums.db";
+
+  private static final String TABLE_ALBUMS = "tracked_albums";
+  private static final String ALBUM_PATH = "path";
+  private static final String ALBUM_ID = "id";
+  private static final String ALBUM_PINNED = "pinned";
+  private static final String ALBUM_COVER_PATH = "cover_path";
+  private static final String ALBUM_SORTING_MODE = "sorting_mode";
+  private static final String ALBUM_SORTING_ORDER = "sort_ascending";
+  private static final String ALBUM_COLUMN_COUNT = "sorting_order";
+
   private static String backupFile = "albums.dat";
   private static HandlingAlbums mInstance = null;
 
@@ -50,7 +66,88 @@ public class HandlingAlbums {
   private int current = 0;
   private boolean hidden;
 
+  @Override public void onCreate(SQLiteDatabase db) {
+    db.execSQL("CREATE TABLE " +
+            TABLE_ALBUMS + "(" +
+            ALBUM_PATH + " TEXT," +
+            ALBUM_ID + " INTEGER," +
+            ALBUM_PINNED + " INTEGER," +
+            ALBUM_COVER_PATH + " TEXT, " +
+            ALBUM_SORTING_MODE + " INTEGER, " +
+            ALBUM_SORTING_ORDER + " INTEGER, " +
+            ALBUM_COLUMN_COUNT + " TEXT)");
+  }
+
+  @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALBUMS);
+    onCreate(db);
+  }
+
+  public void startTrackingAlbums(ArrayList<TrackAlbumsActivity.Item> paths) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    for (TrackAlbumsActivity.Item item : paths) {
+      if (item.isIncluded()) {
+        ContentValues values = new ContentValues();
+        values.put(ALBUM_PATH, item.getPath());
+        values.put(ALBUM_SORTING_MODE, SortingMode.DATE.getValue());
+        values.put(ALBUM_SORTING_ORDER, SortingOrder.DESCENDING.getValue());
+        values.put(ALBUM_ID, item.getId());
+        db.insert(TABLE_ALBUMS, null, values);
+      }
+    }
+    db.close();
+  }
+
+  void pinAlbum(String path, boolean status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ALBUM_PINNED, status ? 1 : 0);
+        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
+        db.close();
+  }
+
+  void setAlbumPhotoPreview(String path, String mediaPath) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ALBUM_COVER_PATH, mediaPath);
+        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
+        db.close();
+  }
+
+  void setAlbumSortingMode(String path, int column) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ALBUM_SORTING_MODE, column);
+        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
+        db.close();
+  }
+
+  void setAlbumSortingOrder(String path, int sortingOrder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ALBUM_SORTING_ORDER, sortingOrder);
+        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
+        db.close();
+  }
+
+  @Nullable AlbumSettings getSettings(String path) {
+    SQLiteDatabase db = this.getReadableDatabase();
+    AlbumSettings s = null;
+
+    String[] selection = new  String[] { ALBUM_COVER_PATH, ALBUM_SORTING_MODE,
+            ALBUM_SORTING_ORDER, ALBUM_PINNED };
+    Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=?",
+            new String[]{ path }, null, null, null);
+
+    if (cursor.moveToFirst())
+      return new AlbumSettings(cursor.getString(0), cursor.getInt(1), cursor.getInt(2),cursor.getInt(3));
+    cursor.close();
+    db.close();
+    return null;
+  }
+
   private HandlingAlbums(Context context) {
+    super(context, DATABASE_NAME, null, DATABASE_VERSION);
     SP = PreferenceUtil.getInstance(context);
     dispAlbums = new ArrayList<>();
     selectedAlbums = new ArrayList<>();
@@ -65,28 +162,41 @@ public class HandlingAlbums {
 
   public void loadAlbums(Context context, boolean hidden) {
     this.hidden = hidden;
+    ArrayList<Album> albums = new ArrayList<>();
+    SQLiteDatabase db = this.getReadableDatabase();
+    String[] projection = new  String[] {
+            ALBUM_PATH,
+            ALBUM_ID,
+            ALBUM_COVER_PATH,
+            ALBUM_SORTING_MODE,
+            ALBUM_SORTING_ORDER,
+            ALBUM_PINNED };
 
-    ArrayList<Album> list = new ArrayList<Album>();
-    if (SP.getBoolean(context.getString(org.horaapps.leafpic.R.string.preference_use_alternative_provider), false)) {
-      StorageProvider p = new StorageProvider(context);
-      list = p.getAlbums(context, hidden);
-    } else {
-      list.addAll(MediaStoreProvider.getAlbums(context, hidden));
+    Cursor cur = db.query(TABLE_ALBUMS, projection, null, null, null, null, null);
+    while (cur.moveToNext()) {
+      Album album = new Album(cur.getString(0), cur.getLong(1),
+              new AlbumSettings(cur.getString(2), cur.getInt(3), cur.getInt(4), cur.getInt(5)));
+      if (!album.hasCustomCover()) {
+        if (album.addMedia(MediaStoreProvider.getLastMedia(context, album.getId()))) albums.add(album);
+      } else albums.add(album);
+      // TODO: 11/21/16 set count
     }
-    dispAlbums = list;
+
+    cur.close();
+    db.close();
+
+    dispAlbums = albums;
     sortAlbums(context);
   }
 
   public void addAlbum(int position, Album album) {
     dispAlbums.add(position, album);
     setCurrentAlbum(album);
-
   }
 
   public void setCurrentAlbum(Album album) {
     current = dispAlbums.indexOf(album);
   }
-
 
   public Album getCurrentAlbum() {
     return dispAlbums.get(current);
@@ -273,7 +383,7 @@ public class HandlingAlbums {
     return dstBmp;
   }
 
-  private void scanFile(Context context, String[] path) {   MediaScannerConnection.scanFile(context, path, null, null); }
+  private void scanFile(Context context, String[] path) {  MediaScannerConnection.scanFile(context, path, null, null); }
 
   public void hideAlbum(String path, Context context) {
     File dirName = new File(path);
@@ -335,6 +445,7 @@ public class HandlingAlbums {
     return ContentHelper.deleteFilesInFolder(context, new File(album.getPath()));
   }
 
+  @Deprecated
   public void excludeSelectedAlbums(Context context) {
     for (Album selectedAlbum : selectedAlbums)
       excludeAlbum(context, selectedAlbum);
@@ -342,6 +453,7 @@ public class HandlingAlbums {
     clearSelectedAlbums();
   }
 
+  @Deprecated
   private void excludeAlbum(Context context, Album a) {
     CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
     h.excludeAlbum(a.getPath());

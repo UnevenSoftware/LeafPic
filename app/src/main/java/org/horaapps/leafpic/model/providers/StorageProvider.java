@@ -99,7 +99,7 @@ public class StorageProvider {
                 }
             }
             if (choice != null)
-                asd.addMedia( new Media(choice.getAbsolutePath(), choice.lastModified()));
+                asd.addMedia(new Media(choice.getAbsolutePath(), choice.lastModified()));
 
             albumArrayList.add(asd);
         }
