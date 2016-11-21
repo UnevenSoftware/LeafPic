@@ -19,6 +19,9 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.CardViewStyle;
+import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
     private ArrayList<Album> albums;
+    private CardViewStyle cvs;
 
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
@@ -39,17 +43,24 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public AlbumsAdapter(ArrayList<Album> ph, Context context) {
         albums = ph;
         theme = new ThemeHelper(context);
-        updateTheme();
+        updateTheme(context);
     }
 
-    public void updateTheme() {
+    public void updateTheme(Context context) {
         theme.updateTheme();
         placeholder = ((BitmapDrawable) theme.getPlaceHolder());
+        cvs = CardViewStyle.fromValue(PreferenceUtil.getInstance(context).getInt("card_view_style",CardViewStyle.CARD_MATERIAL.getValue()));
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(org.horaapps.leafpic.R.layout.card_album, parent, false);
+        View v;
+        switch (cvs) {
+            default:
+            case CARD_MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
+            case CARD_FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
+            case CARD_COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
+        }
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
         return new ViewHolder(v);
@@ -96,7 +107,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         } else {
             holder.picture.clearColorFilter();
             holder.selectedIcon.setVisibility(View.GONE);
-            holder.layout.setBackgroundColor(theme.getCardBackgroundColor());
+            switch (cvs){
+                default:
+                case CARD_MATERIAL:holder.layout.setBackgroundColor(theme.getCardBackgroundColor());break;
+                case CARD_FLAT:
+                case CARD_COMPACT:holder.layout.setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
+            }
         }
 
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
