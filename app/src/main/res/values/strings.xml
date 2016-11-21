@@ -70,7 +70,7 @@
     <!--DIALOG MESSAGES-->
     <string name="hide_album_message">
         Hiding this album will create a .nomedia file in the folder
-        and this could make the media inaccessible from other apps. Use the exclude option to avoid this.
+        and this could make the media inaccessible from other apps. Remove the album from the withe-list to avoid this.
     </string>
     <string name="delete_album_message">Are you sure you want to delete this album?</string>
     <string name="delete_albums_message">Are you sure you want to delete the selected albums?</string>
@@ -336,4 +336,6 @@
     <string name="chose_folders">Chose Folders</string>
     <string name="internal_storage">Internal Storage</string>
     <string name="extrnal_storage">External Storage</string>
+    <string name="white_list">White list</string>
+    <string name="chose_albums_to_display">Chose albums to display</string>
 </resources>

@@ -99,10 +99,6 @@
 
     <group android:id="@+id/album_options_menu">
         <item
-            android:id="@+id/excludeAlbumButton"
-            android:title="@string/exclude"
-            app:showAsAction="never" />
-        <item
             android:id="@+id/hideAlbumButton"
             android:title="@string/hide"
             app:showAsAction="never" />
@@ -150,11 +146,5 @@
     <item
         android:id="@+id/settings"
         android:title="@string/settings"
-        app:showAsAction="never" />
-
-    <!--TODO: remove-->
-    <item
-        android:id="@+id/track"
-        android:title="Track"
         app:showAsAction="never" />
 </menu>

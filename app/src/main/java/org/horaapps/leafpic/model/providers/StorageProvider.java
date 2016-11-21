@@ -3,7 +3,6 @@ package org.horaapps.leafpic.model.providers;
 import android.content.Context;
 
 import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.CustomAlbumsHelper;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.FoldersFileFilter;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
@@ -48,8 +47,8 @@ public class StorageProvider {
             list.add(new File(file.getPath(), "Android"));
         }
 
-        CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
-        list.addAll(handler.getExcludedFolders());
+//        CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
+//        list.addAll(handler.getExcludedFolders());
         return list;
     }
 

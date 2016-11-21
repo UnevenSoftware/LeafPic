@@ -136,10 +136,10 @@ public class SettingsActivity extends ThemedActivity {
         });
 
         /*** EXCLUDED ALBUMS INTENT ***/
-        findViewById(R.id.ll_excluded_album).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ll_white_list).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingsActivity.this, ExcludedAlbumsActivity.class));
+                startActivity(new Intent(getApplicationContext(), TrackAlbumsActivity.class));
             }
         });
 
@@ -929,7 +929,7 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.basic_theme_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.n_columns_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.nav_bar_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.excluded_album_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.white_list_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.internal_player_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.internal_include_video)).setColor(color);
         ((IconicsImageView) findViewById(R.id.auto_update_media_Icon)).setColor(color);
@@ -954,7 +954,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.n_columns_Item_Title)).setTextColor(color);
         ((TextView) findViewById(R.id.NavBar_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.sub_scaling_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Excluded_Album_Item_Title)).setTextColor(color);
+        ((TextView) findViewById(R.id.white_list_item_title)).setTextColor(color);
         ((TextView) findViewById(R.id.internal_player_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.include_video_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.auto_update_media_Item)).setTextColor(color);
@@ -978,7 +978,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.basic_theme_item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.n_columns_Item_Title_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.NavBar_Item_Sub)).setTextColor(color);
-        ((TextView) findViewById(R.id.Excluded_Album_Item_Title_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.white_list_item_title_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.internal_player_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.sub_scaling_Item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.include_video_Item_Sub)).setTextColor(color);

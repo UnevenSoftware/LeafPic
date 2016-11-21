@@ -17,7 +17,7 @@ import android.support.annotation.Nullable;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
-import org.horaapps.leafpic.activities.base.TrackAlbumsActivity;
+import org.horaapps.leafpic.activities.TrackAlbumsActivity;
 import org.horaapps.leafpic.model.base.AlbumsComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
@@ -467,21 +467,6 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
   public boolean deleteAlbum(Album album, Context context) {
     return ContentHelper.deleteFilesInFolder(context, new File(album.getPath()));
-  }
-
-  @Deprecated
-  public void excludeSelectedAlbums(Context context) {
-    for (Album selectedAlbum : selectedAlbums)
-      excludeAlbum(context, selectedAlbum);
-
-    clearSelectedAlbums();
-  }
-
-  @Deprecated
-  private void excludeAlbum(Context context, Album a) {
-    CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-    h.excludeAlbum(a.getPath());
-    dispAlbums.remove(a);
   }
 
   public SortingMode getSortingMode() {

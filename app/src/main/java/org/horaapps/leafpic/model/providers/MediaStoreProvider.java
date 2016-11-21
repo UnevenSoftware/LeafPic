@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 
 import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.CustomAlbumsHelper;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.ContentHelper;
@@ -130,8 +129,8 @@ public class  MediaStoreProvider {
 			list.add(new File(file.getPath(), "Android").getPath());
 		}
 
-		CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
-		list.addAll(handler.getExcludedFoldersPaths());
+//		CustomAlbumsHelper handler = CustomAlbumsHelper.getInstance(context);
+//		list.addAll(handler.getExcludedFoldersPaths());
 		return list;
 	}
 

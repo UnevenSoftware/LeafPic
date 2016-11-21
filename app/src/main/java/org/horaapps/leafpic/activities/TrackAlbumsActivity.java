@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.activities.base;
+package org.horaapps.leafpic.activities;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
@@ -27,6 +27,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -88,7 +89,6 @@ public class TrackAlbumsActivity extends ThemedActivity {
                         cur.getString(nameColumn));
                 item.included = alreadyTracked.contains(item.path);
                 folders.add(item);
-
             }
             cur.close();
         }
@@ -124,18 +124,12 @@ public class TrackAlbumsActivity extends ThemedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                ArrayList<String> paths = new ArrayList<>();
-                for (Item folder : folders) {
-                    if (folder.included)
-                        paths.add(folder.path);
-                }
                 tracker.handleItems(folders);
-
-                Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
 
             case R.id.action_show_music:
-                Toast.makeText(this, "music", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Fuck!", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

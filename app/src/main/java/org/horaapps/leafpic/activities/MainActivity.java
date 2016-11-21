@@ -40,7 +40,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,11 +50,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
-import org.horaapps.leafpic.activities.base.TrackAlbumsActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.CustomAlbumsHelper;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.FilterMode;
@@ -79,7 +76,6 @@ public class MainActivity extends SharedMediaActivity {
   private static String TAG = "AlbumsAct";
   private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
-  private CustomAlbumsHelper customAlbumsHelper = CustomAlbumsHelper.getInstance(MainActivity.this);
   private PreferenceUtil SP;
 
   private RecyclerView rvAlbums;
@@ -679,7 +675,6 @@ public class MainActivity extends SharedMediaActivity {
     togglePrimaryToolbarOptions(menu);
     updateSelectedStuff();
 
-    menu.findItem(R.id.excludeAlbumButton).setVisible(editMode);
     menu.findItem(R.id.select_all).setVisible(editMode);
     menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
     menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
@@ -710,10 +705,6 @@ public class MainActivity extends SharedMediaActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
 
     switch (item.getItemId()) {
-
-      case R.id.track:
-        startActivity(new Intent(getApplicationContext(), TrackAlbumsActivity.class));
-        return true;
 
       case R.id.select_all:
         if (albumsMode) {
@@ -771,17 +762,10 @@ public class MainActivity extends SharedMediaActivity {
           }
         });
         if (!hidden) {
-          hideDialogBuilder.setNeutralButton(this.getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
+          hideDialogBuilder.setNeutralButton(this.getString(R.string.white_list).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              if (albumsMode) {
-                getAlbums().excludeSelectedAlbums(getApplicationContext());
-                albumsAdapter.notifyDataSetChanged();
-                invalidateOptionsMenu();
-              } else {
-                customAlbumsHelper.excludeAlbum(getAlbum().getPath());
-                displayAlbums(true);
-              }
+              startActivity(new Intent(getApplicationContext(), TrackAlbumsActivity.class));
             }
           });
         }
@@ -857,49 +841,6 @@ public class MainActivity extends SharedMediaActivity {
           }
         });
         deleteDialog.show();
-
-        return true;
-      case R.id.excludeAlbumButton:
-        final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-        final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
-        TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
-        TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
-        final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
-
-        spinnerParents.getBackground().setColorFilter(getIconColor(), PorterDuff.Mode.SRC_ATOP);
-
-        ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
-        textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
-        textViewExcludeTitle.setText(getString(R.string.exclude));
-
-        if((albumsMode && getAlbums().getSelectedCount() > 1)) {
-          textViewExcludeMessage.setText(R.string.exclude_albums_message);
-          spinnerParents.setVisibility(View.GONE);
-        } else {
-          textViewExcludeMessage.setText(R.string.exclude_album_message);
-          spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? getAlbums().getSelectedAlbum(0).getParentsFolders() : getAlbum().getParentsFolders()));
-        }
-
-        textViewExcludeMessage.setTextColor(getTextColor());
-        excludeDialogBuilder.setView(excludeDialogLayout);
-
-        excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int id) {
-
-            if ((albumsMode && getAlbums().getSelectedCount() > 1)) {
-              getAlbums().excludeSelectedAlbums(getApplicationContext());
-              albumsAdapter.notifyDataSetChanged();
-              invalidateOptionsMenu();
-            } else {
-              customAlbumsHelper.excludeAlbum(spinnerParents.getSelectedItem().toString());
-              finishEditMode();
-              displayAlbums(true);
-            }
-          }
-        });
-        excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-        excludeDialogBuilder.show();
         return true;
 
       case R.id.sharePhotos:

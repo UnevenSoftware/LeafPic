@@ -160,17 +160,7 @@
         </activity>
 
         <activity
-            android:name="org.horaapps.leafpic.activities.ExcludedAlbumsActivity"
-            android:label="@string/excluded_albums"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.ExcludedAlbums" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="org.horaapps.leafpic.activities.base.TrackAlbumsActivity"
+            android:name="org.horaapps.leafpic.activities.TrackAlbumsActivity"
             android:label="@string/chose_folders"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
