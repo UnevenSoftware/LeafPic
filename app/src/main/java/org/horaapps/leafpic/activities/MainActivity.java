@@ -48,7 +48,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.SelectAlbumBottomSheet;
+import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
@@ -765,7 +765,7 @@ public class MainActivity extends SharedMediaActivity {
           hideDialogBuilder.setNeutralButton(this.getString(R.string.white_list).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              startActivity(new Intent(getApplicationContext(), TrackAlbumsActivity.class));
+              startActivity(new Intent(getApplicationContext(), WhiteListActivity.class));
             }
           });
         }
@@ -970,6 +970,7 @@ public class MainActivity extends SharedMediaActivity {
         return true;
 
       //region Affix
+      // TODO: 11/21/16 move away from here
       case  R.id.affixPhoto:
 
         //region Async MediaAffix
@@ -1130,8 +1131,9 @@ public class MainActivity extends SharedMediaActivity {
       //endregion
 
       case R.id.action_move:
-        SelectAlbumBottomSheet moveToSheet = SelectAlbumBottomSheet.create(getString(R.string.move_to),
-                new SelectAlbumBottomSheet.SelectAlbumInterface() {
+        SelectAlbumBuilder.with(getSupportFragmentManager())
+                .title(getString(R.string.move_to))
+                .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                   @Override
                   public void folderSelected(String path) {
                     swipeRefreshLayout.setRefreshing(true);
@@ -1147,14 +1149,13 @@ public class MainActivity extends SharedMediaActivity {
                     } else requestSdCardPermissions();
 
                     swipeRefreshLayout.setRefreshing(false);
-                  }
-                });
-        moveToSheet.show(getSupportFragmentManager(), moveToSheet.getTag());
+                  }}).show();
         return true;
 
       case R.id.action_copy:
-        SelectAlbumBottomSheet copyToSheet = SelectAlbumBottomSheet.create(getString(R.string.copy_to),
-                new SelectAlbumBottomSheet.SelectAlbumInterface() {
+        SelectAlbumBuilder.with(getSupportFragmentManager())
+              .title(getString(R.string.copy_to))
+                .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                   @Override
                   public void folderSelected(String path) {
                     boolean success = getAlbum().copySelectedPhotos(getApplicationContext(), path);
@@ -1163,8 +1164,8 @@ public class MainActivity extends SharedMediaActivity {
                     if (!success) // TODO: 11/21/16 handle in other way
                       requestSdCardPermissions();
                   }
-                });
-        copyToSheet.show(getSupportFragmentManager(), copyToSheet.getTag());
+                }).show();
+
         return true;
 
       case R.id.renameAlbum:

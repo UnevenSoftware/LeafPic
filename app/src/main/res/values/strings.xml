@@ -14,7 +14,7 @@
     <!-- ACTIONS -->
     <string name="sort">Sort</string>
     <string name="camera">Camera</string>
-    <string name="exclude">Exclude</string>
+
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="hide">Hide</string>
@@ -78,13 +78,7 @@
     <string name="delete_photos_message">Are you sure you want to delete the selected media?</string>
     <string name="hide_albums_message">Are you sure you want to hide the selected albums?</string>
     <string name="unhide_album_message">Un-hiding this album you will also make the media available for other apps.</string>
-    <string name="exclude_albums_message">Are you sure you want to exclude the selected
-        albums? \n If you want to exclude the parent of these albums, try excluding only
-    one album. A dropdown there will allow you to select the parent of the folder.</string>
-    <string name="exclude_album_message">
-        By excluding this folder you will also exclude all sub-folders. Below you can find a list
-        that allows you to choose a parent, if you have to exclude more folders which are on the same level.
-    </string>
+
     <string name="new_folder_message">The new folder will be created in the current path, and
         then the media will be copied or moved in the new folder.
     </string>
@@ -151,9 +145,6 @@
     <string name="auto_update_media_sub">You should disable if there are a large number of images.</string>
     <string name="traslucent_statusbar">Translucent Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
-    <string name="excluded_albums">Excluded Items</string>
-    <string name="excluded_albums_sub">Restore the excluded folders.</string>
-
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>

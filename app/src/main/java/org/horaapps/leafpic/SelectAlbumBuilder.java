@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,7 +46,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
+public class SelectAlbumBuilder extends BottomSheetDialogFragment {
+
     private String title;
     private ArrayList<File> folders;
     private BottomSheetAlbumsAdapter adapter;
@@ -55,24 +57,44 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
     private IconicsImageView imgExploreMode;
     private LinearLayout exploreModePanel;
     private TextView currentFolderPath;
-    private SelectAlbumInterface selectAlbumInterface;
+    private OnFolderSelected onFolderSelected;
+    FragmentManager fragmentManager;
 
     final int INTERNAL_STORAGE = 0;
 
     private String sdCardPath = null;
 
-    public static SelectAlbumBottomSheet create(String title, SelectAlbumInterface callback) {
-        SelectAlbumBottomSheet a = new SelectAlbumBottomSheet();
-        a.title = title;
-        a.selectAlbumInterface = callback;
-        return a;
+    public static SelectAlbumBuilder with(FragmentManager manager) {
+        SelectAlbumBuilder fragment = new SelectAlbumBuilder();
+        fragment.fragmentManager = manager;
+        return fragment;
     }
+
+    public SelectAlbumBuilder title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public SelectAlbumBuilder exploreMode(boolean enabled) {
+        exploreMode = enabled;
+        return this;
+    }
+
+    public SelectAlbumBuilder onFolderSelected(OnFolderSelected callback) {
+        onFolderSelected = callback;
+        return this;
+    }
+
+    public void show() {
+        show(fragmentManager, getTag());
+    }
+
 
     private boolean canGoBack() {
         return canGoBack;
     }
 
-    public interface SelectAlbumInterface {
+    public interface OnFolderSelected {
         void folderSelected(String path);
     }
 
@@ -80,10 +102,10 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         @Override
         public void onClick(View view) {
             String path = view.findViewById(R.id.name_folder).getTag().toString();
-            if (isExploreMode()) displayContentFolder(new File(path));
+            if (exploreMode) displayContentFolder(new File(path));
             else {
                 dismiss();
-                selectAlbumInterface.folderSelected(path);
+                onFolderSelected.folderSelected(path);
             }
         }
     };
@@ -146,7 +168,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
-                selectAlbumInterface.folderSelected(currentFolderPath.getText().toString());
+                onFolderSelected.folderSelected(currentFolderPath.getText().toString());
             }
         });
 
@@ -185,7 +207,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
         adapter.notifyDataSetChanged();
-        toggleExplorerMode(false);
+        toggleExplorerMode(exploreMode);
     }
 
     private void displayContentFolder(File dir) {
@@ -207,11 +229,7 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
         }
     }
 
-    private void setExploreMode(boolean exploreMode) {
-        this.exploreMode = exploreMode;
-    }
 
-    private boolean isExploreMode() { return  exploreMode; }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -224,9 +242,9 @@ public class SelectAlbumBottomSheet extends BottomSheetDialogFragment {
 
     private void toggleExplorerMode(boolean enabled) {
         folders = new ArrayList<>();
-        setExploreMode(enabled);
+        exploreMode = enabled;
 
-        if(enabled) {
+        if(exploreMode) {
             displayContentFolder(Environment.getExternalStorageDirectory());
             imgExploreMode.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_folder));
             exploreModePanel.setVisibility(View.VISIBLE);

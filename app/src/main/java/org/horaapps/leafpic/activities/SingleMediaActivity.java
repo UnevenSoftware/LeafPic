@@ -35,7 +35,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.yalantis.ucrop.UCrop;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.SelectAlbumBottomSheet;
+import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
@@ -353,14 +353,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
 
             case R.id.action_copy:
-                SelectAlbumBottomSheet copyToSheet = SelectAlbumBottomSheet.create(getString(R.string.copy_to),
-                        new SelectAlbumBottomSheet.SelectAlbumInterface() {
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.copy_to))
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                             @Override
                             public void folderSelected(String path) {
                                 getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
                             }
-                        });
-                copyToSheet.show(getSupportFragmentManager(), copyToSheet.getTag());
+                        }).show();
                 break;
 
             case R.id.name_sort_action:
@@ -465,8 +465,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.action_move:
-                SelectAlbumBottomSheet moveToSheet = SelectAlbumBottomSheet.create(getString(R.string.move_to),
-                        new SelectAlbumBottomSheet.SelectAlbumInterface() {
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.move_to))
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                             @Override
                             public void folderSelected(String path) {
                                 getAlbum().moveCurrentMedia(getApplicationContext(), path);
@@ -481,8 +482,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
                                 adapter.notifyDataSetChanged();
                                 updatePageTitle(mViewPager.getCurrentItem());
                             }
-                        });
-                moveToSheet.show(getSupportFragmentManager(), moveToSheet.getTag());
+                        }).show();
+
                 return true;
 
             case R.id.action_rename:

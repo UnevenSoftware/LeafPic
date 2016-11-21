@@ -17,7 +17,7 @@ import android.support.annotation.Nullable;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
-import org.horaapps.leafpic.activities.TrackAlbumsActivity;
+import org.horaapps.leafpic.activities.WhiteListActivity;
 import org.horaapps.leafpic.model.base.AlbumsComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
@@ -83,9 +83,9 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     onCreate(db);
   }
 
-  public void handleItems(ArrayList<TrackAlbumsActivity.Item> paths) {
+  public void handleItems(ArrayList<WhiteListActivity.Item> paths) {
     SQLiteDatabase db = this.getWritableDatabase();
-    for (TrackAlbumsActivity.Item item : paths) {
+    for (WhiteListActivity.Item item : paths) {
 
       boolean isAlreadyTracked = isTracked(db, item);
       if (item.isIncluded() && !isAlreadyTracked) {
@@ -103,7 +103,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     db.close();
   }
 
-  private boolean isTracked(SQLiteDatabase db, TrackAlbumsActivity.Item item) {
+  private boolean isTracked(SQLiteDatabase db, WhiteListActivity.Item item) {
     Cursor cur = db.rawQuery("SELECT EXISTS(SELECT 1 FROM "+TABLE_ALBUMS+" WHERE "+ALBUM_PATH+"=? LIMIT 1);",
             new String[]{ item.getPath() });
     boolean tracked = cur.moveToFirst() &&  cur.getInt(0) == 1;

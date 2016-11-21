@@ -40,7 +40,7 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 01/04/16.
  */
-public class TrackAlbumsActivity extends ThemedActivity {
+public class WhiteListActivity extends ThemedActivity {
 
     HandlingAlbums tracker;
     private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
@@ -171,9 +171,9 @@ public class TrackAlbumsActivity extends ThemedActivity {
     }
 
     private void requestSdCardPermissions() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TrackAlbumsActivity.this, getDialogStyle());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(WhiteListActivity.this, getDialogStyle());
 
-        AlertDialogsHelper.getTextDialog(TrackAlbumsActivity.this, dialogBuilder,
+        AlertDialogsHelper.getTextDialog(WhiteListActivity.this, dialogBuilder,
                 R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
 
         dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {

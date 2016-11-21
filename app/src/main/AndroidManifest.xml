@@ -160,7 +160,7 @@
         </activity>
 
         <activity
-            android:name="org.horaapps.leafpic.activities.TrackAlbumsActivity"
+            android:name="org.horaapps.leafpic.activities.WhiteListActivity"
             android:label="@string/chose_folders"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>

@@ -48,7 +48,7 @@
             android:id="@+id/toggle_hidden_icon"
             android:layout_height="@dimen/icon_width_height"
             android:layout_width="@dimen/icon_width_height"
-            android:clickable="true"
+            android:clickable="false"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:iiv_icon="gmd-folder"
             app:iiv_color="@color/md_white_1000"
