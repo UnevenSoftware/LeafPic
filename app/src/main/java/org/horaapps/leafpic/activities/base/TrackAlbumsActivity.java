@@ -29,7 +29,6 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
-import org.horaapps.leafpic.model.base.NotHiddenFoldersFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.StringUtils;
@@ -46,28 +45,14 @@ public class TrackAlbumsActivity extends ThemedActivity {
     private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
     ArrayList<Item> folders = new ArrayList<>();
-    ArrayList<File> excluded = new ArrayList<>();
+    ArrayList<String> alreadyTracked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_albums);
         tracker = HandlingAlbums.getInstance(getApplicationContext());
-
-//        HashSet<File> storageRoots = ContentHelper.getStorageRoots(getApplicationContext());
-
-
-        // TODO: 11/20/16 look more stuff
-//        if(storageRoots.size() > 1) requestSdCardPermissions();
-//
-//        for (File root : storageRoots) {
-//            excluded.add(new File(root.getPath(), "Android"));
-//
-//            // TODO: 11/20/16 handle differently
-//            excluded.add(new File(root.getPath(), "Music"));
-//            fetchFolders(root);
-//        }
-
+        alreadyTracked = tracker.getTrackedPaths();
         lookForFoldersInMediaStore();
         initUI();
     }
@@ -98,26 +83,34 @@ public class TrackAlbumsActivity extends ThemedActivity {
             int mediaColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
 
             while (cur.moveToNext()) {
-                folders.add(new Item(cur.getLong(idColumn),
+                Item item = new Item(cur.getLong(idColumn),
                         StringUtils.getBucketPathByImagePath(cur.getString(mediaColumn)),
-                                cur.getString(nameColumn)));
+                        cur.getString(nameColumn));
+                item.included = alreadyTracked.contains(item.path);
+                folders.add(item);
 
             }
             cur.close();
         }
     }
 
+    @Deprecated
     private void fetchFolders(File dir) {
-        if (!excluded.contains(dir)) {
-            if (isFolderWithMedia(dir))
-                folders.add(new Item(dir.getPath(), dir.getName()));
-            File[] foo = dir.listFiles(new NotHiddenFoldersFilter());
-            if (foo != null)
-                for (File f : foo)
-                    if (!excluded.contains(f)) fetchFolders(f);
-        }
+//        if (!alreadyTracked.contains(dir)) {
+//            if (isFolderWithMedia(dir))
+//                folders.add(new Item(dir.getPath(), dir.getName()));
+//            File[] foo = dir.listFiles(new NotHiddenFoldersFilter());
+//            if (foo != null)
+//                for (File f : foo)
+//                    if (!alreadyTracked.contains(f)) fetchFolders(f);
+//        }
     }
 
+    @Deprecated
+    private boolean isFolderWithMedia(File dir) {
+        String[] list = dir.list(new ImageFileFilter(true));
+        return list != null && list.length > 0;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -136,7 +129,7 @@ public class TrackAlbumsActivity extends ThemedActivity {
                     if (folder.included)
                         paths.add(folder.path);
                 }
-                tracker.startTrackingAlbums(folders);
+                tracker.handleItems(folders);
 
                 Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
                 return true;
@@ -147,12 +140,6 @@ public class TrackAlbumsActivity extends ThemedActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private boolean isFolderWithMedia(File dir) {
-        String[] list = dir.list(new ImageFileFilter(true));
-        return list != null && list.length > 0;
-    }
-
 
     private void initUI(){
 
@@ -223,7 +210,7 @@ public class TrackAlbumsActivity extends ThemedActivity {
         String path;
         String name;
         long id;
-        boolean included = true;
+        boolean included = false;
 
         public String getPath() {
             return path;
@@ -241,12 +228,6 @@ public class TrackAlbumsActivity extends ThemedActivity {
             this.path = path;
             this.name = name;
             this.id = id;
-        }
-
-        @Deprecated
-        Item(String path, String name) {
-            this.path = path;
-            this.name = name;
         }
 
         void toggleInclude() {

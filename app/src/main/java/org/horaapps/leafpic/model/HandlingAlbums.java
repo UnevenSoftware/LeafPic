@@ -83,10 +83,12 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     onCreate(db);
   }
 
-  public void startTrackingAlbums(ArrayList<TrackAlbumsActivity.Item> paths) {
+  public void handleItems(ArrayList<TrackAlbumsActivity.Item> paths) {
     SQLiteDatabase db = this.getWritableDatabase();
     for (TrackAlbumsActivity.Item item : paths) {
-      if (item.isIncluded()) {
+
+      boolean isAlreadyTracked = isTracked(db, item);
+      if (item.isIncluded() && !isAlreadyTracked) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_PATH, item.getPath());
         values.put(ALBUM_SORTING_MODE, SortingMode.DATE.getValue());
@@ -94,8 +96,31 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         values.put(ALBUM_ID, item.getId());
         db.insert(TABLE_ALBUMS, null, values);
       }
+
+      if (!item.isIncluded() && isAlreadyTracked)
+        db.delete(TABLE_ALBUMS, ALBUM_PATH+"=?", new String[]{ item.getPath() });
     }
     db.close();
+  }
+
+  private boolean isTracked(SQLiteDatabase db, TrackAlbumsActivity.Item item) {
+    Cursor cur = db.rawQuery("SELECT EXISTS(SELECT 1 FROM "+TABLE_ALBUMS+" WHERE "+ALBUM_PATH+"=? LIMIT 1);",
+            new String[]{ item.getPath() });
+    boolean tracked = cur.moveToFirst() &&  cur.getInt(0) == 1;
+    cur.close();
+    return  tracked;
+  }
+
+  public ArrayList<String> getTrackedPaths() {
+    SQLiteDatabase db = getReadableDatabase();
+    ArrayList<String> list = new ArrayList<>();
+
+    Cursor cur = db.query(TABLE_ALBUMS, new String[] { ALBUM_PATH }, null, null, null, null, null);
+    while (cur.moveToNext()) list.add(cur.getString(0));
+
+    cur.close();
+    db.close();
+    return list;
   }
 
   void pinAlbum(String path, boolean status) {
@@ -132,7 +157,6 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
   @Nullable AlbumSettings getSettings(String path) {
     SQLiteDatabase db = this.getReadableDatabase();
-    AlbumSettings s = null;
 
     String[] selection = new  String[] { ALBUM_COVER_PATH, ALBUM_SORTING_MODE,
             ALBUM_SORTING_ORDER, ALBUM_PINNED };
