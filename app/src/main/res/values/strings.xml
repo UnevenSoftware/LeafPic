@@ -157,10 +157,6 @@
     <string name="card_type_flat">Flat Card</string>
     <string name="card_type_compact">Compact Card</string>
 
-    <string name="card_type_material_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare mi velit, eget mattis neque egestas ornare. </string>
-    <string name="card_type_flat_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare mi velit, eget mattis neque egestas ornare. </string>
-    <string name="card_type_compact_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare mi velit, eget mattis neque egestas ornare. </string>
-
     <string name="max_brightness">High Brightness</string>
     <string name="max_brightness_sub">Maximum brightness when viewing a media.</string>
     <string name="picture_orientation">Force use of accelerometer</string>

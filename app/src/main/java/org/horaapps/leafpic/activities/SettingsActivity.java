@@ -453,8 +453,6 @@ public class SettingsActivity extends ThemedActivity {
         txtPreviewFlatCompactMedia.setText(Html.fromHtml(albumPhotoCountHtml));
         txtPreviewMaterialMedia.setText(Html.fromHtml(albumPhotoCountHtml));
 
-        final TextView txtDescription = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_description);
-        txtDescription.setTextColor(getBackgroundColor());
 
         //SP.putInt("card_view_style",CardViewStyle.CARD_MATERIAL.getValue());
         switch (CardViewStyle.fromValue(SP.getInt("card_view_style", CardViewStyle.CARD_MATERIAL.getValue()))) {
@@ -463,21 +461,18 @@ public class SettingsActivity extends ThemedActivity {
                 radioCardMaterial.setChecked(true);
                 llPreviewFlatCompactText.setVisibility(View.GONE);
                 llPreviewMaterialText.setVisibility(View.VISIBLE);
-                txtDescription.setText(getString(R.string.card_type_material_description));
                 break;
             case CARD_FLAT:
                 radioCardFlat.setChecked(true);
                 llPreviewFlatCompactText.setVisibility(View.VISIBLE);
                 txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
                 llPreviewMaterialText.setVisibility(View.GONE);
-                txtDescription.setText(getString(R.string.card_type_flat_description));
                 break;
             case CARD_COMPACT:
                 radioCardCompact.setChecked(true);
                 llPreviewFlatCompactText.setVisibility(View.VISIBLE);
                 txtPreviewFlatCompactMedia.setVisibility(View.GONE);
                 llPreviewMaterialText.setVisibility(View.GONE);
-                txtDescription.setText(getString(R.string.card_type_compact_description));
                 break;
         }
 
@@ -487,19 +482,16 @@ public class SettingsActivity extends ThemedActivity {
                     case R.id.radio_card_material:
                         llPreviewFlatCompactText.setVisibility(View.GONE);
                         llPreviewMaterialText.setVisibility(View.VISIBLE);
-                        txtDescription.setText(getString(R.string.card_type_material_description));
                         break;
                     case R.id.radio_card_flat:
                         llPreviewFlatCompactText.setVisibility(View.VISIBLE);
                         txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
                         llPreviewMaterialText.setVisibility(View.GONE);
-                        txtDescription.setText(getString(R.string.card_type_flat_description));
                         break;
                     case R.id.radio_card_compact:
                         llPreviewFlatCompactText.setVisibility(View.VISIBLE);
                         txtPreviewFlatCompactMedia.setVisibility(View.GONE);
                         llPreviewMaterialText.setVisibility(View.GONE);
-                        txtDescription.setText(getString(R.string.card_type_compact_description));
                         break;
                 }
             }

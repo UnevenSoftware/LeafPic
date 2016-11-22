@@ -165,7 +165,7 @@ public class WhiteListActivity extends ThemedActivity {
         });
         setStatusBarColor();
         setNavBarColor();
-        setRecentApp(getString(org.horaapps.leafpic.R.string.excluded_albums));
+        setRecentApp(getString(R.string.chose_folders));
 
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }

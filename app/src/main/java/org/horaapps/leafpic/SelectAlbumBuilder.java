@@ -156,7 +156,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         });
 
         /**SET UP THEME**/
-        contentView.findViewById(R.id.ll_bottom_sheet_title).setBackgroundColor(theme.getPrimaryColor());
+        contentView.findViewById(R.id.rl_bottom_sheet_title).setBackgroundColor(theme.getPrimaryColor());
         exploreModePanel.setBackgroundColor(theme.getPrimaryColor());
         contentView.findViewById(R.id.ll_select_folder).setBackgroundColor(theme.getCardBackgroundColor());
         theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
@@ -192,7 +192,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             }
         });
 
-        contentView.findViewById(R.id.ll_bottom_sheet_title).setOnClickListener(new View.OnClickListener() {
+        contentView.findViewById(R.id.rl_bottom_sheet_title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleExplorerMode(!exploreMode);

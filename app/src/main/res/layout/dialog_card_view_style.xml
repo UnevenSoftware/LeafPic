@@ -122,13 +122,6 @@
                     />
             </LinearLayout>
         </LinearLayout>
-            <TextView
-                android:id="@+id/preview_album_card_style_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium_spacing"
-                android:textSize="@dimen/sub_big_text"
-                />
         </LinearLayout>
 
         <!--RADIO BUTTONS-->

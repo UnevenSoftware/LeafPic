@@ -7,102 +7,107 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/ll_bottom_sheet_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="22dp"
-        android:paddingEnd="24dp"
-        android:elevation="2dp"
-        tools:targetApi="lollipop">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/bottom_sheet_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/md_dark_primary_text"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/bottom_sheet_sub_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/md_dark_primary_text"
-                android:textSize="14sp"
-                android:text="@string/local_folder"
-                android:ellipsize="start"
-                android:textStyle="italic"
-                />
-
-        </LinearLayout>
-
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/toggle_hidden_icon"
-            android:layout_height="@dimen/icon_width_height"
-            android:layout_width="@dimen/icon_width_height"
-            android:clickable="false"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:iiv_icon="gmd-folder"
-            app:iiv_color="@color/md_white_1000"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
+    <!-- ACTION / TITLE BAR -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ll_explore_mode_panel"
-        android:gravity="center_vertical"
-        android:elevation="1dp"
+        android:orientation="vertical"
         tools:targetApi="lollipop"
-        android:paddingStart="10dp"
-        android:weightSum="10">
+        android:elevation="2dp">
 
-        <Spinner
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/rl_bottom_sheet_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/volume_spinner"
-            android:spinnerMode="dropdown"
-            android:layout_weight="9" />
-
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:layout_height="@dimen/icon_width_height"
-            android:layout_width="@dimen/icon_width_height"
-            android:id="@+id/create_new_folder"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/big_spacing"
-            android:layout_marginRight="@dimen/big_spacing"
-            app:iiv_icon="gmd-create-new-folder"
-            app:iiv_color="@color/md_white_1000"
-            android:layout_weight="1" />
-
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/done"
-            android:layout_height="@dimen/icon_width_height"
-            android:layout_width="@dimen/icon_width_height"
-            android:layout_marginEnd="@dimen/big_spacing"
-            android:layout_gravity="center_vertical"
+            android:paddingStart="22dp"
+            android:paddingEnd="24dp"
+            android:foreground="@drawable/ripple"
             android:clickable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_weight="1"
-            app:iiv_icon="gmd-done"
-            app:iiv_color="@color/md_white_1000"
-            />
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/bottom_sheet_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/md_dark_primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/bottom_sheet_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/md_dark_primary_text"
+                    android:textSize="14sp"
+                    android:text="@string/local_folder"
+                    android:ellipsize="start"
+                    android:textStyle="italic"
+                    />
+            </LinearLayout>
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/toggle_hidden_icon"
+                android:layout_height="@dimen/icon_width_height"
+                android:layout_width="@dimen/icon_width_height"
+                android:clickable="false"
+                app:iiv_icon="gmd-folder"
+                app:iiv_color="@color/md_white_1000"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_explore_mode_panel"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:weightSum="10">
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/volume_spinner"
+                android:spinnerMode="dropdown"
+                android:layout_weight="8" />
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:layout_height="@dimen/icon_width_height"
+                android:layout_width="@dimen/icon_width_height"
+                android:id="@+id/create_new_folder"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/big_spacing"
+                android:layout_marginRight="@dimen/big_spacing"
+                android:clickable="true"
+                android:background="@drawable/ripple"
+                app:iiv_icon="gmd-create-new-folder"
+                app:iiv_color="@color/md_white_1000"
+                android:layout_weight="1" />
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/done"
+                android:layout_height="@dimen/icon_width_height"
+                android:layout_width="@dimen/icon_width_height"
+                android:layout_marginEnd="@dimen/big_spacing"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:background="@drawable/ripple"
+                app:iiv_icon="gmd-done"
+                app:iiv_color="@color/md_white_1000"
+                />
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- ITEMS RECYCLE VIEW -->
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/folders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-        />
+        android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+
 </LinearLayout>

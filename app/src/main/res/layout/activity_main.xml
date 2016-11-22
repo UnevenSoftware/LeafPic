@@ -76,15 +76,17 @@
         </LinearLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_layout_margin"
+            app:elevation="@dimen/fab_elevation"
+            app:borderWidth="@dimen/fab_border_width"
+            app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/medium_spacing"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
-            app:borderWidth="0dp"
-            app:elevation="@dimen/card_elevation"
             app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"
-            style="@style/fab_camera"
             />
     </android.support.design.widget.CoordinatorLayout>
     <include
