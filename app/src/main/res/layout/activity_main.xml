@@ -33,10 +33,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
+                        android:clipToPadding="false"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-                        android:clipToPadding="false"
-
                         />
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/grid_photos"
@@ -44,6 +43,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
                         android:clipToPadding="false"
+                        android:scrollbars="vertical"
+                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                         />
                     <!--
                         android:scrollbars="vertical"

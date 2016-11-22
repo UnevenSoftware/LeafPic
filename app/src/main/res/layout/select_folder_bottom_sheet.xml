@@ -69,42 +69,35 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_explore_mode_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ll_explore_mode_panel"
+            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
-            android:weightSum="10">
+            android:paddingStart="10dp">
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/volume_spinner"
-                android:spinnerMode="dropdown"
-                android:layout_weight="8" />
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:layout_height="@dimen/icon_width_height"
-                android:layout_width="@dimen/icon_width_height"
-                android:id="@+id/create_new_folder"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/big_spacing"
-                android:layout_marginRight="@dimen/big_spacing"
+                android:id="@+id/storage_spinner"
+                android:spinnerMode="dropdown"/>
+            <RelativeLayout
+                android:id="@+id/rl_create_new_folder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/medium_spacing"
+                android:paddingBottom="@dimen/medium_spacing"
+                android:foreground="@drawable/ripple"
                 android:clickable="true"
-                android:background="@drawable/ripple"
-                app:iiv_icon="gmd-create-new-folder"
-                app:iiv_color="@color/md_white_1000"
-                android:layout_weight="1" />
-            <com.mikepenz.iconics.view.IconicsImageView
-                android:id="@+id/done"
-                android:layout_height="@dimen/icon_width_height"
-                android:layout_width="@dimen/icon_width_height"
-                android:layout_marginEnd="@dimen/big_spacing"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:background="@drawable/ripple"
-                app:iiv_icon="gmd-done"
-                app:iiv_color="@color/md_white_1000"
-                />
+                >
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:layout_height="@dimen/icon_width_height"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_marginEnd="@dimen/big_spacing"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    app:iiv_icon="gmd-create-new-folder"
+                    app:iiv_color="@color/md_white_1000"/>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -119,12 +112,11 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_camera"
+        android:id="@+id/fab_bottomsheet_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_layout_margin"
         app:elevation="@dimen/fab_elevation"
-
         app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"

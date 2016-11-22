@@ -7,12 +7,14 @@ package org.horaapps.leafpic;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -58,6 +60,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
     private TextView currentFolderPath;
     private OnFolderSelected onFolderSelected;
     FragmentManager fragmentManager;
+    private FloatingActionButton fabDone;
 
     final int INTERNAL_STORAGE = 0;
 
@@ -120,7 +123,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         View contentView = View.inflate(getContext(), R.layout.select_folder_bottom_sheet, null);
         final RecyclerView mRecyclerView = (RecyclerView) contentView.findViewById(R.id.folders);
-        final Spinner spinner = (Spinner) contentView.findViewById(R.id.volume_spinner);
+        final Spinner spinner = (Spinner) contentView.findViewById(R.id.storage_spinner);
         currentFolderPath = (TextView) contentView.findViewById(R.id.bottom_sheet_sub_title);
         exploreModePanel = (LinearLayout) contentView.findViewById(R.id.ll_explore_mode_panel);
         imgExploreMode = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
@@ -166,42 +169,48 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         contentView.findViewById(R.id.ll_select_folder).setBackgroundColor(theme.getCardBackgroundColor());
         theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
 
-
-        ((TextView) contentView.findViewById(R.id.bottom_sheet_title)).setText(title);
-
-        contentView.findViewById(R.id.done).setOnClickListener(new View.OnClickListener() {
+        fabDone = (FloatingActionButton) contentView.findViewById(R.id.fab_bottomsheet_done);
+        fabDone.setBackgroundTintList(ColorStateList.valueOf(theme.getAccentColor()));
+        fabDone.setImageDrawable(new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_done).color(Color.WHITE));
+        fabDone.setVisibility(exploreMode ? View.VISIBLE : View.GONE);
+        fabDone.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 dismiss();
                 onFolderSelected.folderSelected(currentFolderPath.getText().toString());
             }
         });
 
-        contentView.findViewById(R.id.create_new_folder).setOnClickListener(new View.OnClickListener() {
+        ((TextView) contentView.findViewById(R.id.bottom_sheet_title)).setText(title);
+
+        contentView.findViewById(R.id.rl_create_new_folder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final EditText editText = new EditText(getContext());
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), theme.getDialogStyle());
                 AlertDialogsHelper.getInsertTextDialog(((ThemedActivity) getActivity()), builder,
                         editText, R.string.new_folder);
-                builder.setPositiveButton(R.string.ok_action, new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         File folderPath = new File(currentFolderPath.getText().toString() + File.separator + editText.getText().toString());
                         if (folderPath.mkdir()) displayContentFolder(folderPath);
-
                     }
                 });
+                builder.setNegativeButton(getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                });
                 builder.show();
-
             }
         });
-
         contentView.findViewById(R.id.rl_bottom_sheet_title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!forzed)
+                if (!forzed) {
                     toggleExplorerMode(!exploreMode);
+                    fabDone.setVisibility(exploreMode ? View.VISIBLE : View.GONE);
+                }
             }
         });
 

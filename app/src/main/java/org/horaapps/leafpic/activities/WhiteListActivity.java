@@ -3,11 +3,14 @@ package org.horaapps.leafpic.activities;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
@@ -44,6 +48,7 @@ public class WhiteListActivity extends ThemedActivity {
 
     HandlingAlbums tracker;
     private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
+    private FloatingActionButton fabWHDone;
 
     ArrayList<Item> folders = new ArrayList<>();
     ArrayList<String> alreadyTracked;
@@ -115,7 +120,7 @@ public class WhiteListActivity extends ThemedActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_track_albums, menu);
-        menu.findItem(R.id.action_done).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_done));
+        //menu.findItem(R.id.action_done).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_done));
         return true;
     }
 
@@ -123,11 +128,12 @@ public class WhiteListActivity extends ThemedActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            /*
             case R.id.action_done:
                 tracker.handleItems(folders);
                 finish();
                 return true;
-
+            */
             case R.id.action_show_music:
                 Toast.makeText(this, "Fuck!", Toast.LENGTH_SHORT).show();
                 return true;
@@ -153,6 +159,19 @@ public class WhiteListActivity extends ThemedActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setBackgroundColor(getBackgroundColor());
+
+        /** FAB **/
+        fabWHDone = (FloatingActionButton) findViewById(R.id.fab_whitelist_done);
+        fabWHDone.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+        fabWHDone.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_done).color(Color.WHITE));
+        fabWHDone.setVisibility(View.VISIBLE);
+        fabWHDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tracker.handleItems(folders);
+                finish();
+            }
+        });
 
         /**SET UP UI COLORS**/
         toolbar.setBackgroundColor(getPrimaryColor());
