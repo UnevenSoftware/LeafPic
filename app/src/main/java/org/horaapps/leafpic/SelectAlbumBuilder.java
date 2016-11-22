@@ -52,8 +52,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
     private ArrayList<File> folders;
     private BottomSheetAlbumsAdapter adapter;
     private ThemeHelper theme;
-    private boolean exploreMode = false;
-    private boolean canGoBack = false;
+    private boolean exploreMode = false, canGoBack = false, forzed = false;
     private IconicsImageView imgExploreMode;
     private LinearLayout exploreModePanel;
     private TextView currentFolderPath;
@@ -77,6 +76,12 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 
     public SelectAlbumBuilder exploreMode(boolean enabled) {
         exploreMode = enabled;
+        return this;
+    }
+
+    public SelectAlbumBuilder exploreMode(boolean enabled, boolean force) {
+        exploreMode = enabled;
+        forzed = force;
         return this;
     }
 
@@ -195,7 +200,8 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         contentView.findViewById(R.id.rl_bottom_sheet_title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleExplorerMode(!exploreMode);
+                if (!forzed)
+                    toggleExplorerMode(!exploreMode);
             }
         });
 

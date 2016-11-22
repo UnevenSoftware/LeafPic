@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_select_folder"
@@ -8,6 +9,12 @@
     android:layout_height="match_parent">
 
     <!-- ACTION / TITLE BAR -->
+    <LinearLayout
+        android:id="@+id/Relative_Album_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:theme="@style/Theme.AppCompat.NoActionBar">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -109,5 +116,21 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+    </LinearLayout>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_layout_margin"
+        app:elevation="@dimen/fab_elevation"
+
+        app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        />
+    <!--app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"-->
+
+</android.support.design.widget.CoordinatorLayout>
