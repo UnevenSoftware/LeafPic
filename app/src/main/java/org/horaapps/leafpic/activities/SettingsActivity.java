@@ -410,13 +410,22 @@ public class SettingsActivity extends ThemedActivity {
     private void cardViewDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
         View layout = getLayoutInflater().inflate(R.layout.dialog_selec_cardview, null);
-        ViewPager mViewPager = (ViewPager) layout.findViewById(R.id.viewPager);
-        CardPagerAdapter mCardAdapter = new CardPagerAdapter();
+        final ViewPager mViewPager = (ViewPager) layout.findViewById(R.id.viewPager);
+        CardPagerAdapter mCardAdapter = new CardPagerAdapter(getBaseContext());
         ShadowTransformer mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(SP.getInt("card_view_style", 0));
+
+        builder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+        builder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getBaseContext(), "ITEM: " + mViewPager.getCurrentItem(), Toast.LENGTH_LONG).show();
+                SP.putInt("card_view_style", mViewPager.getCurrentItem());
+            }
+        });
         builder.setView(layout);
         builder.show();
     }
