@@ -199,11 +199,14 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     Cursor cur = db.query(TABLE_ALBUMS, projection, null, null, null, null, null);
     while (cur.moveToNext()) {
       Album album = new Album(cur.getString(0), cur.getLong(1),
-              new AlbumSettings(cur.getString(2), cur.getInt(3), cur.getInt(4), cur.getInt(5)));
+              new AlbumSettings(cur.getString(2), cur.getInt(3), cur.getInt(4), cur.getInt(5)),
+              MediaStoreProvider.getCount(context, cur.getLong(1)));
+
       if (!album.hasCustomCover()) {
-        if (album.addMedia(MediaStoreProvider.getLastMedia(context, album.getId()))) albums.add(album);
+        if (album.addMedia(MediaStoreProvider.getLastMedia(context, album.getId())))
+          albums.add(album);
       } else albums.add(album);
-      // TODO: 11/21/16 set count
+
     }
 
     cur.close();

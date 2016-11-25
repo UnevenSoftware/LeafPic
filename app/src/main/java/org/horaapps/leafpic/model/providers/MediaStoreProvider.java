@@ -24,13 +24,125 @@ import java.util.HashSet;
 
 public class  MediaStoreProvider {
 
+	@Deprecated
 	private static ArrayList<String> excludedAlbums;
 
+	@Nullable public static Media getLastMedia(Context context, long albumId) {
+		ArrayList<Media> list = getMedia(context, albumId, 1, true);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+
+	public static ArrayList<Media> getMedia(Context context, long albumId, boolean includeVideo) {
+		return getMedia(context, albumId, -1, includeVideo);
+	}
+
+	private static ArrayList<Media> getMedia(Context context, long albumId, int n, boolean includeVideo) {
+
+		String limit = n == -1 ? "" : "LIMIT " + n;
+		ArrayList<Media> list = new ArrayList<Media>();
+
+
+		String[] projection = new String[]{
+				// NOTE: don't change the order!
+				MediaStore.Images.Media.DATA,
+				MediaStore.Images.Media.DATE_TAKEN,
+				MediaStore.Images.Media.MIME_TYPE,
+				MediaStore.Images.Media.SIZE,
+				MediaStore.Images.Media.ORIENTATION
+		};
+
+		Uri images = MediaStore.Files.getContentUri("external");
+		String selection, selectionArgs[];
+
+
+		if(includeVideo) {
+			selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
+					+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
+
+			selectionArgs = new String[] {
+					String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+					String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+					String.valueOf(albumId)
+			};
+		} else {
+			selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=?  and " + MediaStore.Files.FileColumns.PARENT + "=?";
+			selectionArgs = new String[] { String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE), String.valueOf(albumId) };
+		}
+
+		Cursor cur = context.getContentResolver().query(
+				images, projection, selection, selectionArgs,
+				" " + MediaStore.Images.Media.DATE_TAKEN + " DESC " + limit);
+
+		if (cur != null) {
+			if (cur.moveToFirst()) do list.add(new Media(cur)); while (cur.moveToNext());
+			cur.close();
+		}
+		return list;
+	}
+
+	public static long getAlbumId(Context context, String mediaPath) {
+		long id = -1;
+		Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
+				new String[]{ MediaStore.Files.FileColumns.PARENT },
+				MediaStore.Files.FileColumns.DATA+"=?", new String[]{ mediaPath }, null);
+		if(cur != null && cur.moveToNext()){
+			id = cur.getLong(0);
+			cur.close();
+		}
+		return id;
+	}
+
+	public static int getCount(Context context, long albumId) {
+
+
+		int c = 0;
+
+		String selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
+				+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
+
+		String[] selectionArgs = new String[] {
+				String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+				String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+				String.valueOf(albumId)
+		};
+
+		Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
+				new String[]{ "count(*)" }, selection, selectionArgs, null);
+
+		if (cur!= null && cur.moveToFirst()) {
+			c = cur.getInt(0);
+			cur.close();
+		}
+
+		return c;
+
+	}
+
+	@TestOnly
+	public static ArrayList<Media> getAllMedia(Context context) {
+		ArrayList<Media> list = new ArrayList<Media>();
+		// TODO: 11/21/16 implement
+		return list;
+	}
+
+	@TestOnly
+	private String getThumbnailPath(Context context, long id) {
+		Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+				context.getContentResolver(), id, MediaStore.Images.Thumbnails.MINI_KIND,
+				new String[]{ MediaStore.Images.Thumbnails.DATA });
+		if(cursor.moveToFirst())
+			return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+		return null;
+	}
+
+
+	@Deprecated
 	public static ArrayList<Album> getAlbums(Context context, boolean hidden) {
 		excludedAlbums = getExcludedFolders(context);
 		return hidden ? getHiddenAlbums(context) : getAlbums(context);
 	}
 
+	@Deprecated
 	private static   ArrayList<Album> getHiddenAlbums(Context context) {
 		ArrayList<Album> list = new ArrayList<Album>();
 		String[] projection = new String[]{ MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT };
@@ -64,11 +176,13 @@ public class  MediaStoreProvider {
 		return list;
 	}
 
+	@Deprecated
 	private static boolean isExcluded(String path) {
 		for(String s : excludedAlbums) if (path.startsWith(s)) return true;
 		return false;
 	}
 
+	@Deprecated
 	private static ArrayList<Album> getAlbums(Context context) {
 		ArrayList<Album> list = new ArrayList<Album>();
 
@@ -121,6 +235,7 @@ public class  MediaStoreProvider {
 		return list;
 	}
 
+	@Deprecated
 	private  static ArrayList<String> getExcludedFolders(Context context) {
 		ArrayList<String>  list = new ArrayList<String>();
 		//forced excluded folder
@@ -134,12 +249,7 @@ public class  MediaStoreProvider {
 		return list;
 	}
 
-	public static ArrayList<Media> getAllMedia(Context context) {
-		ArrayList<Media> list = new ArrayList<Media>();
-		// TODO: 11/21/16 implement
-		return list;
-	}
-
+	@Deprecated
 	private static int getAlbumCount(Context context, long id) {
 		int c = 0;
 		String selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
@@ -159,81 +269,6 @@ public class  MediaStoreProvider {
 			cur.close();
 		}
 		return c;
-	}
-
-	@Nullable public static Media getLastMedia(Context context, long albumId) {
-		ArrayList<Media> list = getMedia(context, albumId, 1, true);
-		return list.size() > 0 ? list.get(0) : null;
-	}
-
-	public static ArrayList<Media> getMedia(Context context, long albumId, boolean includeVideo) {
-		return getMedia(context, albumId, -1, includeVideo);
-	}
-
-	private static ArrayList<Media> getMedia(Context context, long albumId, int n, boolean includeVideo) {
-
-		String limit = n == -1 ? "" : "LIMIT " + n;
-		ArrayList<Media> list = new ArrayList<Media>();
-
-
-		String[] projection = new String[]{
-						// NOTE: don't change the order!
-						MediaStore.Images.Media.DATA,
-						MediaStore.Images.Media.DATE_TAKEN,
-						MediaStore.Images.Media.MIME_TYPE,
-						MediaStore.Images.Media.SIZE,
-						MediaStore.Images.Media.ORIENTATION
-		};
-
-		Uri images = MediaStore.Files.getContentUri("external");
-		String selection, selectionArgs[];
-
-
-		if(includeVideo) {
-			selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
-										+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
-
-			selectionArgs = new String[] {
-							String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-							String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-							String.valueOf(albumId)
-			};
-		} else {
-			selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=?  and " + MediaStore.Files.FileColumns.PARENT + "=?";
-			selectionArgs = new String[] { String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE), String.valueOf(albumId) };
-		}
-
-		Cursor cur = context.getContentResolver().query(
-						images, projection, selection, selectionArgs,
-						" " + MediaStore.Images.Media.DATE_TAKEN + " DESC " + limit);
-
-		if (cur != null) {
-			if (cur.moveToFirst()) do list.add(new Media(cur)); while (cur.moveToNext());
-			cur.close();
-		}
-		return list;
-	}
-
-	public static long getAlbumId(Context context, String mediaPath) {
-		long id = -1;
-		Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
-						new String[]{ MediaStore.Files.FileColumns.PARENT },
-						MediaStore.Files.FileColumns.DATA+"=?", new String[]{ mediaPath }, null);
-		if(cur != null && cur.moveToNext()){
-			id = cur.getLong(0);
-			cur.close();
-		}
-		return id;
-	}
-
-	@TestOnly
-	private String getThumbnailPath(Context context, long id) {
-		Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
-						context.getContentResolver(), id, MediaStore.Images.Thumbnails.MINI_KIND,
-						new String[]{ MediaStore.Images.Thumbnails.DATA });
-		if(cursor.moveToFirst())
-			return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
-		return null;
 	}
 }
 

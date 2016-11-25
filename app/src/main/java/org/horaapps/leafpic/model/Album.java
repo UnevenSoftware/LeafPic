@@ -54,13 +54,13 @@ public class Album implements Serializable {
 		settings = AlbumSettings.getSettings(context, this);
 	}
 
-	public Album(String path, long id, AlbumSettings settings) {
+	public Album(String path, long id, AlbumSettings settings, int count) {
 		this();
 		this.path = path;
 		this.name = StringUtils.getNameByPath(path);
 		this.id = id;
 		this.settings = settings;
-		// TODO: 11/20/16 count goddammit
+		this.count = count;
 	}
 
 	public Album(Context context, @NotNull File mediaPath) {
