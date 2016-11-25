@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
@@ -38,6 +39,8 @@ import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StaticMapProvider;
 import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.SquareImageView;
+import org.horaapps.leafpic.views.cardviewpager.CardPagerAdapter;
+import org.horaapps.leafpic.views.cardviewpager.ShadowTransformer;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -104,7 +107,7 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_card_view_style).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardViewStyleDialog();
+                cardViewDialog();
             }
         });
 
@@ -402,6 +405,23 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
     }
+
+
+    private void cardViewDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        View layout = getLayoutInflater().inflate(R.layout.dialog_selec_cardview, null);
+        ViewPager mViewPager = (ViewPager) layout.findViewById(R.id.viewPager);
+        CardPagerAdapter mCardAdapter = new CardPagerAdapter();
+        ShadowTransformer mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
+        mViewPager.setAdapter(mCardAdapter);
+        mViewPager.setPageTransformer(false, mCardShadowTransformer);
+        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setCurrentItem(1);
+        builder.setView(layout);
+        builder.show();
+    }
+
+    @Deprecated
     private void cardViewStyleDialog() {
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
