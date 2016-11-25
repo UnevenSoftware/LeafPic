@@ -408,7 +408,7 @@ public class SettingsActivity extends ThemedActivity {
 
 
     private void cardViewDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         View layout = getLayoutInflater().inflate(R.layout.dialog_selec_cardview, null);
         final ViewPager mViewPager = (ViewPager) layout.findViewById(R.id.viewPager);
         CardPagerAdapter mCardAdapter = new CardPagerAdapter(getBaseContext());

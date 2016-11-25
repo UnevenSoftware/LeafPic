@@ -3,25 +3,26 @@ package org.horaapps.leafpic.views.cardviewpager;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.views.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardPagerAdapter extends PagerAdapter {
 
-    public static int MAX_ELEVATION_FACTOR = 8;
+    static int MAX_ELEVATION_FACTOR = 8;
 
     private List<CardView> mViews;
     private float mBaseElevation;
@@ -29,23 +30,23 @@ public class CardPagerAdapter extends PagerAdapter {
 
     public CardPagerAdapter(Context context) {
         theme = new ThemeHelper(context);
-        mViews = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        mViews = new ArrayList<>(CardViewStyle.getSize());
+        for (int i = 0; i < CardViewStyle.getSize(); i++)
             mViews.add(null);
-        }
+
     }
 
-    public float getBaseElevation() {
+    float getBaseElevation() {
         return mBaseElevation;
     }
 
-    public CardView getCardViewAt(int position) {
+    CardView getCardViewAt(int position) {
         return mViews.get(position);
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return CardViewStyle.getSize();
     }
 
     @Override
@@ -55,71 +56,57 @@ public class CardPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.card_view_sample, container, false);
+        View v;
 
-        /**OBJECTS**/
-        final SquareImageView imgPreviewAlbumCardStyle = (SquareImageView) view.findViewById(R.id.preview_album_card_style_image);
-        imgPreviewAlbumCardStyle.setBackgroundColor(theme.getPrimaryColor());
+        switch (CardViewStyle.fromValue(position)){
+            default:
+            case CARD_MATERIAL: v = LayoutInflater.from(container.getContext()).inflate(R.layout.card_album_material, container, false); break;
+            case CARD_FLAT: v = LayoutInflater.from(container.getContext()).inflate(R.layout.card_album_flat, container, false); break;
+            case CARD_COMPACT: v = LayoutInflater.from(container.getContext()).inflate(R.layout.card_album_compact, container, false); break;
+        }
 
-        LinearLayout llPreview = (LinearLayout) view.findViewById(R.id.ll_preview_album_card);
-        //llPreview.setBackgroundColor(theme.getInvertedBackgroundColor());
 
-        final LinearLayout llPreviewFlatCompactText = (LinearLayout) view.findViewById(R.id.preview_album_card_style_linear_card_text2);
-        final TextView txtPreviewFlatCompactAlbum = (TextView) view.findViewById(R.id.preview_album_card_style_name2);
-        final TextView txtPreviewFlatCompactMedia = (TextView) view.findViewById(R.id.preview_album_card_style_photos_count2);
+        Glide.with(container.getContext())
+                .load(R.drawable.gilbert_profile)
+                .into(((ImageView) v.findViewById(org.horaapps.leafpic.R.id.album_preview)));
 
-        final LinearLayout llPreviewMaterialText = (LinearLayout) view.findViewById(R.id.preview_album_card_style_linear_card_text);
-        final TextView txtPreviewMaterialAlbum = (TextView) view.findViewById(R.id.preview_album_card_style_name);
-        final TextView txtPreviewMaterialMedia = (TextView) view.findViewById(R.id.preview_album_card_style_photos_count);
+        String hexPrimaryColor = ColorPalette.getHexColor(theme.getPrimaryColor());
+        String hexAccentColor = ColorPalette.getHexColor(theme.getAccentColor());
 
-        llPreviewMaterialText.setBackgroundColor(theme.getCardBackgroundColor());
-        llPreviewFlatCompactText.setBackgroundColor(ColorPalette.getTransparentColor(theme.getCardBackgroundColor(), 150));
+        if (hexAccentColor.equals(hexPrimaryColor))
+            hexAccentColor = ColorPalette.getHexColor(ColorPalette.getDarkerColor(theme.getAccentColor()));
 
-        int color=theme.getTextColor();
-        String albumNameHtml = "<i><font color='" + color+ "'>" + container.getContext().getString(R.string.album) + "</font></i>";
-        txtPreviewFlatCompactAlbum.setTextColor(color);
-        txtPreviewMaterialAlbum.setTextColor(color);
-        txtPreviewFlatCompactAlbum.setText(Html.fromHtml(albumNameHtml));
-        txtPreviewMaterialAlbum.setText(Html.fromHtml(albumNameHtml));
-
-        color=theme.getSubTextColor();
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
-        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + "n" + "</font></b>" + "<font " +
-                "color='" + color + "'> " + container.getContext().getString(R.string.media) + "</font>";
-        txtPreviewFlatCompactMedia.setTextColor(color);
-        txtPreviewMaterialMedia.setTextColor(color);
-        txtPreviewFlatCompactMedia.setText(Html.fromHtml(albumPhotoCountHtml));
-        txtPreviewMaterialMedia.setText(Html.fromHtml(albumPhotoCountHtml));
+        String textColor = theme.getBaseTheme() != ThemeHelper.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
 
 
         switch (CardViewStyle.fromValue(position)){
             default:
-            case CARD_MATERIAL:
-                llPreviewFlatCompactText.setVisibility(View.GONE);
-                llPreviewMaterialText.setVisibility(View.VISIBLE);
-                break;
+            case CARD_MATERIAL:v.findViewById(R.id.linear_card_text).setBackgroundColor(theme.getCardBackgroundColor());break;
             case CARD_FLAT:
-                llPreviewFlatCompactText.setVisibility(View.VISIBLE);
-                txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
-                llPreviewMaterialText.setVisibility(View.GONE);
-                break;
-            case CARD_COMPACT:
-                llPreviewFlatCompactText.setVisibility(View.VISIBLE);
-                txtPreviewFlatCompactMedia.setVisibility(View.GONE);
-                llPreviewMaterialText.setVisibility(View.GONE);
-                break;
+            case CARD_COMPACT:v.findViewById(R.id.linear_card_text).setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
         }
 
-        container.addView(view);
-        CardView cardView = (CardView) view.findViewById(R.id.cardView);
+
+        String albumNameHtml = "<i><font color='" + textColor + "'>#PraiseDuarte</font></i>";
+        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>420</font></b>" + "<font " +
+                "color='" + textColor + "'> " + container.getContext().getString(R.string.media) + "</font>";
+
+        ((TextView) v.findViewById(R.id.album_name)).setText(StringUtils.html(albumNameHtml));
+        ((TextView) v.findViewById(R.id.album_photos_count)).setText(StringUtils.html(albumPhotoCountHtml));
+
+        ((CardView) v).setUseCompatPadding(true);
+        ((CardView) v).setRadius(2);
+
+        container.addView(v);
 
         if (mBaseElevation == 0) {
-            mBaseElevation = cardView.getCardElevation();
+            mBaseElevation = ((CardView) v).getCardElevation();
         }
 
-        cardView.setMaxCardElevation(mBaseElevation * MAX_ELEVATION_FACTOR);
-        mViews.set(position, cardView);
-        return view;
+        ((CardView) v).setMaxCardElevation(mBaseElevation * MAX_ELEVATION_FACTOR);
+        mViews.set(position, ((CardView) v));
+
+        return v;
     }
 
     @Override

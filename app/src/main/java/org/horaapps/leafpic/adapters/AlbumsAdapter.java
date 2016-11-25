@@ -18,10 +18,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
@@ -85,17 +85,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         holder.name.setTag(a);
 
-        String hexPrimaryColor = String.format("#%06X", (0xFFFFFF & theme.getPrimaryColor()));
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
+        String hexPrimaryColor = ColorPalette.getHexColor(theme.getPrimaryColor());
+        String hexAccentColor = ColorPalette.getHexColor(theme.getAccentColor());
 
-        if (hexAccentColor.equals(hexPrimaryColor)) {
-            float[] hsv = new float[3];
-            int color = theme.getAccentColor();
-            Color.colorToHSV(color, hsv);
-            hsv[2] *= 0.72f; // value component
-            color = Color.HSVToColor(hsv);
-            hexAccentColor= String.format("#%06X", (0xFFFFFF & color));
-        }
+        if (hexAccentColor.equals(hexPrimaryColor))
+            hexAccentColor = ColorPalette.getHexColor(ColorPalette.getDarkerColor(theme.getAccentColor()));
 
         String textColor = theme.getBaseTheme() != ThemeHelper.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
 

@@ -10,7 +10,7 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
     private ViewPager mViewPager;
     private CardPagerAdapter mAdapter;
     private float mLastOffset;
-    private boolean mScalingEnabled;
+    private boolean mScalingEnabled = true;
 
     public ShadowTransformer(ViewPager viewPager, CardPagerAdapter adapter) {
         mViewPager = viewPager;
@@ -18,25 +18,25 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
         mAdapter = adapter;
     }
 
-    public void enableScaling(boolean enable) {
-        if (mScalingEnabled && !enable) {
-            // shrink main card
-            CardView currentCard = mAdapter.getCardViewAt(mViewPager.getCurrentItem());
-            if (currentCard != null) {
-                currentCard.animate().scaleY(1);
-                currentCard.animate().scaleX(1);
-            }
-        }else if(!mScalingEnabled && enable){
-            // grow main card
-            CardView currentCard = mAdapter.getCardViewAt(mViewPager.getCurrentItem());
-            if (currentCard != null) {
-                currentCard.animate().scaleY(1.1f);
-                currentCard.animate().scaleX(1.1f);
-            }
-        }
-
-        mScalingEnabled = enable;
-    }
+//    public void enableScaling(boolean enable) {
+//        if (mScalingEnabled && !enable) {
+//            // shrink main card
+//            CardView currentCard = mAdapter.getCardViewAt(mViewPager.getCurrentItem());
+//            if (currentCard != null) {
+//                currentCard.animate().scaleY(1);
+//                currentCard.animate().scaleX(1);
+//            }
+//        }else if(!mScalingEnabled && enable){
+//            // grow main card
+//            CardView currentCard = mAdapter.getCardViewAt(mViewPager.getCurrentItem());
+//            if (currentCard != null) {
+//                currentCard.animate().scaleY(1.1f);
+//                currentCard.animate().scaleX(1.1f);
+//            }
+//        }
+//
+//        mScalingEnabled = enable;
+//    }
 
     @Override
     public void transformPage(View page, float position) {
