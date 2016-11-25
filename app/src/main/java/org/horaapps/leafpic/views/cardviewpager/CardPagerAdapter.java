@@ -65,10 +65,12 @@ public class CardPagerAdapter extends PagerAdapter {
             case CARD_COMPACT: v = LayoutInflater.from(container.getContext()).inflate(R.layout.card_album_compact, container, false); break;
         }
 
+        ImageView img = (ImageView) v.findViewById(org.horaapps.leafpic.R.id.album_preview);
+        img.setBackgroundColor(theme.getPrimaryColor());
 
         Glide.with(container.getContext())
                 .load(R.drawable.gilbert_profile)
-                .into(((ImageView) v.findViewById(org.horaapps.leafpic.R.id.album_preview)));
+                .into(img);
 
         String hexPrimaryColor = ColorPalette.getHexColor(theme.getPrimaryColor());
         String hexAccentColor = ColorPalette.getHexColor(theme.getAccentColor());
@@ -78,14 +80,12 @@ public class CardPagerAdapter extends PagerAdapter {
 
         String textColor = theme.getBaseTheme() != ThemeHelper.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
 
-
         switch (CardViewStyle.fromValue(position)){
             default:
             case CARD_MATERIAL:v.findViewById(R.id.linear_card_text).setBackgroundColor(theme.getCardBackgroundColor());break;
             case CARD_FLAT:
             case CARD_COMPACT:v.findViewById(R.id.linear_card_text).setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
         }
-
 
         String albumNameHtml = "<i><font color='" + textColor + "'>#PraiseDuarte</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>420</font></b>" + "<font " +

@@ -19,7 +19,7 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
 
-        <android.support.v4.view.ViewPager
+        <org.horaapps.leafpic.util.CustomViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,9 +31,6 @@
             android:paddingStart="60dp"
             android:paddingEnd="60dp"
             />
-        <!--
-        -->
-
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

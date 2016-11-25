@@ -8,12 +8,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,13 +30,12 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.util.CustomViewPager;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StaticMapProvider;
 import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.views.SquareImageView;
 import org.horaapps.leafpic.views.cardviewpager.CardPagerAdapter;
 import org.horaapps.leafpic.views.cardviewpager.ShadowTransformer;
 
@@ -409,8 +406,8 @@ public class SettingsActivity extends ThemedActivity {
 
     private void cardViewDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-        View layout = getLayoutInflater().inflate(R.layout.dialog_selec_cardview, null);
-        final ViewPager mViewPager = (ViewPager) layout.findViewById(R.id.viewPager);
+        View layout = getLayoutInflater().inflate(R.layout.dialog_select_cardview, null);
+        final CustomViewPager mViewPager = (CustomViewPager) layout.findViewById(R.id.viewPager);
         CardPagerAdapter mCardAdapter = new CardPagerAdapter(getBaseContext());
         ShadowTransformer mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
         mViewPager.setAdapter(mCardAdapter);
@@ -428,121 +425,6 @@ public class SettingsActivity extends ThemedActivity {
         });
         builder.setView(layout);
         builder.show();
-    }
-
-    @Deprecated
-    private void cardViewStyleDialog() {
-
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-        View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_card_view_style, null);
-        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_card_view_style_title);
-        ((CardView) dialogLayout.findViewById(R.id.dialog_card_view_style)).setCardBackgroundColor(getCardBackgroundColor());
-        dialogTitle.setBackgroundColor(getPrimaryColor());
-
-        final RadioGroup cardStyle = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
-        final RadioButton radioCardMaterial = (RadioButton) dialogLayout.findViewById(R.id.radio_card_material);
-        RadioButton radioCardFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
-        RadioButton radioCardCompact = (RadioButton) dialogLayout.findViewById(R.id.radio_card_compact);
-
-        setRadioTextButtonColor(radioCardMaterial, getTextColor());
-        setRadioTextButtonColor(radioCardFlat, getTextColor());
-        setRadioTextButtonColor(radioCardCompact, getTextColor());
-
-        //PREVIEW ALBUM CARD STYLE
-        final SquareImageView imgPreviewAlbumCardStyle = (SquareImageView) dialogLayout.findViewById(R.id.preview_album_card_style_image);
-        imgPreviewAlbumCardStyle.setBackgroundColor(getPrimaryColor());
-
-        LinearLayout llPreview = (LinearLayout) dialogLayout.findViewById(R.id.ll_preview_album_card);
-        llPreview.setBackgroundColor(getInvertedBackgroundColor());
-
-        final LinearLayout llPreviewFlatCompactText = (LinearLayout) dialogLayout.findViewById(R.id.preview_album_card_style_linear_card_text2);
-        final TextView txtPreviewFlatCompactAlbum = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_name2);
-        final TextView txtPreviewFlatCompactMedia = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_photos_count2);
-
-        final LinearLayout llPreviewMaterialText = (LinearLayout) dialogLayout .findViewById(R.id.preview_album_card_style_linear_card_text);
-        final TextView txtPreviewMaterialAlbum = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_name);
-        final TextView txtPreviewMaterialMedia = (TextView) dialogLayout.findViewById(R.id.preview_album_card_style_photos_count);
-
-        llPreviewMaterialText.setBackgroundColor(getCardBackgroundColor());
-        llPreviewFlatCompactText.setBackgroundColor(ColorPalette.getTransparentColor(getCardBackgroundColor(), 150));
-
-        int color=getTextColor();
-        String albumNameHtml = "<i><font color='" + color+ "'>" + getString(R.string.album) + "</font></i>";
-        txtPreviewFlatCompactAlbum.setTextColor(color);
-        txtPreviewMaterialAlbum.setTextColor(color);
-        txtPreviewFlatCompactAlbum.setText(Html.fromHtml(albumNameHtml));
-        txtPreviewMaterialAlbum.setText(Html.fromHtml(albumNameHtml));
-
-        color=getSubTextColor();
-        String hexAccentColor = String.format("#%06X", (0xFFFFFF & getAccentColor()));
-        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + "n" + "</font></b>" + "<font " +
-                "color='" + color + "'> " + getString(R.string.media) + "</font>";
-        txtPreviewFlatCompactMedia.setTextColor(color);
-        txtPreviewMaterialMedia.setTextColor(color);
-        txtPreviewFlatCompactMedia.setText(Html.fromHtml(albumPhotoCountHtml));
-        txtPreviewMaterialMedia.setText(Html.fromHtml(albumPhotoCountHtml));
-
-
-        //SP.putInt("card_view_style",CardViewStyle.CARD_MATERIAL.getValue());
-        switch (CardViewStyle.fromValue(SP.getInt("card_view_style", CardViewStyle.CARD_MATERIAL.getValue()))) {
-            case CARD_MATERIAL:
-            default:
-                radioCardMaterial.setChecked(true);
-                llPreviewFlatCompactText.setVisibility(View.GONE);
-                llPreviewMaterialText.setVisibility(View.VISIBLE);
-                break;
-            case CARD_FLAT:
-                radioCardFlat.setChecked(true);
-                llPreviewFlatCompactText.setVisibility(View.VISIBLE);
-                txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
-                llPreviewMaterialText.setVisibility(View.GONE);
-                break;
-            case CARD_COMPACT:
-                radioCardCompact.setChecked(true);
-                llPreviewFlatCompactText.setVisibility(View.VISIBLE);
-                txtPreviewFlatCompactMedia.setVisibility(View.GONE);
-                llPreviewMaterialText.setVisibility(View.GONE);
-                break;
-        }
-
-        View.OnClickListener radioClickLIstener = new View.OnClickListener() {
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.radio_card_material:
-                        llPreviewFlatCompactText.setVisibility(View.GONE);
-                        llPreviewMaterialText.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.radio_card_flat:
-                        llPreviewFlatCompactText.setVisibility(View.VISIBLE);
-                        txtPreviewFlatCompactMedia.setVisibility(View.VISIBLE);
-                        llPreviewMaterialText.setVisibility(View.GONE);
-                        break;
-                    case R.id.radio_card_compact:
-                        llPreviewFlatCompactText.setVisibility(View.VISIBLE);
-                        txtPreviewFlatCompactMedia.setVisibility(View.GONE);
-                        llPreviewMaterialText.setVisibility(View.GONE);
-                        break;
-                }
-            }
-        };
-        radioCardMaterial.setOnClickListener(radioClickLIstener);
-        radioCardFlat.setOnClickListener(radioClickLIstener);
-        radioCardCompact.setOnClickListener(radioClickLIstener);
-
-        dialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
-        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (cardStyle.getCheckedRadioButtonId()) {
-                    case R.id.radio_card_material:
-                    default: SP.putInt("card_view_style", CardViewStyle.CARD_MATERIAL.getValue()); break;
-                    case R.id.radio_card_flat: SP.putInt("card_view_style", CardViewStyle.CARD_FLAT.getValue()); break;
-                    case R.id.radio_card_compact: SP.putInt("card_view_style", CardViewStyle.CARD_COMPACT.getValue()); break;
-                }
-            }
-        });
-        dialogBuilder.setView(dialogLayout);
-        dialogBuilder.show();
     }
 
     private void mapProviderDialog() {
