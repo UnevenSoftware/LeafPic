@@ -1,15 +1,29 @@
 package org.horaapps.leafpic.util;
 
+
+import org.horaapps.leafpic.R;
+
 /**
  * Created by Jibo on 20/11/2016.
  */
 public enum CardViewStyle {
-    CARD_MATERIAL(0), CARD_FLAT(1), CARD_COMPACT(2);
+    CARD_MATERIAL(0, R.layout.card_album_material),
+    CARD_FLAT(1, R.layout.card_album_flat),
+    CARD_COMPACT(2, R.layout.card_album_compact);
 
     private static final int size = CardViewStyle.values().length;
     int value;
+    int layout;
 
-    CardViewStyle(int value) { this.value = value; }
+    CardViewStyle(int value, int layout) {
+        this.value = value;
+        this.layout = layout;
+    }
+
+    public int getLayout() {
+        return layout;
+    }
+
 
     public int getValue() { return value; }
 

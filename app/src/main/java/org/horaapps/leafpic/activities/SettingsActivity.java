@@ -31,13 +31,11 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.ColorPalette;
-import org.horaapps.leafpic.util.CustomViewPager;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StaticMapProvider;
 import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.views.cardviewpager.CardPagerAdapter;
-import org.horaapps.leafpic.views.cardviewpager.ShadowTransformer;
+import org.horaapps.leafpic.views.cardviewpager.CustomViewPager;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
@@ -107,6 +105,9 @@ public class SettingsActivity extends ThemedActivity {
                 cardViewDialog();
             }
         });
+
+        //TODO remove
+        cardViewDialog();
 
         /*** SECURITY ***/
         findViewById(R.id.ll_security).setOnClickListener(new View.OnClickListener() {
@@ -407,11 +408,9 @@ public class SettingsActivity extends ThemedActivity {
     private void cardViewDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         View layout = getLayoutInflater().inflate(R.layout.dialog_select_cardview, null);
+
         final CustomViewPager mViewPager = (CustomViewPager) layout.findViewById(R.id.viewPager);
-        CardPagerAdapter mCardAdapter = new CardPagerAdapter(getBaseContext());
-        ShadowTransformer mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
-        mViewPager.setAdapter(mCardAdapter);
-        mViewPager.setPageTransformer(false, mCardShadowTransformer);
+        //mViewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(SP.getInt("card_view_style", 0));
 

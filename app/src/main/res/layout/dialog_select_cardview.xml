@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/dialog_card_view_style_title"
+        android:layout_width="match_parent"
+        android:textColor="@color/md_dark_primary_text"
+        android:layout_height="wrap_content"
+        android:background="@color/md_dark_appbar"
+        android:padding="@dimen/big_spacing"
+        android:text="@string/album_card_view"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-    <LinearLayout
+    <org.horaapps.leafpic.views.cardviewpager.CustomViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/dialog_card_view_style_title"
-            android:layout_width="match_parent"
-            android:textColor="@color/md_dark_primary_text"
-            android:layout_height="wrap_content"
-            android:background="@color/md_dark_appbar"
-            android:padding="@dimen/big_spacing"
-            android:text="@string/album_card_view"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/big_spacing"
+        android:paddingBottom="@dimen/big_spacing"
+        android:paddingStart="60dp"
+        android:paddingEnd="60dp"
+        />
 
-        <org.horaapps.leafpic.util.CustomViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingTop="@dimen/big_spacing"
-            android:paddingBottom="@dimen/big_spacing"
-            android:paddingStart="60dp"
-            android:paddingEnd="60dp"
-            />
+</LinearLayout>
 
-    </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>

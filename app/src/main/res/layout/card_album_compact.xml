@@ -9,7 +9,11 @@
     app:cardCornerRadius="0dp"
     android:foreground="@drawable/ripple"
     app:cardElevation="@dimen/cardview_default_elevation">
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/cont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <org.horaapps.leafpic.views.SquareRelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/header_album_card"
@@ -60,5 +64,6 @@
                 android:visibility="gone"
                 />
         </LinearLayout>
-    </RelativeLayout>
+    </org.horaapps.leafpic.views.SquareRelativeLayout>
+    </LinearLayout>
 </android.support.v7.widget.CardView>
