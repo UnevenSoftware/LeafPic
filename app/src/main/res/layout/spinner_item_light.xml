@@ -6,5 +6,5 @@
     android:id="@+id/text_item"
     android:padding="@dimen/medium_spacing"
     android:textSize="@dimen/medium_text"
-    android:singleLine="true"
-    android:textColor="@color/md_grey_200" />
+    android:textColor="@color/md_grey_200"
+    android:maxLines="1"/>

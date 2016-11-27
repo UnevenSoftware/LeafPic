@@ -9,8 +9,10 @@ repositories {
 
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
@@ -27,7 +29,6 @@ android {
     aaptOptions {
         additionalParameters "--no-version-vectors"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -50,7 +51,7 @@ android {
     }
 }
 
-project.ext.supportLib = "25.0.0"
+project.ext.supportLib = "25.0.1"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

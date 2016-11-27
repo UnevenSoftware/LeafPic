@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/media_card_layout"
     android:layout_width="wrap_content"
+    android:foreground="@drawable/ripple"
     android:layout_height="wrap_content">
 
     <ImageView

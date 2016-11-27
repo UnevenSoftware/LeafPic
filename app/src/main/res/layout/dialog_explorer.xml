@@ -13,7 +13,6 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/md_dark_primary_text"
@@ -28,7 +27,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:scrollHorizontally="true"
-            />
+            android:maxLines="1"/>
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/directory_up"
             app:iiv_icon="gmd-keyboard-arrow-up"
@@ -99,7 +98,6 @@
                 android:layout_marginBottom="@dimen/small_spacing"
                 />
             <EditText
-                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/folder_name_edit_text"
@@ -107,7 +105,7 @@
                 android:layout_marginRight="@dimen/big_spacing"
                 android:layout_marginTop="@dimen/small_spacing"
                 android:layout_marginBottom="@dimen/small_spacing"
-                />
+                android:maxLines="1"/>
         </LinearLayout>
     </LinearLayout>
 

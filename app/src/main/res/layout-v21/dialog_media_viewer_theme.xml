@@ -37,6 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_apply_theme_3thAct_icon"
@@ -97,6 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         android:padding="8dp"
                         >

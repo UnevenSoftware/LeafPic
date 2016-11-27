@@ -5,8 +5,10 @@
     android:id="@+id/ll_album_bottom_sheet_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="@drawable/ripple"
     android:orientation="horizontal"
     android:clickable="true"
+    android:background="@drawable/ripple"
     >
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/folder_icon_bottom_sheet_item"

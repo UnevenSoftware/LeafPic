@@ -33,6 +33,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -57,6 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/security_icon"
@@ -98,6 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/n_columns_icon"
@@ -139,6 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/excluded_album_icon"
@@ -180,6 +184,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/fab_options_icon"
@@ -241,6 +246,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -265,6 +271,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/basic_theme_icon"
@@ -306,6 +313,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/primary_color_icon"
@@ -347,6 +355,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/accent_color_icon"
@@ -388,6 +397,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/custom_3thact_icon"
@@ -429,6 +439,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/card_view_style_icon"
@@ -471,6 +482,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:visibility="gone"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/traslucent_statusbar_icon"
@@ -531,6 +543,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:visibility="gone"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/nav_bar_icon"
@@ -593,6 +606,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -617,6 +631,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_max_luminosity_icon"
@@ -675,6 +690,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
@@ -732,6 +748,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         android:visibility="gone">
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -791,6 +808,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         android:visibility="gone">
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -853,6 +871,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -877,6 +896,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_include_video"
@@ -934,6 +954,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_player_Icon"
@@ -994,6 +1015,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1017,6 +1039,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/sub_scaling_Icon"
@@ -1075,6 +1098,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/use_media_mediastore_Icon"
@@ -1133,6 +1157,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/map_provider_icon"
@@ -1174,6 +1199,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/auto_update_media_Icon"

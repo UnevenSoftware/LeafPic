@@ -54,6 +54,7 @@
                         android:visibility="gone"
                         android:gravity="center"
                         android:clickable="true"
+                        android:background="@drawable/ripple"
                     />
                 </LinearLayout>
             </ScrollView>
