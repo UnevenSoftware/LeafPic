@@ -65,7 +65,7 @@ public class Security {
 
         passwordDialogTitle.setBackgroundColor(activity.getPrimaryColor());
         passwordDialogCard.setBackgroundColor(activity.getCardBackgroundColor());
-        ThemeHelper.setCursorDrawableColor(editTextPassword, activity.getTextColor());
+        ThemeHelper.setCursorColor(editTextPassword, activity.getTextColor());
         editTextPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextPassword.setTextColor(activity.getTextColor());
         passwordDialogBuilder.setView(PasswordDialogLayout);

@@ -1,137 +1,128 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
-    <RelativeLayout
-        android:id="@+id/rl_bottom_sheet_title"
+    android:id="@+id/ll_select_folder"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- ACTION / TITLE BAR -->
+    <LinearLayout
+        android:id="@+id/Relative_Album_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/medium_spacing"
-        android:paddingRight="@dimen/medium_spacing"
-        android:paddingLeft="@dimen/medium_spacing"
-        android:paddingBottom="@dimen/medium_spacing"
-        android:foreground="@drawable/ripple"
-        android:clickable="true"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:layout_marginEnd="44dp"
-            >
-            <TextView
-                android:id="@+id/bottom_sheet_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/md_dark_primary_text"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/bottom_sheet_sub_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/md_dark_primary_text"
-                android:textSize="14sp"
-                android:text="@string/local_folder"
-                android:ellipsize="start"
-                android:textStyle="italic"
-                />
-        </LinearLayout>
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/toggle_hidden_icon"
-            android:layout_height="@dimen/icon_width_height"
-            android:layout_width="@dimen/icon_width_height"
-            android:layout_gravity="center_vertical"
-            android:hapticFeedbackEnabled="true"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            app:iiv_icon="gmd-folder"
-            />
-    </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/ll_select_folder"
         android:orientation="vertical"
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/explore_mode_panel"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:targetApi="lollipop"
+        android:elevation="2dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom_sheet_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="30dp"
-            tools:targetApi="lollipop">
+            android:paddingStart="22dp"
+            android:paddingEnd="24dp"
+            android:foreground="@drawable/ripple"
+            android:clickable="true"
+            >
             <LinearLayout
-                android:id="@+id/ll_create_new_folder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/medium_spacing"
-                android:paddingBottom="@dimen/medium_spacing"
-                android:paddingRight="@dimen/big_spacing"
-                android:background="@drawable/ripple"
-                android:clickable="true"
-                >
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_height="@dimen/icon_width_height"
-                    android:layout_width="@dimen/icon_width_height"
-                    android:id="@+id/create_new_folder"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/big_spacing"
-                    android:layout_marginRight="@dimen/big_spacing"
-                    app:iiv_icon="gmd-create-new-folder"
-                />
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/create_new_folder_text"
+                    android:id="@+id/bottom_sheet_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/create_new_folder"
-                    android:textSize="16sp"
-                />
+                    android:textColor="@color/md_dark_primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/bottom_sheet_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/md_dark_primary_text"
+                    android:textSize="14sp"
+                    android:text="@string/local_folder"
+                    android:ellipsize="start"
+                    android:textStyle="italic"
+                    />
             </LinearLayout>
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/toggle_hidden_icon"
+                android:layout_height="@dimen/icon_width_height"
+                android:layout_width="@dimen/icon_width_height"
+                android:clickable="false"
+                app:iiv_icon="gmd-folder"
+                app:iiv_color="@color/md_white_1000"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_explore_mode_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp">
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/storage_spinner"
+                android:spinnerMode="dropdown"/>
             <RelativeLayout
-                android:id="@+id/rl_done"
-                android:layout_weight="2"
-                android:layout_width="0dp"
+                android:id="@+id/rl_create_new_folder"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium_spacing"
                 android:paddingBottom="@dimen/medium_spacing"
-                android:background="@drawable/ripple"
+                android:foreground="@drawable/ripple"
                 android:clickable="true"
                 >
                 <com.mikepenz.iconics.view.IconicsImageView
-                    android:id="@+id/done"
                     android:layout_height="@dimen/icon_width_height"
                     android:layout_width="@dimen/icon_width_height"
                     android:layout_marginEnd="@dimen/big_spacing"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
-                    app:iiv_icon="gmd-done"
-                />
+                    app:iiv_icon="gmd-create-new-folder"
+                    app:iiv_color="@color/md_white_1000"/>
             </RelativeLayout>
         </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/folders"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical"
-                android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-            />
-            <ProgressBar
-                android:id="@+id/progress_copy_move"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:layout_margin="@dimen/big_spacing"
-                android:visibility="gone"
-                />
-        </RelativeLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <!-- ITEMS RECYCLE VIEW -->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/folders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_bottomsheet_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_layout_margin"
+        app:elevation="@dimen/fab_elevation"
+        app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        />
+    <!--app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"-->
+
+</android.support.design.widget.CoordinatorLayout>

@@ -25,7 +25,6 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 public class VideoFragment extends Fragment {
 
     private Media video;
-    private View.OnClickListener onClickListener;
 
     public static VideoFragment newInstance(Media media) {
         VideoFragment videoFragment = new VideoFragment();
@@ -35,10 +34,6 @@ public class VideoFragment extends Fragment {
         videoFragment.setArguments(args);
 
         return videoFragment;
-    }
-
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
     }
 
     @Override

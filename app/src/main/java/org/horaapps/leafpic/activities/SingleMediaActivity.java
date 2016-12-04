@@ -35,7 +35,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.yalantis.ucrop.UCrop;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.SelectAlbumBottomSheet;
+import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
@@ -68,7 +68,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private MediaPagerAdapter adapter;
     private PreferenceUtil SP;
     private RelativeLayout ActivityBackground;
-    private SelectAlbumBottomSheet bottomSheetDialogFragment;
+
     private Toolbar toolbar;
     private boolean fullScreenMode, customUri = false;
 
@@ -76,10 +76,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
-
-        SP = PreferenceUtil.getInstance(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
+
+        SP = PreferenceUtil.getInstance(getApplicationContext());
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
+
+        initUi();
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -103,23 +106,22 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 }
                 getAlbums().addAlbum(0, album);
             }
-            initUI();
-            setupUI();
+
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    private void initUI() {
+    private void initUi() {
 
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        toolbar.setNavigationIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_arrow_left));
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setRecentApp(getString(R.string.app_name));
+
         setupSystemUI();
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
@@ -130,26 +132,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         else hideSystemUI();
                     }
                 });
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
 
-        adapter.setVideoOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SP.getBoolean("set_internal_player", false)) {
-                    Intent mpdIntent = new Intent(SingleMediaActivity.this, PlayerActivity.class)
-                            .setData(getAlbum().getCurrentMedia().getUri());
-                    startActivity(mpdIntent);
-                } else {
-                    Intent intentOpenWith = new Intent(Intent.ACTION_VIEW);
-                    intentOpenWith.setDataAndType(
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getUri(),
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMimeType());
-                    startActivity(intentOpenWith);
-                }
-            }
-        });
-
-        getSupportActionBar().setTitle((getAlbum().getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+        updatePageTitle(getAlbum().getCurrentMediaIndex());
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(getAlbum().getCurrentMediaIndex());
@@ -162,8 +146,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             @Override
             public void onPageSelected(int position) {
-                getAlbum().setCurrentPhotoIndex(position);
-                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+                getAlbum().setCurrentMedia(position);
+                updatePageTitle(position);
                 invalidateOptionsMenu();
             }
 
@@ -179,11 +163,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
         }
-
     }
 
-    private void setupUI() {
-
+    public void updateUiElements() {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(
@@ -198,6 +180,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         setStatusBarColor();
         setNavBarColor();
+        setRecentApp(getString(R.string.app_name));
 
 
         /**** SETTINGS ****/
@@ -205,6 +188,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_max_luminosity", false))
             updateBrightness(1.0F);
         else try {
+            // TODO: 12/4/16 redo
             float brightness = android.provider.Settings.System.getInt(
                     getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
             brightness = brightness == 1.0F ? 255.0F : brightness;
@@ -216,13 +200,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupUI();
+    private void updatePageTitle(int position) {
+        getSupportActionBar().setTitle((position + 1) + " " + getString(R.string.of) + " " + adapter.getCount());
     }
 
     @Override
@@ -276,7 +258,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null && resultCode == RESULT_OK) {
             switch (requestCode) {
                 case UCrop.REQUEST_CROP:
@@ -297,6 +279,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
                 default:
+                    super.onActivityResult(requestCode, resultCode, data);
                     break;
             }
         }
@@ -322,7 +305,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         }
         adapter.notifyDataSetChanged();
-        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+        updatePageTitle(mViewPager.getCurrentItem());
     }
 
     @Override
@@ -349,17 +332,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
 
             case R.id.action_copy:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
-                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
-                    @Override
-                    public void folderSelected(String path) {
-                        getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.copy_to))
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
+                            @Override
+                            public void folderSelected(String path) {
+                                getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
+                            }
+                        }).show();
                 break;
 
             case R.id.name_sort_action:
@@ -464,27 +444,24 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.action_move:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
-                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
-                    @Override
-                    public void folderSelected(String path) {
-                        getAlbum().moveCurrentMedia(getApplicationContext(), path);
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.move_to))
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
+                            @Override
+                            public void folderSelected(String path) {
+                                getAlbum().moveCurrentMedia(getApplicationContext(), path);
 
-                        if (getAlbum().getMedia().size() == 0) {
-                            if (customUri) finish();
-                            else {
-                                getAlbums().removeCurrentAlbum();
-                                //((MyApplication) getApplicationContext()).removeCurrentAlbum();
-                                displayAlbums(false);
+                                if (getAlbum().getMedia().size() == 0) {
+                                    if (customUri) finish();
+                                    else {
+                                        getAlbums().removeCurrentAlbum();
+                                        displayAlbums(false);
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                                updatePageTitle(mViewPager.getCurrentItem());
                             }
-                        }
-                        adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getCount());
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                        }).show();
 
                 return true;
 

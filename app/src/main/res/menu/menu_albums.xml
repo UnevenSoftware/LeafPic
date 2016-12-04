@@ -65,10 +65,10 @@
                         android:id="@+id/type_sort_action"
                         android:title="@string/type"
                         app:showAsAction="never" />
-                <item
-                    android:id="@+id/numeric_sort_action"
-                    android:title="@string/numeric"
-                    app:showAsAction="never" />
+                    <item
+                        android:id="@+id/numeric_sort_action"
+                        android:title="@string/numeric"
+                        app:showAsAction="never" />
                 </group>
                 <group android:checkableBehavior="all">
                     <item
@@ -98,10 +98,6 @@
     </group>
 
     <group android:id="@+id/album_options_menu">
-        <item
-            android:id="@+id/excludeAlbumButton"
-            android:title="@string/exclude"
-            app:showAsAction="never" />
         <item
             android:id="@+id/hideAlbumButton"
             android:title="@string/hide"

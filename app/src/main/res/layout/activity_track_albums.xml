@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_select_folder"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:background="@color/md_dark_appbar"
+            android:windowActionBarOverlay="true"
+            />
+        <RelativeLayout
+            android:id="@+id/rl_ea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/excluded_albums"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:scrollbarThumbVertical="@drawable/ic_scrollbar"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nothing_to_show"
+                android:text="@string/there_is_nothing_to_show"
+                android:textColor="@color/md_white_1000"
+                android:visibility="invisible"
+                android:textSize="@dimen/sub_big_text"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_whitelist_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_layout_margin"
+        app:elevation="@dimen/fab_elevation"
+        app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.activities;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -15,13 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
+import org.horaapps.leafpic.util.ThemeHelper;
 
 /**
  * Created by dnld on 22/05/16.
@@ -29,9 +28,8 @@ import org.horaapps.leafpic.util.Security;
 public class SecurityActivity extends ThemedActivity {
 
     private Toolbar toolbar;
-    private LinearLayout llbody;
+
     private LinearLayout llroot;
-    private PreferenceUtil SP;
     private SwitchCompat swActiveSecurity;
     private SwitchCompat swApplySecurityDelete;
     private SwitchCompat swApplySecurityHidden;
@@ -40,15 +38,15 @@ public class SecurityActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_security);
-        SP = PreferenceUtil.getInstance(getApplicationContext());
-        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
-        llbody = (LinearLayout) findViewById(org.horaapps.leafpic.R.id.ll_security_dialog_body);
         llroot = (LinearLayout) findViewById(org.horaapps.leafpic.R.id.root);
-
+        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         swActiveSecurity = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.active_security_switch);
         swApplySecurityDelete = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_switch);
         swApplySecurityHidden = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_switch);
 
+        PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
+
+        initUi();
         /** - SWITCHES - **/
         /** - ACTIVE SECURITY - **/
         swActiveSecurity.setChecked(Security.isPasswordSet(getApplicationContext()));
@@ -57,13 +55,12 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 swActiveSecurity.setChecked(!swActiveSecurity.isChecked());
-                updateSwitchColor(swActiveSecurity, getAccentColor());
+                setSwitchColor(swActiveSecurity, getAccentColor());
                 if (swActiveSecurity.isChecked()) setPasswordDialog();
                 else Security.clearPassword(getApplicationContext());
                 toggleEnabledChild(swActiveSecurity.isChecked());
             }
         });
-        updateSwitchColor(swActiveSecurity, getAccentColor());
 
         /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
         swApplySecurityHidden.setChecked(SP.getBoolean("password_on_hidden", false));
@@ -73,10 +70,9 @@ public class SecurityActivity extends ThemedActivity {
             public void onClick(View v) {
                 swApplySecurityHidden.setChecked(!swApplySecurityHidden.isChecked());
                 Security.setPasswordOnHidden(getApplicationContext(), swApplySecurityHidden.isChecked());
-                updateSwitchColor(swApplySecurityHidden, getAccentColor());
+                setSwitchColor(swApplySecurityHidden, getAccentColor());
             }
         });
-        updateSwitchColor(swApplySecurityHidden, getAccentColor());
 
         /**ACTIVE SECURITY ON DELETE ACTION**/
         swApplySecurityDelete.setChecked(SP.getBoolean("password_on_delete", false));
@@ -86,12 +82,20 @@ public class SecurityActivity extends ThemedActivity {
             public void onClick(View v) {
                 swApplySecurityDelete.setChecked(!swApplySecurityDelete.isChecked());
                 Security.setPasswordOnDelete(getApplicationContext(), swApplySecurityDelete.isChecked());
-                updateSwitchColor(swApplySecurityDelete, getAccentColor());
+                setSwitchColor(swApplySecurityDelete, getAccentColor());
             }
         });
-        updateSwitchColor(swApplySecurityDelete, getAccentColor());
-        setupUI();
-        toggleEnabledChild(swActiveSecurity.isChecked());
+    }
+
+    private void initUi() {
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void setPasswordDialog() {
@@ -109,11 +113,11 @@ public class SecurityActivity extends ThemedActivity {
         editTextPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextPassword.setTextColor(getTextColor());
         editTextPassword.setHintTextColor(getSubTextColor());
-        setCursorDrawableColor(editTextPassword, getTextColor());
+        ThemeHelper.setCursorColor(editTextPassword, getTextColor());
         editTextConfirmPassword.getBackground().mutate().setColorFilter(getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextConfirmPassword.setTextColor(getTextColor());
         editTextConfirmPassword.setHintTextColor(getSubTextColor());
-        setCursorDrawableColor(editTextConfirmPassword, getTextColor());
+        ThemeHelper.setCursorColor(editTextConfirmPassword, getTextColor());
         passwordDialog.setView(PasswordDialogLayout);
 
         AlertDialog dialog = passwordDialog.create();
@@ -123,7 +127,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 swActiveSecurity.setChecked(false);
-                updateSwitchColor(swActiveSecurity, getAccentColor());
+                setSwitchColor(swActiveSecurity, getAccentColor());
                 toggleEnabledChild(swActiveSecurity.isChecked());
                 Security.clearPassword(getApplicationContext());
             }
@@ -147,8 +151,6 @@ public class SecurityActivity extends ThemedActivity {
     }
 
     private void toggleEnabledChild(boolean enable) {
-        //swApplySecurityDelete.setEnabled(enable);
-        //swApplySecurityHidden.setEnabled(enable);
         findViewById(R.id.ll_security_body_apply_hidden).setEnabled(enable);
         findViewById(R.id.ll_security_body_apply_delete).setClickable(enable);
         if(enable){
@@ -156,8 +158,7 @@ public class SecurityActivity extends ThemedActivity {
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(getTextColor());
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getIconColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(getTextColor());
-        }
-        else{
+        } else {
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getSubTextColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(getSubTextColor());
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getSubTextColor());
@@ -165,48 +166,34 @@ public class SecurityActivity extends ThemedActivity {
         }
     }
 
-    private void setupUI() {
+
+    @Override
+    public void updateUiElements() {
         setRecentApp(getString(R.string.security));
         toolbar.setBackgroundColor(getPrimaryColor());
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(
-                new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_arrow_back)
-                        .color(Color.WHITE)
-                        .sizeDp(19));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        toolbar.setTitle(getString(R.string.security));
+
+        setSwitchColor(swActiveSecurity, getAccentColor());
+        setSwitchColor(swApplySecurityHidden, getAccentColor());
+        setSwitchColor(swApplySecurityDelete, getAccentColor());
+        toggleEnabledChild(swActiveSecurity.isChecked());
 
         setStatusBarColor();
         setNavBarColor();
 
-        IconicsImageView imgActiveSecurity = (IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_icon);
-        TextView txtActiveSecurity = (TextView) findViewById(org.horaapps.leafpic.R.id.active_security_item_title);
-        TextView txtApplySecurity = (TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_on);
-        IconicsImageView imgApplySecurityHidden = (IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon);
-        TextView txtApplySecurityHidden = (TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title);
-        IconicsImageView imgApplySecurityDelete = (IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon);
-        TextView txtApplySecurityDelete = (TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title);
-        CardView securityDialogCard = (CardView) findViewById(org.horaapps.leafpic.R.id.security_dialog_card);
         llroot.setBackgroundColor(getBackgroundColor());
-        securityDialogCard.setCardBackgroundColor(getCardBackgroundColor());
+        ((CardView) findViewById(org.horaapps.leafpic.R.id.security_dialog_card)).setCardBackgroundColor(getCardBackgroundColor());
 
         /**ICONS**/
         int color = getIconColor();
-        imgActiveSecurity.setColor(color);
-        imgApplySecurityHidden.setColor(color);
-        imgApplySecurityDelete.setColor(color);
+        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_icon)).setColor(color);
+        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(color);
+        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(color);
 
         /**TEXTVIEWS**/
-        color=getTextColor();
-        txtActiveSecurity.setTextColor(color);
-        txtApplySecurity.setTextColor(color);
-        txtApplySecurityHidden.setTextColor(color);
-        txtApplySecurityDelete.setTextColor(color);
+        color = getTextColor();
+        ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_item_title)).setTextColor(color);
+        ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_on)).setTextColor(color);
+        ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(color);
+        ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(color);
     }
 }

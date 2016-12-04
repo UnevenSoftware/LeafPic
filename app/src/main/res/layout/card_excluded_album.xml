@@ -30,14 +30,14 @@
             android:layout_weight="6"
             >
             <TextView
-                android:id="@+id/Excluded_Title_Item"
+                android:id="@+id/folder_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/md_dark_background"
                 android:textSize="16sp"
                 />
             <TextView
-                android:id="@+id/Excluded_Path_Item"
+                android:id="@+id/folder_path"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/md_grey_400"
@@ -46,7 +46,7 @@
         </LinearLayout>
 
         <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/UnExclude_icon"
+            android:id="@+id/tracked_status"
             android:layout_height="16dp"
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -160,8 +161,8 @@
         </activity>
 
         <activity
-            android:name="org.horaapps.leafpic.activities.ExcludedAlbumsActivity"
-            android:label="@string/excluded_albums"
+            android:name="org.horaapps.leafpic.activities.WhiteListActivity"
+            android:label="@string/chose_folders"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.ExcludedAlbums" />
@@ -188,6 +189,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+
+        <service
+            android:name=".LookForMediaJob"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
 
     </application>
 </manifest>

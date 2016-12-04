@@ -31,4 +31,11 @@
     <dimen name="card_corner_radius">1dp</dimen>
     <dimen name="card_elevation">5dp</dimen>
     <dimen name="card_spacing">10dp</dimen>
+
+    <!--FAB-->
+    <dimen name="fab_border_width">0dp</dimen>
+    <dimen name="fab_elevation">8dp</dimen>
+    <dimen name="fab_layout_margin">16dp</dimen>
+    <dimen name="fab_pressed_translationZ">12dp</dimen>
+
 </resources>

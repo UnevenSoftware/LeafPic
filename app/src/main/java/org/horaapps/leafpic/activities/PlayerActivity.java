@@ -107,10 +107,54 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   private Toolbar toolbar;
   private boolean fullscreen = false;
 
-  @SuppressWarnings("ResourceAsColor")
-  private void initUI(){
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(org.horaapps.leafpic.R.layout.activity_player);
+
+    FrameLayout root = (FrameLayout) findViewById(org.horaapps.leafpic.R.id.root);
+    findViewById(R.id.video_frame).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        toggleControlsVisibility();
+      }
+    });
+
+    root.setOnKeyListener(new OnKeyListener() {
+      @Override
+      public boolean onKey(View v, int keyCode, KeyEvent event) {
+        return !(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_MENU) && mediaController.dispatchKeyEvent(event);
+      }
+    });
+
+    root.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+
+    shutterView = findViewById(org.horaapps.leafpic.R.id.shutter);
+
+    videoFrame = (AspectRatioFrameLayout) findViewById(org.horaapps.leafpic.R.id.video_frame);
+    surfaceView = (SurfaceView) findViewById(org.horaapps.leafpic.R.id.surface_view);
+    surfaceView.getHolder().addCallback(this);
+
+    mediaController = new CustomMediaController(this, this);
+
+    mediController_anchor =  findViewById(org.horaapps.leafpic.R.id.media_player_anchor);
+    mediaController.setAnchorView(root);
+
+    initUi();
+
+    CookieHandler currentHandler = CookieHandler.getDefault();
+    if (currentHandler != defaultCookieManager)
+      CookieHandler.setDefault(defaultCookieManager);
+
+
+    audioCapabilitiesReceiver = new AudioCapabilitiesReceiver(this, this);
+    audioCapabilitiesReceiver.register();
+  }
+
+  private void initUi() {
+    toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
     setSupportActionBar(toolbar);
-    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
     toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
@@ -119,24 +163,27 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
       }
     });
     toolbar.setTitle(getIntent().getData().getPath());
-    //getSupportActionBar().setDisplayShowTitleEnabled(false);
-
     getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                   // | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                    // | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                     | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
+
+
+
 
     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
             .setDuration(0).start();
     mediController_anchor.setPadding(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
 
-    mediaController.setBackgroundColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
+    mediaController.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
+  }
 
-    setStatusBarColor();
-    setNavBarColor();
+  @SuppressWarnings("ResourceAsColor")
+  public void updateUiElements() {
     setRecentApp(getString(org.horaapps.leafpic.R.string.app_name));
   }
 
@@ -149,7 +196,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
   @Override
   public void setNavBarColor() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.transparent_black));
+      getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
     }
   }
 
@@ -204,50 +251,7 @@ public class PlayerActivity extends ThemedActivity implements SurfaceHolder.Call
     }
   }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(org.horaapps.leafpic.R.layout.activity_player);
 
-    FrameLayout root = (FrameLayout) findViewById(org.horaapps.leafpic.R.id.root);
-    findViewById(R.id.video_frame).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        toggleControlsVisibility();
-      }
-    });
-
-    root.setOnKeyListener(new OnKeyListener() {
-      @Override
-      public boolean onKey(View v, int keyCode, KeyEvent event) {
-        return !(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE || keyCode == KeyEvent.KEYCODE_MENU) && mediaController.dispatchKeyEvent(event);
-      }
-    });
-
-    root.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.md_black_1000));
-
-    shutterView = findViewById(org.horaapps.leafpic.R.id.shutter);
-
-    videoFrame = (AspectRatioFrameLayout) findViewById(org.horaapps.leafpic.R.id.video_frame);
-    surfaceView = (SurfaceView) findViewById(org.horaapps.leafpic.R.id.surface_view);
-    surfaceView.getHolder().addCallback(this);
-
-    mediaController = new CustomMediaController(this, this);
-
-    mediController_anchor =  findViewById(org.horaapps.leafpic.R.id.media_player_anchor);
-    mediaController.setAnchorView(root);
-    //mediaController.setPaddingRelative(0,0,0,Measure.getNavBarHeight(PlayerActivity.this));
-    toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
-    initUI();
-
-    CookieHandler currentHandler = CookieHandler.getDefault();
-    if (currentHandler != defaultCookieManager)
-      CookieHandler.setDefault(defaultCookieManager);
-
-
-    audioCapabilitiesReceiver = new AudioCapabilitiesReceiver(this, this);
-    audioCapabilitiesReceiver.register();
-  }
 
   @Override
   public void onNewIntent(Intent intent) {

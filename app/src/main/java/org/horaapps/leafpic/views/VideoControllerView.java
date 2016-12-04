@@ -70,8 +70,7 @@ public class VideoControllerView extends FrameLayout {
     super(context);
     mContext = context;
     mUseFastForward = useFastForward;
-    themeHelper = new ThemeHelper(context);
-
+    themeHelper = ThemeHelper.getThemeHelper(context);
     Log.i(TAG, TAG);
   }
 

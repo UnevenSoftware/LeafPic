@@ -43,6 +43,17 @@ public class ColorPalette {
         return  ColorUtils.setAlphaComponent(color, alpha);
     }
 
+    public static String getHexColor(int color) {
+        return String.format("#%06X", (0xFFFFFF & color));
+    }
+
+    public static int getDarkerColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.72f; // value component
+        return Color.HSVToColor(hsv);
+    }
+
     public static int[] getTransparencyShadows(int color) {
         int[] shadows = new int[10];
         for (int i=0; i<10;i++)
