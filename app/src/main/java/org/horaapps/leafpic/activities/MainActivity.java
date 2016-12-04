@@ -186,7 +186,6 @@ public class MainActivity extends SharedMediaActivity {
     }
     invalidateOptionsMenu();
     firstLaunch = false;
-    requestSdCardPermissions();
   }
 
   private void displayCurrentAlbumMedia(boolean reload) {

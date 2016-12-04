@@ -137,7 +137,7 @@ public class DonateActivity extends ThemedActivity {
             @Override
             public boolean onLongClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copied to Clipboard", ((TextView) v).getText());
+                ClipData clip = ClipData.newPlainText("HoraApps BTC", ((TextView) v).getText());
                 clipboard.setPrimaryClip(clip);
                 StringUtils.showToast(getApplicationContext(),getString(org.horaapps.leafpic.R.string.address_copied));
                 return true;
