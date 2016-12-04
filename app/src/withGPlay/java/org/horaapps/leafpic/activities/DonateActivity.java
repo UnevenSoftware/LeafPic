@@ -63,7 +63,7 @@ public class DonateActivity extends ThemedActivity {
         setNavBarColor();
         cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);
-
+        initUi();
         mHelper = new IabHelper(this, SecretConstants.getBase64EncodedPublicKey(getApplicationContext()));
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
@@ -74,6 +74,7 @@ public class DonateActivity extends ThemedActivity {
                 // Hooray, IAB is fully set up!
             }
         });
+
     }
 
 
@@ -86,16 +87,11 @@ public class DonateActivity extends ThemedActivity {
         mHelper = null;
     }
 
-    @Override
-    public void onPostResume() {
-        super.onPostResume();
-        setTheme();
-    }
 
-    private void setTheme(){
+    private void initUi(){
 
         /**** ToolBar *****/
-        toolbar.setBackgroundColor(getPrimaryColor());
+
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(
                 new IconicsDrawable(this)
@@ -110,11 +106,6 @@ public class DonateActivity extends ThemedActivity {
         });
         toolbar.setTitle(getString(org.horaapps.leafpic.R.string.donate));
 
-        setStatusBarColor();
-        setNavBarColor();
-        setRecentApp(getString(org.horaapps.leafpic.R.string.donate));
-
-
         final Button btnDonateIap = (Button) findViewById(R.id.button_donate_play_store);
         btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate).toUpperCase(), progress));
 
@@ -128,16 +119,54 @@ public class DonateActivity extends ThemedActivity {
                 btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate).toUpperCase(), progress));
             }
 
+            @Override public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
+
+        /** ACTIONS **/
+        ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
+        findViewById(org.horaapps.leafpic.R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onClick(View v) {
+                cts.launchUrl("https://www.paypal.me/HoraApps");
             }
         });
+
+        findViewById(org.horaapps.leafpic.R.id.donate_bitcoin_item).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Copied to Clipboard", ((TextView) v).getText());
+                clipboard.setPrimaryClip(clip);
+                StringUtils.showToast(getApplicationContext(),getString(org.horaapps.leafpic.R.string.address_copied));
+                return true;
+            }
+        });
+
+        findViewById(R.id.button_donate_play_store).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (mHelper != null) mHelper.flagEndAsync();
+
+                mHelper.launchPurchaseFlow(DonateActivity.this, "donation_" + progress, 123, new IabHelper.OnIabPurchaseFinishedListener() {
+                    @Override
+                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                        mHelper.consumeAsync(info, mPurchaseFinishedListener);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void updateUiElements() {
+
+        toolbar.setBackgroundColor(getPrimaryColor());
+        setStatusBarColor();
+        setNavBarColor();
+        setRecentApp(getString(org.horaapps.leafpic.R.string.donate));
 
         /**** Title Cards ***/
         ((TextView) findViewById(org.horaapps.leafpic.R.id.team_name)).setTextColor(getAccentColor());
@@ -174,40 +203,5 @@ public class DonateActivity extends ThemedActivity {
 
         /***** ScrolView *****/
         setScrollViewColor(scr);
-
-        /** ACTIONS **/
-        ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
-        findViewById(org.horaapps.leafpic.R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cts.launchUrl("https://www.paypal.me/HoraApps");
-            }
-        });
-
-        findViewById(org.horaapps.leafpic.R.id.donate_bitcoin_item).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copied to Clipboard", ((TextView) v).getText());
-                clipboard.setPrimaryClip(clip);
-                StringUtils.showToast(getApplicationContext(),getString(org.horaapps.leafpic.R.string.address_copied));
-                return true;
-            }
-        });
-
-        findViewById(R.id.button_donate_play_store).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (mHelper != null) mHelper.flagEndAsync();
-
-                mHelper.launchPurchaseFlow(DonateActivity.this, "donation_" + progress, 123, new IabHelper.OnIabPurchaseFinishedListener() {
-                    @Override
-                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
-                        mHelper.consumeAsync(info, mPurchaseFinishedListener);
-                    }
-                });
-            }
-        });
     }
 }

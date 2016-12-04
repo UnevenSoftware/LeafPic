@@ -42,7 +42,7 @@ public class AlertDialogsHelper {
         ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.dialog_chose_provider_title)).setCardBackgroundColor(activity.getCardBackgroundColor());
         textViewTitle.setBackgroundColor(activity.getPrimaryColor());
         textViewTitle.setText(title);
-        ThemeHelper.setCursorDrawableColor(editText, activity.getTextColor());
+        ThemeHelper.setCursorColor(editText, activity.getTextColor());
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         editText.setLayoutParams(layoutParams);

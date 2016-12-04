@@ -22,6 +22,7 @@ import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.Theme;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public void updateTheme(Context context) {
         theme.updateTheme();
         placeholder = ((BitmapDrawable) theme.getPlaceHolder());
-        cvs = CardViewStyle.fromValue(PreferenceUtil.getInstance(context).getInt("card_view_style",CardViewStyle.CARD_MATERIAL.getValue()));
+        cvs = CardViewStyle.fromValue(PreferenceUtil.getInstance(context).getInt("card_view_style",CardViewStyle.MATERIAL.getValue()));
     }
 
     @Override
@@ -57,9 +58,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         View v;
         switch (cvs) {
             default:
-            case CARD_MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
-            case CARD_FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
-            case CARD_COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
+            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
+            case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
+            case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
         }
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
@@ -91,21 +92,21 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         if (hexAccentColor.equals(hexPrimaryColor))
             hexAccentColor = ColorPalette.getHexColor(ColorPalette.getDarkerColor(theme.getAccentColor()));
 
-        String textColor = theme.getBaseTheme() != ThemeHelper.LIGHT_THEME ? "#FAFAFA" : "#2b2b2b";
+        String textColor = theme.getBaseTheme().equals(Theme.LIGHT) ? "#2B2B2B" : "#FAFAFA";
 
         if (a.isSelected()) {
             holder.layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectedIcon.setVisibility(View.VISIBLE);
-            if (theme.getBaseTheme() == ThemeHelper.LIGHT_THEME ) textColor = "#FAFAFA";
+            if (theme.getBaseTheme().equals(Theme.LIGHT)) textColor = "#FAFAFA";
         } else {
             holder.picture.clearColorFilter();
             holder.selectedIcon.setVisibility(View.GONE);
             switch (cvs){
                 default:
-                case CARD_MATERIAL:holder.layout.setBackgroundColor(theme.getCardBackgroundColor());break;
-                case CARD_FLAT:
-                case CARD_COMPACT:holder.layout.setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
+                case MATERIAL:holder.layout.setBackgroundColor(theme.getCardBackgroundColor());break;
+                case FLAT:
+                case COMPACT:holder.layout.setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
             }
         }
 
@@ -113,7 +114,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
                 "color='" + textColor + "'> " + holder.nPhotos.getContext().getString(R.string.media) + "</font>";
 
-        if (cvs.equals(CardViewStyle.CARD_COMPACT)) {
+        if (cvs.equals(CardViewStyle.COMPACT)) {
+            // TODO: 12/4/16 ehhhhh
             albumPhotoCountHtml = "<b><font color='" + textColor + "'>#" + a.getCount() + "</font></b>";
         }
 

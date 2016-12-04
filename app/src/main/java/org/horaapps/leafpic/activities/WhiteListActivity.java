@@ -37,6 +37,7 @@ import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.StringUtils;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,15 +54,23 @@ public class WhiteListActivity extends ThemedActivity {
     ArrayList<Item> folders = new ArrayList<>();
     ArrayList<String> alreadyTracked;
 
+    RecyclerView mRecyclerView;
+    Toolbar toolbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_albums);
+        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
+        mRecyclerView = (RecyclerView) findViewById(org.horaapps.leafpic.R.id.excluded_albums);
+        fabWHDone = (FloatingActionButton) findViewById(R.id.fab_whitelist_done);
+
+        initUi();
         tracker = HandlingAlbums.getInstance(getApplicationContext());
         alreadyTracked = tracker.getTrackedPaths();
         lookForFoldersInMediaStore();
-        initUI();
     }
+
 
     private void lookForFoldersInMediaStore() {
         String[] projection = new String[]{
@@ -99,7 +108,7 @@ public class WhiteListActivity extends ThemedActivity {
         }
     }
 
-    @Deprecated
+    @TestOnly
     private void fetchFolders(File dir) {
 //        if (!alreadyTracked.contains(dir)) {
 //            if (isFolderWithMedia(dir))
@@ -111,7 +120,7 @@ public class WhiteListActivity extends ThemedActivity {
 //        }
     }
 
-    @Deprecated
+    @TestOnly
     private boolean isFolderWithMedia(File dir) {
         String[] list = dir.list(new ImageFileFilter(true));
         return list != null && list.length > 0;
@@ -141,28 +150,23 @@ public class WhiteListActivity extends ThemedActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initUI(){
 
-        RecyclerView mRecyclerView;
-        Toolbar toolbar;
+    private void initUi() {
 
-        /** TOOLBAR **/
-        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        /** RECYCLE VIEW**/
-        mRecyclerView = (RecyclerView) findViewById(org.horaapps.leafpic.R.id.excluded_albums);
         mRecyclerView.setHasFixedSize(true);
-
         mRecyclerView.setAdapter(new ItemsAdapter());
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setBackgroundColor(getBackgroundColor());
 
-        /** FAB **/
-        fabWHDone = (FloatingActionButton) findViewById(R.id.fab_whitelist_done);
-        fabWHDone.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         fabWHDone.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_done).color(Color.WHITE));
         fabWHDone.setVisibility(View.VISIBLE);
         fabWHDone.setOnClickListener(new View.OnClickListener() {
@@ -172,20 +176,16 @@ public class WhiteListActivity extends ThemedActivity {
                 finish();
             }
         });
+    }
 
-        /**SET UP UI COLORS**/
+    @Override
+    public void updateUiElements(){
         toolbar.setBackgroundColor(getPrimaryColor());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        mRecyclerView.setBackgroundColor(getBackgroundColor());
+        fabWHDone.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.chose_folders));
-
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 
@@ -243,8 +243,9 @@ public class WhiteListActivity extends ThemedActivity {
             this.id = id;
         }
 
-        void toggleInclude() {
+        boolean toggleInclude() {
             included = !included;
+            return included;
         }
     }
 
@@ -254,8 +255,9 @@ public class WhiteListActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 int pos = (int) v.findViewById(R.id.folder_path).getTag();
-                folders.get(pos).toggleInclude();
-                notifyItemChanged(pos);
+                SwitchCompat s = (SwitchCompat) v.findViewById(R.id.tracked_status);
+                s.setChecked(folders.get(pos).toggleInclude());
+                //notifyItemChanged(pos);
             }
         };
 
@@ -269,17 +271,17 @@ public class WhiteListActivity extends ThemedActivity {
         public void onBindViewHolder(final ItemsAdapter.ViewHolder holder, final int position) {
 
             Item itm = folders.get(position);
-            holder.album_path.setText(itm.path);
-            holder.album_name.setText(itm.name);
-            holder.album_path.setTag(position);
-            holder.imgUnExclude.setChecked(itm.included);
+            holder.path.setText(itm.path);
+            holder.name.setText(itm.name);
+            holder.path.setTag(position);
+            holder.tracked.setChecked(itm.included);
 
             /**SET LAYOUT THEME**/
-            holder.album_name.setTextColor(getTextColor());
-            holder.album_path.setTextColor(getSubTextColor());
+            holder.name.setTextColor(getTextColor());
+            holder.path.setTextColor(getSubTextColor());
             holder.imgFolder.setColor(getIconColor());
-            updateSwitchColor(holder.imgUnExclude, getAccentColor());
-            holder.card_layout.setBackgroundColor(getCardBackgroundColor());
+            setSwitchColor(holder.tracked, getAccentColor());
+            holder.layout.setBackgroundColor(getCardBackgroundColor());
         }
 
         public int getItemCount() {
@@ -287,19 +289,19 @@ public class WhiteListActivity extends ThemedActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            LinearLayout card_layout;
-            SwitchCompat imgUnExclude;
+            LinearLayout layout;
+            SwitchCompat tracked;
             IconicsImageView imgFolder;
-            TextView album_name;
-            TextView album_path;
+            TextView name;
+            TextView path;
 
             ViewHolder(View itemView) {
                 super(itemView);
-                card_layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
-                imgUnExclude = (SwitchCompat) itemView.findViewById(R.id.tracked_status);
+                layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
+                tracked = (SwitchCompat) itemView.findViewById(R.id.tracked_status);
                 imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon);
-                album_name = (TextView) itemView.findViewById(R.id.folder_name);
-                album_path = (TextView) itemView.findViewById(R.id.folder_path);
+                name = (TextView) itemView.findViewById(R.id.folder_name);
+                path = (TextView) itemView.findViewById(R.id.folder_path);
             }
         }
     }

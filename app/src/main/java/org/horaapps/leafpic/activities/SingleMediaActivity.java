@@ -76,10 +76,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
-
-        SP = PreferenceUtil.getInstance(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
+
+        SP = PreferenceUtil.getInstance(getApplicationContext());
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
+
+        initUi();
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -103,23 +106,22 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 }
                 getAlbums().addAlbum(0, album);
             }
-            initUI();
-            setupUI();
+
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    private void initUI() {
+    private void initUi() {
 
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        toolbar.setNavigationIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_arrow_left));
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setRecentApp(getString(R.string.app_name));
+
         setupSystemUI();
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
@@ -130,24 +132,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         else hideSystemUI();
                     }
                 });
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
-
-        adapter.setVideoOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SP.getBoolean("set_internal_player", false)) {
-                    Intent mpdIntent = new Intent(SingleMediaActivity.this, PlayerActivity.class)
-                            .setData(getAlbum().getCurrentMedia().getUri());
-                    startActivity(mpdIntent);
-                } else {
-                    Intent intentOpenWith = new Intent(Intent.ACTION_VIEW);
-                    intentOpenWith.setDataAndType(
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getUri(),
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMimeType());
-                    startActivity(intentOpenWith);
-                }
-            }
-        });
 
         updatePageTitle(getAlbum().getCurrentMediaIndex());
 
@@ -179,11 +163,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
         }
-
     }
 
-    private void setupUI() {
-
+    public void updateUiElements() {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(
@@ -198,6 +180,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         setStatusBarColor();
         setNavBarColor();
+        setRecentApp(getString(R.string.app_name));
 
 
         /**** SETTINGS ****/
@@ -205,6 +188,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_max_luminosity", false))
             updateBrightness(1.0F);
         else try {
+            // TODO: 12/4/16 redo
             float brightness = android.provider.Settings.System.getInt(
                     getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
             brightness = brightness == 1.0F ? 255.0F : brightness;
@@ -216,17 +200,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+
     }
 
     private void updatePageTitle(int position) {
         getSupportActionBar().setTitle((position + 1) + " " + getString(R.string.of) + " " + adapter.getCount());
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupUI();
     }
 
     @Override
@@ -280,7 +258,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null && resultCode == RESULT_OK) {
             switch (requestCode) {
                 case UCrop.REQUEST_CROP:
@@ -301,6 +279,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
                 default:
+                    super.onActivityResult(requestCode, resultCode, data);
                     break;
             }
         }

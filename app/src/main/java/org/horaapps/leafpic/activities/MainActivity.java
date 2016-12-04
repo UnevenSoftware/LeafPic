@@ -1,6 +1,5 @@
 package org.horaapps.leafpic.activities;
 
-import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -12,7 +11,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -60,7 +58,6 @@ import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
@@ -74,7 +71,6 @@ import java.util.Locale;
 public class MainActivity extends SharedMediaActivity {
 
   private static String TAG = "AlbumsAct";
-  private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
   private PreferenceUtil SP;
 
@@ -162,21 +158,23 @@ public class MainActivity extends SharedMediaActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
+    rvAlbums = (RecyclerView) findViewById(R.id.grid_albums);
+    rvMedia = ((RecyclerView) findViewById(R.id.grid_photos));
+    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+    fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
     SP = PreferenceUtil.getInstance(getApplicationContext());
-    albumsMode = true;
-    editMode = false;
 
-    initUI();
-
-    //MediaStoreProvider.test(getApplicationContext());
+    initUi();
     displayData(getIntent().getExtras());
   }
 
   @Override
   public void onResume() {
     super.onResume();
-    setupUI();
+    updateColumnsRvs();
     getAlbums().clearSelectedAlbums();
     getAlbum().clearSelectedMedia();
     if (SP.getBoolean("auto_update_media", false)) {
@@ -188,6 +186,7 @@ public class MainActivity extends SharedMediaActivity {
     }
     invalidateOptionsMenu();
     firstLaunch = false;
+    requestSdCardPermissions();
   }
 
   private void displayCurrentAlbumMedia(boolean reload) {
@@ -273,29 +272,22 @@ public class MainActivity extends SharedMediaActivity {
     return false;
   }
 
-  private void initUI() {
+  private void initUi() {
 
-    /**** TOOLBAR ****/
-    toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    /**** RECYCLER VIEW ****/
-    rvAlbums = (RecyclerView) findViewById(R.id.grid_albums);
-    rvMedia = ((RecyclerView) findViewById(R.id.grid_photos));
+    /** RVS **/
     rvAlbums.setHasFixedSize(true);
     rvAlbums.setItemAnimator(new DefaultItemAnimator());
     rvMedia.setHasFixedSize(true);
     rvMedia.setItemAnimator(new DefaultItemAnimator());
 
-
     albumsAdapter = new AlbumsAdapter(getAlbums().dispAlbums, MainActivity.this);
-
     albumsAdapter.setOnClickListener(albumOnClickListener);
     albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
     rvAlbums.setAdapter(albumsAdapter);
 
     mediaAdapter = new MediaAdapter(getAlbum().getMedia(), MainActivity.this);
-
     mediaAdapter.setOnClickListener(photosOnClickListener);
     mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
     rvMedia.setAdapter(mediaAdapter);
@@ -310,11 +302,7 @@ public class MainActivity extends SharedMediaActivity {
     rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
     rvMedia.addItemDecoration(rvMediaDecoration);
 
-
     /**** SWIPE TO REFRESH ****/
-    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-    swipeRefreshLayout.setColorSchemeColors(getAccentColor());
-    swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getBackgroundColor());
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
@@ -329,182 +317,30 @@ public class MainActivity extends SharedMediaActivity {
     });
 
     /**** DRAWER ****/
-    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
             mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-      public void onDrawerClosed(View view) {
-        //Put your code here
-        // materialMenu.animateIconState(MaterialMenuDrawable.IconState.BURGER);
-      }
-
-      public void onDrawerOpened(View drawerView) {
-        //Put your code here
-        //materialMenu.animateIconState(MaterialMenuDrawable.IconState.ARROW);
-      }
+      public void onDrawerClosed(View view) {  }
+      public void onDrawerOpened(View drawerView) {  }
     });
 
-    /**** FAB ***/
-    fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
-    fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-    fabCamera.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
-      }
-    });
-
-    //region TESTING
-    fabCamera.setOnLongClickListener(new View.OnLongClickListener() {
-      @Override
-      public boolean onLongClick(View v) {
-
-        // NOTE: this is used to acquire write permission on sd with api 21
-        // TODO call this one when unable to write on sd
-        requestSdCardPermissions();
-        return false;
-      }
-    });
-    //endregion
-
-    setRecentApp(getString(R.string.app_name));
-    setupUI();
-  }
-
-  private void updateColumnsRvs() {
-    updateColumnsRvAlbums();
-    updateColumnsRvMedia();
-  }
-
-  private void updateColumnsRvAlbums() {
-    int spanCount = SP.getInt("n_columns_folders", 2);
-    if (spanCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
-      rvAlbums.removeItemDecoration(rvAlbumsDecoration);
-      rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
-      rvAlbums.addItemDecoration(rvAlbumsDecoration);
-      rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
-    }
-  }
-  private void updateColumnsRvMedia() {
-    int spanCount = SP.getInt("n_columns_media", 3);
-    if (spanCount != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
-      ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
-      rvMedia.removeItemDecoration(rvMediaDecoration);
-      rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
-      rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
-      rvMedia.addItemDecoration(rvMediaDecoration);
-    }
-  }
-
-  //region TESTING
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  @Override
-  public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
-    if (resultCode == RESULT_OK) {
-      if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
-        Uri treeUri = resultData.getData();
-        // Persist URI in shared preference so that you can use it later.
-        ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
-        getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
-      }
-    }
-  }
-  //endregion
-
-  private void requestSdCardPermissions() {
-    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-    AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
-            R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
-
-    dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialogInterface, int i) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
-          startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_CODE_SD_CARD_PERMISSIONS);
-      }
-    });
-    dialogBuilder.show();
-  }
-
-
-  //region UI/GRAPHIC
-  private void setupUI() {
-    updateColumnsRvs();
-    //TODO: MUST BE FIXED
-    toolbar.setPopupTheme(getPopupToolbarStyle());
-    toolbar.setBackgroundColor(getPrimaryColor());
-
-    /**** SWIPE TO REFRESH ****/
-    swipeRefreshLayout.setColorSchemeColors(getAccentColor());
-    swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getBackgroundColor());
-
-    setStatusBarColor();
-    setNavBarColor();
-
-    fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-    fabCamera.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab),false) ? View.VISIBLE : View.GONE);
-    setDrawerTheme();
-    rvAlbums.setBackgroundColor(getBackgroundColor());
-    rvMedia.setBackgroundColor(getBackgroundColor());
-    mediaAdapter.updatePlaceholder(getApplicationContext());
-    albumsAdapter.updateTheme(getApplicationContext());
-    /**** DRAWER ****/
-    setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
-
-    /**** recyclers drawable *****/
-    Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
-    drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
-  }
-
-  private void setDrawerTheme() {
-
-    findViewById(R.id.Drawer_Header).setBackgroundColor(getPrimaryColor());
-    findViewById(R.id.Drawer_Body).setBackgroundColor(getDrawerBackground());
-    findViewById(R.id.drawer_scrollbar).setBackgroundColor(getDrawerBackground());
-    findViewById(R.id.Drawer_Body_Divider).setBackgroundColor(getIconColor());
-
-    /** TEXT VIEWS **/
-    int color = getTextColor();
-    ((TextView) findViewById(R.id.Drawer_Default_Item)).setTextColor(color);
-    ((TextView) findViewById(R.id.Drawer_Setting_Item)).setTextColor(color);
-    ((TextView) findViewById(R.id.Drawer_Donate_Item)).setTextColor(color);
-    ((TextView) findViewById(R.id.Drawer_wallpapers_Item)).setTextColor(color);
-    ((TextView) findViewById(R.id.Drawer_About_Item)).setTextColor(color);
-    ((TextView) findViewById(R.id.Drawer_hidden_Item)).setTextColor(color);
-
-    /** ICONS **/
-    color = getIconColor();
-    ((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
-    ((IconicsImageView) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
-    ((IconicsImageView) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
-    ((IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
-    ((IconicsImageView) findViewById(R.id.Drawer_About_Icon)).setColor(color);
-    ((IconicsImageView) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
-
-    /** CLICK LISTENERS **/
     findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(MainActivity.this, DonateActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(MainActivity.this, DonateActivity.class));
       }
     });
 
     findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
       }
     });
 
     findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(MainActivity.this, AboutActivity.class));
       }
     });
 
@@ -548,9 +384,118 @@ public class MainActivity extends SharedMediaActivity {
         Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
       }
     });
-  }
-  //endregion
 
+    /**** FAB ***/
+    fabCamera.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+    fabCamera.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+      }
+    });
+  }
+
+  @Override
+  public void updateUiElements() {
+    //TODO: MUST BE FIXED
+    toolbar.setPopupTheme(getPopupToolbarStyle());
+    toolbar.setBackgroundColor(getPrimaryColor());
+
+    /**** SWIPE TO REFRESH ****/
+    swipeRefreshLayout.setColorSchemeColors(getAccentColor());
+    swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getBackgroundColor());
+
+    setStatusBarColor();
+    setNavBarColor();
+
+    fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
+    fabCamera.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
+    rvAlbums.setBackgroundColor(getBackgroundColor());
+    rvMedia.setBackgroundColor(getBackgroundColor());
+    mediaAdapter.updatePlaceholder(getApplicationContext());
+    albumsAdapter.updateTheme(getApplicationContext());
+
+    setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
+    Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
+    drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
+
+    findViewById(R.id.Drawer_Header).setBackgroundColor(getPrimaryColor());
+    findViewById(R.id.Drawer_Body).setBackgroundColor(getDrawerBackground());
+    findViewById(R.id.drawer_scrollbar).setBackgroundColor(getDrawerBackground());
+    findViewById(R.id.Drawer_Body_Divider).setBackgroundColor(getIconColor());
+
+    /** TEXT VIEWS **/
+    int color = getTextColor();
+    ((TextView) findViewById(R.id.Drawer_Default_Item)).setTextColor(color);
+    ((TextView) findViewById(R.id.Drawer_Setting_Item)).setTextColor(color);
+    ((TextView) findViewById(R.id.Drawer_Donate_Item)).setTextColor(color);
+    ((TextView) findViewById(R.id.Drawer_wallpapers_Item)).setTextColor(color);
+    ((TextView) findViewById(R.id.Drawer_About_Item)).setTextColor(color);
+    ((TextView) findViewById(R.id.Drawer_hidden_Item)).setTextColor(color);
+
+    /** ICONS **/
+    color = getIconColor();
+    ((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
+    ((IconicsImageView) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
+    ((IconicsImageView) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
+    ((IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
+    ((IconicsImageView) findViewById(R.id.Drawer_About_Icon)).setColor(color);
+    ((IconicsImageView) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
+
+    setRecentApp(getString(R.string.app_name));
+  }
+
+  private void updateColumnsRvs() {
+    int spanCount = SP.getInt("n_columns_folders", 2);
+    if ( spanCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
+      rvAlbums.removeItemDecoration(rvAlbumsDecoration);
+      rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+      rvAlbums.addItemDecoration(rvAlbumsDecoration);
+      rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
+    }
+
+    spanCount = SP.getInt("n_columns_media", 3);
+    if (spanCount != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
+      ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+      rvMedia.removeItemDecoration(rvMediaDecoration);
+      rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+      rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
+      rvMedia.addItemDecoration(rvMediaDecoration);
+    }
+  }
+
+  //region TESTING
+
+//  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//  @Override
+//  public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
+//    if (resultCode == RESULT_OK) {
+//      if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
+//        Uri treeUri = resultData.getData();
+//        // Persist URI in shared preference so that you can use it later.
+//        ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
+//        getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//        Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
+//      }
+//    }
+//  }
+//  //endregion
+//
+//  private void requestSdCardPermissions() {
+//    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+//
+//    AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
+//            R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
+//
+//    dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+//      @Override
+//      public void onClick(DialogInterface dialogInterface, int i) {
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+//          startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_CODE_SD_CARD_PERMISSIONS);
+//      }
+//    });
+//    dialogBuilder.show();
+//  }
 
   private void updateSelectedStuff() {
     if (albumsMode) {
@@ -1060,12 +1005,12 @@ public class MainActivity extends SharedMediaActivity {
         seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
         seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
 
-        updateRadioButtonColor((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
-        updateRadioButtonColor((RadioButton) dialogLayout.findViewById(R.id.radio_png));
-        updateRadioButtonColor((RadioButton) dialogLayout.findViewById(R.id.radio_webp));
+        themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
+        themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_png));
+        themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_webp));
 
-        updateSwitchColor(swVertical, getAccentColor());
-        updateSwitchColor(swSaveHere, getAccentColor());
+        setSwitchColor(swVertical, getAccentColor());
+        setSwitchColor(swSaveHere, getAccentColor());
         //endregion
 
         seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -1090,7 +1035,7 @@ public class MainActivity extends SharedMediaActivity {
           @Override
           public void onClick(View v) {
             swVertical.setChecked(!swVertical.isChecked());
-            updateSwitchColor(swVertical, getAccentColor());
+            setSwitchColor(swVertical, getAccentColor());
           }
         });
 
@@ -1099,7 +1044,7 @@ public class MainActivity extends SharedMediaActivity {
           @Override
           public void onClick(View v) {
             swSaveHere.setChecked(!swSaveHere.isChecked());
-            updateSwitchColor(swSaveHere, getAccentColor());
+            setSwitchColor(swSaveHere, getAccentColor());
           }
         });
 
@@ -1239,8 +1184,6 @@ public class MainActivity extends SharedMediaActivity {
   private void toggleRecyclersVisibility(boolean albumsMode){
     rvAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
     rvMedia.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
-    //touchScrollBar.setScrollBarHidden(albumsMode);
-
   }
 
   @Override

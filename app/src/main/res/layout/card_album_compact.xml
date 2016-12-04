@@ -54,6 +54,7 @@
                 android:paddingStart="8dp"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
+                android:visibility="gone"
                 />
             <TextView
                 android:id="@+id/album_name"

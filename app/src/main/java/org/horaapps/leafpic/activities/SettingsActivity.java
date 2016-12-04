@@ -16,6 +16,8 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,25 +26,29 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
+import com.bumptech.glide.Glide;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
+import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StaticMapProvider;
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.views.cardviewpager.CustomViewPager;
+import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.Theme;
 
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
 
-import static org.horaapps.leafpic.util.ThemeHelper.AMOLED_THEME;
-import static org.horaapps.leafpic.util.ThemeHelper.DARK_THEME;
-import static org.horaapps.leafpic.util.ThemeHelper.LIGHT_THEME;
+import static org.horaapps.leafpic.util.CardViewStyle.COMPACT;
+import static org.horaapps.leafpic.util.CardViewStyle.FLAT;
+import static org.horaapps.leafpic.util.CardViewStyle.MATERIAL;
+import static org.horaapps.leafpic.util.Theme.AMOLED;
+import static org.horaapps.leafpic.util.Theme.DARK;
+import static org.horaapps.leafpic.util.Theme.LIGHT;
 
 /**
  * Created by Jibo on 02/03/2016.
@@ -76,8 +82,8 @@ public class SettingsActivity extends ThemedActivity {
 
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SP = PreferenceUtil.getInstance(getApplicationContext());
@@ -89,6 +95,8 @@ public class SettingsActivity extends ThemedActivity {
         txtAT = (TextView) findViewById(R.id.advanced_setting_title);
 
         scr = (ScrollView)findViewById(R.id.settingAct_scrollView);
+
+        initUi();
 
         /*** BASIC THEME ***/
         findViewById(R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
@@ -102,12 +110,9 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_card_view_style).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardViewDialog();
+                cardViewStyleDialog();
             }
         });
-
-        //TODO remove
-        cardViewDialog();
 
         /*** SECURITY ***/
         findViewById(R.id.ll_security).setOnClickListener(new View.OnClickListener() {
@@ -177,7 +182,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swShowFab.setChecked(!swShowFab.isChecked());
                 SP.putBoolean(getString(R.string.preference_show_fab), swShowFab.isChecked());
-                updateSwitchColor(swShowFab, getAccentColor());
+                setSwitchColor(swShowFab, getAccentColor());
             }
         });
 
@@ -190,7 +195,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swSubScaling.setChecked(!swSubScaling.isChecked());
                 SP.putBoolean(getString(R.string.preference_sub_scaling), swSubScaling.isChecked());
-                updateSwitchColor(swSubScaling, getAccentColor());
+                setSwitchColor(swSubScaling, getAccentColor());
             }
         });
 
@@ -203,7 +208,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swInternalPlayer.setChecked(!swInternalPlayer.isChecked());
                 SP.putBoolean(getString(R.string.preference_internal_player), swInternalPlayer.isChecked());
-                updateSwitchColor(swInternalPlayer, getAccentColor());
+                setSwitchColor(swInternalPlayer, getAccentColor());
             }
         });
 
@@ -216,7 +221,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swIncludeVideo.setChecked(!swIncludeVideo.isChecked());
                 SP.putBoolean(getString(R.string.preference_include_video), swIncludeVideo.isChecked());
-                updateSwitchColor(swIncludeVideo, getAccentColor());
+                setSwitchColor(swIncludeVideo, getAccentColor());
             }
         });
 
@@ -229,7 +234,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swSwipeDirection.setChecked(!swSwipeDirection.isChecked());
                 SP.putBoolean(getString(R.string.preference_swipe_direction_inverted), swSwipeDirection.isChecked());
-                updateSwitchColor(swSwipeDirection, getAccentColor());
+                setSwitchColor(swSwipeDirection, getAccentColor());
             }
         });
 
@@ -242,7 +247,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swAutoUpdate.setChecked(!swAutoUpdate.isChecked());
                 SP.putBoolean(getString(R.string.preference_auto_update_media), swAutoUpdate.isChecked());
-                updateSwitchColor(swAutoUpdate, getAccentColor());
+                setSwitchColor(swAutoUpdate, getAccentColor());
             }
         });
 
@@ -255,7 +260,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swUseMediaStore.setChecked(!swUseMediaStore.isChecked());
                 SP.putBoolean(getString(R.string.preference_use_alternative_provider), swUseMediaStore.isChecked());
-                updateSwitchColor(swUseMediaStore, getAccentColor());
+                setSwitchColor(swUseMediaStore, getAccentColor());
             }
         });
 
@@ -268,7 +273,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swDelayFullImage.setChecked(!swDelayFullImage.isChecked());
                 SP.putBoolean(getString(R.string.preference_delay_full_image), swDelayFullImage.isChecked());
-                updateSwitchColor(swDelayFullImage, getAccentColor());
+                setSwitchColor(swDelayFullImage, getAccentColor());
             }
         });
 
@@ -281,7 +286,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swPictureOrientation.setChecked(!swPictureOrientation.isChecked());
                 SP.putBoolean(getString(R.string.preference_auto_rotate), swPictureOrientation.isChecked());
-                updateSwitchColor(swPictureOrientation, getAccentColor());
+                setSwitchColor(swPictureOrientation, getAccentColor());
             }
         });
 
@@ -294,7 +299,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swMaxLuminosity.setChecked(!swMaxLuminosity.isChecked());
                 SP.putBoolean(getString(R.string.preference_max_brightness), swMaxLuminosity.isChecked());
-                updateSwitchColor(swMaxLuminosity, getAccentColor());
+                setSwitchColor(swMaxLuminosity, getAccentColor());
             }
         });
 
@@ -309,7 +314,7 @@ public class SettingsActivity extends ThemedActivity {
                 SP.putBoolean(getString(R.string.preference_translucent_status_bar), swStatusBar.isChecked());
                 updateTheme();
                 setStatusBarColor();
-                updateSwitchColor(swStatusBar, getAccentColor());
+                setSwitchColor(swStatusBar, getAccentColor());
             }
         });
 
@@ -323,13 +328,14 @@ public class SettingsActivity extends ThemedActivity {
                 swNavBar.setChecked(!swNavBar.isChecked());
                 SP.putBoolean(getString(R.string.preference_colored_nav_bar), swNavBar.isChecked());
                 updateTheme();
-                updateSwitchColor(swNavBar, getAccentColor());
+                setSwitchColor(swNavBar, getAccentColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     getWindow().setNavigationBarColor(isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
             }
         });
     }
+
 
     private void multiColumnsDialog() {
         AlertDialog.Builder multiColumnDialogBuilder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
@@ -405,24 +411,93 @@ public class SettingsActivity extends ThemedActivity {
     }
 
 
-    private void cardViewDialog() {
+    private void cardViewStyleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
-        View layout = getLayoutInflater().inflate(R.layout.dialog_select_cardview, null);
+        final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_select_cardview_style, null);
+        final RadioGroup rGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
 
-        final CustomViewPager mViewPager = (CustomViewPager) layout.findViewById(R.id.viewPager);
-        //mViewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
-        mViewPager.setOffscreenPageLimit(3);
-        mViewPager.setCurrentItem(SP.getInt("card_view_style", 0));
+        final CheckBox chkShowNPhots = (CheckBox) dialogLayout.findViewById(R.id.show_n_photos);
+        RadioButton rCompact = (RadioButton) dialogLayout.findViewById(R.id.radio_card_compact);
+        RadioButton rFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
+        RadioButton rMaterial = (RadioButton) dialogLayout.findViewById(R.id.radio_card_material);
+
+        chkShowNPhots.setChecked(SP.getBoolean("show_n_photos", true));
+
+        themeRadioButton(rCompact);
+        themeRadioButton(rFlat);
+        themeRadioButton(rMaterial);
+        themeCheckBox(chkShowNPhots);
+
+        rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                View v;
+                switch (i) {
+                    case R.id.radio_card_compact:
+                        v = getLayoutInflater().inflate(COMPACT.getLayout(), null);
+                        v.findViewById(R.id.linear_card_text).setBackgroundColor(ColorPalette.getTransparentColor(getBackgroundColor(), 150));
+                        break;
+                    case R.id.radio_card_flat:
+                        v = getLayoutInflater().inflate(FLAT.getLayout(), null);
+                        v.findViewById(R.id.linear_card_text).setBackgroundColor(ColorPalette.getTransparentColor(getBackgroundColor(), 150));
+                        break;
+                    case R.id.radio_card_material: default:
+                        v = getLayoutInflater().inflate(MATERIAL.getLayout(), null);
+                        v.findViewById(R.id.linear_card_text).setBackgroundColor(getCardBackgroundColor());
+                        break;
+                }
+
+                ImageView img = (ImageView) v.findViewById(org.horaapps.leafpic.R.id.album_preview);
+                img.setBackgroundColor(getPrimaryColor());
+
+                Glide.with(getApplicationContext())
+                        .load(R.drawable.gilbert_profile)
+                        .into(img);
+
+                String hexPrimaryColor = ColorPalette.getHexColor(getPrimaryColor());
+                String hexAccentColor = ColorPalette.getHexColor(getAccentColor());
+
+                if (hexAccentColor.equals(hexPrimaryColor))
+                    hexAccentColor = ColorPalette.getHexColor(ColorPalette.getDarkerColor(getAccentColor()));
+
+                String textColor = getBaseTheme().equals(Theme.LIGHT) ? "#2B2B2B" : "#FAFAFA";
+
+
+                String albumNameHtml = "<i><font color='" + textColor + "'>#PraiseDuarte</font></i>";
+                if (chkShowNPhots.isChecked()) {
+                    // TODO: 12/4/16 ehhhh
+                    String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>420</font></b>" + "<font " +
+                            "color='" + textColor + "'> " + getString(R.string.media) + "</font>";
+                    ((TextView) v.findViewById(R.id.album_photos_count)).setText(StringUtils.html(albumPhotoCountHtml));
+                } else
+                    v.findViewById(R.id.album_photos_count).setVisibility(View.GONE);
+
+                ((TextView) v.findViewById(R.id.album_name)).setText(StringUtils.html(albumNameHtml));
+
+
+                ((CardView) v).setUseCompatPadding(true);
+                ((CardView) v).setRadius(2);
+
+                ((LinearLayout) dialogLayout.findViewById(R.id.ll_preview_album_card)).removeAllViews();
+                ((LinearLayout) dialogLayout.findViewById(R.id.ll_preview_album_card)).addView(v);
+            }
+        });
+
+        switch (CardViewStyle.fromValue(SP.getInt("card_view_style", 0))) {
+            case COMPACT: rCompact.setChecked(true); break;
+            case FLAT: rFlat.setChecked(true); break;
+            case MATERIAL: default: rMaterial.setChecked(true); break;
+        }
 
         builder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
         builder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getBaseContext(), "ITEM: " + mViewPager.getCurrentItem(), Toast.LENGTH_LONG).show();
-                SP.putInt("card_view_style", mViewPager.getCurrentItem());
+                Toast.makeText(SettingsActivity.this, "Jibo mettilo apposto", Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setView(layout);
+        builder.setView(dialogLayout);
         builder.show();
     }
 
@@ -440,11 +515,12 @@ public class SettingsActivity extends ThemedActivity {
         RadioButton radioMapBoxDark = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_dark);
         RadioButton radioMapBoxLight = (RadioButton) dialogLayout.findViewById(R.id.radio_mapb_light);
         RadioButton radioTyler = (RadioButton) dialogLayout.findViewById(R.id.radio_osm_tyler);
-        setRadioTextButtonColor(radioGoogleMaps, getSubTextColor());
-        setRadioTextButtonColor(radioMapBoxStreets, getSubTextColor());
-        setRadioTextButtonColor(radioMapBoxDark, getSubTextColor());
-        setRadioTextButtonColor(radioMapBoxLight, getSubTextColor());
-        setRadioTextButtonColor(radioTyler, getSubTextColor());
+
+        themeRadioButton(radioGoogleMaps);
+        themeRadioButton(radioMapBoxStreets);
+        themeRadioButton(radioMapBoxDark);
+        themeRadioButton(radioMapBoxLight);
+        themeRadioButton(radioTyler);
 
         ((TextView) dialogLayout.findViewById(R.id.header_proprietary_maps)).setTextColor(getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.header_free_maps)).setTextColor(getTextColor());
@@ -488,17 +564,17 @@ public class SettingsActivity extends ThemedActivity {
         final IconicsImageView darkAmoledSelect = (IconicsImageView) dialogLayout.findViewById(R.id.dark_amoled_basic_theme_select);
 
         switch (getBaseTheme()){
-            case LIGHT_THEME:
+            case LIGHT:
                 whiteSelect.setVisibility(View.VISIBLE);
                 darkSelect.setVisibility(View.GONE);
                 darkAmoledSelect.setVisibility(View.GONE);
                 break;
-            case DARK_THEME:
+            case DARK:
                 whiteSelect.setVisibility(View.GONE);
                 darkSelect.setVisibility(View.VISIBLE);
                 darkAmoledSelect.setVisibility(View.GONE);
                 break;
-            case AMOLED_THEME:
+            case AMOLED:
                 whiteSelect.setVisibility(View.GONE);
                 darkSelect.setVisibility(View.GONE);
                 darkAmoledSelect.setVisibility(View.VISIBLE);
@@ -509,15 +585,14 @@ public class SettingsActivity extends ThemedActivity {
         dialogTitle.setBackgroundColor(getPrimaryColor());
         dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
 
+        final Theme[] newTheme = new Theme[1];
         dialogLayout.findViewById(R.id.ll_white_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 whiteSelect.setVisibility(View.VISIBLE);
                 darkSelect.setVisibility(View.GONE);
                 darkAmoledSelect.setVisibility(View.GONE);
-                setBaseTheme(LIGHT_THEME, false);
-                //dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
-                //setTheme();
+                newTheme[0] = LIGHT;
 
             }
         });
@@ -527,9 +602,7 @@ public class SettingsActivity extends ThemedActivity {
                 whiteSelect.setVisibility(View.GONE);
                 darkSelect.setVisibility(View.VISIBLE);
                 darkAmoledSelect.setVisibility(View.GONE);
-                setBaseTheme(DARK_THEME, false);
-                //dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
-                //setTheme();
+                newTheme[0] = DARK;
             }
         });
         dialogLayout.findViewById(R.id.ll_dark_amoled_basic_theme).setOnClickListener(new View.OnClickListener() {
@@ -538,26 +611,17 @@ public class SettingsActivity extends ThemedActivity {
                 whiteSelect.setVisibility(View.GONE);
                 darkSelect.setVisibility(View.GONE);
                 darkAmoledSelect.setVisibility(View.VISIBLE);
-                setBaseTheme(AMOLED_THEME, false);
-                //dialogCardView.setCardBackgroundColor(getCardBackgroundColor());
-                //setTheme();
-
+                newTheme[0] = AMOLED;
             }
         });
         dialogBuilder.setView(dialogLayout);
         dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SP.putInt(getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme());
-                setTheme();
+                setBaseTheme(newTheme[0]);
+                updateUiElements();
             }
         });
-        dialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                setBaseTheme(ThemeHelper.getBaseTheme(getApplicationContext()), false);
-                setTheme();
-            }
-        });
+        dialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
         dialogBuilder.setView(dialogLayout);
         dialogBuilder.show();
     }
@@ -729,10 +793,10 @@ public class SettingsActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 swApplyTheme_Viewer.setChecked(!swApplyTheme_Viewer.isChecked());
-                updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
+                setSwitchColor(swApplyTheme_Viewer, getAccentColor());
             }
         });
-        updateSwitchColor(swApplyTheme_Viewer, getAccentColor());
+        setSwitchColor(swApplyTheme_Viewer, getAccentColor());
 
         final LineColorPicker transparencyColorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.pickerTransparent);
         transparencyColorPicker.setColors(ColorPalette.getTransparencyShadows(getPrimaryColor()));
@@ -765,27 +829,33 @@ public class SettingsActivity extends ThemedActivity {
         txtVT.setTextColor(color);
         txtAT.setTextColor(color);
 
-        updateSwitchColor(swDelayFullImage, color);
-        updateSwitchColor(swNavBar, color);
-        updateSwitchColor(swStatusBar, color);
-        updateSwitchColor(swMaxLuminosity, color);
-        updateSwitchColor(swPictureOrientation, color);
-        updateSwitchColor(swInternalPlayer, color);
-        updateSwitchColor(swAutoUpdate, color);
-        updateSwitchColor(swIncludeVideo, color);
-        updateSwitchColor(swSwipeDirection, color);
-        updateSwitchColor(swUseMediaStore, color);
-        updateSwitchColor(swShowFab, color);
-        updateSwitchColor(swSubScaling, color);
+        setSwitchColor(swDelayFullImage, color);
+        setSwitchColor(swNavBar, color);
+        setSwitchColor(swStatusBar, color);
+        setSwitchColor(swMaxLuminosity, color);
+        setSwitchColor(swPictureOrientation, color);
+        setSwitchColor(swInternalPlayer, color);
+        setSwitchColor(swAutoUpdate, color);
+        setSwitchColor(swIncludeVideo, color);
+        setSwitchColor(swSwipeDirection, color);
+        setSwitchColor(swUseMediaStore, color);
+        setSwitchColor(swShowFab, color);
+        setSwitchColor(swSubScaling, color);
+    }
+
+    private void initUi() {
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
-    public void onPostResume() {
-        super.onPostResume();
-        setTheme();
-    }
-
-    private void setTheme(){
+    public void updateUiElements(){
 
         /** BackGround **/
         findViewById(org.horaapps.leafpic.R.id.setting_background).setBackgroundColor(getBackgroundColor());
@@ -799,25 +869,11 @@ public class SettingsActivity extends ThemedActivity {
         ((CardView) findViewById(R.id.advanced_setting_card)).setCardBackgroundColor(color);
 
         toolbar.setBackgroundColor(getPrimaryColor());
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(
-                new IconicsDrawable(this)
-                        .icon(CommunityMaterial.Icon.cmd_arrow_left)
-                        .color(Color.WHITE)
-                        .sizeDp(19));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(org.horaapps.leafpic.R.string.settings));
         setScrollViewColor(scr);
         updateViewsWithAccentColor(getAccentColor());
-
 
         /** Icons **/
         color = getIconColor();

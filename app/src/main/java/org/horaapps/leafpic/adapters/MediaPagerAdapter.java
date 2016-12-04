@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.horaapps.leafpic.fragments.GifFragment;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Media> media;
-    private View.OnClickListener videoOnClickListener;
     private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> media) {
@@ -30,16 +28,10 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         this.media = media;
     }
 
-    public void setVideoOnClickListener(View.OnClickListener videoOnClickListener) {
-        this.videoOnClickListener = videoOnClickListener;
-    }
-
     @Override public Fragment getItem(int pos) {
         Media media = this.media.get(pos);
         if (media.isVideo()) {
-            VideoFragment fragment = VideoFragment.newInstance(media);
-            fragment.setOnClickListener(videoOnClickListener);
-            return fragment;
+            return VideoFragment.newInstance(media);
         }
         if (media.isGif()) return GifFragment.newInstance(media);
         else return ImageFragment.newInstance(media);

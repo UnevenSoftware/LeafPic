@@ -128,7 +128,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         exploreModePanel = (LinearLayout) contentView.findViewById(R.id.ll_explore_mode_panel);
         imgExploreMode = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
 
-        theme = new ThemeHelper(getContext());
+        theme = ThemeHelper.getThemeHelper(getContext());
         sdCardPath = ContentHelper.getSdcardPath(getContext());
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
