@@ -216,6 +216,17 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     sortAlbums(context);
   }
 
+  public ArrayList<String> getWhiteList() {
+    ArrayList<String> list = new ArrayList<>();
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cur = db.query(TABLE_ALBUMS, new String[]{ ALBUM_PATH }, null, null, null, null, null);
+    while (cur.moveToNext())
+      list.add(cur.getString(0));
+    cur.close();
+    db.close();
+    return list;
+  }
+
   public void addAlbum(int position, Album album) {
     dispAlbums.add(position, album);
     setCurrentAlbum(album);

@@ -113,6 +113,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
                 "color='" + textColor + "'> " + holder.nPhotos.getContext().getString(R.string.media) + "</font>";
 
+        if (cvs.equals(CardViewStyle.CARD_COMPACT)) {
+            albumPhotoCountHtml = "<b><font color='" + textColor + "'>#" + a.getCount() + "</font></b>";
+        }
+
         holder.name.setText(StringUtils.html(albumNameHtml));
         holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
 

@@ -1,6 +1,10 @@
 package org.horaapps.leafpic.activities;
 
 import android.Manifest;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -9,11 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.horaapps.leafpic.LookForMediaJob;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.model.Album;
@@ -23,6 +29,7 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by dnld on 01/04/16.
@@ -51,6 +58,7 @@ public class SplashScreen extends SharedMediaActivity {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_splash);
         SP = PreferenceUtil.getInstance(getApplicationContext());
+        startLookingForMedia();
 
         ((ProgressBar) findViewById(R.id.progress_splash)).getIndeterminateDrawable().setColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP);
 
@@ -86,6 +94,28 @@ public class SplashScreen extends SharedMediaActivity {
         } else {
             String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, permissions);
+        }
+    }
+
+    private void startLookingForMedia() {
+
+        ComponentName serviceName = new ComponentName(getApplicationContext(), LookForMediaJob.class);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            JobInfo job = new JobInfo.Builder(0, serviceName)
+                    .setPeriodic(1000)
+                    .setRequiresDeviceIdle(true)
+                    .build();
+
+            JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            // TODO: 11/29/16 asdasd
+            //scheduler.cancelAll();
+            List<JobInfo> allPendingJobs = scheduler.getAllPendingJobs();
+            Log.wtf("FUCK", allPendingJobs.size() +"");
+            int result =  scheduler.schedule(job);
+            if (result == JobScheduler.RESULT_SUCCESS) {
+                Log.wtf("FUCK", "Job scheduled successfully!");
+            } else
+                Log.wtf("FUCK", "Job scheduled failed!");
         }
     }
 
