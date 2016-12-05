@@ -149,13 +149,15 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/medium_spacing"
+                        android:padding="@dimen/small_spacing"
                         android:layout_marginStart="@dimen/medium_spacing"
                         android:layout_marginEnd="@dimen/big_spacing"
                         android:layout_marginBottom="@dimen/medium_spacing"
                         android:layout_gravity="end"
                         android:id="@+id/button_donate_play_store"
+                        android:elevation="@dimen/fab_elevation"
                         android:text="@string/donate"
+                        android:clickable="true"
                     />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -215,12 +217,16 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/medium_spacing"
-                        android:layout_margin="@dimen/big_spacing"
-                        android:layout_gravity="right"
+                        android:padding="@dimen/small_spacing"
+                        android:layout_marginStart="@dimen/medium_spacing"
+                        android:layout_marginEnd="@dimen/big_spacing"
+                        android:layout_marginBottom="@dimen/medium_spacing"
+                        android:layout_gravity="end"
                         android:id="@+id/button_donate_paypal"
+                        android:elevation="@dimen/fab_elevation"
                         android:text="@string/donate"
-                        android:textAllCaps="true"
+                        android:clickable="true"
+
 
                     />
                 </LinearLayout>

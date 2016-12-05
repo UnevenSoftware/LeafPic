@@ -134,7 +134,7 @@ public class AlertDialogsHelper {
             @Override
             public void onClick(View view) {
                 showMoreDetails(dialogLayout, activity, f);
-                showMoreText.setVisibility(View.INVISIBLE);
+                showMoreText.setVisibility(View.GONE);
             }
         });
 
@@ -161,7 +161,7 @@ public class AlertDialogsHelper {
             value.setLayoutParams((new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 7f)));
             label.setTextColor(activity.getTextColor());
             label.setTypeface(null, Typeface.BOLD);
-            label.setGravity(Gravity.END);
+            label.setGravity(Gravity.RIGHT);
             label.setTextSize(16);
             value.setTextColor(activity.getTextColor());
             value.setTextSize(16);

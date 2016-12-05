@@ -26,6 +26,7 @@ public class DonateActivity extends ThemedActivity {
     private Toolbar toolbar;
     private CustomTabService cts;
     private ScrollView scr;
+    private Button btnDonatePP;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -72,10 +73,11 @@ public class DonateActivity extends ThemedActivity {
 
     @Override
     public void updateUiElements() {
-        toolbar.setBackgroundColor(getPrimaryColor());
 
+        toolbar.setBackgroundColor(getPrimaryColor());
         setStatusBarColor();
         setNavBarColor();
+        themeButton(btnDonatePP);
         setRecentApp(getString(R.string.donate));
 
         ((TextView) findViewById(R.id.team_name)).setTextColor(getAccentColor());

@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -153,6 +154,14 @@ public class ThemeHelper {
 		}
 	}
 
+	public int getButtonBackgroundColor(){
+		switch (baseTheme){
+			case DARK: return getColor(R.color.md_grey_700);
+			case AMOLED: return getColor(R.color.md_grey_900);
+			case LIGHT: default: return getColor(R.color.md_grey_200);
+		}
+	}
+
 	public IconicsDrawable getToolbarIcon(IIcon icon) {
 		return new IconicsDrawable(context).icon(icon).color(Color.WHITE).sizeDp(18);
 	}
@@ -238,6 +247,11 @@ public class ThemeHelper {
 			chk.setButtonTintList(getTintList());
 			chk.setTextColor(getTextColor());
 		}
+	}
+
+	public void themeButton(Button btn){
+		btn.setTextColor(getTextColor());
+		btn.setBackgroundColor(getButtonBackgroundColor());
 	}
 
 	public void setSwitchCompactColor(SwitchCompat sw, int color){

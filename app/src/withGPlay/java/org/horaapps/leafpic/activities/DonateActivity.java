@@ -37,6 +37,8 @@ public class DonateActivity extends ThemedActivity {
     private ScrollView scr;
     private IabHelper mHelper;
     private SeekBar bar; private int progress = 2;
+    private Button btnDonateIap;
+    private Button btnDonatePP;
 
     private final IabHelper.OnConsumeFinishedListener mPurchaseFinishedListener =
             new IabHelper.OnConsumeFinishedListener() {
@@ -91,7 +93,6 @@ public class DonateActivity extends ThemedActivity {
     private void initUi(){
 
         /**** ToolBar *****/
-
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(
                 new IconicsDrawable(this)
@@ -106,26 +107,26 @@ public class DonateActivity extends ThemedActivity {
         });
         toolbar.setTitle(getString(org.horaapps.leafpic.R.string.donate));
 
-        final Button btnDonateIap = (Button) findViewById(R.id.button_donate_play_store);
+        /**** DONATE PLAY STORE ****/
+        btnDonateIap = (Button) findViewById(R.id.button_donate_play_store);
         btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate).toUpperCase(), progress));
 
-        themeSeekBar(bar);
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (i == 0) progress = 2;
                 else progress = (i+1)*2;
-
                 btnDonateIap.setText(String.format("%s %d€", getString(R.string.donate).toUpperCase(), progress));
             }
-
             @Override public void onStartTrackingTouch(SeekBar seekBar) { }
             @Override public void onStopTrackingTouch(SeekBar seekBar) { }
         });
 
+        /**** DONATE PAY PAL ****/
+        btnDonatePP = (Button) findViewById(R.id.button_donate_paypal);
+        btnDonatePP.setText(getString(R.string.donate).toUpperCase());
 
         /** ACTIONS **/
-        ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
         findViewById(org.horaapps.leafpic.R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,9 +148,7 @@ public class DonateActivity extends ThemedActivity {
         findViewById(R.id.button_donate_play_store).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (mHelper != null) mHelper.flagEndAsync();
-
                 mHelper.launchPurchaseFlow(DonateActivity.this, "donation_" + progress, 123, new IabHelper.OnIabPurchaseFinishedListener() {
                     @Override
                     public void onIabPurchaseFinished(IabResult result, Purchase info) {
@@ -167,6 +166,12 @@ public class DonateActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(org.horaapps.leafpic.R.string.donate));
+
+        /**** Buttons & Bar ****/
+        themeSeekBar(bar);
+        themeButton(btnDonateIap);
+        themeButton(btnDonatePP);
+
 
         /**** Title Cards ***/
         ((TextView) findViewById(org.horaapps.leafpic.R.id.team_name)).setTextColor(getAccentColor());

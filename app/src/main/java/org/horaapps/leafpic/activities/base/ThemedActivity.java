@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -201,6 +202,8 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     protected void themeCheckBox(CheckBox chk) {
         themeHelper.themeCheckBox(chk);
     }
+
+    protected void themeButton(Button btn) {themeHelper.themeButton(btn);}
 
     public void setSwitchColor(SwitchCompat sw, int color){
         themeHelper.setSwitchCompactColor(sw, color);
