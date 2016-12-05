@@ -257,6 +257,7 @@ public class WhiteListActivity extends ThemedActivity {
                 int pos = (int) v.findViewById(R.id.folder_path).getTag();
                 SwitchCompat s = (SwitchCompat) v.findViewById(R.id.tracked_status);
                 s.setChecked(folders.get(pos).toggleInclude());
+                setSwitchColor(s, getAccentColor());
                 //notifyItemChanged(pos);
             }
         };

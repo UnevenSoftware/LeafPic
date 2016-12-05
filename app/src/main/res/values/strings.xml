@@ -82,6 +82,7 @@
     <string name="new_folder_message">The new folder will be created in the current path, and
         then the media will be copied or moved in the new folder.
     </string>
+    <string name="card_style_alert">NOTE: Restart the app for make changes.</string>
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>

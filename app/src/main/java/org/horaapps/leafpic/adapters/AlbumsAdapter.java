@@ -38,6 +38,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     private View.OnClickListener mOnClickListener;
     private View.OnLongClickListener mOnLongClickListener;
     private ThemeHelper theme;
+    private PreferenceUtil SP;
+
 
     private BitmapDrawable placeholder;
 
@@ -48,6 +50,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     }
 
     public void updateTheme(Context context) {
+        SP = PreferenceUtil.getInstance(context);
         theme.updateTheme();
         placeholder = ((BitmapDrawable) theme.getPlaceHolder());
         cvs = CardViewStyle.fromValue(PreferenceUtil.getInstance(context).getInt("card_view_style",CardViewStyle.MATERIAL.getValue()));
@@ -115,12 +118,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 "color='" + textColor + "'> " + holder.nPhotos.getContext().getString(R.string.media) + "</font>";
 
         if (cvs.equals(CardViewStyle.COMPACT)) {
-            // TODO: 12/4/16 ehhhhh
-            albumPhotoCountHtml = "<b><font color='" + textColor + "'>#" + a.getCount() + "</font></b>";
+            albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>#" + a.getCount() + "</font></b>";
         }
 
         holder.name.setText(StringUtils.html(albumNameHtml));
         holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
+
+        //IMAGE COUNTER
+
+        if (!SP.getBoolean("show_n_photos", true))
+            holder.nPhotos.setVisibility(View.GONE);
 
         // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }

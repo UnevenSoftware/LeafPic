@@ -48,6 +48,7 @@
                     <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/medium_text"
                         android:id="@+id/show_n_photos"
                         android:text="Show count"/>
 

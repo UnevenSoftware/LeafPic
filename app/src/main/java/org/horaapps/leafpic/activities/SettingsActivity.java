@@ -414,8 +414,12 @@ public class SettingsActivity extends ThemedActivity {
     private void cardViewStyleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this, getDialogStyle());
         final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_select_cardview_style, null);
-        final RadioGroup rGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
 
+        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_card_view_style_title);
+        ((CardView) dialogLayout.findViewById(R.id.dialog_card_view_style)).setCardBackgroundColor(getCardBackgroundColor());
+        dialogTitle.setBackgroundColor(getPrimaryColor());
+
+        final RadioGroup rGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
         final CheckBox chkShowNPhots = (CheckBox) dialogLayout.findViewById(R.id.show_n_photos);
         RadioButton rCompact = (RadioButton) dialogLayout.findViewById(R.id.radio_card_compact);
         RadioButton rFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
@@ -431,7 +435,6 @@ public class SettingsActivity extends ThemedActivity {
         rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
                 View v;
                 switch (i) {
                     case R.id.radio_card_compact:
@@ -452,7 +455,7 @@ public class SettingsActivity extends ThemedActivity {
                 img.setBackgroundColor(getPrimaryColor());
 
                 Glide.with(getApplicationContext())
-                        .load(R.drawable.gilbert_profile)
+                        .load(R.drawable.leaf_pic)
                         .into(img);
 
                 String hexPrimaryColor = ColorPalette.getHexColor(getPrimaryColor());
@@ -463,18 +466,32 @@ public class SettingsActivity extends ThemedActivity {
 
                 String textColor = getBaseTheme().equals(Theme.LIGHT) ? "#2B2B2B" : "#FAFAFA";
 
-
                 String albumNameHtml = "<i><font color='" + textColor + "'>#PraiseDuarte</font></i>";
+
+                /** CHECK BOX **/
                 if (chkShowNPhots.isChecked()) {
-                    // TODO: 12/4/16 ehhhh
-                    String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>420</font></b>" + "<font " +
-                            "color='" + textColor + "'> " + getString(R.string.media) + "</font>";
+                    String albumPhotoCountHtml = ("<font color='" + textColor + "'> " + ((i!=R.id.radio_card_compact)? "" : "#" + "")
+                            + "</font>")+"<b><font color='" + hexAccentColor + "'>420</font></b>" + "<font " +
+                            "color='" + textColor + "'> " + ((i!=R.id.radio_card_compact) ? getString(R.string.media) : "" )+ "</font>";
                     ((TextView) v.findViewById(R.id.album_photos_count)).setText(StringUtils.html(albumPhotoCountHtml));
                 } else
                     v.findViewById(R.id.album_photos_count).setVisibility(View.GONE);
+                /*
+                TODO: find a way to do this shit
+                chkShowNPhots.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                        if (chkShowNPhots.isChecked()) {
+                            String albumPhotoCountHtml = ((i!=R.id.radio_card_compact)?"#":"")+"<b><font color='" + hexAccentColor + "'>420</font></b>" + "<font " +
+                                    "color='" + textColor + "'> " + ((i!=R.id.radio_card_compact)? " " : getString(R.string.media)) + "</font>";
+                            ((TextView) v.findViewById(R.id.album_photos_count)).setText(StringUtils.html(albumPhotoCountHtml));
+                        } else
+                            v.findViewById(R.id.album_photos_count).setVisibility(View.GONE);
+                    }
+                });
+                */
 
                 ((TextView) v.findViewById(R.id.album_name)).setText(StringUtils.html(albumNameHtml));
-
 
                 ((CardView) v).setUseCompatPadding(true);
                 ((CardView) v).setRadius(2);
@@ -494,7 +511,14 @@ public class SettingsActivity extends ThemedActivity {
         builder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SettingsActivity.this, "Jibo mettilo apposto", Toast.LENGTH_SHORT).show();
+                switch (rGroup.getCheckedRadioButtonId()) {
+                    case R.id.radio_card_material:
+                    default: SP.putInt("card_view_style", CardViewStyle.MATERIAL.getValue()); break;
+                    case R.id.radio_card_flat: SP.putInt("card_view_style", CardViewStyle.FLAT.getValue()); break;
+                    case R.id.radio_card_compact: SP.putInt("card_view_style", CardViewStyle.COMPACT.getValue()); break;
+                }
+                SP.putBoolean("show_n_photos", chkShowNPhots.isChecked());
+                Toast.makeText(SettingsActivity.this, getString(R.string.card_style_alert), Toast.LENGTH_SHORT).show();
             }
         });
         builder.setView(dialogLayout);

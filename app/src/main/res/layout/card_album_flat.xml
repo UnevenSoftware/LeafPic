@@ -44,15 +44,16 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:orientation="vertical"
+            android:paddingLeft="@dimen/sub_medium_spacing"
+            android:paddingRight="@dimen/sub_medium_spacing"
+            android:paddingBottom="@dimen/small_spacing"
+            android:paddingTop="@dimen/small_spacing"
             >
             <TextView
                 android:id="@+id/album_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:paddingEnd="20dp"
-                android:paddingStart="10dp"
-                android:paddingTop="10dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 />
@@ -61,9 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:paddingBottom="10dp"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 />
