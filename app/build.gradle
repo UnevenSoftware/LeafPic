@@ -50,7 +50,7 @@ android {
     }
 }
 
-project.ext.supportLib = "25.0.0"
+project.ext.supportLib = "25.0.1"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

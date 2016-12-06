@@ -161,7 +161,7 @@ public class AlertDialogsHelper {
             value.setLayoutParams((new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 7f)));
             label.setTextColor(activity.getTextColor());
             label.setTypeface(null, Typeface.BOLD);
-            label.setGravity(Gravity.RIGHT);
+            label.setGravity(Gravity.END);
             label.setTextSize(16);
             value.setTextColor(activity.getTextColor());
             value.setTextSize(16);
