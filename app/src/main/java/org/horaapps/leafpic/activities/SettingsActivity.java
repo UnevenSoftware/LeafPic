@@ -72,7 +72,7 @@ public class SettingsActivity extends ThemedActivity {
     private SwitchCompat swMaxLuminosity;
     private SwitchCompat swPictureOrientation;
     private SwitchCompat swDelayFullImage;
-    private SwitchCompat swInternalPlayer;
+
     private SwitchCompat swAutoUpdate;
     private SwitchCompat swUseMediaStore;
     private SwitchCompat swIncludeVideo;
@@ -196,19 +196,6 @@ public class SettingsActivity extends ThemedActivity {
                 swSubScaling.setChecked(!swSubScaling.isChecked());
                 SP.putBoolean(getString(R.string.preference_sub_scaling), swSubScaling.isChecked());
                 setSwitchColor(swSubScaling, getAccentColor());
-            }
-        });
-
-        /*** SW Internal Player ***/
-        swInternalPlayer = (SwitchCompat) findViewById(R.id.set_internal_player);
-        swInternalPlayer.setChecked(SP.getBoolean(getString(R.string.preference_internal_player), false));
-        swInternalPlayer.setClickable(false);
-        findViewById(R.id.ll_switch_internal_player).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                swInternalPlayer.setChecked(!swInternalPlayer.isChecked());
-                SP.putBoolean(getString(R.string.preference_internal_player), swInternalPlayer.isChecked());
-                setSwitchColor(swInternalPlayer, getAccentColor());
             }
         });
 
@@ -858,7 +845,6 @@ public class SettingsActivity extends ThemedActivity {
         setSwitchColor(swStatusBar, color);
         setSwitchColor(swMaxLuminosity, color);
         setSwitchColor(swPictureOrientation, color);
-        setSwitchColor(swInternalPlayer, color);
         setSwitchColor(swAutoUpdate, color);
         setSwitchColor(swIncludeVideo, color);
         setSwitchColor(swSwipeDirection, color);
@@ -912,7 +898,6 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.n_columns_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.nav_bar_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.white_list_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.internal_player_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.internal_include_video)).setColor(color);
         ((IconicsImageView) findViewById(R.id.auto_update_media_Icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.use_media_mediastore_Icon)).setColor(color);
@@ -937,7 +922,6 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.NavBar_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.sub_scaling_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.white_list_item_title)).setTextColor(color);
-        ((TextView) findViewById(R.id.internal_player_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.include_video_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.auto_update_media_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.security_item_title)).setTextColor(color);
@@ -961,7 +945,6 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.n_columns_Item_Title_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.NavBar_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.white_list_item_title_sub)).setTextColor(color);
-        ((TextView) findViewById(R.id.internal_player_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.sub_scaling_Item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.include_video_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.auto_update_media_Item_sub)).setTextColor(color);

@@ -57,7 +57,7 @@ public class Album implements Serializable {
 	public Album(String path, long id, AlbumSettings settings, int count) {
 		this();
 		this.path = path;
-		this.name = StringUtils.getNameByPath(path);
+		this.name = StringUtils.getName(path);
 		this.id = id;
 		this.settings = settings;
 		this.count = count;

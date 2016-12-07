@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-        <item
-            android:id="@+id/action_share"
-            android:orderInCategory="0"
-            android:title="@string/share"
-            app:showAsAction="ifRoom"
-            />
-        <item
-            android:id="@+id/rotate_layout"
-            android:orderInCategory="1"
-            android:title="@string/rotate"
-            app:showAsAction="ifRoom"
-            />
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/rotate_layout"
+        android:title="@string/rotate"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/video_stuff"
+        android:title="@string/video"
+        android:visible="false"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/audio_stuff"
+        android:title="@string/audio"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/text_stuff"
+        android:title="@string/text"
+        android:visible="false"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_settings"
         android:title="@string/settings"
         app:showAsAction="never" />
-       <!--
-        <item
-            android:id="@+id/video_stuff"
-            android:title="@string/video"
-            app:showAsAction="never"/>
-        <item
-            android:id="@+id/audio_stuff"
-            android:title="@string/audio"
-            app:showAsAction="ifRoom"/>-->
-
-        <!--<item
-            android:id="@+id/text_stuff"
-            android:title="@string/text"
-            app:showAsAction="never"/>-->
 </menu>

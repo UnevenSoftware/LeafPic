@@ -37,7 +37,7 @@ public class StringUtils {
         else return Html.fromHtml(s);
     }
 
-    public static String getNameByPath(String path) {
+    public static String getName(String path) {
         String b[] = path.split("/");
         return b[b.length - 1];
     }
