@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,10 +18,10 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.util.Util;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.Formatter;
 import java.util.Locale;
@@ -31,17 +32,13 @@ import java.util.Locale;
 
 public class CustomPlayBackController extends FrameLayout {
 
-    /**
-     * Listener to be notified about changes of the visibility of the UI control.
-     */
     public interface VisibilityListener {
-        /**
-         * Called when the visibility changes.
-         *
-         * @param visibility The new visibility. Either {@link View#VISIBLE} or {@link View#GONE}.
-         */
+        //Called when the visibility changes.
+        //@param visibility The new visibility. Either {@link View#VISIBLE} or {@link View#GONE}.
         void onVisibilityChange(int visibility);
     }
+
+    private ThemeHelper themeHelper;
 
     public static final int DEFAULT_FAST_FORWARD_MS = 15000;
     public static final int DEFAULT_REWIND_MS = 5000;
@@ -135,24 +132,19 @@ public class CustomPlayBackController extends FrameLayout {
         rewindButton.setOnClickListener(componentListener);
         fastForwardButton = findViewById(R.id.ffwd);
         fastForwardButton.setOnClickListener(componentListener);
+
+        /**** THEMING THINGS ****/
+        themeHelper = ThemeHelper.getThemeHelper(getContext());
+        themeHelper.themeSeekBar(progressBar);
+        ((LinearLayout) findViewById(R.id.exoplayer_controller_background))
+                .setBackgroundColor(themeHelper.getPrimaryColor());
     }
 
-    /**
-     * Returns the player currently being controlled by this view, or null if no player is set.
-     */
-    public ExoPlayer getPlayer() {
-        return player;
-    }
+    public ExoPlayer getPlayer() {return player;}
 
-    /**
-     * Sets the {@link ExoPlayer} to control.
-     *
-     * @param player the {@code ExoPlayer} to control.
-     */
     public void setPlayer(ExoPlayer player) {
-        if (this.player == player) {
+        if (this.player == player)
             return;
-        }
         if (this.player != null) {
             this.player.removeListener(componentListener);
         }
@@ -163,61 +155,28 @@ public class CustomPlayBackController extends FrameLayout {
         updateAll();
     }
 
-    /**
-     * Sets the {@link PlaybackControlView.VisibilityListener}.
-     *
-     * @param listener The listener to be notified about visibility changes.
-     */
     public void setVisibilityListener(VisibilityListener listener) {
         this.visibilityListener = listener;
     }
 
-    /**
-     * Sets the rewind increment in milliseconds.
-     *
-     * @param rewindMs The rewind increment in milliseconds.
-     */
     public void setRewindIncrementMs(int rewindMs) {
         this.rewindMs = rewindMs;
         updateNavigation();
     }
 
-    /**
-     * Sets the fast forward increment in milliseconds.
-     *
-     * @param fastForwardMs The fast forward increment in milliseconds.
-     */
     public void setFastForwardIncrementMs(int fastForwardMs) {
         this.fastForwardMs = fastForwardMs;
         updateNavigation();
     }
 
-    /**
-     * Returns the playback controls timeout. The playback controls are automatically hidden after
-     * this duration of time has elapsed without user input.
-     *
-     * @return The duration in milliseconds. A non-positive value indicates that the controls will
-     *     remain visible indefinitely.
-     */
     public int getShowTimeoutMs() {
         return showTimeoutMs;
     }
 
-    /**
-     * Sets the playback controls timeout. The playback controls are automatically hidden after this
-     * duration of time has elapsed without user input.
-     *
-     * @param showTimeoutMs The duration in milliseconds. A non-positive value will cause the controls
-     *     to remain visible indefinitely.
-     */
     public void setShowTimeoutMs(int showTimeoutMs) {
         this.showTimeoutMs = showTimeoutMs;
     }
 
-    /**
-     * Shows the playback controls. If {@link #getShowTimeoutMs()} is positive then the controls will
-     * be automatically hidden after this duration of time has elapsed without user input.
-     */
     public void show() {
         if (!isVisible()) {
             setVisibility(VISIBLE);
@@ -230,9 +189,8 @@ public class CustomPlayBackController extends FrameLayout {
         hideAfterTimeout();
     }
 
-    /**
-     * Hides the controller.
-     */
+
+    //Hides the controller.
     public void hide() {
         if (isVisible()) {
             setVisibility(GONE);
@@ -245,9 +203,8 @@ public class CustomPlayBackController extends FrameLayout {
         }
     }
 
-    /**
-     * Returns whether the controller is currently visible.
-     */
+
+    //Returns whether the controller is currently visible.
     public boolean isVisible() {
         return getVisibility() == VISIBLE;
     }
@@ -307,9 +264,7 @@ public class CustomPlayBackController extends FrameLayout {
     }
 
     private void updateProgress() {
-        if (!isVisible() || !isAttachedToWindow) {
-            return;
-        }
+        if (!isVisible() || !isAttachedToWindow) return;
         long duration = player == null ? 0 : player.getDuration();
         long position = player == null ? 0 : player.getCurrentPosition();
         time.setText(stringForTime(duration));
@@ -407,16 +362,12 @@ public class CustomPlayBackController extends FrameLayout {
     }
 
     private void rewind() {
-        if (rewindMs <= 0) {
-            return;
-        }
+        if (rewindMs <= 0) return;
         player.seekTo(Math.max(player.getCurrentPosition() - rewindMs, 0));
     }
 
     private void fastForward() {
-        if (fastForwardMs <= 0) {
-            return;
-        }
+        if (fastForwardMs <= 0) return;
         player.seekTo(Math.min(player.getCurrentPosition() + fastForwardMs, player.getDuration()));
     }
 
@@ -450,30 +401,15 @@ public class CustomPlayBackController extends FrameLayout {
         }
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                fastForward();
-                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT: fastForward();break;
             case KeyEvent.KEYCODE_MEDIA_REWIND:
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                rewind();
-                break;
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                player.setPlayWhenReady(!player.getPlayWhenReady());
-                break;
-            case KeyEvent.KEYCODE_MEDIA_PLAY:
-                player.setPlayWhenReady(true);
-                break;
-            case KeyEvent.KEYCODE_MEDIA_PAUSE:
-                player.setPlayWhenReady(false);
-                break;
-            case KeyEvent.KEYCODE_MEDIA_NEXT:
-                next();
-                break;
-            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                previous();
-                break;
-            default:
-                return false;
+            case KeyEvent.KEYCODE_DPAD_LEFT: rewind();break;
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: player.setPlayWhenReady(!player.getPlayWhenReady());break;
+            case KeyEvent.KEYCODE_MEDIA_PLAY: player.setPlayWhenReady(true);break;
+            case KeyEvent.KEYCODE_MEDIA_PAUSE :player.setPlayWhenReady(false);break;
+            case KeyEvent.KEYCODE_MEDIA_NEXT: next();break;
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS: previous();break;
+            default:return false;
         }
         show();
         return true;
@@ -546,6 +482,5 @@ public class CustomPlayBackController extends FrameLayout {
             }
             hideAfterTimeout();
         }
-
     }
 }

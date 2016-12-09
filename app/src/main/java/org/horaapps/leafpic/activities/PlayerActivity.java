@@ -15,10 +15,14 @@
  */
 package org.horaapps.leafpic.activities;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -88,9 +92,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * An activity that plays media using {@link SimpleExoPlayer}.
- */
 public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventListener,
         TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener {
 
@@ -110,7 +111,6 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     private Timeline.Window window;
     private CustomExoPlayerView simpleExoPlayerView;
 
-
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
     private MappingTrackSelector trackSelector;
@@ -122,10 +122,14 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     private int playerWindow,video, audio, text;
     private long playerPosition;
     Toolbar toolbar;
+
+    View rootView;
+    private boolean fullScreenMode;
     // Activity lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updateTheme();
         shouldAutoPlay = true;
         mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
@@ -134,10 +138,9 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
 
-        setContentView(R.layout.activity_player2);
+        setContentView(R.layout.activity_player);
         initUi();
-        View rootView = findViewById(R.id.root);
-        rootView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+        rootView = findViewById(R.id.root);
 
         simpleExoPlayerView = (CustomExoPlayerView) findViewById(R.id.player_view);
         simpleExoPlayerView.setControllerVisibilityListener(this);
@@ -154,9 +157,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     @Override
     public void onStart() {
         super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
-        }
+        if (Util.SDK_INT > 23) initializePlayer();
     }
 
     private void initUi() {
@@ -170,7 +171,6 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
             }
         });
         getSupportActionBar().setTitle(StringUtils.getName(getIntent().getData().getPath()));
-        toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent_black));
     }
 
     @Override
@@ -295,55 +295,12 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         }
     }
 
-
-    // PlaybackControlView.VisibilityListener implementation
-
-    private void hideControls() {
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
-                .setDuration(200).start();
-
-    }
-
-    private void showControls(){
-        int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) { //Landscape
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            simpleExoPlayerView.setPaddingRelative(0, 0, 0, 0);
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            simpleExoPlayerView.setPaddingRelative(0,0,0, Measure.getNavBarHeight(getApplicationContext()));
-        }
-        toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-                .setDuration(240).start();
-    }
-
-    @Override
-    public void onVisibilityChange(int visibility) {
-        if(visibility == View.GONE)
-            hideControls();
-        else if(visibility == View.VISIBLE)
-            showControls();
-    }
-
     // Internal methods
     private void initializePlayer() {
         Intent intent = getIntent();
         if (player == null) {
             boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
-            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
-                    ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
+            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA) ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
             DrmSessionManager<FrameworkMediaCrypto> drmSessionManager = null;
             if (drmSchemeUuid != null) {
                 String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
@@ -358,9 +315,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                                 keyRequestPropertiesArray[i + 1]);
                     }
                 }
-                try {
-                    drmSessionManager = buildDrmSessionManager(drmSchemeUuid, drmLicenseUrl,
-                            keyRequestProperties);
+                try { drmSessionManager = buildDrmSessionManager(drmSchemeUuid, drmLicenseUrl, keyRequestProperties);
                 } catch (UnsupportedDrmException e) {
                     int errorStringId = e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
                             ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown;
@@ -414,23 +369,13 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     }
 
     private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
-        int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension
-                : uri.getLastPathSegment());
+        int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension : uri.getLastPathSegment());
         switch (type) {
-            case C.TYPE_SS:
-                return new SsMediaSource(uri, buildDataSourceFactory(false),
-                        new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
-            case C.TYPE_DASH:
-                return new DashMediaSource(uri, buildDataSourceFactory(false),
-                        new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
-            case C.TYPE_HLS:
-                return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
-            case C.TYPE_OTHER:
-                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
-                        mainHandler, null);
-            default: {
-                throw new IllegalStateException("Unsupported type: " + type);
-            }
+            case C.TYPE_SS:return new SsMediaSource(uri, buildDataSourceFactory(false), new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
+            case C.TYPE_DASH:return new DashMediaSource(uri, buildDataSourceFactory(false), new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
+            case C.TYPE_HLS:return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
+            case C.TYPE_OTHER:return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(), mainHandler, null);
+            default: throw new IllegalStateException("Unsupported type: " + type);
         }
     }
 
@@ -447,9 +392,8 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
             playerWindow = player.getCurrentWindowIndex();
             playerPosition = C.TIME_UNSET;
             Timeline timeline = player.getCurrentTimeline();
-            if (timeline != null && timeline.getWindow(playerWindow, window).isSeekable) {
+            if (timeline != null && timeline.getWindow(playerWindow, window).isSeekable)
                 playerPosition = player.getCurrentPosition();
-            }
             player.release();
             player = null;
             trackSelector = null;
@@ -457,13 +401,6 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         }
     }
 
-    /**
-     * Returns a new DataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new DataSource factory.
-     */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
         return new DefaultDataSourceFactory(this, useBandwidthMeter ? BANDWIDTH_METER : null,
                 buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null));
@@ -473,36 +410,23 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "LeafPic"), bandwidthMeter);
     }
 
-    /**
-     * Returns a new HttpDataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new HttpDataSource factory.
-     */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
         return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "LeafPic"), useBandwidthMeter ? BANDWIDTH_METER : null);
     }
 
     // ExoPlayer.EventListener implementation
-
     @Override
-    public void onLoadingChanged(boolean isLoading) {
-        // Do nothing.
-    }
+    public void onLoadingChanged(boolean isLoading) { }
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == ExoPlayer.STATE_ENDED) {
+        if (playbackState == ExoPlayer.STATE_ENDED)
             showControls();
-        }
         invalidateOptionsMenu();
     }
 
     @Override
-    public void onPositionDiscontinuity() {
-        // Do nothing.
-    }
+    public void onPositionDiscontinuity() {}
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -519,45 +443,36 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                 // Special case for decoder initialization failures.
                 DecoderInitializationException decoderInitializationException =
                         (DecoderInitializationException) cause;
-                if (decoderInitializationException.decoderName == null) {
-                    if (decoderInitializationException.getCause() instanceof DecoderQueryException) {
+                if (decoderInitializationException.decoderName == null)
+                    if (decoderInitializationException.getCause() instanceof DecoderQueryException)
                         errorString = getString(R.string.error_querying_decoders);
-                    } else if (decoderInitializationException.secureDecoderRequired) {
-                        errorString = getString(R.string.error_no_secure_decoder,
-                                decoderInitializationException.mimeType);
-                    } else {
-                        errorString = getString(R.string.error_no_decoder,
-                                decoderInitializationException.mimeType);
-                    }
-                } else {
-                    errorString = getString(R.string.error_instantiating_decoder,
-                            decoderInitializationException.decoderName);
-                }
+                    else if (decoderInitializationException.secureDecoderRequired)
+                        errorString = getString(R.string.error_no_secure_decoder, decoderInitializationException.mimeType);
+                    else
+                        errorString = getString(R.string.error_no_decoder, decoderInitializationException.mimeType);
+                else
+                    errorString = getString(R.string.error_instantiating_decoder, decoderInitializationException.decoderName);
             }
         }
-        if (errorString != null) {
+        if (errorString != null)
             showToast(errorString);
-        }
         playerNeedsSource = true;
         invalidateOptionsMenu();
         showControls();
     }
 
     // MappingTrackSelector.EventListener implementation
-
     @Override
     public void onTrackSelectionsChanged(TrackSelections<? extends MappedTrackInfo> trackSelections) {
         invalidateOptionsMenu();
         MappedTrackInfo trackInfo = trackSelections.info;
-        if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_VIDEO)) {
+        if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_VIDEO))
             showToast(R.string.error_unsupported_video);
-        }
-        if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_AUDIO)) {
+        if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_AUDIO))
             showToast(R.string.error_unsupported_audio);
-        }
     }
 
-    // User controls
+    //User controls
     private void showToast(int messageId) {
         showToast(getString(messageId));
     }
@@ -566,8 +481,93 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    /**** THEMING STUFF ****/
+
     @Override
     public void updateUiElements() {
+        toolbar.setBackgroundColor(getPrimaryColor());
+        setStatusBarColor();
+        setNavBarColor();
+        setRecentApp(getString(R.string.video_player));
+        rootView.setBackgroundColor(getBackgroundColor());
+    }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setNavBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setNavigationBarColor(getPrimaryColor());
+        }
+    }
+
+    private void hideControls() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+                        .setDuration(200).start();
+                fullScreenMode = true;
+                changeBackGroundColor();
+            }
+        });
+    }
+
+    private void showControls(){
+        runOnUiThread(new Runnable() {
+            public void run() {
+                int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
+                if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) { //Landscape
+                    getWindow().getDecorView().setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    simpleExoPlayerView.setPaddingRelative(0, 0, 0, 0);
+                } else {
+                    getWindow().getDecorView().setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                    simpleExoPlayerView.setPaddingRelative(0, 0, 0, Measure.getNavBarHeight(getApplicationContext()));
+                }
+                toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+                        .setDuration(240).start();
+                fullScreenMode = false;
+                changeBackGroundColor();
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChange(int visibility) {
+        if(visibility == View.GONE)
+            hideControls();
+        else if(visibility == View.VISIBLE)
+            showControls();
+    }
+
+    private void changeBackGroundColor() {
+        int colorTo;
+        int colorFrom;
+        if (fullScreenMode) {
+            colorFrom = getBackgroundColor();
+            colorTo = (ContextCompat.getColor(PlayerActivity.this, R.color.md_black_1000));
+        } else {
+            colorFrom = (ContextCompat.getColor(PlayerActivity.this, R.color.md_black_1000));
+            colorTo = getBackgroundColor();
+        }
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(240);
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                rootView.setBackgroundColor((Integer) animator.getAnimatedValue());
+            }
+        });
+        colorAnimation.start();
     }
 }

@@ -119,7 +119,6 @@ public class AboutActivity extends ThemedActivity {
         /*** SPECIAL THANKS ***/
         /*** Patryk Goworowski ***/
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setMovementMethod(LinkMovementMethod.getInstance());
-        ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setLinkTextColor(getAccentColor());
     }
 
     private void mail(String mail) {
@@ -180,6 +179,8 @@ public class AboutActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.about));
+
+        ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setLinkTextColor(getAccentColor());
 
         /**** Title Cards ***/
         int color = getAccentColor();

@@ -101,20 +101,10 @@ public final class CustomExoPlayerView extends FrameLayout {
         layout.addView(surfaceView, 0);
     }
 
-    /**
-     * Returns the player currently set on this view, or null if no player is set.
-     */
     public SimpleExoPlayer getPlayer() {
         return player;
     }
 
-    /**
-     * Set the {@link SimpleExoPlayer} to use. The {@link SimpleExoPlayer#setTextOutput} and
-     * {@link SimpleExoPlayer#setVideoListener} method of the player will be called and previous
-     * assignments are overridden.
-     *
-     * @param player The {@link SimpleExoPlayer} to use.
-     */
     public void setPlayer(SimpleExoPlayer player) {
         if (this.player == player) {
             return;
@@ -145,30 +135,14 @@ public final class CustomExoPlayerView extends FrameLayout {
         }
     }
 
-    /**
-     * Sets the resize mode which can be of value {@link AspectRatioFrameLayout#RESIZE_MODE_FIT},
-     * {@link AspectRatioFrameLayout#RESIZE_MODE_FIXED_HEIGHT} or
-     * {@link AspectRatioFrameLayout#RESIZE_MODE_FIXED_WIDTH}.
-     *
-     * @param resizeMode The resize mode.
-     */
     public void setResizeMode(int resizeMode) {
         layout.setResizeMode(resizeMode);
     }
 
-    /**
-     * Returns whether the playback controls are enabled.
-     */
     public boolean getUseController() {
         return useController;
     }
 
-    /**
-     * Sets whether playback controls are enabled. If set to {@code false} the playback controls are
-     * never visible and are disconnected from the player.
-     *
-     * @param useController Whether playback controls should be enabled.
-     */
     public void setUseController(boolean useController) {
         if (this.useController == useController) {
             return;
@@ -182,62 +156,20 @@ public final class CustomExoPlayerView extends FrameLayout {
         }
     }
 
-    /**
-     * Returns the playback controls timeout. The playback controls are automatically hidden after
-     * this duration of time has elapsed without user input and with playback or buffering in
-     * progress.
-     *
-     * @return The timeout in milliseconds. A non-positive value will cause the controller to remain
-     *     visible indefinitely.
-     */
     public int getControllerShowTimeoutMs() {
         return controllerShowTimeoutMs;
     }
 
-    /**
-     * Sets the playback controls timeout. The playback controls are automatically hidden after this
-     * duration of time has elapsed without user input and with playback or buffering in progress.
-     *
-     * @param controllerShowTimeoutMs The timeout in milliseconds. A non-positive value will cause
-     *     the controller to remain visible indefinitely.
-     */
-    public void setControllerShowTimeoutMs(int controllerShowTimeoutMs) {
-        this.controllerShowTimeoutMs = controllerShowTimeoutMs;
-    }
+    public void setControllerShowTimeoutMs(int controllerShowTimeoutMs) {this.controllerShowTimeoutMs = controllerShowTimeoutMs;}
 
-    /**
-     * Set the {@link CustomPlayBackController.VisibilityListener}.
-     *
-     * @param listener The listener to be notified about visibility changes.
-     */
-    public void setControllerVisibilityListener(CustomPlayBackController.VisibilityListener listener) {
-        controller.setVisibilityListener(listener);
-    }
+    public void setControllerVisibilityListener(CustomPlayBackController.VisibilityListener listener) {controller.setVisibilityListener(listener);}
 
-    /**
-     * Sets the rewind increment in milliseconds.
-     *
-     * @param rewindMs The rewind increment in milliseconds.
-     */
     public void setRewindIncrementMs(int rewindMs) {
         controller.setRewindIncrementMs(rewindMs);
     }
 
-    /**
-     * Sets the fast forward increment in milliseconds.
-     *
-     * @param fastForwardMs The fast forward increment in milliseconds.
-     */
-    public void setFastForwardIncrementMs(int fastForwardMs) {
-        controller.setFastForwardIncrementMs(fastForwardMs);
-    }
+    public void setFastForwardIncrementMs(int fastForwardMs) {controller.setFastForwardIncrementMs(fastForwardMs);}
 
-    /**
-     * Get the view onto which video is rendered. This is either a {@link SurfaceView} (default)
-     * or a {@link TextureView} if the {@code use_texture_view} view attribute has been set to true.
-     *
-     * @return either a {@link SurfaceView} or a {@link TextureView}.
-     */
     public View getVideoSurfaceView() {
         return surfaceView;
     }
@@ -257,9 +189,8 @@ public final class CustomExoPlayerView extends FrameLayout {
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
-        if (!useController || player == null) {
+        if (!useController || player == null)
             return false;
-        }
         maybeShowController(true);
         return true;
     }
@@ -287,17 +218,14 @@ public final class CustomExoPlayerView extends FrameLayout {
             TextRenderer.Output, ExoPlayer.EventListener {
 
         // TextRenderer.Output implementation
-
         @Override
         public void onCues(List<Cue> cues) {
             subtitleLayout.onCues(cues);
         }
 
         // SimpleExoPlayer.VideoListener implementation
-
         @Override
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
-                                       float pixelWidthHeightRatio) {
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
             layout.setAspectRatio(height == 0 ? 1 : (width * pixelWidthHeightRatio) / height);
         }
 
@@ -312,7 +240,6 @@ public final class CustomExoPlayerView extends FrameLayout {
         }
 
         // ExoPlayer.EventListener implementation
-
         @Override
         public void onLoadingChanged(boolean isLoading) {
             // Do nothing.
@@ -337,7 +264,5 @@ public final class CustomExoPlayerView extends FrameLayout {
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             // Do nothing.
         }
-
     }
-
 }
