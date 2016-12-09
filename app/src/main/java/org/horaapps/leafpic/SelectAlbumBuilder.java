@@ -149,7 +149,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 //                            if(documentFile != null){
 //                                displayContentFolder(new File(ContentHelper.getExtSdCardPaths(getContext())[pos - 1]));
 //                            } else {
-//                                Toast.makeText(getContext(), getString(R.string.no_permission), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getContext(), getString(R.string.no_permission), Toast.LENGTH_LONG).choseProvider();
 //                                spinner.setSelection(0);
 //                            }
 //                        } else {

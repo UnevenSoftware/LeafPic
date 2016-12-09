@@ -100,7 +100,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     //the image is stored in the storage
                     album = new Album(getApplicationContext(), file);
                 else {
-                    //try to show with Uri
+                    //try to choseProvider with Uri
                     album = new Album(getApplicationContext(), getIntent().getData());
                     customUri = true;
                 }
@@ -169,7 +169,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(
-                isApplyThemeOnImgAct()
+                themeOnSingleImgAct()
                         ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
                         : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
@@ -553,7 +553,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isApplyThemeOnImgAct())
+            if (themeOnSingleImgAct())
                 if (isNavigationBarColored())
                     getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
                 else
@@ -566,7 +566,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isApplyThemeOnImgAct())
+            if (themeOnSingleImgAct())
                 if (isTranslucentStatusBar() && isTransparencyZero())
                     getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                 else

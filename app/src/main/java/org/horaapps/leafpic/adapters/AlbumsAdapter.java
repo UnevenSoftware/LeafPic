@@ -113,23 +113,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
+
+        holder.llMdia.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
-        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>" + "<font " +
-                "color='" + textColor + "'> " + holder.nPhotos.getContext().getString(R.string.media) + "</font>";
+        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
 
-        if (cvs.equals(CardViewStyle.COMPACT)) {
-            albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>#" + a.getCount() + "</font></b>";
-        }
-
+        holder.mediaLabel.setTextColor(theme.getTextColor());
         holder.name.setText(StringUtils.html(albumNameHtml));
         holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
-
-        //IMAGE COUNTER
-
-        if (!SP.getBoolean("show_n_photos", true))
-            holder.nPhotos.setVisibility(View.GONE);
-
-        // (a.getImagesCount() == 1 ? c.getString(R.string.singular_photo) : c.getString(R.string.plural_photos))
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -155,16 +146,18 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView picture;
-        View selectedIcon, layout;
-        TextView name, nPhotos;
+        View selectedIcon, layout, llMdia;
+        TextView name, nPhotos, mediaLabel;
 
         ViewHolder(View itemView) {
             super(itemView);
             picture = (ImageView) itemView.findViewById(org.horaapps.leafpic.R.id.album_preview);
             selectedIcon = itemView.findViewById(org.horaapps.leafpic.R.id.selected_icon);
+            llMdia = itemView.findViewById(R.id.ll_n_media);
             layout = itemView.findViewById(org.horaapps.leafpic.R.id.linear_card_text);
             name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_name);
             nPhotos = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_photos_count);
+            mediaLabel = (TextView) itemView.findViewById(R.id.album_media_label);
         }
     }
 }

@@ -13,7 +13,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
@@ -40,7 +39,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
 
     private boolean coloredNavBar;
     private boolean obscuredStatusBar;
-    private boolean applyThemeImgAct;
+    private boolean applyThemeSingleImgAct;
 
 
     @Override
@@ -63,7 +62,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         themeHelper.updateTheme();
         coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
         obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
-        applyThemeImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
+        applyThemeSingleImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
     }
 
     @Override
@@ -95,13 +94,6 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         themeHelper.setScrollViewColor(scr);
     }
 
-    @Deprecated
-    public void setCursorDrawableColor(EditText editText, int color) {
-        // TODO: 02/08/16 remove this
-        ThemeHelper.setCursorColor(editText, color);
-    }
-
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setRecentApp(String text){
@@ -120,8 +112,8 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         return obscuredStatusBar;
     }
 
-    protected boolean isApplyThemeOnImgAct() {
-        return applyThemeImgAct;
+    public boolean themeOnSingleImgAct() {
+        return applyThemeSingleImgAct;
     }
 
     protected boolean isTransparencyZero() {
@@ -149,7 +141,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
 
     public Theme getBaseTheme(){ return  themeHelper.getBaseTheme(); }
 
-    protected int getBackgroundColor(){
+    public int getBackgroundColor(){
         return themeHelper.getBackgroundColor();
     }
 
@@ -197,11 +189,11 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         return themeHelper.getDefaultThemeToolbarColor3th();
     }
 
-    protected void themeRadioButton(RadioButton radioButton) {
+    public void themeRadioButton(RadioButton radioButton) {
         themeHelper.themeRadioButton(radioButton);
     }
 
-    protected void themeCheckBox(CheckBox chk) {
+    public void themeCheckBox(CheckBox chk) {
         themeHelper.themeCheckBox(chk);
     }
 
@@ -209,6 +201,13 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
 
     public void setSwitchColor(SwitchCompat sw, int color){
         themeHelper.setSwitchCompactColor(sw, color);
+    }
+
+    public void setSwitchColor(SwitchCompat sw[], int color){
+        for (SwitchCompat switchCompat : sw) {
+            themeHelper.setSwitchCompactColor(switchCompat, color);
+        }
+
     }
 
     public IconicsDrawable getToolbarIcon(IIcon icon){

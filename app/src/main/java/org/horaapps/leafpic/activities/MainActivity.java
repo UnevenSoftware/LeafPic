@@ -474,7 +474,7 @@ public class MainActivity extends SharedMediaActivity {
 //        // Persist URI in shared preference so that you can use it later.
 //        ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
 //        getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-//        Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).choseProvider();
 //      }
 //    }
 //  }
@@ -493,7 +493,7 @@ public class MainActivity extends SharedMediaActivity {
 //          startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_CODE_SD_CARD_PERMISSIONS);
 //      }
 //    });
-//    dialogBuilder.show();
+//    dialogBuilder.choseProvider();
 //  }
 
   private void updateSelectedStuff() {
