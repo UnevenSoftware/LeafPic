@@ -373,7 +373,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                     new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
             trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
             trackSelector.addListener(this);
-            trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
+            trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory, getThemeHelper());
             player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
                     drmSessionManager, preferExtensionDecoders);
             player.addListener(this);

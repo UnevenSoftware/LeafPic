@@ -57,6 +57,8 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         updateUiElements();
     }
 
+    public ThemeHelper getThemeHelper() { return themeHelper; }
+
     public void updateTheme(){
         themeHelper.updateTheme();
         coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
