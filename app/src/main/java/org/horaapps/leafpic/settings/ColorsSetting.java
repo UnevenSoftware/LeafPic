@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.settings;
 
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.SettingsActivity;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -30,14 +30,10 @@ public class ColorsSetting extends ThemedSetting {
         super(activity, SP);
     }
 
-    public ColorsSetting(PreferenceUtil SP) {
-        super(SP);
-    }
-
-    public void choseBaseTheme() {
+    public void chooseBaseTheme() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), getActivity().getDialogStyle());
 
-        final View dialogLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_basic_theme, null);
+        final View dialogLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_base_theme, null);
         final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.basic_theme_title);
         final CardView dialogCardView = (CardView) dialogLayout.findViewById(R.id.basic_theme_card);
 
@@ -70,116 +66,74 @@ public class ColorsSetting extends ThemedSetting {
         dialogLayout.findViewById(R.id.ll_dark_amoled_basic_theme).setOnClickListener(listener);
     }
 
-    public void chosePrimaryColor(final  SettingsActivity activity) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
+    public interface ColorChooser {
+        void onColorSelected(int color);
+        void onDialogDismiss();
+        void onColorChanged(int color);
+    }
 
-        final View dialogLayout = LayoutInflater.from(activity).inflate(R.layout.color_piker_primary, null);
+    public void chooseColor(@StringRes int title, final ColorChooser chooser, int defaultColor) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), getActivity().getDialogStyle());
+
+        View dialogLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_color_picker, null);
         final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_primary);
         final LineColorPicker colorPicker2 = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_primary_2);
-        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.cp_primary_title);
-        CardView dialogCardView = (CardView) dialogLayout.findViewById(R.id.cp_primary_card);
-        dialogCardView.setCardBackgroundColor(activity.getCardBackgroundColor());
-
-        colorPicker.setColors(ColorPalette.getBaseColors(activity));
-        for (int i : colorPicker.getColors())
-            for (int i2 : ColorPalette.getColors(activity, i))
-                if (i2 == activity.getPrimaryColor()) {
-                    colorPicker.setSelectedColor(i);
-                    colorPicker2.setColors(ColorPalette.getColors(activity, i));
-                    colorPicker2.setSelectedColor(i2);
-                    break;
-            }
-
-        dialogTitle.setBackgroundColor(activity.getPrimaryColor());
+        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_title);
+        dialogTitle.setText(title);
+        ((CardView) dialogLayout.findViewById(R.id.dialog_card)).setCardBackgroundColor(getActivity().getCardBackgroundColor());
 
         colorPicker2.setOnColorChangedListener(new OnColorChangedListener() {
             @Override
             public void onColorChanged(int c) {
-                activity.updateViewsWithPrimaryColor(c);
                 dialogTitle.setBackgroundColor(c);
+                chooser.onColorChanged(c);
             }
         });
 
         colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
             @Override
             public void onColorChanged(int c) {
-                colorPicker2.setColors(ColorPalette.getColors(activity, colorPicker.getColor()));
+                colorPicker2.setColors(ColorPalette.getColors(getActivity(), colorPicker.getColor()));
                 colorPicker2.setSelectedColor(colorPicker.getColor());
             }
         });
 
+        int[] baseColors = ColorPalette.getBaseColors(getActivity());
+        colorPicker.setColors(baseColors);
+
+        for (int i : baseColors) {
+            for (int i2 : ColorPalette.getColors(getActivity(), i))
+                if (i2 == defaultColor) {
+                    colorPicker.setSelectedColor(i);
+                    colorPicker2.setColors(ColorPalette.getColors(getActivity(), i));
+                    colorPicker2.setSelectedColor(i2);
+                    break;
+                }
+        }
+
         dialogBuilder.setView(dialogLayout);
 
-        dialogBuilder.setNeutralButton(activity.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getActivity().getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                activity.updateViewsWithPrimaryColor(activity.getPrimaryColor());
                 dialog.cancel();
+                chooser.onDialogDismiss();
             }
         });
 
-        dialogBuilder.setPositiveButton(activity.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getActivity().getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                getSP().putInt(activity.getString(R.string.preference_primary_color), colorPicker2.getColor());
-                activity.updateTheme();
-                activity.updateViewsWithPrimaryColor(activity.getPrimaryColor());
+                chooser.onColorSelected(colorPicker2.getColor());
             }
         });
 
         dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                activity.updateViewsWithPrimaryColor(activity.getPrimaryColor());
+                chooser.onDialogDismiss();
             }
         });
         dialogBuilder.show();
     }
 
-    public void choseAccentColor(final SettingsActivity activity) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
-
-        final View dialogLayout = LayoutInflater.from(activity).inflate(R.layout.color_piker_accent, null);
-        final LineColorPicker colorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.color_picker_accent);
-        final TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.cp_accent_title);
-        CardView cv = (CardView) dialogLayout.findViewById(R.id.cp_accent_card);
-        cv.setCardBackgroundColor(activity.getCardBackgroundColor());
-
-        colorPicker.setColors(ColorPalette.getAccentColors(activity.getApplicationContext()));
-        colorPicker.setSelectedColor(activity.getAccentColor());
-        dialogTitle.setBackgroundColor(activity.getAccentColor());
-
-        colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
-            @Override
-            public void onColorChanged(int c) {
-                dialogTitle.setBackgroundColor(c);
-                // TODO: 12/9/16 callback
-                activity.updateViewsWithAccentColor(colorPicker.getColor());
-
-            }
-        });
-        dialogBuilder.setView(dialogLayout);
-
-        dialogBuilder.setNeutralButton(activity.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                activity.updateViewsWithAccentColor(activity.getAccentColor());
-            }
-        });
-        dialogBuilder.setPositiveButton(activity.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                getSP().putInt(activity.getString(R.string.preference_accent_color), colorPicker.getColor());
-                activity.updateTheme();
-                activity.updateViewsWithAccentColor(activity.getAccentColor());
-            }
-        });
-        dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                activity.updateViewsWithAccentColor(activity.getAccentColor());
-            }
-        });
-        dialogBuilder.show();
-    }
 }

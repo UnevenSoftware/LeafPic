@@ -82,7 +82,7 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_basic_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ColorsSetting(SettingsActivity.this, SP).choseBaseTheme();
+                new ColorsSetting(SettingsActivity.this, SP).chooseBaseTheme();
             }
         });
 
@@ -108,7 +108,23 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_primaryColor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ColorsSetting(SP).chosePrimaryColor(SettingsActivity.this);
+                new ColorsSetting(SettingsActivity.this, SP).chooseColor(R.string.primary_color, new ColorsSetting.ColorChooser() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        SP.putInt(getString(R.string.preference_primary_color), color);
+                        //updateViewsWithAccentColor(color);
+                    }
+
+                    @Override
+                    public void onDialogDismiss() {
+                        updateViewsWithPrimaryColor(getPrimaryColor());
+                    }
+
+                    @Override
+                    public void onColorChanged(int color) {
+                        updateViewsWithPrimaryColor(color);
+                    }
+                }, getPrimaryColor());
             }
         });
 
@@ -116,7 +132,23 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_accentColor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ColorsSetting(SP).choseAccentColor(SettingsActivity.this);
+                new ColorsSetting(SettingsActivity.this, SP).chooseColor(R.string.accent_color, new ColorsSetting.ColorChooser() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        SP.putInt(getString(R.string.preference_accent_color), color);
+                        //updateViewsWithAccentColor(color);
+                    }
+
+                    @Override
+                    public void onDialogDismiss() {
+                        updateViewsWithAccentColor(getAccentColor());
+                    }
+
+                    @Override
+                    public void onColorChanged(int color) {
+                        updateViewsWithAccentColor(color);
+                    }
+                }, getAccentColor());
             }
         });
 
