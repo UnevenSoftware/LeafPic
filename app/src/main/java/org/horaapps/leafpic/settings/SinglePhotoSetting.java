@@ -47,10 +47,10 @@ public class SinglePhotoSetting extends ThemedSetting {
             @Override
             public void onClick(View v) {
                 swApplyTheme.setChecked(!swApplyTheme.isChecked());
-                getActivity().setSwitchColor(swApplyTheme, getActivity().getAccentColor());
+                getActivity().setSwitchColor(getActivity().getAccentColor(), swApplyTheme);
             }
         });
-        getActivity().setSwitchColor(swApplyTheme, getActivity().getAccentColor());
+        getActivity().setSwitchColor(getActivity().getAccentColor(), swApplyTheme);
 
         final LineColorPicker transparencyColorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.pickerTransparent);
         transparencyColorPicker.setColors(ColorPalette.getTransparencyShadows(getActivity().getPrimaryColor()));

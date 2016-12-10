@@ -77,7 +77,7 @@ public final class CustomExoPlayerView extends FrameLayout {
             }
         }
 
-        LayoutInflater.from(context).inflate(R.layout.custom_exo_player_view, this);
+        LayoutInflater.from(context).inflate(R.layout.exo_player, this);
         componentListener = new ComponentListener();
         layout = (AspectRatioFrameLayout) findViewById(R.id.video_frame);
         layout.setResizeMode(resizeMode);

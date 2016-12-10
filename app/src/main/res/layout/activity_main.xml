@@ -92,7 +92,7 @@
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/drawer_items"
-        layout="@layout/activity_drawer"/>
+        layout="@layout/drawer"/>
 </android.support.v4.widget.DrawerLayout>
 
 

@@ -116,7 +116,7 @@ public class CustomPlayBackController extends FrameLayout {
         formatter = new Formatter(formatBuilder, Locale.getDefault());
         componentListener = new ComponentListener();
 
-        LayoutInflater.from(context).inflate(R.layout.exo_playback_control_view, this);
+        LayoutInflater.from(context).inflate(R.layout.exo_media_control, this);
         time = (TextView) findViewById(R.id.time);
         timeCurrent = (TextView) findViewById(R.id.time_current);
         progressBar = (SeekBar) findViewById(R.id.mediacontroller_progress);

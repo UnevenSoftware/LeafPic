@@ -1007,9 +1007,7 @@ public class MainActivity extends SharedMediaActivity {
         themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
         themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_png));
         themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_webp));
-
-        setSwitchColor(swVertical, getAccentColor());
-        setSwitchColor(swSaveHere, getAccentColor());
+        setSwitchColor(getAccentColor(), swSaveHere, swVertical);
         //endregion
 
         seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -1034,7 +1032,7 @@ public class MainActivity extends SharedMediaActivity {
           @Override
           public void onClick(View v) {
             swVertical.setChecked(!swVertical.isChecked());
-            setSwitchColor(swVertical, getAccentColor());
+            setSwitchColor(getAccentColor(), swVertical);
           }
         });
 
@@ -1043,7 +1041,7 @@ public class MainActivity extends SharedMediaActivity {
           @Override
           public void onClick(View v) {
             swSaveHere.setChecked(!swSaveHere.isChecked());
-            setSwitchColor(swSaveHere, getAccentColor());
+            setSwitchColor(getAccentColor(), swSaveHere);
           }
         });
 

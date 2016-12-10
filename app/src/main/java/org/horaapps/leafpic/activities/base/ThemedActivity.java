@@ -199,15 +199,9 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
 
     protected void themeButton(Button btn) {themeHelper.themeButton(btn);}
 
-    public void setSwitchColor(SwitchCompat sw, int color){
-        themeHelper.setSwitchCompactColor(sw, color);
-    }
-
-    public void setSwitchColor(SwitchCompat sw[], int color){
-        for (SwitchCompat switchCompat : sw) {
+    public void setSwitchColor(int color, SwitchCompat... sw){
+        for (SwitchCompat switchCompat : sw)
             themeHelper.setSwitchCompactColor(switchCompat, color);
-        }
-
     }
 
     public IconicsDrawable getToolbarIcon(IIcon icon){

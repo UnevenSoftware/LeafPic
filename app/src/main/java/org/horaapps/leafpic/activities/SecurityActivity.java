@@ -55,7 +55,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 swActiveSecurity.setChecked(!swActiveSecurity.isChecked());
-                setSwitchColor(swActiveSecurity, getAccentColor());
+                setSwitchColor(getAccentColor(), swActiveSecurity);
                 if (swActiveSecurity.isChecked()) setPasswordDialog();
                 else Security.clearPassword(getApplicationContext());
                 toggleEnabledChild(swActiveSecurity.isChecked());
@@ -70,7 +70,7 @@ public class SecurityActivity extends ThemedActivity {
             public void onClick(View v) {
                 swApplySecurityHidden.setChecked(!swApplySecurityHidden.isChecked());
                 Security.setPasswordOnHidden(getApplicationContext(), swApplySecurityHidden.isChecked());
-                setSwitchColor(swApplySecurityHidden, getAccentColor());
+                setSwitchColor(getAccentColor(), swApplySecurityHidden);
             }
         });
 
@@ -82,7 +82,7 @@ public class SecurityActivity extends ThemedActivity {
             public void onClick(View v) {
                 swApplySecurityDelete.setChecked(!swApplySecurityDelete.isChecked());
                 Security.setPasswordOnDelete(getApplicationContext(), swApplySecurityDelete.isChecked());
-                setSwitchColor(swApplySecurityDelete, getAccentColor());
+                setSwitchColor(getAccentColor(), swApplySecurityDelete);
             }
         });
     }
@@ -127,7 +127,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 swActiveSecurity.setChecked(false);
-                setSwitchColor(swActiveSecurity, getAccentColor());
+                setSwitchColor(getAccentColor(), swActiveSecurity);
                 toggleEnabledChild(swActiveSecurity.isChecked());
                 Security.clearPassword(getApplicationContext());
             }
@@ -172,9 +172,9 @@ public class SecurityActivity extends ThemedActivity {
         setRecentApp(getString(R.string.security));
         toolbar.setBackgroundColor(getPrimaryColor());
 
-        setSwitchColor(swActiveSecurity, getAccentColor());
-        setSwitchColor(swApplySecurityHidden, getAccentColor());
-        setSwitchColor(swApplySecurityDelete, getAccentColor());
+        setSwitchColor(getAccentColor(), swActiveSecurity, swApplySecurityHidden, swApplySecurityDelete);
+        setSwitchColor(getAccentColor(), swApplySecurityHidden);
+        setSwitchColor(getAccentColor(), swApplySecurityDelete);
         toggleEnabledChild(swActiveSecurity.isChecked());
 
         setStatusBarColor();

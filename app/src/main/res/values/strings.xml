@@ -327,4 +327,5 @@
     <string name="white_list">White list</string>
     <string name="chose_albums_to_display">Chose albums to display</string>
     <string name="use_primary_color_in_the_viewer">Use primary color in the viewer</string>
+    <string name="add">Add</string>
 </resources>

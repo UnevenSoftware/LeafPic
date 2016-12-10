@@ -193,7 +193,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swShowFab.setChecked(!swShowFab.isChecked());
                 SP.putBoolean(getString(R.string.preference_show_fab), swShowFab.isChecked());
-                setSwitchColor(swShowFab, getAccentColor());
+                setSwitchColor(getAccentColor(), swShowFab);
             }
         });
 
@@ -206,7 +206,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swSubScaling.setChecked(!swSubScaling.isChecked());
                 SP.putBoolean(getString(R.string.preference_sub_scaling), swSubScaling.isChecked());
-                setSwitchColor(swSubScaling, getAccentColor());
+                setSwitchColor(getAccentColor(), swSubScaling);
             }
         });
 
@@ -219,7 +219,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swIncludeVideo.setChecked(!swIncludeVideo.isChecked());
                 SP.putBoolean(getString(R.string.preference_include_video), swIncludeVideo.isChecked());
-                setSwitchColor(swIncludeVideo, getAccentColor());
+                setSwitchColor(getAccentColor(), swIncludeVideo);
             }
         });
 
@@ -232,7 +232,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swSwipeDirection.setChecked(!swSwipeDirection.isChecked());
                 SP.putBoolean(getString(R.string.preference_swipe_direction_inverted), swSwipeDirection.isChecked());
-                setSwitchColor(swSwipeDirection, getAccentColor());
+                setSwitchColor(getAccentColor(), swSwipeDirection);
             }
         });
 
@@ -245,7 +245,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swAutoUpdate.setChecked(!swAutoUpdate.isChecked());
                 SP.putBoolean(getString(R.string.preference_auto_update_media), swAutoUpdate.isChecked());
-                setSwitchColor(swAutoUpdate, getAccentColor());
+                setSwitchColor(getAccentColor(), swAutoUpdate);
             }
         });
 
@@ -258,7 +258,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swUseMediaStore.setChecked(!swUseMediaStore.isChecked());
                 SP.putBoolean(getString(R.string.preference_use_alternative_provider), swUseMediaStore.isChecked());
-                setSwitchColor(swUseMediaStore, getAccentColor());
+                setSwitchColor(getAccentColor(), swUseMediaStore);
             }
         });
 
@@ -271,7 +271,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swDelayFullImage.setChecked(!swDelayFullImage.isChecked());
                 SP.putBoolean(getString(R.string.preference_delay_full_image), swDelayFullImage.isChecked());
-                setSwitchColor(swDelayFullImage, getAccentColor());
+                setSwitchColor(getAccentColor(), swDelayFullImage);
             }
         });
 
@@ -284,7 +284,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swPictureOrientation.setChecked(!swPictureOrientation.isChecked());
                 SP.putBoolean(getString(R.string.preference_auto_rotate), swPictureOrientation.isChecked());
-                setSwitchColor(swPictureOrientation, getAccentColor());
+                setSwitchColor(getAccentColor(), swPictureOrientation);
             }
         });
 
@@ -297,7 +297,7 @@ public class SettingsActivity extends ThemedActivity {
             public void onClick(View v) {
                 swMaxLuminosity.setChecked(!swMaxLuminosity.isChecked());
                 SP.putBoolean(getString(R.string.preference_max_brightness), swMaxLuminosity.isChecked());
-                setSwitchColor(swMaxLuminosity, getAccentColor());
+                setSwitchColor(getAccentColor(), swMaxLuminosity);
             }
         });
 
@@ -312,7 +312,7 @@ public class SettingsActivity extends ThemedActivity {
                 SP.putBoolean(getString(R.string.preference_translucent_status_bar), swStatusBar.isChecked());
                 updateTheme();
                 setStatusBarColor();
-                setSwitchColor(swStatusBar, getAccentColor());
+                setSwitchColor(getAccentColor(), swStatusBar);
             }
         });
 
@@ -326,7 +326,7 @@ public class SettingsActivity extends ThemedActivity {
                 swNavBar.setChecked(!swNavBar.isChecked());
                 SP.putBoolean(getString(R.string.preference_colored_nav_bar), swNavBar.isChecked());
                 updateTheme();
-                setSwitchColor(swNavBar, getAccentColor());
+                setSwitchColor(getAccentColor(), swNavBar);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     getWindow().setNavigationBarColor(isNavigationBarColored() ? getPrimaryColor() : ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 
@@ -355,7 +355,7 @@ public class SettingsActivity extends ThemedActivity {
         txtPT.setTextColor(color);
         txtVT.setTextColor(color);
         txtAT.setTextColor(color);
-        setSwitchColor(new SwitchCompat[]{
+        setSwitchColor(color,
                 swDelayFullImage,
                 swNavBar,
                 swStatusBar,
@@ -366,8 +366,7 @@ public class SettingsActivity extends ThemedActivity {
                 swSwipeDirection,
                 swUseMediaStore,
                 swShowFab,
-                swSubScaling
-        }, color);
+                swSubScaling);
     }
 
     public void updateViewsWithPrimaryColor(int color){
