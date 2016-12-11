@@ -173,8 +173,6 @@ public class SecurityActivity extends ThemedActivity {
         toolbar.setBackgroundColor(getPrimaryColor());
 
         setSwitchColor(getAccentColor(), swActiveSecurity, swApplySecurityHidden, swApplySecurityDelete);
-        setSwitchColor(getAccentColor(), swApplySecurityHidden);
-        setSwitchColor(getAccentColor(), swApplySecurityDelete);
         toggleEnabledChild(swActiveSecurity.isChecked());
 
         setStatusBarColor();

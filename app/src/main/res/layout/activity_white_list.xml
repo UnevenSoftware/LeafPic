@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_select_folder"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -40,18 +38,4 @@
                 />
         </RelativeLayout>
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_whitelist_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_layout_margin"
-        app:elevation="@dimen/fab_elevation"
-        app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour" />
-
 </android.support.design.widget.CoordinatorLayout>

@@ -39,14 +39,18 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.base.FoldersFileFilter;
+import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 
@@ -144,6 +148,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
                         displayContentFolder(Environment.getExternalStorageDirectory());
                         break;
                     default:
+                        // TODO: 12/11/16 do
 //                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                            DocumentFile documentFile = ContentHelper.getDocumentFile(getContext(), new File(ContentHelper.getExtSdCardPaths(getContext())[pos - 1]), true, false);
 //                            if(documentFile != null){
@@ -323,21 +328,33 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(final BottomSheetAlbumsAdapter.ViewHolder holder, final int position) {
+
             File f = folders.get(position);
-            String[] list = f.list();
-            int count = list == null ? 0 : list.length;
+            String[] list = f.list(new ImageFileFilter(true));
+            int countMedia = list != null ? list.length : 0;
+            list = f.list(new FilenameFilter() {
+                @Override
+                public boolean accept(File file, String s) {
+                    return new File(file, s).isDirectory();
+                }
+            });
+            int countFolder = list != null ? list.length : 0;
+
             holder.folderName.setText(f.getName());
             holder.folderName.setTag(f.getPath());
-            /** SET UP THEME**/
             holder.folderName.setTextColor(theme.getTextColor());
-            String hexAccentColor = String.format("#%06X", (0xFFFFFF & theme.getAccentColor()));
-            holder.folderCount.setText(StringUtils.html("<b><font color='" + hexAccentColor + "'>" + count + "</font></b>" + "<font " + "color='" + theme.getSubTextColor() + "'> Media</font>"));
+            String hexAccentColor =ColorPalette.getHexColor(theme.getAccentColor());
+
+            String b = String.format(Locale.ENGLISH, "<b><font color='%s'>%d</font></b><font color='%d'> %s</font>", hexAccentColor, countMedia, theme.getSubTextColor(), getString(R.string.media)) +
+                    " " +
+                    String.format(Locale.ENGLISH, "<b><font color='%s'>%d</font></b><font color='%d'> %s</font>", hexAccentColor, countFolder, theme.getSubTextColor(), getString(countFolder != 1 ? R.string.folders : R.string.folder));
+            holder.folderCount.setText(StringUtils.html(b));
             holder.imgFolder.setColor(theme.getIconColor());
             holder.imgFolder.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_folder));
 
             if(canGoBack() && position == 0) { // go to parent folder
                 holder.folderName.setText("..");
-                holder.folderCount.setText(StringUtils.html("<font color='" + theme.getSubTextColor() + "'>Go to parent</font>"));
+                holder.folderCount.setText(StringUtils.html("<font color='" + theme.getSubTextColor() + "'>"+getString(R.string.go_to_parent)+"</font>"));
                 holder.imgFolder.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_arrow_up));
             }
         }

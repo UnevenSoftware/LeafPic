@@ -41,7 +41,7 @@ public class LookForMediaJob extends JobService {
             public void run() {
                 try {
                     HandlingAlbums instance = HandlingAlbums.getInstance(getApplicationContext());
-                    ArrayList<String> whiteList = instance.getWhiteList();
+                    ArrayList<String> whiteList = instance.getPaths();
                     for (String s : whiteList) {
                         scanFolder(s);
                         Log.wtf(TAG, s);

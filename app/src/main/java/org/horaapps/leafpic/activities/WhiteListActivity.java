@@ -1,16 +1,16 @@
 package org.horaapps.leafpic.activities;
 
-import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.StringUtils;
@@ -37,15 +38,10 @@ import java.util.ArrayList;
  */
 public class WhiteListActivity extends SharedMediaActivity {
 
+    private RecyclerView mRecyclerView;
+    private Toolbar toolbar;
 
-    private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
-    private FloatingActionButton fabWHDone;
-
-    ArrayList<Item> folders = new ArrayList<>();
-    ArrayList<String> alreadyTracked;
-
-    RecyclerView mRecyclerView;
-    Toolbar toolbar;
+    private ArrayList<Item> folders = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,9 +49,8 @@ public class WhiteListActivity extends SharedMediaActivity {
         setContentView(R.layout.activity_white_list);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         mRecyclerView = (RecyclerView) findViewById(org.horaapps.leafpic.R.id.excluded_albums);
-        fabWHDone = (FloatingActionButton) findViewById(R.id.fab_whitelist_done);
         initUi();
-        alreadyTracked = getAlbums().getTrackedPaths();
+        folders = getAlbums().getItems();
         lookForFoldersInMediaStore();
     }
 
@@ -86,18 +81,24 @@ public class WhiteListActivity extends SharedMediaActivity {
             int mediaColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
 
             while (cur.moveToNext()) {
-                Item item = new Item(cur.getLong(idColumn),
-                        StringUtils.getBucketPathByImagePath(cur.getString(mediaColumn)),
-                        cur.getString(nameColumn));
-                int indexOf = alreadyTracked.indexOf(item.path);
-                if (indexOf != -1) {
-                    item.included = true;
-                    alreadyTracked.remove(indexOf);
+                if (shouldAdd(cur.getLong(idColumn))) {
+                    folders.add(new Item(cur.getLong(idColumn),
+                            StringUtils.getBucketPathByImagePath(cur.getString(mediaColumn)),
+                            cur.getString(nameColumn)));
                 }
-                folders.add(item);
+
             }
             cur.close();
         }
+
+
+    }
+
+    private boolean shouldAdd(long id) {
+        for (Item item : folders)
+            if (item.equals(id))
+                return false;
+        return true;
     }
 
     @TestOnly
@@ -122,22 +123,39 @@ public class WhiteListActivity extends SharedMediaActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_track_albums, menu);
         //menu.findItem(R.id.action_done).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_done));
+        menu.findItem(R.id.action_add).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_add_circle));
         return true;
     }
 
 
+    private void addFolder(File dir) {
+        String[] list = dir.list(new ImageFileFilter(true));
+        if (list != null && list.length > 0) {
+            MediaScannerConnection.scanFile(getApplicationContext(), list, null, new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String s, Uri uri) {
+                    Log.wtf("asd", s+" - "+uri.toString());
+                }
+            });
+        } else {
+            Toast.makeText(this, "No media in that folder", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*
-            case R.id.action_done:
-                tracker.handleItems(folders);
-                finish();
+            case R.id.action_add:
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.chose_folders))
+                        .exploreMode(true, true)
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
+                            @Override
+                            public void folderSelected(String path) {
+                                addFolder(new File(path));
+                            }
+                        }).show();
                 return true;
-            */
-           /* case R.id.action_show_music:
-                Toast.makeText(this, "Fuck!", Toast.LENGTH_SHORT).show();
-                return true;*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -159,30 +177,19 @@ public class WhiteListActivity extends SharedMediaActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        fabWHDone.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_done).color(Color.WHITE));
-        fabWHDone.setVisibility(View.VISIBLE);
-        fabWHDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getAlbums().handleItems(folders);
-                finish();
-            }
-        });
     }
 
     @Override
     public void updateUiElements(){
         toolbar.setBackgroundColor(getPrimaryColor());
         mRecyclerView.setBackgroundColor(getBackgroundColor());
-        fabWHDone.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.chose_folders));
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 
-
-    public class Item {
+    public static class Item {
         String path;
         String name;
         long id;
@@ -206,9 +213,23 @@ public class WhiteListActivity extends SharedMediaActivity {
             this.id = id;
         }
 
+        public Item(long id, String path, boolean included) {
+            this.path = path;
+            this.name = StringUtils.getName(path);
+            this.id = id;
+            this.included = included;
+        }
+
         boolean toggleInclude() {
             included = !included;
             return included;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Long)
+                return this.id == (long) obj;
+            return super.equals(obj);
         }
     }
 
@@ -217,10 +238,11 @@ public class WhiteListActivity extends SharedMediaActivity {
         private View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = (int) v.findViewById(R.id.folder_path).getTag();
+                Item item = folders.get((int) v.findViewById(R.id.folder_path).getTag());
                 SwitchCompat s = (SwitchCompat) v.findViewById(R.id.tracked_status);
-                s.setChecked(folders.get(pos).toggleInclude());
+                s.setChecked(item.toggleInclude());
                 setSwitchColor(getAccentColor(), s);
+                getAlbums().handleTrackItem(item);
             }
         };
 

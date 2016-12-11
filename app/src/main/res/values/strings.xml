@@ -118,6 +118,8 @@
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">General Setting</string>
     <string name="folder">Folder</string>
+    <string name="folders">Folders</string>
+    <string name="go_to_parent">Go to parent</string>
     <string name="color_palette">Color Palette</string>
     <string name="app_intro_skip">Introduction Skipped!</string>
 
