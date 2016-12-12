@@ -354,7 +354,7 @@ public class Album implements Serializable {
 
 	private boolean moveMedia(Context context, String source, String targetDir) {
 		File from = new File(source);
-		File to = new File(targetDir);
+		File to = new File(targetDir, from.getName());
 		return ContentHelper.moveFile(context, from, to);
 	}
 

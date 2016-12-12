@@ -189,17 +189,18 @@ public class ContentHelper {
 	 * Move a file. The target file may even be on external SD card.
 	 *
 	 * @param source The source file
-	 * @param targetDir The target Directory
+	 * @param target The target Directory
 	 * @return true if the copying was successful.
 	 */
-	public static boolean moveFile(Context context, @NonNull final File source, @NonNull final File targetDir) {
-		// First try the normal rename.
-		File target = new File(targetDir, source.getName());
+	public static boolean moveFile(Context context, @NonNull final File source, @NonNull final File target) {
+		// the param "target" is a file.
+		// File target = new File(target, source.getName());
 
+		// First try the normal rename.
 		boolean success = source.renameTo(target);
 
 		if (!success) {
-			success = copyFile(context, source, targetDir);
+			success = copyFile(context, source, target);
 			if (success) {
 				success = deleteFile(context, source);
 			}
