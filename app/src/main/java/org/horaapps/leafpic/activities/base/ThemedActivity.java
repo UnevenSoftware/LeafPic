@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
@@ -202,6 +203,11 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     public void setSwitchColor(int color, SwitchCompat... sw){
         for (SwitchCompat switchCompat : sw)
             themeHelper.setSwitchCompactColor(switchCompat, color);
+    }
+
+    public void setTextViewColor(int color, TextView... textViews){
+        for (TextView txt: textViews)
+            themeHelper.setTextViewColor(txt, color);
     }
 
     public IconicsDrawable getToolbarIcon(IIcon icon){

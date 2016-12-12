@@ -114,6 +114,8 @@
     <string name="insert_a_name">Insert something</string>
     <string name="nothing_changed">Nothing changed!</string>
     <string name="install_shortcut">Install shortcut</string>
+    <string name="landscape">Landscape</string>
+    <string name="portrait">Portrait</string>
 
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">General Setting</string>

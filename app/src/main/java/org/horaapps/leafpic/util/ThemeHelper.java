@@ -267,6 +267,10 @@ public class ThemeHelper {
 				PorterDuff.Mode.MULTIPLY);
 	}
 
+	public void setTextViewColor(TextView txt, int color){
+		txt.setTextColor(color);
+	}
+
 	public void setScrollViewColor(ScrollView scr){
 		try
 		{

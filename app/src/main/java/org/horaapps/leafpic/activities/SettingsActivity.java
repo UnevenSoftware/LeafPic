@@ -112,7 +112,7 @@ public class SettingsActivity extends ThemedActivity {
                     @Override
                     public void onColorSelected(int color) {
                         SP.putInt(getString(R.string.preference_primary_color), color);
-                        //updateViewsWithAccentColor(color);
+                        updateViewsWithPrimaryColor(color);
                     }
 
                     @Override
@@ -136,7 +136,7 @@ public class SettingsActivity extends ThemedActivity {
                     @Override
                     public void onColorSelected(int color) {
                         SP.putInt(getString(R.string.preference_accent_color), color);
-                        //updateViewsWithAccentColor(color);
+                        updateViewsWithAccentColor(color);
                     }
 
                     @Override
@@ -350,11 +350,7 @@ public class SettingsActivity extends ThemedActivity {
     }
 
     public void updateViewsWithAccentColor(int color){
-        txtGT.setTextColor(color);
-        txtTT.setTextColor(color);
-        txtPT.setTextColor(color);
-        txtVT.setTextColor(color);
-        txtAT.setTextColor(color);
+        setTextViewColor(color, txtAT, txtGT, txtPT, txtTT, txtVT);
         setSwitchColor(color,
                 swDelayFullImage,
                 swNavBar,

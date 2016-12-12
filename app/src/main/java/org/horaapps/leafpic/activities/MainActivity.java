@@ -230,6 +230,7 @@ public class MainActivity extends SharedMediaActivity {
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
+    updateColumnsRvs();
     if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
       fabCamera.setVisibility(View.GONE);
     } else {
@@ -445,21 +446,40 @@ public class MainActivity extends SharedMediaActivity {
   }
 
   private void updateColumnsRvs() {
-    int spanCount = SP.getInt("n_columns_folders", 2);
-    if ( spanCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
-      rvAlbums.removeItemDecoration(rvAlbumsDecoration);
-      rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
-      rvAlbums.addItemDecoration(rvAlbumsDecoration);
-      rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
+    int spanCount;
+    if (getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
+      spanCount = SP.getInt("n_columns_folders", 2);
+      if (spanCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
+        rvAlbums.removeItemDecoration(rvAlbumsDecoration);
+        rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+        rvAlbums.addItemDecoration(rvAlbumsDecoration);
+        rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
+      }
+      spanCount = SP.getInt("n_columns_media", 3);
+      if (spanCount != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
+        ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+        rvMedia.removeItemDecoration(rvMediaDecoration);
+        rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+        rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
+        rvMedia.addItemDecoration(rvMediaDecoration);
+      }
     }
-
-    spanCount = SP.getInt("n_columns_media", 3);
-    if (spanCount != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
-      ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
-      rvMedia.removeItemDecoration(rvMediaDecoration);
-      rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
-      rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
-      rvMedia.addItemDecoration(rvMediaDecoration);
+    else {
+      spanCount = SP.getInt("n_columns_folders_landscape", 3);
+      if (spanCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
+        rvAlbums.removeItemDecoration(rvAlbumsDecoration);
+        rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+        rvAlbums.addItemDecoration(rvAlbumsDecoration);
+        rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
+      }
+      spanCount = SP.getInt("n_columns_media_landscape", 4);
+      if (spanCount != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
+        ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
+        rvMedia.removeItemDecoration(rvMediaDecoration);
+        rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
+        rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
+        rvMedia.addItemDecoration(rvMediaDecoration);
+      }
     }
   }
 
