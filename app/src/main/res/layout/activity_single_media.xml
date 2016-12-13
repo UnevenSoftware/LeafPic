@@ -13,7 +13,6 @@
         android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true"
         />
-
     <org.horaapps.leafpic.views.HackyViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/photos_pager"

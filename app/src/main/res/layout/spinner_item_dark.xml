@@ -8,5 +8,4 @@
     android:singleLine="true"
     android:textSize="@dimen/medium_text"
     android:textColor="@color/md_grey_800"
-    android:background="@color/md_light_cards"
-    />
+    android:background="@color/md_light_cards" />

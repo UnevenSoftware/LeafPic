@@ -12,8 +12,7 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar"
             android:background="@color/md_dark_appbar"
-            android:windowActionBarOverlay="true"
-            />
+            android:windowActionBarOverlay="true" />
         <RelativeLayout
             android:id="@+id/rl_ea"
             android:layout_width="match_parent"
@@ -23,8 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-                />
+                android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,8 +32,7 @@
                 android:visibility="invisible"
                 android:textSize="@dimen/sub_big_text"
                 android:gravity="center"
-                android:layout_centerInParent="true"
-                />
+                android:layout_centerInParent="true" />
         </RelativeLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

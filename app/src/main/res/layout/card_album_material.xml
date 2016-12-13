@@ -27,25 +27,22 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:elevation="10dp"
+                    android:elevation="@dimen/icon_elevation"
                     android:visibility="gone"
                     app:iiv_color="@color/md_white_1000"
                     app:iiv_icon="gmd-check"
                     tools:targetApi="lollipop" />
-
                 <org.horaapps.leafpic.views.SquareImageView
                     android:id="@+id/album_preview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    />
+                    android:scaleType="centerCrop" />
             </org.horaapps.leafpic.views.SquareRelativeLayout>
             <View
                 android:id="@+id/album_card_divider"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_below="@id/header_album_card"
-                />
+                android:layout_below="@id/header_album_card" />
             <LinearLayout
                 android:id="@+id/linear_card_text"
                 android:layout_width="match_parent"
@@ -57,17 +54,14 @@
                 android:paddingLeft="@dimen/sub_medium_spacing"
                 android:paddingRight="@dimen/sub_medium_spacing"
                 android:paddingBottom="@dimen/small_spacing"
-                android:paddingTop="@dimen/small_spacing"
-                >
-
+                android:paddingTop="@dimen/small_spacing">
                 <TextView
                     android:id="@+id/album_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="@dimen/medium_text" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,8 +74,7 @@
                         android:paddingEnd="4dp"
                         android:maxLines="1"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="@dimen/sub_medium_text" />
                     <TextView
                         android:id="@+id/album_media_label"
                         android:layout_width="wrap_content"
@@ -89,10 +82,8 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="@dimen/sub_medium_text" />
                 </LinearLayout>
-
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

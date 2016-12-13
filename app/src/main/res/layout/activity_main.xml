@@ -87,8 +87,7 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"
-            />
+            app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour" />
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/drawer_items"

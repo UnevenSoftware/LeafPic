@@ -10,24 +10,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
-        >
+        android:layout_centerInParent="true">
         <ImageView
             android:id="@+id/imgLogo"
             android:layout_width="175dp"
             android:layout_height="175dp"
             android:src="@drawable/leaf_pic"
-            android:scaleType="fitXY"
-        />
+            android:scaleType="fitXY" />
         <ProgressBar
             android:id="@+id/progress_splash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="40dp"
-         />
+            android:paddingTop="40dp" />
     </LinearLayout>
-
     <!--
     <TextView
         android:id="@+id/txtLogo"

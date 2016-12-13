@@ -7,14 +7,12 @@
     android:layout_width="wrap_content"
     android:foreground="@drawable/ripple"
     android:layout_height="wrap_content">
-
     <ImageView
         android:id="@+id/photo_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
     />
-
     <TextView
         android:id="@+id/photo_path"
         android:layout_width="match_parent"
@@ -26,33 +24,28 @@
         android:textSize="@dimen/medium_small_text"
         android:maxLines="1"
         android:layout_alignParentBottom="true"
-        tools:targetApi="lollipop"
-    />
-
+        tools:targetApi="lollipop" />
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/gif_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="@dimen/icon_sub_width_height"
+        android:layout_height="@dimen/icon_sub_width_height"
         android:layout_marginBottom="2dp"
         android:layout_marginStart="4dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:visibility="gone"
-        android:elevation="10dp"
+        android:elevation="@dimen/icon_elevation"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-gif"
-        tools:targetApi="lollipop"
-    />
-
+        tools:targetApi="lollipop" />
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/icon"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:elevation="10dp"
+        android:elevation="@dimen/icon_elevation"
         android:visibility="gone"
         android:layout_centerInParent="true"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-play-circle-filled"
-        tools:targetApi="lollipop"
-    />
+        tools:targetApi="lollipop" />
 </org.horaapps.leafpic.views.SquareRelativeLayout>
