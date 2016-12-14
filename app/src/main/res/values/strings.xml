@@ -7,6 +7,27 @@
     <string name="welcome_slide_sub">A Colorful Material Designed Gallery!</string>
     <string name="made_with_love_by">Made with love by</string>
 
+    <!--CHANGELOG-->
+    <string-array name="changelog_message">
+        <item><b>#Fixed</b></item>
+        <item>&#8226; Fixed crash on startup and some random crash</item>
+        <item>&#8226; FIied crash opening video (Nougat)</item>
+        <item>&#8226; Fixed zoom out issue with SubScaling ImageView enabled</item>
+        <item><b>#Update</b></item>
+        <item>&#8226; Updated translations</item>
+        <item>&#8226; General improvements</item>
+    </string-array>
+
+    <string name="changelog_text">
+        <b>#Fixed</b><br/>
+        &#8226; Fixed crash on startup and some random crash<br/>
+        &#8226; FIied crash opening video (Nougat)<br/>
+        &#8226; Fixed zoom out issue with SubScaling ImageView enabled<br/>
+        <b>#Update</b><br/>
+        &#8226; Updated translations<br/>
+        &#8226; General improvements<br/>
+    </string>
+
     <!--AUTHORS-->
     <string name="donald_role">Project Manager</string>
     <string name="gilbert_role">Major Designer</string>
@@ -66,6 +87,7 @@
     <string name="clear_preview">Clear preview</string>
     <string name="new_folder">New Folder</string>
     <string name="create_new_folder">Create new folder</string>
+    <string name="view">View</string>
 
     <!--DIALOG MESSAGES-->
     <string name="hide_album_message">
@@ -83,6 +105,7 @@
         then the media will be copied or moved in the new folder.
     </string>
     <string name="card_style_alert">NOTE: Restart the app for make changes.</string>
+    <string name="changelog">Changelog</string>
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>

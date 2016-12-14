@@ -22,7 +22,7 @@ public class FabScrollBehaviour extends FloatingActionButton.Behavior {
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
         if (dyConsumed > 0)
-            child.animate().translationY(child.getHeight()*2).setInterpolator(new AccelerateInterpolator(2)).start();
+            child.animate().translationY(child.getHeight()*4).setInterpolator(new AccelerateInterpolator(2)).start();
         else
             child.animate().translationY(/*-Measure.getNavigationBarSize(coordinatorLayout
             .getContext()).y*/0).setInterpolator(new DecelerateInterpolator(2)).start();

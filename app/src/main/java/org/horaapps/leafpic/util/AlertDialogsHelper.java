@@ -16,11 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 
+import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.model.Media;
@@ -176,5 +178,38 @@ public class AlertDialogsHelper {
 
         MediaDetailsMap<String, String> metadata = media.getAllDetails();
         loadDetails(dialogLayout ,activity , metadata);
+    }
+
+    public static AlertDialog changelogDialog(final ThemedActivity activity, AlertDialog.Builder changelogDialogBuilder){
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_changelog, null);
+
+        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_changelog_title);
+        TextView dialogMessage = (TextView) dialogLayout.findViewById(R.id.dialog_changelog_text);
+        CardView cvBackground = (CardView) dialogLayout.findViewById(R.id.dialog_changelog_card);
+        ScrollView scrChangelog = (ScrollView) dialogLayout.findViewById(R.id.changelog_scrollview);
+
+        cvBackground.setCardBackgroundColor(activity.getCardBackgroundColor());
+        dialogTitle.setBackgroundColor(activity.getPrimaryColor());
+        activity.getThemeHelper().setScrollViewColor(scrChangelog);
+
+        String titleHtml = activity.getString(R.string.changelog) + " <font color='" + activity.getAccentColor()+ "'>" + BuildConfig.VERSION_NAME + "</font>";
+        dialogTitle.setText(StringUtils.html(titleHtml));
+
+        //TODO: TRY TO FIND A BETTER WAY PLZ, I BELIVE IN YOU! <3
+        //Spanned changelogText = StringUtils.html(activity.getString(R.string.changelog_text));
+        //dialogMessage.setText(changelogText);
+        dialogMessage.setText("");
+        String[] changeLogMessage = activity.getResources().getStringArray(R.array.changelog_message);
+        StringBuilder builder = new StringBuilder();
+        for(String s: changeLogMessage){
+            builder.append(s);
+            builder.append("\n");
+        }
+
+        dialogMessage.setText(builder.toString().trim());
+        dialogMessage.setTextColor(activity.getTextColor());
+
+        changelogDialogBuilder.setView(dialogLayout);
+        return changelogDialogBuilder.create();
     }
 }

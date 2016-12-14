@@ -13,7 +13,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -45,6 +47,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -86,6 +89,7 @@ public class MainActivity extends SharedMediaActivity {
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CoordinatorLayout coordinatorMainLayout;
 
 
     private boolean hidden = false, pickMode = false, editMode = false, albumsMode = true, firstLaunch = true;
@@ -164,7 +168,7 @@ public class MainActivity extends SharedMediaActivity {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        coordinatorMainLayout = (CoordinatorLayout) findViewById(R.id.coordinator_main_layout);
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
         initUi();
@@ -186,6 +190,30 @@ public class MainActivity extends SharedMediaActivity {
         }
         invalidateOptionsMenu();
         firstLaunch = false;
+    }
+
+    private void showChangelog(){
+        String titleHtml = "<font color='" + getTextColor() + "'>" + getString(R.string.changelog) + " <b>" + BuildConfig.VERSION_NAME + "</b>" + "</font>";
+        String buttonHtml= "<font color='" + getAccentColor() + "'>" + getString(R.string.view).toUpperCase() + "</font>";
+        Snackbar snackbar = Snackbar
+                .make(coordinatorMainLayout, StringUtils.html(titleHtml), Snackbar.LENGTH_LONG)
+                .setAction(StringUtils.html(buttonHtml), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+                        AlertDialogsHelper.changelogDialog(MainActivity.this, dialogBuilder);
+                        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {}
+                        });
+                        dialogBuilder.show();
+                    }
+                });
+        View snackbarView = snackbar.getView();
+        snackbarView.setBackgroundColor(getBackgroundColor());
+        snackbarView.setElevation(R.dimen.snackbar_elevation);
+        snackbar.show();
+        SP.putBoolean("changelog", false);
     }
 
     private void displayCurrentAlbumMedia(boolean reload) {
@@ -397,6 +425,15 @@ public class MainActivity extends SharedMediaActivity {
 
     @Override
     public void updateUiElements() {
+
+        /** CHANGELOG **/
+        //SP.putInt("VERSION_CODE",0);
+        int versionCode = BuildConfig.VERSION_CODE;
+        if (SP.getInt("VERSION_CODE", 0) != versionCode) {
+            SP.putInt("VERSION_CODE", versionCode);
+            showChangelog();
+        }
+
         //TODO: MUST BE FIXED
         toolbar.setPopupTheme(getPopupToolbarStyle());
         toolbar.setBackgroundColor(getPrimaryColor());

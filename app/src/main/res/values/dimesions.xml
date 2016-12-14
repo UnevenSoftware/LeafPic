@@ -43,5 +43,6 @@
 
     <!--OTHER OBJECT-->
     <dimen name="progress_circle_width_height">48dp</dimen>
+    <dimen name="snackbar_elevation">10dp</dimen>
 
 </resources>

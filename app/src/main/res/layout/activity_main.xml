@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:openDrawer="start">
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/Relative_Album_layout"
+        android:id="@+id/coordinator_main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

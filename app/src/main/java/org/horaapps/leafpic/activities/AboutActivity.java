@@ -1,8 +1,10 @@
 package org.horaapps.leafpic.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
@@ -20,7 +22,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
+import org.horaapps.leafpic.util.StringUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -81,6 +85,21 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
+        });
+
+        //ChangeLog
+        ((TextView) findViewById(R.id.about_changelog_item_sub)).setText(StringUtils.html(getString(R.string.changelog)+" <b>"+BuildConfig.VERSION_NAME+"</b>"));
+        findViewById(R.id.ll_about_changelog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AboutActivity.this, getDialogStyle());
+                AlertDialogsHelper.changelogDialog(AboutActivity.this, dialogBuilder);
+                dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                });
+                dialogBuilder.show();
+            }
         });
 
         /*** Donald Shtjefni ***/
@@ -230,6 +249,7 @@ public class AboutActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.about_support_report_bug_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_support_donate_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.about_license_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.about_changelog_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();
@@ -240,6 +260,7 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.about_support_report_bug_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_support_donate_item)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_changelog_item)).setTextColor(color);
 
         /** Sub Text Views**/
         color = getSubTextColor();
@@ -255,5 +276,6 @@ public class AboutActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.donald_shtjefni_role)).setTextColor(color);
         ((TextView) findViewById(R.id.gilbert_ndresaj_role)).setTextColor(color);
         ((TextView) findViewById(R.id.about_license_item_sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.about_changelog_item_sub)).setTextColor(color);
     }
 }
