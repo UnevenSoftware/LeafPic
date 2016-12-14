@@ -11,6 +11,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
@@ -30,7 +31,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -200,20 +200,20 @@ public class MainActivity extends SharedMediaActivity {
                 .setAction(StringUtils.html(buttonHtml), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                        AlertDialogsHelper.changelogDialog(MainActivity.this, dialogBuilder);
-                        dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+                        AlertDialog alertDialog = AlertDialogsHelper.changelogDialog(MainActivity.this);
+                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {}
                         });
-                        dialogBuilder.show();
+                        alertDialog.show();
                     }
                 });
         View snackbarView = snackbar.getView();
         snackbarView.setBackgroundColor(getBackgroundColor());
-        snackbarView.setElevation(R.dimen.snackbar_elevation);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
+        }
         snackbar.show();
-        SP.putBoolean("changelog", false);
     }
 
     private void displayCurrentAlbumMedia(boolean reload) {
@@ -427,11 +427,10 @@ public class MainActivity extends SharedMediaActivity {
     public void updateUiElements() {
 
         /** CHANGELOG **/
-        //SP.putInt("VERSION_CODE",0);
         int versionCode = BuildConfig.VERSION_CODE;
-        if (SP.getInt("VERSION_CODE", 0) != versionCode) {
-            SP.putInt("VERSION_CODE", versionCode);
+        if (SP.getInt("last_version_code", 0) != versionCode) {
             showChangelog();
+            SP.putInt("last_version_code", versionCode);
         }
 
         //TODO: MUST BE FIXED
@@ -729,13 +728,11 @@ public class MainActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.hideAlbumButton:
-                final AlertDialog.Builder hideDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-                AlertDialogsHelper.getTextDialog(MainActivity.this,hideDialogBuilder,
+                final AlertDialog dialog = AlertDialogsHelper.getTextDialog(MainActivity.this,
                         hidden ? R.string.unhide : R.string.hide,
                         hidden ? R.string.unhide_album_message : R.string.hide_album_message);
 
-                hideDialogBuilder.setPositiveButton(getString(hidden ? R.string.unhide : R.string.hide).toUpperCase(), new DialogInterface.OnClickListener() {
+                dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(hidden ? R.string.unhide : R.string.hide).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (albumsMode) {
                             if (hidden) getAlbums().unHideSelectedAlbums(getApplicationContext());
@@ -749,16 +746,22 @@ public class MainActivity extends SharedMediaActivity {
                         }
                     }
                 });
+
                 if (!hidden) {
-                    hideDialogBuilder.setNeutralButton(this.getString(R.string.white_list).toUpperCase(), new DialogInterface.OnClickListener() {
+                    dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.white_list).toUpperCase(), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             startActivity(new Intent(getApplicationContext(), WhiteListActivity.class));
                         }
                     });
                 }
-                hideDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-                hideDialogBuilder.show();
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
                 return true;
 
             case R.id.delete_action:
@@ -806,11 +809,17 @@ public class MainActivity extends SharedMediaActivity {
                     }
                 }
 
-                AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                AlertDialogsHelper.getTextDialog(this, deleteDialog, R.string.delete, albumsMode || !editMode ? R.string.delete_album_message : R.string.delete_photos_message);
 
-                deleteDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-                deleteDialog.setPositiveButton(this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
+                final AlertDialog alertDialog = AlertDialogsHelper.getTextDialog(this, R.string.delete, albumsMode || !editMode ? R.string.delete_album_message : R.string.delete_photos_message);
+
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Security.isPasswordOnDelete(getApplicationContext())) {
 
@@ -828,7 +837,7 @@ public class MainActivity extends SharedMediaActivity {
                         } else new DeletePhotos().execute();
                     }
                 });
-                deleteDialog.show();
+                alertDialog.show();
                 return true;
 
             case R.id.sharePhotos:
@@ -966,12 +975,9 @@ public class MainActivity extends SharedMediaActivity {
                     private AlertDialog dialog;
                     @Override
                     protected void onPreExecute() {
-                        AlertDialog.Builder progressDialog = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-                        dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, progressDialog,
-                                getString(R.string.affix), getString(R.string.affix_text));
-                        dialog.show();
                         super.onPreExecute();
+                        dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, getString(R.string.affix), getString(R.string.affix_text));
+                        dialog.show();
                     }
 
                     @Override
@@ -1057,8 +1063,7 @@ public class MainActivity extends SharedMediaActivity {
                 seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        txtQuality.setText(Html.fromHtml(
-                                String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
+                        txtQuality.setText(StringUtils.html(String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -1069,7 +1074,7 @@ public class MainActivity extends SharedMediaActivity {
 
                     }
                 });
-                seekQuality.setProgress(50); //DEFAULT
+                seekQuality.setProgress(50);
 
                 swVertical.setClickable(false);
                 llSwVertical.setOnClickListener(new View.OnClickListener() {
@@ -1155,32 +1160,25 @@ public class MainActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.renameAlbum:
-                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
                 final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(albumsMode ? getAlbums().getSelectedAlbum(0).getName() : getAlbum().getName());
 
-                AlertDialogsHelper.getInsertTextDialog(MainActivity.this, renameDialogBuilder,
-                        editTextNewName, R.string.rename_album);
+                final AlertDialog insertTextDialog = AlertDialogsHelper.getInsertTextDialog(MainActivity.this, editTextNewName, R.string.rename_album);
 
-                renameDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
-
-                renameDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+                insertTextDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //This should br empty it will be overwrite later
-                        //to avoid dismiss of the dialog
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        insertTextDialog.dismiss();
                     }
                 });
-                final AlertDialog renameDialog = renameDialogBuilder.create();
-                renameDialog.show();
 
-                renameDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener( new View.OnClickListener() {
+                insertTextDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View dialog) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         if (editTextNewName.length() != 0) {
                             swipeRefreshLayout.setRefreshing(true);
                             boolean success;
-                            if (albumsMode){
+                            if (albumsMode) {
 
                                 int index = getAlbums().dispAlbums.indexOf(getAlbums().getSelectedAlbum(0));
                                 getAlbums().getAlbum(index).updatePhotos(getApplicationContext());
@@ -1192,14 +1190,17 @@ public class MainActivity extends SharedMediaActivity {
                                 toolbar.setTitle(getAlbum().getName());
                                 mediaAdapter.notifyDataSetChanged();
                             }
-                            renameDialog.dismiss();
+                            insertTextDialog.dismiss();
                             if (!success) requestSdCardPermissions();
                             swipeRefreshLayout.setRefreshing(false);
                         } else {
                             StringUtils.showToast(getApplicationContext(), getString(R.string.insert_something));
                             editTextNewName.requestFocus();
                         }
-                    }});
+                    }
+                });
+
+                insertTextDialog.show();
                 return true;
 
             case R.id.clear_album_preview:

@@ -192,21 +192,19 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 final EditText editText = new EditText(getContext());
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), theme.getDialogStyle());
-                AlertDialogsHelper.getInsertTextDialog(((ThemedActivity) getActivity()), builder,
-                        editText, R.string.new_folder);
-                builder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+                AlertDialog insertTextDialog = AlertDialogsHelper.getInsertTextDialog(((ThemedActivity) getActivity()), editText, R.string.new_folder);
+                insertTextDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         File folderPath = new File(currentFolderPath.getText().toString() + File.separator + editText.getText().toString());
                         if (folderPath.mkdir()) displayContentFolder(folderPath);
                     }
                 });
-                builder.setNegativeButton(getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                insertTextDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {}
                 });
-                builder.show();
+                insertTextDialog.show();
             }
         });
         contentView.findViewById(R.id.rl_bottom_sheet_title).setOnClickListener(new View.OnClickListener() {

@@ -92,13 +92,12 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_changelog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AboutActivity.this, getDialogStyle());
-                AlertDialogsHelper.changelogDialog(AboutActivity.this, dialogBuilder);
-                dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+                AlertDialog alertDialog = AlertDialogsHelper.changelogDialog(AboutActivity.this);
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {}
                 });
-                dialogBuilder.show();
+                alertDialog.show();
             }
         });
 

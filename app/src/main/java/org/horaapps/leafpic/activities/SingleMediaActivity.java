@@ -416,12 +416,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 break;
 
             case R.id.action_delete:
-                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
-                AlertDialogsHelper.getTextDialog(SingleMediaActivity.this,deleteDialog,
-                        R.string.delete, R.string.delete_photo_message);
-
-                deleteDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-                deleteDialog.setPositiveButton(this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
+                final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(SingleMediaActivity.this, R.string.delete, R.string.delete_photo_message);
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        textDialog.dismiss();
+                    }
+                });
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Security.isPasswordOnDelete(getApplicationContext())) {
 
@@ -440,7 +442,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                             deleteCurrentMedia();
                     }
                 });
-                deleteDialog.show();
+                textDialog.show();
                 return true;
 
             case R.id.action_move:
@@ -466,13 +468,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.action_rename:
-                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
                 final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(StringUtils.getPhotoNameByPath(getAlbum().getCurrentMedia().getPath()));
 
-                AlertDialog renameDialog =
-                        AlertDialogsHelper.getInsertTextDialog(
-                                this,renameDialogBuilder, editTextNewName, R.string.rename_photo_action);
+                AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(this, editTextNewName, R.string.rename_photo_action);
 
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
@@ -484,7 +483,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     }});
                 renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { } });
+                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); } });
                 renameDialog.show();
                 break;
 
@@ -496,14 +495,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 break;
 
             case R.id.action_details:
-                AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
-                final AlertDialog detailsDialog =
-                        AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,getAlbum().getCurrentMedia());
+
+                final AlertDialog detailsDialog = AlertDialogsHelper.getDetailsDialog(this, getAlbum().getCurrentMedia());
 
                 detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
                         .ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { }});
+                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); }});
 
                 detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,9 @@ import java.util.Locale;
  */
 public class AlertDialogsHelper {
 
-    public static  AlertDialog getInsertTextDialog(final ThemedActivity activity, AlertDialog.Builder dialogBuilder , EditText editText, @StringRes int title) {
+    public static  AlertDialog getInsertTextDialog(final ThemedActivity activity, EditText editText, @StringRes int title) {
 
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_insert_text, null);
         TextView textViewTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.rename_title);
 
@@ -64,7 +66,8 @@ public class AlertDialogsHelper {
         return dialogBuilder.create();
     }
 
-    public static AlertDialog getTextDialog(final ThemedActivity activity, AlertDialog.Builder textDialogBuilder, @StringRes int title, @StringRes int Message){
+    public static AlertDialog getTextDialog(final ThemedActivity activity, @StringRes int title, @StringRes int Message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity,activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_text, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_title);
@@ -75,11 +78,12 @@ public class AlertDialogsHelper {
         dialogTitle.setText(title);
         dialogMessage.setText(Message);
         dialogMessage.setTextColor(activity.getTextColor());
-        textDialogBuilder.setView(dialogLayout);
-        return textDialogBuilder.create();
+        builder.setView(dialogLayout);
+        return builder.create();
     }
 
-    public static AlertDialog getProgressDialog(final ThemedActivity activity, AlertDialog.Builder progressDialog, String title, String message){
+    public static AlertDialog getProgressDialog(final ThemedActivity activity,  String title, String message){
+        AlertDialog.Builder progressDialog = new AlertDialog.Builder(activity, activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_progress, null);
         TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.progress_dialog_title);
         TextView dialogMessage = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.progress_dialog_text);
@@ -98,7 +102,8 @@ public class AlertDialogsHelper {
         return progressDialog.create();
     }
 
-    public static AlertDialog getDetailsDialog(final ThemedActivity activity, AlertDialog.Builder detailsDialogBuilder, final Media f) {
+    public static AlertDialog getDetailsDialog(final ThemedActivity activity, final Media f) {
+        AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
         MediaDetailsMap<String, String> mainDetails = f.getMainDetails(activity.getApplicationContext());
         final View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_detail, null);
         ImageView imgMap = (ImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_map);
@@ -180,7 +185,8 @@ public class AlertDialogsHelper {
         loadDetails(dialogLayout ,activity , metadata);
     }
 
-    public static AlertDialog changelogDialog(final ThemedActivity activity, AlertDialog.Builder changelogDialogBuilder){
+    public static AlertDialog changelogDialog(final ThemedActivity activity) {
+        AlertDialog.Builder changelogDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_changelog, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_changelog_title);
@@ -192,23 +198,17 @@ public class AlertDialogsHelper {
         dialogTitle.setBackgroundColor(activity.getPrimaryColor());
         activity.getThemeHelper().setScrollViewColor(scrChangelog);
 
-        String titleHtml = activity.getString(R.string.changelog) + " <font color='" + activity.getAccentColor()+ "'>" + BuildConfig.VERSION_NAME + "</font>";
-        dialogTitle.setText(StringUtils.html(titleHtml));
+        dialogTitle.setText(StringUtils.html(String.format(Locale.ENGLISH,"%s <font color='%d'>%s</font>", activity.getString(R.string.changelog), activity.getAccentColor(), BuildConfig.VERSION_NAME )));
 
-        //TODO: TRY TO FIND A BETTER WAY PLZ, I BELIVE IN YOU! <3
-        //Spanned changelogText = StringUtils.html(activity.getString(R.string.changelog_text));
-        //dialogMessage.setText(changelogText);
-        dialogMessage.setText("");
-        String[] changeLogMessage = activity.getResources().getStringArray(R.array.changelog_message);
-        StringBuilder builder = new StringBuilder();
-        for(String s: changeLogMessage){
-            builder.append(s);
-            builder.append("\n");
-        }
-
-        dialogMessage.setText(builder.toString().trim());
+        Spanned changelogText = StringUtils.html("<b>#Fixed</b><br/>\n" +
+                "        &#8226; Fixed crash on startup and some random crash<br/>\n" +
+                "        &#8226; FIied crash opening video (Nougat)<br/>\n" +
+                "        &#8226; Fixed zoom out issue with SubScaling ImageView enabled<br/>\n" +
+                "        <b>#Update</b><br/>\n" +
+                "        &#8226; Updated translations<br/>\n" +
+                "        &#8226; General improvements<br/>");
         dialogMessage.setTextColor(activity.getTextColor());
-
+        dialogMessage.setText(changelogText);
         changelogDialogBuilder.setView(dialogLayout);
         return changelogDialogBuilder.create();
     }
