@@ -10,7 +10,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +26,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
+import org.horaapps.leafpic.model.providers.MediaStoreProvider;
 import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 public class WhiteListActivity extends SharedMediaActivity {
 
     private RecyclerView mRecyclerView;
+    private ItemsAdapter adapter;
     private Toolbar toolbar;
 
     private ArrayList<Item> folders = new ArrayList<>();
@@ -54,7 +55,6 @@ public class WhiteListActivity extends SharedMediaActivity {
         lookForFoldersInMediaStore();
     }
 
-
     private void lookForFoldersInMediaStore() {
         String[] projection = new String[]{
                 MediaStore.Files.FileColumns.PARENT,
@@ -63,10 +63,10 @@ public class WhiteListActivity extends SharedMediaActivity {
         };
 
         String selection, selectionArgs[];
-
-        selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or " +
-                MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
-                + " ) GROUP BY ( " + MediaStore.Files.FileColumns.PARENT + " ";
+        selection = String.format("%s=? or %s=? ) GROUP BY (%s ",
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.Files.FileColumns.PARENT);
 
         selectionArgs = new String[]{
                 String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
@@ -86,12 +86,9 @@ public class WhiteListActivity extends SharedMediaActivity {
                             StringUtils.getBucketPathByImagePath(cur.getString(mediaColumn)),
                             cur.getString(nameColumn)));
                 }
-
             }
             cur.close();
         }
-
-
     }
 
     private boolean shouldAdd(long id) {
@@ -99,18 +96,6 @@ public class WhiteListActivity extends SharedMediaActivity {
             if (item.equals(id))
                 return false;
         return true;
-    }
-
-    @TestOnly
-    private void fetchFolders(File dir) {
-//        if (!alreadyTracked.contains(dir)) {
-//            if (isFolderWithMedia(dir))
-//                folders.add(new Item(dir.getPath(), dir.getName()));
-//            File[] foo = dir.listFiles(new NotHiddenFoldersFilter());
-//            if (foo != null)
-//                for (File f : foo)
-//                    if (!alreadyTracked.contains(f)) fetchFolders(f);
-//        }
     }
 
     @TestOnly
@@ -122,19 +107,27 @@ public class WhiteListActivity extends SharedMediaActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_track_albums, menu);
-        //menu.findItem(R.id.action_done).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_done));
         menu.findItem(R.id.action_add).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_add_circle));
         return true;
     }
 
 
-    private void addFolder(File dir) {
+    private void addFolder(final File dir) {
         String[] list = dir.list(new ImageFileFilter(true));
+        final boolean[] found = { false };
         if (list != null && list.length > 0) {
             MediaScannerConnection.scanFile(getApplicationContext(), list, null, new MediaScannerConnection.OnScanCompletedListener() {
                 @Override
                 public void onScanCompleted(String s, Uri uri) {
-                    Log.wtf("asd", s+" - "+uri.toString());
+                    // TODO: 12/15/16 test this!
+                    if(!found[0]) {
+                        long albumId = MediaStoreProvider.getAlbumId(getApplicationContext(), s);
+                        if (albumId != -1) {
+                            found[0] = true;
+                            folders.add(0, new Item(albumId, dir.getPath(), dir.getName()));
+                        }
+                    }
+
                 }
             });
         } else {
@@ -156,13 +149,18 @@ public class WhiteListActivity extends SharedMediaActivity {
                             }
                         }).show();
                 return true;
+
+            case R.id.action_select_all:
+                for (Item folder : folders) folder.included = true;
+                getAlbums().trackItems(folders);
+                adapter.notifyDataSetChanged();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
     private void initUi() {
-
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -173,10 +171,9 @@ public class WhiteListActivity extends SharedMediaActivity {
         });
 
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(new ItemsAdapter());
+        mRecyclerView.setAdapter((adapter = new ItemsAdapter()));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
     }
 
     @Override
@@ -190,8 +187,8 @@ public class WhiteListActivity extends SharedMediaActivity {
     }
 
     public static class Item {
-        String path;
-        String name;
+
+        String path, name;
         long id;
         boolean included = false;
 

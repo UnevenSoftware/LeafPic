@@ -37,7 +37,7 @@ import java.util.Locale;
  */
 public class AlertDialogsHelper {
 
-    public static  AlertDialog getInsertTextDialog(final ThemedActivity activity, EditText editText, @StringRes int title) {
+    public static  AlertDialog getInsertTextDialog(ThemedActivity activity, EditText editText, @StringRes int title) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_insert_text, null);
@@ -66,7 +66,7 @@ public class AlertDialogsHelper {
         return dialogBuilder.create();
     }
 
-    public static AlertDialog getTextDialog(final ThemedActivity activity, @StringRes int title, @StringRes int Message){
+    public static AlertDialog getTextDialog(ThemedActivity activity, @StringRes int title, @StringRes int Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity,activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_text, null);
 
@@ -180,7 +180,6 @@ public class AlertDialogsHelper {
     }
 
     private static void showMoreDetails(View dialogLayout, ThemedActivity activity, Media media) {
-
         MediaDetailsMap<String, String> metadata = media.getAllDetails();
         loadDetails(dialogLayout ,activity , metadata);
     }

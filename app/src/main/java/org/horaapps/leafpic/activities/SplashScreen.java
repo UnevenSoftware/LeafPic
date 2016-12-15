@@ -167,7 +167,7 @@ public class SplashScreen extends SharedMediaActivity {
         @Override
         protected Boolean doInBackground(Boolean... arg0) {
             getAlbums().restoreBackup(getApplicationContext());
-            if(getAlbums().dispAlbums.size() == 0) {
+            if(getAlbums().albums.size() == 0) {
                 getAlbums().loadAlbums(getApplicationContext(), false);
                 return true;
             }

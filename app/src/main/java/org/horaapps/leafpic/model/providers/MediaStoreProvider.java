@@ -56,22 +56,25 @@ public class  MediaStoreProvider {
 
 
 		if(includeVideo) {
-			selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
-					+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
-
+			selection = String.format("(%s=? or %s=?) and %s=?",
+					MediaStore.Files.FileColumns.MEDIA_TYPE,
+					MediaStore.Files.FileColumns.MEDIA_TYPE,
+					MediaStore.Files.FileColumns.PARENT);
 			selectionArgs = new String[] {
 					String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
 					String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
 					String.valueOf(albumId)
 			};
 		} else {
-			selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=?  and " + MediaStore.Files.FileColumns.PARENT + "=?";
+			selection = String.format("%s=? and %s=?",
+					MediaStore.Files.FileColumns.MEDIA_TYPE,
+					MediaStore.Files.FileColumns.PARENT);
 			selectionArgs = new String[] { String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE), String.valueOf(albumId) };
 		}
 
 		Cursor cur = context.getContentResolver().query(
 				images, projection, selection, selectionArgs,
-				" " + MediaStore.Images.Media.DATE_TAKEN + " DESC " + limit);
+				MediaStore.Images.Media.DATE_TAKEN + " DESC " + limit);
 
 		if (cur != null) {
 			if (cur.moveToFirst()) do list.add(new Media(cur)); while (cur.moveToNext());
@@ -93,18 +96,17 @@ public class  MediaStoreProvider {
 	}
 
 	public static int getCount(Context context, long albumId) {
-
-
 		int c = 0;
+		String selection = String.format("(%s=? or %s=?) and %s=?",
+				MediaStore.Files.FileColumns.MEDIA_TYPE,
+				MediaStore.Files.FileColumns.MEDIA_TYPE,
+				MediaStore.Files.FileColumns.PARENT),
 
-		String selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
-				+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
-
-		String[] selectionArgs = new String[] {
-				String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-				String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-				String.valueOf(albumId)
-		};
+				selectionArgs[] = new String[] {
+						String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+						String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+						String.valueOf(albumId)
+				};
 
 		Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
 				new String[]{ "count(*)" }, selection, selectionArgs, null);
@@ -135,7 +137,6 @@ public class  MediaStoreProvider {
 		return null;
 	}
 
-
 	@Deprecated
 	public static ArrayList<Album> getAlbums(Context context, boolean hidden) {
 		excludedAlbums = getExcludedFolders(context);
@@ -147,7 +148,7 @@ public class  MediaStoreProvider {
 		ArrayList<Album> list = new ArrayList<Album>();
 		String[] projection = new String[]{ MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT };
 		String selection = MediaStore.Files.FileColumns.MEDIA_TYPE+"="+MediaStore.Files.FileColumns.MEDIA_TYPE_NONE+" and "+
-										   MediaStore.Files.FileColumns.DATA +" LIKE '%.nomedia'";
+				MediaStore.Files.FileColumns.DATA +" LIKE '%.nomedia'";
 		Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"), projection, selection, null, null);
 		if(cur != null && cur.moveToFirst()) {
 			do {
@@ -187,8 +188,8 @@ public class  MediaStoreProvider {
 		ArrayList<Album> list = new ArrayList<Album>();
 
 		String[] projection = new String[]{
-						MediaStore.Files.FileColumns.PARENT,
-						MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+				MediaStore.Files.FileColumns.PARENT,
+				MediaStore.Images.Media.BUCKET_DISPLAY_NAME
 		};
 
 		String selection, selectionArgs[];
@@ -198,12 +199,12 @@ public class  MediaStoreProvider {
 
 		if (includeVideo) {
 			selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or " +
-										MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
-										+ " ) GROUP BY ( " + MediaStore.Files.FileColumns.PARENT + " ";
+					MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+					+ " ) GROUP BY ( " + MediaStore.Files.FileColumns.PARENT + " ";
 
 			selectionArgs = new String[]{
-							String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-							String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+					String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+					String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
 			};
 		} else {
 			selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) GROUP BY ( " + MediaStore.Files.FileColumns.PARENT + " ";
@@ -211,7 +212,7 @@ public class  MediaStoreProvider {
 		}
 
 		Cursor cur = context.getContentResolver().query(
-						MediaStore.Files.getContentUri("external"), projection, selection, selectionArgs, null);
+				MediaStore.Files.getContentUri("external"), projection, selection, selectionArgs, null);
 
 		if (cur != null) {
 			if (cur.moveToFirst()) {
@@ -237,7 +238,7 @@ public class  MediaStoreProvider {
 
 	@Deprecated
 	private  static ArrayList<String> getExcludedFolders(Context context) {
-		ArrayList<String>  list = new ArrayList<String>();
+		ArrayList<String>  list = new ArrayList<>();
 		//forced excluded folder
 		HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
 		for(File file : storageRoots) {
@@ -253,16 +254,16 @@ public class  MediaStoreProvider {
 	private static int getAlbumCount(Context context, long id) {
 		int c = 0;
 		String selection = "( "+MediaStore.Files.FileColumns.MEDIA_TYPE + "=? or "
-										   + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
+				+ MediaStore.Files.FileColumns.MEDIA_TYPE + "=? ) and " + MediaStore.Files.FileColumns.PARENT + "=?";
 
 		String[] selectionArgs = new String[] {
-						String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-						String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-						String.valueOf(id)
+				String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+				String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+				String.valueOf(id)
 		};
 
 		Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
-						new String[]{ MediaStore.Files.FileColumns.PARENT }, selection, selectionArgs, null);
+				new String[]{ MediaStore.Files.FileColumns.PARENT }, selection, selectionArgs, null);
 
 		if (cur != null) {
 			c = cur.getCount();

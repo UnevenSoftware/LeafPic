@@ -12,7 +12,6 @@ import org.horaapps.leafpic.model.base.MediaComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.model.providers.MediaStoreProvider;
-import org.horaapps.leafpic.model.providers.StorageProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
@@ -154,14 +153,16 @@ public class Album implements Serializable {
 		PreferenceUtil SP = PreferenceUtil.getInstance(context);
 		ArrayList<Media> mediaArrayList = new ArrayList<>();
 		// TODO: 18/08/16
-		if (isFromMediaStore()) {
+		mediaArrayList.addAll(
+				MediaStoreProvider.getMedia(context, id, SP.getBoolean("set_include_video", true)));
+		/*if (isFromMediaStore()) {
 			mediaArrayList.addAll(
 					MediaStoreProvider.getMedia(
 							context, id, SP.getBoolean("set_include_video", true)));
 		} else {
 			mediaArrayList.addAll(StorageProvider.getMedia(
 					getPath(), SP.getBoolean("set_include_video", true)));
-		}
+		}*/
 		return mediaArrayList;
 	}
 

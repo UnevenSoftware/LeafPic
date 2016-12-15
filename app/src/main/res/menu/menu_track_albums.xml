@@ -6,9 +6,9 @@
         android:title="@string/add"
         app:showAsAction="always"
         />
-    <!--<item
-        android:id="@+id/action_show_music"
-        android:title="Show Music folder"
+    <item
+        android:id="@+id/action_select_all"
+        android:title="@string/select_all"
         app:showAsAction="never"
-        />-->
+        />
 </menu>

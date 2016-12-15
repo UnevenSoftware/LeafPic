@@ -14,6 +14,7 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
@@ -33,8 +34,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
-import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -56,10 +55,10 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     private static final String ALBUM_SORTING_ORDER = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "sorting_order";
 
-    private static String backupFile = "albums.dat";
+    private static final String backupFile = "albums.bck";
     private static HandlingAlbums mInstance = null;
 
-    public ArrayList<Album> dispAlbums = null;
+    public ArrayList<Album> albums = null;
     private ArrayList<Album> selectedAlbums = null;
 
     private PreferenceUtil SP;
@@ -85,19 +84,9 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void handleItems(ArrayList<WhiteListActivity.Item> paths) {
+    public void trackItems(ArrayList<WhiteListActivity.Item> items) {
         SQLiteDatabase db = this.getWritableDatabase();
-        for (WhiteListActivity.Item item : paths) {
-
-            boolean isAlreadyTracked = true;//xist(db, item);
-            if (item.isIncluded() && !isAlreadyTracked) {
-                ContentValues values = new ContentValues();
-
-            }
-
-            if (!item.isIncluded() && isAlreadyTracked)
-                db.delete(TABLE_ALBUMS, ALBUM_PATH+"=?", new String[]{ item.getPath() });
-        }
+        for (WhiteListActivity.Item item : items) handleTrackItem(db, item);
         db.close();
     }
 
@@ -126,21 +115,24 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
     public void handleTrackItem(WhiteListActivity.Item itm) {
         SQLiteDatabase db = getWritableDatabase();
+        handleTrackItem(db, itm);
+        db.close();
+    }
+
+    private void handleTrackItem(SQLiteDatabase db, WhiteListActivity.Item itm) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_TRAKED, itm.isIncluded() ? 1 : 0);
         if (exist(db, itm.getPath())) {
             db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ itm.getPath() });
         } else {
             values.put(ALBUM_PATH, itm.getPath());
-            values.put(ALBUM_PINNED, itm.isIncluded() ? 1 : 0);
+            values.put(ALBUM_PINNED, 0);
             values.put(ALBUM_SORTING_MODE, SortingMode.DATE.getValue());
             values.put(ALBUM_SORTING_ORDER, SortingOrder.DESCENDING.getValue());
             values.put(ALBUM_ID, itm.getId());
             db.insert(TABLE_ALBUMS, null, values);
         }
-        db.close();
     }
-
 
     void pinAlbum(String path, boolean status) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -192,7 +184,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     private HandlingAlbums(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         SP = PreferenceUtil.getInstance(context);
-        dispAlbums = new ArrayList<>();
+        albums = new ArrayList<>();
         selectedAlbums = new ArrayList<>();
     }
 
@@ -230,7 +222,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         cur.close();
         db.close();
 
-        dispAlbums = albums;
+        this.albums = albums;
         sortAlbums(context);
     }
 
@@ -246,33 +238,29 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     }
 
     public void addAlbum(int position, Album album) {
-        dispAlbums.add(position, album);
+        albums.add(position, album);
         setCurrentAlbum(album);
     }
 
     public void setCurrentAlbum(Album album) {
-        current = dispAlbums.indexOf(album);
+        current = albums.indexOf(album);
     }
 
     public Album getCurrentAlbum() {
-        return dispAlbums.get(current);
+        return albums.get(current);
     }
 
     public void saveBackup(final Context context) {
         if (!hidden) {
             new Thread(new Runnable() {
                 public void run() {
-                    FileOutputStream outStream;
                     try {
-                        File f = new File(context.getCacheDir(), backupFile);
-                        outStream = new FileOutputStream(f);
+                        FileOutputStream outStream = new FileOutputStream(new File(context.getCacheDir(), backupFile));
                         ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
-                        objectOutStream.writeObject(dispAlbums);
+                        objectOutStream.writeObject(albums);
                         objectOutStream.close();
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
+                    } catch (Exception e) {
+                        Log.wtf("asd", "Unable to save backup", e);
                     }
                 }
             }).start();
@@ -280,7 +268,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     }
 
     public int getCount() {
-        if(dispAlbums != null) return dispAlbums.size();
+        if(albums != null) return albums.size();
         return 0;
     }
 
@@ -328,54 +316,44 @@ public class HandlingAlbums extends SQLiteOpenHelper {
             File f = new File(context.getCacheDir(), backupFile);
             inStream = new FileInputStream(f);
             ObjectInputStream objectInStream = new ObjectInputStream(inStream);
-
-            dispAlbums = (ArrayList<Album>) objectInStream.readObject();
-
+            Object o = objectInStream.readObject();
+            if(o.getClass().equals(ArrayList.class))
+                albums = (ArrayList<Album>) o;
             objectInStream.close();
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (OptionalDataException e1) {
-            e1.printStackTrace();
-        } catch (StreamCorruptedException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        } catch (Exception e) { albums.clear(); }
     }
 
     private int toggleSelectAlbum(int index) {
-        if (dispAlbums.get(index) != null) {
-            dispAlbums.get(index).setSelected(!dispAlbums.get(index).isSelected());
-            if (dispAlbums.get(index).isSelected()) selectedAlbums.add(dispAlbums.get(index));
-            else selectedAlbums.remove(dispAlbums.get(index));
+        if (albums.get(index) != null) {
+            albums.get(index).setSelected(!albums.get(index).isSelected());
+            if (albums.get(index).isSelected()) selectedAlbums.add(albums.get(index));
+            else selectedAlbums.remove(albums.get(index));
         }
         return index;
     }
 
     public int toggleSelectAlbum(Album album) {
-        return toggleSelectAlbum(dispAlbums.indexOf(album));
+        return toggleSelectAlbum(albums.indexOf(album));
     }
 
-    public Album getAlbum(int index){ return dispAlbums.get(index); }
+    public Album getAlbum(int index){ return albums.get(index); }
 
     public void selectAllAlbums() {
-        for (Album dispAlbum : dispAlbums)
+        for (Album dispAlbum : albums)
             if (!dispAlbum.isSelected()) {
                 dispAlbum.setSelected(true);
                 selectedAlbums.add(dispAlbum);
             }
     }
 
-    public void removeCurrentAlbum(){ dispAlbums.remove(current); }
+    public void removeCurrentAlbum(){ albums.remove(current); }
 
     public int getSelectedCount() {
         return selectedAlbums.size();
     }
 
     public void clearSelectedAlbums() {
-        for (Album dispAlbum : dispAlbums)
+        for (Album dispAlbum : albums)
             dispAlbum.setSelected(false);
 
         selectedAlbums.clear();
@@ -463,7 +441,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
     private void hideAlbum(final Album a, Context context) {
         hideAlbum(a.getPath(), context);
-        dispAlbums.remove(a);
+        albums.remove(a);
     }
 
     public void unHideAlbum(String path, Context context) {
@@ -482,16 +460,16 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
     private void unHideAlbum(final Album a, Context context) {
         unHideAlbum(a.getPath(), context);
-        dispAlbums.remove(a);
+        albums.remove(a);
     }
 
     public boolean deleteSelectedAlbums(Context context) {
         boolean success = true;
 
         for (Album selectedAlbum : selectedAlbums) {
-            int index = dispAlbums.indexOf(selectedAlbum);
+            int index = albums.indexOf(selectedAlbum);
             if(deleteAlbum(selectedAlbum, context))
-                dispAlbums.remove(index);
+                albums.remove(index);
             else success = false;
         }
         return success;
@@ -521,18 +499,18 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
         Album camera = null;
 
-        for(Album album : dispAlbums) {
-            if (album.getName().equals("Camera") && dispAlbums.remove(album)) {
+        for(Album album : albums) {
+            if (album.getName().equals("Camera") && albums.remove(album)) {
                 camera = album;
                 break;
             }
         }
 
-        Collections.sort(dispAlbums, AlbumsComparators.getComparator(getSortingMode(), getSortingOrder()));
+        Collections.sort(albums, AlbumsComparators.getComparator(getSortingMode(), getSortingOrder()));
 
         if (camera != null) {
             camera.setName(context.getString(R.string.camera));
-            dispAlbums.add(0, camera);
+            albums.add(0, camera);
         }
     }
 

@@ -240,7 +240,7 @@ public class MainActivity extends SharedMediaActivity {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+        albumsAdapter.swapDataSet(getAlbums().albums);
         if (reload) new PrepareAlbumTask().execute();
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -310,7 +310,7 @@ public class MainActivity extends SharedMediaActivity {
         rvMedia.setHasFixedSize(true);
         rvMedia.setItemAnimator(new DefaultItemAnimator());
 
-        albumsAdapter = new AlbumsAdapter(getAlbums().dispAlbums, MainActivity.this);
+        albumsAdapter = new AlbumsAdapter(getAlbums().albums, MainActivity.this);
         albumsAdapter.setOnClickListener(albumOnClickListener);
         albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
         rvAlbums.setAdapter(albumsAdapter);
@@ -541,7 +541,7 @@ public class MainActivity extends SharedMediaActivity {
 
     private void updateSelectedStuff() {
         if (albumsMode) {
-            if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().dispAlbums.size());
+            if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().albums.size());
             else {
                 toolbar.setTitle(getString(R.string.app_name));
                 toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
@@ -592,7 +592,7 @@ public class MainActivity extends SharedMediaActivity {
     private void checkNothing() {
         TextView a = (TextView) findViewById(R.id.nothing_to_show);
         a.setTextColor(getTextColor());
-        a.setVisibility((albumsMode && getAlbums().dispAlbums.size() == 0) || (!albumsMode && getAlbum().getMedia().size() == 0) ? View.VISIBLE : View.GONE);
+        a.setVisibility((albumsMode && getAlbums().albums.size() == 0) || (!albumsMode && getAlbum().getMedia().size() == 0) ? View.VISIBLE : View.GONE);
     }
 
     //region MENU
@@ -714,7 +714,7 @@ public class MainActivity extends SharedMediaActivity {
                 getAlbums().getSelectedAlbum(0).togglePinAlbum(getApplicationContext());
                 getAlbums().sortAlbums(getApplicationContext());
                 getAlbums().clearSelectedAlbums();
-                albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+                albumsAdapter.swapDataSet(getAlbums().albums);
                 invalidateOptionsMenu();
                 return true;
 
@@ -895,7 +895,7 @@ public class MainActivity extends SharedMediaActivity {
                 if (albumsMode) {
                     getAlbums().setDefaultSortingMode(SortingMode.NAME);
                     getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+                    albumsAdapter.swapDataSet(getAlbums().albums);
                 } else {
                     getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NAME);
                     getAlbum().sortPhotos();
@@ -908,7 +908,7 @@ public class MainActivity extends SharedMediaActivity {
                 if (albumsMode) {
                     getAlbums().setDefaultSortingMode(SortingMode.DATE);
                     getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+                    albumsAdapter.swapDataSet(getAlbums().albums);
                 } else {
                     getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.DATE);
                     getAlbum().sortPhotos();
@@ -921,7 +921,7 @@ public class MainActivity extends SharedMediaActivity {
                 if (albumsMode) {
                     getAlbums().setDefaultSortingMode(SortingMode.SIZE);
                     getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+                    albumsAdapter.swapDataSet(getAlbums().albums);
                 } else {
                     getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.SIZE);
                     getAlbum().sortPhotos();
@@ -944,7 +944,7 @@ public class MainActivity extends SharedMediaActivity {
                 if (albumsMode) {
                     getAlbums().setDefaultSortingMode(SortingMode.NUMERIC);
                     getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+                    albumsAdapter.swapDataSet(getAlbums().albums);
                 } else {
                     getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
                     getAlbum().sortPhotos();
@@ -957,7 +957,7 @@ public class MainActivity extends SharedMediaActivity {
                 if (albumsMode) {
                     getAlbums().setDefaultSortingAscending(item.isChecked() ? SortingOrder.DESCENDING : SortingOrder.ASCENDING);
                     getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+                    albumsAdapter.swapDataSet(getAlbums().albums);
                 } else {
                     getAlbum().setDefaultSortingAscending(getApplicationContext(), item.isChecked() ? SortingOrder.DESCENDING : SortingOrder.ASCENDING);
                     getAlbum().sortPhotos();
@@ -1180,7 +1180,7 @@ public class MainActivity extends SharedMediaActivity {
                             boolean success;
                             if (albumsMode) {
 
-                                int index = getAlbums().dispAlbums.indexOf(getAlbums().getSelectedAlbum(0));
+                                int index = getAlbums().albums.indexOf(getAlbums().getSelectedAlbum(0));
                                 getAlbums().getAlbum(index).updatePhotos(getApplicationContext());
                                 success = getAlbums().getAlbum(index).renameAlbum(getApplicationContext(),
                                         editTextNewName.getText().toString());
@@ -1260,7 +1260,7 @@ public class MainActivity extends SharedMediaActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            albumsAdapter.swapDataSet(getAlbums().dispAlbums);
+            albumsAdapter.swapDataSet(getAlbums().albums);
             checkNothing();
             swipeRefreshLayout.setRefreshing(false);
             getAlbums().saveBackup(getApplicationContext());

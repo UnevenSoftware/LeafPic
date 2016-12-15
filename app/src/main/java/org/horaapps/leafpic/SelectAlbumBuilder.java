@@ -268,7 +268,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             exploreModePanel.setVisibility(View.VISIBLE);
         } else {
             currentFolderPath.setText(R.string.local_folder);
-            for (Album album : ((MyApplication) getActivity().getApplicationContext()).getAlbums().dispAlbums) {
+            for (Album album : ((MyApplication) getActivity().getApplicationContext()).getAlbums().albums) {
                 folders.add(new File(album.getPath()));
             }
             imgExploreMode.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_compass_outline));
