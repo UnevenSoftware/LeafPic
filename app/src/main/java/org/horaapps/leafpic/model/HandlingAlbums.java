@@ -29,9 +29,7 @@ import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -44,8 +42,12 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "tracked_albums.db";
-
     private static final String TABLE_ALBUMS = "tracked_albums";
+
+    private static final int EXCLUDED = 1;
+    private static final int INCLUDED = 2;
+    private static final int NORMAL = 0;
+
     private static final String ALBUM_PATH = "path";
     private static final String ALBUM_ID = "id";
     private static final String ALBUM_PINNED = "pinned";
@@ -298,11 +300,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
                         objectOutStream.close();
                     }
 
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
