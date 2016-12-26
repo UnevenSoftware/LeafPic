@@ -156,7 +156,7 @@ public class SettingsActivity extends ThemedActivity {
         findViewById(R.id.ll_white_list).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), WhiteListActivity.class));
+                startActivity(new Intent(getApplicationContext(), BlackWhiteListActivity.class));
             }
         });
 

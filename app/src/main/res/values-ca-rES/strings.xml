@@ -153,11 +153,11 @@
   <string name="primary_color_sub">Color principal que s\'utilitza a la interfície d\'usuari.</string>
   <string name="accent_color">Color d\'èmfasi</string>
   <string name="accent_color_sub">Color secundari que s\'utilitza als ginys i detalls de la interfície gràfica.</string>
-  <string name="basic_theme">Tema bàsic</string>
-  <string name="basic_theme_sub">Seleccioneu un tema bàsic.</string>
-  <string name="white_basic_theme">Blanc</string>
-  <string name="dark_basic_theme">Fosc</string>
-  <string name="dark_amoled_basic_theme">Fosc AMOLED</string>
+  <string name="base_theme">Tema bàsic</string>
+  <string name="base_theme_sub">Seleccioneu un tema bàsic.</string>
+  <string name="white">Blanc</string>
+  <string name="dark">Fosc</string>
+  <string name="dark_amoled">Fosc AMOLED</string>
   <string name="colored_navbar">Barra de navegació acolorida</string>
   <string name="colored_navbar_sub">Aplica el color primari a la barra de navegació.</string>
   <string name="internal_player">Reproductor de vídeo intern</string>

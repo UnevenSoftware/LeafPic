@@ -364,7 +364,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                     : new ConcatenatingMediaSource(mediaSources);
             player.prepare(mediaSource, !isTimelineStatic, !isTimelineStatic);
             playerNeedsSource = false;
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
         }
     }
 
@@ -422,7 +422,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (playbackState == ExoPlayer.STATE_ENDED)
             showControls();
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -457,14 +457,14 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         if (errorString != null)
             showToast(errorString);
         playerNeedsSource = true;
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
         showControls();
     }
 
     // MappingTrackSelector.EventListener implementation
     @Override
     public void onTrackSelectionsChanged(TrackSelections<? extends MappedTrackInfo> trackSelections) {
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
         MappedTrackInfo trackInfo = trackSelections.info;
         if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_VIDEO))
             showToast(R.string.error_unsupported_video);

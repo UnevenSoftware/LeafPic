@@ -22,6 +22,7 @@ import org.horaapps.leafpic.LookForMediaJob;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -78,8 +79,10 @@ public class SplashScreen extends SharedMediaActivity {
                         new PrefetchPhotosData().execute();
                     }
                 } else StringUtils.showToast(getApplicationContext(), "Album not found");
-            } else
+            } else { // default intent
                 new PrefetchAlbumsData().execute();
+            }
+
 
             if (getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK))
                 PICK_INTENT = true;
@@ -92,24 +95,35 @@ public class SplashScreen extends SharedMediaActivity {
 
     private void startLookingForMedia() {
 
-        ComponentName serviceName = new ComponentName(getApplicationContext(), LookForMediaJob.class);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            JobInfo job = new JobInfo.Builder(0, serviceName)
-                    .setPeriodic(1000)
-                    .setRequiresDeviceIdle(true)
-                    .build();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ComponentName serviceName = new ComponentName(getApplicationContext(), LookForMediaJob.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            // TODO: 11/29/16 asdasd
-            //scheduler.cancelAll();
-            List<JobInfo> allPendingJobs = scheduler.getAllPendingJobs();
-            Log.wtf("FUCK", allPendingJobs.size() +"");
-            int result =  scheduler.schedule(job);
-            if (result == JobScheduler.RESULT_SUCCESS) {
-                Log.wtf("FUCK", "Job scheduled successfully!");
-            } else
-                Log.wtf("FUCK", "Job scheduled failed!");
-        }
+                    if (getAlbums().getFoldersCount(HandlingAlbums.EXCLUDED) > 0) {
+
+                        JobInfo job = new JobInfo.Builder(0, serviceName)
+                                .setPeriodic(1000)
+                                .setRequiresDeviceIdle(true)
+                                .build();
+
+                        JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                        if (scheduler.getAllPendingJobs().size() == 0) {
+                            List<JobInfo> allPendingJobs = scheduler.getAllPendingJobs();
+                            Log.wtf("FUCK", allPendingJobs.size() + "");
+                            int result = scheduler.schedule(job);
+                            if (result == JobScheduler.RESULT_SUCCESS) {
+                                Log.wtf("FUCK", "Job scheduled successfully!");
+                            } else
+                                Log.wtf("FUCK", "Job scheduled failed!");
+                        }
+                    }
+                }
+            }
+        }).start();
+
+
     }
 
     @Override

@@ -29,7 +29,6 @@
                 android:id="@+id/nothing_to_show"
                 android:text="@string/there_is_nothing_to_show"
                 android:textColor="@color/md_white_1000"
-                android:visibility="invisible"
                 android:textSize="@dimen/sub_big_text"
                 android:gravity="center"
                 android:layout_centerInParent="true" />

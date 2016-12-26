@@ -92,7 +92,7 @@
     <!--DIALOG MESSAGES-->
     <string name="hide_album_message">
         Hiding this album will create a .nomedia file in the folder
-        and this could make the media inaccessible from other apps. Remove the album from the withe-list to avoid this.
+and this could make the media inaccessible from other apps. Use the exclude option to avoid this.
     </string>
     <string name="delete_album_message">Are you sure you want to delete this album?</string>
     <string name="delete_albums_message">Are you sure you want to delete the selected albums?</string>
@@ -203,11 +203,11 @@
     <string name="primary_color_sub">The main color to be used in the UI.</string>
     <string name="accent_color">Accent Color</string>
     <string name="accent_color_sub">The secondary color which is used to tint widgets and UI details.</string>
-    <string name="basic_theme">Basic Theme</string>
-    <string name="basic_theme_sub">Select a basic theme.</string>
-    <string name="white_basic_theme">White</string>
-    <string name="dark_basic_theme">Dark</string>
-    <string name="dark_amoled_basic_theme">Dark AMOLED</string>
+    <string name="base_theme">Base Theme</string>
+    <string name="base_theme_sub">Select a base theme.</string>
+    <string name="white">White</string>
+    <string name="dark">Dark</string>
+    <string name="dark_amoled">Dark AMOLED</string>
     <string name="colored_navbar">Colored Navigation Bar</string>
     <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
     <string name="internal_player">Internal Video Player</string>
@@ -355,4 +355,17 @@
     <string name="chose_albums_to_display">Chose albums to display</string>
     <string name="use_primary_color_in_the_viewer">Use primary color in the viewer</string>
     <string name="add">Add</string>
+    <string name="exclude">Exclude</string>
+    <string name="exclude_albums_message">Are you sure you want to exclude the selected
+        albums? \n If you want to exclude the parent of these albums, try excluding only
+    one album. A dropdown there will allow you to select the parent of the folder.</string>
+    <string name="exclude_album_message">
+        By excluding this folder you will also exclude all sub-folders. Below you can find a list
+        that allows you to choose a parent, if you have to exclude more folders which are on the same level.
+</string>
+    <string name="excluded_items">Excluded items</string>
+    <string name="manage_your_folders">Manage your folders</string>
+    <string name="manage_your_folders_sub">Here can handle the excluded folders and include folders that don\'t show up</string>
+    <string name="white_list_explaination">You have no included folders. You can add folders that aren\'t listed or folders with some problems. White-listed folders will be scanned periodically when the device is in idle mode, so it won\'t cause any performance issue</string>
+    <string name="no_media_in_this_folder">No media in this folder</string>
 </resources>

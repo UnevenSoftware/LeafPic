@@ -153,11 +153,11 @@
   <string name="primary_color_sub">アプリで使用される優先色を設定します</string>
   <string name="accent_color">アクセント色</string>
   <string name="accent_color_sub">アプリ内の詳細メニューに使用されるアクセント色を設定します</string>
-  <string name="basic_theme">基本テーマ</string>
-  <string name="basic_theme_sub">基本テーマを選択します。</string>
-  <string name="white_basic_theme">ホワイト</string>
-  <string name="dark_basic_theme">ダーク</string>
-  <string name="dark_amoled_basic_theme">ダーク AMOLED</string>
+  <string name="base_theme">基本テーマ</string>
+  <string name="base_theme_sub">基本テーマを選択します。</string>
+  <string name="white">ホワイト</string>
+  <string name="dark">ダーク</string>
+  <string name="dark_amoled">ダーク AMOLED</string>
   <string name="colored_navbar">ナビゲーションバーにも色を適用</string>
   <string name="colored_navbar_sub">ナビゲーションバーに優先色を適用します</string>
   <string name="internal_player">内蔵ビデオプレーヤー</string>

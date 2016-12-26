@@ -142,11 +142,11 @@ wtedy media zostaną skopiowane bądź przeniesione do nowego folderu.    </stri
   <string name="primary_color_sub">Główny kolor interfejsu.</string>
   <string name="accent_color">Kolor akcentów</string>
   <string name="accent_color_sub">Drugi kolor dla elementów interfejsu.</string>
-  <string name="basic_theme">Podstawowy motyw</string>
-  <string name="basic_theme_sub">Wybierz podstawowy motyw.</string>
-  <string name="white_basic_theme">Biały</string>
-  <string name="dark_basic_theme">Ciemny</string>
-  <string name="dark_amoled_basic_theme">Czarny (dla AMOLED)</string>
+  <string name="base_theme">Podstawowy motyw</string>
+  <string name="base_theme_sub">Wybierz podstawowy motyw.</string>
+  <string name="white">Biały</string>
+  <string name="dark">Ciemny</string>
+  <string name="dark_amoled">Czarny (dla AMOLED)</string>
   <string name="colored_navbar">Kolorowany pasek nawigacji</string>
   <string name="colored_navbar_sub">Zastosuj główny kolor na pasku nawigacji.</string>
   <string name="internal_player">Wewnętrzny odtwarzacz wideo</string>

@@ -124,11 +124,11 @@
   <string name="theme">外觀主題</string>
   <string name="primary_color">主要色彩</string>
   <string name="accent_color">強調色彩</string>
-  <string name="basic_theme">基本主題</string>
-  <string name="basic_theme_sub">選擇基本主題。</string>
-  <string name="white_basic_theme">白色</string>
-  <string name="dark_basic_theme">深黑色</string>
-  <string name="dark_amoled_basic_theme">AMOLED 黑色</string>
+  <string name="base_theme">基本主題</string>
+  <string name="base_theme_sub">選擇基本主題。</string>
+  <string name="white">白色</string>
+  <string name="dark">深黑色</string>
+  <string name="dark_amoled">AMOLED 黑色</string>
   <string name="colored_navbar">將導航列上色</string>
   <string name="colored_navbar_sub">套用主要顏色到導航列上。</string>
   <string name="internal_player">內建影片播放器</string>

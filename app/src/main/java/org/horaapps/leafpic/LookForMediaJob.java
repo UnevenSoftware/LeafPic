@@ -24,8 +24,8 @@ import java.util.ArrayList;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class LookForMediaJob extends JobService {
 
-    private final String TAG = "FUCK";
-
+    private final String TAG = "LookForMediaJob";
+    private boolean DEBUG = true;
 
     @Override
     public void onCreate() {
@@ -40,13 +40,13 @@ public class LookForMediaJob extends JobService {
             @Override
             public void run() {
                 try {
-                    HandlingAlbums instance = HandlingAlbums.getInstance(getApplicationContext());
-                    ArrayList<String> whiteList = instance.getPaths();
+                    ArrayList<String> whiteList = HandlingAlbums.getInstance(getApplicationContext()).getFolders(HandlingAlbums.INCLUDED);
                     for (String s : whiteList) {
                         scanFolder(s);
-                        Log.wtf(TAG, s);
+                        Log.wtf(TAG, "Scanned: " + s);
                     }
-                    notification(whiteList);
+                    if(DEBUG)
+                        notification(whiteList);
                 } finally {
                     jobFinished(jobParameters, false);
                 }
@@ -67,6 +67,7 @@ public class LookForMediaJob extends JobService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Looked for media")
+                        .setAutoCancel(true)
                         .setContentText(builder.toString()); //Required on Gingerbread and below
 
         NotificationManager notificationManager =

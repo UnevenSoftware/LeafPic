@@ -102,6 +102,10 @@
             android:id="@+id/hideAlbumButton"
             android:title="@string/hide"
             app:showAsAction="never" />
+        <item
+            android:id="@+id/exclude_action"
+            android:title="@string/exclude"
+            app:showAsAction="never" />
     </group>
 
     <item

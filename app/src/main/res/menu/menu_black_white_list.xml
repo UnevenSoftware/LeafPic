@@ -4,11 +4,12 @@
     <item
         android:id="@+id/action_add"
         android:title="@string/add"
-        app:showAsAction="always"
+        android:visible="false"
+        app:showAsAction="ifRoom"
         />
     <item
-        android:id="@+id/action_select_all"
-        android:title="@string/select_all"
+        android:id="@+id/action_toggle"
+        android:title="@string/white_list"
         app:showAsAction="never"
         />
 </menu>

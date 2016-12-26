@@ -25,7 +25,6 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -110,7 +109,7 @@ public class Media implements Parcelable, Serializable {
         return uri != null ? Uri.parse(uri) : Uri.fromFile(new File(path));
     }
 
-    private InputStream getInputStream(ContentResolver contentResolver) throws FileNotFoundException {
+    private InputStream getInputStream(ContentResolver contentResolver) throws Exception {
         return contentResolver.openInputStream(getUri());
     }
 
@@ -178,7 +177,7 @@ public class Media implements Parcelable, Serializable {
         try {
             InputStream stream = getInputStream(context.getContentResolver());
             details.put(context.getString(R.string.resolution), MetaDataItem.getResolution(stream));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
+        } catch (Exception e) { e.printStackTrace(); }
 
         File file = getFile();
 

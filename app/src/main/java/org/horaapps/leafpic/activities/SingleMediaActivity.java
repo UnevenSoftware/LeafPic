@@ -41,6 +41,9 @@ import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.AlbumSettings;
+import org.horaapps.leafpic.model.ContentProviderHelper;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -80,34 +83,37 @@ public class SingleMediaActivity extends SharedMediaActivity {
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
 
         SP = PreferenceUtil.getInstance(getApplicationContext());
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
-
-        initUi();
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
         try
         {
-            Album album;
             if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW)) && getIntent().getData() != null) {
                 String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
+                Album album = null;
+                if (path != null) {
+                    album = ContentProviderHelper.getAlbumFromMedia(getApplicationContext(), path);
+                    if (album != null) {
+                        album.updatePhotos(getApplicationContext());
+                        album.setCurrentMedia(path);
+                    }
+                }
 
-                File file = null;
-                if (path != null)
-                    file = new File(path);
-
-                if (file != null && file.isFile())
-                    //the image is stored in the storage
-                    album = new Album(getApplicationContext(), file);
-                else {
-                    //try to choseProvider with Uri
-                    album = new Album(getApplicationContext(), getIntent().getData());
+                if (album == null) {
+                    Uri mediaUri = getIntent().getData();
+                    album = new Album(mediaUri.toString(), mediaUri.getPath());
+                    album.settings = AlbumSettings.getDefaults();
+                    album.addMedia(new Media(getApplicationContext(), mediaUri));
+                    album.setCount(1);
                     customUri = true;
                 }
                 getAlbums().addAlbum(0, album);
             }
 
         } catch (Exception e) { e.printStackTrace(); }
+
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
+        initUi();
     }
 
     private void initUi() {
@@ -140,20 +146,15 @@ public class SingleMediaActivity extends SharedMediaActivity {
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {    }
 
-            @Override
-            public void onPageSelected(int position) {
+            @Override public void onPageSelected(int position) {
                 getAlbum().setCurrentMedia(position);
                 updatePageTitle(position);
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+            @Override public void onPageScrollStateChanged(int state) {    }
         });
 
         Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();

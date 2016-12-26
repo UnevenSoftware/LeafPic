@@ -12,7 +12,7 @@ private TreeMap<Integer, String> keys;
 
   public MediaDetailsMap() {
     super();
-    keys = new TreeMap<Integer, String>();
+    keys = new TreeMap<>();
   }
 
   public String getValue(int index) {

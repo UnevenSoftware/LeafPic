@@ -56,8 +56,8 @@
   <!--SETTINGS PREFERENCES-->
   <!-- SECURITY-->
   <!-- SETTINGS -->
-  <string name="white_basic_theme">Wit</string>
-  <string name="dark_basic_theme">Donker</string>
+  <string name="white">Wit</string>
+  <string name="dark">Donker</string>
   <!--DONATE STRINGS-->
   <string name="donate_googleplay">Google Play-Winkel</string>
   <string name="donate_payppal">PayPal</string>

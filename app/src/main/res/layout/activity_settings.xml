@@ -163,14 +163,14 @@
                                 android:id="@+id/white_list_item_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/white_list"
+                                android:text="@string/manage_your_folders"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="@dimen/medium_text" />
                             <TextView
                                 android:id="@+id/white_list_item_title_sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/chose_albums_to_display"
+                                android:text="@string/manage_your_folders_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="@dimen/sub_medium_text" />
                         </LinearLayout>
@@ -292,14 +292,14 @@
                                 android:id="@+id/basic_theme_item"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/basic_theme"
+                                android:text="@string/base_theme"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="@dimen/medium_text"/>
                             <TextView
                                 android:id="@+id/basic_theme_item_sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/basic_theme_sub"
+                                android:text="@string/base_theme_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="@dimen/sub_medium_text" />
                         </LinearLayout>

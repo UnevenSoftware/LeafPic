@@ -138,11 +138,11 @@
   <string name="primary_color_sub">La couleur la plus utilisée dans l\'interface</string>
   <string name="accent_color">Couleur secondaire</string>
   <string name="accent_color_sub">La couleur utilisée pour colorer les détails de l\'interface</string>
-  <string name="basic_theme">Thème</string>
-  <string name="basic_theme_sub">Sélectionner un thème</string>
-  <string name="white_basic_theme">Clair</string>
-  <string name="dark_basic_theme">Sombre</string>
-  <string name="dark_amoled_basic_theme">Noir AMOLED</string>
+  <string name="base_theme">Thème</string>
+  <string name="base_theme_sub">Sélectionner un thème</string>
+  <string name="white">Clair</string>
+  <string name="dark">Sombre</string>
+  <string name="dark_amoled">Noir AMOLED</string>
   <string name="colored_navbar">Barre de navigation colorée</string>
   <string name="colored_navbar_sub">Appliquer la couleur principale à la barre de navigation</string>
   <string name="internal_player">Lecteur vidéo interne</string>

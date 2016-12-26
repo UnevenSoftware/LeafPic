@@ -143,11 +143,11 @@
   <string name="primary_color_sub">Die Primärfarbe der Benutzeroberfläche.</string>
   <string name="accent_color">Sekundärfarbe</string>
   <string name="accent_color_sub">Die Sekundärfarbe mit welcher Widgets und Details der Benutzeroberfläche hervorgehoben werden.</string>
-  <string name="basic_theme">Grundlegende Theme</string>
-  <string name="basic_theme_sub">Grundlegende Theme auswählen.</string>
-  <string name="white_basic_theme">Weiß</string>
-  <string name="dark_basic_theme">Schwarz</string>
-  <string name="dark_amoled_basic_theme">Dunkles AMOLED</string>
+  <string name="base_theme">Grundlegende Theme</string>
+  <string name="base_theme_sub">Grundlegende Theme auswählen.</string>
+  <string name="white">Weiß</string>
+  <string name="dark">Schwarz</string>
+  <string name="dark_amoled">Dunkles AMOLED</string>
   <string name="colored_navbar">Farbige Navigationsleiste</string>
   <string name="colored_navbar_sub">Navigationsleiste mit der Primärfarbe einfärben.</string>
   <string name="internal_player">Verwende den internen Video-Player</string>

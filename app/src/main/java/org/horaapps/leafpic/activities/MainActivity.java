@@ -40,6 +40,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -105,7 +106,7 @@ public class MainActivity extends SharedMediaActivity {
             } else
                 getAlbum().selectAllMediaUpTo(m, mediaAdapter);
 
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             return true;
         }
     };
@@ -117,7 +118,7 @@ public class MainActivity extends SharedMediaActivity {
             if (!pickMode) {
                 if (editMode) {
                     mediaAdapter.notifyItemChanged(getAlbum().toggleSelectMedia(m));
-                    invalidateOptionsMenu();
+                    supportInvalidateOptionsMenu();
                 } else {
                     getAlbum().setCurrentMedia(m);
                     Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
@@ -138,7 +139,7 @@ public class MainActivity extends SharedMediaActivity {
 
             albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(((Album) v.findViewById(R.id.album_name).getTag())));
             editMode = true;
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
             return true;
         }
     };
@@ -149,7 +150,7 @@ public class MainActivity extends SharedMediaActivity {
             Album album = (Album) v.findViewById(R.id.album_name).getTag();
             if (editMode) {
                 albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(album));
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
             } else {
                 getAlbums().setCurrentAlbum(album);
                 displayCurrentAlbumMedia(true);
@@ -188,7 +189,7 @@ public class MainActivity extends SharedMediaActivity {
             albumsAdapter.notifyDataSetChanged();
             mediaAdapter.notifyDataSetChanged();
         }
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
         firstLaunch = false;
     }
 
@@ -229,7 +230,7 @@ public class MainActivity extends SharedMediaActivity {
             }
         });
         albumsMode = editMode = false;
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
     }
 
     private void displayAlbums() {
@@ -249,7 +250,7 @@ public class MainActivity extends SharedMediaActivity {
 
         albumsMode = true;
         editMode = false;
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
         mediaAdapter.swapDataSet(new ArrayList<Media>());
         rvMedia.scrollToPosition(0);
     }
@@ -586,7 +587,7 @@ public class MainActivity extends SharedMediaActivity {
             getAlbum().clearSelectedMedia();
             mediaAdapter.notifyDataSetChanged();
         }
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
     }
 
     private void checkNothing() {
@@ -663,6 +664,7 @@ public class MainActivity extends SharedMediaActivity {
         updateSelectedStuff();
 
         menu.findItem(R.id.select_all).setVisible(editMode);
+        menu.findItem(R.id.exclude_action).setVisible(editMode);
         menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
         menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
         menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
@@ -707,7 +709,7 @@ public class MainActivity extends SharedMediaActivity {
                     } else getAlbum().selectAllMedia();
                     mediaAdapter.notifyDataSetChanged();
                 }
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
                 return true;
 
             case R.id.set_pin_album:
@@ -715,7 +717,7 @@ public class MainActivity extends SharedMediaActivity {
                 getAlbums().sortAlbums(getApplicationContext());
                 getAlbums().clearSelectedAlbums();
                 albumsAdapter.swapDataSet(getAlbums().albums);
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
                 return true;
 
             case R.id.settings:
@@ -738,7 +740,7 @@ public class MainActivity extends SharedMediaActivity {
                             if (hidden) getAlbums().unHideSelectedAlbums(getApplicationContext());
                             else getAlbums().hideSelectedAlbums(getApplicationContext());
                             albumsAdapter.notifyDataSetChanged();
-                            invalidateOptionsMenu();
+                            supportInvalidateOptionsMenu();
                         } else {
                             if(hidden) getAlbums().unHideAlbum(getAlbum().getPath(), getApplicationContext());
                             else getAlbums().hideAlbum(getAlbum().getPath(), getApplicationContext());
@@ -748,10 +750,17 @@ public class MainActivity extends SharedMediaActivity {
                 });
 
                 if (!hidden) {
-                    dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.white_list).toUpperCase(), new DialogInterface.OnClickListener() {
+                    dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(getApplicationContext(), WhiteListActivity.class));
+                            if (albumsMode) {
+                                getAlbums().excludeSelectedAlbums();
+                                albumsAdapter.notifyDataSetChanged();
+                                supportInvalidateOptionsMenu();
+                            } else {
+                                getAlbums().excludeAlbum(getAlbum().getPath());
+                                displayAlbums(true);
+                            }
                         }
                     });
                 }
@@ -762,6 +771,50 @@ public class MainActivity extends SharedMediaActivity {
                     }
                 });
                 dialog.show();
+                return true;
+
+            case R.id.exclude_action:
+                final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
+
+                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
+                TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
+                TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
+                final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
+
+                spinnerParents.getBackground().setColorFilter(getIconColor(), PorterDuff.Mode.SRC_ATOP);
+
+                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
+                textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
+                textViewExcludeTitle.setText(getString(R.string.exclude));
+
+                if((albumsMode && getAlbums().getSelectedCount() > 1)) {
+                    textViewExcludeMessage.setText(R.string.exclude_albums_message);
+                    spinnerParents.setVisibility(View.GONE);
+                } else {
+                    textViewExcludeMessage.setText(R.string.exclude_album_message);
+                    spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? getAlbums().getSelectedAlbum(0).getParentsFolders() : getAlbum().getParentsFolders()));
+                }
+
+                textViewExcludeMessage.setTextColor(getTextColor());
+                excludeDialogBuilder.setView(excludeDialogLayout);
+
+                excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if ((albumsMode && getAlbums().getSelectedCount() > 1)) {
+                            getAlbums().excludeSelectedAlbums();
+                            getAlbums().clearSelectedAlbums();
+                            albumsAdapter.notifyDataSetChanged();
+                            supportInvalidateOptionsMenu();
+                        } else {
+                            getAlbums().excludeAlbum(spinnerParents.getSelectedItem().toString());
+                            finishEditMode();
+                            displayAlbums(true);
+                        }
+                    }
+                });
+                excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
+                excludeDialogBuilder.show();
                 return true;
 
             case R.id.delete_action:
@@ -803,7 +856,7 @@ public class MainActivity extends SharedMediaActivity {
                             }
                         } else requestSdCardPermissions();
 
-                        invalidateOptionsMenu();
+                        supportInvalidateOptionsMenu();
                         checkNothing();
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -1003,7 +1056,7 @@ public class MainActivity extends SharedMediaActivity {
                         editMode = false;
                         getAlbum().clearSelectedMedia();
                         dialog.dismiss();
-                        invalidateOptionsMenu();
+                        supportInvalidateOptionsMenu();
                         mediaAdapter.notifyDataSetChanged();
                         new PreparePhotosTask().execute();
                     }
@@ -1136,7 +1189,7 @@ public class MainActivity extends SharedMediaActivity {
                                     }
                                     mediaAdapter.swapDataSet(getAlbum().getMedia());
                                     finishEditMode();
-                                    invalidateOptionsMenu();
+                                    supportInvalidateOptionsMenu();
                                 } else requestSdCardPermissions();
 
                                 swipeRefreshLayout.setRefreshing(false);

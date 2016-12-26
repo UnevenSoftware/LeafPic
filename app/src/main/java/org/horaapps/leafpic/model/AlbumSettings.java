@@ -20,11 +20,10 @@ public class AlbumSettings implements Serializable {
     FilterMode filterMode = FilterMode.ALL;
 
     static AlbumSettings getSettings(Context context, Album album) {
-        AlbumSettings settings = HandlingAlbums.getInstance(context).getSettings(album.getPath());
-        return settings != null ? settings : getDefaults();
+        return HandlingAlbums.getInstance(context).getSettings(album.getPath());
     }
 
-    static AlbumSettings getDefaults() {
+    public static AlbumSettings getDefaults() {
         return new AlbumSettings(null, SortingMode.DATE.getValue(), SortingOrder.DESCENDING.getValue(), 0);
     }
 

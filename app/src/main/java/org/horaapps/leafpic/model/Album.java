@@ -11,11 +11,9 @@ import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.MediaComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
-import org.horaapps.leafpic.model.providers.MediaStoreProvider;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.Serializable;
@@ -39,57 +37,38 @@ public class Album implements Serializable {
 	private ArrayList<Media> media;
 	private ArrayList<Media> selectedMedia;
 
-	private Album() {
+
+	public Album(String path, String name) {
 		media = new ArrayList<>();
 		selectedMedia = new ArrayList<>();
+		this.name = name;
+		this.path = path;
 	}
 
 	public Album(Context context, String path, long id, String name, int count) {
-		this();
-		this.path = path;
-		this.name = name;
+		this(path, name);
 		this.count = count;
 		this.id = id;
 		settings = AlbumSettings.getSettings(context, this);
 	}
 
 	public Album(String path, long id, AlbumSettings settings, int count) {
-		this();
-		this.path = path;
-		this.name = StringUtils.getName(path);
+		this(path, StringUtils.getName(path));
 		this.id = id;
 		this.settings = settings;
 		this.count = count;
 	}
 
-	public Album(Context context, @NotNull File mediaPath) {
-		this();
-		File folder = mediaPath.getParentFile();
-		this.path = folder.getPath();
-		this.name = folder.getName();
-		settings = AlbumSettings.getSettings(context, this);
-		updatePhotos(context);
-		setCurrentPhoto(mediaPath.getAbsolutePath());
-	}
-
-	/**
-	 * used for open an image from an unknown content storage
-	 *
-	 * @param context context
-	 * @param mediaUri uri of the media to display
-	 */
-	public Album(Context context, Uri mediaUri) {
-		this();
-		this.path = mediaUri.toString();
-		this.name = mediaUri.getPath();
-		media.add(0, new Media(context, mediaUri));
-		setCurrentMedia(0);
-	}
-
 	public static Album getEmptyAlbum() {
-		Album album = new Album();
+		Album album = new Album(null, null);
 		album.settings = AlbumSettings.getDefaults();
 		return album;
+	}
+
+	static Album withPath(String path) {
+		Album emptyAlbum = getEmptyAlbum();
+		emptyAlbum.path = path;
+		return emptyAlbum;
 	}
 
 	public ArrayList<Media> getMedia() {
@@ -150,19 +129,15 @@ public class Album implements Serializable {
 	}
 
 	private ArrayList<Media> getMedia(Context context) {
-		PreferenceUtil SP = PreferenceUtil.getInstance(context);
 		ArrayList<Media> mediaArrayList = new ArrayList<>();
-		// TODO: 18/08/16
-		mediaArrayList.addAll(
-				MediaStoreProvider.getMedia(context, id, SP.getBoolean("set_include_video", true)));
-		/*if (isFromMediaStore()) {
+		if (hasId()) {
 			mediaArrayList.addAll(
-					MediaStoreProvider.getMedia(
-							context, id, SP.getBoolean("set_include_video", true)));
+					ContentProviderHelper.getMedia(
+							context, id, PreferenceUtil.getBool(context, "set_include_video", true)));
 		} else {
-			mediaArrayList.addAll(StorageProvider.getMedia(
-					getPath(), SP.getBoolean("set_include_video", true)));
-		}*/
+			mediaArrayList.addAll(ContentProviderHelper.getMedia(
+					getPath(), PreferenceUtil.getBool(context, "set_include_video", true)));
+		}
 		return mediaArrayList;
 	}
 
@@ -198,7 +173,7 @@ public class Album implements Serializable {
 
 	public int getCurrentMediaIndex() { return currentMediaIndex; }
 
-	private void setCurrentPhoto(String path) {
+	public void setCurrentMedia(String path) {
 		for (int i = 0; i < media.size(); i++)
 			if (media.get(i).getPath().equals(path)) {
 				currentMediaIndex = i;
@@ -228,7 +203,7 @@ public class Album implements Serializable {
 		return new Media();
 	}
 
-	private boolean isFromMediaStore() {
+	private boolean hasId() {
 		return id != -1;
 	}
 
@@ -333,7 +308,7 @@ public class Album implements Serializable {
 
 	//region Album Properties Setters
 
-	private void setCount(int count) {
+	public void setCount(int count) {
 		this.count = count;
 	}
 
@@ -511,7 +486,7 @@ public class Album implements Serializable {
 							// TODO: 05/08/16 it sucks! look for a better solution!
 
 							if (!found_id_album) {
-								id = MediaStoreProvider.getAlbumId(context, s);
+								id = ContentProviderHelper.getAlbumId(context, s);
 								found_id_album = true;
 							}
 							Log.d(s, "onScanCompleted: "+s);
@@ -526,7 +501,7 @@ public class Album implements Serializable {
 			path = dir.getAbsolutePath();
 			name = newName;
 			// NOTE: the following line doesn't work
-			//id = MediaStoreProvider.getAlbumId(context, media.getValue(0).getPath());
+			//id = ContentProviderHelper.getAlbumId(context, media.getValue(0).getPath());
 
 		}
 		return success;
