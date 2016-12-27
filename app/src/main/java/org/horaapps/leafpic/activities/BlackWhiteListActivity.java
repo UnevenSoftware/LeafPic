@@ -3,6 +3,7 @@ package org.horaapps.leafpic.activities;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -115,11 +116,8 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        findViewById(R.id.nothing_to_show).setVisibility(folders.size() > 0 ? View.GONE : View.VISIBLE);
-        if (isExcludedMode())
-            ((TextView) findViewById(R.id.nothing_to_show)).setText(R.string.there_is_nothing_to_show);
-        else
-            ((TextView) findViewById(R.id.nothing_to_show)).setText(R.string.white_list_explaination);
+        findViewById(R.id.ll_nothing_to_show).setVisibility(folders.size() < 1 && isExcludedMode() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.white_list_decription_card).setVisibility(isExcludedMode() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -168,7 +166,10 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         setNavBarColor();
         toolbar.setTitle(getTitle());
         setRecentApp(getTitle().toString());
-        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getTextColor());
+        ((CardView) findViewById(R.id.white_list_decription_card)).setCardBackgroundColor(getCardBackgroundColor());
+        ((TextView) findViewById(R.id.white_list_decription_txt)).setTextColor(getTextColor());
+        ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 

@@ -591,9 +591,12 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        TextView a = (TextView) findViewById(R.id.nothing_to_show);
-        a.setTextColor(getTextColor());
-        a.setVisibility((albumsMode && getAlbums().albums.size() == 0) || (!albumsMode && getAlbum().getMedia().size() == 0) ? View.VISIBLE : View.GONE);
+        ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
+        ((LinearLayout) findViewById(R.id.ll_nothing_to_show)).setVisibility(
+                albumsMode && getAlbums().albums.size() == 0 ||
+                !albumsMode && getAlbum().getMedia().size() == 0
+                ? View.VISIBLE : View.GONE);
     }
 
     //region MENU

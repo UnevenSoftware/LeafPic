@@ -366,6 +366,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="excluded_items">Excluded items</string>
     <string name="manage_your_folders">Manage your folders</string>
     <string name="manage_your_folders_sub">Here can handle the excluded folders and include folders that don\'t show up</string>
-    <string name="white_list_explaination">You have no included folders. You can add folders that aren\'t listed or folders with some problems. White-listed folders will be scanned periodically when the device is in idle mode, so it won\'t cause any performance issue</string>
+    <string name="white_list_explaination">You can add folders that aren\'t listed or folders with some problems.
+        White-listed folders will be scanned periodically when the device is in idle mode, so it won\'t cause any performance issue</string>
     <string name="no_media_in_this_folder">No media in this folder</string>
 </resources>

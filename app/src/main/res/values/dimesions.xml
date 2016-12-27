@@ -8,6 +8,7 @@
     <dimen name="big_icon">36dp</dimen>
     <dimen name="icon_sub_width_height">16dp</dimen>
     <dimen name="icon_elevation">10dp</dimen>
+    <dimen name="big_background_icon">72dp</dimen>
 
     <!--PADDING & MARGIN-->
     <dimen name="big_spacing">24dp</dimen>
