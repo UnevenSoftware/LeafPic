@@ -81,22 +81,22 @@ public class ContentProviderHelper {
         Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
                 new String[]{ MediaStore.Files.FileColumns.PARENT },
                 MediaStore.Files.FileColumns.DATA+"=?", new String[]{ mediaPath }, null);
-        if(cur != null && cur.moveToNext()){
+
+        if(cur != null && cur.moveToFirst()){
             id = cur.getLong(0);
             cur.close();
         }
+
         return id;
     }
 
-    @TestOnly
-    public static ArrayList<Media> getAllMedia(Context context) {
+    @TestOnly public static ArrayList<Media> getAllMedia(Context context) {
         ArrayList<Media> list = new ArrayList<Media>();
         // TODO: 11/21/16 implement
         return list;
     }
 
-    @TestOnly
-    private String getThumbnailPath(Context context, long id) {
+    @TestOnly private String getThumbnailPath(Context context, long id) {
         Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                 context.getContentResolver(), id, MediaStore.Images.Thumbnails.MINI_KIND,
                 new String[]{ MediaStore.Images.Thumbnails.DATA });

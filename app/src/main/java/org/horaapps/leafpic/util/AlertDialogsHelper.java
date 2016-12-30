@@ -1,5 +1,7 @@
 package org.horaapps.leafpic.util;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -23,12 +25,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.drew.lang.GeoLocation;
 
-import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.MediaDetailsMap;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
@@ -93,7 +97,7 @@ public class AlertDialogsHelper {
         dialogTitle.setBackgroundColor(activity.getPrimaryColor());
         ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.progress_dialog_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
         ((ProgressBar) dialogLayout.findViewById(org.horaapps.leafpic.R.id.progress_dialog_loading)).getIndeterminateDrawable().setColorFilter(activity.getPrimaryColor(), android.graphics
-                                                                                                                                                                                   .PorterDuff.Mode.SRC_ATOP);
+                .PorterDuff.Mode.SRC_ATOP);
 
         dialogTitle.setText(title);
         dialogMessage.setText(message);
@@ -186,8 +190,8 @@ public class AlertDialogsHelper {
         loadDetails(dialogLayout ,activity , metadata);
     }
 
-    public static AlertDialog changelogDialog(final ThemedActivity activity) {
-        AlertDialog.Builder changelogDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
+    public static AlertDialog showChangelogDialog(final ThemedActivity activity) {
+        final AlertDialog.Builder changelogDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
         View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_changelog, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_changelog_title);
@@ -199,77 +203,42 @@ public class AlertDialogsHelper {
         dialogTitle.setBackgroundColor(activity.getPrimaryColor());
         activity.getThemeHelper().setScrollViewColor(scrChangelog);
 
-        dialogTitle.setText(StringUtils.html(String.format(Locale.ENGLISH,"%s <font color='%d'>%s</font>", activity.getString(R.string.changelog), activity.getAccentColor(), BuildConfig.VERSION_NAME )));
+        dialogTitle.setText(activity.getString(R.string.changelog));
 
-        Bypass bypass = new Bypass();
-        String markdownString = "An h1 header\n" +
-                "============\n" +
-                "\n" +
-                "Paragraphs are separated by a blank line.\n" +
-                "\n" +
-                "2nd paragraph. *Italic*, **bold**, and `monospace`. Itemized lists\n" +
-                "look like:\n" +
-                "\n" +
-                "  * this one\n" +
-                "  * that one\n" +
-                "  * the other one\n" +
-                "\n" +
-                "Note that --- not considering the asterisk --- the actual text\n" +
-                "content starts at 4-columns in.\n" +
-                "\n" +
-                "> Block quotes are\n" +
-                "> written like so.\n" +
-                ">\n" +
-                "> They can span multiple paragraphs,\n" +
-                "> if you like.\n" +
-                "\n" +
-                "Use 3 dashes for an em-dash. Use 2 dashes for ranges (ex., \"it's all\n" +
-                "in chapters 12--14\"). Three dots ... will be converted to an ellipsis.\n" +
-                "Unicode is supported. ☺\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "An h2 header\n" +
-                "------------\n" +
-                "\n" +
-                "Here's a numbered list:\n" +
-                "\n" +
-                " 1. first item\n" +
-                " 2. second item\n" +
-                " 3. third item\n" +
-                "\n" +
-                "Note again how the actual text starts at 4 columns in (4 characters\n" +
-                "from the left side). Here's a code sample:\n" +
-                "\n" +
-                "    # Let me re-iterate ...\n" +
-                "    for i in 1 .. 10 { do-something(i) }\n" +
-                "\n" +
-                "As you probably guessed, indented 4 spaces. By the way, instead of\n" +
-                "indenting the block, you can use delimited blocks, if you like:\n" +
-                "\n" +
-                "~~~\n" +
-                "define foobar() {\n" +
-                "    print \"Welcome to flavor country!\";\n" +
-                "}\n" +
-                "~~~\n" +
-                "\n" +
-                "(which makes copying & pasting easier). You can optionally mark the\n" +
-                "delimited block for Pandoc to syntax highlight it:\n" +
-                "\n" +
-                "~~~python\n" +
-                "import time\n" +
-                "# Quick, count to ten!\n" +
-                "for i in range(10):\n" +
-                "    # (but not *too* quick)\n" +
-                "    time.sleep(0.5)\n" +
-                "    print i\n" +
-                "~~~";
+        Bypass bypass = new Bypass(activity);
+
+        String markdownString;
+        try {
+            markdownString = getChangeLogFromAssets(activity);
+        } catch (IOException e) {
+            CustomTabService.openUrl(activity, "https://github.com/HoraApps/LeafPic/blob/dev/CHANGELOG.md");
+            return null;
+        }
         CharSequence string = bypass.markdownToSpannable(markdownString);
         dialogMessage.setText(string);
         dialogMessage.setMovementMethod(LinkMovementMethod.getInstance());
         dialogMessage.setTextColor(activity.getTextColor());
 
         changelogDialogBuilder.setView(dialogLayout);
-        return changelogDialogBuilder.create();
+        changelogDialogBuilder.setPositiveButton(activity.getString(R.string.ok_action).toUpperCase(), null);
+        changelogDialogBuilder.setNeutralButton(activity.getString(R.string.show_full).toUpperCase(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                CustomTabService.openUrl(activity, "https://github.com/HoraApps/LeafPic/blob/dev/CHANGELOG.md");
+            }
+        });
+        return changelogDialogBuilder.show();
+    }
+
+    private static String getChangeLogFromAssets(Context context) throws IOException {
+        InputStream inputStream = context.getAssets().open("latest_changelog.md");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        int i;
+        while ((i = inputStream.read()) != -1)
+            outputStream.write(i);
+
+        inputStream.close();
+        return outputStream.toString();
     }
 }

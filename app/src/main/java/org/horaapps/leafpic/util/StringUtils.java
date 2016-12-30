@@ -17,7 +17,11 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
     public static String getMimeType(String path) {
-        String extension = path.substring(path.lastIndexOf('.')+1).toLowerCase();
+        int index;
+        if (path == null || (index = path.lastIndexOf('.')) == -1)
+            return "unknown";
+
+        String extension = path.substring(index + 1).toLowerCase();
         return  MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
 

@@ -44,7 +44,7 @@ public class AboutActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
 
-        cts = new CustomTabService(AboutActivity.this,getPrimaryColor());
+        cts = new CustomTabService(AboutActivity.this);
 
         initUi();
         setUpActions();
@@ -92,7 +92,7 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_changelog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = AlertDialogsHelper.changelogDialog(AboutActivity.this);
+                AlertDialog alertDialog = AlertDialogsHelper.showChangelogDialog(AboutActivity.this);
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {}

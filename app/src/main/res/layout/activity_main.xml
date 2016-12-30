@@ -45,10 +45,6 @@
                         android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                         />
                     <include layout="@layout/there_is_nothing_to_show"/>
-                    <!--
-                    android:scrollbars="vertical"
-                    android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-                     -->
                 </RelativeLayout>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>

@@ -193,29 +193,6 @@ public class MainActivity extends SharedMediaActivity {
         firstLaunch = false;
     }
 
-    private void showChangelog(){
-        String titleHtml = "<font color='" + getTextColor() + "'>" + getString(R.string.changelog) + " <b>" + BuildConfig.VERSION_NAME + "</b>" + "</font>";
-        String buttonHtml= "<font color='" + getAccentColor() + "'>" + getString(R.string.view).toUpperCase() + "</font>";
-        Snackbar snackbar = Snackbar
-                .make(coordinatorMainLayout, StringUtils.html(titleHtml), Snackbar.LENGTH_LONG)
-                .setAction(StringUtils.html(buttonHtml), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        AlertDialog alertDialog = AlertDialogsHelper.changelogDialog(MainActivity.this);
-                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {}
-                        });
-                        alertDialog.show();
-                    }
-                });
-        View snackbarView = snackbar.getView();
-        snackbarView.setBackgroundColor(getBackgroundColor());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
-        }
-        snackbar.show();
-    }
 
     private void displayCurrentAlbumMedia(boolean reload) {
         toolbar.setTitle(getAlbum().getName());
@@ -425,14 +402,35 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     @Override
-    public void updateUiElements() {
+    protected void onPostResume() {
+        super.onPostResume();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (SP.getInt("last_version_code", 0) < BuildConfig.VERSION_CODE) {
+                    String titleHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s <b>%s</b></font>", getTextColor(), getString(R.string.changelog), BuildConfig.VERSION_NAME),
+                            buttonHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s</font>", getAccentColor(), getString(R.string.view).toUpperCase());
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorMainLayout, StringUtils.html(titleHtml), Snackbar.LENGTH_LONG)
+                            .setAction(StringUtils.html(buttonHtml), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialogsHelper.showChangelogDialog(MainActivity.this);
+                                }
+                            });
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(getBackgroundColor());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
+                    snackbar.show();
+                    SP.putInt("last_version_code", BuildConfig.VERSION_CODE);
+                }
+            }
+        }).start();
+    }
 
-        /** CHANGELOG **/
-        int versionCode = BuildConfig.VERSION_CODE;
-        if (SP.getInt("last_version_code", 0) != versionCode) {
-            showChangelog();
-            SP.putInt("last_version_code", versionCode);
-        }
+    @Override
+    public void updateUiElements() {
 
         //TODO: MUST BE FIXED
         toolbar.setPopupTheme(getPopupToolbarStyle());
@@ -507,39 +505,6 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
-    //region TESTING
-
-//  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//  @Override
-//  public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
-//    if (resultCode == RESULT_OK) {
-//      if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
-//        Uri treeUri = resultData.getData();
-//        // Persist URI in shared preference so that you can use it later.
-//        ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
-//        getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-//        Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).choseProvider();
-//      }
-//    }
-//  }
-//  //endregion
-//
-//  private void requestSdCardPermissions() {
-//    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-//
-//    AlertDialogsHelper.getTextDialog(MainActivity.this, dialogBuilder,
-//            R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
-//
-//    dialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-//      @Override
-//      public void onClick(DialogInterface dialogInterface, int i) {
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
-//          startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_CODE_SD_CARD_PERMISSIONS);
-//      }
-//    });
-//    dialogBuilder.choseProvider();
-//  }
-
     private void updateSelectedStuff() {
         if (albumsMode) {
             if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().albums.size());
@@ -595,8 +560,8 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
         ((LinearLayout) findViewById(R.id.ll_nothing_to_show)).setVisibility(
                 albumsMode && getAlbums().albums.size() == 0 ||
-                !albumsMode && getAlbum().getMedia().size() == 0
-                ? View.VISIBLE : View.GONE);
+                        !albumsMode && getAlbum().getMedia().size() == 0
+                        ? View.VISIBLE : View.GONE);
     }
 
     //region MENU

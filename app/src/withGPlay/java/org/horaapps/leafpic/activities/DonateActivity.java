@@ -63,7 +63,7 @@ public class DonateActivity extends ThemedActivity {
         bar = (SeekBar) findViewById(R.id.seek_bar_donations);
 
         setNavBarColor();
-        cts = new CustomTabService(DonateActivity.this, getPrimaryColor());
+        cts = new CustomTabService(DonateActivity.this);
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);
         initUi();
         mHelper = new IabHelper(this, SecretConstants.getBase64EncodedPublicKey(getApplicationContext()));

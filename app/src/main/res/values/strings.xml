@@ -46,6 +46,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="refresh">Refresh</string>
     <string name="sent_to_action">Send to</string>
+    <string name="show_full">Show full</string>
 
     <string name="filter_menu_title">Filter</string>
     <string name="all">All</string>
@@ -366,7 +367,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="excluded_items">Excluded items</string>
     <string name="manage_your_folders">Manage your folders</string>
     <string name="manage_your_folders_sub">Here can handle the excluded folders and include folders that don\'t show up</string>
-    <string name="white_list_explaination">You can add folders that aren\'t listed or folders with some problems.
+    <string name="white_list_explaination">You can add folders that are not listed or folders with some media missing.
         White-listed folders will be scanned periodically when the device is in idle mode, so it won\'t cause any performance issue</string>
     <string name="no_media_in_this_folder">No media in this folder</string>
+    <string name="error_occured_open_media">An error occurred opening this media.</string>
 </resources>

@@ -27,11 +27,13 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.view.IconicsImageView;
 import com.yalantis.ucrop.UCrop;
 
 import org.horaapps.leafpic.R;
@@ -56,6 +58,7 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * Created by dnld on 18/02/16.
@@ -86,11 +89,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
-        try
-        {
+
             if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW)) && getIntent().getData() != null) {
+
                 String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
                 Album album = null;
+
                 if (path != null) {
                     album = ContentProviderHelper.getAlbumFromMedia(getApplicationContext(), path);
                     if (album != null) {
@@ -99,18 +103,26 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     }
                 }
 
-                if (album == null) {
+                if (album == null || album.getCount() == 0) {
                     Uri mediaUri = getIntent().getData();
+                    Media media;
                     album = new Album(mediaUri.toString(), mediaUri.getPath());
                     album.settings = AlbumSettings.getDefaults();
-                    album.addMedia(new Media(getApplicationContext(), mediaUri));
-                    album.setCount(1);
+
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception ex) {
+                        ((TextView) findViewById(R.id.nothing_to_show)).setText(R.string.error_occured_open_media);
+                        findViewById(R.id.ll_nothing_to_show).setVisibility(View.VISIBLE);
+                    }
+
+                    media = new Media(getApplicationContext(), mediaUri);
+                    if (album.addMedia(media)) album.setCount(1);
                     customUri = true;
                 }
                 getAlbums().addAlbum(0, album);
             }
-
-        } catch (Exception e) { e.printStackTrace(); }
 
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
         initUi();
@@ -182,6 +194,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.app_name));
+
+        ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
 
 
         /**** SETTINGS ****/
@@ -492,7 +507,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
                 editIntent.setDataAndType(getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMimeType());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(editIntent, "Edit with"));
+                startActivity(Intent.createChooser(editIntent, getString(R.string.edit_with)));
                 break;
 
             case R.id.action_details:

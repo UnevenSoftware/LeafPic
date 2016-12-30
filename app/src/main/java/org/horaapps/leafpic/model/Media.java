@@ -41,7 +41,7 @@ public class Media implements Parcelable, Serializable {
     private String mimeType = "unknown";
     private int orientation = 0;
 
-    private String uri = null;
+    private String uriString = null;
 
     private long size = -1;
     private boolean selected = false;
@@ -66,7 +66,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public Media(Context context, Uri mediaUri) {
-        this.uri = mediaUri.toString();
+        this.uriString = mediaUri.toString();
         this.path = null;
         this.mimeType = context.getContentResolver().getType(getUri());
     }
@@ -80,7 +80,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public void setUri(String uriString) {
-        this.uri = uriString;
+        this.uriString = uriString;
     }
 
     public void setPath(String path) {
@@ -106,7 +106,7 @@ public class Media implements Parcelable, Serializable {
     public boolean isVideo() { return mimeType.startsWith("video"); }
 
     public Uri getUri() {
-        return uri != null ? Uri.parse(uri) : Uri.fromFile(new File(path));
+        return uriString != null ? Uri.parse(uriString) : Uri.fromFile(new File(path));
     }
 
     private InputStream getInputStream(ContentResolver contentResolver) throws Exception {
