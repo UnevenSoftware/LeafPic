@@ -117,7 +117,7 @@ public class Affix {
 
         private String folderPath = null;
         private Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
-        private int quality = 90;
+        private int quality = 50;
         private boolean vertical = false;
 
         public Options(String folderPath, Bitmap.CompressFormat format, int quality, boolean vertical) {

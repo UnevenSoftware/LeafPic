@@ -176,6 +176,7 @@ public class DonateActivity extends ThemedActivity {
         setScrollViewColor(scr);
 
         /** ACTIONS **/
+        ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
         findViewById(org.horaapps.leafpic.R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

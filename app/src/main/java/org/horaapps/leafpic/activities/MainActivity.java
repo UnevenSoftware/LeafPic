@@ -34,8 +34,8 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -53,19 +53,19 @@ import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.CustomAlbumsHelper;
-import org.horaapps.leafpic.data.HandlingAlbums;
-import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.base.FilterMode;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.CustomAlbumsHelper;
+import org.horaapps.leafpic.model.HandlingAlbums;
+import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.model.base.FilterMode;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
@@ -80,7 +80,6 @@ public class MainActivity extends SharedMediaActivity {
 
   private CustomAlbumsHelper customAlbumsHelper = CustomAlbumsHelper.getInstance(MainActivity.this);
   private PreferenceUtil SP;
-  private SecurityHelper securityObj;
 
   private RecyclerView rvAlbums;
   private AlbumsAdapter albumsAdapter;
@@ -172,7 +171,6 @@ public class MainActivity extends SharedMediaActivity {
     SP = PreferenceUtil.getInstance(getApplicationContext());
     albumsMode = true;
     editMode = false;
-    securityObj = new SecurityHelper(MainActivity.this);
 
     initUI();
 
@@ -182,7 +180,6 @@ public class MainActivity extends SharedMediaActivity {
   @Override
   public void onResume() {
     super.onResume();
-    securityObj.updateSecuritySetting();
     setupUI();
     getAlbums().clearSelectedAlbums();
     getAlbum().clearSelectedPhotos();
@@ -498,6 +495,7 @@ public class MainActivity extends SharedMediaActivity {
         startActivity(intent);
       }
     });
+
     findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -522,36 +520,22 @@ public class MainActivity extends SharedMediaActivity {
         new PrepareAlbumTask().execute();
       }
     });
+
     findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (securityObj.isActiveSecurity() && securityObj.isPasswordOnHidden()){
-
-          AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder (MainActivity.this, getDialogStyle());
-          final EditText editTextPassword = securityObj.getInsertPasswordDialog(MainActivity.this, passwordDialogBuilder);
-          passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {}
-          });
-
-          passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
-
-          final AlertDialog passwordDialog = passwordDialogBuilder.create();
-          passwordDialog.show();
-
-          passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
-                                                                                               .OnClickListener() {
+        if (!hidden && Security.isPasswordOnHidden(getApplicationContext())){
+          Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
             @Override
-            public void onClick(View v) {
-              if (securityObj.checkPassword(editTextPassword.getText().toString())){
-                hidden = true;
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                new PrepareAlbumTask().execute();
-                passwordDialog.dismiss();
-              } else {
-                Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                editTextPassword.getText().clear();
-                editTextPassword.requestFocus();
-              }
+            public void onSuccess() {
+              hidden = true;
+              mDrawerLayout.closeDrawer(GravityCompat.START);
+              new PrepareAlbumTask().execute();
+            }
+
+            @Override
+            public void onError() {
+              Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
             }
           });
         } else {
@@ -852,33 +836,17 @@ public class MainActivity extends SharedMediaActivity {
         deleteDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
         deleteDialog.setPositiveButton(this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
-            if (securityObj.isActiveSecurity() && securityObj.isPasswordOnDelete()) {
-              AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-              final EditText editTextPassword  = securityObj.getInsertPasswordDialog(MainActivity.this,passwordDialogBuilder);
-              passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+            if (Security.isPasswordOnDelete(getApplicationContext())) {
 
-              passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+              Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                  //This should br empty it will be overwrite later
-                  //to avoid dismiss of the dialog on wrong password
+                public void onSuccess() {
+                  new DeletePhotos().execute();
                 }
-              });
 
-              final AlertDialog passwordDialog = passwordDialogBuilder.create();
-              passwordDialog.show();
-
-              passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                  if (securityObj.checkPassword(editTextPassword.getText().toString())) {
-                    passwordDialog.dismiss();
-                    new DeletePhotos().execute();
-                  } else {
-                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                    editTextPassword.getText().clear();
-                    editTextPassword.requestFocus();
-                  }
+                public void onError() {
+                  Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                 }
               });
             } else new DeletePhotos().execute();
@@ -1112,6 +1080,9 @@ public class MainActivity extends SharedMediaActivity {
         final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(R.id.affix_vertical_switch);
         final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
 
+        final LinearLayout llSwVertical = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_vertical);
+        final LinearLayout llSwSaveHere = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_save_here);
+
         final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
 
         final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
@@ -1127,7 +1098,7 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
 
         /** Sub TextViews **/
-        color = getTextColor();
+        color = getSubTextColor();
         ((TextView) dialogLayout.findViewById(R.id.save_here_sub)).setTextColor(color);
         ((TextView) dialogLayout.findViewById(R.id.affix_vertical_sub)).setTextColor(color);
         ((TextView) dialogLayout.findViewById(R.id.affix_format_sub)).setTextColor(color);
@@ -1166,21 +1137,26 @@ public class MainActivity extends SharedMediaActivity {
 
           }
         });
-        seekQuality.setProgress(90); //DEFAULT
+        seekQuality.setProgress(50); //DEFAULT
 
-        swVertical.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swVertical.setClickable(false);
+        llSwVertical.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            updateSwitchColor(swVertical, getAccentColor());
+          public void onClick(View v) {
+              swVertical.setChecked(!swVertical.isChecked());
+              updateSwitchColor(swVertical, getAccentColor());
           }
         });
 
-        swSaveHere.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swSaveHere.setClickable(false);
+        llSwSaveHere.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          public void onClick(View v) {
+            swSaveHere.setChecked(!swSaveHere.isChecked());
             updateSwitchColor(swSaveHere, getAccentColor());
           }
         });
+
         builder.setView(dialogLayout);
         builder.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
@@ -1399,7 +1375,7 @@ public class MainActivity extends SharedMediaActivity {
 
 		@Override
 		protected Boolean doInBackground(String... arg0) {
-			boolean success = true;
+			boolean onSuccess = true;
 			try
 			{
 				for (int i = 0; i < getAlbum().selectedMedias.size(); i++) {
@@ -1410,10 +1386,10 @@ public class MainActivity extends SharedMediaActivity {
 						MediaScannerConnection.scanFile(getApplicationContext(),
 										new String[]{ to.getAbsolutePath(), from.getAbsolutePath() }, null, null);
 						getAlbum().getMedia().remove(getAlbum().selectedMedias.get(i));
-					} else success = false;
+					} else onSuccess = false;
 				}
 			} catch (Exception e) { e.printStackTrace(); }
-			return success;
+			return onSuccess;
 		}
 
 		@Override

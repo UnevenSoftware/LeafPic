@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.activities;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -20,9 +19,10 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.Security;
 
 /**
  * Created by dnld on 22/05/16.
@@ -33,7 +33,6 @@ public class SecurityActivity extends ThemedActivity {
     private LinearLayout llbody;
     private LinearLayout llroot;
     private PreferenceUtil SP;
-    private SecurityHelper securityObj;
     private SwitchCompat swActiveSecurity;
     private SwitchCompat swApplySecurityDelete;
     private SwitchCompat swApplySecurityHidden;
@@ -43,7 +42,6 @@ public class SecurityActivity extends ThemedActivity {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_security_layout);
         SP = PreferenceUtil.getInstance(getApplicationContext());
-        securityObj = new SecurityHelper(SecurityActivity.this);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         llbody = (LinearLayout) findViewById(org.horaapps.leafpic.R.id.ll_security_dialog_body);
         llroot = (LinearLayout) findViewById(org.horaapps.leafpic.R.id.root);
@@ -54,21 +52,16 @@ public class SecurityActivity extends ThemedActivity {
 
         /** - SWITCHES - **/
         /** - ACTIVE SECURITY - **/
-        swActiveSecurity.setChecked(securityObj.isActiveSecurity());
+        swActiveSecurity.setChecked(Security.isPasswordSet(getApplicationContext()));
         swActiveSecurity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = SP.getEditor();
-
-                securityObj.updateSecuritySetting();
                 updateSwitchColor(swActiveSecurity, getAccentColor());
                 llbody.setEnabled(swActiveSecurity.isChecked());
                 if (isChecked)
                     setPasswordDialog();
                 else {
-                    editor.putString(getString(org.horaapps.leafpic.R.string.preference_password_value),"");
-                    editor.putBoolean(getString(org.horaapps.leafpic.R.string.preference_use_password), false);
-                    editor.commit();
+                    Security.clearPassword(getApplicationContext());
                     toggleEnabledChild(false);
                 }
             }
@@ -77,24 +70,22 @@ public class SecurityActivity extends ThemedActivity {
         llbody.setEnabled(swActiveSecurity.isChecked());
 
         /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
-        swApplySecurityHidden.setChecked(securityObj.isPasswordOnHidden());
+        swApplySecurityHidden.setChecked(SP.getBoolean("password_on_hidden", false));
         swApplySecurityHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_use_password_on_hidden), isChecked);
-                securityObj.updateSecuritySetting();
+                Security.setPasswordOnHidden(getApplicationContext(), isChecked);
                 updateSwitchColor(swApplySecurityHidden, getAccentColor());
             }
         });
         updateSwitchColor(swApplySecurityHidden, getAccentColor());
 
         /**ACTIVE SECURITY ON DELETE ACTION**/
-        swApplySecurityDelete.setChecked(securityObj.isPasswordOnDelete());
+        swApplySecurityDelete.setChecked(SP.getBoolean("password_on_delete", false));
         swApplySecurityDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_use_password_on_delete), isChecked);
-                securityObj.updateSecuritySetting();
+                Security.setPasswordOnDelete(getApplicationContext(), isChecked);
                 updateSwitchColor(swApplySecurityDelete, getAccentColor());
             }
         });
@@ -132,29 +123,28 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 swActiveSecurity.setChecked(false);
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_use_password), false);
+                Security.clearPassword(getApplicationContext());
             }
         });
 
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(org.horaapps.leafpic.R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean changed = false;
 
                 if (editTextPassword.length() > 3) {
                     if (editTextPassword.getText().toString().equals(editTextConfirmPassword.getText().toString())) {
-                        SP.putString(getString(org.horaapps.leafpic.R.string.preference_password_value), editTextPassword.getText().toString());
-                        securityObj.updateSecuritySetting();
-                        Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.remember_password_message, Toast.LENGTH_SHORT).show();
-                        changed = true;
+                        if(Security.setPassword(getApplicationContext(), editTextPassword.getText().toString())) {
+                            swActiveSecurity.setChecked(true);
+                            toggleEnabledChild(true);
+                            Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.remember_password_message, Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(SecurityActivity.this, R.string.error_contact_developer, Toast.LENGTH_SHORT).show();
+
                     } else
                         Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.password_dont_match, Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.error_password_length, Toast.LENGTH_SHORT).show();
 
-                swActiveSecurity.setChecked(changed);
-                SP.putBoolean(getString(org.horaapps.leafpic.R.string.preference_use_password), changed);
-                toggleEnabledChild(changed);
             }
         });
 

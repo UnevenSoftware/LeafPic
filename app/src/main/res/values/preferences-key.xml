@@ -17,10 +17,6 @@
     <string name="preference_transparency">set_alpha</string>
     <string name="preference_map_provider">map_provider</string>
 
-    <string name="preference_password_value">password_value</string>
-    <string name="preference_use_password">active_security</string>
-    <string name="preference_use_password_on_hidden">password_on_hidden</string>
-    <string name="preference_use_password_on_delete">password_on_delete</string>
     <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
     <string name="preference_show_fab">show_fab</string>
     <string name="preference_sub_scaling">use_sub_scaling</string>

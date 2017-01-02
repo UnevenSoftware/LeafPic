@@ -23,8 +23,8 @@ import com.drew.lang.GeoLocation;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.base.MediaDetailsMap;
+import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.model.base.MediaDetailsMap;
 
 import java.lang.reflect.Field;
 import java.util.Locale;

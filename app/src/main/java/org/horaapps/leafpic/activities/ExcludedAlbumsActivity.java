@@ -16,7 +16,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.data.CustomAlbumsHelper;
+import org.horaapps.leafpic.model.CustomAlbumsHelper;
 
 import java.io.File;
 import java.util.ArrayList;

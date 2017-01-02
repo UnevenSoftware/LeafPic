@@ -18,8 +18,8 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
@@ -124,9 +124,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     }
 
     public void swapDataSet(ArrayList<Album> asd) {
-        if (albums.equals(asd))
-            return;
-        albums = asd;
+
+        // TODO improve this
+        albums.clear();
+        albums.addAll(asd);
         notifyDataSetChanged();
     }
 

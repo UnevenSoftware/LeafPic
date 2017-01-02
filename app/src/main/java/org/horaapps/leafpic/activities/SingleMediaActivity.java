@@ -39,16 +39,16 @@ import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.SecurityHelper;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
@@ -69,7 +69,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private PreferenceUtil SP;
     private RelativeLayout ActivityBackground;
     private SelectAlbumBottomSheet bottomSheetDialogFragment;
-    private SecurityHelper securityObj;
     private Toolbar toolbar;
     private boolean fullScreenMode, customUri = false;
 
@@ -81,7 +80,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         SP = PreferenceUtil.getInstance(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
-        securityObj= new SecurityHelper(SingleMediaActivity.this);
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -202,7 +200,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         setStatusBarColor();
         setNavBarColor();
 
-        securityObj.updateSecuritySetting();
 
         /**** SETTINGS ****/
 
@@ -441,43 +438,23 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_delete:
                 final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
-
                 AlertDialogsHelper.getTextDialog(SingleMediaActivity.this,deleteDialog,
                         R.string.delete, R.string.delete_photo_message);
 
                 deleteDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
                 deleteDialog.setPositiveButton(this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (securityObj.isActiveSecurity()&&securityObj.isPasswordOnDelete()) {
+                        if (Security.isPasswordOnDelete(getApplicationContext())) {
 
-                            final AlertDialog.Builder passwordDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
-                            final EditText editTextPassword = securityObj.getInsertPasswordDialog
-                                    (SingleMediaActivity.this, passwordDialogBuilder);
-
-                            passwordDialogBuilder.setPositiveButton(getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (securityObj.checkPassword(editTextPassword.getText().toString())) {
-                                        deleteCurrentMedia();
-                                    } else
-                                        Toast.makeText(passwordDialogBuilder.getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                            passwordDialogBuilder.setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
-                            final AlertDialog passwordDialog = passwordDialogBuilder.create();
-                            passwordDialog.show();
-                            passwordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View
-                                    .OnClickListener() {
+                            Security.askPassword(SingleMediaActivity.this, new Security.PasswordInterface() {
                                 @Override
-                                public void onClick(View v) {
-                                    if (securityObj.checkPassword(editTextPassword.getText().toString())){
-                                        deleteCurrentMedia();
-                                        passwordDialog.dismiss();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                        editTextPassword.getText().clear();
-                                        editTextPassword.requestFocus();
-                                    }
+                                public void onSuccess() {
+                                    deleteCurrentMedia();
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else

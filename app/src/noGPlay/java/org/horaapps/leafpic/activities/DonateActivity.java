@@ -104,7 +104,6 @@ public class DonateActivity extends ThemedActivity {
 
         /** ACTIONS **/
         ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
-        ((Button) findViewById(R.id.button_donate_play_store)).setText(getString(R.string.donate).toUpperCase());
         findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

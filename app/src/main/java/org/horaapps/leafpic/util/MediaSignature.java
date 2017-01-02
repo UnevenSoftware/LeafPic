@@ -2,7 +2,7 @@ package org.horaapps.leafpic.util;
 
 import com.bumptech.glide.signature.StringSignature;
 
-import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.model.Media;
 
 /**
  * Created by dnld on 21/08/16.
