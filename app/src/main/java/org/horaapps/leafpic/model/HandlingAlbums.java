@@ -15,6 +15,7 @@ import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
@@ -23,16 +24,17 @@ import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by dnld on 27/04/16.
@@ -55,7 +57,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     private static final String ALBUM_SORTING_ORDER = "sort_ascending";
     private static final String ALBUM_COLUMN_COUNT = "sorting_order";
 
-    private static final String backupFile = "albums.bck";
+    private static final String backupFile = "albums2.bck";
     private static HandlingAlbums mInstance = null;
 
     public ArrayList<Album> albums = null;
@@ -271,8 +273,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        FileOutputStream outStream = new FileOutputStream(new File(context.getCacheDir(), backupFile));
-                        ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
+                        ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(new File(context.getCacheDir(), backupFile)));
                         objectOutStream.writeObject(albums);
                         objectOutStream.close();
                     } catch (Exception e) {
@@ -301,8 +302,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
                         list = (ArrayList<Album>) o;
                         for(int i = 0; i < list.size(); i++) {
                             if (list.get(i).equals(album)) {
-                                list.remove(i);
-                                list.add(i, album);
+                                list.set(i, album);
                                 success = true;
                             }
                         }
@@ -322,17 +322,26 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     }
 
 
-    public void restoreBackup(Context context) {
-        FileInputStream inStream;
+    public boolean restoreBackup(Context context) {
+        boolean success = false;
+        ObjectInputStream objectInStream = null;
         try {
             File f = new File(context.getCacheDir(), backupFile);
-            inStream = new FileInputStream(f);
-            ObjectInputStream objectInStream = new ObjectInputStream(inStream);
+            objectInStream = new ObjectInputStream(new FileInputStream(f));
             Object o = objectInStream.readObject();
-            if(o.getClass().equals(ArrayList.class))
+            if(o.getClass().equals(ArrayList.class)) {
                 albums = (ArrayList<Album>) o;
-            objectInStream.close();
-        } catch (Exception e) { albums.clear(); }
+                success = true;
+            }
+        } catch (Exception e) {
+            albums.clear();
+            success = false;
+        } finally {
+            if (objectInStream != null)
+                try { objectInStream.close(); }
+                catch (IOException ignored) { }
+        }
+        return success;
     }
 
     private int toggleSelectAlbum(int index) {
@@ -371,11 +380,11 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         selectedAlbums.clear();
     }
 
-    public void installShortcutForSelectedAlbums(Context appCtx) {
+    public void installShortcutForSelectedAlbums(Context context) {
         for (Album selectedAlbum : selectedAlbums) {
 
             Intent shortcutIntent;
-            shortcutIntent = new Intent(appCtx, SplashScreen.class);
+            shortcutIntent = new Intent(context, SplashScreen.class);
             shortcutIntent.setAction(SplashScreen.ACTION_OPEN_ALBUM);
             shortcutIntent.putExtra("albumPath", selectedAlbum.getPath());
             shortcutIntent.putExtra("albumId", selectedAlbum.getId());
@@ -386,22 +395,22 @@ public class HandlingAlbums extends SQLiteOpenHelper {
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.getName());
 
-            File image = new File(selectedAlbum.getCoverAlbum().getPath());
-            Bitmap bitmap;
+            Media coverAlbum = selectedAlbum.getCoverAlbum();
+            File image = new File(coverAlbum.getPath());
+            Bitmap bitmap = coverAlbum.isVideo() ? ThumbnailUtils.createVideoThumbnail(coverAlbum.getPath(), MediaStore.Images.Thumbnails.MINI_KIND)
+                    : BitmapFactory.decodeFile(image.getAbsolutePath(), new BitmapFactory.Options());
 
-            String mime = StringUtils.getMimeType(image.getAbsolutePath());
+            if (bitmap == null) {
+                Toast.makeText(context, R.string.error_thumbnail, Toast.LENGTH_SHORT).show();
+                // TODO: 12/31/16
+                return;
+            }
 
-            if(mime.startsWith("image")) {
-                bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), new BitmapFactory.Options());
-            } else if(mime.startsWith("video")) {
-                bitmap = ThumbnailUtils.createVideoThumbnail(selectedAlbum.getCoverAlbum().getPath(),
-                        MediaStore.Images.Thumbnails.MINI_KIND);
-            } else return;
             bitmap = Bitmap.createScaledBitmap(getCroppedBitmap(bitmap), 128, 128, false);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, addWhiteBorder(bitmap, 5));
 
             addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-            appCtx.sendBroadcast(addIntent);
+            context.sendBroadcast(addIntent);
         }
     }
 
@@ -511,9 +520,12 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
         Album camera = null;
 
-        for(Album album : albums) {
-            if (album.getName().equals("Camera") && albums.remove(album)) {
-                camera = album;
+        Iterator<Album> iterator = albums.iterator();
+        while (iterator.hasNext()) {
+            Album a = iterator.next();
+            if (a.getName().equals("Camera")) {
+                camera = a;
+                iterator.remove();
                 break;
             }
         }
@@ -527,8 +539,4 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     }
 
     public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
-
-    public void loadAlbums(Context applicationContext) {
-        loadAlbums(applicationContext, hidden);
-    }
 }

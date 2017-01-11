@@ -86,7 +86,7 @@
         <activity
             android:name="org.horaapps.leafpic.activities.SingleMediaActivity"
             android:label="@string/app_name"
-            android:configChanges="orientation|screenSize|uiMode|touchscreen|screenLayout"
+            android:configChanges="orientation|screenSize|uiMode|screenLayout|navigation"
             android:parentActivityName="org.horaapps.leafpic.activities.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data

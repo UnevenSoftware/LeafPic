@@ -20,8 +20,9 @@ import java.util.ArrayList;
 
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
+    private final String TAG = "asd";
     private ArrayList<Media> media;
-    private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> media) {
         super(fm);
@@ -30,9 +31,7 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override public Fragment getItem(int pos) {
         Media media = this.media.get(pos);
-        if (media.isVideo()) {
-            return VideoFragment.newInstance(media);
-        }
+        if (media.isVideo()) return VideoFragment.newInstance(media);
         if (media.isGif()) return GifFragment.newInstance(media);
         else return ImageFragment.newInstance(media);
     }

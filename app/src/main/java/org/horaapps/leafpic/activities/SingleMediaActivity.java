@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
@@ -66,6 +65,8 @@ import java.io.InputStream;
 @SuppressWarnings("ResourceAsColor")
 public class SingleMediaActivity extends SharedMediaActivity {
 
+    private static final String TAG = SingleMediaActivity.class.getSimpleName();
+
     private static final String ISLOCKED_ARG = "isLocked";
     static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
@@ -73,7 +74,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private HackyViewPager mViewPager;
     private MediaPagerAdapter adapter;
     private PreferenceUtil SP;
-    private RelativeLayout ActivityBackground;
+    private RelativeLayout activityBackground;
 
     private Toolbar toolbar;
     private boolean fullScreenMode, customUri = false;
@@ -83,6 +84,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_media);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        activityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
 
         SP = PreferenceUtil.getInstance(getApplicationContext());
@@ -156,7 +158,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(getAlbum().getCurrentMediaIndex());
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
-        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {    }
 
@@ -169,9 +170,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             @Override public void onPageScrollStateChanged(int state) {    }
         });
 
-        Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-        if (aa.getRotation() == Surface.ROTATION_90) {
+        if (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getRotation() == Surface.ROTATION_90) {
             Configuration configuration = new Configuration();
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
@@ -181,6 +180,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     public void updateUiElements() {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        activityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         toolbar.setBackgroundColor(
                 themeOnSingleImgAct()
                         ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
@@ -188,8 +188,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
 
-        ActivityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
-        ActivityBackground.setBackgroundColor(getBackgroundColor());
+
+        activityBackground.setBackgroundColor(getBackgroundColor());
 
         setStatusBarColor();
         setNavBarColor();
@@ -610,6 +610,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
             public void run() {
                 toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
                         .setDuration(200).start();
+                getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        Log.wtf(TAG, "ui changed: "+visibility);
+                    }
+                });
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -664,7 +670,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
-                ActivityBackground.setBackgroundColor((Integer) animator.getAnimatedValue());
+                activityBackground.setBackgroundColor((Integer) animator.getAnimatedValue());
             }
         });
         colorAnimation.start();

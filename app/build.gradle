@@ -13,8 +13,8 @@ android {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion 25
-        versionName "v0.6-beta-1"
-        versionCode 13
+        versionName "v0.6-beta-2"
+        versionCode 14
     }
     lintOptions {
         disable 'MissingTranslation'

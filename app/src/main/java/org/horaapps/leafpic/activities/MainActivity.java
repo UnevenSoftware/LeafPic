@@ -74,7 +74,7 @@ import java.util.Locale;
 
 public class MainActivity extends SharedMediaActivity {
 
-    private static String TAG = "AlbumsAct";
+    private static String TAG = MainActivity.class.getSimpleName();
 
     private PreferenceUtil SP;
 
@@ -91,7 +91,6 @@ public class MainActivity extends SharedMediaActivity {
     private Toolbar toolbar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CoordinatorLayout coordinatorMainLayout;
-
 
     private boolean hidden = false, pickMode = false, editMode = false, albumsMode = true, firstLaunch = true;
 
@@ -129,14 +128,12 @@ public class MainActivity extends SharedMediaActivity {
                 setResult(RESULT_OK, new Intent().setData(m.getUri()));
                 finish();
             }
-
         }
     };
 
     private View.OnLongClickListener albumOnLongCLickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-
             albumsAdapter.notifyItemChanged(getAlbums().toggleSelectAlbum(((Album) v.findViewById(R.id.album_name).getTag())));
             editMode = true;
             supportInvalidateOptionsMenu();
@@ -173,7 +170,7 @@ public class MainActivity extends SharedMediaActivity {
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
         initUi();
-        displayData(getIntent().getExtras());
+        displayData(getIntent());
     }
 
     @Override
@@ -245,37 +242,31 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
-    private boolean displayData(Bundle data){
-        if (data!=null) {
-            switch (data.getInt(SplashScreen.CONTENT)) {
-                case SplashScreen.ALBUMS_PREFETCHED:
-                    displayAlbums(false);
-                    pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-                    toggleRecyclersVisibility(true);
-                    return true;
+    private boolean displayData(Intent data){
+        pickMode = data.getBooleanExtra(SplashScreen.PICK_MODE, false);
+        switch (data.getIntExtra(SplashScreen.CONTENT, SplashScreen.ALBUMS_BACKUP)) {
+            case SplashScreen.ALBUMS_PREFETCHED:
+                displayAlbums(false);
+                toggleRecyclersVisibility(true);
+                return true;
 
-                case SplashScreen.ALBUMS_BACKUP:
-                    displayAlbums(true);
-                    pickMode = data.getBoolean(SplashScreen.PICK_MODE);
-                    toggleRecyclersVisibility(true);
-                    return true;
+            default: case SplashScreen.ALBUMS_BACKUP:
+                displayAlbums(true);
+                toggleRecyclersVisibility(true);
+                return true;
 
-                case SplashScreen.PHOTOS_PREFETCHED:
-                    //TODO ask password if hidden
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
-                        }
-                    }).start();
-                    displayCurrentAlbumMedia(false);
-                    toggleRecyclersVisibility(false);
-                    return true;
-            }
+            case SplashScreen.PHOTOS_PREFETCHED:
+                //TODO ask password if hidden
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
+                    }
+                }).start();
+                displayCurrentAlbumMedia(false);
+                toggleRecyclersVisibility(false);
+                return true;
         }
-
-        displayAlbums(true);
-        return false;
     }
 
     private void initUi() {
@@ -481,8 +472,7 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     private void updateColumnsRvs() {
-        int spanCountAlbums;
-        int spanCountMedias;
+        int spanCountAlbums, spanCountMedias;
         if (getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
             spanCountAlbums = SP.getInt("n_columns_folders", 2);
             spanCountMedias = SP.getInt("n_columns_media", 3);
@@ -490,13 +480,13 @@ public class MainActivity extends SharedMediaActivity {
             spanCountAlbums = SP.getInt("n_columns_folders_landscape", 3);
             spanCountMedias = SP.getInt("n_columns_media_landscape", 4);
         }
-        if (spanCountAlbums!= ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
+        if (spanCountAlbums != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
             rvAlbums.removeItemDecoration(rvAlbumsDecoration);
             rvAlbumsDecoration = new GridSpacingItemDecoration(spanCountAlbums, Measure.pxToDp(3, getApplicationContext()), true);
             rvAlbums.addItemDecoration(rvAlbumsDecoration);
             rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCountAlbums));
         }
-        if (spanCountMedias!= ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
+        if (spanCountMedias != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
             ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
             rvMedia.removeItemDecoration(rvMediaDecoration);
             rvMediaDecoration = new GridSpacingItemDecoration(spanCountMedias, Measure.pxToDp(3, getApplicationContext()), true);
@@ -507,7 +497,7 @@ public class MainActivity extends SharedMediaActivity {
 
     private void updateSelectedStuff() {
         if (albumsMode) {
-            if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().albums.size());
+            if (editMode) toolbar.setTitle(getAlbums().getSelectedCount() + "/" + getAlbums().getCount());
             else {
                 toolbar.setTitle(getString(R.string.app_name));
                 toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
@@ -559,7 +549,7 @@ public class MainActivity extends SharedMediaActivity {
         ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
         ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
         ((LinearLayout) findViewById(R.id.ll_nothing_to_show)).setVisibility(
-                albumsMode && getAlbums().albums.size() == 0 ||
+                albumsMode && getAlbums().getCount() == 0 ||
                         !albumsMode && getAlbum().getMedia().size() == 0
                         ? View.VISIBLE : View.GONE);
     }

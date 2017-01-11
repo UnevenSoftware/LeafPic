@@ -113,7 +113,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
-
         holder.llMdia.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
