@@ -35,7 +35,7 @@ public class DonateActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scr = (ScrollView)findViewById(R.id.donateAct_scrollView);
         iniUi();
-        cts = new CustomTabService(org.horaapps.leafpic.activities.DonateActivity.this, getPrimaryColor());
+        cts = new CustomTabService(DonateActivity.this);
     }
 
 
