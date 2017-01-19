@@ -168,8 +168,9 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         setRecentApp(getTitle().toString());
         ((CardView) findViewById(R.id.white_list_decription_card)).setCardBackgroundColor(getCardBackgroundColor());
         ((TextView) findViewById(R.id.white_list_decription_txt)).setTextColor(getTextColor());
-        ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
-        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
+        //TODO: OLD THERE'S NOTHING TO SHOW
+        //((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
+        //((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 

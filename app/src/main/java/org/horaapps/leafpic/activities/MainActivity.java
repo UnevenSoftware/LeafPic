@@ -556,8 +556,9 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
-        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
+        //TODO: OLD THERE'S NOTHING TO SHOW
+        //((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
+        //((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
         ((LinearLayout) findViewById(R.id.ll_nothing_to_show)).setVisibility(
                 albumsMode && getAlbums().albums.size() == 0 ||
                         !albumsMode && getAlbum().getMedia().size() == 0
