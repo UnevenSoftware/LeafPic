@@ -27,6 +27,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -111,8 +112,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         InputStream inputStream = getContentResolver().openInputStream(mediaUri);
                         if (inputStream != null) inputStream.close();
                     } catch (Exception ex) {
-                        //((TextView) findViewById(R.id.nothing_to_show)).setText(R.string.error_occured_open_media);
-                        findViewById(R.id.ll_nothing_to_show).setVisibility(View.VISIBLE);
+                        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+                        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setText(R.string.error_occured_open_media);
+                        findViewById(R.id.nothing_to_show_placeholder).setVisibility(SP.getInt("emoji_easter_egg", 0)==0 ? View.VISIBLE: View.GONE);
+                        findViewById(R.id.ll_emoji_easter_egg).setVisibility(SP.getInt("emoji_easter_egg", 0)==1 ? View.VISIBLE : View.GONE);
                     }
 
                     media = new Media(getApplicationContext(), mediaUri);
@@ -193,9 +196,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
         setNavBarColor();
         setRecentApp(getString(R.string.app_name));
 
-        //TODO: OLD THERE'S NOTHING TO SHOW
-        //((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
-        //((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
+        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+        ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
 
 
         /**** SETTINGS ****/

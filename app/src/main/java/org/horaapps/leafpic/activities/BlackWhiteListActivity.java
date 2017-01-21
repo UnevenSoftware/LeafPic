@@ -26,6 +26,7 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.model.ContentProviderHelper;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
+import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
@@ -43,6 +44,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     private Toolbar toolbar;
     private ArrayList<String> folders = new ArrayList<>();
     private boolean typeExcluded;
+    PreferenceUtil SP;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         setContentView(R.layout.activity_black_white_list);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         mRecyclerView = (RecyclerView) findViewById(org.horaapps.leafpic.R.id.excluded_albums);
+        SP = PreferenceUtil.getInstance(getApplicationContext());
         initUi();
         loadFolders(getIntent().getIntExtra(EXTRA_TYPE, HandlingAlbums.EXCLUDED));
     }
@@ -116,8 +119,10 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        findViewById(R.id.ll_nothing_to_show).setVisibility(folders.size() < 1 && isExcludedMode() ? View.VISIBLE : View.GONE);
         findViewById(R.id.white_list_decription_card).setVisibility(isExcludedMode() ? View.GONE : View.VISIBLE);
+        //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
+        findViewById(R.id.nothing_to_show_placeholder).setVisibility(folders.size() < 1 && isExcludedMode() && SP.getInt("emoji_easter_egg", 0)==0 ? View.VISIBLE : View.GONE);
+        findViewById(R.id.ll_emoji_easter_egg).setVisibility(folders.size() < 1 && isExcludedMode() && SP.getInt("emoji_easter_egg", 0)==1 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -168,9 +173,10 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         setRecentApp(getTitle().toString());
         ((CardView) findViewById(R.id.white_list_decription_card)).setCardBackgroundColor(getCardBackgroundColor());
         ((TextView) findViewById(R.id.white_list_decription_txt)).setTextColor(getTextColor());
-        //TODO: OLD THERE'S NOTHING TO SHOW
-        //((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
-        //((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
+        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+        ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
+
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 

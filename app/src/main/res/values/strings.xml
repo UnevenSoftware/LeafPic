@@ -11,6 +11,11 @@
     <string name="donald_role">Project Manager</string>
     <string name="gilbert_role">Major Designer</string>
 
+    <!--EASTER EGG-->
+    <string name="emoji_easter_egg">¯\\_(ツ)_/¯</string>
+    <string name="easter_egg_enable">Enabled Easter Egg: </string>
+    <string name="easter_egg_disable">Disabled Easter Egg: </string>
+
     <!-- ACTIONS -->
     <string name="sort">Sort</string>
     <string name="camera">Camera</string>
