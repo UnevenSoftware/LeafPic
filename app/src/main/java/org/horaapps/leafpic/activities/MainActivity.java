@@ -546,11 +546,18 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        ((IconicsImageView) findViewById(R.id.nothing_to_show_icon)).setColor(getSubTextColor());
-        ((TextView) findViewById(R.id.nothing_to_show)).setTextColor(getSubTextColor());
-        ((LinearLayout) findViewById(R.id.ll_nothing_to_show)).setVisibility(
-                albumsMode && getAlbums().getCount() == 0 ||
-                        !albumsMode && getAlbum().getMedia().size() == 0
+        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+        ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
+        findViewById(R.id.ll_emoji_easter_egg).setVisibility(
+                albumsMode && getAlbums().albums.size() == 0
+                || !albumsMode && getAlbum().getMedia().size() == 0
+                && SP.getInt("emoji_easter_egg", 0)==1
+                ? View.VISIBLE : View.GONE);
+        findViewById(R.id.nothing_to_show_placeholder).setVisibility(
+                albumsMode && getAlbums().albums.size() == 0
+                        || !albumsMode && getAlbum().getMedia().size() == 0
+                        && SP.getInt("emoji_easter_egg", 0)==0
                         ? View.VISIBLE : View.GONE);
     }
 

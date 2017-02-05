@@ -23,7 +23,8 @@
     <dimen name="setting_margin_end">44dp</dimen>
 
     <!--TEXT-->
-    <dimen name="big_text">25sp</dimen>
+    <dimen name="super_big_text">32sp</dimen>
+    <dimen name="big_text">24sp</dimen>
     <dimen name="sub_big_text">18sp</dimen>
     <dimen name="medium_text">16sp</dimen>
     <dimen name="sub_medium_text">14sp</dimen>

@@ -24,6 +24,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
+import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,6 +37,8 @@ public class AboutActivity extends ThemedActivity {
     private Toolbar toolbar;
     private CustomTabService cts;
     private ScrollView scr;
+    PreferenceUtil SP;
+    int emojiEasterEggCount=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,8 @@ public class AboutActivity extends ThemedActivity {
         setContentView(R.layout.activity_about);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
-
         cts = new CustomTabService(AboutActivity.this);
+        SP = PreferenceUtil.getInstance(getApplicationContext());
 
         initUi();
         setUpActions();
@@ -133,10 +136,32 @@ public class AboutActivity extends ThemedActivity {
             }
         });
 
+        //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
+        findViewById(R.id.about_gilbert_card).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emojiEasterEgg();
+            }
+        });
+
 
         /*** SPECIAL THANKS ***/
         /*** Patryk Goworowski ***/
         ((TextView) findViewById(R.id.about_patryk_goworowski_item_sub)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
+    private void emojiEasterEgg(){
+        emojiEasterEggCount++;
+        if(emojiEasterEggCount>3) {
+            Toast.makeText(this,
+                    (SP.getInt("emoji_easter_egg",0)==0
+                    ? this.getString(R.string.easter_egg_enable)
+                    : this.getString(R.string.easter_egg_disable))
+                    + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
+            SP.putInt("emoji_easter_egg", SP.getInt("emoji_easter_egg", 0)==0 ? 1 : 0);
+            emojiEasterEggCount=0;
+        } else Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
     }
 
     private void mail(String mail) {

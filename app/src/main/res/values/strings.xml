@@ -7,30 +7,14 @@
     <string name="welcome_slide_sub">A Colorful Material Designed Gallery!</string>
     <string name="made_with_love_by">Made with love by</string>
 
-    <!--CHANGELOG-->
-    <string-array name="changelog_message">
-        <item><b>#Fixed</b></item>
-        <item>&#8226; Fixed crash on startup and some random crash</item>
-        <item>&#8226; FIied crash opening video (Nougat)</item>
-        <item>&#8226; Fixed zoom out issue with SubScaling ImageView enabled</item>
-        <item><b>#Update</b></item>
-        <item>&#8226; Updated translations</item>
-        <item>&#8226; General improvements</item>
-    </string-array>
-
-    <string name="changelog_text">
-        <b>#Fixed</b><br/>
-        &#8226; Fixed crash on startup and some random crash<br/>
-        &#8226; FIied crash opening video (Nougat)<br/>
-        &#8226; Fixed zoom out issue with SubScaling ImageView enabled<br/>
-        <b>#Update</b><br/>
-        &#8226; Updated translations<br/>
-        &#8226; General improvements<br/>
-    </string>
-
     <!--AUTHORS-->
     <string name="donald_role">Project Manager</string>
     <string name="gilbert_role">Major Designer</string>
+
+    <!--EASTER EGG-->
+    <string name="emoji_easter_egg">¯\\_(ツ)_/¯</string>
+    <string name="easter_egg_enable">Enabled Easter Egg: </string>
+    <string name="easter_egg_disable">Disabled Easter Egg: </string>
 
     <!-- ACTIONS -->
     <string name="sort">Sort</string>
