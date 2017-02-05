@@ -59,6 +59,7 @@ public class SettingsActivity extends ThemedActivity {
     private SwitchCompat swSwipeDirection;
     private SwitchCompat swShowFab;
     private SwitchCompat swSubScaling;
+    private SwitchCompat swKeepZoomLevel;
 
 
     @Override
@@ -301,6 +302,20 @@ public class SettingsActivity extends ThemedActivity {
             }
         });
 
+        /*** SW KEEP ZOOM LEVEL ***/
+
+        swKeepZoomLevel = (SwitchCompat) findViewById(R.id.set_keep_zoom_level);
+        swKeepZoomLevel.setChecked(SP.getBoolean(getString(R.string.preference_keep_zoom_level), true));
+        swKeepZoomLevel.setClickable(false);
+        findViewById(R.id.ll_keep_zoom_level).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swKeepZoomLevel.setChecked(!swKeepZoomLevel.isChecked());
+                SP.putBoolean(getString(R.string.preference_keep_zoom_level), swKeepZoomLevel.isChecked());
+                setSwitchColor(getAccentColor(), swKeepZoomLevel);
+            }
+        });
+
         /*** SW TRANSLUCENT STATUS BAR ***/
         swStatusBar = (SwitchCompat) findViewById(R.id.SetTraslucentStatusBar);
         swStatusBar.setChecked(SP.getBoolean(getString(R.string.preference_translucent_status_bar), true));
@@ -357,6 +372,7 @@ public class SettingsActivity extends ThemedActivity {
                 swStatusBar,
                 swMaxLuminosity,
                 swPictureOrientation,
+                swKeepZoomLevel,
                 swAutoUpdate,
                 swIncludeVideo,
                 swSwipeDirection,
@@ -418,6 +434,7 @@ public class SettingsActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(R.id.ll_switch_picture_orientation_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.ll_switch_max_luminosity_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.ll_switch_full_resolution_icon)).setColor(color);
+        ((IconicsImageView) findViewById(R.id.ll_keep_zoom_level_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.traslucent_statusbar_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.custom_3thact_icon)).setColor(color);
         ((IconicsImageView) findViewById(R.id.primary_color_icon)).setColor(color);
@@ -441,6 +458,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.max_luminosity_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.full_resolution_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.picture_orientation_Item)).setTextColor(color);
+        ((TextView) findViewById(R.id.keep_zoom_level_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.custom_3thAct_title)).setTextColor(color);
         ((TextView) findViewById(R.id.Traslucent_StatusBar_Item)).setTextColor(color);
         ((TextView) findViewById(R.id.PrimaryColor_Item)).setTextColor(color);
@@ -465,6 +483,7 @@ public class SettingsActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.full_resolution_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.custom_3thAct_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.picture_orientation_Item_Sub)).setTextColor(color);
+        ((TextView) findViewById(R.id.keep_zoom_level_Item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.Traslucent_StatusBar_Item_Sub)).setTextColor(color);
         ((TextView) findViewById(R.id.use_media_mediastore_Item_sub)).setTextColor(color);
         ((TextView) findViewById(R.id.PrimaryColor_Item_Sub)).setTextColor(color);

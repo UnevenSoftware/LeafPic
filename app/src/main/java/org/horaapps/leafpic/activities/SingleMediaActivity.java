@@ -188,20 +188,22 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     }
                 }
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
-                    mViewPager.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            MediaPagerAdapter adapter = (MediaPagerAdapter) mViewPager.getAdapter();
-                            Fragment frag = adapter.getRegisteredFragment(mViewPager.getCurrentItem());
-                            if (frag != null && frag.getView() instanceof PhotoView) {
-                                PhotoView imgView = (PhotoView) frag.getView();
-                                float zoom = Math.min(mZoomLevel, imgView.getMaximumScale());
-                                if (zoom > 1.0f) {
-                                    imgView.setScale(zoom, imgView.getWidth() / 2, imgView.getHeight() / 2, true);
+                    if(SP.getBoolean(getString(R.string.preference_keep_zoom_level), true)) {
+                        mViewPager.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                MediaPagerAdapter adapter = (MediaPagerAdapter) mViewPager.getAdapter();
+                                Fragment frag = adapter.getRegisteredFragment(mViewPager.getCurrentItem());
+                                if (frag != null && frag.getView() instanceof PhotoView) {
+                                    PhotoView imgView = (PhotoView) frag.getView();
+                                    float zoom = Math.min(mZoomLevel, imgView.getMaximumScale());
+                                    if (zoom > 1.0f) {
+                                        imgView.setScale(zoom, imgView.getWidth() / 2, imgView.getHeight() / 2, true);
+                                    }
                                 }
                             }
-                        }
-                    }, 100);
+                        }, 100);
+                    }
                 }
             }
         });

@@ -740,6 +740,65 @@
                         </RelativeLayout>
                     </LinearLayout>
 
+                    <!-- KEEP ZOOM LEVEL -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_keep_zoom_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/ll_keep_zoom_level_icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-zoom-in"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/keep_zoom_level_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/keep_zoom_level"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/keep_zoom_level_Item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/keep_zoom_level_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_keep_zoom_level"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
                     <!-- FULL resolution TODO: do something -->
 
                     <LinearLayout
@@ -1193,6 +1252,7 @@
                         </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>
+
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>

@@ -182,6 +182,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="load_full_image_when_zoom_in">Load full image when zoomed in</string>
     <string name="media_viewer_swipe_direction">Swipe Direction</string>
     <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(Default: Left to Right)</string>
+    <string name="keep_zoom_level">Keep zoom</string>
+    <string name="keep_zoom_level_sub">Stay zoomed when swiping through images</string>
 
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>
