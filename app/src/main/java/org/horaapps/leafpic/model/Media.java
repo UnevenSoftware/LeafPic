@@ -172,21 +172,13 @@ public class Media implements Parcelable, Serializable {
             details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
         // TODO should i add this always?
         details.put(context.getString(R.string.orientation), getOrientation() + "");
-
-
         try {
-            InputStream stream = getInputStream(context.getContentResolver());
-            details.put(context.getString(R.string.resolution), MetaDataItem.getResolution(stream));
-        } catch (Exception e) { e.printStackTrace(); }
-
-        File file = getFile();
-
-        if(file != null) {
-            metadata = MetaDataItem.getMetadata(file);
-
-            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
-            if (metadata.getDateOriginal() != null)
-                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
+            metadata = MetaDataItem.getMetadata(getInputStream(context.getContentResolver()));
+            details.put(context.getString(R.string.resolution), metadata.getResolution());
+            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(dateModified)));
+            Date dateOriginal = metadata.getDateOriginal();
+            if (dateOriginal != null )
+                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(dateOriginal));
 
             String tmp;
             if ((tmp = metadata.getCameraInfo()) != null)
@@ -196,7 +188,8 @@ public class Media implements Parcelable, Serializable {
             GeoLocation location;
             if ((location = metadata.getLocation()) != null)
                 details.put(context.getString(R.string.location), location.toDMSString());
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return details;

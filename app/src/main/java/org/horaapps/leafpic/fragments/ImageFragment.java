@@ -52,7 +52,8 @@ public class ImageFragment extends Fragment {
 
         if (PreferenceUtil.getInstance(getContext()).getBoolean(getString(R.string.preference_sub_scaling) , true)) {
             SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(getContext());
-            imageView.setImage(ImageSource.uri(img.getUri()));
+            imageView.setImage(ImageSource.uri(img.getUri()).tilingEnabled());
+            imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_0);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

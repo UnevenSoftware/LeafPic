@@ -2,7 +2,6 @@ package org.horaapps.leafpic.model;
 
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -14,7 +13,6 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.xmp.XmpDirectory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -29,75 +27,55 @@ import java.util.TimeZone;
 
 class MetaDataItem {
 
-//  private static Set<Class<?>> usefullDirectories = new HashSet<Class<?>>();
-
     private static final int ORIENTATION_NORMAL = 1;
     private static final int ORIENTATION_ROTATE_180 = 3;
     private static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
     private static final int ORIENTATION_ROTATE_270 = 8;  // rotate 270 to right it
 
-//  static {
-//    usefullDirectories.add(ExifIFD0Directory.class);
-//    usefullDirectories.add(ExifSubIFDDirectory.class);
-//    usefullDirectories.add(GpsDirectory.class);
-//    usefullDirectories.add(XmpDirectory.class);
-//  }
-
-    private String make = null;
-    private String model = null;
-    private String fNumber = null;
-    private String iso = null;
-    private String exposureTime = null;
+    private String make = null, model = null, fNumber = null, iso = null, exposureTime;
     private Date dateOriginal = null;
     private GeoLocation location = null;
-    private int orientation = -1;
+    private int orientation = -1, height = -1, width = -1;
 
-    static MetaDataItem getMetadata(@NonNull File file) {
-        return new MetaDataItem(file);
+    static MetaDataItem getMetadata(@NonNull InputStream in) throws ImageProcessingException, IOException {
+        return new MetaDataItem(in, true);
     }
 
-    static String getResolution(InputStream stream) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(stream, null, options);
+    private MetaDataItem(InputStream in) throws ImageProcessingException, IOException {
+        Metadata metadata = ImageMetadataReader.readMetadata(in);
+        handleDirectoryBase(metadata.getFirstDirectoryOfType(ExifIFD0Directory.class));
+        ExifSubIFDDirectory dir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+        if(dir != null) {
+            dateOriginal = dir.getDateOriginal(TimeZone.getDefault());
+            handleDirectoryBase(dir);
+        }
 
-        return String.format(Locale.getDefault(),"%dx%d", options.outWidth, options.outHeight);
+        XmpDirectory dir1 = metadata.getFirstDirectoryOfType(XmpDirectory.class);
+        if(dir1 != null) {
+            if (dir1.containsTag(XmpDirectory.TAG_DATETIME_ORIGINAL))
+                dateOriginal = dir1.getDate(XmpDirectory.TAG_DATETIME_ORIGINAL);
 
+            if (dir1.containsTag(XmpDirectory.TAG_MAKE))
+                make = dir1.getString(XmpDirectory.TAG_MAKE);
+            if (dir1.containsTag(XmpDirectory.TAG_MODEL))
+                model = dir1.getString(XmpDirectory.TAG_MODEL);
+
+            if (dir1.containsTag(XmpDirectory.TAG_F_NUMBER))
+                fNumber = dir1.getString(XmpDirectory.TAG_F_NUMBER);
+        }
+
+        GpsDirectory d = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+        if(d != null) location  = d.getGeoLocation();
     }
 
-    private MetaDataItem(File stream) {
-
-        try {
-            Metadata metadata = ImageMetadataReader.readMetadata(stream);
-            // TODO: 21/08/16 should I switch to ExifInterface or to any other lib?
-
-            handleDirectoryBase(metadata.getFirstDirectoryOfType(ExifIFD0Directory.class));
-            ExifSubIFDDirectory dir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-            if(dir != null) {
-                dateOriginal = dir.getDateOriginal(TimeZone.getDefault());
-                handleDirectoryBase(dir);
-            }
-
-            XmpDirectory dir1 = metadata.getFirstDirectoryOfType(XmpDirectory.class);
-            if(dir1 != null) {
-                if (dir1.containsTag(XmpDirectory.TAG_DATETIME_ORIGINAL))
-                    dateOriginal = dir1.getDate(XmpDirectory.TAG_DATETIME_ORIGINAL);
-
-                if (dir1.containsTag(XmpDirectory.TAG_MAKE))
-                    make = dir1.getString(XmpDirectory.TAG_MAKE);
-                if (dir1.containsTag(XmpDirectory.TAG_MODEL))
-                    model = dir1.getString(XmpDirectory.TAG_MODEL);
-
-                if (dir1.containsTag(XmpDirectory.TAG_F_NUMBER))
-                    fNumber = dir1.getString(XmpDirectory.TAG_F_NUMBER);
-            }
-
-            GpsDirectory d = metadata.getFirstDirectoryOfType(GpsDirectory.class);
-            if(d != null) location  = d.getGeoLocation();
-        } catch (ImageProcessingException e) {
-            Log.wtf("asd", "logMainTags: ImageProcessingException", e);
-        } catch (IOException e) {
-            Log.wtf("asd", "logMainTags: IOException", e);
+    private MetaDataItem(InputStream in, boolean resolution) throws ImageProcessingException, IOException {
+        this(in);
+        if(resolution) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, options);
+            width = options.outWidth;
+            height = options.outHeight;
         }
     }
 
@@ -120,6 +98,12 @@ class MetaDataItem {
         }
     }
 
+
+    public String getResolution() {
+        if (width != -1 && -1 != height)
+            return String.format(Locale.getDefault(),"%dx%d", width, height);
+        else return "¿x?";
+    }
     public int getOrientation() {
         return orientation;
     }

@@ -372,4 +372,5 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="no_media_in_this_folder">No media in this folder</string>
     <string name="error_occured_open_media">An error occurred opening this media.</string>
     <string name="error_thumbnail">Unable to find a thumbnail for the album!</string>
+    <string name="no_app_to_perform">Unable to found an app to perform this action.</string>
 </resources>

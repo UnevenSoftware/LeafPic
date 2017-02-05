@@ -31,6 +31,10 @@ public class PreferenceUtil {
       return getInstance(context).getBoolean(key, defValue);
   }
 
+    public static int getInt(Context context, String key, int defValue) {
+        return getInstance(context).getInt(key, defValue);
+    }
+
   public SharedPreferences.Editor getEditor() {
 	return SP.edit();
   }
