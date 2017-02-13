@@ -549,16 +549,14 @@ public class MainActivity extends SharedMediaActivity {
         //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
         ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
-        findViewById(R.id.ll_emoji_easter_egg).setVisibility(
-                albumsMode && getAlbums().albums.size() == 0
-                        || !albumsMode && getAlbum().getMedia().size() == 0
-                        && SP.getInt("emoji_easter_egg", 0)==1
-                        ? View.VISIBLE : View.GONE);
-        findViewById(R.id.nothing_to_show_placeholder).setVisibility(
-                albumsMode && getAlbums().albums.size() == 0
-                        || !albumsMode && getAlbum().getMedia().size() == 0
-                        && SP.getInt("emoji_easter_egg", 0)==0
-                        ? View.VISIBLE : View.GONE);
+
+        if(albumsMode && getAlbums().albums.size() == 0 || !albumsMode && getAlbum().getMedia().size() == 0 && SP.getInt("emoji_easter_egg", 0) == 1) {
+            findViewById(R.id.ll_emoji_easter_egg).setVisibility(View.VISIBLE);
+            findViewById(R.id.nothing_to_show_placeholder).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.ll_emoji_easter_egg).setVisibility(View.GONE);
+            findViewById(R.id.nothing_to_show_placeholder).setVisibility(View.GONE);
+        }
     }
 
     //region MENU

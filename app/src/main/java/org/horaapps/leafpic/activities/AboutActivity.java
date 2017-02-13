@@ -153,14 +153,14 @@ public class AboutActivity extends ThemedActivity {
     //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
     private void emojiEasterEgg(){
         emojiEasterEggCount++;
-        if(emojiEasterEggCount>3) {
+        if(emojiEasterEggCount > 3) {
             Toast.makeText(this,
                     (SP.getInt("emoji_easter_egg",0)==0
                     ? this.getString(R.string.easter_egg_enable)
                     : this.getString(R.string.easter_egg_disable))
                     + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
-            SP.putInt("emoji_easter_egg", SP.getInt("emoji_easter_egg", 0)==0 ? 1 : 0);
-            emojiEasterEggCount=0;
+            SP.putInt("emoji_easter_egg", SP.getInt("emoji_easter_egg", 0) == 0 ? 1 : 0);
+            emojiEasterEggCount = 0;
         } else Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
     }
 
