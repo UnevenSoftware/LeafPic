@@ -21,8 +21,8 @@ public class StringUtils {
         if (path == null || (index = path.lastIndexOf('.')) == -1)
             return "unknown";
 
-        String extension = path.substring(index + 1).toLowerCase();
-        return  MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(path.substring(index + 1).toLowerCase());
+        return  mime != null ? mime : "unknown";
     }
 
     public static String getGenericMIME(String mime) {
@@ -35,6 +35,7 @@ public class StringUtils {
         return fi.substring(0, fi.lastIndexOf('.'));
     }
 
+    @SuppressWarnings("deprecation")
     public static Spanned html(String s) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY);

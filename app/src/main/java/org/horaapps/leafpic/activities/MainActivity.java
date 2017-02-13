@@ -188,8 +188,8 @@ public class MainActivity extends SharedMediaActivity {
         }
         supportInvalidateOptionsMenu();
         firstLaunch = false;
-    }
 
+    }
 
     private void displayCurrentAlbumMedia(boolean reload) {
         toolbar.setTitle(getAlbum().getName());
