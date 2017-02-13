@@ -551,9 +551,9 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
         findViewById(R.id.ll_emoji_easter_egg).setVisibility(
                 albumsMode && getAlbums().albums.size() == 0
-                || !albumsMode && getAlbum().getMedia().size() == 0
-                && SP.getInt("emoji_easter_egg", 0)==1
-                ? View.VISIBLE : View.GONE);
+                        || !albumsMode && getAlbum().getMedia().size() == 0
+                        && SP.getInt("emoji_easter_egg", 0)==1
+                        ? View.VISIBLE : View.GONE);
         findViewById(R.id.nothing_to_show_placeholder).setVisibility(
                 albumsMode && getAlbums().albums.size() == 0
                         || !albumsMode && getAlbum().getMedia().size() == 0
@@ -784,10 +784,13 @@ public class MainActivity extends SharedMediaActivity {
 
             case R.id.delete_action:
                 class DeletePhotos extends AsyncTask<String, Integer, Boolean> {
+                    private AlertDialog dialog;
+
                     @Override
                     protected void onPreExecute() {
-                        swipeRefreshLayout.setRefreshing(true);
                         super.onPreExecute();
+                        dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, getString(R.string.delete), getString(R.string.deleting_images));
+                        dialog.show();
                     }
 
                     @Override
@@ -823,7 +826,7 @@ public class MainActivity extends SharedMediaActivity {
 
                         supportInvalidateOptionsMenu();
                         checkNothing();
-                        swipeRefreshLayout.setRefreshing(false);
+                        dialog.dismiss();
                     }
                 }
 

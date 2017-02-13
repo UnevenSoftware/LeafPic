@@ -25,7 +25,6 @@ import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PermissionUtils;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
@@ -51,13 +50,10 @@ public class SplashScreen extends SharedMediaActivity {
 
     private Album tmpAlbum;
 
-    private PreferenceUtil SP;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_splash);
-        SP = PreferenceUtil.getInstance(getApplicationContext());
 
 
         getWindow().getDecorView().setSystemUiVisibility(
