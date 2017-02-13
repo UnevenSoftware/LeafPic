@@ -1033,65 +1033,6 @@
                         </RelativeLayout>
                     </LinearLayout>
 
-                    <!-- USE MEDIA STORE -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_use_media_mediastore"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/use_media_mediastore_Icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-perm-media"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_text"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="44dp">
-                                <TextView
-                                    android:id="@+id/use_media_mediastore_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/use_mediastore_provider"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/use_media_mediastore_Item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/use_media_store_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/sw_use_media_mediastore"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
-
                     <!-- MAPS PROVIDER-->
 
                     <LinearLayout
