@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +26,7 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +59,8 @@ import org.horaapps.leafpic.views.HackyViewPager;
 
 import java.io.File;
 import java.io.InputStream;
+
+import uk.co.senab.photoview.PhotoView;
 
 /**
  * Created by dnld on 18/02/16.
@@ -160,15 +164,49 @@ public class SingleMediaActivity extends SharedMediaActivity {
         mViewPager.setCurrentItem(getAlbum().getCurrentMediaIndex());
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private int mPrevPosition = -1;
+            private float mZoomLevel = 1.0f;
+
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {    }
 
             @Override public void onPageSelected(int position) {
                 getAlbum().setCurrentMedia(position);
                 updatePageTitle(position);
                 supportInvalidateOptionsMenu();
+                mPrevPosition = position;
             }
 
-            @Override public void onPageScrollStateChanged(int state) {    }
+            @Override public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                    if (mPrevPosition < 0) {
+                        mPrevPosition = mViewPager.getCurrentItem();
+                    }
+                    MediaPagerAdapter adapter = (MediaPagerAdapter) mViewPager.getAdapter();
+                    Fragment frag = adapter.getRegisteredFragment(mPrevPosition);
+                    if (frag != null && frag.getView() instanceof PhotoView) {
+                        PhotoView imgView = (PhotoView) frag.getView();
+                        mZoomLevel = imgView.getScale();
+                    }
+                }
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    if(SP.getBoolean(getString(R.string.preference_keep_zoom_level), true)) {
+                        mViewPager.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                MediaPagerAdapter adapter = (MediaPagerAdapter) mViewPager.getAdapter();
+                                Fragment frag = adapter.getRegisteredFragment(mViewPager.getCurrentItem());
+                                if (frag != null && frag.getView() instanceof PhotoView) {
+                                    PhotoView imgView = (PhotoView) frag.getView();
+                                    float zoom = Math.min(mZoomLevel, imgView.getMaximumScale());
+                                    if (zoom > 1.0f) {
+                                        imgView.setScale(zoom, imgView.getWidth() / 2, imgView.getHeight() / 2, true);
+                                    }
+                                }
+                            }
+                        }, 100);
+                    }
+                }
+            }
         });
 
         if (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getRotation() == Surface.ROTATION_90) {
