@@ -41,7 +41,9 @@ import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.base.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.ThemeHelper;
+import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -131,6 +133,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         sdCardPath = ContentHelper.getSdcardPath(getContext());
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Measure.pxToDp(3, getContext()), true));
         adapter = new BottomSheetAlbumsAdapter();
         mRecyclerView.setAdapter(adapter);
 
@@ -168,6 +171,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         exploreModePanel.setBackgroundColor(theme.getPrimaryColor());
         contentView.findViewById(R.id.ll_select_folder).setBackgroundColor(theme.getCardBackgroundColor());
         theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
+        mRecyclerView.setBackgroundColor(theme.getBackgroundColor());
 
         fabDone = (FloatingActionButton) contentView.findViewById(R.id.fab_bottomsheet_done);
         fabDone.setBackgroundTintList(ColorStateList.valueOf(theme.getAccentColor()));
@@ -329,6 +333,8 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             holder.imgFolder.setColor(theme.getIconColor());
             holder.imgFolder.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_folder));
 
+            holder.llItemBackground.setBackgroundColor(theme.getCardBackgroundColor());
+
             if(canGoBack() && position == 0) { // go to parent folder
                 holder.folderName.setText("..");
                 holder.imgFolder.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_arrow_up));
@@ -342,10 +348,12 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView folderName;
             IconicsImageView imgFolder;
+            LinearLayout llItemBackground;
             ViewHolder(View itemView) {
                 super(itemView);
                 folderName = (TextView) itemView.findViewById(R.id.name_folder);
                 imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon_bottom_sheet_item);
+                llItemBackground = (LinearLayout) itemView.findViewById(R.id.ll_album_bottom_sheet_item);
             }
         }
     }

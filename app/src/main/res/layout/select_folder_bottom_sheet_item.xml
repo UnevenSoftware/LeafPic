@@ -10,8 +10,8 @@
     android:clickable="true"
     android:gravity="center_vertical"
     android:background="@drawable/ripple"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="@dimen/sub_medium_spacing_2"
+    android:paddingBottom="@dimen/sub_medium_spacing_2">
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/folder_icon_bottom_sheet_item"
         android:layout_height="@dimen/icon_width_height"
