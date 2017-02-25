@@ -33,6 +33,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -57,6 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/security_icon"
@@ -98,6 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/n_columns_icon"
@@ -135,17 +138,18 @@
 
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_white_list"
+                        android:id="@+id/ll_excluded_album"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/white_list_icon"
+                            android:id="@+id/excluded_album_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
                             android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-burst-mode"
+                            app:iiv_icon="gmd-folder"
                             android:layout_marginLeft="@dimen/big_spacing"
                             android:layout_marginRight="@dimen/big_spacing" />
                         <LinearLayout
@@ -156,17 +160,17 @@
                             android:paddingRight="@dimen/medium_spacing"
                             android:paddingBottom="@dimen/small_spacing">
                             <TextView
-                                android:id="@+id/white_list_item_title"
+                                android:id="@+id/Excluded_Album_Item_Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/manage_your_folders"
+                                android:text="@string/excluded_albums"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="@dimen/medium_text" />
                             <TextView
-                                android:id="@+id/white_list_item_title_sub"
+                                android:id="@+id/Excluded_Album_Item_Title_Sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/manage_your_folders_sub"
+                                android:text="@string/excluded_albums_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="@dimen/sub_medium_text" />
                         </LinearLayout>
@@ -180,6 +184,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/fab_options_icon"
@@ -241,6 +246,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -265,6 +271,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/basic_theme_icon"
@@ -285,14 +292,14 @@
                                 android:id="@+id/basic_theme_item"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/base_theme"
+                                android:text="@string/basic_theme"
                                 android:textColor="@color/md_dark_background"
                                 android:textSize="@dimen/medium_text"/>
                             <TextView
                                 android:id="@+id/basic_theme_item_sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/base_theme_sub"
+                                android:text="@string/basic_theme_sub"
                                 android:textColor="@color/md_grey_400"
                                 android:textSize="@dimen/sub_medium_text" />
                         </LinearLayout>
@@ -306,6 +313,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/primary_color_icon"
@@ -347,6 +355,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/accent_color_icon"
@@ -388,6 +397,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/custom_3thact_icon"
@@ -429,6 +439,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/card_view_style_icon"
@@ -471,6 +482,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:visibility="gone"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/traslucent_statusbar_icon"
@@ -531,6 +543,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:visibility="gone"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/nav_bar_icon"
@@ -593,6 +606,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -617,6 +631,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_max_luminosity_icon"
@@ -675,6 +690,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/ll_switch_picture_orientation_icon"
@@ -732,6 +748,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         android:visibility="gone">
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -791,6 +808,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         android:visibility="gone">
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -853,6 +871,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -877,6 +896,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/internal_include_video"
@@ -925,6 +945,64 @@
                                 android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                     </LinearLayout>
+
+                    <!-- USE EXTERNAL Player-->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_switch_internal_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/internal_player_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-ondemand-video"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/small_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/medium_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="45dp">
+                                <TextView
+                                    android:id="@+id/internal_player_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/internal_player"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/internal_player_Item_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/internal_player_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/set_internal_player"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -937,6 +1015,7 @@
                 android:layout_marginBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation"
+                android:foreground="@drawable/ripple"
                 android:clickable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -960,6 +1039,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/sub_scaling_Icon"
@@ -1010,6 +1090,65 @@
                         </RelativeLayout>
                     </LinearLayout>
 
+                    <!-- USE MEDIA STORE -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_use_media_mediastore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
+                        <com.mikepenz.iconics.view.IconicsImageView
+                            android:id="@+id/use_media_mediastore_Icon"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            app:iiv_icon="gmd-perm-media"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_text"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/use_media_mediastore_Item"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/use_mediastore_provider"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text" />
+                                <TextView
+                                    android:id="@+id/use_media_mediastore_Item_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/use_media_store_sub"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="@dimen/sub_medium_text" />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/sw_use_media_mediastore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
                     <!-- MAPS PROVIDER-->
 
                     <LinearLayout
@@ -1018,6 +1157,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/map_provider_icon"
@@ -1059,6 +1199,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
                         <com.mikepenz.iconics.view.IconicsImageView
                             android:id="@+id/auto_update_media_Icon"

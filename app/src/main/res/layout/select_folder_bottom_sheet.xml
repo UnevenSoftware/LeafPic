@@ -86,9 +86,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/medium_spacing"
                 android:paddingBottom="@dimen/medium_spacing"
-                android:foreground="@drawable/ripple"
-                android:clickable="true"
-                >
+                android:clickable="true" >
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:layout_height="@dimen/icon_width_height"
                     android:layout_width="@dimen/icon_width_height"

@@ -23,6 +23,7 @@
                 android:layout_height="160dp"
                 android:elevation="@dimen/card_elevation"
                 android:orientation="vertical"
+                android:foreground="@drawable/ripple"
                 android:clickable="true"
                 >
                 <LinearLayout
@@ -65,6 +66,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         >
 
@@ -96,6 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         >
 
@@ -192,6 +195,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true">
 
                         <com.mikepenz.iconics.view.IconicsImageView
@@ -233,6 +237,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         >
 
@@ -264,6 +269,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         >
 
@@ -295,6 +301,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@drawable/ripple"
                         android:clickable="true"
                         >
 

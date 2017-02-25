@@ -5,11 +5,9 @@
     android:id="@+id/ll_album_bottom_sheet_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="@drawable/ripple"
     android:orientation="horizontal"
     android:clickable="true"
     android:gravity="center_vertical"
-    android:background="@drawable/ripple"
     android:paddingTop="@dimen/sub_medium_spacing_2"
     android:paddingBottom="@dimen/sub_medium_spacing_2">
     <com.mikepenz.iconics.view.IconicsImageView

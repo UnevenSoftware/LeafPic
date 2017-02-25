@@ -43,6 +43,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:background="@drawable/ripple"
                             android:clickable="true">
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/affix_vertical_icon"
@@ -98,6 +99,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:background="@drawable/ripple"
                             android:clickable="true">
                             <com.mikepenz.iconics.view.IconicsImageView
                                 android:id="@+id/save_here_icon"
@@ -157,6 +159,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
                             android:paddingTop="@dimen/small_spacing"
                             android:paddingRight="@dimen/medium_spacing"
@@ -224,6 +227,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:background="@drawable/ripple"
                             android:clickable="true"
                             android:paddingTop="@dimen/small_spacing"
                             android:paddingRight="@dimen/medium_spacing"
