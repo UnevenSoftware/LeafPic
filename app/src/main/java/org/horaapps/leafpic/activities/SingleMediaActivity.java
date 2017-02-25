@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
@@ -27,6 +26,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -35,12 +35,15 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.yalantis.ucrop.UCrop;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.SelectAlbumBottomSheet;
+import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.AlbumSettings;
+import org.horaapps.leafpic.model.ContentProviderHelper;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -53,12 +56,15 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * Created by dnld on 18/02/16.
  */
 @SuppressWarnings("ResourceAsColor")
 public class SingleMediaActivity extends SharedMediaActivity {
+
+    private static final String TAG = SingleMediaActivity.class.getSimpleName();
 
     private static final String ISLOCKED_ARG = "isLocked";
     static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
@@ -67,59 +73,76 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private HackyViewPager mViewPager;
     private MediaPagerAdapter adapter;
     private PreferenceUtil SP;
-    private RelativeLayout ActivityBackground;
-    private SelectAlbumBottomSheet bottomSheetDialogFragment;
+    private RelativeLayout activityBackground;
+
     private Toolbar toolbar;
     private boolean fullScreenMode, customUri = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pager);
+        setContentView(R.layout.activity_single_media);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        activityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
+        mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
 
         SP = PreferenceUtil.getInstance(getApplicationContext());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
-        try
-        {
-            Album album;
+
             if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW)) && getIntent().getData() != null) {
+
                 String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
+                Album album = null;
 
-                File file = null;
-                if (path != null)
-                    file = new File(path);
+                if (path != null) {
+                    album = ContentProviderHelper.getAlbumFromMedia(getApplicationContext(), path);
+                    if (album != null) {
+                        album.updatePhotos(getApplicationContext());
+                        album.setCurrentMedia(path);
+                    }
+                }
 
-                if (file != null && file.isFile())
-                    //the image is stored in the storage
-                    album = new Album(getApplicationContext(), file);
-                else {
-                    //try to show with Uri
-                    album = new Album(getApplicationContext(), getIntent().getData());
+                if (album == null || album.getCount() == 0) {
+                    Uri mediaUri = getIntent().getData();
+                    Media media;
+                    album = new Album(mediaUri.toString(), mediaUri.getPath());
+                    album.settings = AlbumSettings.getDefaults();
+
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception ex) {
+                        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+                        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setText(R.string.error_occured_open_media);
+                        findViewById(R.id.nothing_to_show_placeholder).setVisibility(SP.getInt("emoji_easter_egg", 0)==0 ? View.VISIBLE: View.GONE);
+                        findViewById(R.id.ll_emoji_easter_egg).setVisibility(SP.getInt("emoji_easter_egg", 0)==1 ? View.VISIBLE : View.GONE);
+                    }
+
+                    media = new Media(getApplicationContext(), mediaUri);
+                    if (album.addMedia(media)) album.setCount(1);
                     customUri = true;
                 }
                 getAlbums().addAlbum(0, album);
             }
-            initUI();
-            setupUI();
-        } catch (Exception e) { e.printStackTrace(); }
+
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
+        initUi();
     }
 
-    private void initUI() {
+    private void initUi() {
 
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        toolbar.setNavigationIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_arrow_left));
+        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setRecentApp(getString(R.string.app_name));
+
         setupSystemUI();
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener
@@ -130,74 +153,52 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         else hideSystemUI();
                     }
                 });
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
 
-        adapter.setVideoOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SP.getBoolean("set_internal_player", false)) {
-                    Intent mpdIntent = new Intent(SingleMediaActivity.this, PlayerActivity.class)
-                            .setData(getAlbum().getCurrentMedia().getUri());
-                    startActivity(mpdIntent);
-                } else {
-                    Intent intentOpenWith = new Intent(Intent.ACTION_VIEW);
-                    intentOpenWith.setDataAndType(
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getUri(),
-                            getAlbum().getMedia().get(mViewPager.getCurrentItem()).getMimeType());
-                    startActivity(intentOpenWith);
-                }
-            }
-        });
-
-        getSupportActionBar().setTitle((getAlbum().getCurrentMediaIndex() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+        updatePageTitle(getAlbum().getCurrentMediaIndex());
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(getAlbum().getCurrentMediaIndex());
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
-        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {    }
+
+            @Override public void onPageSelected(int position) {
+                getAlbum().setCurrentMedia(position);
+                updatePageTitle(position);
+                supportInvalidateOptionsMenu();
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                getAlbum().setCurrentPhotoIndex(position);
-                toolbar.setTitle((position + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+            @Override public void onPageScrollStateChanged(int state) {    }
         });
 
-        Display aa = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-        if (aa.getRotation() == Surface.ROTATION_90) {
+        if (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getRotation() == Surface.ROTATION_90) {
             Configuration configuration = new Configuration();
             configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
             onConfigurationChanged(configuration);
         }
-
     }
 
-    private void setupUI() {
-
+    public void updateUiElements() {
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        activityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         toolbar.setBackgroundColor(
-                isApplyThemeOnImgAct()
+                themeOnSingleImgAct()
                         ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
                         : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
 
-        ActivityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
-        ActivityBackground.setBackgroundColor(getBackgroundColor());
+
+        activityBackground.setBackgroundColor(getBackgroundColor());
 
         setStatusBarColor();
         setNavBarColor();
+        setRecentApp(getString(R.string.app_name));
+
+        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+        ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
+        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
 
 
         /**** SETTINGS ****/
@@ -205,6 +206,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_max_luminosity", false))
             updateBrightness(1.0F);
         else try {
+            // TODO: 12/4/16 redo
             float brightness = android.provider.Settings.System.getInt(
                     getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS);
             brightness = brightness == 1.0F ? 255.0F : brightness;
@@ -216,13 +218,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (SP.getBoolean("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupUI();
+    private void updatePageTitle(int position) {
+        getSupportActionBar().setTitle((position + 1) + " " + getString(R.string.of) + " " + adapter.getCount());
     }
 
     @Override
@@ -276,7 +276,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null && resultCode == RESULT_OK) {
             switch (requestCode) {
                 case UCrop.REQUEST_CROP:
@@ -297,6 +297,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         StringUtils.showToast(getApplicationContext(), "errori random");
                     break;
                 default:
+                    super.onActivityResult(requestCode, resultCode, data);
                     break;
             }
         }
@@ -322,7 +323,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         }
         adapter.notifyDataSetChanged();
-        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getMedia().size());
+        updatePageTitle(mViewPager.getCurrentItem());
     }
 
     @Override
@@ -349,17 +350,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
 
             case R.id.action_copy:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setTitle(getString(R.string.copy_to));
-                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
-                    @Override
-                    public void folderSelected(String path) {
-                        getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.copy_to))
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
+                            @Override
+                            public void folderSelected(String path) {
+                                getAlbum().copyPhoto(getApplicationContext(), getAlbum().getCurrentMedia().getPath(), path);
+                            }
+                        }).show();
                 break;
 
             case R.id.name_sort_action:
@@ -436,12 +434,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 break;
 
             case R.id.action_delete:
-                final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
-                AlertDialogsHelper.getTextDialog(SingleMediaActivity.this,deleteDialog,
-                        R.string.delete, R.string.delete_photo_message);
-
-                deleteDialog.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-                deleteDialog.setPositiveButton(this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
+                final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(SingleMediaActivity.this, R.string.delete, R.string.delete_photo_message);
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        textDialog.dismiss();
+                    }
+                });
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Security.isPasswordOnDelete(getApplicationContext())) {
 
@@ -460,42 +460,36 @@ public class SingleMediaActivity extends SharedMediaActivity {
                             deleteCurrentMedia();
                     }
                 });
-                deleteDialog.show();
+                textDialog.show();
                 return true;
 
             case R.id.action_move:
-                bottomSheetDialogFragment = new SelectAlbumBottomSheet();
-                bottomSheetDialogFragment.setTitle(getString(R.string.move_to));
-                bottomSheetDialogFragment.setSelectAlbumInterface(new SelectAlbumBottomSheet.SelectAlbumInterface() {
-                    @Override
-                    public void folderSelected(String path) {
-                        getAlbum().moveCurrentMedia(getApplicationContext(), path);
+                SelectAlbumBuilder.with(getSupportFragmentManager())
+                        .title(getString(R.string.move_to))
+                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
+                            @Override
+                            public void folderSelected(String path) {
+                                getAlbum().moveCurrentMedia(getApplicationContext(), path);
 
-                        if (getAlbum().getMedia().size() == 0) {
-                            if (customUri) finish();
-                            else {
-                                getAlbums().removeCurrentAlbum();
-                                //((MyApplication) getApplicationContext()).removeCurrentAlbum();
-                                displayAlbums(false);
+                                if (getAlbum().getMedia().size() == 0) {
+                                    if (customUri) finish();
+                                    else {
+                                        getAlbums().removeCurrentAlbum();
+                                        displayAlbums(false);
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                                updatePageTitle(mViewPager.getCurrentItem());
                             }
-                        }
-                        adapter.notifyDataSetChanged();
-                        toolbar.setTitle((mViewPager.getCurrentItem() + 1) + " " + getString(R.string.of) + " " + getAlbum().getCount());
-                        bottomSheetDialogFragment.dismiss();
-                    }
-                });
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                        }).show();
 
                 return true;
 
             case R.id.action_rename:
-                AlertDialog.Builder renameDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
                 final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(StringUtils.getPhotoNameByPath(getAlbum().getCurrentMedia().getPath()));
 
-                AlertDialog renameDialog =
-                        AlertDialogsHelper.getInsertTextDialog(
-                                this,renameDialogBuilder, editTextNewName, R.string.rename_photo_action);
+                AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(this, editTextNewName, R.string.rename_photo_action);
 
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
@@ -507,7 +501,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     }});
                 renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { } });
+                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); } });
                 renameDialog.show();
                 break;
 
@@ -515,18 +509,17 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
                 editIntent.setDataAndType(getAlbum().getCurrentMedia().getUri(), getAlbum().getCurrentMedia().getMimeType());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(editIntent, "Edit with"));
+                startActivity(Intent.createChooser(editIntent, getString(R.string.edit_with)));
                 break;
 
             case R.id.action_details:
-                AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(SingleMediaActivity.this, getDialogStyle());
-                final AlertDialog detailsDialog =
-                        AlertDialogsHelper.getDetailsDialog(this, detailsDialogBuilder,getAlbum().getCurrentMedia());
+
+                final AlertDialog detailsDialog = AlertDialogsHelper.getDetailsDialog(this, getAlbum().getCurrentMedia());
 
                 detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
                         .ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { }});
+                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); }});
 
                 detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
@@ -576,7 +569,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isApplyThemeOnImgAct())
+            if (themeOnSingleImgAct())
                 if (isNavigationBarColored())
                     getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency()));
                 else
@@ -589,7 +582,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isApplyThemeOnImgAct())
+            if (themeOnSingleImgAct())
                 if (isTranslucentStatusBar() && isTransparencyZero())
                     getWindow().setStatusBarColor(ColorPalette.getObscuredColor(getPrimaryColor()));
                 else
@@ -619,6 +612,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
             public void run() {
                 toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
                         .setDuration(200).start();
+                getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        Log.wtf(TAG, "ui changed: "+visibility);
+                    }
+                });
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -673,7 +672,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
-                ActivityBackground.setBackgroundColor((Integer) animator.getAnimatedValue());
+                activityBackground.setBackgroundColor((Integer) animator.getAnimatedValue());
             }
         });
         colorAnimation.start();

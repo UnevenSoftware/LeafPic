@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_select_folder"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:background="@color/md_dark_appbar"
+            android:windowActionBarOverlay="true" />
+        <RelativeLayout
+            android:id="@+id/rl_ea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--THERE IS NOTHING TO SHOW-->
+            <include layout="@layout/there_is_nothing_to_show"/>
+
+            <!--RECYCLE VIEW AND WHITE LIST CARD-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.CardView
+                    android:id="@+id/white_list_decription_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/card_spacing"
+                    android:paddingBottom="@dimen/card_spacing"
+                    app:cardCornerRadius="@dimen/card_corner_radius"
+                    app:cardElevation="@dimen/card_elevation"
+                    android:foreground="@drawable/ripple"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:id="@+id/white_list_decription_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/md_dark_primary_text"
+                        android:text="@string/white_list_explaination"
+                        android:textSize="@dimen/medium_text"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/medium_spacing" />
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/excluded_albums"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

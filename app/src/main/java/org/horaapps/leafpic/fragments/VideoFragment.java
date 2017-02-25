@@ -12,11 +12,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.activities.PlayerActivity;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.util.ContentHelper;
-import org.horaapps.leafpic.util.PreferenceUtil;
 
 /**
  * Created by dnld on 18/02/16.
@@ -25,7 +23,6 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 public class VideoFragment extends Fragment {
 
     private Media video;
-    private View.OnClickListener onClickListener;
 
     public static VideoFragment newInstance(Media media) {
         VideoFragment videoFragment = new VideoFragment();
@@ -35,10 +32,6 @@ public class VideoFragment extends Fragment {
         videoFragment.setArguments(args);
 
         return videoFragment;
-    }
-
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
     }
 
     @Override
@@ -60,13 +53,10 @@ public class VideoFragment extends Fragment {
         videoInd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = PreferenceUtil.getInstance(getContext()).getBoolean("set_internal_player", false)
-                        ? new Intent(getActivity(), PlayerActivity.class) : new Intent(Intent.ACTION_VIEW);
-
-                intent.setDataAndType(
-                        ContentHelper.getUriForFile(getContext(), video.getFile()),
-                        video.getMimeType());
-                startActivity(intent);
+                startActivity(
+                        new Intent(Intent.ACTION_VIEW)
+                                .setDataAndType(ContentHelper.getUriForFile(getContext(), video.getFile()),
+                                        video.getMimeType()));
             }
         });
 

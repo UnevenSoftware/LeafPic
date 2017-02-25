@@ -149,11 +149,11 @@ Al ocultar este álbum, se creará un archivo .nomedia en la carpeta
   <string name="primary_color_sub">Color principal que utiliza en la interfaz.</string>
   <string name="accent_color">Color del acentuado</string>
   <string name="accent_color_sub">El color secundario que se usa para teñir widgets y detalles de la interfaz.</string>
-  <string name="basic_theme">Tema básico</string>
-  <string name="basic_theme_sub">Seleccione un tema básico.</string>
-  <string name="white_basic_theme">Blanco</string>
-  <string name="dark_basic_theme">Oscuro</string>
-  <string name="dark_amoled_basic_theme">Oscuro AMOLED</string>
+  <string name="base_theme">Tema básico</string>
+  <string name="base_theme_sub">Seleccione un tema básico.</string>
+  <string name="white">Blanco</string>
+  <string name="dark">Oscuro</string>
+  <string name="dark_amoled">Oscuro AMOLED</string>
   <string name="colored_navbar">Barra de navegación colorida</string>
   <string name="colored_navbar_sub">Aplicar el color primario a la barra de navegación.</string>
   <string name="internal_player">Reproductor de vídeo Interno</string>

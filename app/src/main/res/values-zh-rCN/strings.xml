@@ -150,11 +150,11 @@
   <string name="primary_color_sub">设置整个界面所需使用的主色调。</string>
   <string name="accent_color">重点色调</string>
   <string name="accent_color_sub">设置界面的其它组件和细节部分所需使用的次要颜色。</string>
-  <string name="basic_theme">基本主题</string>
-  <string name="basic_theme_sub">选择基本的主题。</string>
-  <string name="white_basic_theme">白色</string>
-  <string name="dark_basic_theme">暗色主题</string>
-  <string name="dark_amoled_basic_theme">暗色 AMOLED</string>
+  <string name="base_theme">基本主题</string>
+  <string name="base_theme_sub">选择基本的主题。</string>
+  <string name="white">白色</string>
+  <string name="dark">暗色主题</string>
+  <string name="dark_amoled">暗色 AMOLED</string>
   <string name="colored_navbar">导航栏着色</string>
   <string name="colored_navbar_sub">导航栏背景颜色将与界面的主色调相同。</string>
   <string name="internal_player">内置视频播放器</string>

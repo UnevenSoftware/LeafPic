@@ -7,5 +7,4 @@
     android:padding="@dimen/medium_spacing"
     android:textSize="@dimen/medium_text"
     android:textColor="@color/md_grey_800"
-    android:background="@color/md_light_cards"
-    android:maxLines="1"/>
+    android:background="@color/md_light_cards" />

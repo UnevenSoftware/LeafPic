@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_card_excluded"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:foreground="@drawable/ripple"
+    android:clickable="true">
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/folder_icon"
+        android:layout_width="@dimen/icon_width_height"
+        android:layout_height="@dimen/icon_width_height"
+        android:layout_gravity="center_vertical"
+        app:iiv_icon="gmd-folder"
+        android:layout_marginLeft="@dimen/big_spacing"
+        android:layout_marginRight="@dimen/big_spacing" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/medium_spacing"
+        android:paddingEnd="@dimen/medium_spacing"
+        android:paddingBottom="@dimen/small_spacing">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:layout_marginEnd="44dp">
+            <TextView
+                android:id="@+id/folder_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_dark_background"
+                android:textSize="16sp"
+                />
+            <TextView
+                android:id="@+id/folder_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_grey_400"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/remove_icon"
+            android:layout_width="@dimen/icon_width_height"
+            android:layout_height="@dimen/icon_width_height"
+            app:iiv_icon="gmd-remove-circle"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+             />
+    </RelativeLayout>
+</LinearLayout>

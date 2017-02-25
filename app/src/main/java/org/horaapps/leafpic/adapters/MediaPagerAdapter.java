@@ -5,13 +5,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.ViewGroup;
 
-import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.fragments.GifFragment;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.fragments.VideoFragment;
+import org.horaapps.leafpic.model.Media;
 
 import java.util.ArrayList;
 
@@ -21,26 +20,18 @@ import java.util.ArrayList;
 
 public class MediaPagerAdapter extends FragmentStatePagerAdapter {
 
+    private final String TAG = "asd";
     private ArrayList<Media> media;
-    private View.OnClickListener videoOnClickListener;
-    private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
     public MediaPagerAdapter(FragmentManager fm, ArrayList<Media> media) {
         super(fm);
         this.media = media;
     }
 
-    public void setVideoOnClickListener(View.OnClickListener videoOnClickListener) {
-        this.videoOnClickListener = videoOnClickListener;
-    }
-
     @Override public Fragment getItem(int pos) {
         Media media = this.media.get(pos);
-        if (media.isVideo()) {
-            VideoFragment fragment = VideoFragment.newInstance(media);
-            fragment.setOnClickListener(videoOnClickListener);
-            return fragment;
-        }
+        if (media.isVideo()) return VideoFragment.newInstance(media);
         if (media.isGif()) return GifFragment.newInstance(media);
         else return ImageFragment.newInstance(media);
     }

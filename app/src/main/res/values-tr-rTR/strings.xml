@@ -146,11 +146,11 @@ Bu klasörü hariç tutarak tüm alt klasörlerini de hariç tutmuş olursunuz. 
   <string name="primary_color_sub">Arayüzde kullanılan ana renk.</string>
   <string name="accent_color">Vurgu Rengi</string>
   <string name="accent_color_sub">Widget ve UI ayrıntıları tonu için kullanılan ikincil renk.</string>
-  <string name="basic_theme">Temel Tema</string>
-  <string name="basic_theme_sub">Bir temel tema seç</string>
-  <string name="white_basic_theme">Açık</string>
-  <string name="dark_basic_theme">Koyu</string>
-  <string name="dark_amoled_basic_theme">Koyu AMOLED</string>
+  <string name="base_theme">Temel Tema</string>
+  <string name="base_theme_sub">Bir temel tema seç</string>
+  <string name="white">Açık</string>
+  <string name="dark">Koyu</string>
+  <string name="dark_amoled">Koyu AMOLED</string>
   <string name="colored_navbar">Gezinti Çubuğunu Renklendir</string>
   <string name="colored_navbar_sub">Birincil rengi gezinti çubuğuna uygula.</string>
   <string name="internal_player">Dahili Video oynatıcı</string>

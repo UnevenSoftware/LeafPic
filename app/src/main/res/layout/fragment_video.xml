@@ -19,5 +19,4 @@
         android:visibility="visible"
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-play-circle-filled" />
-
 </FrameLayout>

@@ -27,6 +27,14 @@ public class PreferenceUtil {
 	return instance;
   }
 
+  public static boolean getBool(Context context, String key, boolean defValue) {
+      return getInstance(context).getBoolean(key, defValue);
+  }
+
+    public static int getInt(Context context, String key, int defValue) {
+        return getInstance(context).getInt(key, defValue);
+    }
+
   public SharedPreferences.Editor getEditor() {
 	return SP.edit();
   }
@@ -54,7 +62,6 @@ public class PreferenceUtil {
   public boolean getBoolean(String key, boolean defValue) {
 	return SP.getBoolean(key, defValue);
   }
-
 
   public void remove(String key) {
 	getEditor().remove(key).commit();

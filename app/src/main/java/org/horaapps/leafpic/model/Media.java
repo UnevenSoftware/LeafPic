@@ -25,7 +25,6 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -39,10 +38,10 @@ public class Media implements Parcelable, Serializable {
 
     private String path = null;
     private long dateModified = -1;
-    private String mimeType = null;
+    private String mimeType = "unknown";
     private int orientation = 0;
 
-    private String uri = null;
+    private String uriString = null;
 
     private long size = -1;
     private boolean selected = false;
@@ -67,7 +66,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public Media(Context context, Uri mediaUri) {
-        this.uri = mediaUri.toString();
+        this.uriString = mediaUri.toString();
         this.path = null;
         this.mimeType = context.getContentResolver().getType(getUri());
     }
@@ -81,7 +80,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     public void setUri(String uriString) {
-        this.uri = uriString;
+        this.uriString = uriString;
     }
 
     public void setPath(String path) {
@@ -107,10 +106,10 @@ public class Media implements Parcelable, Serializable {
     public boolean isVideo() { return mimeType.startsWith("video"); }
 
     public Uri getUri() {
-        return uri != null ? Uri.parse(uri) : Uri.fromFile(new File(path));
+        return uriString != null ? Uri.parse(uriString) : Uri.fromFile(new File(path));
     }
 
-    private InputStream getInputStream(ContentResolver contentResolver) throws FileNotFoundException {
+    private InputStream getInputStream(ContentResolver contentResolver) throws Exception {
         return contentResolver.openInputStream(getUri());
     }
 
@@ -173,21 +172,13 @@ public class Media implements Parcelable, Serializable {
             details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
         // TODO should i add this always?
         details.put(context.getString(R.string.orientation), getOrientation() + "");
-
-
         try {
-            InputStream stream = getInputStream(context.getContentResolver());
-            details.put(context.getString(R.string.resolution), MetaDataItem.getResolution(stream));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
-
-        File file = getFile();
-
-        if(file != null) {
-            metadata = MetaDataItem.getMetadata(file);
-
-            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(getDateModified())));
-            if (metadata.getDateOriginal() != null)
-                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(metadata.getDateOriginal()));
+            metadata = MetaDataItem.getMetadata(getInputStream(context.getContentResolver()));
+            details.put(context.getString(R.string.resolution), metadata.getResolution());
+            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(dateModified)));
+            Date dateOriginal = metadata.getDateOriginal();
+            if (dateOriginal != null )
+                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(dateOriginal));
 
             String tmp;
             if ((tmp = metadata.getCameraInfo()) != null)
@@ -197,7 +188,8 @@ public class Media implements Parcelable, Serializable {
             GeoLocation location;
             if ((location = metadata.getLocation()) != null)
                 details.put(context.getString(R.string.location), location.toDMSString());
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return details;

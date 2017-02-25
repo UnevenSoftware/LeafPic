@@ -125,11 +125,11 @@
   <string name="primary_color_sub">Главна боја корисничког сучеља.</string>
   <string name="accent_color">Боја за наглашавање</string>
   <string name="accent_color_sub">Секундарна боја за фарбање виџета и детаља сучеља.</string>
-  <string name="basic_theme">Основна тема</string>
-  <string name="basic_theme_sub">Избор основне теме.</string>
-  <string name="white_basic_theme">Светла</string>
-  <string name="dark_basic_theme">Тамна</string>
-  <string name="dark_amoled_basic_theme">Тамна АМОЛЕД</string>
+  <string name="base_theme">Основна тема</string>
+  <string name="base_theme_sub">Избор основне теме.</string>
+  <string name="white">Светла</string>
+  <string name="dark">Тамна</string>
+  <string name="dark_amoled">Тамна АМОЛЕД</string>
   <string name="colored_navbar">Обојена трака навигације</string>
   <string name="internal_player">Уграђени видео плејер</string>
   <string name="internal_player_sub">Користи уграђени видео плејер</string>

@@ -1,6 +1,9 @@
 package org.horaapps.leafpic.util;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -14,8 +17,12 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
     public static String getMimeType(String path) {
-        String extension = path.substring(path.lastIndexOf('.')+1);
-        return  MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        int index;
+        if (path == null || (index = path.lastIndexOf('.')) == -1)
+            return "unknown";
+
+        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(path.substring(index + 1).toLowerCase());
+        return  mime != null ? mime : "unknown";
     }
 
     public static String getGenericMIME(String mime) {
@@ -26,6 +33,18 @@ public class StringUtils {
         String b[] = path.split("/");
         String fi = b[b.length - 1];
         return fi.substring(0, fi.lastIndexOf('.'));
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned html(String s) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY);
+        else return Html.fromHtml(s);
+    }
+
+    public static String getName(String path) {
+        String b[] = path.split("/");
+        return b[b.length - 1];
     }
 
     public static String getPhotoPathRenamed(String olderPath, String newName) {

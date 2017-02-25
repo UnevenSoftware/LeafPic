@@ -1,6 +1,5 @@
 package org.horaapps.leafpic.util;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsClient;
@@ -9,47 +8,53 @@ import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 import android.widget.Toast;
 
+import org.horaapps.leafpic.activities.base.ThemedActivity;
+
 
 public class CustomTabService {
+
     private CustomTabsClient mCustomTabsClient;
     private CustomTabsSession mCustomTabsSession;
-    private CustomTabsServiceConnection mCustomTabsServiceConnection;
     private CustomTabsIntent mCustomTabsIntent;
 
-    private Activity activity;
-    private int color;
+    private ThemedActivity activity;
 
-    public CustomTabService (Activity act, int c) {
+    public CustomTabService (ThemedActivity act) {
         this.activity = act;
-        this.color = c;
         init();
     }
 
     private void init() {
-        mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
+        CustomTabsServiceConnection mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
                 mCustomTabsClient = customTabsClient;
                 mCustomTabsClient.warmup(0L);
                 mCustomTabsSession = mCustomTabsClient.newSession(null);
             }
+
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                mCustomTabsClient= null;
+                mCustomTabsClient = null;
             }
         };
         CustomTabsClient.bindCustomTabsService(activity, activity.getPackageName(), mCustomTabsServiceConnection);
         mCustomTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
                 .setShowTitle(true)
-                .setToolbarColor(color)
+                .setToolbarColor(activity.getPrimaryColor())
                 .build();
     }
 
     public void launchUrl(String Url){
-        try{
+        try {
             mCustomTabsIntent.launchUrl(activity, Uri.parse(Url));
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(activity.getApplication(), "Error: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void openUrl(ThemedActivity activity, String url) {
+        CustomTabService service = new CustomTabService(activity);
+        service.launchUrl(url);
     }
 }

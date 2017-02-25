@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
@@ -28,326 +30,291 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import static org.horaapps.leafpic.util.Theme.LIGHT;
+
 /**
  * Created by dnld on 02/08/16.
  */
 
 public class ThemeHelper {
 
-  public static final int DARK_THEME = 2;
-  public static final int LIGHT_THEME = 1;
-  public static final int AMOLED_THEME = 3;
+	private PreferenceUtil SP;
+	private Context context;
 
-  private PreferenceUtil SP;
-  private Context context;
+	private Theme baseTheme;
+	private int primaryColor;
+	private int accentColor;
 
-  private int baseTheme;
-  private int primaryColor;
-  private int accentColor;
-
-  public ThemeHelper(Context context) {
-	this.SP = PreferenceUtil.getInstance(context);
-	this.context = context;
-	updateTheme();
-  }
-
-  public void updateTheme(){
-	this.primaryColor = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
-			getColor(org.horaapps.leafpic.R.color.md_indigo_500));
-	this.accentColor = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_accent_color),
-			getColor(org.horaapps.leafpic.R.color.md_light_blue_500));
-	baseTheme = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), LIGHT_THEME);
-  }
-
-  public int getPrimaryColor() {
-	return primaryColor;
-  }
-
-  public int getAccentColor() {
-	return accentColor;
-  }
-
-  public int getBaseTheme(){ return baseTheme; }
-
-  public static int getPrimaryColor(Context context) {
-	PreferenceUtil SP = PreferenceUtil.getInstance(context);
-	return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
-			ContextCompat.getColor(context, org.horaapps.leafpic.R.color.md_indigo_500));
-  }
-
-  public void setBaseTheme(int baseTheme, boolean permanent) {
-	if(permanent) {
-	  // TODO: 09/08/16 to
-	} else this.baseTheme = baseTheme;
-  }
-
-
-  public static int getAccentColor(Context context) {
-	PreferenceUtil SP = PreferenceUtil.getInstance(context);
-	return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_accent_color),
-			getColor(context, org.horaapps.leafpic.R.color.md_light_blue_500));
-  }
-
-  public static int getBaseTheme(Context context) {
-	PreferenceUtil SP = PreferenceUtil.getInstance(context);
-	return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), LIGHT_THEME);
-  }
-
-  public int getColor(@ColorRes int color) {
-	return ContextCompat.getColor(context, color);
-  }
-
-  public static int getColor(Context context, @ColorRes int color) {
-	return ContextCompat.getColor(context, color);
-  }
-
-  public void themeSeekBar(SeekBar bar) {
-	bar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
-	bar.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
-  }
-
-  public int getBackgroundColor(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_dark_background);break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_black_1000);break;
-	  case LIGHT_THEME:
-	  default:color = getColor(org.horaapps.leafpic.R.color.md_light_background);
+	public ThemeHelper(Context context) {
+		this.SP = PreferenceUtil.getInstance(context);
+		this.context = context;
 	}
-	return color;
-  }
 
-  public int getInvertedBackgroundColor(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_light_background);break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_light_background);break;
-	  case LIGHT_THEME:
-	  default:color = getColor(R.color.md_dark_background);
+	public static ThemeHelper getThemeHelper(Context context) {
+		ThemeHelper t = new ThemeHelper(context);
+		t.updateTheme();
+		return t;
 	}
-	return color;
-  }
 
-  public int getTextColor(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_grey_200);break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_grey_200);break;
-	  case LIGHT_THEME:
-	  default:color = getColor(org.horaapps.leafpic.R.color.md_grey_800);
+	public void updateTheme(){
+		this.primaryColor = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
+				getColor(org.horaapps.leafpic.R.color.md_indigo_500));
+		this.accentColor = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_accent_color),
+				getColor(org.horaapps.leafpic.R.color.md_light_blue_500));
+		baseTheme = Theme.fromValue(SP.getInt(context.getString(R.string.preference_base_theme), 1));
 	}
-	return color;
-  }
 
-  public int getSubTextColor(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_grey_400);break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_grey_400);break;
-	  case LIGHT_THEME:
-	  default:color = getColor(org.horaapps.leafpic.R.color.md_grey_600);
+	public int getPrimaryColor() {
+		return primaryColor;
 	}
-	return color;
-  }
 
-  public int getCardBackgroundColor(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_dark_cards);break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_black_1000);break;
-	  case LIGHT_THEME:default:color = getColor(org.horaapps.leafpic.R.color.md_light_cards);
+	public int getAccentColor() {
+		return accentColor;
 	}
-	return color;
-  }
 
-  public int getIconColor(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME: case AMOLED_THEME: color = getColor(org.horaapps.leafpic.R.color.md_white_1000);break;
-	  case LIGHT_THEME: default: color = getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
+	public Theme getBaseTheme(){ return baseTheme; }
+
+	public static int getPrimaryColor(Context context) {
+		PreferenceUtil SP = PreferenceUtil.getInstance(context);
+		return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
+				ContextCompat.getColor(context, org.horaapps.leafpic.R.color.md_indigo_500));
 	}
-	return color;
-  }
 
-  public IconicsDrawable getToolbarIcon(IIcon icon) {
-	return new IconicsDrawable(context).icon(icon).color(Color.WHITE).sizeDp(18);
-  }
-
-  public IconicsDrawable getIcon(IIcon icon) {
-	return new IconicsDrawable(context).icon(icon).color(getIconColor());
-  }
-
-  public static IconicsDrawable getIcon(Context context, IIcon icon) {
-	return new IconicsDrawable(context).icon(icon).color(Color.WHITE);
-  }
-
-
-  public int getDrawerBackground(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_dark_cards);break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_black_1000);break;
-	  case LIGHT_THEME:
-	  default: color = getColor(org.horaapps.leafpic.R.color.md_light_cards);
+	public void setBaseTheme(Theme baseTheme) {
+		this.baseTheme = baseTheme;
+		SP.putInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme().getValue());
 	}
-	return color;
-  }
 
-  public Drawable getPlaceHolder(){
-	switch (baseTheme){
-	  case DARK_THEME : return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);
-	  case AMOLED_THEME : return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_amoled);
-	  case LIGHT_THEME: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_white);
+
+	public static int getAccentColor(Context context) {
+		PreferenceUtil SP = PreferenceUtil.getInstance(context);
+		return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_accent_color),
+				ContextCompat.getColor(context, org.horaapps.leafpic.R.color.md_light_blue_500));
 	}
-	return null;
-  }
 
-  public static Drawable getPlaceHolder(Context context){
-	switch (getBaseTheme(context)){
-	  case DARK_THEME : return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);
-	  case AMOLED_THEME : return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_amoled);
-	  case LIGHT_THEME: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_white);
+	public static Theme getBaseTheme(Context context) {
+		PreferenceUtil SP = PreferenceUtil.getInstance(context);
+		return Theme.fromValue(SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), LIGHT.value));
 	}
-	return null;
-  }
 
-  public int getDialogStyle(){
-	int style;
-	switch (getBaseTheme()){
-	  case DARK_THEME: style = org.horaapps.leafpic.R.style.AlertDialog_Dark;break;
-	  case AMOLED_THEME: style = org.horaapps.leafpic.R.style.AlertDialog_Dark_Amoled;break;
-	  case LIGHT_THEME: default: style = org.horaapps.leafpic.R.style.AlertDialog_Light;break;
+	private int getColor(@ColorRes int color) {
+		return ContextCompat.getColor(context, color);
 	}
-	return style;
-  }
 
-  public int getPopupToolbarStyle(){
-	int style;
-	switch (getBaseTheme()){
-	  case DARK_THEME: style = org.horaapps.leafpic.R.style.DarkActionBarMenu;break;
-	  case AMOLED_THEME: style = org.horaapps.leafpic.R.style.AmoledDarkActionBarMenu;break;
-	  case LIGHT_THEME: default: style = org.horaapps.leafpic.R.style.LightActionBarMenu;
+	private static int getColor(Context context, @ColorRes int color) {
+		return ContextCompat.getColor(context, color);
 	}
-	return style;
-  }
 
-  public ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
-	switch (getBaseTheme()){
-	  case AMOLED_THEME:
-	  case DARK_THEME: return new ArrayAdapter<String>(context, org.horaapps.leafpic.R.layout.spinner_item_light, items);
-	  case LIGHT_THEME: default: return new ArrayAdapter<String>(context, org.horaapps.leafpic.R.layout.spinner_item_dark, items);
+	public void themeSeekBar(SeekBar bar) {
+		bar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
+		bar.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
 	}
-  }
 
-  public int getDefaultThemeToolbarColor3th(){
-	int color;
-	switch (baseTheme){
-	  case DARK_THEME:color = getColor(org.horaapps.leafpic.R.color.md_black_1000); break;
-	  case AMOLED_THEME:color = getColor(org.horaapps.leafpic.R.color.md_blue_grey_800);break;
-	  case LIGHT_THEME: default: color = getColor(org.horaapps.leafpic.R.color.md_blue_grey_800);
-	}
-	return color;
-  }
-
-  private ColorStateList getRadioButtonColor(){
-	return new ColorStateList(
-									 new int[][]{
-											 new int[]{ -android.R.attr.state_enabled }, //disabled
-											 new int[]{ android.R.attr.state_enabled } //enabled
-									 }, new int[] { getTextColor(), getAccentColor() });
-  }
-
-	public int getSwitchColor(boolean background){
-		int color;
-		if (background) {
-			switch (baseTheme) {
-				case AMOLED_THEME:
-				case DARK_THEME:
-					color = getColor(R.color.md_grey_900);
-					break;
-				default:
-				case LIGHT_THEME:
-					color = getColor(R.color.md_grey_400);
-					break;
-			}
-		} else {
-			switch (baseTheme) {
-				case AMOLED_THEME:
-				case DARK_THEME:
-					color = getColor(R.color.md_grey_600);
-					break;
-				default:
-				case LIGHT_THEME:
-					color = getColor(R.color.md_grey_200);
-					break;
-			}
+	public int getBackgroundColor(){
+		switch (baseTheme){
+			case DARK: return getColor(org.horaapps.leafpic.R.color.md_dark_background);
+			case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
+			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_background);
 		}
-
-		return color;
 	}
 
-  public void updateRadioButtonColor(RadioButton radioButton) {
-	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-	  radioButton.setButtonTintList(getRadioButtonColor());
-	  radioButton.setTextColor(getTextColor());
+	public int getInvertedBackgroundColor(){
+		switch (baseTheme){
+			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_light_background);
+			case LIGHT: default: return getColor(R.color.md_dark_background);
+		}
 	}
-  }
-  public void setRadioTextButtonColor(RadioButton radioButton, int color) {
-	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-	  radioButton.setButtonTintList(getRadioButtonColor());
-	  radioButton.setTextColor(color);
+
+	public int getTextColor(){
+		switch (baseTheme){
+			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_grey_200);
+			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_grey_800);
+		}
 	}
-  }
 
-  public void updateSwitchColor(SwitchCompat sw, int color){
-	sw.getThumbDrawable().setColorFilter(sw.isChecked() ? color : getSwitchColor(false), PorterDuff.Mode.MULTIPLY);
-	sw.getTrackDrawable().setColorFilter(sw.isChecked() ? ColorPalette.getTransparentColor(color,100): getSwitchColor(true), PorterDuff.Mode.MULTIPLY);
-  }
-
-  public void setScrollViewColor(ScrollView scr){
-	try
-	{
-	  Field mScrollCacheField = View.class.getDeclaredField("mScrollCache");
-	  mScrollCacheField.setAccessible(true);
-	  Object mScrollCache = mScrollCacheField.get(scr); // scr is your Scroll View
-
-	  Field scrollBarField = mScrollCache.getClass().getDeclaredField("scrollBar");
-	  scrollBarField.setAccessible(true);
-	  Object scrollBar = scrollBarField.get(mScrollCache);
-
-	  Method method = scrollBar.getClass().getDeclaredMethod("setVerticalThumbDrawable", Drawable.class);
-	  method.setAccessible(true);
-
-	  ColorDrawable ColorDraw = new ColorDrawable(getPrimaryColor());
-	  method.invoke(scrollBar, ColorDraw);
-	} catch(Exception e) {
-	  e.printStackTrace();
+	public int getSubTextColor(){
+		switch (baseTheme){
+			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_grey_400);
+			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_grey_600);
+		}
 	}
-  }
 
-  public void setColorScrollBarDrawable(Drawable drawable) {
-	drawable.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
-  }
+	public int getCardBackgroundColor(){
+		switch (baseTheme){
+			case DARK: return getColor(org.horaapps.leafpic.R.color.md_dark_cards);
+			case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
+			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_cards);
+		}
+	}
 
-  public static void setCursorDrawableColor(EditText editText, int color) {
-	try {
-	  Field fCursorDrawableRes =
-			  TextView.class.getDeclaredField("mCursorDrawableRes");
-	  fCursorDrawableRes.setAccessible(true);
-	  int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
-	  Field fEditor = TextView.class.getDeclaredField("mEditor");
-	  fEditor.setAccessible(true);
-	  Object editor = fEditor.get(editText);
-	  Class<?> clazz = editor.getClass();
-	  Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
-	  fCursorDrawable.setAccessible(true);
+	public int getIconColor(){
+		switch (baseTheme){
+			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_white_1000);
+			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
+		}
+	}
 
-	  Drawable[] drawables = new Drawable[2];
-	  drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-	  drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-	  drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-	  drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-	  fCursorDrawable.set(editor, drawables);
-	} catch (final Throwable ignored) {  }
-  }
+	public int getButtonBackgroundColor(){
+		switch (baseTheme){
+			case DARK: return getColor(R.color.md_grey_700);
+			case AMOLED: return getColor(R.color.md_grey_900);
+			case LIGHT: default: return getColor(R.color.md_grey_200);
+		}
+	}
+
+	public IconicsDrawable getToolbarIcon(IIcon icon) {
+		return new IconicsDrawable(context).icon(icon).color(Color.WHITE).sizeDp(18);
+	}
+
+	public IconicsDrawable getIcon(IIcon icon) {
+		return new IconicsDrawable(context).icon(icon).color(getIconColor());
+	}
+
+
+	public int getDrawerBackground(){
+		switch (baseTheme){
+			case DARK: return getColor(org.horaapps.leafpic.R.color.md_dark_cards);
+			case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
+			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_cards);
+		}
+	}
+
+	public Drawable getPlaceHolder(){
+		switch (baseTheme){
+			case DARK: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);
+			case AMOLED: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_amoled);
+			case LIGHT: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_white);
+		}
+		return null;
+	}
+
+	public static Drawable getPlaceHolder(Context context){
+		switch (getBaseTheme(context)){
+			case DARK: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);
+			case AMOLED: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_amoled);
+			case LIGHT: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_white);
+		}
+		return null;
+	}
+
+	public int getDialogStyle(){
+		switch (baseTheme){
+			case DARK: return R.style.AlertDialog_Dark;
+			case AMOLED: return R.style.AlertDialog_Dark_Amoled;
+			case LIGHT: default: return R.style.AlertDialog_Light;
+		}
+	}
+
+	public int getPopupToolbarStyle(){
+		switch (baseTheme){
+			case DARK: return R.style.DarkActionBarMenu;
+			case AMOLED: return R.style.AmoledDarkActionBarMenu;
+			case LIGHT: default: return R.style.LightActionBarMenu;
+		}
+	}
+
+	public ArrayAdapter<String> getSpinnerAdapter(ArrayList<String> items) {
+		switch (baseTheme){
+			case AMOLED: case DARK: return new ArrayAdapter<>(context, R.layout.spinner_item_light, items);
+			case LIGHT: default: return new ArrayAdapter<>(context, R.layout.spinner_item_dark, items);
+		}
+	}
+
+	public int getDefaultThemeToolbarColor3th(){
+		switch (baseTheme){
+			case DARK: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
+			case LIGHT: default: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_blue_grey_800);
+		}
+	}
+
+	private ColorStateList getTintList(){
+		return new ColorStateList(
+				new int[][]{
+						new int[]{ -android.R.attr.state_enabled }, //disabled
+						new int[]{ android.R.attr.state_enabled } //enabled
+				}, new int[] { getTextColor(), getAccentColor() });
+	}
+
+	public void themeRadioButton(RadioButton radioButton) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			radioButton.setButtonTintList(getTintList());
+			radioButton.setTextColor(getTextColor());
+		}
+	}
+
+	public void themeCheckBox(CheckBox chk) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			chk.setButtonTintList(getTintList());
+			chk.setTextColor(getTextColor());
+		}
+	}
+
+	public void themeButton(Button btn){
+		btn.setTextColor(getTextColor());
+		btn.setBackgroundColor(getButtonBackgroundColor());
+	}
+
+	public void setSwitchCompactColor(SwitchCompat sw, int color){
+		/** SWITCH HEAD **/
+		sw.getThumbDrawable().setColorFilter(
+				sw.isChecked() ? color :
+				(baseTheme.equals(LIGHT) ? getColor(R.color.md_grey_200) : getColor(R.color.md_grey_600)),
+				PorterDuff.Mode.MULTIPLY);
+		/** SWITCH BODY **/
+		sw.getTrackDrawable().setColorFilter(
+				sw.isChecked() ? ColorPalette.getTransparentColor(color,100):
+				(baseTheme.equals(LIGHT) ? getColor(R.color.md_grey_400) : getColor(R.color.md_grey_900)),
+				PorterDuff.Mode.MULTIPLY);
+	}
+
+	public void setTextViewColor(TextView txt, int color){
+		txt.setTextColor(color);
+	}
+
+	public void setScrollViewColor(ScrollView scr){
+		try
+		{
+			Field mScrollCacheField = View.class.getDeclaredField("mScrollCache");
+			mScrollCacheField.setAccessible(true);
+			Object mScrollCache = mScrollCacheField.get(scr); // scr is your Scroll View
+
+			Field scrollBarField = mScrollCache.getClass().getDeclaredField("scrollBar");
+			scrollBarField.setAccessible(true);
+			Object scrollBar = scrollBarField.get(mScrollCache);
+
+			Method method = scrollBar.getClass().getDeclaredMethod("setVerticalThumbDrawable", Drawable.class);
+			method.setAccessible(true);
+
+			ColorDrawable ColorDraw = new ColorDrawable(getPrimaryColor());
+			method.invoke(scrollBar, ColorDraw);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setColorScrollBarDrawable(Drawable drawable) {
+		drawable.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
+	}
+
+	public static void setCursorColor(EditText editText, int color) {
+		try {
+			Field fCursorDrawableRes =
+					TextView.class.getDeclaredField("mCursorDrawableRes");
+			fCursorDrawableRes.setAccessible(true);
+			int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
+			Field fEditor = TextView.class.getDeclaredField("mEditor");
+			fEditor.setAccessible(true);
+			Object editor = fEditor.get(editText);
+			Class<?> clazz = editor.getClass();
+			Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+			fCursorDrawable.setAccessible(true);
+
+			Drawable[] drawables = new Drawable[2];
+			drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+			drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+			drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			fCursorDrawable.set(editor, drawables);
+		} catch (final Throwable ignored) {  }
+	}
 }
