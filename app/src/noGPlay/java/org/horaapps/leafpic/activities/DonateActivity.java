@@ -3,6 +3,7 @@ package org.horaapps.leafpic.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -71,9 +72,10 @@ public class DonateActivity extends ThemedActivity {
         });
     }
 
+    @CallSuper
     @Override
     public void updateUiElements() {
-
+        super.updateUiElements();
         toolbar.setBackgroundColor(getPrimaryColor());
         setStatusBarColor();
         setNavBarColor();

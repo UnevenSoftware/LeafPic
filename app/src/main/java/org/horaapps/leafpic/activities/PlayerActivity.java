@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -483,8 +484,10 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
 
     /**** THEMING STUFF ****/
 
+    @CallSuper
     @Override
     public void updateUiElements() {
+        super.updateUiElements();
         toolbar.setBackgroundColor(getPrimaryColor());
         setStatusBarColor();
         setNavBarColor();

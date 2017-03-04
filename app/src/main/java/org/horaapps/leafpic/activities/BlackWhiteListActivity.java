@@ -3,6 +3,7 @@ package org.horaapps.leafpic.activities;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -163,8 +164,10 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    @CallSuper
     @Override
     public void updateUiElements(){
+        super.updateUiElements();
         toolbar.setBackgroundColor(getPrimaryColor());
         mRecyclerView.setBackgroundColor(getBackgroundColor());
         setStatusBarColor();

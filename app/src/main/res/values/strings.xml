@@ -301,6 +301,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="unable_to_fix_date">Unable to fix date</string>
     <string name="compression_settings">Compression settings</string>
     <string name="include_video">Include Video</string>
+    <string name="include_video_sub">Also display videos.</string>
     <string name="fab_options">Show FAB</string>
     <string name="fab_options_sub">Display the floating button.</string>
     <string name="map_provider">Map Provider</string>

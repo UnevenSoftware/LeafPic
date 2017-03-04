@@ -48,7 +48,7 @@ android {
     }
 }
 
-project.ext.supportLib = "25.0.1"
+project.ext.supportLib = "25.2.0"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -78,4 +78,8 @@ dependencies {
     compile 'com.github.Commit451:bypasses:1.0.4'
 
     compile 'com.github.jetradarmobile:desertplaceholder:1.1.1'
+
+    //Butter Knife
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

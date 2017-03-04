@@ -7,9 +7,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,6 +29,8 @@ import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Theme;
 import org.horaapps.leafpic.util.ThemeHelper;
+import org.horaapps.leafpic.util.Themeable;
+import org.horaapps.leafpic.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -64,6 +68,14 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
         obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
         applyThemeSingleImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
+    }
+
+    @CallSuper
+    @Override
+    public void updateUiElements() {
+        for (View view : ViewUtil.getAllChildren(findViewById(android.R.id.content))) {
+            if (view instanceof Themeable) ((Themeable) view).refreshTheme(getThemeHelper());
+        }
     }
 
     @Override

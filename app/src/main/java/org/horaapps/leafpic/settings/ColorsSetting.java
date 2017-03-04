@@ -68,7 +68,9 @@ public class ColorsSetting extends ThemedSetting {
 
     public interface ColorChooser {
         void onColorSelected(int color);
+
         void onDialogDismiss();
+
         void onColorChanged(int color);
     }
 
@@ -123,7 +125,10 @@ public class ColorsSetting extends ThemedSetting {
 
         dialogBuilder.setPositiveButton(getActivity().getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                AlertDialog alertDialog = (AlertDialog) dialog;
+                alertDialog.setOnDismissListener(null);
                 chooser.onColorSelected(colorPicker2.getColor());
+
             }
         });
 

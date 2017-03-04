@@ -47,4 +47,6 @@
     <dimen name="progress_circle_width_height">48dp</dimen>
     <dimen name="snackbar_elevation">10dp</dimen>
 
+    <!-- List items -->
+    <dimen name="listitem_height_twoline">72dp</dimen>
 </resources>

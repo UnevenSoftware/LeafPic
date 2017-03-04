@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -178,7 +179,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
         }
     }
 
+    @CallSuper
     public void updateUiElements() {
+        super.updateUiElements();
         /**** Theme ****/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         activityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);

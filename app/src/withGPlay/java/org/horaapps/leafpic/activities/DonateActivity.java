@@ -161,7 +161,7 @@ public class DonateActivity extends ThemedActivity {
 
     @Override
     public void updateUiElements() {
-
+        super.updateUiElements();
         toolbar.setBackgroundColor(getPrimaryColor());
         setStatusBarColor();
         setNavBarColor();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
+<org.horaapps.leafpic.views.themeable.ThemeableToolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MyToolbar"
     android:layout_height="wrap_content"

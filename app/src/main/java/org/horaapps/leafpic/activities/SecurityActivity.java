@@ -3,6 +3,7 @@ package org.horaapps.leafpic.activities;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
@@ -167,8 +168,10 @@ public class SecurityActivity extends ThemedActivity {
     }
 
 
+    @CallSuper
     @Override
     public void updateUiElements() {
+        super.updateUiElements();
         setRecentApp(getString(R.string.security));
         toolbar.setBackgroundColor(getPrimaryColor());
 
