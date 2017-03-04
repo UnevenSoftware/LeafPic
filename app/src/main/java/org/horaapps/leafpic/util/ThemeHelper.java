@@ -262,7 +262,7 @@ public class ThemeHelper {
 				PorterDuff.Mode.MULTIPLY);
 		/** SWITCH BODY **/
 		sw.getTrackDrawable().setColorFilter(
-				sw.isChecked() ? ColorPalette.getTransparentColor(color,100):
+				sw.isChecked() ? ColorPalette.getTransparentColor(color, 100):
 				(baseTheme.equals(LIGHT) ? getColor(R.color.md_grey_400) : getColor(R.color.md_grey_900)),
 				PorterDuff.Mode.MULTIPLY);
 	}

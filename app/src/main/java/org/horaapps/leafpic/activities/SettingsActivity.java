@@ -107,7 +107,10 @@ public class SettingsActivity extends ThemedActivity {
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(org.horaapps.leafpic.R.string.settings));
+    }
 
+    @Override
+    protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = getThemeHelper().getPrimaryColor();
             if (isTranslucentStatusBar()) getWindow().setStatusBarColor(ColorPalette.getObscuredColor(color));
