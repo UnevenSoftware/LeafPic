@@ -225,6 +225,11 @@ public class ContentProviderHelper {
         }
         return list;
     }
+
+
+    public static void test(Context context) {
+        getAllMedia(context).stream().filter(Media::isGif);
+    }
 }
 
 
