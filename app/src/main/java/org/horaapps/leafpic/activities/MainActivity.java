@@ -602,6 +602,8 @@ public class MainActivity extends SharedMediaActivity {
         menu.findItem(R.id.hideAlbumButton).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
         menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
         menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+        menu.findItem(R.id.renameAlbum).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_create));
+        menu.findItem(R.id.select_all).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
         menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
         menu.findItem(R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
@@ -633,6 +635,10 @@ public class MainActivity extends SharedMediaActivity {
         menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
         menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
         menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
+
+        menu.findItem(R.id.select_all).setShowAsAction(albumsMode && getAlbums().getSelectedCount()>1
+                ? MenuItem.SHOW_AS_ACTION_IF_ROOM
+                : MenuItem.SHOW_AS_ACTION_NEVER);
 
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCustomCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));

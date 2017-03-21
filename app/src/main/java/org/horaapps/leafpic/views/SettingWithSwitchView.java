@@ -80,14 +80,10 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
         toggle.setChecked(isChecked());
         super.setOnClickListener(this);
 
-        setPadding(
-                (int) getResources().getDimension(R.dimen.medium_spacing),
-                0,
-                (int) getResources().getDimension(R.dimen.medium_spacing),
-                0
-        );
+        /*
+        setPadding((int) getResources().getDimension(R.dimen.medium_spacing), 0,(int) getResources().getDimension(R.dimen.medium_spacing), 0);
         setMinimumHeight((int) getResources().getDimension(R.dimen.listitem_height_twoline));
-
+        */
         super.onFinishInflate();
     }
 

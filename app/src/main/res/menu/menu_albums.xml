@@ -111,7 +111,7 @@
     <item
         android:id="@+id/renameAlbum"
         android:title="@string/rename"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/select_all"
         android:title="@string/select_all"

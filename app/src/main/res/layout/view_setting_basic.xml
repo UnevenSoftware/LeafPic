@@ -5,38 +5,41 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        tools:parentTag="FrameLayout">
-
-    <org.horaapps.leafpic.views.themeable.ThemeableSettingsIcon
-        android:id="@+id/icon"
-        android:layout_width="@dimen/icon_width_height"
-        android:layout_height="@dimen/icon_width_height"
-        android:layout_gravity="start|center_vertical"
-        app:iiv_icon="gmd-add-circle"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="56dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/small_spacing"
-        android:paddingTop="@dimen/small_spacing">
-
-        <org.horaapps.leafpic.views.themeable.ThemeableSettingsTitle
-            android:id="@+id/title"
-            style="@style/TextAppearance.AppCompat.Subhead"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/sub_medium_spacing"
+        android:paddingTop="@dimen/sub_medium_spacing"
+        android:paddingRight="@dimen/medium_spacing">
+        <org.horaapps.leafpic.views.themeable.ThemeableSettingsIcon
+            android:id="@+id/icon"
+            android:layout_width="@dimen/icon_width_height"
+            android:layout_height="@dimen/icon_width_height"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginRight="@dimen/big_spacing"
+            android:layout_marginLeft="@dimen/big_spacing"
+            app:iiv_icon="gmd-android"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/md_dark_background"
-            tools:text="@string/fab_options"/>
-
-        <org.horaapps.leafpic.views.themeable.ThemeableSettingsCaption
-            android:id="@+id/caption"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/md_grey_400"
-            tools:text="@string/fab_options_sub"/>
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+            <org.horaapps.leafpic.views.themeable.ThemeableSettingsTitle
+                android:id="@+id/title"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_grey_200"
+                tools:text="title text goes here"/>
+            <org.horaapps.leafpic.views.themeable.ThemeableSettingsCaption
+                android:id="@+id/caption"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_grey_400"
+                tools:text="caption text goes here"/>
+        </LinearLayout>
     </LinearLayout>
 </merge>
