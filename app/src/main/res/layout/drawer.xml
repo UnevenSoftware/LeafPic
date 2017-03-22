@@ -42,11 +42,12 @@
                          android:id="@+id/txtLogo"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
-                         android:text="LeafPic"
                          android:textColor="@color/md_white_1000"
+                         android:text="LeafPic"
                          android:textSize="@dimen/big_text"
                          android:paddingLeft="@dimen/big_spacing"
                          android:paddingBottom="@dimen/small_spacing"
+                         android:letterSpacing="0.25"
                          />
                 </LinearLayout>
             </RelativeLayout>

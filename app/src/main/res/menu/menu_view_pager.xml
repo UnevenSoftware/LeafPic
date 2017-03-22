@@ -29,6 +29,11 @@
             </menu>
         </item>
         <item
+            android:id="@+id/action_palette"
+            android:title="@string/palette"
+            app:showAsAction="never"
+            />
+        <item
             android:id="@+id/action_use_as"
             android:title="@string/use_as"
             app:showAsAction="never"

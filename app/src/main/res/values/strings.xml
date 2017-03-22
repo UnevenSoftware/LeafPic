@@ -102,6 +102,13 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="full_resolution">Full resolution</string>
     <string name="of">of</string>
 
+    <!-- PALETTE-->
+    <string name="palette">Palette</string>
+    <string name="colors">Colors</string>
+    <string name="color">Color</string>
+    <string name="copy_clipboard">Copyed to clipboard.</string>
+
+
     <!-- AFFIX -->
     <string name="affix">Affix</string>
     <string name="affix_vertical">Affix Vertical</string>

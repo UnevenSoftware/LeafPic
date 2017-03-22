@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
@@ -537,6 +539,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                break;
+
+            case R.id.action_palette:
+                Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
+                paletteIntent.putExtra("imageUri", getAlbum().getCurrentMedia().getUri().toString());
+                startActivity(paletteIntent);
                 break;
 
             default:

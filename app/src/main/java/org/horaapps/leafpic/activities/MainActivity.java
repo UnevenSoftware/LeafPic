@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -631,7 +632,8 @@ public class MainActivity extends SharedMediaActivity {
         updateSelectedStuff();
 
         menu.findItem(R.id.select_all).setVisible(editMode);
-        menu.findItem(R.id.exclude_action).setVisible(editMode);
+        menu.findItem(R.id.exclude_action).setVisible((albumsMode && editMode) || (!albumsMode && !editMode));
+        menu.findItem(R.id.hideAlbumButton).setVisible((albumsMode && editMode) || (!albumsMode && !editMode));
         menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
         menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
         menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
@@ -645,7 +647,7 @@ public class MainActivity extends SharedMediaActivity {
         if (getAlbums().getSelectedCount() == 1)
             menu.findItem(R.id.set_pin_album).setTitle(getAlbums().getSelectedAlbum(0).isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
         menu.findItem(R.id.set_pin_album).setVisible(albumsMode && getAlbums().getSelectedCount() == 1);
-        menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode);
+        menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1);
         menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }

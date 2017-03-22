@@ -148,7 +148,7 @@ public class AlertDialogsHelper {
             imgMap.setVisibility(View.VISIBLE);
             dialogLayout.findViewById(org.horaapps.leafpic.R.id.details_title).setVisibility(View.GONE);
 
-        }
+        } else imgMap.setVisibility(View.GONE);
 
         final TextView showMoreText = (TextView) dialogLayout.findViewById(R.id.details_showmore);
         showMoreText.setOnClickListener(new View.OnClickListener() {
