@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         }
         v.setOnClickListener(mOnClickListener);
         v.setOnLongClickListener(mOnLongClickListener);
+
         return new ViewHolder(v);
     }
 
@@ -120,6 +122,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         holder.mediaLabel.setTextColor(theme.getTextColor());
         holder.name.setText(StringUtils.html(albumNameHtml));
         holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
+
+        //START Animation MAKES BUG ON FAST TAP ON CARD
+        //Animation anim;
+        //anim = AnimationUtils.loadAnimation(holder.albumCard.getContext(), R.anim.slide_fade_card);
+        //holder.albumCard.startAnimation(anim);
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
@@ -147,6 +154,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         ImageView picture;
         View selectedIcon, layout, llMdia;
         TextView name, nPhotos, mediaLabel;
+        CardView albumCard;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -157,6 +165,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_name);
             nPhotos = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_photos_count);
             mediaLabel = (TextView) itemView.findViewById(R.id.album_media_label);
+            albumCard = (CardView) itemView.findViewById(R.id.album_card);
         }
     }
 }

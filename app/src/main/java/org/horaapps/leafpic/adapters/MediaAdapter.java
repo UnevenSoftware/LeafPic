@@ -77,7 +77,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .thumbnail(0.5f)
                     .placeholder(drawable)
-                    .animate(org.horaapps.leafpic.R.anim.fade_in)
+                    //.animate(R.anim.slide_fade_photos)TODO:DONT WORK WELL
                     .into(holder.imageView);
             holder.gifIcon.setVisibility(View.GONE);
         }
