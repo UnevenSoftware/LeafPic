@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
         Album a = albums.get(position);
+
+        Log.wtf("asd/holder", a.toString());
         Media f = a.getCoverAlbum();
 
         Glide.with(holder.picture.getContext())
@@ -136,6 +139,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         albums.clear();
         albums.addAll(asd);
         notifyDataSetChanged();
+    }
+
+    public void clear() {
+        albums.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAlbum(Album album) {
+        albums.add(album);
+        //notifyDataSetChanged();
+        notifyItemInserted(albums.size()-1);
     }
 
     @Override

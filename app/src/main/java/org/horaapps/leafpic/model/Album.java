@@ -1,29 +1,36 @@
 package org.horaapps.leafpic.model;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.MediaComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import io.reactivex.Observable;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album implements Serializable {
+public class Album implements Serializable, CursorHandler {
 
 	private String name = null;
 	private String path = null;
@@ -36,7 +43,45 @@ public class Album implements Serializable {
 
 	private ArrayList<Media> media;
 	private ArrayList<Media> selectedMedia;
+	private Observable<Media> mediaObservable;
 
+	public Album withMediaObservable(Observable<Media> mediaObservable) {
+		this.mediaObservable = mediaObservable;
+		return this;
+	}
+
+	public static String[] projection = new String[]{
+			MediaStore.Files.FileColumns.PARENT,
+			MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+			"count(*)",
+			MediaStore.Images.Media.DATA,
+	};
+
+	public Album(Cursor cur) {
+		this(MyApplication.getInstance(),
+				StringUtils.getBucketPathByImagePath(cur.getString(3)),
+				cur.getLong(0), cur.getString(1), cur.getInt(2));
+	}
+
+
+	@Override
+	public Album handle(Cursor cur) throws SQLException {
+		return new Album(cur);
+	}
+
+	@Override
+	public String toString() {
+		return "Album{" +
+				"name='" + name + '\'' +
+				", path='" + path + '\'' +
+				", id=" + id +
+				", count=" + count +
+				'}';
+	}
+
+	public Observable<Media> getMediaObservable() {
+		return mediaObservable;
+	}
 
 	public Album(String path, String name) {
 		media = new ArrayList<>();
@@ -512,4 +557,6 @@ public class Album implements Serializable {
 	private void scanFile(Context context, String[] path, MediaScannerConnection.OnScanCompletedListener onScanCompletedListener) {
 		MediaScannerConnection.scanFile(context, path, null, onScanCompletedListener);
 	}
+
+
 }

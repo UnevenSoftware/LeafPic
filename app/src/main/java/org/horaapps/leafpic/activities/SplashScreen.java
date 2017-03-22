@@ -65,6 +65,10 @@ public class SplashScreen extends SharedMediaActivity {
         setStatusBarColor();
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
+        
+            // todo no preload
+            startActivity(new Intent(SplashScreen.this, MainActivity.class));
+            finish();
 
             if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                 Bundle data = getIntent().getExtras();
@@ -89,22 +93,19 @@ public class SplashScreen extends SharedMediaActivity {
 
     private void startLookingForMedia() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getAlbums().getFoldersCount(HandlingAlbums.INCLUDED) > 0) {
+        new Thread(() -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getAlbums().getFoldersCount(HandlingAlbums.INCLUDED) > 0) {
 
-                    JobInfo job = new JobInfo.Builder(0, new ComponentName(getApplicationContext(), LookForMediaJob.class))
-                            .setPeriodic(1000)
-                            .setRequiresDeviceIdle(true)
-                            .build();
+                JobInfo job = new JobInfo.Builder(0, new ComponentName(getApplicationContext(), LookForMediaJob.class))
+                        .setPeriodic(1000)
+                        .setRequiresDeviceIdle(true)
+                        .build();
 
-                    JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                    if (scheduler.getAllPendingJobs().size() == 0)
-                        Log.wtf(TAG, scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS
-                                ? "LookForMediaJob scheduled successfully!" : "LookForMediaJob scheduled failed!");
+                JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                if (scheduler.getAllPendingJobs().size() == 0)
+                    Log.wtf(TAG, scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS
+                            ? "LookForMediaJob scheduled successfully!" : "LookForMediaJob scheduled failed!");
 
-                }
             }
         }).start();
     }

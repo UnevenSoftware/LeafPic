@@ -276,7 +276,7 @@ public class ContentHelper {
 	public static boolean deleteFile(Context context, @NonNull final File file) {
 
 
-		//W/DocumentFile: Failed query: java.lang.IllegalArgumentException: Failed to determine if A613-F0E1:.android_secure is child of A613-F0E1:: java.io.FileNotFoundException: Missing file for A613-F0E1:.android_secure at /storage/sdcard1/.android_secure
+		//W/DocumentFile: Failed getCursor: java.lang.IllegalArgumentException: Failed to determine if A613-F0E1:.android_secure is child of A613-F0E1:: java.io.FileNotFoundException: Missing file for A613-F0E1:.android_secure at /storage/sdcard1/.android_secure
 		// First try the normal deletion.
 		boolean success = file.delete();
 
@@ -564,9 +564,9 @@ public class ContentHelper {
 	 * MediaStore Uris, and other file-based ContentProviders.
 	 *
 	 * @param context The context.
-	 * @param uri The Uri to query.
-	 * @param selection (Optional) Filter used in the query.
-	 * @param selectionArgs (Optional) Selection arguments used in the query.
+	 * @param uri The Uri to getCursor.
+	 * @param selection (Optional) Filter used in the getCursor.
+	 * @param selectionArgs (Optional) Selection arguments used in the getCursor.
 	 * @return The value of the _data column, which is typically a file path.
 	 */
 	private static String getDataColumn(Context context, Uri uri, String selection,

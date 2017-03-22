@@ -1,51 +1,42 @@
-package org.horaapps.leafpic.model;
+package org.horaapps.leafpic.new_way;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
+import org.horaapps.leafpic.MyApplication;
+import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.FoldersFileFilter;
 import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.StringUtils;
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import io.reactivex.Observable;
+
+
 /**
  * Created by dnld on 24/07/16.
  */
 
-public class ContentProviderHelper {
+public class CPHelper {
 
-    @Nullable private static Media getLastMedia(Context context, long albumId) {
-        ArrayList<Media> list = getMedia(context, albumId, 1, true);
-        return list.size() > 0 ? list.get(0) : null;
+    public static Observable<Media> getLastMedia(Context context, long albumId) {
+        return getMedia(context, albumId, 1, true);
     }
 
-    static ArrayList<Media> getMedia(Context context, long albumId, boolean includeVideo) {
+    public static Observable<Media> getMedia(Context context, long albumId, boolean includeVideo) {
         return getMedia(context, albumId, -1, includeVideo);
     }
 
-    private static ArrayList<Media> getMedia(Context context, long albumId, int n, boolean includeVideo) {
 
-        String limit = n == -1 ? "" : "LIMIT " + n;
-        ArrayList<Media> list = new ArrayList<Media>();
-
-        String[] projection = new String[]{
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.MIME_TYPE,
-                MediaStore.Images.Media.SIZE,
-                MediaStore.Images.Media.ORIENTATION
-        };
-
-        Uri images = MediaStore.Files.getContentUri("external");
+    public static Observable<Media> getMedia(Context context, long albumId, int n, boolean includeVideo) {
         String selection, selectionArgs[];
 
         if(includeVideo) {
@@ -65,17 +56,15 @@ public class ContentProviderHelper {
             selectionArgs = new String[] { String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE), String.valueOf(albumId) };
         }
 
-        Cursor cur = context.getContentResolver().query(
-                images, projection, selection, selectionArgs,
-                MediaStore.Images.Media.DATE_TAKEN + " DESC " + limit);
-
-        if (cur != null) {
-            if (cur.moveToFirst()) do list.add(new Media(cur)); while (cur.moveToNext());
-            cur.close();
-        }
-        return list;
+        return QueryUtils.query(new Query.Builder()
+                .uri(MediaStore.Files.getContentUri("external"))
+                .projection(Media.getProjection())
+                .selection(selection)
+                .args(selectionArgs)
+                .sort(MediaStore.Images.Media.DATE_MODIFIED)
+                .ascending(false)
+                .limit(n).build(), context.getContentResolver(), Media::new);
     }
-
 
     public static long getAlbumId(Context context, String mediaPath) {
         long id = -1;
@@ -91,11 +80,6 @@ public class ContentProviderHelper {
         return id;
     }
 
-    @TestOnly public static ArrayList<Media> getAllMedia(Context context) {
-        ArrayList<Media> list = new ArrayList<Media>();
-        // TODO: 11/21/16 implement
-        return list;
-    }
 
     @TestOnly private String getThumbnailPath(Context context, long id) {
         Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
@@ -115,7 +99,8 @@ public class ContentProviderHelper {
     }
 
     static ArrayList<Album> getAlbums(Context context, HashSet<String> excludedAlbums, boolean hidden) {
-        return hidden ? getHiddenAlbums(context, excludedAlbums) : getAlbums(context, excludedAlbums);
+        return getHiddenAlbums(context, excludedAlbums);
+        /*return hidden ? getHiddenAlbums(context, excludedAlbums) : getAlbums(context, excludedAlbums);*/
     }
 
     private static ArrayList<Album> getHiddenAlbums(Context context, HashSet<String> excludedAlbums) {
@@ -176,15 +161,11 @@ public class ContentProviderHelper {
        return new Album(context, parentFolder.getPath(), getAlbumId(context, mediaPath), parentFolder.getName(), 0);
     }
 
-    private static ArrayList<Album> getAlbums(Context context, HashSet<String> excludedAlbums) {
-        ArrayList<Album> list = new ArrayList<>();
+    public static Observable<Album> getAlbums() {
+        return getAlbums(MyApplication.getInstance(), new HashSet<>());
+    }
 
-        String[] projection = new String[]{
-                MediaStore.Files.FileColumns.PARENT,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                "count(*)",
-                MediaStore.Images.Media.DATA,
-        };
+    private static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums) {
 
         String selection, selectionArgs[];
 
@@ -205,7 +186,17 @@ public class ContentProviderHelper {
             selectionArgs = new String[] { String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) };
         }
 
-        Cursor cur = context.getContentResolver().query(
+        Query query = new Query.Builder()
+                .uri(MediaStore.Files.getContentUri("external"))
+                .projection(Album.projection)
+                .selection(selection)
+                .args(selectionArgs).build();
+
+        Log.wtf("asd",query.toString());
+
+        return QueryUtils.query(query, context.getContentResolver(), Album::new);
+
+        /*Cursor cur = context.getContentResolver().query(
                 MediaStore.Files.getContentUri("external"), projection, selection, selectionArgs, null);
 
         if (cur != null) {
@@ -224,12 +215,7 @@ public class ContentProviderHelper {
             }
             cur.close();
         }
-        return list;
-    }
-
-
-    public static void test(Context context) {
-        getAllMedia(context).stream().filter(Media::isGif);
+        return list;*/
     }
 }
 

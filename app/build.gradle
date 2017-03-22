@@ -22,6 +22,7 @@ android {
         disable 'ExtraTranslation'
         abortOnError false
     }
+
     // This is handled for you by the 2.0+ Gradle Plugin
     aaptOptions {
         additionalParameters "--no-version-vectors"
@@ -40,8 +41,8 @@ android {
         }
 
         debug {
-            applicationIdSuffix ".debug"
-            resValue "string", "app_name", "LeafPic (debug)"
+            applicationIdSuffix ".debug.observables"
+            resValue "string", "app_name", "LeafPic (observables)"
         }
     }
     productFlavors {
@@ -54,7 +55,7 @@ android {
     }
 }
 
-project.ext.supportLib = "25.2.0"
+project.ext.supportLib = "25.3.0"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -84,6 +85,12 @@ dependencies {
     compile 'com.github.Commit451:bypasses:1.0.4'
 
     compile 'com.github.jetradarmobile:desertplaceholder:1.1.1'
+
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+// Because RxAndroid releases are few and far between, it is recommended you also
+// explicitly depend on RxJava's latest version for bug fixes and new features.
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     //Butter Knife
     compile 'com.jakewharton:butterknife:8.5.1'

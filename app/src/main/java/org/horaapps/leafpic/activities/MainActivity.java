@@ -32,6 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.BuildConfig;
+import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -61,6 +63,8 @@ import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.new_way.CPHelper;
+import org.horaapps.leafpic.new_way.DataManager;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
@@ -71,6 +75,9 @@ import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends SharedMediaActivity {
@@ -215,19 +222,37 @@ public class MainActivity extends SharedMediaActivity {
     private void displayAlbums(boolean reload) {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
+
+        albumsAdapter.clear();
+        DataManager.getInstance()
+                .getAlbumsRelay()
+                .map(album -> album.withMediaObservable(CPHelper.getLastMedia(MyApplication.getInstance(),album.getId())))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        album -> {
+                            album.getMediaObservable().subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            media -> album.addMedia(media),
+                                            throwable -> {},
+                                            () -> albumsAdapter.addAlbum(album));
+
+                        }, throwable -> {
+                            Log.wtf("asd", throwable.toString());
+                        }, () -> {
+                            albumsAdapter.notifyDataSetChanged();
+                            Log.wtf("asd", "");
+                            swipeRefreshLayout.setRefreshing(false);
+                        });
+
+
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        albumsAdapter.swapDataSet(getAlbums().albums);
-        if (reload) new PrepareAlbumTask().execute();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { mDrawerLayout.openDrawer(GravityCompat.START); }
-        });
+        toolbar.setNavigationOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
 
         albumsMode = true;
         editMode = false;
         supportInvalidateOptionsMenu();
-        mediaAdapter.swapDataSet(new ArrayList<Media>());
-        rvMedia.scrollToPosition(0);
     }
 
 
@@ -244,6 +269,13 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     private boolean displayData(Intent data){
+
+        if (true==!!true) {
+            toggleRecyclersVisibility(true);
+            displayAlbums(true);
+            return true;
+        }
+
         pickMode = data.getBooleanExtra(SplashScreen.PICK_MODE, false);
         switch (data.getIntExtra(SplashScreen.CONTENT, SplashScreen.ALBUMS_BACKUP)) {
             case SplashScreen.ALBUMS_PREFETCHED:
@@ -280,7 +312,8 @@ public class MainActivity extends SharedMediaActivity {
         rvMedia.setHasFixedSize(true);
         rvMedia.setItemAnimator(new DefaultItemAnimator());
 
-        albumsAdapter = new AlbumsAdapter(getAlbums().albums, MainActivity.this);
+        // TODO: 3/21/17 redo
+        albumsAdapter = new AlbumsAdapter(new ArrayList<>(), MainActivity.this);
         albumsAdapter.setOnClickListener(albumOnClickListener);
         albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
         rvAlbums.setAdapter(albumsAdapter);
@@ -305,8 +338,10 @@ public class MainActivity extends SharedMediaActivity {
             @Override
             public void onRefresh() {
                 if (albumsMode) {
-                    getAlbums().clearSelectedAlbums();
-                    new PrepareAlbumTask().execute();
+                    //getAlbums().clearSelectedAlbums();
+                    //new PrepareAlbumTask().execute();
+                    displayAlbums();
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
                     getAlbum().clearSelectedMedia();
                     new PreparePhotosTask().execute();
@@ -1264,6 +1299,7 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
+    @Deprecated
     private class PrepareAlbumTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
@@ -1288,6 +1324,7 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
+    @Deprecated
     private class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
 
         @Override
