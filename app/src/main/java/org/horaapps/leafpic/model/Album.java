@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.MediaComparators;
@@ -25,8 +24,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import io.reactivex.Observable;
-
 /**
  * Created by dnld on 26/04/16.
  */
@@ -41,47 +38,17 @@ public class Album implements Serializable, CursorHandler {
 	private boolean selected = false;
 	public AlbumSettings settings = null;
 
-	private ArrayList<Media> media;
-	private ArrayList<Media> selectedMedia;
-	private Observable<Media> mediaObservable;
+	@Deprecated private ArrayList<Media> media;
+	@Deprecated private ArrayList<Media> selectedMedia;
 
-	public Album withMediaObservable(Observable<Media> mediaObservable) {
-		this.mediaObservable = mediaObservable;
-		return this;
-	}
 
 	public static String[] projection = new String[]{
 			MediaStore.Files.FileColumns.PARENT,
 			MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
 			"count(*)",
 			MediaStore.Images.Media.DATA,
+			MediaStore.Images.Media.DATE_MODIFIED
 	};
-
-	public Album(Cursor cur) {
-		this(MyApplication.getInstance(),
-				StringUtils.getBucketPathByImagePath(cur.getString(3)),
-				cur.getLong(0), cur.getString(1), cur.getInt(2));
-	}
-
-
-	@Override
-	public Album handle(Cursor cur) throws SQLException {
-		return new Album(cur);
-	}
-
-	@Override
-	public String toString() {
-		return "Album{" +
-				"name='" + name + '\'' +
-				", path='" + path + '\'' +
-				", id=" + id +
-				", count=" + count +
-				'}';
-	}
-
-	public Observable<Media> getMediaObservable() {
-		return mediaObservable;
-	}
 
 	public Album(String path, String name) {
 		media = new ArrayList<>();
@@ -90,18 +57,28 @@ public class Album implements Serializable, CursorHandler {
 		this.path = path;
 	}
 
-	public Album(Context context, String path, long id, String name, int count) {
+	public Album(String path, String name, long id, int count) {
 		this(path, name);
 		this.count = count;
 		this.id = id;
-		settings = AlbumSettings.getSettings(context, this);
 	}
 
-	public Album(String path, long id, AlbumSettings settings, int count) {
-		this(path, StringUtils.getName(path));
-		this.id = id;
-		this.settings = settings;
-		this.count = count;
+	public Album(Cursor cur) {
+		this(StringUtils.getBucketPathByImagePath(cur.getString(3)),
+				cur.getString(1),
+				cur.getLong(0),
+				cur.getInt(2));
+	}
+
+	@Override
+	public Album handle(Cursor cur) throws SQLException {
+		return new Album(cur);
+	}
+
+	@Deprecated
+	public Album(Context context, String path, long id, String name, int count) {
+		this(path, name, id, count);
+		settings = AlbumSettings.getSettings(context, this);
 	}
 
 	public static Album getEmptyAlbum() {
@@ -114,6 +91,83 @@ public class Album implements Serializable, CursorHandler {
 		Album emptyAlbum = getEmptyAlbum();
 		emptyAlbum.path = path;
 		return emptyAlbum;
+	}
+
+	public Album withSettings(AlbumSettings settings) {
+		this.settings = settings;
+		return this;
+	}
+
+	//region Album Properties Getters
+	public String getName() {
+		return name;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public Media getCover() {
+		if (hasCover())
+			return new Media(settings.coverPath);
+		// TODO: 11/20/16 how should i handle this?
+		return new Media();
+	}
+
+	public void setCover(String path) {
+		settings.coverPath = path;
+	}
+
+	private boolean hasId() {
+		return id != -1;
+	}
+
+	public long getId() {
+		return  this.id;
+	}
+
+	public boolean isHidden() {
+		return new File(path, ".nomedia").exists();
+	}
+
+	public boolean isPinned(){ return settings.pinned; }
+
+	public boolean hasCover() {
+		return settings.coverPath != null;
+	}
+
+	private FilterMode getFilterMode() {
+		return settings != null ? settings.filterMode : FilterMode.ALL;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	@Override
+	public String toString() {
+		return "Album{" +
+				"name='" + name + '\'' +
+				", path='" + path + '\'' +
+				", id=" + id +
+				", count=" + count +
+				'}';
+	}
+	//endregion
+
+	public ArrayList<String> getParentsFolders() {
+		ArrayList<String> result = new ArrayList<>();
+
+		File f = new File(getPath());
+		while(f != null && f.canRead()) {
+			result.add(f.getPath());
+			f = f.getParentFile();
+		}
+		return result;
 	}
 
 	public ArrayList<Media> getMedia() {
@@ -186,16 +240,7 @@ public class Album implements Serializable, CursorHandler {
 		return mediaArrayList;
 	}
 
-	public ArrayList<String> getParentsFolders() {
-		ArrayList<String> result = new ArrayList<String>();
 
-		File f = new File(getPath());
-		while(f != null && f.canRead()) {
-			result.add(f.getPath());
-			f = f.getParentFile();
-		}
-		return result;
-	}
 
 	public void filterMedias(Context context, FilterMode filter) {
 		settings.filterMode = filter;
@@ -205,6 +250,7 @@ public class Album implements Serializable, CursorHandler {
 	public boolean addMedia(@Nullable Media media) {
 		if(media == null) return false;
 		this.media.add(media);
+		Log.d("asd", "addMedia: "+media.getPath());
 		return true;
 	}
 
@@ -226,55 +272,7 @@ public class Album implements Serializable, CursorHandler {
 			}
 	}
 
-	//region Album Properties Getters
-	public String getName() {
-		return name;
-	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public Media getCoverAlbum() {
-		if (hasCustomCover())
-			return new Media(settings.coverPath);
-		if (media.size() > 0)
-			return media.get(0);
-		// TODO: 11/20/16 how should i handle this?
-		return new Media();
-	}
-
-	private boolean hasId() {
-		return id != -1;
-	}
-
-	public long getId() {
-		return  this.id;
-	}
-
-	public boolean isHidden() {
-		return new File(path, ".nomedia").exists();
-	}
-
-	public boolean isPinned(){ return settings.pinned; }
-
-	public boolean hasCustomCover() {
-		return settings.coverPath != null;
-	}
-
-	private FilterMode getFilterMode() {
-		return settings != null ? settings.filterMode : FilterMode.ALL;
-	}
-
-	public boolean isSelected() {
-		return selected;
-	}
-
-	//endregion
 
 	//region Selected Media
 

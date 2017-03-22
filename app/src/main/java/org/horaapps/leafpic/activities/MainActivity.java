@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -50,8 +51,8 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.BuildConfig;
-import org.horaapps.leafpic.MyApplication;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -223,28 +224,36 @@ public class MainActivity extends SharedMediaActivity {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
 
+
         albumsAdapter.clear();
+        SQLiteDatabase db = HandlingAlbums.getInstance(this).getReadableDatabase();
         DataManager.getInstance()
-                .getAlbumsRelay()
-                .map(album -> album.withMediaObservable(CPHelper.getLastMedia(MyApplication.getInstance(),album.getId())))
+                .getAlbumsRelay(db,hidden)
+                /*.map(album -> album.withMediaObservable(CPHelper.getLastMedia(App.getInstance(), album.getId())))*/
                 .subscribeOn(Schedulers.io())
+                .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath(), null)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         album -> {
-                            album.getMediaObservable().subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(
-                                            media -> album.addMedia(media),
-                                            throwable -> {},
-                                            () -> albumsAdapter.addAlbum(album));
+                            if (album.hasCover())
+                                albumsAdapter.addAlbum(album);
+                            else
+                                CPHelper.getLastMedia(App.getInstance(), album.getId())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(
+                                                media -> album.setCover(media.getPath()),
+                                                throwable -> {},
+                                                () -> albumsAdapter.addAlbum(album));
 
-                        }, throwable -> {
-                            Log.wtf("asd", throwable.toString());
-                        }, () -> {
-                            albumsAdapter.notifyDataSetChanged();
+                        }, throwable -> { },
+                        () -> {
+                            //albumsAdapter.notifyDataSetChanged();
+                            db.close();
                             Log.wtf("asd", "");
                             swipeRefreshLayout.setRefreshing(false);
-                        });
+                        })
+        ;
 
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -382,7 +391,8 @@ public class MainActivity extends SharedMediaActivity {
             public void onClick(View v) {
                 hidden = false;
                 mDrawerLayout.closeDrawer(GravityCompat.START);
-                new PrepareAlbumTask().execute();
+                displayAlbums();
+                //new PrepareAlbumTask().execute();
             }
         });
 
@@ -395,7 +405,8 @@ public class MainActivity extends SharedMediaActivity {
                         public void onSuccess() {
                             hidden = true;
                             mDrawerLayout.closeDrawer(GravityCompat.START);
-                            new PrepareAlbumTask().execute();
+                            displayAlbums();
+                            //new PrepareAlbumTask().execute();
                         }
 
                         @Override
@@ -669,7 +680,7 @@ public class MainActivity extends SharedMediaActivity {
         menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
         menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
 
-        menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCustomCover());
+        menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCover());
         menu.findItem(R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));
         if (getAlbums().getSelectedCount() == 1)
             menu.findItem(R.id.set_pin_album).setTitle(getAlbums().getSelectedAlbum(0).isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));

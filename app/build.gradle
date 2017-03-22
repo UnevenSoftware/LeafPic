@@ -41,8 +41,8 @@ android {
         }
 
         debug {
-            applicationIdSuffix ".debug.observables"
-            resValue "string", "app_name", "LeafPic (observables)"
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "LeafPic (debug)"
         }
     }
     productFlavors {

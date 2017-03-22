@@ -208,6 +208,27 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     }
 
     @NonNull AlbumSettings getSettings(String path) {
+        return getSettings(path, null);
+    }
+
+    @NonNull public static AlbumSettings getSettings(SQLiteDatabase db, String path, String defaultCover) {
+        AlbumSettings settings = null;
+        String[] selection = new  String[] { ALBUM_COVER_PATH, ALBUM_SORTING_MODE,
+                ALBUM_SORTING_ORDER, ALBUM_PINNED };
+        Cursor cursor = db.query(TABLE_ALBUMS, selection, ALBUM_PATH+"=?",
+                new String[]{ path }, null, null, null);
+
+        if (cursor.moveToFirst())
+            return new AlbumSettings(
+                    cursor.getString(0) == null ? defaultCover : cursor.getString(0),
+                    cursor.getInt(1),
+                    cursor.getInt(2),
+                    cursor.getInt(3));
+        cursor.close();
+        return settings == null ? AlbumSettings.getDefaults() : settings;
+    }
+
+    @NonNull AlbumSettings getSettings(String path, String defaultCover) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         AlbumSettings settings = null;
@@ -217,7 +238,11 @@ public class HandlingAlbums extends SQLiteOpenHelper {
                 new String[]{ path }, null, null, null);
 
         if (cursor.moveToFirst())
-            return new AlbumSettings(cursor.getString(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3));
+            return new AlbumSettings(
+                    cursor.getString(0) == null ? defaultCover : cursor.getString(0),
+                    cursor.getInt(1),
+                    cursor.getInt(2),
+                    cursor.getInt(3));
         cursor.close();
         db.close();
         return settings == null ? AlbumSettings.getDefaults() : settings;
@@ -395,7 +420,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, selectedAlbum.getName());
 
-            Media coverAlbum = selectedAlbum.getCoverAlbum();
+            Media coverAlbum = selectedAlbum.getCover();
             File image = new File(coverAlbum.getPath());
             Bitmap bitmap = coverAlbum.isVideo() ? ThumbnailUtils.createVideoThumbnail(coverAlbum.getPath(), MediaStore.Images.Thumbnails.MINI_KIND)
                     : BitmapFactory.decodeFile(image.getAbsolutePath(), new BitmapFactory.Options());

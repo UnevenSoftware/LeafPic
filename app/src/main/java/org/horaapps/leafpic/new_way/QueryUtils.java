@@ -12,7 +12,7 @@ import io.reactivex.Observable;
 
 public class QueryUtils {
 
-    public static  <T> Observable<T> query(Query q, ContentResolver cr, CursorHandler<T> ch) {
+    public static <T> Observable<T> query(Query q, ContentResolver cr, CursorHandler<T> ch) {
         return Observable.create(subscriber -> {
             Cursor cursor = null;
             try {

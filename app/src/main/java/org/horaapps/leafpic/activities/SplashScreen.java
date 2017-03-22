@@ -65,26 +65,30 @@ public class SplashScreen extends SharedMediaActivity {
         setStatusBarColor();
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
-        
+
             // todo no preload
-            startActivity(new Intent(SplashScreen.this, MainActivity.class));
-            finish();
+            if (true) {
+                startActivity(new Intent(SplashScreen.this, MainActivity.class));
+                finish();
+                return;
+            } else {
 
-            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
-                Bundle data = getIntent().getExtras();
-                if (data != null) {
-                    String ab = data.getString("albumPath");
-                    if (ab != null) {
-                        File dir = new File(ab);
-                        tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
-                        new PrefetchPhotosData().execute();
-                    }
-                } else StringUtils.showToast(getApplicationContext(), "Album not found");
-            } else  // default intent
-                new PrefetchAlbumsData().execute();
 
-            PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
+                if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+                    Bundle data = getIntent().getExtras();
+                    if (data != null) {
+                        String ab = data.getString("albumPath");
+                        if (ab != null) {
+                            File dir = new File(ab);
+                            tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
+                            new PrefetchPhotosData().execute();
+                        }
+                    } else StringUtils.showToast(getApplicationContext(), "Album not found");
+                } else  // default intent
+                    new PrefetchAlbumsData().execute();
 
+                PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
+            }
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
 

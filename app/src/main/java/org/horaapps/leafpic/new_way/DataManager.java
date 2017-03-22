@@ -43,9 +43,9 @@ public class DataManager {
 
     }
 
-    public Observable<Album> getAlbumsRelay() {
+    public Observable<Album> getAlbumsRelay(boolean hidden) {
         ReplaySubject<Album> as = ReplaySubject.create();
-        CPHelper.getAlbums()
+        CPHelper.getAlbums(hidden)
                 .subscribe(as);
         return as;
     }

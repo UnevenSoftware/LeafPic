@@ -8,9 +8,9 @@ import org.horaapps.leafpic.model.HandlingAlbums;
 /**
  * Created by dnld on 28/04/16.
  */
-public class MyApplication extends Application {
+public class App extends Application {
 
-    private static MyApplication mInstance;
+    private static App mInstance;
 
     @Override
     public void onCreate() {
@@ -18,14 +18,16 @@ public class MyApplication extends Application {
         mInstance = this;
     }
 
-    public static MyApplication getInstance() {
+    public static App getInstance() {
         return mInstance;
     }
 
+    @Deprecated
     public Album getAlbum() {
         return getAlbums().getCount() > 0 ? getAlbums().getCurrentAlbum() : Album.getEmptyAlbum();
     }
 
+    @Deprecated
     public HandlingAlbums getAlbums() {
         return HandlingAlbums.getInstance(getApplicationContext());
     }

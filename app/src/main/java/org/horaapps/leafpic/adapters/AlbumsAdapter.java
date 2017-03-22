@@ -76,7 +76,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         Album a = albums.get(position);
 
         Log.wtf("asd/holder", a.toString());
-        Media f = a.getCoverAlbum();
+        Media f = a.getCover();
 
         Glide.with(holder.picture.getContext())
                 .load(f.getPath())
