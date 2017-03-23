@@ -74,17 +74,19 @@ public class ThemeHelper {
 
 	public Theme getBaseTheme(){ return baseTheme; }
 
+	public void setBaseTheme(Theme baseTheme) {
+		this.baseTheme = baseTheme;
+		SP.putInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme().getValue());
+	}
+
 	public static int getPrimaryColor(Context context) {
 		PreferenceUtil SP = PreferenceUtil.getInstance(context);
 		return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
 				ContextCompat.getColor(context, org.horaapps.leafpic.R.color.md_indigo_500));
 	}
 
-	public void setBaseTheme(Theme baseTheme) {
-		this.baseTheme = baseTheme;
-		SP.putInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme().getValue());
-	}
 
+	public boolean isPrimaryEqualAccent(){return (this.primaryColor == this.accentColor);}
 
 	public static int getAccentColor(Context context) {
 		PreferenceUtil SP = PreferenceUtil.getInstance(context);

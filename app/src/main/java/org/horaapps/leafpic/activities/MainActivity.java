@@ -48,6 +48,7 @@ import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.utils.Utils;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.BuildConfig;
@@ -316,6 +317,7 @@ public class MainActivity extends SharedMediaActivity {
         });
 
         /**** DRAWER ****/
+        ((TextView) findViewById(R.id.txtVersion)).setText(BuildConfig.VERSION_NAME);
         mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(this,
                 mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {  }

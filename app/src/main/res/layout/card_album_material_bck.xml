@@ -37,45 +37,70 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop" />
-                <LinearLayout
-                    android:id="@+id/preview_card_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="@dimen/sub_medium_spacing"
-                    android:paddingRight="@dimen/sub_medium_spacing"
-                    android:paddingBottom="@dimen/small_spacing"
-                    android:paddingTop="@dimen/small_spacing">
-                    <TextView
-                        android:id="@+id/preview_media_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sub_medium_text" />
-
-                    <TextView
-                        android:id="@+id/preview_media_path"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_grey_400"
-                        android:textSize="@dimen/medium_small_text"
-                        android:maxLines="1"
-                        android:ellipsize="marquee"
-                        android:marqueeRepeatLimit ="marquee_forever"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:scrollHorizontally="true"/>
-
-                </LinearLayout>
             </org.horaapps.leafpic.views.SquareRelativeLayout>
             <View
                 android:id="@+id/album_card_divider"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_below="@id/header_album_card" />
+
+            <!--
+            <LinearLayout
+                android:id="@+id/linear_card_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/album_card_divider"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/medium_spacing"
+                android:paddingRight="@dimen/medium_spacing"
+                android:paddingBottom="@dimen/small_spacing"
+                android:paddingTop="@dimen/small_spacing">
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:id="@+id/album_icon"
+                    app:iiv_icon="gmd-save"
+                    app:iiv_color="@color/md_dark_primary_icon"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_height="@dimen/icon_width_height"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/medium_spacing"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/album_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/medium_text" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ll_n_media"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/album_photos_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="4dp"
+                            android:maxLines="1"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sub_medium_text" />
+                        <TextView
+                            android:id="@+id/album_media_label"
+                            android:layout_width="wrap_content"
+                            android:text="@string/media"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sub_medium_text" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            -->
 
             <LinearLayout
                 android:id="@+id/linear_card_text"

@@ -85,7 +85,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .signature(f.getSignature())
                 .centerCrop()
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
-                .placeholder(placeholder)
+                 //.placeholder(placeholder)
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into(holder.picture);
 
@@ -115,6 +115,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
+        if(cvs.equals(CardViewStyle.MATERIAL)){
+            holder.itemView.findViewById(R.id.preview_card_text).setBackgroundColor(ColorPalette.getTransparentColor(a.isSelected() ? theme.getPrimaryColor() : theme.getBackgroundColor(), 150));
+            ((TextView) holder.itemView.findViewById(R.id.preview_media_name)).setText(a.getCoverAlbum().getName().toString());
+            ((TextView) holder.itemView.findViewById(R.id.preview_media_path)).setText(a.getPath().toString());
+            ((TextView) holder.itemView.findViewById(R.id.preview_media_path)).setTextColor(theme.getSubTextColor());
+            ((TextView) holder.itemView.findViewById(R.id.preview_media_path)).setSelected(true);
+        }
+
+
         holder.llMdia.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
@@ -127,6 +136,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         //Animation anim;
         //anim = AnimationUtils.loadAnimation(holder.albumCard.getContext(), R.anim.slide_fade_card);
         //holder.albumCard.startAnimation(anim);
+        //ANIMS
+        holder.albumCard.animate().alpha(1).setDuration(250);
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
