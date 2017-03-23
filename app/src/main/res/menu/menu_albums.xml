@@ -146,7 +146,12 @@
         android:title="@string/affix"
         android:visible="false"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/action_palette"
+        android:title="@string/palette"
+        android:visible="false"
+        app:showAsAction="never"
+        />
     <item
         android:id="@+id/settings"
         android:title="@string/settings"

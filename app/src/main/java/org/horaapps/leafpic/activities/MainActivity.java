@@ -649,6 +649,8 @@ public class MainActivity extends SharedMediaActivity {
         menu.findItem(R.id.set_pin_album).setVisible(albumsMode && getAlbums().getSelectedCount() == 1);
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1);
         menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
+        menu.findItem(R.id.action_palette).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1
+                && (getAlbum().getSelectedMedia(0).isImage()||getAlbum().getSelectedMedia(0).isGif()));
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1243,6 +1245,12 @@ public class MainActivity extends SharedMediaActivity {
                     getAlbum().setSelectedPhotoAsPreview(getApplicationContext());
                     finishEditMode();
                 }
+                return true;
+
+            case R.id.action_palette:
+                Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
+                paletteIntent.putExtra("imageUri", getAlbum().getSelectedMedia(0).getUri().toString());
+                startActivity(paletteIntent);
                 return true;
 
             default:

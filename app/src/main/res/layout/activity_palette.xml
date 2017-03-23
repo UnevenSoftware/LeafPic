@@ -12,16 +12,14 @@
         layout="@layout/toolbar"
         android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true" />
-    <ScrollView
-        android:id="@+id/paletteAct_scrollView"
-        android:scrollbarSize="@dimen/scroll_bar_size"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!--ABOUT APP REDESIGN-->
+            <!--PALETTE HEADER-->
             <android.support.v7.widget.CardView
                 android:id="@+id/palette_image_card"
                 android:layout_width="match_parent"
@@ -40,7 +38,8 @@
                         android:id="@+id/palette_image"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop"
+                        android:focusableInTouchMode="true"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -74,92 +73,11 @@
                 android:paddingBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/paletteRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/palette_vibrant"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:background="@color/md_red_500"
-                        android:padding="@dimen/big_spacing"
-                        android:textSize="@dimen/sub_big_text"
-                        android:text="Vibrant"
-                        android:foreground="@drawable/ripple"
-                        android:clickable="true"
-                        android:onClick="onClick"/>
-
-                    <TextView
-                        android:id="@+id/palette_vibrant_dark"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:background="@color/md_red_200"
-                        android:padding="@dimen/big_spacing"
-                        android:textSize="@dimen/sub_big_text"
-                        android:text="Vibrant dark"
-                        android:foreground="@drawable/ripple"
-                        android:clickable="true"
-                        android:onClick="onClick"/>
-
-                    <TextView
-                        android:id="@+id/palette_vibrant_light"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:background="@color/md_red_800"
-                        android:padding="@dimen/big_spacing"
-                        android:textSize="@dimen/sub_big_text"
-                        android:text="Vibrant light"
-                        android:foreground="@drawable/ripple"
-                        android:clickable="true"
-                        android:onClick="onClick"/>
-
-                    <TextView
-                        android:id="@+id/palette_muted"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:background="@color/md_red_500"
-                        android:padding="@dimen/big_spacing"
-                        android:textSize="@dimen/sub_big_text"
-                        android:text="Muted"
-                        android:foreground="@drawable/ripple"
-                        android:clickable="true"
-                        android:onClick="onClick"/>
-
-                    <TextView
-                        android:id="@+id/palette_muted_dark"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:background="@color/md_red_200"
-                        android:padding="@dimen/big_spacing"
-                        android:textSize="@dimen/sub_big_text"
-                        android:text="Muted dark"
-                        android:foreground="@drawable/ripple"
-                        android:clickable="true"
-                        android:onClick="onClick"/>
-
-                    <TextView
-                        android:id="@+id/palette_muted_light"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:background="@color/md_red_800"
-                        android:padding="@dimen/big_spacing"
-                        android:textSize="@dimen/sub_big_text"
-                        android:text="Muted light"
-                        android:foreground="@drawable/ripple"
-                        android:clickable="true"
-                        android:onClick="onClick"/>
-
-                </LinearLayout>
+                    android:layout_height="wrap_content" />
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_palette_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/md_red_500"
+    android:padding="@dimen/big_spacing"
+    android:foreground="@drawable/ripple"
+    android:clickable="true">
+    <TextView
+        android:id="@+id/palette_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/md_dark_primary_text"
+        android:textSize="@dimen/sub_big_text"
+        android:text="Color" />
+</LinearLayout>
