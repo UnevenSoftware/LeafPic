@@ -62,7 +62,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         View v;
         switch (cvs) {
             default:
-            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
+            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material_test, parent, false); break;
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
             case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
         }
@@ -115,16 +115,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
-        if(cvs.equals(CardViewStyle.MATERIAL)){
-            holder.itemView.findViewById(R.id.preview_card_text).setBackgroundColor(ColorPalette.getTransparentColor(a.isSelected() ? theme.getPrimaryColor() : theme.getBackgroundColor(), 150));
-            ((TextView) holder.itemView.findViewById(R.id.preview_media_name)).setText(a.getCoverAlbum().getName().toString());
-            ((TextView) holder.itemView.findViewById(R.id.preview_media_path)).setText(a.getPath().toString());
-            ((TextView) holder.itemView.findViewById(R.id.preview_media_path)).setTextColor(theme.getSubTextColor());
-            ((TextView) holder.itemView.findViewById(R.id.preview_media_path)).setSelected(true);
-        }
+        holder.llMdia.setVisibility(SP.getBoolean("show_media_count", true) ? View.VISIBLE : View.GONE);
 
-
-        holder.llMdia.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
 
@@ -172,14 +164,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             picture = (ImageView) itemView.findViewById(org.horaapps.leafpic.R.id.album_preview);
             selectedIcon = itemView.findViewById(org.horaapps.leafpic.R.id.selected_icon);
             llMdia = itemView.findViewById(R.id.ll_n_media);
-            layout = itemView.findViewById(org.horaapps.leafpic.R.id.linear_card_text);
+            layout = itemView.findViewById(org.horaapps.leafpic.R.id.ll_album_info);
             name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_name);
-            nPhotos = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_photos_count);
+            nPhotos = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_media_count);
             mediaLabel = (TextView) itemView.findViewById(R.id.album_media_label);
             albumCard = (CardView) itemView.findViewById(R.id.album_card);
         }
     }
 }
-
-
-

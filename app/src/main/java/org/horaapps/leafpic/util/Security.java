@@ -1,8 +1,10 @@
 package org.horaapps.leafpic.util;
 
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -15,6 +17,10 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
 
 import java.security.MessageDigest;
+
+import static android.R.id.message;
+import static android.content.Context.FINGERPRINT_SERVICE;
+import static android.content.Context.KEYGUARD_SERVICE;
 
 /**
  * Created by Jibo on 06/05/2016.
@@ -68,6 +74,10 @@ public class Security {
         ThemeHelper.setCursorColor(editTextPassword, activity.getTextColor());
         editTextPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextPassword.setTextColor(activity.getTextColor());
+
+        //Finger Print
+        //if(FingerPrint.checkFinger(activity))
+
         passwordDialogBuilder.setView(PasswordDialogLayout);
 
         passwordDialogBuilder.setPositiveButton(activity.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {

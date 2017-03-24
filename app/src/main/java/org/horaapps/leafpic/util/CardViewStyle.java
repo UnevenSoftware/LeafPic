@@ -7,7 +7,7 @@ import org.horaapps.leafpic.R;
  * Created by Jibo on 20/11/2016.
  */
 public enum CardViewStyle {
-    MATERIAL(0, R.layout.card_album_material),
+    MATERIAL(0, R.layout.card_album_material_test),
     FLAT(1, R.layout.card_album_flat),
     COMPACT(2, R.layout.card_album_compact);
 
@@ -23,7 +23,6 @@ public enum CardViewStyle {
     public int getLayout() {
         return layout;
     }
-
 
     public int getValue() { return value; }
 

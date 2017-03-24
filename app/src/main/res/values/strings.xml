@@ -16,6 +16,11 @@
     <string name="easter_egg_enable">Enabled Easter Egg: </string>
     <string name="easter_egg_disable">Disabled Easter Egg: </string>
 
+    <!--FINGER PRINT-->
+    <string name="fp_not_supported">Sorry, fingerprint authentication not supported.</string>
+    <string name="fp_not_configured">No fingerprint configured.</string>
+    <string name="fp_not_enabled_sls">Secure lock screen not enabled.</string>
+
     <!-- ACTIONS -->
     <string name="sort">Sort</string>
     <string name="camera">Camera</string>
@@ -90,6 +95,9 @@ and this could make the media inaccessible from other apps. Use the exclude opti
         then the media will be copied or moved in the new folder.
     </string>
     <string name="card_style_alert">NOTE: Restart the app for make changes.</string>
+    <string name="show_album_path">Show album path</string>
+    <string name="show_preview_image_name">Show preview image name</string>
+    <string name="show_media_count">Show media count</string>
     <string name="changelog">Changelog</string>
 
     <!-- ITEMS -->
