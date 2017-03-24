@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +22,6 @@ import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.AlbumsComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -34,29 +33,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by dnld on 1/7/16.
  */
-public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
+public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
 
 
-    TreeSet<Album> as = new TreeSet<>(AlbumsComparators.getComparator(SortingMode.DATE, SortingOrder.DESCENDING));
 
     private List<Album> albums;
 
-    private CardViewStyle cvs;
-
-    private View.OnClickListener mOnClickListener;
-    private View.OnLongClickListener mOnLongClickListener;
-    private ThemeHelper theme;
-    private PreferenceUtil SP;
-
     Comparator<Album> c = AlbumsComparators.getComparator(SortingMode.DATE);
 
+    private final PublishSubject<Album> onClickSubject = PublishSubject.create();
+    private final PublishSubject<Album> onChangeSelectedSubject = PublishSubject.create();
+
+    private int selectedCount = 0;
+
+    private ThemeHelper theme;
+    private PreferenceUtil SP;
     private BitmapDrawable placeholder;
+    private CardViewStyle cvs;
+
 
     public AlbumsAdapter(ArrayList<Album> ph, Context context) {
         albums = new ArrayList<>();
@@ -67,9 +71,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         sort();
     }
 
-
-    private void sort() {
-
+    public void sort() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             albums = albums.stream().sorted(c).collect(Collectors.toList());
         else Collections.sort(albums, c);
@@ -78,11 +80,56 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public List<Album> getSelectedAlbums() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return albums.stream().filter(Album::isSelected).collect(Collectors.toList());
+        } else {
+            ArrayList<Album> arrayList = new ArrayList<>(selectedCount);
+            for (Album album : albums)
+                if (album.isSelected())
+                    arrayList.add(album);
+            return arrayList;
+        }
+    }
+
+    public Album getFirstSelectedAlbum() {
+        if (selectedCount > 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                return albums.stream().filter(Album::isSelected).findFirst().orElse(null);
+            else
+                for (Album album : albums)
+                    if (album.isSelected())
+                        return album;
+        }
+        return null;
+    }
+
+
+    public int getSelectedCount() {
+        return selectedCount;
+    }
+
+    public void selectAllAlbums() {
+        for (int i = 0; i < albums.size(); i++)
+            if (albums.get(i).setSelected(true))
+                notifyItemChanged(i);
+        selectedCount = albums.size();
+        onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
+    }
+
+    public void clearSelectedAlbums() {
+        for (int i = 0; i < albums.size(); i++)
+            if (albums.get(i).setSelected(false))
+                notifyItemChanged(i);
+        selectedCount = 0;
+        onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
+    }
+
     public void updateTheme(Context context) {
         SP = PreferenceUtil.getInstance(context);
         theme.updateTheme();
         placeholder = ((BitmapDrawable) theme.getPlaceHolder());
-        cvs = CardViewStyle.fromValue(PreferenceUtil.getInstance(context).getInt("card_view_style",CardViewStyle.MATERIAL.getValue()));
+        cvs = CardViewStyle.fromValue(PreferenceUtil.getInt(context,"card_view_style", CardViewStyle.MATERIAL.getValue()));
     }
 
     @Override
@@ -94,16 +141,49 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
             case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
         }
-        v.setOnClickListener(mOnClickListener);
-        v.setOnLongClickListener(mOnLongClickListener);
+        v.setOnClickListener(this);
+        v.setOnLongClickListener(this);
         return new ViewHolder(v);
+    }
+
+
+    private void notifySelected(boolean increase) {
+        selectedCount += increase ? 1 : -1;
+    }
+
+    public boolean selecting() {
+        return selectedCount > 0;
+    }
+
+    public Observable<Album> getAlbumsClicks() {
+        return onClickSubject;
+    }
+
+    public Observable<Album> getAlbumsSelectedClicks() {
+        return onChangeSelectedSubject;
     }
 
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
+
         Album a = albums.get(position);
 
-        Log.wtf("asd/holder", a.toString());
+        holder.card.setOnClickListener(v -> {
+            if (selecting()) {
+                notifySelected(a.toggleSelected());
+                notifyItemChanged(position);
+                onChangeSelectedSubject.onNext(a);
+            } else
+                onClickSubject.onNext(a);
+        });
+
+        holder.card.setOnLongClickListener(v -> {
+            notifySelected(a.toggleSelected());
+            notifyItemChanged(position);
+            onChangeSelectedSubject.onNext(a);
+            return true;
+        });
+
         Media f = a.getCover();
 
         Glide.with(holder.picture.getContext())
@@ -129,7 +209,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         String textColor = theme.getBaseTheme().equals(Theme.LIGHT) ? "#2B2B2B" : "#FAFAFA";
 
         if (a.isSelected()) {
-            holder.layout.setBackgroundColor(Color.parseColor(hexPrimaryColor));
+            holder.footer.setBackgroundColor(Color.parseColor(hexPrimaryColor));
             holder.picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
             holder.selectedIcon.setVisibility(View.VISIBLE);
             if (theme.getBaseTheme().equals(Theme.LIGHT)) textColor = "#FAFAFA";
@@ -138,27 +218,27 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             holder.selectedIcon.setVisibility(View.GONE);
             switch (cvs){
                 default:
-                case MATERIAL:holder.layout.setBackgroundColor(theme.getCardBackgroundColor());break;
+                case MATERIAL:holder.footer.setBackgroundColor(theme.getCardBackgroundColor());break;
                 case FLAT:
-                case COMPACT:holder.layout.setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
+                case COMPACT:holder.footer.setBackgroundColor(ColorPalette.getTransparentColor(theme.getBackgroundColor(), 150)); break;
             }
         }
 
-        holder.llMdia.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
+        holder.llCount.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
 
         holder.mediaLabel.setTextColor(theme.getTextColor());
         holder.name.setText(StringUtils.html(albumNameHtml));
-        holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
+        holder.nMedia.setText(StringUtils.html(albumPhotoCountHtml));
     }
 
     public void setOnClickListener(View.OnClickListener lis) {
-        mOnClickListener = lis;
+        //mOnClickListener = lis;
     }
 
     public void setOnLongClickListener(View.OnLongClickListener lis) {
-        mOnLongClickListener = lis;
+        //mOnLongClickListener = lis;
     }
 
     public void swapDataSet(ArrayList<Album> asd) {
@@ -187,20 +267,30 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return albums.size();
     }
 
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView picture;
-        View selectedIcon, layout, llMdia;
-        TextView name, nPhotos, mediaLabel;
+        @BindView(R.id.album_card) CardView card;
+        @BindView(R.id.album_preview) ImageView picture;
+        @BindView(R.id.selected_icon) View selectedIcon;
+        @BindView(R.id.linear_card_text) View footer;
+        @BindView(R.id.ll_n_media) View llCount;
+        @BindView(R.id.album_name) TextView name;
+        @BindView(R.id.album_media_count) TextView nMedia;
+        @BindView(R.id.album_media_label) TextView mediaLabel;
 
         ViewHolder(View itemView) {
             super(itemView);
-            picture = (ImageView) itemView.findViewById(org.horaapps.leafpic.R.id.album_preview);
-            selectedIcon = itemView.findViewById(org.horaapps.leafpic.R.id.selected_icon);
-            llMdia = itemView.findViewById(R.id.ll_n_media);
-            layout = itemView.findViewById(org.horaapps.leafpic.R.id.linear_card_text);
-            name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_name);
-            nPhotos = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_photos_count);
-            mediaLabel = (TextView) itemView.findViewById(R.id.album_media_label);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

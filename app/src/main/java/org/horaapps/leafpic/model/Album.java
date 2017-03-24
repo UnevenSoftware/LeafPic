@@ -358,8 +358,16 @@ public class Album implements Serializable, CursorHandler {
 		this.name = name;
 	}
 
-	void setSelected(boolean selected) {
+	public boolean setSelected(boolean selected) {
+		if (this.selected == selected)
+			return false;
 		this.selected = selected;
+		return true;
+	}
+
+	public boolean toggleSelected() {
+		selected = !selected;
+		return selected;
 	}
 
 	public void removeCoverAlbum(Context context) {

@@ -94,7 +94,7 @@ public class CardViewStyleSetting extends ThemedSetting {
                 String textColor = getActivity().getBaseTheme().equals(Theme.LIGHT) ? "#2B2B2B" : "#FAFAFA";
                 String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>420</font></b>";
 
-                ((TextView) v.findViewById(R.id.album_photos_count)).setText(StringUtils.html(albumPhotoCountHtml));
+                ((TextView) v.findViewById(R.id.album_media_count)).setText(StringUtils.html(albumPhotoCountHtml));
                 ((TextView) v.findViewById(R.id.album_media_label)).setTextColor(getActivity().getTextColor());
                 v.findViewById(R.id.ll_n_media).setVisibility( chkShowNPhots.isChecked() ? View.VISIBLE : View.GONE);
 

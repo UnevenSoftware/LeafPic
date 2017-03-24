@@ -59,7 +59,7 @@
                     android:id="@+id/ll_n_media"
                     android:orientation="horizontal">
                     <TextView
-                        android:id="@+id/album_photos_count"
+                        android:id="@+id/album_media_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"

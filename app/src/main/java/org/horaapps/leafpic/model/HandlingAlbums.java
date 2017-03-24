@@ -378,13 +378,15 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         return index;
     }
 
-    public int toggleSelectAlbum(Album album) {
+    @Deprecated
+    private int toggleSelectAlbum(Album album) {
         return toggleSelectAlbum(albums.indexOf(album));
     }
 
     public Album getAlbum(int index){ return albums.get(index); }
 
-    public void selectAllAlbums() {
+    @Deprecated
+    private void selectAllAlbums() {
         for (Album dispAlbum : albums)
             if (!dispAlbum.isSelected()) {
                 dispAlbum.setSelected(true);
@@ -394,11 +396,13 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
     public void removeCurrentAlbum(){ albums.remove(current); }
 
-    public int getSelectedCount() {
+    @Deprecated
+    private int getSelectedCount() {
         return selectedAlbums.size();
     }
 
-    public void clearSelectedAlbums() {
+    @Deprecated
+    private void clearSelectedAlbums() {
         for (Album dispAlbum : albums)
             dispAlbum.setSelected(false);
 
@@ -509,6 +513,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         albums.remove(a);
     }
 
+    @Deprecated
     public boolean deleteSelectedAlbums(Context context) {
         boolean success = true;
 
@@ -541,6 +546,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         SP.putInt("albums_sorting_order", sortingOrder.getValue());
     }
 
+    @Deprecated
     public void sortAlbums(final Context context) {
 
         Album camera = null;
@@ -562,6 +568,6 @@ public class HandlingAlbums extends SQLiteOpenHelper {
             albums.add(0, camera);
         }
     }
-
-    public Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
+    @Deprecated
+    private Album getSelectedAlbum(int index) { return selectedAlbums.get(index); }
 }

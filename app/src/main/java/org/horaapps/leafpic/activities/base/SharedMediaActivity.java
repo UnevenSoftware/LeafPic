@@ -21,10 +21,12 @@ public abstract class SharedMediaActivity extends ThemedActivity {
 
     private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
+    @Deprecated
     public HandlingAlbums getAlbums() {
         return ((App) getApplicationContext()).getAlbums();
     }
 
+    @Deprecated
     public Album getAlbum() {
         return ((App) getApplicationContext()).getAlbum();
     }
