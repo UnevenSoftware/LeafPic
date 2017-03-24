@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.model.base.AlbumsComparators;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -27,13 +31,22 @@ import org.horaapps.leafpic.util.Theme;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by dnld on 1/7/16.
  */
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
-    private ArrayList<Album> albums;
+
+    TreeSet<Album> as = new TreeSet<>(AlbumsComparators.getComparator(SortingMode.DATE, SortingOrder.DESCENDING));
+
+    private List<Album> albums;
+
     private CardViewStyle cvs;
 
     private View.OnClickListener mOnClickListener;
@@ -41,13 +54,28 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     private ThemeHelper theme;
     private PreferenceUtil SP;
 
+    Comparator<Album> c = AlbumsComparators.getComparator(SortingMode.DATE);
 
     private BitmapDrawable placeholder;
 
     public AlbumsAdapter(ArrayList<Album> ph, Context context) {
-        albums = ph;
+        albums = new ArrayList<>();
         theme = new ThemeHelper(context);
         updateTheme(context);
+        albums.addAll(ph);
+
+        sort();
+    }
+
+
+    private void sort() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            albums = albums.stream().sorted(c).collect(Collectors.toList());
+        else Collections.sort(albums, c);
+
+        Collections.reverse(albums);
+        notifyDataSetChanged();
     }
 
     public void updateTheme(Context context) {
@@ -138,7 +166,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         // TODO improve this
         albums.clear();
         albums.addAll(asd);
-        notifyDataSetChanged();
+        sort();
+        //notifyDataSetChanged();
     }
 
     public void clear() {
@@ -148,8 +177,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     public void addAlbum(Album album) {
         albums.add(album);
+        sort();
         //notifyDataSetChanged();
-        notifyItemInserted(albums.size()-1);
+        //notifyItemInserted(albums.size()-1);
     }
 
     @Override

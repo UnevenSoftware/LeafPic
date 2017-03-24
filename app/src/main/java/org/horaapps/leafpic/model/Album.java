@@ -29,11 +29,9 @@ import java.util.Collections;
  */
 public class Album implements Serializable, CursorHandler {
 
-	private String name = null;
-	private String path = null;
-	private long id = -1;
-	private int count = -1;
-	private int currentMediaIndex = 0;
+	private String name, path;
+	private long id = -1, dateModified;
+	private int count = -1, currentMediaIndex = 0;
 
 	private boolean selected = false;
 	public AlbumSettings settings = null;
@@ -47,7 +45,7 @@ public class Album implements Serializable, CursorHandler {
 			MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
 			"count(*)",
 			MediaStore.Images.Media.DATA,
-			MediaStore.Images.Media.DATE_MODIFIED
+			"max("+MediaStore.Images.Media.DATE_MODIFIED+")"
 	};
 
 	public Album(String path, String name) {
@@ -68,6 +66,7 @@ public class Album implements Serializable, CursorHandler {
 				cur.getString(1),
 				cur.getLong(0),
 				cur.getInt(2));
+		dateModified = cur.getLong(4);
 	}
 
 	@Override
@@ -557,4 +556,7 @@ public class Album implements Serializable, CursorHandler {
 	}
 
 
+	public Long getDateModified() {
+		return dateModified;
+	}
 }

@@ -178,6 +178,7 @@ public class MainActivity extends SharedMediaActivity {
         coordinatorMainLayout = (CoordinatorLayout) findViewById(R.id.coordinator_main_layout);
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
+
         initUi();
         displayData(getIntent());
     }
@@ -228,10 +229,11 @@ public class MainActivity extends SharedMediaActivity {
         albumsAdapter.clear();
         SQLiteDatabase db = HandlingAlbums.getInstance(this).getReadableDatabase();
         DataManager.getInstance()
-                .getAlbumsRelay(db,hidden)
+                .getAlbumsRelay(hidden)
                 /*.map(album -> album.withMediaObservable(CPHelper.getLastMedia(App.getInstance(), album.getId())))*/
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath(), null)))
+
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         album -> {
