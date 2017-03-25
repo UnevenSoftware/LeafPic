@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by dnld on 27/04/16.
@@ -409,8 +410,8 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         selectedAlbums.clear();
     }
 
-    public void installShortcutForSelectedAlbums(Context context) {
-        for (Album selectedAlbum : selectedAlbums) {
+    public static void installShortcutForSelectedAlbums(Context context, List<Album> albums) {
+        for (Album selectedAlbum : albums) {
 
             Intent shortcutIntent;
             shortcutIntent = new Intent(context, SplashScreen.class);
@@ -443,7 +444,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         }
     }
 
-    private Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
+    private static Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
         Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         canvas.drawColor(Color.WHITE);
@@ -451,7 +452,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         return bmpWithBorder;
     }
 
-    private Bitmap getCroppedBitmap(Bitmap srcBmp){
+    private static Bitmap getCroppedBitmap(Bitmap srcBmp){
         Bitmap dstBmp;
         if (srcBmp.getWidth() >= srcBmp.getHeight()){
             dstBmp = Bitmap.createBitmap(srcBmp,

@@ -5,6 +5,6 @@ package org.horaapps.leafpic.fragments;
  */
 
 public interface IFragment {
-    boolean selecting();
+    boolean editMode();
     void clearSelected();
 }

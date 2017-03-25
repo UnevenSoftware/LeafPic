@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+
 import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.HandlingAlbums;
+import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.new_way.CPHelper;
 import org.horaapps.leafpic.new_way.DataManager;
 import org.horaapps.leafpic.util.Measure;
@@ -40,19 +45,25 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
+    private static final String TAG = "asd";
+
     RecyclerView rvAlbums;
     private AlbumsAdapter albumsAdapter;
     private GridSpacingItemDecoration rvAlbumsDecoration;
+    MainActivity act;
+
+
+    SortingOrder sortingOrder;
+    SortingMode sortingMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        albumsAdapter = new AlbumsAdapter(getContext());
+        sortingMode = SortingMode.NUMERIC;
+        sortingOrder = SortingOrder.ASCENDING;
     }
 
-
-    MainActivity act;
 
     @Override
     public void onAttach(Context context) {
@@ -119,7 +130,15 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     }
 
     private void updateToolbar() {
-        act.updateToolbar();
+
+        if (editMode()) act.updateToolbar(
+                String.format("%d/%d", albumsAdapter.getSelectedCount(), albumsAdapter.getItemCount()),
+                GoogleMaterial.Icon.gmd_check, v -> albumsAdapter.clearSelectedAlbums());
+        else
+            act.updateToolbar(
+                    getString(R.string.app_name),
+                    GoogleMaterial.Icon.gmd_menu, v -> act.mDrawerLayout.openDrawer(GravityCompat.START));
+
     }
 
     @Nullable
@@ -136,6 +155,8 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         rvAlbums.setHasFixedSize(true);
         rvAlbums.setItemAnimator(new DefaultItemAnimator());
 
+        albumsAdapter = new AlbumsAdapter(getContext());
+
         albumsAdapter.getAlbumsClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -146,6 +167,8 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((album) -> updateToolbar());
 
+        //displayAlbums(false);
+
         rvAlbums.setAdapter(albumsAdapter);
         return rvAlbums;
 
@@ -154,6 +177,47 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
+        menu.findItem(R.id.select_all).setTitle(
+                getString(getSelectedCount() == getCount()
+                        ? R.string.clear_selected
+                        : R.string.select_all));
+
+        menu.findItem(R.id.ascending_sort_action).setChecked(sortingOrder == SortingOrder.ASCENDING);
+
+        switch (sortingMode) {
+            case NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
+            case SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
+            case DATE: default:
+                menu.findItem(R.id.date_taken_sort_action).setChecked(true); break;
+            case NUMERIC:  menu.findItem(R.id.numeric_sort_action).setChecked(true); break;
+        }
+    }
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        boolean editMode = editMode();
+        boolean oneSelected = getSelectedCount() == 1;
+
+        menu.setGroupVisible(R.id.album_options_menu, true);
+        menu.setGroupVisible(R.id.photos_option_men, false);
+
+        menu.findItem(R.id.type_sort_action).setVisible(false);
+        menu.findItem(R.id.filter_menu).setVisible(false);
+        menu.findItem(R.id.search_action).setVisible(true);
+
+        menu.findItem(R.id.renameAlbum).setVisible(oneSelected);
+        menu.findItem(R.id.set_pin_album).setVisible(oneSelected);
+        menu.findItem(R.id.clear_album_preview).setVisible(oneSelected);
+        menu.findItem(R.id.clear_album_preview).setVisible(oneSelected);
+
+        if (oneSelected)
+            menu.findItem(R.id.set_pin_album).setTitle(albumsAdapter.getFirstSelectedAlbum().isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
+
+        menu.findItem(R.id.delete_action).setVisible(editMode);
+        menu.findItem(R.id.shortcut).setVisible(editMode);
     }
 
     @Override
@@ -162,10 +226,11 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         switch (item.getItemId()) {
 
             case R.id.select_all:
-                if (albumsAdapter.getSelectedCount() == albumsAdapter.getItemCount()) {
+                if (albumsAdapter.getSelectedCount() == albumsAdapter.getItemCount())
                     albumsAdapter.clearSelectedAlbums();
-                } else albumsAdapter.selectAllAlbums();
+                else albumsAdapter.selectAllAlbums();
                 return true;
+
             case R.id.set_pin_album:
                 Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
                 if (selectedAlbum != null) {
@@ -174,6 +239,11 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                     albumsAdapter.sort();
                 }
                 // TODO: 3/24/17 notify
+                return true;
+
+            case R.id.shortcut:
+                HandlingAlbums.installShortcutForSelectedAlbums(getContext(), albumsAdapter.getSelectedAlbums());
+                albumsAdapter.clearSelectedAlbums();
                 return true;
 
         }
@@ -190,7 +260,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     }
 
     @Override
-    public boolean selecting() {
+    public boolean editMode() {
         return albumsAdapter.selecting();
     }
 
