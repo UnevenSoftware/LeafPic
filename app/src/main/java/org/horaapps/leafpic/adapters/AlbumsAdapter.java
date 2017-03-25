@@ -57,17 +57,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     private int selectedCount = 0;
 
     private ThemeHelper theme;
-    private PreferenceUtil SP;
     private BitmapDrawable placeholder;
     private CardViewStyle cvs;
 
+    public AlbumsAdapter(Context context) {
+        albums = new ArrayList<>();
+        updateTheme(ThemeHelper.getThemeHelper(context));
+    }
 
     public AlbumsAdapter(ArrayList<Album> ph, Context context) {
-        albums = new ArrayList<>();
-        theme = new ThemeHelper(context);
-        updateTheme(context);
+        this(context);
         albums.addAll(ph);
-
         sort();
     }
 
@@ -125,11 +125,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
     }
 
-    public void updateTheme(Context context) {
-        SP = PreferenceUtil.getInstance(context);
-        theme.updateTheme();
+    public void updateTheme(ThemeHelper theme) {
+        this.theme = theme;
         placeholder = ((BitmapDrawable) theme.getPlaceHolder());
-        cvs = CardViewStyle.fromValue(PreferenceUtil.getInt(context,"card_view_style", CardViewStyle.MATERIAL.getValue()));
+        cvs = theme.getCardViewStyle();
     }
 
     @Override
@@ -224,7 +223,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
-        holder.llCount.setVisibility(SP.getBoolean("show_n_photos", true) ? View.VISIBLE : View.GONE);
+        holder.llCount.setVisibility(PreferenceUtil.getBool(holder.llCount.getContext(), "show_n_photos", true) ? View.VISIBLE : View.GONE);
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
 

@@ -188,6 +188,10 @@ public class ThemeHelper {
 		return null;
 	}
 
+	public CardViewStyle getCardViewStyle() {
+		return CardViewStyle.fromValue(SP.getInt("card_view_style", CardViewStyle.MATERIAL.getValue()));
+	}
+
 	public static Drawable getPlaceHolder(Context context){
 		switch (getBaseTheme(context)){
 			case DARK: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);

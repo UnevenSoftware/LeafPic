@@ -146,7 +146,8 @@ public class CPHelper {
                 .args(selectionArgs)
                 .sort(MediaStore.Images.Media.DATE_MODIFIED)
                 .ascending(false)
-                .limit(n).build(), context.getContentResolver(), Media::new);
+                .limit(n)
+                .build(), context.getContentResolver(), Media::new);
     }
     //endregion
 

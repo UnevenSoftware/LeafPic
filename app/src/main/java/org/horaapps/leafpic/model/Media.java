@@ -98,7 +98,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
     public static String[] getProjection() {
         return new String[]{
                 MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATE_MODIFIED,
                 MediaStore.Images.Media.MIME_TYPE,
                 MediaStore.Images.Media.SIZE,
                 MediaStore.Images.Media.ORIENTATION

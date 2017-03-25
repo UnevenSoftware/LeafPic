@@ -211,7 +211,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         return getSettings(path, null);
     }
 
-    @NonNull public static AlbumSettings getSettings(SQLiteDatabase db, String path, String defaultCover) {
+    @NonNull public static AlbumSettings getSettings(SQLiteDatabase db, String path) {
         AlbumSettings settings = null;
         String[] selection = new  String[] { ALBUM_COVER_PATH, ALBUM_SORTING_MODE,
                 ALBUM_SORTING_ORDER, ALBUM_PINNED };
@@ -220,7 +220,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst())
             return new AlbumSettings(
-                    cursor.getString(0) == null ? defaultCover : cursor.getString(0),
+                    cursor.getString(0),
                     cursor.getInt(1),
                     cursor.getInt(2),
                     cursor.getInt(3));

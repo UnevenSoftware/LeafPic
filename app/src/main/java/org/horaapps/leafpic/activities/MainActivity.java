@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -33,7 +32,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,29 +41,25 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
-import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
-import org.horaapps.leafpic.new_way.CPHelper;
-import org.horaapps.leafpic.new_way.DataManager;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
@@ -77,9 +71,6 @@ import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
 
 public class MainActivity extends SharedMediaActivity {
 
@@ -87,9 +78,11 @@ public class MainActivity extends SharedMediaActivity {
 
     private PreferenceUtil SP;
 
-    private RecyclerView rvAlbums;
+    /*private RecyclerView rvAlbums;
     private AlbumsAdapter albumsAdapter;
-    private GridSpacingItemDecoration rvAlbumsDecoration;
+    private GridSpacingItemDecoration rvAlbumsDecoration;*/
+
+    AlbumsFragment albumsFragment;
 
     private RecyclerView rvMedia;
     private MediaAdapter mediaAdapter;
@@ -98,15 +91,15 @@ public class MainActivity extends SharedMediaActivity {
     private FloatingActionButton fabCamera;
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
     private CoordinatorLayout coordinatorMainLayout;
 
-    private boolean hidden = false, pickMode = false,  albumsMode = true, firstLaunch = true;
+    private boolean hidden = false, pickMode = false,  albumsMode = true;
 
 
     private boolean editMode() {
         if (albumsMode)
-            return albumsAdapter.selecting();
+            return albumsFragment.selecting();
         return false;
     }
 
@@ -179,7 +172,6 @@ public class MainActivity extends SharedMediaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        rvAlbums = (RecyclerView) findViewById(R.id.grid_albums);
         rvMedia = ((RecyclerView) findViewById(R.id.grid_photos));
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         fabCamera = (FloatingActionButton) findViewById(R.id.fab_camera);
@@ -196,20 +188,18 @@ public class MainActivity extends SharedMediaActivity {
     public void onResume() {
         super.onResume();
         updateColumnsRvs();
-        albumsAdapter.clearSelectedAlbums();
-        getAlbum().clearSelectedMedia();
+
+        albumsFragment.clearSelected();
+
+        //getAlbum().clearSelectedMedia();
 
         // TODO: 3/24/17
-        if (SP.getBoolean("auto_update_media", false)) {
+       /* if (SP.getBoolean("auto_update_media", false)) {
             if (albumsMode) { if (!firstLaunch) new PrepareAlbumTask().execute(); }
             else new PreparePhotosTask().execute();
-        } else {
-            albumsAdapter.notifyDataSetChanged();
-            mediaAdapter.notifyDataSetChanged();
-        }
-        supportInvalidateOptionsMenu();
-        firstLaunch = false;
+        }*/
 
+        supportInvalidateOptionsMenu();
     }
 
     private void displayCurrentAlbumMedia(boolean reload) {
@@ -236,12 +226,12 @@ public class MainActivity extends SharedMediaActivity {
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
         toolbar.setTitle(getString(R.string.app_name));
 
-
-        albumsAdapter.clear();
+        albumsFragment.displayAlbums(hidden);
+        /*albumsAdapter.clear();
         SQLiteDatabase db = HandlingAlbums.getInstance(this).getReadableDatabase();
         DataManager.getInstance()
                 .getAlbumsRelay(hidden)
-                /*.map(album -> album.withMediaObservable(CPHelper.getLastMedia(App.getInstance(), album.getId())))*/
+                *//*.map(album -> album.withMediaObservable(CPHelper.getLastMedia(App.getInstance(), album.getId())))*//*
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath(), null)))
 
@@ -266,7 +256,7 @@ public class MainActivity extends SharedMediaActivity {
                             Log.wtf("asd", "");
                             swipeRefreshLayout.setRefreshing(false);
                         })
-        ;
+        ;*/
 
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -281,7 +271,7 @@ public class MainActivity extends SharedMediaActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateColumnsRvs();
+        //updateColumnsRvs();
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             fabCamera.setVisibility(View.GONE);
         } else {
@@ -329,45 +319,17 @@ public class MainActivity extends SharedMediaActivity {
         setSupportActionBar(toolbar);
 
         /** RVS **/
-        rvAlbums.setHasFixedSize(true);
-        rvAlbums.setItemAnimator(new DefaultItemAnimator());
 
         rvMedia.setHasFixedSize(true);
         rvMedia.setItemAnimator(new DefaultItemAnimator());
-
-        // TODO: 3/21/17 redo
-        albumsAdapter = new AlbumsAdapter(new ArrayList<>(), MainActivity.this);
-        //albumsAdapter.setOnClickListener(albumOnClickListener);
-        //albumsAdapter.setOnLongClickListener(albumOnLongCLickListener);
-
-        albumsAdapter.getAlbumsClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> {
-                    Toast.makeText(this, album.toString(), Toast.LENGTH_SHORT).show();
-                });
-
-        albumsAdapter.getAlbumsSelectedClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> {
-                    updateSelectedStuff();
-                    invalidateOptionsMenu();
-                    //Toast.makeText(this, album.toString(), Toast.LENGTH_SHORT).show();
-                });
-        rvAlbums.setAdapter(albumsAdapter);
 
         mediaAdapter = new MediaAdapter(getAlbum().getMedia(), MainActivity.this);
         mediaAdapter.setOnClickListener(photosOnClickListener);
         mediaAdapter.setOnLongClickListener(photosOnLongClickListener);
         rvMedia.setAdapter(mediaAdapter);
 
-        int spanCount = SP.getInt("n_columns_folders", 2);
-        rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
-        rvAlbums.addItemDecoration(rvAlbumsDecoration);
-        rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCount));
 
-        spanCount = SP.getInt("n_columns_media", 3);
+        int spanCount = SP.getInt("n_columns_media", 3);
         rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
         rvMedia.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
         rvMedia.addItemDecoration(rvMediaDecoration);
@@ -380,7 +342,7 @@ public class MainActivity extends SharedMediaActivity {
                     //getAlbums().clearSelectedAlbums();
                     //new PrepareAlbumTask().execute();
                     displayAlbums();
-                    swipeRefreshLayout.setRefreshing(false);
+                    //swipeRefreshLayout.setRefreshing(false);
                 } else {
                     getAlbum().clearSelectedMedia();
                     new PreparePhotosTask().execute();
@@ -514,10 +476,8 @@ public class MainActivity extends SharedMediaActivity {
 
         fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         fabCamera.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
-        rvAlbums.setBackgroundColor(getBackgroundColor());
         rvMedia.setBackgroundColor(getBackgroundColor());
         mediaAdapter.updatePlaceholder(getApplicationContext());
-        albumsAdapter.updateTheme(getApplicationContext());
 
         setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
         Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
@@ -549,20 +509,13 @@ public class MainActivity extends SharedMediaActivity {
         setRecentApp(getString(R.string.app_name));
     }
 
+    @Deprecated
     private void updateColumnsRvs() {
-        int spanCountAlbums, spanCountMedias;
+        int  spanCountMedias;
         if (getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
-            spanCountAlbums = SP.getInt("n_columns_folders", 2);
             spanCountMedias = SP.getInt("n_columns_media", 3);
         } else {
-            spanCountAlbums = SP.getInt("n_columns_folders_landscape", 3);
             spanCountMedias = SP.getInt("n_columns_media_landscape", 4);
-        }
-        if (spanCountAlbums != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
-            rvAlbums.removeItemDecoration(rvAlbumsDecoration);
-            rvAlbumsDecoration = new GridSpacingItemDecoration(spanCountAlbums, Measure.pxToDp(3, getApplicationContext()), true);
-            rvAlbums.addItemDecoration(rvAlbumsDecoration);
-            rvAlbums.setLayoutManager(new GridLayoutManager(this, spanCountAlbums));
         }
         if (spanCountMedias != ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount()) {
             ((GridLayoutManager) rvMedia.getLayoutManager()).getSpanCount();
@@ -573,7 +526,18 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
-    public void updateSelectedStuff() {
+
+    public void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
+        updateToolbar(title, icon);
+        toolbar.setNavigationOnClickListener(onClickListener);
+    }
+
+    public void updateToolbar(String title, IIcon icon) {
+        toolbar.setTitle(title);
+        toolbar.setNavigationIcon(getToolbarIcon(icon));
+    }
+
+    public void updateToolbar() {
         if (albumsMode) {
             if (editMode()) toolbar.setTitle(String.format("%d/%d", albumsAdapter.getSelectedCount(), albumsAdapter.getItemCount()));
             else {
@@ -611,10 +575,11 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
+    @Deprecated
     private void finishEditMode() {
         //editMode = false;
         if (albumsMode) {
-            albumsAdapter.clearSelectedAlbums();
+            //albumsAdapter.clearSelectedAlbums();
             //albumsAdapter.notifyDataSetChanged();
         } else {
             getAlbum().clearSelectedMedia();
@@ -646,7 +611,7 @@ public class MainActivity extends SharedMediaActivity {
 
         if (albumsMode) {
             menu.findItem(R.id.select_all).setTitle(
-                    getString(albumsAdapter.getSelectedCount() == albumsAdapter.getItemCount()
+                    getString(albumsFragment.getSelectedCount() == albumsFragment.getCount()
                             ? R.string.clear_selected
                             : R.string.select_all));
             menu.findItem(R.id.ascending_sort_action).setChecked(getAlbums().getSortingOrder() == SortingOrder.ASCENDING);
@@ -706,7 +671,7 @@ public class MainActivity extends SharedMediaActivity {
         }
 
         togglePrimaryToolbarOptions(menu, editMode);
-        updateSelectedStuff();
+        updateToolbar();
 
         menu.findItem(R.id.select_all).setVisible(editMode);
         menu.findItem(R.id.exclude_action).setVisible(editMode);
@@ -715,12 +680,16 @@ public class MainActivity extends SharedMediaActivity {
         menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
 
         menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCover());
-        menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albumsAdapter.getSelectedCount() == 1) || (!albumsMode && !editMode));
+        menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albumsFragment.getSelectedCount() == 1) || (!albumsMode && !editMode));
 
-        Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
+
+        // TODO: 3/24/17 pin
+       /* Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
         if (selectedAlbum != null)
-            menu.findItem(R.id.set_pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
-        menu.findItem(R.id.set_pin_album).setVisible(albumsMode && albumsAdapter.getSelectedCount() == 1);
+            menu.findItem(R.id.set_pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));*/
+
+
+        menu.findItem(R.id.set_pin_album).setVisible(albumsMode && albumsFragment.getSelectedCount() == 1);
         menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode);
         menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
         return super.onPrepareOptionsMenu(menu);
@@ -740,7 +709,7 @@ public class MainActivity extends SharedMediaActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Album firstSelectedAlbum = albumsAdapter.getFirstSelectedAlbum();
+        //Album firstSelectedAlbum = albumsAdapter.getFirstSelectedAlbum();
 
         switch (item.getItemId()) {
 
@@ -760,19 +729,17 @@ public class MainActivity extends SharedMediaActivity {
                 supportInvalidateOptionsMenu();
                 return true;*/
 
-            case R.id.set_pin_album:
+            /*case R.id.set_pin_album:
                 Album selectedAlbum = firstSelectedAlbum;
                 if (selectedAlbum != null) {
                     selectedAlbum.togglePinAlbum(getApplicationContext());
                     albumsAdapter.clearSelectedAlbums();
                     albumsAdapter.sort();
                 }
-                /*getAlbums().sortAlbums(getApplicationContext());
-                getAlbums().clearSelectedAlbums();*/
-                //albumsAdapter.swapDataSet(getAlbums().albums);
+
 
                 supportInvalidateOptionsMenu();
-                return true;
+                return true;*/
 
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -783,7 +750,7 @@ public class MainActivity extends SharedMediaActivity {
                 finishEditMode();
                 return true;
 
-            case R.id.hideAlbumButton:
+/*            case R.id.hideAlbumButton:
                 final AlertDialog dialog = AlertDialogsHelper.getTextDialog(MainActivity.this,
                         hidden ? R.string.unhide : R.string.hide,
                         hidden ? R.string.unhide_album_message : R.string.hide_album_message);
@@ -948,7 +915,7 @@ public class MainActivity extends SharedMediaActivity {
                     }
                 });
                 alertDialog.show();
-                return true;
+                return true;*/
 
             case R.id.sharePhotos:
                 Intent intent = new Intent();
