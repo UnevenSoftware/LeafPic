@@ -144,7 +144,7 @@ public class CPHelper {
                 .projection(Media.getProjection())
                 .selection(selection)
                 .args(selectionArgs)
-                .sort(MediaStore.Images.Media.DATE_MODIFIED)
+                .sort(MediaStore.Images.Media.DATE_TAKEN)
                 .ascending(false)
                 .limit(n)
                 .build(), context.getContentResolver(), Media::new);

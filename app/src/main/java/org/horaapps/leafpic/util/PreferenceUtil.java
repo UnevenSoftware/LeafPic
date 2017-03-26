@@ -35,6 +35,14 @@ public class PreferenceUtil {
         return getInstance(context).getInt(key, defValue);
     }
 
+    public static void putInt(Context context, String key, int value) {
+        getInstance(context).putInt(key, value);
+    }
+
+    public static void putBool(Context context, String key, boolean value) {
+        getInstance(context).putBoolean(key, value);
+    }
+
     public SharedPreferences.Editor getEditor() {
         return SP.edit();
     }

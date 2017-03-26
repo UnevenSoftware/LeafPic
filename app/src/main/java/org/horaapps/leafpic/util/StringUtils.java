@@ -25,7 +25,9 @@ public class StringUtils {
         return  mime != null ? mime : "unknown";
     }
 
-
+    public static String[] asArray(String ... a) {
+        return a;
+    }
 
     public static String getGenericMIME(String mime) {
         return mime.split("/")[0] + "/*";

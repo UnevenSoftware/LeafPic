@@ -24,7 +24,7 @@ public class App extends Application {
 
     @Deprecated
     public Album getAlbum() {
-        return getAlbums().getCount() > 0 ? getAlbums().getCurrentAlbum() : Album.getEmptyAlbum();
+        return Album.getEmptyAlbum();
     }
 
     @Deprecated

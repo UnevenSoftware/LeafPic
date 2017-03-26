@@ -11,3 +11,6 @@
 /captures
 /scripts/crowdin.key
 /app/src/main/assets/secretconstants.properties
+
+# debug purpose
+inappstoragereader

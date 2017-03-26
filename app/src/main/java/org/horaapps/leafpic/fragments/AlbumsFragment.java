@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +28,7 @@ import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.HandlingAlbums;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.new_way.AlbumsHelper;
 import org.horaapps.leafpic.new_way.CPHelper;
 import org.horaapps.leafpic.new_way.DataManager;
 import org.horaapps.leafpic.util.Measure;
@@ -36,6 +37,10 @@ import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.util.Themeable;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -47,21 +52,21 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     private static final String TAG = "asd";
 
-    RecyclerView rvAlbums;
+    @BindView(R.id.albums) RecyclerView rvAlbums;
+    @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
+
     private AlbumsAdapter albumsAdapter;
     private GridSpacingItemDecoration rvAlbumsDecoration;
     MainActivity act;
 
 
-    SortingOrder sortingOrder;
-    SortingMode sortingMode;
+
+    boolean hidden;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        sortingMode = SortingMode.NUMERIC;
-        sortingOrder = SortingOrder.ASCENDING;
     }
 
 
@@ -74,17 +79,21 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     @Override
     public void onResume() {
         super.onResume();
+        clearSelected();
     }
 
     public void displayAlbums(boolean hidden) {
+        this.hidden = hidden;
+        displayAlbums();
+    }
+
+    public void displayAlbums() {
         albumsAdapter.clear();
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
         DataManager.getInstance()
                 .getAlbumsRelay(hidden)
-                /*.map(album -> album.withMediaObservable(CPHelper.getLastMedia(App.getInstance(), album.getId())))*/
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
-
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         album -> {
@@ -102,7 +111,8 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                         }, throwable -> { },
                         () -> {
                             db.close();
-                            act.swipeRefreshLayout.setRefreshing(false);
+                            act.nothingToShow(getCount() == 0);
+                            refresh.setRefreshing(false);
                         });
     }
 
@@ -130,22 +140,23 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     }
 
     private void updateToolbar() {
+        if (editMode())
 
-        if (editMode()) act.updateToolbar(
-                String.format("%d/%d", albumsAdapter.getSelectedCount(), albumsAdapter.getItemCount()),
-                GoogleMaterial.Icon.gmd_check, v -> albumsAdapter.clearSelectedAlbums());
-        else
+            //todo improve
             act.updateToolbar(
-                    getString(R.string.app_name),
-                    GoogleMaterial.Icon.gmd_menu, v -> act.mDrawerLayout.openDrawer(GravityCompat.START));
-
+                    String.format(Locale.ENGLISH, "%d/%d",
+                            albumsAdapter.getSelectedCount(), albumsAdapter.getItemCount()),
+                    GoogleMaterial.Icon.gmd_check,
+                    v -> albumsAdapter.clearSelectedAlbums());
+        else act.resetToolbar();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rvAlbums = new RecyclerView(getContext());
+        View v = inflater.inflate(R.layout.fragment_albums, null);
+        ButterKnife.bind(this, v);
 
         int spanCount = columnsCount();
         rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
@@ -155,23 +166,19 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         rvAlbums.setHasFixedSize(true);
         rvAlbums.setItemAnimator(new DefaultItemAnimator());
 
-        albumsAdapter = new AlbumsAdapter(getContext());
+        albumsAdapter = new AlbumsAdapter(
+                getContext(), sortingMode(), sortingOrder());
 
         albumsAdapter.getAlbumsClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(album -> Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show());
 
-        albumsAdapter.getAlbumsSelectedClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((album) -> updateToolbar());
-
-        //displayAlbums(false);
-
+        refresh.setOnRefreshListener(this::displayAlbums);
         rvAlbums.setAdapter(albumsAdapter);
-        return rvAlbums;
 
+        displayAlbums(false);
+        return v;
     }
 
     @Override
@@ -183,15 +190,31 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                         ? R.string.clear_selected
                         : R.string.select_all));
 
-        menu.findItem(R.id.ascending_sort_action).setChecked(sortingOrder == SortingOrder.ASCENDING);
+        menu.findItem(R.id.ascending_sort_action).setChecked(sortingOrder() == SortingOrder.ASCENDING);
 
-        switch (sortingMode) {
+        switch (sortingMode()) {
             case NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
             case SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
             case DATE: default:
                 menu.findItem(R.id.date_taken_sort_action).setChecked(true); break;
             case NUMERIC:  menu.findItem(R.id.numeric_sort_action).setChecked(true); break;
         }
+    }
+
+    public SortingMode sortingMode() {
+        return albumsAdapter != null
+                ? albumsAdapter.sortingMode()
+                : AlbumsHelper.getSortingMode(getContext());
+    }
+
+    public SortingOrder sortingOrder() {
+        return albumsAdapter != null
+                ? albumsAdapter.sortingOrder()
+                : AlbumsHelper.getSortingOrder(getContext());
+    }
+
+    private HandlingAlbums db() {
+        return HandlingAlbums.getInstance(getContext());
     }
 
 
@@ -234,7 +257,8 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
             case R.id.set_pin_album:
                 Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
                 if (selectedAlbum != null) {
-                    selectedAlbum.togglePinAlbum(getContext());
+                    selectedAlbum.togglePinAlbum();
+                    db().updatePinned(selectedAlbum);
                     albumsAdapter.clearSelectedAlbums();
                     albumsAdapter.sort();
                 }
@@ -242,8 +266,38 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 return true;
 
             case R.id.shortcut:
-                HandlingAlbums.installShortcutForSelectedAlbums(getContext(), albumsAdapter.getSelectedAlbums());
+                AlbumsHelper.createShortcuts(getContext(), albumsAdapter.getSelectedAlbums());
                 albumsAdapter.clearSelectedAlbums();
+                return true;
+
+            case R.id.name_sort_action:
+                albumsAdapter.changeSortingMode(SortingMode.NAME);
+                AlbumsHelper.setSortingMode(getContext(), SortingMode.NAME);
+                item.setChecked(true);
+                return true;
+
+            case R.id.date_taken_sort_action:
+                albumsAdapter.changeSortingMode(SortingMode.DATE);
+                AlbumsHelper.setSortingMode(getContext(), SortingMode.DATE);
+                item.setChecked(true);
+                return true;
+
+            case R.id.size_sort_action:
+                albumsAdapter.changeSortingMode(SortingMode.SIZE);
+                AlbumsHelper.setSortingMode(getContext(), SortingMode.SIZE);
+                item.setChecked(true);
+                return true;
+
+            case R.id.numeric_sort_action:
+                albumsAdapter.changeSortingMode(SortingMode.NUMERIC);
+                AlbumsHelper.setSortingMode(getContext(), SortingMode.NUMERIC);
+                item.setChecked(true);
+                return true;
+
+            case R.id.ascending_sort_action:
+                albumsAdapter.changeSortingOrder(SortingOrder.fromValue(item.isChecked()));
+                AlbumsHelper.setSortingOrder(getContext(), sortingOrder());
+                item.setChecked(!item.isChecked());
                 return true;
 
         }
@@ -270,8 +324,10 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     }
 
     @Override
-    public void refreshTheme(ThemeHelper themeHelper) {
-        rvAlbums.setBackgroundColor(themeHelper.getBackgroundColor());
-        albumsAdapter.updateTheme(themeHelper);
+    public void refreshTheme(ThemeHelper t) {
+        rvAlbums.setBackgroundColor(t.getBackgroundColor());
+        albumsAdapter.updateTheme(t);
+        refresh.setColorSchemeColors(t.getAccentColor());
+        refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
     }
 }

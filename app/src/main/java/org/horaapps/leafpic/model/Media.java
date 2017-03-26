@@ -24,7 +24,6 @@ import org.horaapps.leafpic.model.base.MediaDetailsMap;
 import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.MediaSignature;
 import org.horaapps.leafpic.util.StringUtils;
-import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,7 +97,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
     public static String[] getProjection() {
         return new String[]{
                 MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DATE_MODIFIED,
+                MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.MIME_TYPE,
                 MediaStore.Images.Media.SIZE,
                 MediaStore.Images.Media.ORIENTATION
@@ -154,7 +153,6 @@ public class Media implements Parcelable, Serializable, CursorHandler {
     public Long getDateModified() {
         return dateModified;
     }
-
 
     public Bitmap getBitmap(){
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -316,7 +314,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
     }
 
     //<editor-fold desc="Thumbnail Tests">
-    @TestOnly public byte[] getThumbnail() {
+    public byte[] getThumbnail() {
 
         ExifInterface exif;
         try {
@@ -337,7 +335,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         } catch (Exception e) { return null; }*/
     }
 
-    @TestOnly public String getThumbnail(Context context) {
+    public String getThumbnail(Context context) {
         /*Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                 context.getContentResolver(), id,
                 MediaStore.Images.Thumbnails.MINI_KIND,

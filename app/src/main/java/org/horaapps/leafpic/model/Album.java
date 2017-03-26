@@ -77,7 +77,7 @@ public class Album implements Serializable, CursorHandler {
 	@Deprecated
 	public Album(Context context, String path, long id, String name, int count) {
 		this(path, name, id, count);
-		settings = AlbumSettings.getSettings(context, this);
+		settings = AlbumSettings.getDefaults();
 	}
 
 	public static Album getEmptyAlbum() {
@@ -371,31 +371,30 @@ public class Album implements Serializable, CursorHandler {
 	}
 
 	public void removeCoverAlbum(Context context) {
-		HandlingAlbums.getInstance(context).setAlbumPhotoPreview(path, null);
+		//HandlingAlbums.getInstance(context).setCover(path, null);
 		settings.coverPath = null;
 	}
 
 	public void setSelectedPhotoAsPreview(Context context) {
 		if (selectedMedia.size() > 0) {
 			String asd = selectedMedia.get(0).getPath();
-			HandlingAlbums.getInstance(context).setAlbumPhotoPreview(this.path, asd);
+			//HandlingAlbums.getInstance(context).setCover(this.path, asd);
 			settings.coverPath = asd;
 		}
 	}
 
 	public void setDefaultSortingMode(Context context, SortingMode column) {
 		settings.sortingMode = column.getValue();
-		HandlingAlbums.getInstance(context).setAlbumSortingMode(path, column.getValue());
+		//HandlingAlbums.getInstance(context).setSortingMode(path, column.getValue());
 	}
 
 	public void setDefaultSortingAscending(Context context, SortingOrder sortingOrder) {
 		settings.sortingOrder = sortingOrder.getValue();
-		HandlingAlbums.getInstance(context).setAlbumSortingOrder(path, sortingOrder.getValue());
+		//HandlingAlbums.getInstance(context).setSortingOrder(path, sortingOrder.getValue());
 	}
 
-	public void togglePinAlbum(Context context) {
+	public void togglePinAlbum() {
 		settings.pinned = !settings.pinned;
-		HandlingAlbums.getInstance(context).pinAlbum(path, settings.pinned);
 	}
 
 	//endregion

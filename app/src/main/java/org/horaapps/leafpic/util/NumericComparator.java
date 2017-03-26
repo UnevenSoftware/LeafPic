@@ -18,14 +18,6 @@
 
 package org.horaapps.leafpic.util;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
-
 /* Copied from GNU coreutils-8.23/lib/filevercmp.c
    Java implementation is highly inefficient, because it copies strings symbol by symbol. */
 public class NumericComparator {
@@ -52,9 +44,8 @@ public class NumericComparator {
   This function is intended to be a replacement for strverscmp. */
 
   public static int filevercmp (String s1, String s2) {
-    String s1_suffix = "", s2_suffix = "";
-    int s1_len = 0, s2_len = 0;
-    int result = 0;
+    String s1_suffix, s2_suffix;
+    int s1_len, s2_len, result;
 
     /* easy comparison to see if strings are identical */
     int simple_cmp = strcmp (s1, s2);

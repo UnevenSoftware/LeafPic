@@ -22,6 +22,7 @@ import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.AlbumsComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
+import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -31,7 +32,6 @@ import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,40 +43,60 @@ import io.reactivex.subjects.PublishSubject;
 /**
  * Created by dnld on 1/7/16.
  */
-public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
-
-
+public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
     private List<Album> albums;
-
-    Comparator<Album> c = AlbumsComparators.getComparator(SortingMode.DATE);
 
     private final PublishSubject<Album> onClickSubject = PublishSubject.create();
     private final PublishSubject<Album> onChangeSelectedSubject = PublishSubject.create();
 
     private int selectedCount = 0;
 
+    private SortingOrder sortingOrder;
+    private SortingMode sortingMode;
+
+    public SortingOrder sortingOrder() {
+        return sortingOrder;
+    }
+
+    public void changeSortingOrder(SortingOrder sortingOrder) {
+        this.sortingOrder = sortingOrder;
+        reverseOrder();
+        notifyDataSetChanged();
+    }
+
+    public SortingMode sortingMode() {
+        return sortingMode;
+    }
+
+    public void changeSortingMode(SortingMode sortingMode) {
+        this.sortingMode = sortingMode;
+        sort();
+    }
+
     private ThemeHelper theme;
     private BitmapDrawable placeholder;
     private CardViewStyle cvs;
 
-    public AlbumsAdapter(Context context) {
+    public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
         albums = new ArrayList<>();
         updateTheme(ThemeHelper.getThemeHelper(context));
+        this.sortingMode = sortingMode;
+        this.sortingOrder = sortingOrder;
     }
 
-    public AlbumsAdapter(ArrayList<Album> ph, Context context) {
-        this(context);
-        albums.addAll(ph);
-        sort();
+    public AlbumsAdapter(Context context) {
+        this(context, SortingMode.DATE, SortingOrder.DESCENDING);
     }
 
     public void sort() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            albums = albums.stream().sorted(c).collect(Collectors.toList());
-        else Collections.sort(albums, c);
-
-        Collections.reverse(albums);
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            albums.sort(AlbumsComparators.getComparator(sortingMode));
+            //albums = albums.stream().sorted(AlbumsComparators.getComparator(sortingMode)).collect(Collectors.toList());
+        else Collections.sort(albums, AlbumsComparators.getComparator(sortingMode));*/
+        Collections.sort(albums, AlbumsComparators.getComparator(sortingMode, sortingOrder));
+        /*if (sortingOrder.equals(SortingOrder.DESCENDING))
+            reverseOrder();*/
         notifyDataSetChanged();
     }
 
@@ -140,11 +160,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
             case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
         }
-        v.setOnClickListener(this);
-        v.setOnLongClickListener(this);
         return new ViewHolder(v);
     }
-
 
     private void notifySelected(boolean increase) {
         selectedCount += increase ? 1 : -1;
@@ -232,33 +249,26 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         holder.nMedia.setText(StringUtils.html(albumPhotoCountHtml));
     }
 
-    public void setOnClickListener(View.OnClickListener lis) {
-        //mOnClickListener = lis;
-    }
-
-    public void setOnLongClickListener(View.OnLongClickListener lis) {
-        //mOnLongClickListener = lis;
-    }
-
-    public void swapDataSet(ArrayList<Album> asd) {
-
-        // TODO improve this
-        albums.clear();
-        albums.addAll(asd);
-        sort();
-        //notifyDataSetChanged();
-    }
-
     public void clear() {
         albums.clear();
         notifyDataSetChanged();
     }
 
     public void addAlbum(Album album) {
-        albums.add(album);
-        sort();
-        //notifyDataSetChanged();
-        //notifyItemInserted(albums.size()-1);
+        int i = Collections.binarySearch(
+                albums, album, AlbumsComparators.getComparator(sortingMode, sortingOrder));
+        if (i < 0) i = ~i;
+        albums.add(i, album);
+        notifyItemInserted(i);
+    }
+
+    private void reverseOrder() {
+        int z = 0, size = getItemCount();
+        while (z < size && albums.get(0).isPinned())
+            z++;
+
+        for (int i = Math.max(0, z), mid = (i+size)>>1, j = size-1; i < mid; i++, j--)
+             Collections.swap(albums, i, j);
     }
 
     @Override
@@ -266,16 +276,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return albums.size();
     }
 
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        return false;
-    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.album_card) CardView card;

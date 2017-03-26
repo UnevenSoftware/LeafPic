@@ -167,10 +167,10 @@ public class SplashScreen extends SharedMediaActivity {
 
         @Override
         protected Boolean doInBackground(Void... arg0) {
-            if(!getAlbums().restoreBackup(getApplicationContext()) || getAlbums().getCount() == 0) {
+            /*if(!getAlbums().restoreBackup(getApplicationContext()) || getAlbums().getCount() == 0) {
                 getAlbums().loadAlbums(getApplicationContext(), false);
                 return true;
-            }
+            }*/
             return false;
         }
 
@@ -188,8 +188,8 @@ public class SplashScreen extends SharedMediaActivity {
             } else
                 startActivityForResult(i, PICK_MEDIA_REQUEST);
 
-            if(result)
-                getAlbums().saveBackup(getApplicationContext());
+            //if(result)
+                //getAlbums().saveBackup(getApplicationContext());
         }
     }
 
@@ -204,7 +204,7 @@ public class SplashScreen extends SharedMediaActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            getAlbums().addAlbum(0, tmpAlbum);
+            //getAlbums().addAlbum(0, tmpAlbum);
             i.putExtra(CONTENT, PHOTOS_PREFETCHED);
             startActivity(i);
             finish();

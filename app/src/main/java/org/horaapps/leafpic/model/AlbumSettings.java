@@ -1,8 +1,5 @@
 package org.horaapps.leafpic.model;
 
-import android.content.Context;
-
-import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
@@ -15,21 +12,12 @@ import java.io.Serializable;
 public class AlbumSettings implements Serializable {
 
     String coverPath;
-    int sortingMode;
-    int sortingOrder;
+    int sortingMode, sortingOrder;
     boolean pinned;
     FilterMode filterMode = FilterMode.ALL;
 
-    static AlbumSettings getSettings(Context context, Album album) {
-        return HandlingAlbums.getInstance(context).getSettings(album.getPath());
-    }
-
-    static AlbumSettings getSettings(String albumPath, String defaultCover) {
-        return HandlingAlbums.getInstance(App.getInstance()).getSettings(albumPath, defaultCover);
-    }
-
     public static AlbumSettings getDefaults() {
-        return new AlbumSettings(null, SortingMode.DATE.getValue(), SortingOrder.DESCENDING.getValue(), 0);
+        return new AlbumSettings(null, SortingMode.DATE.getValue(), 1, 0);
     }
 
     AlbumSettings(String cover, int sortingMode, int sortingOrder, int pinned) {

@@ -125,7 +125,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     if (album.addMedia(media)) album.setCount(1);
                     customUri = true;
                 }
-                getAlbums().addAlbum(0, album);
+                //getAlbums().addAlbum(0, album);
             }
 
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());
@@ -321,7 +321,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         if (getAlbum().getMedia().size() == 0) {
             if (customUri) finish();
             else {
-                getAlbums().removeCurrentAlbum();
+                //getAlbums().removeCurrentAlbum();
                 displayAlbums(false);
             }
         }
@@ -477,7 +477,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                                 if (getAlbum().getMedia().size() == 0) {
                                     if (customUri) finish();
                                     else {
-                                        getAlbums().removeCurrentAlbum();
+                                        //getAlbums().removeCurrentAlbum();
                                         displayAlbums(false);
                                     }
                                 }
