@@ -62,7 +62,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         View v;
         switch (cvs) {
             default:
-            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material_test, parent, false); break;
+            case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
             case COMPACT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_compact, parent, false); break;
         }
@@ -124,6 +124,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         holder.name.setText(StringUtils.html(albumNameHtml));
         holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
 
+        holder.itemView.findViewById(R.id.album_path).setVisibility(SP.getBoolean("show_album_path", false) ? View.VISIBLE : View.GONE);
+        ((TextView) holder.itemView.findViewById(R.id.album_path)).setTextColor(theme.getSubTextColor());
+        ((TextView) holder.itemView.findViewById(R.id.album_path)).setText(a.getPath().toString());
+        ((TextView) holder.itemView.findViewById(R.id.album_path)).setSelected(true);
+
         //START Animation MAKES BUG ON FAST TAP ON CARD
         //Animation anim;
         //anim = AnimationUtils.loadAnimation(holder.albumCard.getContext(), R.anim.slide_fade_card);
@@ -163,7 +168,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             super(itemView);
             picture = (ImageView) itemView.findViewById(org.horaapps.leafpic.R.id.album_preview);
             selectedIcon = itemView.findViewById(org.horaapps.leafpic.R.id.selected_icon);
-            llMdia = itemView.findViewById(R.id.ll_n_media);
+            llMdia = itemView.findViewById(R.id.ll_media_count);
             layout = itemView.findViewById(org.horaapps.leafpic.R.id.ll_album_info);
             name = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_name);
             nPhotos = (TextView) itemView.findViewById(org.horaapps.leafpic.R.id.album_media_count);

@@ -65,6 +65,7 @@ import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
@@ -122,10 +123,15 @@ public class MainActivity extends SharedMediaActivity {
                     mediaAdapter.notifyItemChanged(getAlbum().toggleSelectMedia(m));
                     supportInvalidateOptionsMenu();
                 } else {
-                    getAlbum().setCurrentMedia(m);
-                    Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
-                    intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                    startActivity(intent);
+                    if(SP.getBoolean("video_instant_play", false) && m.isVideo()) {
+                        startActivity(new Intent(Intent.ACTION_VIEW)
+                                .setDataAndType(ContentHelper.getUriForFile(getApplicationContext(), m.getFile()), m.getMimeType()));
+                    } else {
+                        getAlbum().setCurrentMedia(m);
+                        Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
+                        intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
+                        startActivity(intent);
+                    }
                 }
             } else {
                 setResult(RESULT_OK, new Intent().setData(m.getUri()));
@@ -664,14 +670,11 @@ public class MainActivity extends SharedMediaActivity {
             menu.findItem(R.id.search_action).setVisible(albumsMode);
         }
     }
-
     //endregion
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-
             case R.id.select_all:
                 if (albumsMode) {
                     if (getAlbums().getSelectedCount() == albumsAdapter.getItemCount()) {
@@ -1061,6 +1064,19 @@ public class MainActivity extends SharedMediaActivity {
                 final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
                 final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
 
+                //region Example
+                final LinearLayout llExample = (LinearLayout) dialogLayout.findViewById(R.id.affix_example);
+                llExample.setBackgroundColor(getBackgroundColor());
+                llExample.setVisibility(SP.getBoolean("show_tips", true) ? View.VISIBLE : View.GONE);
+                final LinearLayout llExampleH = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_horizontal);
+                //llExampleH.setBackgroundColor(getCardBackgroundColor());
+                final LinearLayout llExampleV = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_vertical);
+                //llExampleV.setBackgroundColor(getCardBackgroundColor());
+
+
+
+                //endregion
+
                 //region THEME STUFF
                 setScrollViewColor((ScrollView) dialogLayout.findViewById(R.id.affix_scrollView));
 
@@ -1069,6 +1085,13 @@ public class MainActivity extends SharedMediaActivity {
                 ((TextView) dialogLayout.findViewById(R.id.affix_vertical_title)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.compression_settings_title)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
+
+                //Example Stuff
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setTextColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setTextColor(color);
+
 
                 /** Sub TextViews **/
                 color = getSubTextColor();
@@ -1083,6 +1106,13 @@ public class MainActivity extends SharedMediaActivity {
                 ((IconicsImageView) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
                 ((IconicsImageView) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
                 ((IconicsImageView) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
+
+                //Example bg
+                color=getCardBackgroundColor();
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setBackgroundColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setBackgroundColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setBackgroundColor(color);
+                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setBackgroundColor(color);
 
                 seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
                 seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
@@ -1115,6 +1145,8 @@ public class MainActivity extends SharedMediaActivity {
                     public void onClick(View v) {
                         swVertical.setChecked(!swVertical.isChecked());
                         setSwitchColor(getAccentColor(), swVertical);
+                        llExampleH.setVisibility(swVertical.isChecked() ? View.GONE : View.VISIBLE);
+                        llExampleV.setVisibility(swVertical.isChecked() ? View.VISIBLE : View.GONE);
                     }
                 });
 

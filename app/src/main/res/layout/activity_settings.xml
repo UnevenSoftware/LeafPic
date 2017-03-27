@@ -86,6 +86,16 @@
                         app:settingIcon="gmd-add-circle"
                         app:settingPreferenceKey="@string/preference_show_fab"
                         app:settingTitle="@string/fab_options"/>
+
+                    <!-- TIPS -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_tips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/option_show_tips_sub"
+                        app:settingIcon="gmd-info"
+                        app:settingPreferenceKey="@string/preference_show_tips"
+                        app:settingTitle="@string/option_show_tips"/>
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemeableCardView>
 
@@ -291,6 +301,16 @@
                         app:settingIcon="gmd-videocam"
                         app:settingPreferenceKey="@string/preference_swipe_direction_inverted"
                         app:settingTitle="@string/include_video"/>
+
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_instant_play_video"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/video_instant_play_sub"
+                        app:settingIcon="gmd-play-arrow"
+                        app:settingPreferenceKey="@string/preference_video_instant_play"
+                        app:settingTitle="@string/video_instant_play"/>
+
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemeableCardView>
 

@@ -53,6 +53,13 @@
                         android:id="@+id/show_media_count"
                         android:text="@string/show_media_count"/>
 
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/medium_text"
+                        android:id="@+id/show_album_path"
+                        android:text="@string/show_album_path"/>
+
                     <RadioButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

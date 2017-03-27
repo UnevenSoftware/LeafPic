@@ -99,6 +99,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="show_preview_image_name">Show preview image name</string>
     <string name="show_media_count">Show media count</string>
     <string name="changelog">Changelog</string>
+    <string name="album_path">Album Path</string>
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>
@@ -173,6 +174,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="auto_update_media_sub">You should disable if there are a large number of images.</string>
     <string name="traslucent_statusbar">Translucent Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
+    <string name="option_show_tips">Show Tips</string>
+    <string name="option_show_tips_sub">It help you to understand the use of some feature.</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>
@@ -197,6 +200,9 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="load_full_image_when_zoom_in">Load full image when zoomed in</string>
     <string name="media_viewer_swipe_direction">Swipe Direction</string>
     <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(Default: Left to Right)</string>
+
+    <string name="video_instant_play">Instant Play</string>
+    <string name="video_instant_play_sub">It allows you to instantlly play the video, skipping the preview.</string>
 
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>

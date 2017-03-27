@@ -440,13 +440,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_delete:
                 final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(SingleMediaActivity.this, R.string.delete, R.string.delete_photo_message);
-                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         textDialog.dismiss();
                     }
                 });
-                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Security.isPasswordOnDelete(getApplicationContext())) {
 
