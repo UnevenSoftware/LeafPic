@@ -40,14 +40,6 @@ public class Album implements Serializable, CursorHandler {
 	@Deprecated private ArrayList<Media> selectedMedia;
 
 
-	public static String[] projection = new String[]{
-			MediaStore.Files.FileColumns.PARENT,
-			MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-			"count(*)",
-			MediaStore.Images.Media.DATA,
-			"max("+MediaStore.Images.Media.DATE_MODIFIED+")"
-	};
-
 	public Album(String path, String name) {
 		media = new ArrayList<>();
 		selectedMedia = new ArrayList<>();
@@ -67,6 +59,16 @@ public class Album implements Serializable, CursorHandler {
 				cur.getLong(0),
 				cur.getInt(2));
 		dateModified = cur.getLong(4);
+	}
+
+	public static String[] getProjection() {
+		return new String[]{
+				MediaStore.Files.FileColumns.PARENT,
+				MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+				"count(*)",
+				MediaStore.Images.Media.DATA,
+				"max(" + MediaStore.Images.Media.DATE_MODIFIED + ")"
+		};
 	}
 
 	@Override

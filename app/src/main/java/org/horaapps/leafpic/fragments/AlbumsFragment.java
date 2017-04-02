@@ -90,12 +90,14 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         albumsAdapter.clear();
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
         DataManager.getInstance()
-                .getAlbumsRelay(hidden)
+                .getAlbumsRelay(getContext(), hidden)
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         album -> {
+
+                            Log.wtf("asd", album.toString());
                             if (album.hasCover())
                                 albumsAdapter.addAlbum(album);
                             else

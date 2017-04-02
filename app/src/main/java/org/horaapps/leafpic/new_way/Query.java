@@ -3,11 +3,9 @@ package org.horaapps.leafpic.new_way;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-
-import org.horaapps.leafpic.util.StringUtils;
+import android.os.Build;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 public class Query {
 
@@ -16,48 +14,57 @@ public class Query {
     public String selection;
     public String[] args;
     public String sort;
-    public boolean ascending = true;
-    public int limit = -1;
+    public boolean ascending;
+    public int limit;
 
     Query(Builder builder) {
         uri = builder.uri;
         projection = builder.projection;
         selection = builder.selection;
-        args = builder.args;
+        args = builder.getStringArgs();
         sort = builder.sort;
         ascending = builder.ascending;
+        limit = builder.limit;
     }
 
     public Cursor getCursor(ContentResolver cr) {
-        //Log.wtf("asd",hack());
         return cr.query(uri, projection, selection, args, hack());
     }
 
     private String hack() {
         if (sort == null && limit == -1) return null;
-        return StringUtils.join(" ", sort, sortOrder(), limit());
-    }
 
-    private String limit() {
-        return limit == -1 ? "" : String.format(Locale.CANADA,"LIMIT %d", limit);
-    }
+        StringBuilder builder = new StringBuilder();
+        if (sort != null)
+            builder.append(sort);
 
-    private String sortOrder() {
-        return ascending ? "ASC" : "DESC";
+            // Sorting by Relative Position
+            // ORDER BY 1
+            // sort by the first column in the PROJECTION
+            // otherwise the LIMIT should not work
+        else builder.append(1);
+
+        builder.append(" ");
+
+        if (!ascending)
+            builder.append("DESC").append(" ");
+
+        if (limit != -1)
+            builder.append("LIMIT").append(" ").append(limit);
+
+        return builder.toString();
     }
 
     public static final class Builder {
-        Uri uri;
-        String[] projection;
-        String selection;
-        String[] args;
-        String sort;
+        Uri uri = null;
+        String[] projection = null;
+        String selection = null;
+        Object[] args = null;
+        String sort = null;
         int limit = -1;
-        public boolean ascending = true;
+        boolean ascending = false;
 
-
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder uri(Uri val) {
             uri = val;
@@ -74,7 +81,7 @@ public class Query {
             return this;
         }
 
-        public Builder args(String[] val) {
+        public Builder args(Object ... val) {
             args = val;
             return this;
         }
@@ -98,8 +105,13 @@ public class Query {
             return new Query(this);
         }
 
-        public Cursor cursor(ContentResolver cr) {
-            return build().getCursor(cr);
+        public String[] getStringArgs() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                return Arrays.stream(args).map(Object::toString).toArray(String[]::new);
+
+            String[] list = new String[args.length];
+            for (int i = 0; i < args.length; i++) list[i] = String.valueOf(args[i]);
+            return list;
         }
     }
 
@@ -107,10 +119,11 @@ public class Query {
     public String toString() {
         return "Query{" +
                 "\nuri=" + uri +
-                "\nPROJECTION=" + Arrays.toString(projection) +
+                "\nprojection=" + Arrays.toString(projection) +
                 "\nselection='" + selection + '\'' +
                 "\nargs=" + Arrays.toString(args) +
-                "\nsort='" + sort  +" "+ sortOrder()+ '\'' +
+                "\nsortMode='" + sort +'\'' +
+                "\nascending='" + ascending+ '\'' +
                 "\nlimit='" + limit + '\'' +
                 '}';
     }

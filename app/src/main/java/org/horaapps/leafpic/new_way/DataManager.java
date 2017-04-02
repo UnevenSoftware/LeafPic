@@ -1,6 +1,8 @@
 package org.horaapps.leafpic.new_way;
 
 
+import android.content.Context;
+
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.ReplayRelay;
 
@@ -43,9 +45,9 @@ public class DataManager {
 
     }
 
-    public Observable<Album> getAlbumsRelay(boolean hidden) {
+    public Observable<Album> getAlbumsRelay(Context context, boolean hidden) {
         ReplaySubject<Album> as = ReplaySubject.create();
-        CPHelper.getAlbums(hidden)
+        CPHelper.getAlbums(context, hidden)
                 .subscribe(as);
         return as;
     }
