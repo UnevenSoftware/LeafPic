@@ -55,6 +55,29 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     private SortingOrder sortingOrder;
     private SortingMode sortingMode;
 
+    private ThemeHelper theme;
+    private BitmapDrawable placeholder;
+    private CardViewStyle cvs;
+
+    public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
+        albums = new ArrayList<>();
+        updateTheme(ThemeHelper.getThemeHelper(context));
+        this.sortingMode = sortingMode;
+        this.sortingOrder = sortingOrder;
+    }
+
+    public void sort() {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            albums.sort(AlbumsComparators.getComparator(sortingMode));
+            //albums = albums.stream().sorted(AlbumsComparators.getComparator(sortingMode)).collect(Collectors.toList());
+        else Collections.sort(albums, AlbumsComparators.getComparator(sortingMode));*/
+        Collections.sort(albums, AlbumsComparators.getComparator(sortingMode, sortingOrder));
+        /*if (sortingOrder.equals(SortingOrder.DESCENDING))
+            reverseOrder();*/
+
+        notifyDataSetChanged();
+    }
+
     public SortingOrder sortingOrder() {
         return sortingOrder;
     }
@@ -72,32 +95,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public void changeSortingMode(SortingMode sortingMode) {
         this.sortingMode = sortingMode;
         sort();
-    }
-
-    private ThemeHelper theme;
-    private BitmapDrawable placeholder;
-    private CardViewStyle cvs;
-
-    public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
-        albums = new ArrayList<>();
-        updateTheme(ThemeHelper.getThemeHelper(context));
-        this.sortingMode = sortingMode;
-        this.sortingOrder = sortingOrder;
-    }
-
-    public AlbumsAdapter(Context context) {
-        this(context, SortingMode.DATE, SortingOrder.DESCENDING);
-    }
-
-    public void sort() {
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            albums.sort(AlbumsComparators.getComparator(sortingMode));
-            //albums = albums.stream().sorted(AlbumsComparators.getComparator(sortingMode)).collect(Collectors.toList());
-        else Collections.sort(albums, AlbumsComparators.getComparator(sortingMode));*/
-        Collections.sort(albums, AlbumsComparators.getComparator(sortingMode, sortingOrder));
-        /*if (sortingOrder.equals(SortingOrder.DESCENDING))
-            reverseOrder();*/
-        notifyDataSetChanged();
     }
 
     public List<Album> getSelectedAlbums() {
@@ -264,7 +261,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     private void reverseOrder() {
         int z = 0, size = getItemCount();
-        while (z < size && albums.get(0).isPinned())
+        while (z < size && albums.get(z).isPinned())
             z++;
 
         for (int i = Math.max(0, z), mid = (i+size)>>1, j = size-1; i < mid; i++, j--)

@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
-    maven  { url "http://repo1.maven.org/maven2" }
     maven { url  "http://dl.bintray.com/dasar/maven" }
 }
 

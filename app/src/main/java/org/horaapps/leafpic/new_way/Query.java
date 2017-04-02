@@ -3,7 +3,6 @@ package org.horaapps.leafpic.new_way;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -30,7 +29,7 @@ public class Query {
     }
 
     public Cursor getCursor(ContentResolver cr) {
-        Log.wtf("asd",hack());
+        //Log.wtf("asd",hack());
         return cr.query(uri, projection, selection, args, hack());
     }
 

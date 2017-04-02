@@ -36,22 +36,6 @@ public class AlbumsComparators {
         return (o1, o2) -> comparator.compare(o2, o1);
     }
 
-    /*private static Comparator<Album> getNameComparator(final SortingOrder sortingOrder) {
-        return (a1, a2) -> {
-            switch (sortingOrder) {
-                case ASCENDING:
-                    if (a1.isPinned() == a2.isPinned())
-                        return a1.getName().toLowerCase().compareTo(a2.getName().toLowerCase());
-                    return a1.isPinned() ? -1 : 1;
-
-                case DESCENDING: default:
-                    if (a1.isPinned() == a2.isPinned())
-                        return a2.getName().toLowerCase().compareTo(a1.getName().toLowerCase());
-                    return a2.isPinned() ? 1 : -1;
-            }
-        };
-    }*/
-
     private static Comparator<Album> getBaseComparator(SortingOrder sortingOrder) {
         return sortingOrder == SortingOrder.ASCENDING
                 ? getPinned() : getReversedPinned();
@@ -65,10 +49,7 @@ public class AlbumsComparators {
     }
 
     private static Comparator<Album> getReversedPinned() {
-        return (o1, o2) -> {
-            if (o1.isPinned() == o2.isPinned()) return 0;
-            return o2.isPinned() ? 1 : -1;
-        };
+        return (o1, o2) -> getPinned().compare(o2, o1);
     }
 
     private static Comparator<Album> getDateComparator(Comparator<Album> base){

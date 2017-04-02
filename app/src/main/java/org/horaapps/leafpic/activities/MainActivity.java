@@ -255,11 +255,18 @@ public class MainActivity extends SharedMediaActivity {
 
         // TODO: 3/25/17 organize better
         /**** DRAWER ****/
-        drawer.addDrawerListener(new ActionBarDrawerToggle(this,
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,
                 drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) {  }
-            public void onDrawerOpened(View drawerView) {  }
-        });
+            public void onDrawerClosed(View view) {
+            }
+
+            public void onDrawerOpened(View drawerView) {
+            }
+        };
+
+        drawer.addDrawerListener(drawerToggle);
+
+        drawerToggle.syncState();
 
         findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
             @Override

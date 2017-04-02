@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,10 +58,8 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     private AlbumsAdapter albumsAdapter;
     private GridSpacingItemDecoration rvAlbumsDecoration;
+
     MainActivity act;
-
-
-
     boolean hidden;
 
     @Override
@@ -141,7 +140,6 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     private void updateToolbar() {
         if (editMode())
-
             //todo improve
             act.updateToolbar(
                     String.format(Locale.ENGLISH, "%d/%d",
@@ -174,6 +172,11 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(album -> Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show());
 
+        albumsAdapter.getAlbumsSelectedClicks()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(album -> updateToolbar());
+
         refresh.setOnRefreshListener(this::displayAlbums);
         rvAlbums.setAdapter(albumsAdapter);
 
@@ -189,6 +192,8 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 getString(getSelectedCount() == getCount()
                         ? R.string.clear_selected
                         : R.string.select_all));
+
+        Log.d(TAG, "onCreateOptionsMenu: " +sortingOrder());
 
         menu.findItem(R.id.ascending_sort_action).setChecked(sortingOrder() == SortingOrder.ASCENDING);
 
@@ -295,9 +300,10 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 return true;
 
             case R.id.ascending_sort_action:
-                albumsAdapter.changeSortingOrder(SortingOrder.fromValue(item.isChecked()));
-                AlbumsHelper.setSortingOrder(getContext(), sortingOrder());
                 item.setChecked(!item.isChecked());
+                SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
+                albumsAdapter.changeSortingOrder(sortingOrder);
+                AlbumsHelper.setSortingOrder(getContext(), sortingOrder);
                 return true;
 
         }
