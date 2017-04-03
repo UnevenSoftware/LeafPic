@@ -11,7 +11,6 @@ import org.horaapps.leafpic.model.base.ImageFileFilter;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
-import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,17 +20,21 @@ import java.util.HashSet;
  * Created by dnld on 24/07/16.
  */
 
+@Deprecated
 public class ContentProviderHelper {
 
+    @Deprecated
     @Nullable private static Media getLastMedia(Context context, long albumId) {
         ArrayList<Media> list = getMedia(context, albumId, 1, true);
         return list.size() > 0 ? list.get(0) : null;
     }
 
+    @Deprecated
     static ArrayList<Media> getMedia(Context context, long albumId, boolean includeVideo) {
         return getMedia(context, albumId, -1, includeVideo);
     }
 
+    @Deprecated
     private static ArrayList<Media> getMedia(Context context, long albumId, int n, boolean includeVideo) {
 
         String limit = n == -1 ? "" : "LIMIT " + n;
@@ -76,6 +79,7 @@ public class ContentProviderHelper {
         return list;
     }
 
+    @Deprecated
     public static long getAlbumId(Context context, String mediaPath) {
         long id = -1;
         Cursor cur = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
@@ -90,21 +94,7 @@ public class ContentProviderHelper {
         return id;
     }
 
-    @TestOnly public static ArrayList<Media> getAllMedia(Context context) {
-        ArrayList<Media> list = new ArrayList<Media>();
-        // TODO: 11/21/16 implement
-        return list;
-    }
-
-    @TestOnly private String getThumbnailPath(Context context, long id) {
-        Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
-                context.getContentResolver(), id, MediaStore.Images.Thumbnails.MINI_KIND,
-                new String[]{ MediaStore.Images.Thumbnails.DATA });
-        if(cursor.moveToFirst())
-            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
-        return null;
-    }
-
+    @Deprecated
     static ArrayList<Media> getMedia(String path, boolean includeVideo) {
         ArrayList<Media> list = new ArrayList<Media>();
         File[] images = new File(path).listFiles(new ImageFileFilter(includeVideo));
@@ -112,11 +102,12 @@ public class ContentProviderHelper {
             list.add(new Media(image));
         return list;
     }
-
+    @Deprecated
     static ArrayList<Album> getAlbums(Context context, HashSet<String> excludedAlbums, boolean hidden) {
         return hidden ? getHiddenAlbums(context, excludedAlbums) : getAlbums(context, excludedAlbums);
     }
 
+    @Deprecated
     private static ArrayList<Album> getHiddenAlbums(Context context, HashSet<String> excludedAlbums) {
         ArrayList<Album> list = new ArrayList<Album>();
         for (File storage : ContentHelper.getStorageRoots(context))
@@ -124,6 +115,7 @@ public class ContentProviderHelper {
         return list;
     }
 
+    @Deprecated
     private static void fetchRecursivelyHiddenFolder(Context context, File dir, ArrayList<Album> albumArrayList, HashSet<String> excludedAlbums, boolean includeVideo) {
         if (!isExcluded(dir.getPath(), excludedAlbums)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
@@ -139,12 +131,13 @@ public class ContentProviderHelper {
         }
     }
 
+    @Deprecated
     private static void checkAndAddFolder(Context context, File dir, ArrayList<Album> albumArrayList, boolean includeVideo) {
         File[] files = dir.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
             Album asd = new Album(context, dir.getAbsolutePath(), -1, dir.getName(), files.length);
-            if (!asd.hasCustomCover()) {
+            if (!asd.hasCover()) {
 
                 long lastMod = Long.MIN_VALUE;
                 File choice = null;
@@ -162,11 +155,13 @@ public class ContentProviderHelper {
         }
     }
 
+    @Deprecated
     private static boolean isExcluded(String path, HashSet<String> excludedAlbums) {
         for(String s : excludedAlbums) if (path.startsWith(s)) return true;
         return false;
     }
 
+    @Deprecated
     public static Album getAlbumFromMedia(Context context, String mediaPath) {
         File parentFolder = new File(mediaPath).getParentFile();
         if (parentFolder == null || !parentFolder.isDirectory())
@@ -175,6 +170,7 @@ public class ContentProviderHelper {
        return new Album(context, parentFolder.getPath(), getAlbumId(context, mediaPath), parentFolder.getName(), 0);
     }
 
+    @Deprecated
     private static ArrayList<Album> getAlbums(Context context, HashSet<String> excludedAlbums) {
         ArrayList<Album> list = new ArrayList<>();
 
@@ -214,7 +210,7 @@ public class ContentProviderHelper {
                     boolean excluded = isExcluded(path, excludedAlbums);
                     if (!excluded) {
                         Album album = new Album(context, path, cur.getLong(0), cur.getString(1), cur.getInt(2));
-                        if(!album.hasCustomCover())
+                        if(!album.hasCover())
                             album.addMedia(getLastMedia(context, cur.getLong(0)));
                         list.add(album);
                     }
@@ -226,10 +222,6 @@ public class ContentProviderHelper {
         return list;
     }
 
-
-    public static void test(Context context) {
-        getAllMedia(context).stream().filter(Media::isGif);
-    }
 }
 
 

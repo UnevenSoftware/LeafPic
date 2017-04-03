@@ -37,7 +37,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.base.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ContentHelper;
@@ -265,9 +264,9 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             exploreModePanel.setVisibility(View.VISIBLE);
         } else {
             currentFolderPath.setText(R.string.local_folder);
-            for (Album album : ((MyApplication) getActivity().getApplicationContext()).getAlbums().albums) {
+            /*for (Album album : ((App) getActivity().getApplicationContext()).getAlbums().albums) {
                 folders.add(new File(album.getPath()));
-            }
+            }*/
             imgExploreMode.setIcon(theme.getIcon(CommunityMaterial.Icon.cmd_compass_outline));
             exploreModePanel.setVisibility(View.GONE);
         }

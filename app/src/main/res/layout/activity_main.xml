@@ -15,51 +15,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <include
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipeRefreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <RelativeLayout
-                    android:id="@+id/rl_main_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/grid_albums"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:clipToPadding="false"
-                        android:scrollbars="vertical"
-                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-                        />
-                    <!--
-                    <org.horaapps.leafpic.views.GridRecyclerView
-                        android:id="@+id/grid_albums"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:clipToPadding="false"
-                        android:scrollbars="vertical"
-                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-                        android:layoutAnimation="@anim/grid_layout_animation"
-                        />-->
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/grid_photos"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:clipToPadding="false"
-                        android:scrollbars="vertical"
-                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-                        />
-                    <include layout="@layout/there_is_nothing_to_show"/>
-                </RelativeLayout>
-            </android.support.v4.widget.SwipeRefreshLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content"
+                />
+
+            <include layout="@layout/there_is_nothing_to_show"/>
+
         </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grid_photos"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            android:scrollbars="vertical"
+            android:scrollbarThumbVertical="@drawable/ic_scrollbar"
+            />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_camera"
             android:layout_width="wrap_content"

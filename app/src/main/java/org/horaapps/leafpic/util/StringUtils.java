@@ -25,6 +25,10 @@ public class StringUtils {
         return  mime != null ? mime : "unknown";
     }
 
+    public static String[] asArray(String ... a) {
+        return a;
+    }
+
     public static String getGenericMIME(String mime) {
         return mime.split("/")[0] + "/*";
     }
@@ -33,6 +37,16 @@ public class StringUtils {
         String b[] = path.split("/");
         String fi = b[b.length - 1];
         return fi.substring(0, fi.lastIndexOf('.'));
+    }
+
+    public static String join(String jointChar, Object... collection) {
+        String s = "";
+        for (Object o : collection) s += o.toString() + jointChar;
+
+        int i = s.lastIndexOf(jointChar);
+        if (i!=-1)
+            s = s.substring(0, i);
+        return s;
     }
 
     @SuppressWarnings("deprecation")

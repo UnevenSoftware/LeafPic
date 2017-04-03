@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-import org.horaapps.leafpic.MyApplication;
+import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.HandlingAlbums;
@@ -21,12 +21,14 @@ public abstract class SharedMediaActivity extends ThemedActivity {
 
     private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
+    @Deprecated
     public HandlingAlbums getAlbums() {
-        return ((MyApplication) getApplicationContext()).getAlbums();
+        return ((App) getApplicationContext()).getAlbums();
     }
 
+    @Deprecated
     public Album getAlbum() {
-        return ((MyApplication) getApplicationContext()).getAlbum();
+        return ((App) getApplicationContext()).getAlbum();
     }
 
     public void requestSdCardPermissions() {

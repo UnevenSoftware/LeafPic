@@ -2,18 +2,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
-    maven  { url "http://repo1.maven.org/maven2" }
     maven { url  "http://dl.bintray.com/dasar/maven" }
 }
 
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion project.sdkVersion
+    buildToolsVersion project.buildToolsVersion
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion project.sdkVersion
         versionName "v0.6-beta-2"
         versionCode 14
     }
@@ -22,6 +21,7 @@ android {
         disable 'ExtraTranslation'
         abortOnError false
     }
+
     // This is handled for you by the 2.0+ Gradle Plugin
     aaptOptions {
         additionalParameters "--no-version-vectors"
@@ -54,40 +54,53 @@ android {
     }
 }
 
-project.ext.supportLib = "25.2.0"
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:$supportLib"
-    compile "com.android.support:cardview-v7:$supportLib"
-    compile "com.android.support:recyclerview-v7:$supportLib"
-    compile "com.android.support:design:$supportLib"
-    compile "com.android.support:palette-v7:$supportLib"
-    compile "com.android.support:customtabs:$supportLib"
-    compile "com.android.support:support-v4:$supportLib"
-    compile "com.android.support:palette-v7:$supportLib"
+    
+    // google & support
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:cardview-v7:$supportVersion"
+    compile "com.android.support:recyclerview-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:palette-v7:$supportVersion"
+    compile "com.android.support:customtabs:$supportVersion"
+    compile "com.android.support:support-v4:$supportVersion"
+    compile 'com.google.android.exoplayer:exoplayer:r2.0.4'
+
+    // utils
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.koushikdutta.ion:ion:2.1.7'
+    compile 'com.github.Commit451:bypasses:1.0.4'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.drewnoakes:metadata-extractor:2.9.1'
+
+    // rxJava
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //it is recommended to keep the same version of rxAndroid
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+
+    // icons
     compile 'com.mikepenz:iconics-core:2.8.1@aar'
     compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
     compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.6.0.1@aar'
-    compile 'com.yalantis:ucrop:1.5.0'
+
+    // ui
     compile 'uz.shift:colorpicker:0.5@aar'
-    compile 'com.google.android.exoplayer:exoplayer:r2.0.4'
-    compile 'de.psdev.licensesdialog:licensesdialog:1.8.0'
+    compile 'com.github.jetradarmobile:desertplaceholder:1.1.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile 'com.drewnoakes:metadata-extractor:2.9.1'
-    compile 'org.jetbrains:annotations-java5:15.0'
-    compile 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
+    compile 'com.yalantis:ucrop:1.5.0'
     compile 'com.github.chrisbanes:PhotoView:1.3.0'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
-    compile 'com.github.Commit451:bypasses:1.0.4'
-    compile 'com.github.jetradarmobile:desertplaceholder:1.1.1'
-
     compile 'jp.wasabeef:recyclerview-animators:2.2.6'
 
-    //Butter Knife
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    // debug Only
+    //debugCompile project(':inappstoragereader')
+
+    // TODO check them out
+    compile 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
+    compile 'de.psdev.licensesdialog:licensesdialog:1.8.0'
 }

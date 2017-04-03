@@ -8,12 +8,26 @@ import org.horaapps.leafpic.model.HandlingAlbums;
 /**
  * Created by dnld on 28/04/16.
  */
-public class MyApplication extends Application {
+public class App extends Application {
 
-    public Album getAlbum() {
-        return getAlbums().getCount() > 0 ? getAlbums().getCurrentAlbum() : Album.getEmptyAlbum();
+    private static App mInstance;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
     }
 
+    public static App getInstance() {
+        return mInstance;
+    }
+
+    @Deprecated
+    public Album getAlbum() {
+        return Album.getEmptyAlbum();
+    }
+
+    @Deprecated
     public HandlingAlbums getAlbums() {
         return HandlingAlbums.getInstance(getApplicationContext());
     }

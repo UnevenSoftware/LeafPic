@@ -10,88 +10,89 @@ import java.util.Comparator;
  */
 public class AlbumsComparators {
 
-    public static Comparator<Album> getComparator(SortingMode sortingMode, SortingOrder sortingOrder) {
+
+    private static Comparator<Album> getComparator(SortingMode sortingMode, Comparator<Album> base) {
         switch (sortingMode) {
             case NAME:
-                return getNameComparator(sortingOrder);
+                return getNameComparator(base);
             case SIZE:
-                return getSizeComparator(sortingOrder);
+                return getSizeComparator(base);
             case DATE: default:
-                return getDateComparator(sortingOrder);
+                return getDateComparator(base);
             case NUMERIC:
-                return getNumericComparator(sortingOrder);
+                return getNumericComparator(base);
         }
     }
 
-    private static Comparator<Album> getDateComparator(final SortingOrder sortingOrder){
-        return new Comparator<Album>(){
-            public int compare(Album a1, Album a2) {
-                switch (sortingOrder) {
-                    case ASCENDING:
-                        if (a1.isPinned() == a2.isPinned())
-                            return a1.getMedia(0).getDateModified().compareTo(a2.getMedia(0).getDateModified());
-                        return a1.isPinned() ? -1 : 1;
+    public static Comparator<Album> getComparator(SortingMode sortingMode, SortingOrder sortingOrder) {
 
-                    case DESCENDING: default:
-                        if (a1.isPinned() == a2.isPinned())
-                            return a2.getMedia(0).getDateModified().compareTo(a1.getMedia(0).getDateModified());
-                        return a2.isPinned() ? 1 : -1;
-                }
-            }
+        Comparator<Album> comparator = getComparator(sortingMode, getBaseComparator(sortingOrder));
+
+        return sortingOrder == SortingOrder.ASCENDING
+                ? comparator : reverse(comparator);
+    }
+
+    private static Comparator<Album> reverse(Comparator<Album> comparator) {
+        return (o1, o2) -> comparator.compare(o2, o1);
+    }
+
+    private static Comparator<Album> getBaseComparator(SortingOrder sortingOrder) {
+        return sortingOrder == SortingOrder.ASCENDING
+                ? getPinned() : getReversedPinned();
+    }
+
+    private static Comparator<Album> getPinned() {
+        return (o1, o2) -> {
+            if (o1.isPinned() == o2.isPinned()) return 0;
+            return o1.isPinned() ? -1 : 1;
         };
     }
 
-    private static Comparator<Album> getNameComparator(final SortingOrder sortingOrder) {
-        return new Comparator<Album>() {
-            public int compare(Album a1, Album a2) {
-                switch (sortingOrder) {
-                    case ASCENDING:
-                        if (a1.isPinned() == a2.isPinned())
-                            return a1.getName().toLowerCase().compareTo(a2.getName().toLowerCase());
-                        return a1.isPinned() ? -1 : 1;
+    private static Comparator<Album> getReversedPinned() {
+        return (o1, o2) -> getPinned().compare(o2, o1);
+    }
 
-                    case DESCENDING: default:
-                        if (a1.isPinned() == a2.isPinned())
-                            return a2.getName().toLowerCase().compareTo(a1.getName().toLowerCase());
-                        return a2.isPinned() ? 1 : -1;
-                }
-            }
+    private static Comparator<Album> getDateComparator(Comparator<Album> base){
+        return (a1, a2) -> {
+            int res = base.compare(a1, a2);
+            if (res == 0)
+                return a1.getDateModified().compareTo(a2.getDateModified());
+            return res;
         };
     }
 
-    private static Comparator<Album> getSizeComparator(final SortingOrder sortingOrder) {
-        return new Comparator<Album>() {
-            public int compare(Album a1, Album a2) {
-                switch (sortingOrder) {
-                    case ASCENDING:
-                        if (a1.isPinned() == a2.isPinned())
-                            return a1.getCount() - a2.getCount();
-                        return a1.isPinned() ? -1 : 1;
+   /* private static Comparator<Album> getDateComparator(){
+        return (a1, a2) -> {
+            if (a1.isPinned() == a2.isPinned())
+                return a1.getDateModified().compareTo(a2.getDateModified());
+            return a1.isPinned() ? -1 : 1;
+        };
+    }*/
 
-                    case DESCENDING: default:
-                        if (a1.isPinned() == a2.isPinned())
-                            return a2.getCount() - a1.getCount() ;
-                        return a2.isPinned() ? 1 : -1;
-                }
-            }
+    private static Comparator<Album> getNameComparator(Comparator<Album> base) {
+        return (a1, a2) -> {
+            int res = base.compare(a1, a2);
+            if (res == 0)
+                return a1.getName().toLowerCase().compareTo(a2.getName().toLowerCase());
+            return res;
         };
     }
 
-    private static Comparator<Album> getNumericComparator(final SortingOrder sortingOrder) {
-        return new Comparator<Album>() {
-            public int compare(Album a1, Album a2) {
-                switch (sortingOrder) {
-                    case ASCENDING:
-                        if (a1.isPinned() == a2.isPinned())
-                            return NumericComparator.filevercmp(a1.getName().toLowerCase(), a2.getName().toLowerCase());
-                        return a1.isPinned() ? -1 : 1;
+    private static Comparator<Album> getSizeComparator(Comparator<Album> base) {
+        return (a1, a2) -> {
+            int res = base.compare(a1, a2);
+            if (res == 0)
+                return a1.getCount() - a2.getCount();
+            return res;
+        };
+    }
 
-                    case DESCENDING: default:
-                        if (a1.isPinned() == a2.isPinned())
-                            return NumericComparator.filevercmp(a2.getName().toLowerCase(), a1.getName().toLowerCase());
-                        return a2.isPinned() ? 1 : -1;
-                }
-            }
+    private static Comparator<Album> getNumericComparator(Comparator<Album> base) {
+        return (a1, a2) -> {
+            int res = base.compare(a1, a2);
+            if (res == 0)
+                return NumericComparator.filevercmp(a1.getName().toLowerCase(), a2.getName().toLowerCase());
+            return res;
         };
     }
 }

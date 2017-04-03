@@ -9,6 +9,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -20,21 +21,22 @@ import com.drew.metadata.Tag;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.model.base.MediaDetailsMap;
+import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.MediaSignature;
 import org.horaapps.leafpic.util.StringUtils;
-import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class Media implements Parcelable, Serializable {
+public class Media implements Parcelable, Serializable, CursorHandler {
 
     private String path = null;
     private long dateModified = -1;
@@ -48,6 +50,14 @@ public class Media implements Parcelable, Serializable {
     private MetaDataItem metadata;
 
     public Media() { }
+
+    @Override
+    public String toString() {
+        return "Media{" +
+                "path='" + path + '\'' +
+                ", mime='" + mimeType + '\'' +
+                '}';
+    }
 
     public Media(String path, long dateModified) {
         this.path = path;
@@ -77,6 +87,21 @@ public class Media implements Parcelable, Serializable {
         this.mimeType = cur.getString(2);
         this.size = cur.getLong(3);
         this.orientation = cur.getInt(4);
+    }
+
+    @Override
+    public Media handle(Cursor cu) throws SQLException {
+        return new Media(cu);
+    }
+
+    public static String[] getProjection() {
+        return new String[]{
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.MIME_TYPE,
+                MediaStore.Images.Media.SIZE,
+                MediaStore.Images.Media.ORIENTATION
+        };
     }
 
     public void setUri(String uriString) {
@@ -128,7 +153,6 @@ public class Media implements Parcelable, Serializable {
     public Long getDateModified() {
         return dateModified;
     }
-
 
     public Bitmap getBitmap(){
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -290,7 +314,7 @@ public class Media implements Parcelable, Serializable {
     }
 
     //<editor-fold desc="Thumbnail Tests">
-    @TestOnly public byte[] getThumbnail() {
+    public byte[] getThumbnail() {
 
         ExifInterface exif;
         try {
@@ -311,7 +335,7 @@ public class Media implements Parcelable, Serializable {
         } catch (Exception e) { return null; }*/
     }
 
-    @TestOnly public String getThumbnail(Context context) {
+    public String getThumbnail(Context context) {
         /*Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                 context.getContentResolver(), id,
                 MediaStore.Images.Thumbnails.MINI_KIND,

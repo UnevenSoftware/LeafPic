@@ -66,21 +66,29 @@ public class SplashScreen extends SharedMediaActivity {
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
 
-            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
-                Bundle data = getIntent().getExtras();
-                if (data != null) {
-                    String ab = data.getString("albumPath");
-                    if (ab != null) {
-                        File dir = new File(ab);
-                        tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
-                        new PrefetchPhotosData().execute();
-                    }
-                } else StringUtils.showToast(getApplicationContext(), "Album not found");
-            } else  // default intent
-                new PrefetchAlbumsData().execute();
+            // todo no preload
+            if (true) {
+                startActivity(new Intent(SplashScreen.this, MainActivity.class));
+                finish();
+                return;
+            } else {
 
-            PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
 
+                if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+                    Bundle data = getIntent().getExtras();
+                    if (data != null) {
+                        String ab = data.getString("albumPath");
+                        if (ab != null) {
+                            File dir = new File(ab);
+                            tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
+                            new PrefetchPhotosData().execute();
+                        }
+                    } else StringUtils.showToast(getApplicationContext(), "Album not found");
+                } else  // default intent
+                    new PrefetchAlbumsData().execute();
+
+                PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
+            }
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
 
@@ -89,22 +97,19 @@ public class SplashScreen extends SharedMediaActivity {
 
     private void startLookingForMedia() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getAlbums().getFoldersCount(HandlingAlbums.INCLUDED) > 0) {
+        new Thread(() -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getAlbums().getFoldersCount(HandlingAlbums.INCLUDED) > 0) {
 
-                    JobInfo job = new JobInfo.Builder(0, new ComponentName(getApplicationContext(), LookForMediaJob.class))
-                            .setPeriodic(1000)
-                            .setRequiresDeviceIdle(true)
-                            .build();
+                JobInfo job = new JobInfo.Builder(0, new ComponentName(getApplicationContext(), LookForMediaJob.class))
+                        .setPeriodic(1000)
+                        .setRequiresDeviceIdle(true)
+                        .build();
 
-                    JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                    if (scheduler.getAllPendingJobs().size() == 0)
-                        Log.wtf(TAG, scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS
-                                ? "LookForMediaJob scheduled successfully!" : "LookForMediaJob scheduled failed!");
+                JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                if (scheduler.getAllPendingJobs().size() == 0)
+                    Log.wtf(TAG, scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS
+                            ? "LookForMediaJob scheduled successfully!" : "LookForMediaJob scheduled failed!");
 
-                }
             }
         }).start();
     }
@@ -162,10 +167,10 @@ public class SplashScreen extends SharedMediaActivity {
 
         @Override
         protected Boolean doInBackground(Void... arg0) {
-            if(!getAlbums().restoreBackup(getApplicationContext()) || getAlbums().getCount() == 0) {
+            /*if(!getAlbums().restoreBackup(getApplicationContext()) || getAlbums().getCount() == 0) {
                 getAlbums().loadAlbums(getApplicationContext(), false);
                 return true;
-            }
+            }*/
             return false;
         }
 
@@ -183,8 +188,8 @@ public class SplashScreen extends SharedMediaActivity {
             } else
                 startActivityForResult(i, PICK_MEDIA_REQUEST);
 
-            if(result)
-                getAlbums().saveBackup(getApplicationContext());
+            //if(result)
+                //getAlbums().saveBackup(getApplicationContext());
         }
     }
 
@@ -199,7 +204,7 @@ public class SplashScreen extends SharedMediaActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            getAlbums().addAlbum(0, tmpAlbum);
+            //getAlbums().addAlbum(0, tmpAlbum);
             i.putExtra(CONTENT, PHOTOS_PREFETCHED);
             startActivity(i);
             finish();

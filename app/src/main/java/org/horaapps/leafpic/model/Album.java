@@ -1,8 +1,10 @@
 package org.horaapps.leafpic.model;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -11,31 +13,31 @@ import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.MediaComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album implements Serializable {
+public class Album implements Serializable, CursorHandler {
 
-	private String name = null;
-	private String path = null;
-	private long id = -1;
-	private int count = -1;
-	private int currentMediaIndex = 0;
+	private String name, path;
+	private long id = -1, dateModified;
+	private int count = -1, currentMediaIndex = 0;
 
 	private boolean selected = false;
 	public AlbumSettings settings = null;
 
-	private ArrayList<Media> media;
-	private ArrayList<Media> selectedMedia;
+	@Deprecated private ArrayList<Media> media;
+	@Deprecated private ArrayList<Media> selectedMedia;
 
 
 	public Album(String path, String name) {
@@ -45,18 +47,39 @@ public class Album implements Serializable {
 		this.path = path;
 	}
 
-	public Album(Context context, String path, long id, String name, int count) {
+	public Album(String path, String name, long id, int count) {
 		this(path, name);
 		this.count = count;
 		this.id = id;
-		settings = AlbumSettings.getSettings(context, this);
 	}
 
-	public Album(String path, long id, AlbumSettings settings, int count) {
-		this(path, StringUtils.getName(path));
-		this.id = id;
-		this.settings = settings;
-		this.count = count;
+	public Album(Cursor cur) {
+		this(StringUtils.getBucketPathByImagePath(cur.getString(3)),
+				cur.getString(1),
+				cur.getLong(0),
+				cur.getInt(2));
+		dateModified = cur.getLong(4);
+	}
+
+	public static String[] getProjection() {
+		return new String[]{
+				MediaStore.Files.FileColumns.PARENT,
+				MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+				"count(*)",
+				MediaStore.Images.Media.DATA,
+				"max(" + MediaStore.Images.Media.DATE_MODIFIED + ")"
+		};
+	}
+
+	@Override
+	public Album handle(Cursor cur) throws SQLException {
+		return new Album(cur);
+	}
+
+	@Deprecated
+	public Album(Context context, String path, long id, String name, int count) {
+		this(path, name, id, count);
+		settings = AlbumSettings.getDefaults();
 	}
 
 	public static Album getEmptyAlbum() {
@@ -69,6 +92,83 @@ public class Album implements Serializable {
 		Album emptyAlbum = getEmptyAlbum();
 		emptyAlbum.path = path;
 		return emptyAlbum;
+	}
+
+	public Album withSettings(AlbumSettings settings) {
+		this.settings = settings;
+		return this;
+	}
+
+	//region Album Properties Getters
+	public String getName() {
+		return name;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public Media getCover() {
+		if (hasCover())
+			return new Media(settings.coverPath);
+		// TODO: 11/20/16 how should i handle this?
+		return new Media();
+	}
+
+	public void setCover(String path) {
+		settings.coverPath = path;
+	}
+
+	private boolean hasId() {
+		return id != -1;
+	}
+
+	public long getId() {
+		return  this.id;
+	}
+
+	public boolean isHidden() {
+		return new File(path, ".nomedia").exists();
+	}
+
+	public boolean isPinned(){ return settings.pinned; }
+
+	public boolean hasCover() {
+		return settings.coverPath != null;
+	}
+
+	private FilterMode getFilterMode() {
+		return settings != null ? settings.filterMode : FilterMode.ALL;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	@Override
+	public String toString() {
+		return "Album{" +
+				"name='" + name + '\'' +
+				", path='" + path + '\'' +
+				", id=" + id +
+				", count=" + count +
+				'}';
+	}
+	//endregion
+
+	public ArrayList<String> getParentsFolders() {
+		ArrayList<String> result = new ArrayList<>();
+
+		File f = new File(getPath());
+		while(f != null && f.canRead()) {
+			result.add(f.getPath());
+			f = f.getParentFile();
+		}
+		return result;
 	}
 
 	public ArrayList<Media> getMedia() {
@@ -141,16 +241,7 @@ public class Album implements Serializable {
 		return mediaArrayList;
 	}
 
-	public ArrayList<String> getParentsFolders() {
-		ArrayList<String> result = new ArrayList<String>();
 
-		File f = new File(getPath());
-		while(f != null && f.canRead()) {
-			result.add(f.getPath());
-			f = f.getParentFile();
-		}
-		return result;
-	}
 
 	public void filterMedias(Context context, FilterMode filter) {
 		settings.filterMode = filter;
@@ -160,6 +251,7 @@ public class Album implements Serializable {
 	public boolean addMedia(@Nullable Media media) {
 		if(media == null) return false;
 		this.media.add(media);
+		Log.d("asd", "addMedia: "+media.getPath());
 		return true;
 	}
 
@@ -181,55 +273,7 @@ public class Album implements Serializable {
 			}
 	}
 
-	//region Album Properties Getters
-	public String getName() {
-		return name;
-	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public Media getCoverAlbum() {
-		if (hasCustomCover())
-			return new Media(settings.coverPath);
-		if (media.size() > 0)
-			return media.get(0);
-		// TODO: 11/20/16 how should i handle this?
-		return new Media();
-	}
-
-	private boolean hasId() {
-		return id != -1;
-	}
-
-	public long getId() {
-		return  this.id;
-	}
-
-	public boolean isHidden() {
-		return new File(path, ".nomedia").exists();
-	}
-
-	public boolean isPinned(){ return settings.pinned; }
-
-	public boolean hasCustomCover() {
-		return settings.coverPath != null;
-	}
-
-	private FilterMode getFilterMode() {
-		return settings != null ? settings.filterMode : FilterMode.ALL;
-	}
-
-	public boolean isSelected() {
-		return selected;
-	}
-
-	//endregion
 
 	//region Selected Media
 
@@ -316,36 +360,43 @@ public class Album implements Serializable {
 		this.name = name;
 	}
 
-	void setSelected(boolean selected) {
+	public boolean setSelected(boolean selected) {
+		if (this.selected == selected)
+			return false;
 		this.selected = selected;
+		return true;
+	}
+
+	public boolean toggleSelected() {
+		selected = !selected;
+		return selected;
 	}
 
 	public void removeCoverAlbum(Context context) {
-		HandlingAlbums.getInstance(context).setAlbumPhotoPreview(path, null);
+		//HandlingAlbums.getInstance(context).setCover(path, null);
 		settings.coverPath = null;
 	}
 
 	public void setSelectedPhotoAsPreview(Context context) {
 		if (selectedMedia.size() > 0) {
 			String asd = selectedMedia.get(0).getPath();
-			HandlingAlbums.getInstance(context).setAlbumPhotoPreview(this.path, asd);
+			//HandlingAlbums.getInstance(context).setCover(this.path, asd);
 			settings.coverPath = asd;
 		}
 	}
 
 	public void setDefaultSortingMode(Context context, SortingMode column) {
 		settings.sortingMode = column.getValue();
-		HandlingAlbums.getInstance(context).setAlbumSortingMode(path, column.getValue());
+		//HandlingAlbums.getInstance(context).setSortingMode(path, column.getValue());
 	}
 
 	public void setDefaultSortingAscending(Context context, SortingOrder sortingOrder) {
 		settings.sortingOrder = sortingOrder.getValue();
-		HandlingAlbums.getInstance(context).setAlbumSortingOrder(path, sortingOrder.getValue());
+		//HandlingAlbums.getInstance(context).setSortingOrder(path, sortingOrder.getValue());
 	}
 
-	public void togglePinAlbum(Context context) {
+	public void togglePinAlbum() {
 		settings.pinned = !settings.pinned;
-		HandlingAlbums.getInstance(context).pinAlbum(path, settings.pinned);
 	}
 
 	//endregion
@@ -511,5 +562,10 @@ public class Album implements Serializable {
 
 	private void scanFile(Context context, String[] path, MediaScannerConnection.OnScanCompletedListener onScanCompletedListener) {
 		MediaScannerConnection.scanFile(context, path, null, onScanCompletedListener);
+	}
+
+
+	public Long getDateModified() {
+		return dateModified;
 	}
 }

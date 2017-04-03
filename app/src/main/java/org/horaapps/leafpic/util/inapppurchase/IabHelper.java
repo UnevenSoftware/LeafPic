@@ -494,12 +494,12 @@ public class IabHelper {
     }
 
     /**
-     * Queries the inventory. This will query all owned items from the server, as well as
+     * Queries the inventory. This will getCursor all owned items from the server, as well as
      * information on additional skus, if specified. This method may block or take long to execute.
      *
      * @param querySkuDetails if true, SKU details (price, description, etc) will be queried as well
      *                        as purchase information.
-     * @param moreItemSkus    additional PRODUCT skus to query information on, regardless of ownership.
+     * @param moreItemSkus    additional PRODUCT skus to getCursor information on, regardless of ownership.
      *                        Ignored if null or if querySkuDetails is false.
      * @throws IabException if a problem occurs while refreshing the inventory.
      */
@@ -520,7 +520,7 @@ public class IabHelper {
                 }
             }
 
-            // if subscriptions are supported, then also query for subscriptions
+            // if subscriptions are supported, then also getCursor for subscriptions
             if (mSubscriptionsSupported) {
                 r = queryPurchases(inv, ITEM_TYPE_SUBS);
                 if (r != BILLING_RESPONSE_RESULT_OK) {
@@ -544,8 +544,8 @@ public class IabHelper {
     }
 
     /**
-     * Asynchronous wrapper for inventory query. This will perform an inventory
-     * query as described in {@link #queryInventory}, but will do so asynchronously
+     * Asynchronous wrapper for inventory getCursor. This will perform an inventory
+     * getCursor as described in {@link #queryInventory}, but will do so asynchronously
      * and call back the specified listener upon completion. This method is safe to
      * call from a UI thread.
      *
@@ -895,11 +895,11 @@ public class IabHelper {
     }
 
     /**
-     * Listener that notifies when an inventory query operation completes.
+     * Listener that notifies when an inventory getCursor operation completes.
      */
     public interface QueryInventoryFinishedListener {
         /**
-         * Called to notify that an inventory query operation completed.
+         * Called to notify that an inventory getCursor operation completed.
          *
          * @param result The result of the operation.
          * @param inv    The inventory.
