@@ -65,6 +65,7 @@ dependencies {
     compile "com.android.support:palette-v7:$supportLib"
     compile "com.android.support:customtabs:$supportLib"
     compile "com.android.support:support-v4:$supportLib"
+    compile "com.android.support:palette-v7:$supportLib"
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.koushikdutta.ion:ion:2.1.7'
     compile 'com.mikepenz:iconics-core:2.8.1@aar'
@@ -83,7 +84,8 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     compile 'com.github.Commit451:bypasses:1.0.4'
     compile 'com.github.jetradarmobile:desertplaceholder:1.1.1'
-    compile 'com.android.support:palette-v7:23.1.1'
+
+    compile 'jp.wasabeef:recyclerview-animators:2.2.6'
 
     //Butter Knife
     compile 'com.jakewharton:butterknife:8.5.1'

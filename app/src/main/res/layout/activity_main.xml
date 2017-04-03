@@ -26,6 +26,7 @@
                     android:id="@+id/rl_main_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/grid_albums"
                         android:layout_width="match_parent"
@@ -35,6 +36,17 @@
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@drawable/ic_scrollbar"
                         />
+                    <!--
+                    <org.horaapps.leafpic.views.GridRecyclerView
+                        android:id="@+id/grid_albums"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:clipToPadding="false"
+                        android:scrollbars="vertical"
+                        android:scrollbarThumbVertical="@drawable/ic_scrollbar"
+                        android:layoutAnimation="@anim/grid_layout_animation"
+                        />-->
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/grid_photos"
                         android:layout_width="match_parent"
