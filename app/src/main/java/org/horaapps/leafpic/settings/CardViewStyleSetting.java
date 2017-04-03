@@ -40,24 +40,27 @@ public class CardViewStyleSetting extends ThemedSetting {
 
     public void show() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), getActivity().getDialogStyle());
-        final View dialogLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_select_cardview_style, null);
+        final View dialogLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_album_card_style, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_card_view_style_title);
         ((CardView) dialogLayout.findViewById(R.id.dialog_card_view_style)).setCardBackgroundColor(getActivity().getCardBackgroundColor());
         dialogTitle.setBackgroundColor(getActivity().getPrimaryColor());
 
         final RadioGroup rGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
-        final CheckBox chkShowNPhots = (CheckBox) dialogLayout.findViewById(R.id.show_n_photos);
+        final CheckBox chkShowMediaCount = (CheckBox) dialogLayout.findViewById(R.id.show_media_count);
+        final CheckBox chkShowAlbumPath = (CheckBox) dialogLayout.findViewById(R.id.show_album_path);
         RadioButton rCompact = (RadioButton) dialogLayout.findViewById(R.id.radio_card_compact);
         RadioButton rFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
         RadioButton rMaterial = (RadioButton) dialogLayout.findViewById(R.id.radio_card_material);
 
-        chkShowNPhots.setChecked(getSP().getBoolean("show_n_photos", true));
+        chkShowMediaCount.setChecked(getSP().getBoolean("show_media_count", true));
+        chkShowAlbumPath.setChecked(getSP().getBoolean("show_album_path", false));
 
         getActivity().themeRadioButton(rCompact);
         getActivity().themeRadioButton(rFlat);
         getActivity().themeRadioButton(rMaterial);
-        getActivity().themeCheckBox(chkShowNPhots);
+        getActivity().themeCheckBox(chkShowMediaCount);
+        getActivity().themeCheckBox(chkShowAlbumPath);
 
         rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -66,15 +69,15 @@ public class CardViewStyleSetting extends ThemedSetting {
                 switch (i) {
                     case R.id.radio_card_compact:
                         v = LayoutInflater.from(getActivity()).inflate(COMPACT.getLayout(), null);
-                        v.findViewById(R.id.linear_card_text).setBackgroundColor(ColorPalette.getTransparentColor(getActivity().getBackgroundColor(), 150));
+                        v.findViewById(R.id.ll_album_info).setBackgroundColor(ColorPalette.getTransparentColor(getActivity().getBackgroundColor(), 150));
                         break;
                     case R.id.radio_card_flat:
                         v = LayoutInflater.from(getActivity()).inflate(FLAT.getLayout(), null);
-                        v.findViewById(R.id.linear_card_text).setBackgroundColor(ColorPalette.getTransparentColor(getActivity().getBackgroundColor(), 150));
+                        v.findViewById(R.id.ll_album_info).setBackgroundColor(ColorPalette.getTransparentColor(getActivity().getBackgroundColor(), 150));
                         break;
                     case R.id.radio_card_material: default:
                         v = LayoutInflater.from(getActivity()).inflate(MATERIAL.getLayout(), null);
-                        v.findViewById(R.id.linear_card_text).setBackgroundColor(getActivity().getCardBackgroundColor());
+                        v.findViewById(R.id.ll_album_info).setBackgroundColor(getActivity().getCardBackgroundColor());
                         break;
                 }
 
@@ -96,16 +99,26 @@ public class CardViewStyleSetting extends ThemedSetting {
 
                 ((TextView) v.findViewById(R.id.album_media_count)).setText(StringUtils.html(albumPhotoCountHtml));
                 ((TextView) v.findViewById(R.id.album_media_label)).setTextColor(getActivity().getTextColor());
-                v.findViewById(R.id.ll_n_media).setVisibility( chkShowNPhots.isChecked() ? View.VISIBLE : View.GONE);
+                ((TextView) v.findViewById(R.id.album_path)).setTextColor(getActivity().getSubTextColor());
 
-                chkShowNPhots.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                v.findViewById(R.id.ll_media_count).setVisibility( chkShowMediaCount.isChecked() ? View.VISIBLE : View.GONE);
+                chkShowMediaCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        v.findViewById(R.id.ll_n_media).setVisibility(b ? View.VISIBLE : View.GONE);
+                        v.findViewById(R.id.ll_media_count).setVisibility(b ? View.VISIBLE : View.GONE);
+                    }
+                });
+
+                v.findViewById(R.id.album_path).setVisibility( chkShowAlbumPath.isChecked() ? View.VISIBLE : View.GONE);
+                chkShowAlbumPath.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        v.findViewById(R.id.album_path).setVisibility(b ? View.VISIBLE : View.GONE);
                     }
                 });
 
                 ((TextView) v.findViewById(R.id.album_name)).setText(StringUtils.html("<i><font color='" + textColor + "'>PraiseDuarte</font></i>"));
+                ((TextView) v.findViewById(R.id.album_path)).setText(getActivity().getString(R.string.album_path));
 
                 ((CardView) v).setUseCompatPadding(true);
                 ((CardView) v).setRadius(2);
@@ -131,7 +144,8 @@ public class CardViewStyleSetting extends ThemedSetting {
                     case R.id.radio_card_flat: getSP().putInt("card_view_style", CardViewStyle.FLAT.getValue()); break;
                     case R.id.radio_card_compact: getSP().putInt("card_view_style", CardViewStyle.COMPACT.getValue()); break;
                 }
-                getSP().putBoolean("show_n_photos", chkShowNPhots.isChecked());
+                getSP().putBoolean("show_media_count", chkShowMediaCount.isChecked());
+                getSP().putBoolean("show_album_path", chkShowAlbumPath.isChecked());
                 Toast.makeText(getActivity(), getActivity().getString(R.string.card_style_alert), Toast.LENGTH_SHORT).show();
             }
         });

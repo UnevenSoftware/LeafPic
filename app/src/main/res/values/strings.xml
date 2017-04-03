@@ -16,6 +16,11 @@
     <string name="easter_egg_enable">Enabled Easter Egg: </string>
     <string name="easter_egg_disable">Disabled Easter Egg: </string>
 
+    <!--FINGER PRINT-->
+    <string name="fp_not_supported">Sorry, fingerprint authentication not supported.</string>
+    <string name="fp_not_configured">No fingerprint configured.</string>
+    <string name="fp_not_enabled_sls">Secure lock screen not enabled.</string>
+
     <!-- ACTIONS -->
     <string name="sort">Sort</string>
     <string name="camera">Camera</string>
@@ -90,7 +95,11 @@ and this could make the media inaccessible from other apps. Use the exclude opti
         then the media will be copied or moved in the new folder.
     </string>
     <string name="card_style_alert">NOTE: Restart the app for make changes.</string>
+    <string name="show_album_path">Show album path</string>
+    <string name="show_preview_image_name">Show preview image name</string>
+    <string name="show_media_count">Show media count</string>
     <string name="changelog">Changelog</string>
+    <string name="album_path">Album Path</string>
 
     <!-- ITEMS -->
     <string name="singular_photo">Photo</string>
@@ -101,6 +110,13 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="search_menu">search</string>
     <string name="full_resolution">Full resolution</string>
     <string name="of">of</string>
+
+    <!-- PALETTE-->
+    <string name="palette">Palette</string>
+    <string name="colors">Colors</string>
+    <string name="color">Color</string>
+    <string name="copy_clipboard">Copyed to clipboard.</string>
+
 
     <!-- AFFIX -->
     <string name="affix">Affix</string>
@@ -158,6 +174,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="auto_update_media_sub">You should disable if there are a large number of images.</string>
     <string name="traslucent_statusbar">Translucent Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
+    <string name="option_show_tips">Show Tips</string>
+    <string name="option_show_tips_sub">It help you to understand the use of some feature.</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>
@@ -182,6 +200,9 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="load_full_image_when_zoom_in">Load full image when zoomed in</string>
     <string name="media_viewer_swipe_direction">Swipe Direction</string>
     <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(Default: Left to Right)</string>
+
+    <string name="video_instant_play">Instant Play</string>
+    <string name="video_instant_play_sub">It allows you to instantlly play the video, skipping the preview.</string>
 
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>

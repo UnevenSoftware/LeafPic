@@ -3,6 +3,8 @@ package org.horaapps.leafpic.views.videoplayer;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -21,6 +23,7 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.util.Util;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.Formatter;
@@ -135,7 +138,13 @@ public class CustomPlayBackController extends FrameLayout {
 
         /**** THEMING THINGS ****/
         themeHelper = ThemeHelper.getThemeHelper(getContext());
-        themeHelper.themeSeekBar(progressBar);
+
+        //themeHelper.themeSeekBar(progressBar);
+        progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
+                ? ColorPalette.getDarkerColor(themeHelper.getAccentColor()): themeHelper.getAccentColor(), PorterDuff.Mode.SRC_IN));
+        progressBar.getThumb().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
+                ? ColorPalette.getDarkerColor(themeHelper.getAccentColor()): themeHelper.getAccentColor(),PorterDuff.Mode.SRC_IN));
+
         ((LinearLayout) findViewById(R.id.exoplayer_controller_background))
                 .setBackgroundColor(themeHelper.getPrimaryColor());
     }

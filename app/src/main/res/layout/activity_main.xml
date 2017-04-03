@@ -27,6 +27,7 @@
                 />
 
             <include layout="@layout/there_is_nothing_to_show"/>
+
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

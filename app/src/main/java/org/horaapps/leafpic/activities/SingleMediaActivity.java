@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
@@ -438,13 +440,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_delete:
                 final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(SingleMediaActivity.this, R.string.delete, R.string.delete_photo_message);
-                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         textDialog.dismiss();
                     }
                 });
-                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Security.isPasswordOnDelete(getApplicationContext())) {
 
@@ -537,6 +539,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                break;
+
+            case R.id.action_palette:
+                Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
+                paletteIntent.putExtra("imageUri", getAlbum().getCurrentMedia().getUri().toString());
+                startActivity(paletteIntent);
                 break;
 
             default:

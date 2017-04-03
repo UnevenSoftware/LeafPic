@@ -20,5 +20,6 @@
         android:elevation="10dp"
         android:visibility="visible"
         app:iiv_color="@color/md_white_1000"
-        app:iiv_icon="gmd-play-circle-filled" />
+        app:iiv_icon="gmd-play-circle-filled"
+        android:alpha="0.7"/>
 </FrameLayout>

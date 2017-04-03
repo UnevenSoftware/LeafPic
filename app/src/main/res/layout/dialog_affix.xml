@@ -37,6 +37,81 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                        <!--TIPS-->
+                        <LinearLayout
+                            android:id="@+id/affix_example"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/small_spacing"
+                            android:layout_margin="@dimen/medium_spacing"
+                            android:layout_gravity="center_horizontal">
+
+                            <!--HORIZONTAL-->
+                            <LinearLayout
+                                android:id="@+id/affix_example_horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+                                <TextView
+                                    android:id="@+id/affix_example_horizontal_txt1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Image1"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text"
+                                    android:layout_margin="@dimen/small_spacing"
+                                    android:padding="@dimen/big_spacing"
+                                    android:gravity="center"
+                                    android:layout_weight="1"/>
+                                <TextView
+                                    android:id="@+id/affix_example_horizontal_txt2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Image2"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text"
+                                    android:layout_margin="@dimen/small_spacing"
+                                    android:padding="@dimen/big_spacing"
+                                    android:gravity="center"
+                                    android:layout_weight="1"/>
+                            </LinearLayout>
+
+                            <!--VERTICAL-->
+                            <LinearLayout
+                                android:id="@+id/affix_example_vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+                                <TextView
+                                    android:id="@+id/affix_example_vertical_txt1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Image1"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text"
+                                    android:layout_margin="@dimen/small_spacing"
+                                    android:padding="@dimen/big_spacing"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:id="@+id/affix_example_vertical_txt2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Image2"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="@dimen/medium_text"
+                                    android:layout_margin="@dimen/small_spacing"
+                                    android:padding="@dimen/big_spacing"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
                         <!--VERTICAL-->
                         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/ll_affix_vertical"
@@ -129,16 +204,14 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/affix_save_here"
                                         android:textColor="@color/md_dark_background"
-                                        android:textSize="16sp"
-                                        />
+                                        android:textSize="16sp" />
                                     <TextView
                                         android:id="@+id/save_here_sub"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/affix_save_here_sub"
                                         android:textColor="@color/md_grey_400"
-                                        android:textSize="14sp"
-                                        />
+                                        android:textSize="14sp" />
                                 </LinearLayout>
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/save_here_switch"
@@ -252,15 +325,13 @@
                                     android:text="Quality 50"
                                     android:textColor="@color/md_grey_400"
                                     android:paddingBottom="3dp"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="14sp" />
                                 <SeekBar
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:progress="50"
                                     android:max="100"
-                                    android:id="@+id/seek_bar_quality"
-                                    />
+                                    android:id="@+id/seek_bar_quality" />
                             </LinearLayout>
                         </LinearLayout>
                 </LinearLayout>

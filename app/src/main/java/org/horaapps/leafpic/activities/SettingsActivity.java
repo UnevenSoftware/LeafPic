@@ -135,14 +135,9 @@ public class SettingsActivity extends ThemedActivity {
         if (Security.isPasswordSet(getApplicationContext())) {
             Security.askPassword(SettingsActivity.this, new Security.PasswordInterface() {
                 @Override
-                public void onSuccess() {
-                    startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
-                }
-
+                public void onSuccess() {startActivity(new Intent(getApplicationContext(), SecurityActivity.class));}
                 @Override
-                public void onError() {
-                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                }
+                public void onError() {Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();}
             });
         } else startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
     }
@@ -220,5 +215,4 @@ public class SettingsActivity extends ThemedActivity {
     public void onChangeColumnsClicked(View view) {
         new GeneralSetting(SettingsActivity.this, SP).editNumberOfColumns();
     }
-
 }

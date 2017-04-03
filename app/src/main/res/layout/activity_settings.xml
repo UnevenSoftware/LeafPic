@@ -34,12 +34,11 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
                     <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
                         android:id="@+id/general_setting_title"
                         android:layout_width="match_parent"
@@ -87,6 +86,16 @@
                         app:settingIcon="gmd-add-circle"
                         app:settingPreferenceKey="@string/preference_show_fab"
                         app:settingTitle="@string/fab_options"/>
+
+                    <!-- TIPS -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_tips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/option_show_tips_sub"
+                        app:settingIcon="gmd-info"
+                        app:settingPreferenceKey="@string/preference_show_tips"
+                        app:settingTitle="@string/option_show_tips"/>
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemeableCardView>
 
@@ -100,12 +109,11 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
                     <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
                         android:id="@+id/theme_setting_title"
                         android:layout_width="match_parent"
@@ -153,7 +161,6 @@
                         app:settingIcon="gmd-colorize"
                         app:settingTitle="@string/media_viewer"/>
 
-
                     <!-- CARD VIEW STYLE -->
                     <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_card_view_style"
@@ -162,7 +169,6 @@
                         app:settingCaption="@string/album_card_view_sub"
                         app:settingIcon="gmd-dashboard"
                         app:settingTitle="@string/album_card_view"/>
-
 
                     <!-- TRANSLUCENT STATUS BAR-->
                     <org.horaapps.leafpic.views.SettingWithSwitchView
@@ -200,12 +206,11 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
                     <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
                         android:id="@+id/picture_setting_title"
                         android:layout_width="match_parent"
@@ -248,7 +253,6 @@
                         app:settingPreferenceKey="@string/preference_delay_full_image"
                         app:settingTitle="@string/delay_load_full_size_image"/>
 
-
                     <!--SWIPE ORIENTATION TODO: implement feature -->
                     <org.horaapps.leafpic.views.SettingWithSwitchView
                         android:id="@+id/option_swipe_direction"
@@ -272,12 +276,11 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
                     <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
                         android:id="@+id/video_setting_title"
                         android:layout_width="match_parent"
@@ -299,11 +302,19 @@
                         app:settingPreferenceKey="@string/preference_swipe_direction_inverted"
                         app:settingTitle="@string/include_video"/>
 
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_instant_play_video"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/video_instant_play_sub"
+                        app:settingIcon="gmd-play-arrow"
+                        app:settingPreferenceKey="@string/preference_video_instant_play"
+                        app:settingTitle="@string/video_instant_play"/>
+
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemeableCardView>
 
             <!--ADVANCED SETTING-->
-
             <org.horaapps.leafpic.views.themeable.ThemeableCardView
                 android:id="@+id/advanced_setting_card"
                 android:layout_width="match_parent"
@@ -313,12 +324,11 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
                     <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
                         android:id="@+id/advanced_setting_title"
                         android:layout_width="match_parent"
@@ -330,7 +340,7 @@
                         android:textSize="@dimen/medium_text"
                         android:textStyle="bold"/>
 
-
+                    <!-- SUB SCALING-->
                     <org.horaapps.leafpic.views.SettingWithSwitchView
                         android:id="@+id/option_sub_scaling"
                         android:layout_width="match_parent"

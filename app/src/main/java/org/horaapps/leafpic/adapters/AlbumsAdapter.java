@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -207,7 +208,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .signature(f.getSignature())
                 .centerCrop()
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
-                .placeholder(placeholder)
+                 //.placeholder(placeholder)
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into(holder.picture);
 
@@ -237,12 +238,28 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
+
+        holder.llMdia.setVisibility(SP.getBoolean("show_media_count", true) ? View.VISIBLE : View.GONE);
         holder.llCount.setVisibility(PreferenceUtil.getBool(holder.llCount.getContext(), "show_n_photos", true) ? View.VISIBLE : View.GONE);
+
         String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
         String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
 
         holder.mediaLabel.setTextColor(theme.getTextColor());
         holder.name.setText(StringUtils.html(albumNameHtml));
+        holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
+
+        holder.itemView.findViewById(R.id.album_path).setVisibility(SP.getBoolean("show_album_path", false) ? View.VISIBLE : View.GONE);
+        ((TextView) holder.itemView.findViewById(R.id.album_path)).setTextColor(theme.getSubTextColor());
+        ((TextView) holder.itemView.findViewById(R.id.album_path)).setText(a.getPath().toString());
+        ((TextView) holder.itemView.findViewById(R.id.album_path)).setSelected(true);
+
+        //START Animation MAKES BUG ON FAST TAP ON CARD
+        //Animation anim;
+        //anim = AnimationUtils.loadAnimation(holder.albumCard.getContext(), R.anim.slide_fade_card);
+        //holder.albumCard.startAnimation(anim);
+        //ANIMS
+        holder.albumCard.animate().alpha(1).setDuration(250);
         holder.nMedia.setText(StringUtils.html(albumPhotoCountHtml));
     }
 
@@ -290,6 +307,3 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         }
     }
 }
-
-
-

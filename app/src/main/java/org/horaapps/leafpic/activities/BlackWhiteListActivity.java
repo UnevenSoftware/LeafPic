@@ -120,7 +120,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        findViewById(R.id.white_list_decription_card).setVisibility(isExcludedMode() ? View.GONE : View.VISIBLE);
+        findViewById(R.id.white_list_decription_card).setVisibility((isExcludedMode() || !(SP.getBoolean("preference_show_tips", true))) ? View.GONE : View.VISIBLE);
         //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
         findViewById(R.id.nothing_to_show_placeholder).setVisibility(folders.size() < 1 && isExcludedMode() && SP.getInt("emoji_easter_egg", 0)==0 ? View.VISIBLE : View.GONE);
         findViewById(R.id.ll_emoji_easter_egg).setVisibility(folders.size() < 1 && isExcludedMode() && SP.getInt("emoji_easter_egg", 0)==1 ? View.VISIBLE : View.GONE);

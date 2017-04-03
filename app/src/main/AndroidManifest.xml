@@ -8,6 +8,7 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -167,6 +168,21 @@
             <intent-filter>
                 <action android:name="android.intent.action.ExcludedAlbums" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.horaapps.leafpic.activities.PaletteActivity"
+            android:label="@string/palette"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.PALETTE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
 

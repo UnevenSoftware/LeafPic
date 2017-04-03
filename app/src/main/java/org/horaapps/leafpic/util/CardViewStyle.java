@@ -24,7 +24,6 @@ public enum CardViewStyle {
         return layout;
     }
 
-
     public int getValue() { return value; }
 
     public static int getSize() {

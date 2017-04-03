@@ -3,6 +3,7 @@
     <string name="preference_internal_player">set_internal_player</string>
     <string name="preference_include_video">set_include_video</string>
     <string name="preference_swipe_direction_inverted">swipe_opposite</string>
+    <string name="preference_video_instant_play">video_instant_play</string>
     <string name="preference_auto_update_media">auto_update_media</string>
     <string name="preference_delay_full_image">set_delay_full_image</string>
     <string name="preference_auto_rotate">set_picture_orientation</string>
@@ -15,6 +16,7 @@
     <string name="preference_apply_theme_pager">apply_theme_img_act</string>
     <string name="preference_transparency">set_alpha</string>
     <string name="preference_map_provider">map_provider</string>
+    <string name="preference_show_tips">show_tips</string>
 
     <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
     <string name="preference_show_fab">show_fab</string>
