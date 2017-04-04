@@ -2,12 +2,14 @@ package org.horaapps.leafpic.util;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -118,11 +120,40 @@ public class StringUtils {
         t.show();
     }
 
-     public static String humanReadableByteCount(long bytes, boolean si) {
+    public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
+
+    public static String b(String content) {
+        return String.format(Locale.ENGLISH, "<b>%s</b>", content);
+    }
+
+    public static String i(String content) {
+        return String.format(Locale.ENGLISH, "<i>%s</i>", content);
+    }
+
+    public static Spanned htmlFormat(String content, @Nullable String hexcolor, boolean bold, boolean italic) {
+        String res = content;
+        if (hexcolor != null) res = color(hexcolor, res);
+        if (bold) res = b(res);
+        if (italic) res = i(res);
+        return html(res);
+    }
+
+    public static String color(int color, String content) {
+        return String.format(Locale.ENGLISH,
+                "<font color='%s'>%s</font>",
+                ColorPalette.getHexColor(color), content);
+    }
+
+    public static String color(String color, String content) {
+        return String.format(Locale.ENGLISH,
+                "<font color='%s'>%s</font>",
+                color, content);
+    }
+
 }

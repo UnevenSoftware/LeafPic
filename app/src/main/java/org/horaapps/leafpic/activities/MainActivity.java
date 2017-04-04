@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -48,9 +47,7 @@ import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.utils.Utils;
 import com.mikepenz.iconics.typeface.IIcon;
-
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.BuildConfig;
@@ -264,18 +261,15 @@ public class MainActivity extends SharedMediaActivity {
 
         // TODO: 3/25/17 organize better
         /**** DRAWER ****/
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,
-                drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) {
-            }
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar,
+                R.string.drawer_open, R.string.drawer_close) {
+            public void onDrawerClosed(View view) { }
+            public void onDrawerOpened(View drawerView) { }
+        };
 
 
         ((TextView) findViewById(R.id.txtVersion)).setText(BuildConfig.VERSION_NAME);
-
-            public void onDrawerOpened(View drawerView) {
-            }
-        };
-
         drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
@@ -544,6 +538,9 @@ public class MainActivity extends SharedMediaActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        if (1 == 1)
+            return false;
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_albums, menu);
 
@@ -564,9 +561,9 @@ public class MainActivity extends SharedMediaActivity {
         }*/
 
 
-        menu.findItem(R.id.hide_action).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
-        menu.findItem(R.id.delete_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
-        menu.findItem(R.id.renameAlbum).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_create));
+        menu.findItem(R.id.hide).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
+        menu.findItem(R.id.delete).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
+        menu.findItem(R.id.rename).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_create));
         menu.findItem(R.id.select_all).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
         menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
@@ -600,38 +597,16 @@ public class MainActivity extends SharedMediaActivity {
 
         //menu.findItem(R.id.select_all).setVisible(editMode);
         //menu.findItem(R.id.exclude_action).setVisible(editMode);
-       // menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
+        // menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
         //menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
 
         //menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCover());
         //menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albumsFragment.getSelectedCount() == 1) || (!albumsMode && !editMode));
 
-        /*togglePrimaryToolbarOptions(menu);
-        updateSelectedStuff();
 
-        menu.findItem(R.id.select_all).setVisible(editMode);
-        menu.findItem(R.id.exclude_action).setVisible((albumsMode && editMode) || (!albumsMode && !editMode));
-        menu.findItem(R.id.hideAlbumButton).setVisible((albumsMode && editMode) || (!albumsMode && !editMode));
-        menu.findItem(R.id.installShortcut).setVisible(albumsMode && editMode);
-        menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
-        menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
+       /* menu.findItem(R.id.action_palette).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1
+                && (getAlbum().getSelectedMedia(0).isImage()||getAlbum().getSelectedMedia(0).isGif()));*/
 
-        menu.findItem(R.id.select_all).setShowAsAction(albumsMode && getAlbums().getSelectedCount()>1
-                ? MenuItem.SHOW_AS_ACTION_IF_ROOM
-                : MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCustomCover());
-        menu.findItem(R.id.renameAlbum).setVisible((albumsMode && getAlbums().getSelectedCount() == 1) || (!albumsMode && !editMode));
-        if (getAlbums().getSelectedCount() == 1)
-            menu.findItem(R.id.set_pin_album).setTitle(getAlbums().getSelectedAlbum(0).isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
-        menu.findItem(R.id.set_pin_album).setVisible(albumsMode && getAlbums().getSelectedCount() == 1);
-        menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1);
-        menu.findItem(R.id.affixPhoto).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
-        menu.findItem(R.id.action_palette).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1
-                && (getAlbum().getSelectedMedia(0).isImage()||getAlbum().getSelectedMedia(0).isGif()));
-        return super.onPrepareOptionsMenu(menu);
-    }
-*/
 
         // TODO: 3/24/17 pin
        /* Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
@@ -645,7 +620,7 @@ public class MainActivity extends SharedMediaActivity {
 
         //menu.findItem(R.id.set_pin_album).setVisible(albumsMode && albumsFragment.getSelectedCount() == 1);
         //menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode);
-       // menu.findItem(R.id.affix).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
+        // menu.findItem(R.id.affix).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
         return super.onPrepareOptionsMenu(menu);
     }
     //endregion
@@ -1189,7 +1164,7 @@ public class MainActivity extends SharedMediaActivity {
 
                 return true;
 
-            case R.id.renameAlbum:
+            case R.id.rename:
                 /*final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(albumsMode ? firstSelectedAlbum.getName() : getAlbum().getName());
 
@@ -1233,7 +1208,7 @@ public class MainActivity extends SharedMediaActivity {
                 insertTextDialog.show();*/
                 return true;
 
-            case R.id.clear_album_preview:
+            case R.id.clear_album_cover:
                 if (!albumsMode) {
                     getAlbum().removeCoverAlbum(getApplicationContext());
                 }
@@ -1300,7 +1275,7 @@ public class MainActivity extends SharedMediaActivity {
         protected void onPostExecute(Void result) {
             mediaAdapter.swapDataSet(getAlbum().getMedia());
             //if (!hidden)
-                //HandlingAlbums.addAlbumToBackup(getApplicationContext(), getAlbum());
+            //HandlingAlbums.addAlbumToBackup(getApplicationContext(), getAlbum());
             checkNothing();
             //swipeRefreshLayout.setRefreshing(false);
         }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,7 +56,6 @@ import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
@@ -365,21 +363,21 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         }).show();
                 break;
 
-            case R.id.name_sort_action:
+            case R.id.name_sort_mode:
                 getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NAME);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
-            case R.id.date_taken_sort_action:
+            case R.id.date_taken_sort_mode:
                 getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.DATE);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
-            case R.id.size_sort_action:
+            case R.id.size_sort_mode:
                 getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.SIZE);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
@@ -393,14 +391,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 item.setChecked(true);
                 return true;
 
-            case R.id.numeric_sort_action:
+            case R.id.numeric_sort_mode:
                 getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());
                 item.setChecked(true);
                 return true;
 
-            case R.id.ascending_sort_action:
+            case R.id.ascending_sort_order:
                 getAlbum().setDefaultSortingAscending(getApplicationContext(), !item.isChecked() ? SortingOrder.ASCENDING : SortingOrder.DESCENDING);
                 getAlbum().sortPhotos();
                 adapter.swapDataSet(getAlbum().getMedia());

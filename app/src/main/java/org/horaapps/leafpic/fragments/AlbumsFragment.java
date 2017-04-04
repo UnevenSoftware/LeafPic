@@ -177,35 +177,16 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         albumsAdapter.getAlbumsSelectedClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> updateToolbar());
+                .subscribe(album -> {
+                    updateToolbar();
+                    getActivity().invalidateOptionsMenu();
+                });
 
         refresh.setOnRefreshListener(this::displayAlbums);
         rvAlbums.setAdapter(albumsAdapter);
 
         displayAlbums(false);
         return v;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        menu.findItem(R.id.select_all).setTitle(
-                getString(getSelectedCount() == getCount()
-                        ? R.string.clear_selected
-                        : R.string.select_all));
-
-        Log.d(TAG, "onCreateOptionsMenu: " +sortingOrder());
-
-        menu.findItem(R.id.ascending_sort_action).setChecked(sortingOrder() == SortingOrder.ASCENDING);
-
-        switch (sortingMode()) {
-            case NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
-            case SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
-            case DATE: default:
-                menu.findItem(R.id.date_taken_sort_action).setChecked(true); break;
-            case NUMERIC:  menu.findItem(R.id.numeric_sort_action).setChecked(true); break;
-        }
     }
 
     public SortingMode sortingMode() {
@@ -226,28 +207,47 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_albums_fragment, menu);
+
+        menu.findItem(R.id.select_all).setIcon(ThemeHelper.getToolbarIcon(getContext(), GoogleMaterial.Icon.gmd_select_all));
+        menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
+        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_sort)));
+        menu.findItem(R.id.search_action).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_search)));
+    }
+
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         boolean editMode = editMode();
         boolean oneSelected = getSelectedCount() == 1;
 
-        menu.setGroupVisible(R.id.album_options_menu, true);
-        menu.setGroupVisible(R.id.photos_option_men, false);
+        menu.setGroupVisible(R.id.general_album_items, !editMode);
+        menu.setGroupVisible(R.id.edit_mode_items, editMode);
+        menu.setGroupVisible(R.id.one_selected_items, oneSelected);
 
-        menu.findItem(R.id.type_sort_action).setVisible(false);
-        menu.findItem(R.id.filter_menu).setVisible(false);
-        menu.findItem(R.id.search_action).setVisible(true);
+        menu.findItem(R.id.select_all).setTitle(
+                getSelectedCount() == getCount()
+                        ? R.string.clear_selected
+                        : R.string.clear_selected);
 
-        menu.findItem(R.id.renameAlbum).setVisible(oneSelected);
-        menu.findItem(R.id.set_pin_album).setVisible(oneSelected);
-        menu.findItem(R.id.clear_album_preview).setVisible(oneSelected);
-        menu.findItem(R.id.clear_album_preview).setVisible(oneSelected);
+        if (!editMode) {
+            menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
+            switch (sortingMode()) {
+                case NAME:  menu.findItem(R.id.name_sort_mode).setChecked(true); break;
+                case SIZE:  menu.findItem(R.id.size_sort_mode).setChecked(true); break;
+                case DATE: default:
+                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true); break;
+                case NUMERIC:  menu.findItem(R.id.numeric_sort_mode).setChecked(true); break;
+            }
+        }
 
-        if (oneSelected)
-            menu.findItem(R.id.set_pin_album).setTitle(albumsAdapter.getFirstSelectedAlbum().isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
-
-        menu.findItem(R.id.delete_action).setVisible(editMode);
-        menu.findItem(R.id.shortcut).setVisible(editMode);
+        if (oneSelected) {
+            Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
+            menu.findItem(R.id.pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
+            menu.findItem(R.id.clear_album_cover).setVisible(selectedAlbum.hasCover());
+        }
     }
 
     @Override
@@ -261,7 +261,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 else albumsAdapter.selectAllAlbums();
                 return true;
 
-            case R.id.set_pin_album:
+            case R.id.pin_album:
                 Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
                 if (selectedAlbum != null) {
                     selectedAlbum.togglePinAlbum();
@@ -277,31 +277,31 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 albumsAdapter.clearSelectedAlbums();
                 return true;
 
-            case R.id.name_sort_action:
+            case R.id.name_sort_mode:
                 albumsAdapter.changeSortingMode(SortingMode.NAME);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.NAME);
                 item.setChecked(true);
                 return true;
 
-            case R.id.date_taken_sort_action:
+            case R.id.date_taken_sort_mode:
                 albumsAdapter.changeSortingMode(SortingMode.DATE);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.DATE);
                 item.setChecked(true);
                 return true;
 
-            case R.id.size_sort_action:
+            case R.id.size_sort_mode:
                 albumsAdapter.changeSortingMode(SortingMode.SIZE);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.SIZE);
                 item.setChecked(true);
                 return true;
 
-            case R.id.numeric_sort_action:
+            case R.id.numeric_sort_mode:
                 albumsAdapter.changeSortingMode(SortingMode.NUMERIC);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.NUMERIC);
                 item.setChecked(true);
                 return true;
 
-            case R.id.ascending_sort_action:
+            case R.id.ascending_sort_order:
                 item.setChecked(!item.isChecked());
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
                 albumsAdapter.changeSortingOrder(sortingOrder);

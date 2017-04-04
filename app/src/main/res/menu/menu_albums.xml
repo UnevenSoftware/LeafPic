@@ -48,16 +48,16 @@
             tools:context=".PhotosActivity">
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/name_sort_action"
+                    android:id="@+id/name_sort_mode"
                     android:title="@string/name"
                     app:showAsAction="never" />
                 <item
-                    android:id="@+id/date_taken_sort_action"
+                    android:id="@+id/date_taken_sort_mode"
                     android:checked="true"
                     android:title="@string/date"
                     app:showAsAction="never" />
                 <item
-                    android:id="@+id/size_sort_action"
+                    android:id="@+id/size_sort_mode"
                     android:title="@string/size"
                     app:showAsAction="never" />
                 <item
@@ -65,13 +65,13 @@
                     android:title="@string/type"
                     app:showAsAction="never" />
                 <item
-                    android:id="@+id/numeric_sort_action"
+                    android:id="@+id/numeric_sort_mode"
                     android:title="@string/numeric"
                     app:showAsAction="never" />
             </group>
             <group android:checkableBehavior="all">
                 <item
-                    android:id="@+id/ascending_sort_action"
+                    android:id="@+id/ascending_sort_order"
                     android:title="@string/ascending"
                     app:showAsAction="never" />
             </group>
@@ -109,15 +109,15 @@
 
     <group android:id="@+id/album_options_menu">
         <item
-            android:id="@+id/hide_action"
+            android:id="@+id/hide"
             android:title="@string/hide"
             app:showAsAction="never" />
         <item
-            android:id="@+id/exclude_action"
+            android:id="@+id/exclude"
             android:title="@string/exclude"
             app:showAsAction="never" />
         <item
-            android:id="@+id/set_pin_album"
+            android:id="@+id/pin_album"
             android:title="@string/pin"
             app:showAsAction="never" />
 
@@ -128,22 +128,22 @@
     </group>
 
     <item
-        android:id="@+id/renameAlbum"
+        android:id="@+id/rename"
         android:title="@string/rename"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
-        android:id="@+id/delete_action"
+        android:id="@+id/delete"
         android:title="@string/delete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/select_all"
         android:title="@string/select_all"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 
     <item
-        android:id="@+id/clear_album_preview"
+        android:id="@+id/clear_album_cover"
         android:title="@string/clear_preview"
         android:visible="false"
         app:showAsAction="never" />

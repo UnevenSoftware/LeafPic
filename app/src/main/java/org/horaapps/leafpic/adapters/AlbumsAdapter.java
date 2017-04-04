@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -182,22 +181,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
         Album a = albums.get(position);
 
-        holder.card.setOnClickListener(v -> {
-            if (selecting()) {
-                notifySelected(a.toggleSelected());
-                notifyItemChanged(position);
-                onChangeSelectedSubject.onNext(a);
-            } else
-                onClickSubject.onNext(a);
-        });
-
-        holder.card.setOnLongClickListener(v -> {
-            notifySelected(a.toggleSelected());
-            notifyItemChanged(position);
-            onChangeSelectedSubject.onNext(a);
-            return true;
-        });
-
         Media f = a.getCover();
 
         Glide.with(holder.picture.getContext())
@@ -208,11 +191,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .signature(f.getSignature())
                 .centerCrop()
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
-                 //.placeholder(placeholder)
+                .placeholder(placeholder)
                 .animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into(holder.picture);
 
-        holder.name.setTag(a);
+        //holder.name.setTag(a);
 
         String hexPrimaryColor = ColorPalette.getHexColor(theme.getPrimaryColor());
         String hexAccentColor = ColorPalette.getHexColor(theme.getAccentColor());
@@ -220,6 +203,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         if (hexAccentColor.equals(hexPrimaryColor))
             hexAccentColor = ColorPalette.getHexColor(ColorPalette.getDarkerColor(theme.getAccentColor()));
 
+        // TODO: 4/4/17 use ints
         String textColor = theme.getBaseTheme().equals(Theme.LIGHT) ? "#2B2B2B" : "#FAFAFA";
 
         if (a.isSelected()) {
@@ -238,29 +222,41 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             }
         }
 
-
-        holder.llMdia.setVisibility(SP.getBoolean("show_media_count", true) ? View.VISIBLE : View.GONE);
         holder.llCount.setVisibility(PreferenceUtil.getBool(holder.llCount.getContext(), "show_n_photos", true) ? View.VISIBLE : View.GONE);
 
-        String albumNameHtml = "<i><font color='" + textColor + "'>" + a.getName() + "</font></i>";
-        String albumPhotoCountHtml = "<b><font color='" + hexAccentColor + "'>" + a.getCount() + "</font></b>";
-
         holder.mediaLabel.setTextColor(theme.getTextColor());
-        holder.name.setText(StringUtils.html(albumNameHtml));
-        holder.nPhotos.setText(StringUtils.html(albumPhotoCountHtml));
 
-        holder.itemView.findViewById(R.id.album_path).setVisibility(SP.getBoolean("show_album_path", false) ? View.VISIBLE : View.GONE);
-        ((TextView) holder.itemView.findViewById(R.id.album_path)).setTextColor(theme.getSubTextColor());
-        ((TextView) holder.itemView.findViewById(R.id.album_path)).setText(a.getPath().toString());
-        ((TextView) holder.itemView.findViewById(R.id.album_path)).setSelected(true);
+        holder.name.setText(StringUtils.htmlFormat(a.getName(), textColor, false, true));
+        holder.nMedia.setText(StringUtils.htmlFormat(String.valueOf(a.getCount()), hexAccentColor, true, false));
+
+        holder.path.setVisibility(PreferenceUtil.getBool(holder.path.getContext(),"show_album_path", false) ? View.VISIBLE : View.GONE);
+
+        holder.path.setTextColor(theme.getSubTextColor());
+        holder.path.setText(a.getPath());
+        //holder.path.setSelected(true);
 
         //START Animation MAKES BUG ON FAST TAP ON CARD
         //Animation anim;
         //anim = AnimationUtils.loadAnimation(holder.albumCard.getContext(), R.anim.slide_fade_card);
         //holder.albumCard.startAnimation(anim);
         //ANIMS
-        holder.albumCard.animate().alpha(1).setDuration(250);
-        holder.nMedia.setText(StringUtils.html(albumPhotoCountHtml));
+        //holder.card.animate().alpha(1).setDuration(250);
+
+        holder.card.setOnClickListener(v -> {
+            if (selecting()) {
+                notifySelected(a.toggleSelected());
+                notifyItemChanged(position);
+                onChangeSelectedSubject.onNext(a);
+            } else
+                onClickSubject.onNext(a);
+        });
+
+        holder.card.setOnLongClickListener(v -> {
+            notifySelected(a.toggleSelected());
+            notifyItemChanged(position);
+            onChangeSelectedSubject.onNext(a);
+            return true;
+        });
     }
 
     public void clear() {
@@ -282,7 +278,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             z++;
 
         for (int i = Math.max(0, z), mid = (i+size)>>1, j = size-1; i < mid; i++, j--)
-             Collections.swap(albums, i, j);
+            Collections.swap(albums, i, j);
     }
 
     @Override
@@ -292,14 +288,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.album_card) CardView card;
         @BindView(R.id.album_preview) ImageView picture;
         @BindView(R.id.selected_icon) View selectedIcon;
-        @BindView(R.id.linear_card_text) View footer;
-        @BindView(R.id.ll_n_media) View llCount;
+        @BindView(R.id.ll_album_info) View footer;
+        @BindView(R.id.ll_media_count) View llCount;
         @BindView(R.id.album_name) TextView name;
         @BindView(R.id.album_media_count) TextView nMedia;
         @BindView(R.id.album_media_label) TextView mediaLabel;
+        @BindView(R.id.album_path) TextView path;
 
         ViewHolder(View itemView) {
             super(itemView);

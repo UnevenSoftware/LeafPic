@@ -49,16 +49,16 @@
               tools:context=".PhotosActivity">
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/name_sort_action"
+                    android:id="@+id/name_sort_mode"
                     android:title="@string/name"
                     app:showAsAction="never" />
                 <item
-                    android:id="@+id/date_taken_sort_action"
+                    android:id="@+id/date_taken_sort_mode"
                     android:checked="true"
                     android:title="@string/date"
                     app:showAsAction="never" />
                 <item
-                    android:id="@+id/size_sort_action"
+                    android:id="@+id/size_sort_mode"
                     android:title="@string/size"
                     app:showAsAction="never" />
                 <item
@@ -66,13 +66,13 @@
                     android:title="@string/type"
                     app:showAsAction="never" />
                 <item
-                    android:id="@+id/numeric_sort_action"
+                    android:id="@+id/numeric_sort_mode"
                     android:title="@string/numeric"
                     app:showAsAction="never" />
             </group>
             <group android:checkableBehavior="all">
                 <item
-                    android:id="@+id/ascending_sort_action"
+                    android:id="@+id/ascending_sort_order"
                     android:title="@string/ascending"
                     app:showAsAction="never" />
             </group>

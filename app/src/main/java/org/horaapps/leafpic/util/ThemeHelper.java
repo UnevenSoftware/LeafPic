@@ -168,6 +168,10 @@ public class ThemeHelper {
 		return new IconicsDrawable(context).icon(icon).color(Color.WHITE).sizeDp(18);
 	}
 
+	public static IconicsDrawable getToolbarIcon(Context context, IIcon icon) {
+		return new IconicsDrawable(context).icon(icon).color(Color.WHITE).sizeDp(18);
+	}
+
 	public IconicsDrawable getIcon(IIcon icon) {
 		return new IconicsDrawable(context).icon(icon).color(getIconColor());
 	}
