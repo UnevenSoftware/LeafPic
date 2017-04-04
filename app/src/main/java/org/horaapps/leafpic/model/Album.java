@@ -8,7 +8,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.horaapps.leafpic.adapters.MediaAdapter;
+import org.horaapps.leafpic.adapters.OldMediaAdapter;
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.MediaComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
@@ -318,7 +318,7 @@ public class Album implements Serializable, CursorHandler {
 	 *
 	 * @param adapter
 	 */
-	public void selectAllMediaUpTo(Media m, MediaAdapter adapter) {
+	public void selectAllMediaUpTo(Media m, OldMediaAdapter adapter) {
 		int targetIndex = media.indexOf(m);
 		int indexRightBeforeOrAfter = -1;
 		int indexNow;

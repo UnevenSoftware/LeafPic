@@ -204,7 +204,7 @@ public class SplashScreen extends SharedMediaActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            //getAlbums().addAlbum(0, tmpAlbum);
+            //getAlbums().add(0, tmpAlbum);
             i.putExtra(CONTENT, PHOTOS_PREFETCHED);
             startActivity(i);
             finish();

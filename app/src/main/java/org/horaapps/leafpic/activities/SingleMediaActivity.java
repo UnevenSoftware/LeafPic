@@ -125,7 +125,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     if (album.addMedia(media)) album.setCount(1);
                     customUri = true;
                 }
-                //getAlbums().addAlbum(0, album);
+                //getAlbums().add(0, album);
             }
 
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), getAlbum().getMedia());

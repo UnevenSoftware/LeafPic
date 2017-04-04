@@ -126,7 +126,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return selectedCount;
     }
 
-    public void selectAllAlbums() {
+    public void selectAll() {
         for (int i = 0; i < albums.size(); i++)
             if (albums.get(i).setSelected(true))
                 notifyItemChanged(i);
@@ -134,7 +134,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
     }
 
-    public void clearSelectedAlbums() {
+    public void clearSelected() {
         for (int i = 0; i < albums.size(); i++)
             if (albums.get(i).setSelected(false))
                 notifyItemChanged(i);
@@ -168,11 +168,11 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return selectedCount > 0;
     }
 
-    public Observable<Album> getAlbumsClicks() {
+    public Observable<Album> getClicks() {
         return onClickSubject;
     }
 
-    public Observable<Album> getAlbumsSelectedClicks() {
+    public Observable<Album> getSelectedClicks() {
         return onChangeSelectedSubject;
     }
 
@@ -264,7 +264,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void addAlbum(Album album) {
+    public void add(Album album) {
         int i = Collections.binarySearch(
                 albums, album, AlbumsComparators.getComparator(sortingMode, sortingOrder));
         if (i < 0) i = ~i;

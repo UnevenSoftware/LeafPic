@@ -120,8 +120,15 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return selected;
     }
 
-    void setSelected(boolean selected) {
+    public boolean setSelected(boolean selected) {
+        if (this.selected == selected) return false;
         this.selected = selected;
+        return true;
+    }
+
+    public boolean toggleSelected() {
+        selected = !selected;
+        return selected;
     }
 
     public boolean isGif() { return mimeType.endsWith("gif"); }

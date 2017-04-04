@@ -2,7 +2,6 @@ package org.horaapps.leafpic.fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,17 +19,14 @@ import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
-import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
-import org.horaapps.leafpic.adapters.AlbumsAdapter;
-import org.horaapps.leafpic.model.Album;
+import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.model.HandlingAlbums;
+import org.horaapps.leafpic.model.Media;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.new_way.AlbumsHelper;
-import org.horaapps.leafpic.new_way.CPHelper;
-import org.horaapps.leafpic.new_way.DataManager;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
@@ -49,14 +44,14 @@ import io.reactivex.schedulers.Schedulers;
  * Created by dnld on 3/13/17.
  */
 
-public class AlbumsFragment extends Fragment implements IFragment, Themeable {
+public class RvMediaFragment extends Fragment implements IFragment, Themeable {
 
     private static final String TAG = "asd";
 
-    @BindView(R.id.albums) RecyclerView rvAlbums;
+    @BindView(R.id.media) RecyclerView rv;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
 
-    private AlbumsAdapter albumsAdapter;
+    private MediaAdapter albumsAdapter;
     private GridSpacingItemDecoration rvAlbumsDecoration;
 
     private MainActivity act;
@@ -87,7 +82,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     public void displayAlbums() {
         albumsAdapter.clear();
-        SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
+        /*SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
         DataManager.getInstance()
                 .getAlbumsRelay(getContext(), hidden)
                 .subscribeOn(Schedulers.io())
@@ -113,7 +108,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                             db.close();
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
-                        });
+                        });*/
     }
 
     @Override
@@ -125,11 +120,11 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     public void setUpColumns() {
         int columnsCount = columnsCount();
 
-        if (columnsCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
-            rvAlbums.removeItemDecoration(rvAlbumsDecoration);
+        if (columnsCount != ((GridLayoutManager) rv.getLayoutManager()).getSpanCount()) {
+            rv.removeItemDecoration(rvAlbumsDecoration);
             rvAlbumsDecoration = new GridSpacingItemDecoration(columnsCount, Measure.pxToDp(3, getContext()), true);
-            rvAlbums.addItemDecoration(rvAlbumsDecoration);
-            rvAlbums.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
+            rv.addItemDecoration(rvAlbumsDecoration);
+            rv.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
         }
     }
 
@@ -154,18 +149,18 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_albums, null);
+        View v = inflater.inflate(R.layout.fragment_rv_media, null);
         ButterKnife.bind(this, v);
 
         int spanCount = columnsCount();
         rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
-        rvAlbums.addItemDecoration(rvAlbumsDecoration);
-        rvAlbums.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+        rv.addItemDecoration(rvAlbumsDecoration);
+        rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
 
-        rvAlbums.setHasFixedSize(true);
-        rvAlbums.setItemAnimator(new DefaultItemAnimator());
+        rv.setHasFixedSize(true);
+        rv.setItemAnimator(new DefaultItemAnimator());
 
-        albumsAdapter = new AlbumsAdapter(
+        albumsAdapter = new MediaAdapter(
                 getContext(), sortingMode(), sortingOrder());
 
         albumsAdapter.getClicks()
@@ -182,7 +177,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 });
 
         refresh.setOnRefreshListener(this::displayAlbums);
-        rvAlbums.setAdapter(albumsAdapter);
+        rv.setAdapter(albumsAdapter);
 
         displayAlbums(false);
         return v;
@@ -243,9 +238,9 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         }
 
         if (oneSelected) {
-            Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
-            menu.findItem(R.id.pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
-            menu.findItem(R.id.clear_album_cover).setVisible(selectedAlbum.hasCover());
+            Media selectedAlbum = albumsAdapter.getFirstSelected();
+            //menu.findItem(R.id.pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
+            //menu.findItem(R.id.clear_album_cover).setVisible(selectedAlbum.hasCover());
         }
     }
 
@@ -260,21 +255,6 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 else albumsAdapter.selectAll();
                 return true;
 
-            case R.id.pin_album:
-                Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
-                if (selectedAlbum != null) {
-                    selectedAlbum.togglePinAlbum();
-                    db().updatePinned(selectedAlbum);
-                    albumsAdapter.clearSelected();
-                    albumsAdapter.sort();
-                }
-                // TODO: 3/24/17 notify
-                return true;
-
-            case R.id.shortcut:
-                AlbumsHelper.createShortcuts(getContext(), albumsAdapter.getSelectedAlbums());
-                albumsAdapter.clearSelected();
-                return true;
 
             case R.id.name_sort_mode:
                 albumsAdapter.changeSortingMode(SortingMode.NAME);
@@ -332,7 +312,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     @Override
     public void refreshTheme(ThemeHelper t) {
-        rvAlbums.setBackgroundColor(t.getBackgroundColor());
+        rv.setBackgroundColor(t.getBackgroundColor());
         albumsAdapter.updateTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
