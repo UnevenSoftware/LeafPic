@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     maven { url  "http://dl.bintray.com/dasar/maven" }
@@ -16,10 +15,15 @@ android {
         versionName "v0.6-beta-2"
         versionCode 14
     }
+
     lintOptions {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
         abortOnError false
+    }
+
+    dexOptions {
+        jumboMode = true
     }
 
     // This is handled for you by the 2.0+ Gradle Plugin
