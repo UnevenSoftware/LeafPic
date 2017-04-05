@@ -166,33 +166,33 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         return  tracked;
     }
 
-    public void updatePinned(Album album) {
+    public void setPined(String path, boolean pinned) {
         ContentValues values = new ContentValues();
-        values.put(ALBUM_PINNED, album.isPinned() ? 1 : 0);
-        setValue(album, values);
+        values.put(ALBUM_PINNED, pinned ? 1 : 0);
+        setValue(path, values);
     }
 
-    void setCover(Album albumPath, String mediaPath) {
+    public void setCover(String path, String mediaPath) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_COVER_PATH, mediaPath);
-        setValue(albumPath, values);
+        setValue(path, values);
     }
 
-    void setSortingMode(Album albumPath, int column) {
+    void setSortingMode(String path, int column) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_SORTING_MODE, column);
-        setValue(albumPath, values);
+        setValue(path, values);
     }
 
-    void setSortingOrder(Album albumPath, int sortingOrder) {
+    void setSortingOrder(String path, int sortingOrder) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_SORTING_ORDER, sortingOrder);
-        setValue(albumPath, values);
+        setValue(path, values);
     }
 
-    private void setValue(Album albumPath, ContentValues values) {
+    private void setValue(String path, ContentValues values) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ albumPath.getPath() });
+        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
         db.close();
     }
 

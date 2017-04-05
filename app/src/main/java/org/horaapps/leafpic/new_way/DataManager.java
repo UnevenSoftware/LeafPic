@@ -4,16 +4,13 @@ package org.horaapps.leafpic.new_way;
 import android.content.Context;
 
 import com.jakewharton.rxrelay2.PublishRelay;
-import com.jakewharton.rxrelay2.ReplayRelay;
 
 import org.horaapps.leafpic.model.Album;
 import org.horaapps.leafpic.model.Media;
-import org.reactivestreams.Subscription;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.subjects.ReplaySubject;
 
 
 public class DataManager {
@@ -22,10 +19,7 @@ public class DataManager {
 
     private static DataManager instance;
 
-    private Subscription songsSubscription;
-    private ReplayRelay<List<Media>> songsRelay = ReplayRelay.create();
-
-    private Subscription albumsSubscription;
+    private PublishRelay<Media> mediaRelay = PublishRelay.create();
     private PublishRelay<Album> albumsRelay = PublishRelay.create();
 
 
@@ -46,10 +40,16 @@ public class DataManager {
     }
 
     public Observable<Album> getAlbumsRelay(Context context, boolean hidden) {
-        ReplaySubject<Album> as = ReplaySubject.create();
         CPHelper.getAlbums(context, hidden)
-                .subscribe(as);
-        return as;
+                .subscribe(albumsRelay);
+        return albumsRelay;
+    }
+
+    public Observable<Media> getMediaRelay(Context context, Album album) {
+        CPHelper.getMedia(context, album)
+                .subscribe(mediaRelay);
+
+        return mediaRelay;
     }
 
 
@@ -82,9 +82,9 @@ public class DataManager {
                 }
 
                 return result;
-            }).subscribe(songsRelay, error -> Crashlytics.log("getSongsRelay error: " + error.getMessage()));
+            }).subscribe(mediaRelay, error -> Crashlytics.log("getSongsRelay error: " + error.getMessage()));
         }
-        return songsRelay.subscribeOn(Schedulers.io()).map(ArrayList::new);
+        return mediaRelay.subscribeOn(Schedulers.io()).map(ArrayList::new);
     }
 
 

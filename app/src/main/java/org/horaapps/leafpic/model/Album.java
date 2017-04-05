@@ -3,14 +3,12 @@ package org.horaapps.leafpic.model;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.horaapps.leafpic.adapters.OldMediaAdapter;
 import org.horaapps.leafpic.model.base.FilterMode;
-import org.horaapps.leafpic.model.base.MediaComparators;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.new_way.CursorHandler;
@@ -22,7 +20,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by dnld on 26/04/16.
@@ -31,18 +28,12 @@ public class Album implements Serializable, CursorHandler {
 
 	private String name, path;
 	private long id = -1, dateModified;
-	private int count = -1, currentMediaIndex = 0;
+	private int count = -1;
 
 	private boolean selected = false;
 	public AlbumSettings settings = null;
 
-	@Deprecated private ArrayList<Media> media;
-	@Deprecated private ArrayList<Media> selectedMedia;
-
-
 	public Album(String path, String name) {
-		media = new ArrayList<>();
-		selectedMedia = new ArrayList<>();
 		this.name = name;
 		this.path = path;
 	}
@@ -112,6 +103,10 @@ public class Album implements Serializable, CursorHandler {
 		return count;
 	}
 
+	public Long getDateModified() {
+		return dateModified;
+	}
+
 	public Media getCover() {
 		if (hasCover())
 			return new Media(settings.coverPath);
@@ -171,8 +166,12 @@ public class Album implements Serializable, CursorHandler {
 		return result;
 	}
 
+	@Deprecated
 	public ArrayList<Media> getMedia() {
-		ArrayList<Media> mediaArrayList = new ArrayList<>();
+
+		return new ArrayList<>();
+
+		/*ArrayList<Media> mediaArrayList = new ArrayList<>();
 		switch (getFilterMode()) {
 			case ALL:
 				mediaArrayList = media;
@@ -191,18 +190,20 @@ public class Album implements Serializable, CursorHandler {
 					if (media1.isVideo()) mediaArrayList.add(media1);
 				break;
 		}
-		return mediaArrayList;
+		return mediaArrayList;*/
 	}
 
+	@Deprecated
 	public void updatePhotos(Context context) {
-		media = getMedia(context);
+		/*media = getMedia(context);
 		sortPhotos();
-		setCount(media.size());
+		setCount(media.size());*/
 	}
 
+	@Deprecated
 	private void updatePhotos(Context context, FilterMode filterMode) {
 
-		ArrayList<Media> media = getMedia(context), mediaArrayList = new ArrayList<>();
+		/*ArrayList<Media> media = getMedia(context), mediaArrayList = new ArrayList<>();
 
 		switch (filterMode) {
 			case ALL:
@@ -225,9 +226,10 @@ public class Album implements Serializable, CursorHandler {
 
 		this.media = mediaArrayList;
 		sortPhotos();
-		setCount(this.media.size());
+		setCount(this.media.size());*/
 	}
 
+	@Deprecated
 	private ArrayList<Media> getMedia(Context context) {
 		ArrayList<Media> mediaArrayList = new ArrayList<>();
 		if (hasId()) {
@@ -241,75 +243,56 @@ public class Album implements Serializable, CursorHandler {
 		return mediaArrayList;
 	}
 
-
-
+	@Deprecated
 	public void filterMedias(Context context, FilterMode filter) {
 		settings.filterMode = filter;
 		updatePhotos(context, filter);
 	}
 
+	@Deprecated
 	public boolean addMedia(@Nullable Media media) {
 		if(media == null) return false;
-		this.media.add(media);
+		//this.media.add(media);
 		Log.d("asd", "addMedia: "+media.getPath());
 		return true;
 	}
 
-	public Media getMedia(int index) { return media.get(index); }
+	@Deprecated
+	public Media getMedia(int index) { return new Media(); }
 
-	public void setCurrentMedia(int index){ currentMediaIndex = index; }
+	@Deprecated
+	public void setCurrentMedia(int index){  }
 
-	public void setCurrentMedia(Media m){ setCurrentMedia(media.indexOf(m)); }
+	@Deprecated
+	public void setCurrentMedia(Media m){ }
 
-	public Media getCurrentMedia() { return getMedia(currentMediaIndex); }
+	@Deprecated
+	public Media getCurrentMedia() { return new Media(); }
 
-	public int getCurrentMediaIndex() { return currentMediaIndex; }
+	@Deprecated
+	public int getCurrentMediaIndex() { return -1; }
 
+	@Deprecated
 	public void setCurrentMedia(String path) {
-		for (int i = 0; i < media.size(); i++)
+		/*for (int i = 0; i < media.size(); i++)
 			if (media.get(i).getPath().equals(path)) {
 				currentMediaIndex = i;
 				break;
-			}
+			}*/
 	}
 
 
 
 	//region Selected Media
 
-	public ArrayList<Media> getSelectedMedia() {
-		return selectedMedia;
-	}
-
+	@Deprecated
 	public Media getSelectedMedia(int index) {
-		return selectedMedia.get(index);
+		return new Media();
 	}
 
+	@Deprecated
 	public int getSelectedMediaCount() {
-		return selectedMedia.size();
-	}
-
-	public boolean thereAreMediaSelected() { return getSelectedMediaCount() != 0;}
-
-	public void selectAllMedia() {
-		for (int i = 0; i < media.size(); i++) {
-			if (!media.get(i).isSelected()) {
-				media.get(i).setSelected(true);
-				selectedMedia.add(media.get(i));
-			}
-		}
-	}
-
-	public int toggleSelectMedia(Media m) {
-		int index = media.indexOf(m);
-		if (media.get(index) != null) {
-			media.get(index).setSelected(!media.get(index).isSelected());
-			if (media.get(index).isSelected())
-				selectedMedia.add(media.get(index));
-			else
-				selectedMedia.remove(media.get(index));
-		}
-		return index;
+		return -1;
 	}
 
 	/**
@@ -318,8 +301,9 @@ public class Album implements Serializable, CursorHandler {
 	 *
 	 * @param adapter
 	 */
+	@Deprecated
 	public void selectAllMediaUpTo(Media m, OldMediaAdapter adapter) {
-		int targetIndex = media.indexOf(m);
+		/*int targetIndex = media.indexOf(m);
 		int indexRightBeforeOrAfter = -1;
 		int indexNow;
 		for (Media sm : selectedMedia) {
@@ -340,14 +324,9 @@ public class Album implements Serializable, CursorHandler {
 					}
 				}
 			}
-		}
+		}*/
 	}
 
-	public void clearSelectedMedia() {
-		for (Media m : media)
-			m.setSelected(false);
-		selectedMedia.clear();
-	}
 	//endregion
 
 	//region Album Properties Setters
@@ -372,31 +351,29 @@ public class Album implements Serializable, CursorHandler {
 		return selected;
 	}
 
-	public void removeCoverAlbum(Context context) {
-		//HandlingAlbums.getInstance(context).setCover(path, null);
+	public void removeCoverAlbum() {
 		settings.coverPath = null;
 	}
 
 	public void setSelectedPhotoAsPreview(Context context) {
-		if (selectedMedia.size() > 0) {
+		/*if (selectedMedia.size() > 0) {
 			String asd = selectedMedia.get(0).getPath();
 			//HandlingAlbums.getInstance(context).setCover(this.path, asd);
 			settings.coverPath = asd;
-		}
+		}*/
 	}
 
 	public void setDefaultSortingMode(Context context, SortingMode column) {
 		settings.sortingMode = column.getValue();
-		//HandlingAlbums.getInstance(context).setSortingMode(path, column.getValue());
 	}
 
 	public void setDefaultSortingAscending(Context context, SortingOrder sortingOrder) {
 		settings.sortingOrder = sortingOrder.getValue();
-		//HandlingAlbums.getInstance(context).setSortingOrder(path, sortingOrder.getValue());
 	}
 
-	public void togglePinAlbum() {
+	public boolean togglePinAlbum() {
 		settings.pinned = !settings.pinned;
+		return settings.pinned;
 	}
 
 	//endregion
@@ -414,8 +391,9 @@ public class Album implements Serializable, CursorHandler {
 		return success;
 	}
 
+	@Deprecated
 	public boolean moveCurrentMedia(Context context, String targetDir) {
-		boolean success = false;
+		/*boolean success = false;
 		try {
 			String from = getCurrentMedia().getPath();
 			if (success = moveMedia(context, from, targetDir)) {
@@ -424,11 +402,13 @@ public class Album implements Serializable, CursorHandler {
 				setCount(media.size());
 			}
 		} catch (Exception e) { e.printStackTrace(); }
-		return success;
+		return success;*/
+		return false;
 	}
 
+	@Deprecated
 	public int moveSelectedMedia(Context context, String targetDir) {
-		int n = 0;
+		/*int n = 0;
 		try
 		{
 			for (int i = 0; i < selectedMedia.size(); i++) {
@@ -448,7 +428,8 @@ public class Album implements Serializable, CursorHandler {
 			}
 		} catch (Exception e) { e.printStackTrace(); }
 		setCount(media.size());
-		return n;
+		return n;*/
+		return -1;
 	}
 
 	private boolean moveMedia(Context context, String source, String targetDir) {
@@ -458,15 +439,16 @@ public class Album implements Serializable, CursorHandler {
 	}
 
 	public void sortPhotos() {
-		Collections.sort(media, MediaComparators.getComparator(settings.getSortingMode(), settings.getSortingOrder()));
+		/*Collections.sort(media, MediaComparators.getComparator(settings.getSortingMode(), settings.getSortingOrder()));*/
 	}
 
 	public boolean copySelectedPhotos(Context context, String folderPath) {
-		boolean success = true;
+		/*boolean success = true;
 		for (Media media : selectedMedia)
 			if(!copyPhoto(context, media.getPath(), folderPath))
 				success = false;
-		return success;
+		return success;*/
+		return false;
 	}
 
 	public boolean copyPhoto(Context context, String olderPath, String folderPath) {
@@ -481,13 +463,15 @@ public class Album implements Serializable, CursorHandler {
 		return success;
 	}
 
+	@Deprecated
 	public boolean deleteCurrentMedia(Context context) {
-		boolean success = deleteMedia(context, getCurrentMedia());
+		/*boolean success = deleteMedia(context, getCurrentMedia());
 		if (success) {
 			media.remove(getCurrentMediaIndex());
 			setCount(media.size());
 		}
-		return success;
+		return success;*/
+		return false;
 	}
 
 	private boolean deleteMedia(Context context, Media media) {
@@ -506,7 +490,7 @@ public class Album implements Serializable, CursorHandler {
 	}
 
 	public boolean deleteSelectedMedia(Context context) {
-		boolean success = true;
+		/*boolean success = true;
 		for (Media selectedMedia : this.selectedMedia) {
 			if (deleteMedia(context, selectedMedia))
 				media.remove(selectedMedia);
@@ -516,13 +500,14 @@ public class Album implements Serializable, CursorHandler {
 			clearSelectedMedia();
 			setCount(media.size());
 		}
-		return success;
+		return success;*/
+		return false;
 	}
 
 	private boolean found_id_album = false;
 
 	public boolean renameAlbum(final Context context, String newName) {
-		found_id_album = false;
+		/*found_id_album = false;
 		boolean success;
 		File dir = new File(StringUtils.getAlbumPathRenamed(getPath(), newName));
 		if (success = ContentHelper.mkdir(context, dir)) {
@@ -555,17 +540,11 @@ public class Album implements Serializable, CursorHandler {
 			//id = ContentProviderHelper.getAlbumId(context, media.getValue(0).getPath());
 
 		}
-		return success;
+		return success;*/
+
+		return false;
 	}
 
-	private void scanFile(Context context, String[] path) { scanFile(context, path, null); }
-
-	private void scanFile(Context context, String[] path, MediaScannerConnection.OnScanCompletedListener onScanCompletedListener) {
-		MediaScannerConnection.scanFile(context, path, null, onScanCompletedListener);
-	}
-
-
-	public Long getDateModified() {
-		return dateModified;
-	}
+	@Deprecated
+	private void scanFile(Context context, String[] path) { MediaScannerConnection.scanFile(context, path, null, null); }
 }

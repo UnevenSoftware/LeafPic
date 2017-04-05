@@ -141,14 +141,14 @@ public class CPHelper {
         return QueryUtils.querySingle(query.build(), context.getContentResolver(), Media::new);
     }
 
-    private static Observable<Media> getMedia(Context context, long albumId, int n) {
+    public static Observable<Media> getMedia(Context context, Album album) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
-                .projection(Media.getProjection())
+                .projection(Media.getProjection());
                /* .sort(MediaStore.Images.Media.DATE_TAKEN)
-                .ascending(false)*/
-                .limit(n);
+                .ascending(false)
+                .limit(n);*/
 
         if(PreferenceUtil.getBool(context, "set_include_video", true)) {
             query.selection(String.format("(%s=? or %s=?) and %s=?",
@@ -158,19 +158,17 @@ public class CPHelper {
             query.args(
                     MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
-                    albumId);
+                    album.getId());
         } else {
             query.selection(String.format("%s=? and %s=?",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.PARENT));
-            query.args(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, albumId);
+            query.args(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, album.getId());
         }
 
         return QueryUtils.query(query.build(), context.getContentResolver(), Media::new);
     }
     //endregion
-
-
 }
 
 

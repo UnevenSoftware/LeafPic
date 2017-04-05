@@ -239,11 +239,53 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         });
 
         holder.layout.setOnLongClickListener(v -> {
-            notifySelected(f.toggleSelected());
-            notifyItemChanged(position);
-            onChangeSelectedSubject.onNext(f);
+            if (!selecting()) {
+                // If it is the first long press
+                notifySelected(f.toggleSelected());
+                notifyItemChanged(position);
+                onChangeSelectedSubject.onNext(f);
+            } else {
+                selectAllUpTo(f);
+                onChangeSelectedSubject.onNext(new Media());
+            }
+
+
             return true;
         });
+    }
+
+
+    /**
+     * On longpress, it finds the last or the first selected image before or after the targetIndex
+     * and selects them all.
+     *
+     * @param
+     */
+    public void selectAllUpTo(Media m) {
+        int targetIndex = media.indexOf(m);
+
+        int indexRightBeforeOrAfter = -1;
+        int indexNow;
+
+        // TODO: 4/5/17 rewrite?
+        for (Media sm : getSelected()) {
+            indexNow = media.indexOf(sm);
+            if (indexRightBeforeOrAfter == -1) indexRightBeforeOrAfter = indexNow;
+
+            if (indexNow > targetIndex) break;
+            indexRightBeforeOrAfter = indexNow;
+        }
+
+        if (indexRightBeforeOrAfter != -1) {
+            for (int index = Math.min(targetIndex, indexRightBeforeOrAfter); index <= Math.max(targetIndex, indexRightBeforeOrAfter); index++) {
+                if (media.get(index) != null) {
+                    if (media.get(index).setSelected(true)) {
+                        notifyItemChanged(index);
+                    }
+                }
+            }
+
+        }
     }
 
     public void clear() {

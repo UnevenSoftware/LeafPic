@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
@@ -53,11 +52,11 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     private static final String TAG = "asd";
 
-    @BindView(R.id.albums) RecyclerView rvAlbums;
+    @BindView(R.id.albums) RecyclerView rv;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
 
-    private AlbumsAdapter albumsAdapter;
-    private GridSpacingItemDecoration rvAlbumsDecoration;
+    private AlbumsAdapter adapter;
+    private GridSpacingItemDecoration spacingDecoration;
 
     private MainActivity act;
     private boolean hidden;
@@ -86,7 +85,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     }
 
     public void displayAlbums() {
-        albumsAdapter.clear();
+        adapter.clear();
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
         DataManager.getInstance()
                 .getAlbumsRelay(getContext(), hidden)
@@ -98,7 +97,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
                             Log.wtf("asd", album.toString());
                             if (album.hasCover())
-                                albumsAdapter.add(album);
+                                adapter.add(album);
                             else
                                 CPHelper.getLastMedia(App.getInstance(), album.getId())
                                         .subscribeOn(Schedulers.io())
@@ -106,7 +105,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                                         .subscribe(
                                                 media -> album.setCover(media.getPath()),
                                                 throwable -> {},
-                                                () -> albumsAdapter.add(album));
+                                                () -> adapter.add(album));
 
                         }, throwable -> { },
                         () -> {
@@ -125,11 +124,11 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     public void setUpColumns() {
         int columnsCount = columnsCount();
 
-        if (columnsCount != ((GridLayoutManager) rvAlbums.getLayoutManager()).getSpanCount()) {
-            rvAlbums.removeItemDecoration(rvAlbumsDecoration);
-            rvAlbumsDecoration = new GridSpacingItemDecoration(columnsCount, Measure.pxToDp(3, getContext()), true);
-            rvAlbums.addItemDecoration(rvAlbumsDecoration);
-            rvAlbums.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
+        if (columnsCount != ((GridLayoutManager) rv.getLayoutManager()).getSpanCount()) {
+            rv.removeItemDecoration(spacingDecoration);
+            spacingDecoration = new GridSpacingItemDecoration(columnsCount, Measure.pxToDp(3, getContext()), true);
+            rv.addItemDecoration(spacingDecoration);
+            rv.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
         }
     }
 
@@ -144,9 +143,9 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
             //todo improve
             act.updateToolbar(
                     String.format(Locale.ENGLISH, "%d/%d",
-                            albumsAdapter.getSelectedCount(), albumsAdapter.getItemCount()),
+                            adapter.getSelectedCount(), adapter.getItemCount()),
                     GoogleMaterial.Icon.gmd_check,
-                    v -> albumsAdapter.clearSelected());
+                    v -> adapter.clearSelected());
         else act.resetToolbar();
     }
 
@@ -158,22 +157,22 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         ButterKnife.bind(this, v);
 
         int spanCount = columnsCount();
-        rvAlbumsDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
-        rvAlbums.addItemDecoration(rvAlbumsDecoration);
-        rvAlbums.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+        spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
+        rv.addItemDecoration(spacingDecoration);
+        rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
 
-        rvAlbums.setHasFixedSize(true);
-        rvAlbums.setItemAnimator(new DefaultItemAnimator());
+        rv.setHasFixedSize(true);
+        rv.setItemAnimator(new DefaultItemAnimator());
 
-        albumsAdapter = new AlbumsAdapter(
+        adapter = new AlbumsAdapter(
                 getContext(), sortingMode(), sortingOrder());
 
-        albumsAdapter.getClicks()
+        adapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show());
+                .subscribe(album -> act.displayMedia(album));
 
-        albumsAdapter.getSelectedClicks()
+        adapter.getSelectedClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(album -> {
@@ -182,21 +181,21 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                 });
 
         refresh.setOnRefreshListener(this::displayAlbums);
-        rvAlbums.setAdapter(albumsAdapter);
+        rv.setAdapter(adapter);
 
         displayAlbums(false);
         return v;
     }
 
     public SortingMode sortingMode() {
-        return albumsAdapter != null
-                ? albumsAdapter.sortingMode()
+        return adapter != null
+                ? adapter.sortingMode()
                 : AlbumsHelper.getSortingMode(getContext());
     }
 
     public SortingOrder sortingOrder() {
-        return albumsAdapter != null
-                ? albumsAdapter.sortingOrder()
+        return adapter != null
+                ? adapter.sortingOrder()
                 : AlbumsHelper.getSortingOrder(getContext());
     }
 
@@ -208,7 +207,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_albums_fragment, menu);
+        inflater.inflate(R.menu.grid_albums, menu);
 
         menu.findItem(R.id.select_all).setIcon(ThemeHelper.getToolbarIcon(getContext(), GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
@@ -243,7 +242,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         }
 
         if (oneSelected) {
-            Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
+            Album selectedAlbum = adapter.getFirstSelectedAlbum();
             menu.findItem(R.id.pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));
             menu.findItem(R.id.clear_album_cover).setVisible(selectedAlbum.hasCover());
         }
@@ -252,50 +251,60 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        Album selectedAlbum = adapter.getFirstSelectedAlbum();
         switch (item.getItemId()) {
 
             case R.id.select_all:
-                if (albumsAdapter.getSelectedCount() == albumsAdapter.getItemCount())
-                    albumsAdapter.clearSelected();
-                else albumsAdapter.selectAll();
+                if (adapter.getSelectedCount() == adapter.getItemCount())
+                    adapter.clearSelected();
+                else adapter.selectAll();
                 return true;
 
             case R.id.pin_album:
-                Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
                 if (selectedAlbum != null) {
-                    selectedAlbum.togglePinAlbum();
-                    db().updatePinned(selectedAlbum);
-                    albumsAdapter.clearSelected();
-                    albumsAdapter.sort();
+                    boolean b = selectedAlbum.togglePinAlbum();
+                    db().setPined(selectedAlbum.getPath(), b);
+                    adapter.clearSelected();
+                    adapter.sort();
                 }
-                // TODO: 3/24/17 notify
                 return true;
 
+            case R.id.clear_album_cover:
+                if (selectedAlbum != null) {
+                    selectedAlbum.removeCoverAlbum();
+                    db().setCover(selectedAlbum.getPath(), null);
+                    adapter.clearSelected();
+                    // TODO: 4/5/17 updateui
+                    return true;
+                }
+
+                return false;
+
             case R.id.shortcut:
-                AlbumsHelper.createShortcuts(getContext(), albumsAdapter.getSelectedAlbums());
-                albumsAdapter.clearSelected();
+                AlbumsHelper.createShortcuts(getContext(), adapter.getSelectedAlbums());
+                adapter.clearSelected();
                 return true;
 
             case R.id.name_sort_mode:
-                albumsAdapter.changeSortingMode(SortingMode.NAME);
+                adapter.changeSortingMode(SortingMode.NAME);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.NAME);
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_mode:
-                albumsAdapter.changeSortingMode(SortingMode.DATE);
+                adapter.changeSortingMode(SortingMode.DATE);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.DATE);
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_mode:
-                albumsAdapter.changeSortingMode(SortingMode.SIZE);
+                adapter.changeSortingMode(SortingMode.SIZE);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.SIZE);
                 item.setChecked(true);
                 return true;
 
             case R.id.numeric_sort_mode:
-                albumsAdapter.changeSortingMode(SortingMode.NUMERIC);
+                adapter.changeSortingMode(SortingMode.NUMERIC);
                 AlbumsHelper.setSortingMode(getContext(), SortingMode.NUMERIC);
                 item.setChecked(true);
                 return true;
@@ -303,7 +312,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
             case R.id.ascending_sort_order:
                 item.setChecked(!item.isChecked());
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
-                albumsAdapter.changeSortingOrder(sortingOrder);
+                adapter.changeSortingOrder(sortingOrder);
                 AlbumsHelper.setSortingOrder(getContext(), sortingOrder);
                 return true;
 
@@ -313,27 +322,27 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     }
 
     public int getCount() {
-        return albumsAdapter.getItemCount();
+        return adapter.getItemCount();
     }
 
     public int getSelectedCount() {
-        return albumsAdapter.getSelectedCount();
+        return adapter.getSelectedCount();
     }
 
     @Override
     public boolean editMode() {
-        return albumsAdapter.selecting();
+        return adapter.selecting();
     }
 
     @Override
     public void clearSelected() {
-        albumsAdapter.clearSelected();
+        adapter.clearSelected();
     }
 
     @Override
     public void refreshTheme(ThemeHelper t) {
-        rvAlbums.setBackgroundColor(t.getBackgroundColor());
-        albumsAdapter.updateTheme(t);
+        rv.setBackgroundColor(t.getBackgroundColor());
+        adapter.updateTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
     }

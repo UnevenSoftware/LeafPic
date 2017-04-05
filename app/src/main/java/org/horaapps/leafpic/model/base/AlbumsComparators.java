@@ -61,14 +61,6 @@ public class AlbumsComparators {
         };
     }
 
-   /* private static Comparator<Album> getDateComparator(){
-        return (a1, a2) -> {
-            if (a1.isPinned() == a2.isPinned())
-                return a1.getDateModified().compareTo(a2.getDateModified());
-            return a1.isPinned() ? -1 : 1;
-        };
-    }*/
-
     private static Comparator<Album> getNameComparator(Comparator<Album> base) {
         return (a1, a2) -> {
             int res = base.compare(a1, a2);

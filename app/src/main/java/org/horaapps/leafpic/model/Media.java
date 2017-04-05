@@ -51,14 +51,6 @@ public class Media implements Parcelable, Serializable, CursorHandler {
 
     public Media() { }
 
-    @Override
-    public String toString() {
-        return "Media{" +
-                "path='" + path + '\'' +
-                ", mime='" + mimeType + '\'' +
-                '}';
-    }
-
     public Media(String path, long dateModified) {
         this.path = path;
         this.dateModified = dateModified;
@@ -161,9 +153,10 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return dateModified;
     }
 
+    @Deprecated
     public Bitmap getBitmap(){
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(path,bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
         bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
         return bitmap;
     }
@@ -172,11 +165,16 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return new MediaSignature(this);
     }
 
+    public int getOrientation() {
+        return orientation;
+    }
+
     //<editor-fold desc="Exif & More">
     public GeoLocation getGeoLocation()  {
         return metadata != null ? metadata.getLocation() : null;
     }
 
+    // TODO remove Exif from here!
     public MediaDetailsMap<String, String> getAllDetails() {
         MediaDetailsMap<String, String> data = new MediaDetailsMap<String, String>();
         try {
@@ -196,7 +194,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
     }
 
     public MediaDetailsMap<String, String> getMainDetails(Context context){
-        MediaDetailsMap<String, String> details = new MediaDetailsMap<String, String>();
+        MediaDetailsMap<String, String> details = new MediaDetailsMap<>();
         details.put(context.getString(R.string.path), path != null ? path : getUri().getEncodedPath());
         details.put(context.getString(R.string.type), getMimeType());
         if(size != -1)
@@ -315,42 +313,4 @@ public class Media implements Parcelable, Serializable, CursorHandler {
             return new Media[size];
         }
     };
-
-    public int getOrientation() {
-        return orientation;
-    }
-
-    //<editor-fold desc="Thumbnail Tests">
-    public byte[] getThumbnail() {
-
-        ExifInterface exif;
-        try {
-            exif = new ExifInterface(path);
-        } catch (IOException e) {
-            return null;
-        }
-        if (exif.hasThumbnail())
-            return exif.getThumbnail();
-        return null;
-
-        // NOTE: ExifInterface is faster than metadata-extractor to getValue the thumbnail data
-        /*try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(getMediaPath()));
-            ExifThumbnailDirectory thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
-            if (thumbnailDirectory.hasThumbnailData())
-                return thumbnailDirectory.getThumbnailData();
-        } catch (Exception e) { return null; }*/
-    }
-
-    public String getThumbnail(Context context) {
-        /*Cursor cursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
-                context.getContentResolver(), id,
-                MediaStore.Images.Thumbnails.MINI_KIND,
-                new String[]{ MediaStore.Images.Thumbnails.DATA } );
-        if(cursor.moveToFirst())
-            return cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
-        return null;*/
-        return null;
-    }
-    //</editor-fold>
 }
