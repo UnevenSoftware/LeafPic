@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -77,7 +76,6 @@ public class MainActivity extends SharedMediaActivity {
     private PreferenceUtil SP;
 
     AlbumsFragment albumsFragment = new AlbumsFragment();;
-    RvMediaFragment mediaFragment = new RvMediaFragment();
 
     @BindView(R.id.fab_camera) FloatingActionButton fab;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -145,30 +143,30 @@ public class MainActivity extends SharedMediaActivity {
 
         initUi();
 
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(R.id.content, albumsFragment);
-        transaction.commit();
-        //loadFragment(albumsFragment);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, albumsFragment, "albums")
+                .commit();
+
+        albumsMode = true;
     }
 
     private void displayAlbums(boolean hidden) {
+        albumsMode = true;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         albumsFragment.displayAlbums();
-        albumsMode = true;
         supportInvalidateOptionsMenu();
     }
 
     public void displayMedia(Album album) {
-        mediaFragment.setAlbum(album);
-        //loadFragment(mediaFragment);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.remove(albumsFragment);
-        transaction.replace(R.id.content, mediaFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        albumsMode = false;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, RvMediaFragment.make(album), "media")
+                .addToBackStack(null)
+                .commit();
     }
 
     private boolean editMode() {
@@ -204,9 +202,6 @@ public class MainActivity extends SharedMediaActivity {
         albumsMode =  false;
         supportInvalidateOptionsMenu();
     }
-
-
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -252,22 +247,6 @@ public class MainActivity extends SharedMediaActivity {
     private void initUi() {
 
         setSupportActionBar(toolbar);
-
-        /** RVS **/
-
-        /*rv.setHasFixedSize(true);
-        rv.setItemAnimator(new DefaultItemAnimator());
-
-        oldMediaAdapter = new OldMediaAdapter(getAlbum().getMedia(), MainActivity.this);
-        oldMediaAdapter.setOnClickListener(photosOnClickListener);
-        oldMediaAdapter.setOnLongClickListener(photosOnLongClickListener);
-        rv.setAdapter(oldMediaAdapter);*/
-
-
-       /* int spanCount = SP.getInt("n_columns_media", 3);
-        rvMediaDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getApplicationContext()), true);
-        rv.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCount));
-        rv.addItemDecoration(rvMediaDecoration);*/
 
         // TODO: 3/25/17 organize better
         /**** DRAWER ****/
@@ -431,24 +410,6 @@ public class MainActivity extends SharedMediaActivity {
 
         setRecentApp(getString(R.string.app_name));
     }
-
-    @Deprecated
-    private void updateColumnsRvs() {
-        /*int  spanCountMedias;
-        if (getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
-            spanCountMedias = SP.getInt("n_columns_media", 3);
-        } else {
-            spanCountMedias = SP.getInt("n_columns_media_landscape", 4);
-        }
-        if (spanCountMedias != ((GridLayoutManager) rv.getLayoutManager()).getSpanCount()) {
-            ((GridLayoutManager) rv.getLayoutManager()).getSpanCount();
-            rv.removeItemDecoration(rvMediaDecoration);
-            rvMediaDecoration = new GridSpacingItemDecoration(spanCountMedias, Measure.pxToDp(3, getApplicationContext()), true);
-            rv.setLayoutManager(new GridLayoutManager(getApplicationContext(), spanCountMedias));
-            rv.addItemDecoration(rvMediaDecoration);
-        }*/
-    }
-
 
     public void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
         updateToolbar(title, icon);
@@ -633,24 +594,13 @@ public class MainActivity extends SharedMediaActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        //Album firstSelectedAlbum = albumsAdapter.getFirstSelectedAlbum();
 
         switch (item.getItemId()) {
-
-            /*case R.id.select_all:
-               {
-                    if (getAlbum().getSelectedMediaCount() == oldMediaAdapter.getItemCount()) {
-                        //editMode = false;
-                        getAlbum().clearSelectedMedia();
-                    } else getAlbum().selectAllMedia();
-                    oldMediaAdapter.notifyDataSetChanged();
-                }
-                supportInvalidateOptionsMenu();
-                return true;*/
 
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
+
 
 
 
@@ -821,20 +771,7 @@ public class MainActivity extends SharedMediaActivity {
                 alertDialog.show();
                 return true;*/
 
-            case R.id.sharePhotos:
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
 
-                ArrayList<Uri> files = new ArrayList<Uri>();
-                for (Media f : /*getAlbum().getSelectedMedia()*/ new ArrayList<Media>())
-                    files.add(f.getUri());
-
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                intent.setType(StringUtils.getGenericMIME(getAlbum().getSelectedMedia(0).getMimeType()));
-                finishEditMode();
-                startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
-                return true;
 
             case R.id.all_media_filter:
                 if (!albumsMode) {
@@ -871,81 +808,6 @@ public class MainActivity extends SharedMediaActivity {
                     checkNothing();
                 }
                 return true;
-
-           /* case R.id.name_sort_action:
-                if (albumsMode) {
-                    getAlbums().setDefaultSortingMode(SortingMode.NAME);
-                    getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().albums);
-                } else {
-                    getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NAME);
-                    getAlbum().sortPhotos();
-                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                }
-                item.setChecked(true);
-                return true;
-
-            case R.id.date_taken_sort_action:
-                if (albumsMode) {
-                    getAlbums().setDefaultSortingMode(SortingMode.DATE);
-                    getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().albums);
-                } else {
-                    getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.DATE);
-                    getAlbum().sortPhotos();
-                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                }
-                item.setChecked(true);
-                return true;
-
-            case R.id.size_sort_action:
-                if (albumsMode) {
-                    getAlbums().setDefaultSortingMode(SortingMode.SIZE);
-                    getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().albums);
-                } else {
-                    getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.SIZE);
-                    getAlbum().sortPhotos();
-                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                }
-                item.setChecked(true);
-                return true;
-
-            case R.id.type_sort_action:
-                if (!albumsMode) {
-                    getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.TYPE);
-                    getAlbum().sortPhotos();
-                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                    item.setChecked(true);
-                }
-
-                return true;
-
-            case R.id.numeric_sort_action:
-                if (albumsMode) {
-                    getAlbums().setDefaultSortingMode(SortingMode.NUMERIC);
-                    getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().albums);
-                } else {
-                    getAlbum().setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
-                    getAlbum().sortPhotos();
-                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                }
-                item.setChecked(true);
-                return true;
-
-            case R.id.ascending_sort_action:
-                if (albumsMode) {
-                    getAlbums().setDefaultSortingAscending(item.isChecked() ? SortingOrder.DESCENDING : SortingOrder.ASCENDING);
-                    getAlbums().sortAlbums(getApplicationContext());
-                    albumsAdapter.swapDataSet(getAlbums().albums);
-                } else {
-                    getAlbum().setDefaultSortingAscending(getApplicationContext(), item.isChecked() ? SortingOrder.DESCENDING : SortingOrder.ASCENDING);
-                    getAlbum().sortPhotos();
-                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                }
-                item.setChecked(!item.isChecked());
-                return true;*/
 
             //region Affix
             // TODO: 11/21/16 move away from here
@@ -1215,18 +1077,9 @@ public class MainActivity extends SharedMediaActivity {
 
 
 
-            case R.id.set_as_cover:
-                if (!albumsMode) {
-                    getAlbum().setSelectedPhotoAsPreview(getApplicationContext());
-                    finishEditMode();
-                }
-                return true;
 
-            case R.id.action_palette:
-                Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
-                paletteIntent.putExtra("imageUri", getAlbum().getSelectedMedia(0).getUri().toString());
-                startActivity(paletteIntent);
-                return true;
+
+
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -1250,8 +1103,10 @@ public class MainActivity extends SharedMediaActivity {
                     drawer.closeDrawer(GravityCompat.START);
                 else finish();
             } else {
-                displayAlbums(false);
-                setRecentApp(getString(R.string.app_name));
+                Toast.makeText(this, "asd", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().popBackStack();
+                albumsMode = true;
+                //setRecentApp(getString(R.string.app_name));
             }
         }
     }

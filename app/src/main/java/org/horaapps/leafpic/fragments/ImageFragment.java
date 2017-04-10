@@ -93,7 +93,7 @@ public class ImageFragment extends Fragment {
     }*/
 
     private void displayMedia(PhotoView photoView, boolean useCache) {
-        //PreferenceUtil SP = PreferenceUtil.getInstance(getContext());
+        //PreferenceUtil SP = PreferenceUtil.make(getContext());
 
         Glide.with(getContext())
                 .load(img.getUri())

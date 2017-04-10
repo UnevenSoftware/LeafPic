@@ -4,13 +4,6 @@
     tools:context="org.horaapps.leafpic.activities.MainActivity">
 
     <item
-        android:id="@+id/search_action"
-        android:title="@string/search_menu"
-        android:visible="false"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
-
-    <item
         android:id="@+id/filter_menu"
         android:title="@string/filter_menu_title"
         app:showAsAction="ifRoom">
@@ -77,20 +70,40 @@
             </group>
         </menu>
     </item>
-
-    <group android:id="@+id/photos_option_men">
+    <group android:id="@+id/edit_mode_items">
         <item
             android:id="@+id/sharePhotos"
             android:title="@string/share"
             app:showAsAction="ifRoom" />
 
         <item
+            android:id="@+id/delete"
+            android:title="@string/delete"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/affix"
+            android:title="@string/affix"
+            android:visible="false"
+            app:showAsAction="never" />
+
+        <item
             android:id="@+id/action_copy"
             android:title="@string/copy_to"
             app:showAsAction="never" />
+
         <item
             android:id="@+id/action_move"
             android:title="@string/move_to"
+            app:showAsAction="never" />
+    </group>
+
+    <group android:id="@+id/one_selected_items">
+
+        <item
+            android:id="@+id/action_palette"
+            android:title="@string/palette"
+            android:visible="false"
             app:showAsAction="never" />
 
         <item
@@ -100,14 +113,13 @@
             app:showAsAction="never" />
 
         <item
-            android:id="@+id/affix"
-            android:title="@string/affix"
-            android:visible="false"
+            android:id="@+id/rename"
+            android:title="@string/rename"
             app:showAsAction="never" />
-
     </group>
 
-    <group android:id="@+id/album_options_menu">
+
+    <group android:id="@+id/album_options_menu" android:visible="false">
         <item
             android:id="@+id/hide"
             android:title="@string/hide"
@@ -125,34 +137,18 @@
             android:id="@+id/shortcut"
             android:title="@string/install_shortcut"
             app:showAsAction="never" />
+        <item
+            android:id="@+id/clear_album_cover"
+            android:title="@string/clear_preview"
+            android:visible="false"
+            app:showAsAction="never" />
     </group>
-
-    <item
-        android:id="@+id/rename"
-        android:title="@string/rename"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/delete"
-        android:title="@string/delete"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/select_all"
         android:title="@string/select_all"
         app:showAsAction="ifRoom" />
 
-
-    <item
-        android:id="@+id/clear_album_cover"
-        android:title="@string/clear_preview"
-        android:visible="false"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_palette"
-        android:title="@string/palette"
-        android:visible="false"
-        app:showAsAction="never"
-        />
     <item
         android:id="@+id/settings"
         android:title="@string/settings"

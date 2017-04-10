@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +29,6 @@ import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.new_way.AlbumsHelper;
 import org.horaapps.leafpic.new_way.CPHelper;
-import org.horaapps.leafpic.new_way.DataManager;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
@@ -59,7 +57,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     private GridSpacingItemDecoration spacingDecoration;
 
     private MainActivity act;
-    private boolean hidden;
+    private boolean hidden = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,33 +84,32 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
 
     public void displayAlbums() {
         adapter.clear();
+
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
-        DataManager.getInstance()
-                .getAlbumsRelay(getContext(), hidden)
+        CPHelper.getAlbums(getContext(), hidden)
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        album -> {
-
-                            Log.wtf("asd", album.toString());
-                            if (album.hasCover())
-                                adapter.add(album);
-                            else
-                                CPHelper.getLastMedia(App.getInstance(), album.getId())
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(
-                                                media -> album.setCover(media.getPath()),
-                                                throwable -> {},
-                                                () -> adapter.add(album));
-
-                        }, throwable -> { },
+                        album -> CPHelper.getLastMedia(App.getInstance(), album.getId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        album::setLastMedia,
+                                        throwable -> {},
+                                        () -> adapter.add(album)),
+                        throwable -> refresh.setRefreshing(false),
                         () -> {
                             db.close();
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
                         });
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        displayAlbums();
     }
 
     @Override
@@ -183,7 +180,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         refresh.setOnRefreshListener(this::displayAlbums);
         rv.setAdapter(adapter);
 
-        displayAlbums(false);
+        //displayAlbums(false);
         return v;
     }
 

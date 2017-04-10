@@ -3,6 +3,8 @@ package org.horaapps.leafpic.model;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album implements Serializable, CursorHandler {
+public class Album implements Serializable, CursorHandler, Parcelable {
 
 	private String name, path;
 	private long id = -1, dateModified;
@@ -32,6 +34,7 @@ public class Album implements Serializable, CursorHandler {
 
 	private boolean selected = false;
 	public AlbumSettings settings = null;
+	private Media lastMedia = null;
 
 	public Album(String path, String name) {
 		this.name = name;
@@ -110,8 +113,14 @@ public class Album implements Serializable, CursorHandler {
 	public Media getCover() {
 		if (hasCover())
 			return new Media(settings.coverPath);
+		if (lastMedia != null)
+			return lastMedia;
 		// TODO: 11/20/16 how should i handle this?
 		return new Media();
+	}
+
+	public void setLastMedia(Media lastMedia) {
+		this.lastMedia = lastMedia;
 	}
 
 	public void setCover(String path) {
@@ -358,7 +367,7 @@ public class Album implements Serializable, CursorHandler {
 	public void setSelectedPhotoAsPreview(Context context) {
 		/*if (selectedMedia.size() > 0) {
 			String asd = selectedMedia.get(0).getPath();
-			//HandlingAlbums.getInstance(context).setCover(this.path, asd);
+			//HandlingAlbums.make(context).setCover(this.path, asd);
 			settings.coverPath = asd;
 		}*/
 	}
@@ -481,6 +490,8 @@ public class Album implements Serializable, CursorHandler {
 		return success;
 	}
 
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Album) {
@@ -547,4 +558,46 @@ public class Album implements Serializable, CursorHandler {
 
 	@Deprecated
 	private void scanFile(Context context, String[] path) { MediaScannerConnection.scanFile(context, path, null, null); }
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.name);
+		dest.writeString(this.path);
+		dest.writeLong(this.id);
+		dest.writeLong(this.dateModified);
+		dest.writeInt(this.count);
+		dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
+		dest.writeSerializable(this.settings);
+		dest.writeParcelable(this.lastMedia, flags);
+		dest.writeByte(this.found_id_album ? (byte) 1 : (byte) 0);
+	}
+
+	protected Album(Parcel in) {
+		this.name = in.readString();
+		this.path = in.readString();
+		this.id = in.readLong();
+		this.dateModified = in.readLong();
+		this.count = in.readInt();
+		this.selected = in.readByte() != 0;
+		this.settings = (AlbumSettings) in.readSerializable();
+		this.lastMedia = in.readParcelable(Media.class.getClassLoader());
+		this.found_id_album = in.readByte() != 0;
+	}
+
+	public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
+		@Override
+		public Album createFromParcel(Parcel source) {
+			return new Album(source);
+		}
+
+		@Override
+		public Album[] newArray(int size) {
+			return new Album[size];
+		}
+	};
 }

@@ -59,7 +59,7 @@ public class DataManager {
 
         if (songsSubscription == null || songsSubscription.isUnsubscribed()) {
 
-            Observable<List<Media>> songsObservable = SqlBriteUtils.createContinuousQuery(ShuttleApplication.getInstance(), Song::new, Song.getQuery());
+            Observable<List<Media>> songsObservable = SqlBriteUtils.createContinuousQuery(ShuttleApplication.make(), Song::new, Song.getQuery());
 
             songsSubscription = (songs) ->
             {
@@ -108,7 +108,7 @@ public class DataManager {
     public BriteDatabase getWhitelistDatabase() {
         if (whitelistDatabase == null) {
             whitelistDatabase = new SqlBrite.Builder().build()
-                    .wrapDatabaseHelper(new WhitelistDbOpenHelper(ShuttleApplication.getInstance()), Schedulers.io());
+                    .wrapDatabaseHelper(new WhitelistDbOpenHelper(ShuttleApplication.make()), Schedulers.io());
         }
         return whitelistDatabase;
     }

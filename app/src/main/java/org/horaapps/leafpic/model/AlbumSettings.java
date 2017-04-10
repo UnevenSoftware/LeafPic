@@ -1,5 +1,8 @@
 package org.horaapps.leafpic.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.model.base.SortingMode;
 import org.horaapps.leafpic.model.base.SortingOrder;
@@ -9,12 +12,14 @@ import java.io.Serializable;
 /**
  * Created by dnld on 2/4/16.
  */
-public class AlbumSettings implements Serializable {
+public class AlbumSettings implements Serializable, Parcelable {
 
     String coverPath;
     int sortingMode, sortingOrder;
     boolean pinned;
     FilterMode filterMode = FilterMode.ALL;
+
+
 
     public static AlbumSettings getDefaults() {
         return new AlbumSettings(null, SortingMode.DATE.getValue(), 1, 0);
@@ -34,4 +39,39 @@ public class AlbumSettings implements Serializable {
     public SortingOrder getSortingOrder() {
         return SortingOrder.fromValue(sortingOrder);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.coverPath);
+        dest.writeInt(this.sortingMode);
+        dest.writeInt(this.sortingOrder);
+        dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.filterMode == null ? -1 : this.filterMode.ordinal());
+    }
+
+    protected AlbumSettings(Parcel in) {
+        this.coverPath = in.readString();
+        this.sortingMode = in.readInt();
+        this.sortingOrder = in.readInt();
+        this.pinned = in.readByte() != 0;
+        int tmpFilterMode = in.readInt();
+        this.filterMode = tmpFilterMode == -1 ? null : FilterMode.values()[tmpFilterMode];
+    }
+
+    public static final Parcelable.Creator<AlbumSettings> CREATOR = new Parcelable.Creator<AlbumSettings>() {
+        @Override
+        public AlbumSettings createFromParcel(Parcel source) {
+            return new AlbumSettings(source);
+        }
+
+        @Override
+        public AlbumSettings[] newArray(int size) {
+            return new AlbumSettings[size];
+        }
+    };
 }
