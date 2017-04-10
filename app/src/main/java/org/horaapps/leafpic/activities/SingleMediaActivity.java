@@ -40,16 +40,16 @@ import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.AlbumSettings;
+import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.provider.ContentProviderHelper;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.AlbumSettings;
-import org.horaapps.leafpic.model.ContentProviderHelper;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ColorPalette;
-import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
@@ -100,7 +100,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 if (path != null) {
                     album = ContentProviderHelper.getAlbumFromMedia(getApplicationContext(), path);
                     if (album != null) {
-                        album.updatePhotos(getApplicationContext());
+                        //album.updatePhotos(getApplicationContext());
                         album.setCurrentMedia(path);
                     }
                 }

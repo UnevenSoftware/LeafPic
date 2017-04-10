@@ -30,8 +30,8 @@ import com.drew.lang.GeoLocation;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.MediaDetailsMap;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.metadata.MediaDetailsMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -113,7 +113,7 @@ public class AlertDialogsHelper {
 
     public static AlertDialog getDetailsDialog(final ThemedActivity activity, final Media f) {
         AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
-        MediaDetailsMap<String, String> mainDetails = f.getMainDetails(activity.getApplicationContext());
+        MediaDetailsMap<String, String> mainDetails = new MediaDetailsMap<>();//f.getMainDetails(activity.getApplicationContext());
         final View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_detail, null);
         ImageView imgMap = (ImageView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.photo_map);
         dialogLayout.findViewById(org.horaapps.leafpic.R.id.details_title).setBackgroundColor(activity.getPrimaryColor());
@@ -194,7 +194,7 @@ public class AlertDialogsHelper {
     }
 
     private static void showMoreDetails(View dialogLayout, ThemedActivity activity, Media media) {
-        MediaDetailsMap<String, String> metadata = media.getAllDetails();
+        MediaDetailsMap<String, String> metadata = new MediaDetailsMap<>();//media.getAllDetails();
         loadDetails(dialogLayout ,activity , metadata);
     }
 

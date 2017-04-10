@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.model;
+package org.horaapps.leafpic.data;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,24 +9,20 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.horaapps.leafpic.adapters.OldMediaAdapter;
-import org.horaapps.leafpic.model.base.FilterMode;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.data.filter.FilterMode;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.new_way.CursorHandler;
-import org.horaapps.leafpic.util.ContentHelper;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album implements Serializable, CursorHandler, Parcelable {
+public class Album implements CursorHandler, Parcelable {
 
 	private String name, path;
 	private long id = -1, dateModified;
@@ -127,10 +123,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 		settings.coverPath = path;
 	}
 
-	private boolean hasId() {
-		return id != -1;
-	}
-
 	public long getId() {
 		return  this.id;
 	}
@@ -145,8 +137,12 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 		return settings.coverPath != null;
 	}
 
-	private FilterMode getFilterMode() {
+	public FilterMode filterMode() {
 		return settings != null ? settings.filterMode : FilterMode.ALL;
+	}
+
+	public void setFilterMode(FilterMode newMode) {
+		settings.filterMode = newMode;
 	}
 
 	public boolean isSelected() {
@@ -202,61 +198,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 		return mediaArrayList;*/
 	}
 
-	@Deprecated
-	public void updatePhotos(Context context) {
-		/*media = getMedia(context);
-		sortPhotos();
-		setCount(media.size());*/
-	}
-
-	@Deprecated
-	private void updatePhotos(Context context, FilterMode filterMode) {
-
-		/*ArrayList<Media> media = getMedia(context), mediaArrayList = new ArrayList<>();
-
-		switch (filterMode) {
-			case ALL:
-				mediaArrayList = media;
-			default:
-				break;
-			case GIF:
-				for (Media media1 : media)
-					if (media1.isGif()) mediaArrayList.add(media1);
-				break;
-			case IMAGES:
-				for (Media media1 : media)
-					if (media1.isImage()) mediaArrayList.add(media1);
-				break;
-			case VIDEO:
-				for (Media media1 : media)
-					if (media1.isVideo()) mediaArrayList.add(media1);
-				break;
-		}
-
-		this.media = mediaArrayList;
-		sortPhotos();
-		setCount(this.media.size());*/
-	}
-
-	@Deprecated
-	private ArrayList<Media> getMedia(Context context) {
-		ArrayList<Media> mediaArrayList = new ArrayList<>();
-		if (hasId()) {
-			mediaArrayList.addAll(
-					ContentProviderHelper.getMedia(
-							context, id, PreferenceUtil.getBool(context, "set_include_video", true)));
-		} else {
-			mediaArrayList.addAll(ContentProviderHelper.getMedia(
-					getPath(), PreferenceUtil.getBool(context, "set_include_video", true)));
-		}
-		return mediaArrayList;
-	}
-
-	@Deprecated
-	public void filterMedias(Context context, FilterMode filter) {
-		settings.filterMode = filter;
-		updatePhotos(context, filter);
-	}
 
 	@Deprecated
 	public boolean addMedia(@Nullable Media media) {
@@ -266,8 +207,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 		return true;
 	}
 
-	@Deprecated
-	public Media getMedia(int index) { return new Media(); }
 
 	@Deprecated
 	public void setCurrentMedia(int index){  }
@@ -291,52 +230,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 	}
 
 
-
-	//region Selected Media
-
-	@Deprecated
-	public Media getSelectedMedia(int index) {
-		return new Media();
-	}
-
-	@Deprecated
-	public int getSelectedMediaCount() {
-		return -1;
-	}
-
-	/**
-	 * On longpress, it finds the last or the first selected image before or after the targetIndex
-	 * and selects them all.
-	 *
-	 * @param adapter
-	 */
-	@Deprecated
-	public void selectAllMediaUpTo(Media m, OldMediaAdapter adapter) {
-		/*int targetIndex = media.indexOf(m);
-		int indexRightBeforeOrAfter = -1;
-		int indexNow;
-		for (Media sm : selectedMedia) {
-			indexNow = media.indexOf(sm);
-			if (indexRightBeforeOrAfter == -1) indexRightBeforeOrAfter = indexNow;
-
-			if (indexNow > targetIndex) break;
-			indexRightBeforeOrAfter = indexNow;
-		}
-
-		if (indexRightBeforeOrAfter != -1) {
-			for (int index = Math.min(targetIndex, indexRightBeforeOrAfter); index <= Math.max(targetIndex, indexRightBeforeOrAfter); index++) {
-				if (media.get(index) != null) {
-					if (!media.get(index).isSelected()) {
-						media.get(index).setSelected(true);
-						selectedMedia.add(media.get(index));
-						adapter.notifyItemChanged(index);
-					}
-				}
-			}
-		}*/
-	}
-
-	//endregion
 
 	//region Album Properties Setters
 
@@ -362,14 +255,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 
 	public void removeCoverAlbum() {
 		settings.coverPath = null;
-	}
-
-	public void setSelectedPhotoAsPreview(Context context) {
-		/*if (selectedMedia.size() > 0) {
-			String asd = selectedMedia.get(0).getPath();
-			//HandlingAlbums.make(context).setCover(this.path, asd);
-			settings.coverPath = asd;
-		}*/
 	}
 
 	public void setDefaultSortingMode(Context context, SortingMode column) {
@@ -574,7 +459,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 		dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
 		dest.writeSerializable(this.settings);
 		dest.writeParcelable(this.lastMedia, flags);
-		dest.writeByte(this.found_id_album ? (byte) 1 : (byte) 0);
 	}
 
 	protected Album(Parcel in) {
@@ -586,7 +470,6 @@ public class Album implements Serializable, CursorHandler, Parcelable {
 		this.selected = in.readByte() != 0;
 		this.settings = (AlbumSettings) in.readSerializable();
 		this.lastMedia = in.readParcelable(Media.class.getClassLoader());
-		this.found_id_album = in.readByte() != 0;
 	}
 
 	public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {

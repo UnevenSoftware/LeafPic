@@ -37,9 +37,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.model.base.FoldersFileFilter;
+import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;

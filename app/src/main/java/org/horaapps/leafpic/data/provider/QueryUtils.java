@@ -1,8 +1,10 @@
-package org.horaapps.leafpic.new_way;
+package org.horaapps.leafpic.data.provider;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.util.Log;
+
+import org.horaapps.leafpic.new_way.CursorHandler;
 
 import io.reactivex.Observable;
 

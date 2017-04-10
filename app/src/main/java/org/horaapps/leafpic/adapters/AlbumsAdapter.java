@@ -18,11 +18,11 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.AlbumsComparators;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.sort.AlbumsComparators;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
@@ -76,6 +76,10 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             reverseOrder();*/
 
         notifyDataSetChanged();
+    }
+
+    public void notifyItemChanaged(Album album) {
+        notifyItemChanged(albums.indexOf(album));
     }
 
     public SortingOrder sortingOrder() {

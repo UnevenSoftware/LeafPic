@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.model.base;
+package org.horaapps.leafpic.data.filter;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -1,13 +1,13 @@
-package org.horaapps.leafpic.new_way;
+package org.horaapps.leafpic.data.provider;
 
 import android.content.Context;
 import android.provider.MediaStore;
 
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.FoldersFileFilter;
-import org.horaapps.leafpic.model.base.ImageFileFilter;
-import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.filter.FoldersFileFilter;
+import org.horaapps.leafpic.data.filter.ImageFileFilter;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;

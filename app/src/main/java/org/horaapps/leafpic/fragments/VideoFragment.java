@@ -13,8 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.Media;
 
 /**
  * Created by dnld on 18/02/16.

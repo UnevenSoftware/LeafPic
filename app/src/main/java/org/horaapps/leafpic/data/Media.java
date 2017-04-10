@@ -1,6 +1,5 @@
-package org.horaapps.leafpic.model;
+package org.horaapps.leafpic.data;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,32 +10,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.annotations.NotNull;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 
-import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.model.base.MediaDetailsMap;
 import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.MediaSignature;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class Media implements Parcelable, Serializable, CursorHandler {
+public class Media implements CursorHandler, Parcelable {
 
     private String path = null;
     private long dateModified = -1;
@@ -47,7 +35,6 @@ public class Media implements Parcelable, Serializable, CursorHandler {
 
     private long size = -1;
     private boolean selected = false;
-    private MetaDataItem metadata;
 
     public Media() { }
 
@@ -133,8 +120,8 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return uriString != null ? Uri.parse(uriString) : Uri.fromFile(new File(path));
     }
 
-    private InputStream getInputStream(ContentResolver contentResolver) throws Exception {
-        return contentResolver.openInputStream(getUri());
+    public String getDisplayPath() {
+        return path != null ? path : getUri().getEncodedPath();
     }
 
     public String getName() {
@@ -153,13 +140,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return dateModified;
     }
 
-    @Deprecated
-    public Bitmap getBitmap(){
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
-        return bitmap;
-    }
+
 
     public MediaSignature getSignature() {
         return new MediaSignature(this);
@@ -170,60 +151,20 @@ public class Media implements Parcelable, Serializable, CursorHandler {
     }
 
     //<editor-fold desc="Exif & More">
+// TODO remove from here!
+    @Deprecated
+    public Bitmap getBitmap(){
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
+        return bitmap;
+    }
+    @Deprecated
     public GeoLocation getGeoLocation()  {
-        return metadata != null ? metadata.getLocation() : null;
+        return /*metadata != null ? metadata.getLocation() :*/ null;
     }
 
-    // TODO remove Exif from here!
-    public MediaDetailsMap<String, String> getAllDetails() {
-        MediaDetailsMap<String, String> data = new MediaDetailsMap<String, String>();
-        try {
-            Metadata metadata = ImageMetadataReader.readMetadata(new File(path));
-            for(Directory directory : metadata.getDirectories()) {
-
-                for(Tag tag : directory.getTags()) {
-                    data.put(tag.getTagName(), directory.getObject(tag.getTagType())+"");
-                }
-            }
-        } catch (ImageProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return data;
-    }
-
-    public MediaDetailsMap<String, String> getMainDetails(Context context){
-        MediaDetailsMap<String, String> details = new MediaDetailsMap<>();
-        details.put(context.getString(R.string.path), path != null ? path : getUri().getEncodedPath());
-        details.put(context.getString(R.string.type), getMimeType());
-        if(size != -1)
-            details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(size, true));
-        // TODO should i add this always?
-        details.put(context.getString(R.string.orientation), getOrientation() + "");
-        try {
-            metadata = MetaDataItem.getMetadata(getInputStream(context.getContentResolver()));
-            details.put(context.getString(R.string.resolution), metadata.getResolution());
-            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(dateModified)));
-            Date dateOriginal = metadata.getDateOriginal();
-            if (dateOriginal != null )
-                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(dateOriginal));
-
-            String tmp;
-            if ((tmp = metadata.getCameraInfo()) != null)
-                details.put(context.getString(R.string.camera), tmp);
-            if ((tmp = metadata.getExifInfo()) != null)
-                details.put(context.getString(R.string.exif), tmp);
-            GeoLocation location;
-            if ((location = metadata.getLocation()) != null)
-                details.put(context.getString(R.string.location), location.toDMSString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return details;
-    }
-
+    @Deprecated
     public boolean setOrientation(final int orientation) {
         this.orientation = orientation;
         // TODO: 28/08/16  find a better way
@@ -250,13 +191,16 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return true;
     }
 
+    @Deprecated
     private long getDateTaken() {
-        // TODO: 16/08/16 improved
+        /*// TODO: 16/08/16 improved
         Date dateOriginal = metadata.getDateOriginal();
         if (dateOriginal != null) return metadata.getDateOriginal().getTime();
-        return -1;
+        return -1;*/
+        return 1;
     }
 
+    @Deprecated
     public boolean fixDate(){
         long newDate = getDateTaken();
         if (newDate != -1){
@@ -268,6 +212,7 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         }
         return false;
     }
+
     //</editor-fold>
 
     public File getFile() {
@@ -283,13 +228,13 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         return 0;
     }
 
-
-    //TODO add orientation
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.path);
         dest.writeLong(this.dateModified);
         dest.writeString(this.mimeType);
+        dest.writeInt(this.orientation);
+        dest.writeString(this.uriString);
         dest.writeLong(this.size);
         dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
     }
@@ -298,11 +243,13 @@ public class Media implements Parcelable, Serializable, CursorHandler {
         this.path = in.readString();
         this.dateModified = in.readLong();
         this.mimeType = in.readString();
+        this.orientation = in.readInt();
+        this.uriString = in.readString();
         this.size = in.readLong();
         this.selected = in.readByte() != 0;
     }
 
-    public static final Creator<Media> CREATOR = new Creator<Media>() {
+    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
         @Override
         public Media createFromParcel(Parcel source) {
             return new Media(source);

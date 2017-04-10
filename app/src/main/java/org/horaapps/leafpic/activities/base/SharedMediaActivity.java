@@ -8,10 +8,10 @@ import android.widget.Toast;
 
 import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.HandlingAlbums;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.ContentHelper;
 
 /**
  * Created by dnld on 03/08/16.

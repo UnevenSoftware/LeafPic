@@ -14,7 +14,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
-import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.views.RotateTransformation;
 

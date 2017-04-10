@@ -7,10 +7,10 @@ import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.GifFragment;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.fragments.VideoFragment;
-import org.horaapps.leafpic.model.Media;
 
 import java.util.ArrayList;
 

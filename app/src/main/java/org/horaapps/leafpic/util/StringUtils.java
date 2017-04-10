@@ -72,7 +72,7 @@ public class StringUtils {
         return c;
     }
 
-    static String incrementFileNameSuffix(String name) {
+    public static String incrementFileNameSuffix(String name) {
         StringBuilder builder = new StringBuilder();
 
         int dot = name.lastIndexOf('.');

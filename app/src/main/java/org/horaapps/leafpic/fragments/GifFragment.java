@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.koushikdutta.ion.Ion;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
-import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.data.Media;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;

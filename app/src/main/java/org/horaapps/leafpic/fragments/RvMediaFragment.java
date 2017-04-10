@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,17 +24,18 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.HandlingAlbums;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
-import org.horaapps.leafpic.new_way.AlbumsHelper;
-import org.horaapps.leafpic.new_way.CPHelper;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.AlbumsHelper;
+import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.filter.FilterMode;
+import org.horaapps.leafpic.data.filter.MediaFilter;
+import org.horaapps.leafpic.data.provider.CPHelper;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by dnld on 3/13/17.
  */
 
-public class RvMediaFragment extends Fragment implements IFragment, Themeable {
+public class RvMediaFragment extends BaseFragment {
 
     private static final String TAG = "asd";
 
@@ -90,6 +90,7 @@ public class RvMediaFragment extends Fragment implements IFragment, Themeable {
     public void onResume() {
         super.onResume();
         clearSelected();
+        updateToolbar();
     }
 
     private void display() {
@@ -99,6 +100,7 @@ public class RvMediaFragment extends Fragment implements IFragment, Themeable {
         CPHelper.getMedia(getContext(), album)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
                 .subscribe(media -> adapter.add(media),
                         throwable -> refresh.setRefreshing(false),
                         () -> {
@@ -176,7 +178,6 @@ public class RvMediaFragment extends Fragment implements IFragment, Themeable {
 
     private void updateToolbar() {
         if (editMode())
-            //todo improve
             act.updateToolbar(
                     String.format(Locale.ENGLISH, "%d/%d",
                             adapter.getSelectedCount(), adapter.getItemCount()),
@@ -185,7 +186,7 @@ public class RvMediaFragment extends Fragment implements IFragment, Themeable {
         else act.updateToolbar(
                 album.getName(),
                 GoogleMaterial.Icon.gmd_arrow_back,
-                v -> act.getSupportFragmentManager().popBackStack());
+                v -> act.goBackToAlbums());
     }
 
     public SortingMode sortingMode() {
@@ -253,6 +254,30 @@ public class RvMediaFragment extends Fragment implements IFragment, Themeable {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+
+            case R.id.all_media_filter:
+                album.setFilterMode(FilterMode.ALL);
+                item.setChecked(true);
+                display();
+                return true;
+
+            case R.id.video_media_filter:
+                album.setFilterMode(FilterMode.VIDEO);
+                item.setChecked(true);
+                display();
+                return true;
+
+            case R.id.image_media_filter:
+                album.setFilterMode(FilterMode.IMAGES);
+                item.setChecked(true);
+                display();
+                return true;
+
+            case R.id.gifs_media_filter:
+                album.setFilterMode(FilterMode.GIF);
+                item.setChecked(true);
+                display();
+                return true;
 
             case R.id.sharePhotos:
                 Intent intent = new Intent();

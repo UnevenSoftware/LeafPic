@@ -11,8 +11,8 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import org.horaapps.leafpic.model.HandlingAlbums;
-import org.horaapps.leafpic.model.base.ImageFileFilter;
+import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.data.filter.ImageFileFilter;
 
 import java.io.File;
 import java.util.ArrayList;

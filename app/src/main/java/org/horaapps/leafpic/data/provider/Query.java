@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.new_way;
+package org.horaapps.leafpic.data.provider;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

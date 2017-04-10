@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -22,8 +21,8 @@ import android.widget.Toast;
 import org.horaapps.leafpic.LookForMediaJob;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.HandlingAlbums;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.StringUtils;
@@ -61,18 +60,11 @@ public class SplashScreen extends SharedMediaActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         setNavBarColor();
         setStatusBarColor();
 
         if (PermissionUtils.isDeviceInfoGranted(this)) {
-
-            // todo no preload
-            if (true) {
-                startActivity(new Intent(SplashScreen.this, MainActivity.class));
-                finish();
-                return;
-            } else {
-
 
                 if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                     Bundle data = getIntent().getExtras();
@@ -81,18 +73,24 @@ public class SplashScreen extends SharedMediaActivity {
                         if (ab != null) {
                             File dir = new File(ab);
                             tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
-                            new PrefetchPhotosData().execute();
+                            // TODO: 4/10/17 handle
+                            start();
                         }
                     } else StringUtils.showToast(getApplicationContext(), "Album not found");
                 } else  // default intent
-                    new PrefetchAlbumsData().execute();
+                    start();
 
                 PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
-            }
+
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
 
         startLookingForMedia();
+    }
+
+    private void start() {
+        startActivity(new Intent(SplashScreen.this, MainActivity.class));
+        finish();
     }
 
     private void startLookingForMedia() {
@@ -147,7 +145,7 @@ public class SplashScreen extends SharedMediaActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case READ_EXTERNAL_STORAGE_ID:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) new PrefetchAlbumsData().execute();
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) start();
                 else Toast.makeText(SplashScreen.this, getString(org.horaapps.leafpic.R.string.storage_permission_denied), Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -161,53 +159,5 @@ public class SplashScreen extends SharedMediaActivity {
         super.updateUiElements();
         ((ProgressBar) findViewById(R.id.progress_splash)).getIndeterminateDrawable().setColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP);
         findViewById(org.horaapps.leafpic.R.id.Splah_Bg).setBackgroundColor(getBackgroundColor());
-    }
-
-    private class PrefetchAlbumsData extends AsyncTask<Void, Boolean, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... arg0) {
-            /*if(!getAlbums().restoreBackup(getApplicationContext()) || getAlbums().getCount() == 0) {
-                getAlbums().loadAlbums(getApplicationContext(), false);
-                return true;
-            }*/
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-
-            Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            i.putExtra(CONTENT, result ? ALBUMS_PREFETCHED : ALBUMS_BACKUP);
-            i.putExtra(PICK_MODE, PICK_INTENT);
-
-            if (!PICK_INTENT) {
-                startActivity(i);
-                finish();
-            } else
-                startActivityForResult(i, PICK_MEDIA_REQUEST);
-
-            //if(result)
-                //getAlbums().saveBackup(getApplicationContext());
-        }
-    }
-
-    private class PrefetchPhotosData extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            tmpAlbum.updatePhotos(getApplicationContext());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            //getAlbums().add(0, tmpAlbum);
-            i.putExtra(CONTENT, PHOTOS_PREFETCHED);
-            startActivity(i);
-            finish();
-        }
     }
 }

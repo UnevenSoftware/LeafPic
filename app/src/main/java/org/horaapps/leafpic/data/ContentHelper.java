@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.util;
+package org.horaapps.leafpic.data;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -20,6 +20,8 @@ import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

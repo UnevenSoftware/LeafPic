@@ -5,8 +5,9 @@ import android.content.Context;
 
 import com.jakewharton.rxrelay2.PublishRelay;
 
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.Media;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.provider.CPHelper;
 
 import java.util.List;
 

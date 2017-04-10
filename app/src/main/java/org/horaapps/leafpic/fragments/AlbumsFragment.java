@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,16 +22,15 @@ import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.HandlingAlbums;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
-import org.horaapps.leafpic.new_way.AlbumsHelper;
-import org.horaapps.leafpic.new_way.CPHelper;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.AlbumsHelper;
+import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.data.provider.CPHelper;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.Locale;
@@ -46,7 +44,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by dnld on 3/13/17.
  */
 
-public class AlbumsFragment extends Fragment implements IFragment, Themeable {
+public class AlbumsFragment extends BaseFragment{
 
     private static final String TAG = "asd";
 
@@ -75,6 +73,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
     public void onResume() {
         super.onResume();
         clearSelected();
+        updateToolbar();
     }
 
     public void displayAlbums(boolean hidden) {
@@ -82,7 +81,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
         displayAlbums();
     }
 
-    public void displayAlbums() {
+    private void displayAlbums() {
         adapter.clear();
 
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
@@ -271,6 +270,7 @@ public class AlbumsFragment extends Fragment implements IFragment, Themeable {
                     selectedAlbum.removeCoverAlbum();
                     db().setCover(selectedAlbum.getPath(), null);
                     adapter.clearSelected();
+                    adapter.notifyItemChanaged(selectedAlbum);
                     // TODO: 4/5/17 updateui
                     return true;
                 }

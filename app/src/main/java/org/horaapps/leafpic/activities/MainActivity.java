@@ -17,20 +17,14 @@ import android.support.annotation.CallSuper;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -50,14 +44,14 @@ import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
+import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
+import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.FilterMode;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.ContentHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
@@ -75,7 +69,7 @@ public class MainActivity extends SharedMediaActivity {
 
     private PreferenceUtil SP;
 
-    AlbumsFragment albumsFragment = new AlbumsFragment();;
+    AlbumsFragment albumsFragment = new AlbumsFragment();
 
     @BindView(R.id.fab_camera) FloatingActionButton fab;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -85,32 +79,12 @@ public class MainActivity extends SharedMediaActivity {
     private boolean pickMode = false;
     private boolean albumsMode = true;
 
-    /*private View.OnLongClickListener photosOnLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            Media m = (Media) v.findViewById(R.id.photo_path).getTag();
-            if (!editMode()) {
-                // If it is the first long press
-                oldMediaAdapter.notifyItemChanged(getAlbum().toggleSelectMedia(m));
-                //editMode = true;
-            } else
-                getAlbum().selectAllMediaUpTo(m, oldMediaAdapter);
-
-            supportInvalidateOptionsMenu();
-            return true;
-            return true;
-        }
-    };*/
-
     private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Media m = (Media) v.findViewById(R.id.photo_path).getTag();
             if (!pickMode) {
-                if (editMode()) {
-                   /* oldMediaAdapter.notifyItemChanged(getAlbum().toggleSelectMedia(m));
-                    supportInvalidateOptionsMenu();*/
-                } else {
+                {
                     // TODO: 4/5/17 moveout
                     if(SP.getBoolean("video_instant_play", false) && m.isVideo()) {
                         startActivity(new Intent(Intent.ACTION_VIEW)
@@ -135,9 +109,8 @@ public class MainActivity extends SharedMediaActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null)
             return;
-        }
 
         SP = PreferenceUtil.getInstance(getApplicationContext());
 
@@ -148,14 +121,12 @@ public class MainActivity extends SharedMediaActivity {
                 .replace(R.id.content, albumsFragment, "albums")
                 .commit();
 
-        albumsMode = true;
     }
 
     private void displayAlbums(boolean hidden) {
         albumsMode = true;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        albumsFragment.displayAlbums();
-        supportInvalidateOptionsMenu();
+        albumsFragment.displayAlbums(hidden);
     }
 
     public void displayMedia(Album album) {
@@ -169,39 +140,6 @@ public class MainActivity extends SharedMediaActivity {
                 .commit();
     }
 
-    private boolean editMode() {
-        if (albumsMode)
-            return albumsFragment.editMode();
-        return false;
-    }
-
-    public void loadFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(R.id.content, fragment);
-        transaction.addToBackStack(null);
-        transaction.remove(albumsFragment);
-        fm.popBackStack();
-        transaction.commit();
-    }
-
-    @Deprecated
-    private void displayCurrentAlbumMedia(boolean reload) {
-        toolbar.setTitle(getAlbum().getName());
-        toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-
-        if (reload) new PreparePhotosTask().execute();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //displayAlbums();
-            }
-        });
-        albumsMode =  false;
-        supportInvalidateOptionsMenu();
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -213,21 +151,18 @@ public class MainActivity extends SharedMediaActivity {
             fab.setVisibility(View.GONE);
     }
 
+    public void goBackToAlbums() {
+        albumsMode = true;
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        getSupportFragmentManager().popBackStack();
+    }
+
     @Deprecated
     private boolean displayData(Intent data){
 
         // TODO: 3/25/17 pick porcodio
         pickMode = data.getBooleanExtra(SplashScreen.PICK_MODE, false);
         switch (data.getIntExtra(SplashScreen.CONTENT, SplashScreen.ALBUMS_BACKUP)) {
-           /* case SplashScreen.ALBUMS_PREFETCHED:
-                //displayAlbums(false);
-                toggleRecyclersVisibility(true);
-                return true;
-
-            default: case SplashScreen.ALBUMS_BACKUP:
-                displayAlbums(true);
-                toggleRecyclersVisibility(true);
-                return true;*/
 
             case SplashScreen.PHOTOS_PREFETCHED:
                 //TODO ask password if hidden
@@ -237,8 +172,6 @@ public class MainActivity extends SharedMediaActivity {
                         //getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
                     }
                 }).start();
-                displayCurrentAlbumMedia(false);
-                toggleRecyclersVisibility(false);
                 return true;
         }
         return false;
@@ -428,70 +361,17 @@ public class MainActivity extends SharedMediaActivity {
                 v -> drawer.openDrawer(GravityCompat.START));
     }
 
-    @Deprecated
-    public void updateToolbar() {
-
-        /*if (albumsMode) {
-            *//*if (editMode()) toolbar.setTitle(String.format("%d/%d", albumsAdapter.getSelectedCount(), albumsAdapter.getItemCount()));
-            else {
-                toolbar.setTitle(getString(R.string.app_name));
-                toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_menu));
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        drawer.openDrawer(GravityCompat.START);
-                    }
-                });
-            }*//*
-        } else {
-            if (editMode()) toolbar.setTitle(getAlbum().getSelectedMediaCount() + "/" + getAlbum().getMedia().size());
-            else {
-                toolbar.setTitle(getAlbum().getName());
-                toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        displayAlbums();
-                    }
-                });
-            }
-        }
-
-        if (editMode()) {
-            toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_check));
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finishEditMode();
-                }
-            });*/
-
-    }
-
-    @Deprecated
-    private void finishEditMode() {
-        //editMode = false;
-        if (albumsMode) {
-            //albumsAdapter.clearSelected();
-            //albumsAdapter.notifyDataSetChanged();
-        } else {
-            /*getAlbum().clearSelectedMedia();
-            oldMediaAdapter.notifyDataSetChanged();*/
-        }
-        supportInvalidateOptionsMenu();
-    }
-
     public void nothingToShow(boolean status) {
         findViewById(R.id.nothing_to_show_placeholder).setVisibility(status ? View.VISIBLE : View.GONE);
     }
 
     @Deprecated
-    public void checkNothing() {
+    public void checkNothing(boolean status) {
         //TODO: @jibo come vuo fare qua? o anzi sopra!
         ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
 
-        if(/*albumsMode && getAlbums().albums.size() == 0 ||*/ !albumsMode && getAlbum().getMedia().size() == 0 && SP.getInt("emoji_easter_egg", 0) == 1) {
+        if(status && SP.getInt("emoji_easter_egg", 0) == 1) {
             findViewById(R.id.ll_emoji_easter_egg).setVisibility(View.VISIBLE);
             findViewById(R.id.nothing_to_show_placeholder).setVisibility(View.VISIBLE);
         } else {
@@ -501,95 +381,6 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     //region MENU
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        if (1 == 1)
-            return false;
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_albums, menu);
-
-       /* {
-            menu.findItem(R.id.select_all).setTitle(getString(
-                    getAlbum().getSelectedMediaCount() == oldMediaAdapter.getItemCount()
-                            ? R.string.clear_selected
-                            : R.string.select_all));
-            menu.findItem(R.id.ascending_sort_action).setChecked(getAlbum().settings.sortingOrder() == SortingOrder.ASCENDING);
-            switch (getAlbum().settings.sortingMode()) {
-                case NAME:  menu.findItem(R.id.name_sort_action).setChecked(true); break;
-                case SIZE:  menu.findItem(R.id.size_sort_action).setChecked(true); break;
-                case TYPE:  menu.findItem(R.id.type_sort_action).setChecked(true); break;
-                case DATE: default:
-                    menu.findItem(R.id.date_taken_sort_action).setChecked(true); break;
-                case NUMERIC:  menu.findItem(R.id.numeric_sort_action).setChecked(true); break;
-            }
-        }*/
-
-
-        //menu.findItem(R.id.hide).setTitle(hidden ? getString(R.string.unhide) : getString(R.string.hide));
-        menu.findItem(R.id.delete).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_delete));
-        menu.findItem(R.id.rename).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_create));
-        menu.findItem(R.id.select_all).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_select_all));
-        menu.findItem(R.id.sort_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_sort));
-        menu.findItem(R.id.search_action).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_search));
-
-        menu.findItem(R.id.filter_menu).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_filter_list));
-        menu.findItem(R.id.sharePhotos).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
-
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search_action));
-        searchView.setQueryHint(getString(R.string.coming_soon));
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-
-        // TODO: 3/24/17 split that shit
-
-        boolean editMode = editMode();
-        /*if (albumsMode) {
-            //editMode = getAlbums().getSelectedCount() != 0;
-            menu.setGroupVisible(R.id.album_options_menu, editMode);
-            menu.setGroupVisible(R.id.photos_option_men, false);
-        } else {
-            //editMode = getAlbum().thereAreMediaSelected();
-            menu.setGroupVisible(R.id.photos_option_men, editMode);
-            menu.setGroupVisible(R.id.album_options_menu, !editMode);
-        }*/
-
-        //updateToolbar();
-
-        //menu.findItem(R.id.select_all).setVisible(editMode);
-        //menu.findItem(R.id.exclude_action).setVisible(editMode);
-        // menu.findItem(R.id.type_sort_action).setVisible(!albumsMode);
-        //menu.findItem(R.id.delete_action).setVisible(!albumsMode || editMode);
-
-        //menu.findItem(R.id.clear_album_preview).setVisible(!albumsMode && getAlbum().hasCover());
-        //menu.findItem(R.id.renameAlbum).setVisible((albumsMode && albumsFragment.getSelectedCount() == 1) || (!albumsMode && !editMode));
-
-
-       /* menu.findItem(R.id.action_palette).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() == 1
-                && (getAlbum().getSelectedMedia(0).isImage()||getAlbum().getSelectedMedia(0).isGif()));*/
-
-
-        // TODO: 3/24/17 pin
-       /* Album selectedAlbum = albumsAdapter.getFirstSelectedAlbum();
-        if (selectedAlbum != null)
-            menu.findItem(R.id.set_pin_album).setTitle(selectedAlbum.isPinned() ? getString(R.string.un_pin) : getString(R.string.pin));*/
-
-       /*if (!editMode) {
-            menu.findItem(R.id.filter_menu).setVisible(!albumsMode);
-            menu.findItem(R.id.search_action).setVisible(albumsMode);
-        }*/
-
-        //menu.findItem(R.id.set_pin_album).setVisible(albumsMode && albumsFragment.getSelectedCount() == 1);
-        //menu.findItem(R.id.setAsAlbumPreview).setVisible(!albumsMode);
-        // menu.findItem(R.id.affix).setVisible(!albumsMode && getAlbum().getSelectedMediaCount() > 1);
-        return super.onPrepareOptionsMenu(menu);
-    }
-    //endregion
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -771,44 +562,6 @@ public class MainActivity extends SharedMediaActivity {
                 alertDialog.show();
                 return true;*/
 
-
-
-            case R.id.all_media_filter:
-                if (!albumsMode) {
-                    getAlbum().filterMedias(getApplicationContext(), FilterMode.ALL);
-                    //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                    item.setChecked(true);
-                    checkNothing();
-                }
-                return true;
-
-            case R.id.video_media_filter:
-                if (!albumsMode) {
-                    getAlbum().filterMedias(getApplicationContext(), FilterMode.VIDEO);
-                    //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                    item.setChecked(true);
-                    checkNothing();
-                }
-                return true;
-
-            case R.id.image_media_filter:
-                if (!albumsMode) {
-                    getAlbum().filterMedias(getApplicationContext(), FilterMode.IMAGES);
-                    //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                    item.setChecked(true);
-                    checkNothing();
-                }
-                return true;
-
-            case R.id.gifs_media_filter:
-                if (!albumsMode) {
-                    getAlbum().filterMedias(getApplicationContext(), FilterMode.GIF);
-                    //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                    item.setChecked(true);
-                    checkNothing();
-                }
-                return true;
-
             //region Affix
             // TODO: 11/21/16 move away from here
             case  R.id.affix:
@@ -826,10 +579,10 @@ public class MainActivity extends SharedMediaActivity {
                     @Override
                     protected Void doInBackground(Affix.Options... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-                        for (int i = 0; i<getAlbum().getSelectedMediaCount(); i++) {
+                       /* for (int i = 0; i<getAlbum().getSelectedMediaCount(); i++) {
                             if(!getAlbum().getSelectedMedia(i).isVideo())
                                 bitmapArray.add(getAlbum().getSelectedMedia(i).getBitmap());
-                        }
+                        }*/
 
                         if (bitmapArray.size() > 1)
                             Affix.AffixBitmapList(getApplicationContext(), bitmapArray, arg0[0]);
@@ -848,7 +601,7 @@ public class MainActivity extends SharedMediaActivity {
                         dialog.dismiss();
                         supportInvalidateOptionsMenu();
                         //oldMediaAdapter.notifyDataSetChanged();
-                        new PreparePhotosTask().execute();
+                        //new PreparePhotosTask().execute();
                     }
                 }
                 //endregion
@@ -1007,7 +760,7 @@ public class MainActivity extends SharedMediaActivity {
                                         displayAlbums(false);
                                     }
                                     //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                                    finishEditMode();
+                                    //finishEditMode();
                                     supportInvalidateOptionsMenu();
                                 } else requestSdCardPermissions();
 
@@ -1022,7 +775,7 @@ public class MainActivity extends SharedMediaActivity {
                             @Override
                             public void folderSelected(String path) {
                                 boolean success = getAlbum().copySelectedPhotos(getApplicationContext(), path);
-                                finishEditMode();
+                                //finishEditMode();
 
                                 if (!success) // TODO: 11/21/16 handle in other way
                                     requestSdCardPermissions();
@@ -1088,53 +841,19 @@ public class MainActivity extends SharedMediaActivity {
         }
     }
 
-    @Deprecated
-    private void toggleRecyclersVisibility(boolean albumsMode){
-        //rvAlbums.setVisibility(albumsMode ? View.VISIBLE : View.GONE);
-        //rv.setVisibility(albumsMode ? View.GONE : View.VISIBLE);
-    }
 
     @Override
     public void onBackPressed() {
-        if (editMode()) finishEditMode();
-        else {
-            if (albumsMode) {
+
+        if (albumsMode) {
+            if (!albumsFragment.onBackPressed()) {
                 if (drawer.isDrawerOpen(GravityCompat.START))
                     drawer.closeDrawer(GravityCompat.START);
                 else finish();
-            } else {
-                Toast.makeText(this, "asd", Toast.LENGTH_SHORT).show();
-                getSupportFragmentManager().popBackStack();
-                albumsMode = true;
-                //setRecentApp(getString(R.string.app_name));
             }
-        }
-    }
-
-
-    @Deprecated
-    private class PreparePhotosTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            //swipeRefreshLayout.setRefreshing(true);
-            toggleRecyclersVisibility(false);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            getAlbum().updatePhotos(getApplicationContext());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-            //if (!hidden)
-            //HandlingAlbums.addAlbumToBackup(getApplicationContext(), getAlbum());
-            checkNothing();
-            //swipeRefreshLayout.setRefreshing(false);
+        } else {
+            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
+               goBackToAlbums();
         }
     }
 }

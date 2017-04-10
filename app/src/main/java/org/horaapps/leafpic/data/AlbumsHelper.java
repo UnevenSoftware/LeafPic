@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.new_way;
+package org.horaapps.leafpic.data;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +11,8 @@ import android.widget.Toast;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
-import org.horaapps.leafpic.model.Album;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
-import org.horaapps.leafpic.util.ContentHelper;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;

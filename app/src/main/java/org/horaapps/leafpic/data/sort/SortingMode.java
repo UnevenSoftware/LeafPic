@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.model.base;
+package org.horaapps.leafpic.data.sort;
 
 /**
  * Created by dnld on 18/08/16.

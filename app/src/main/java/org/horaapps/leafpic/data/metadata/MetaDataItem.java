@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.model;
+package org.horaapps.leafpic.data.metadata;
 
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;

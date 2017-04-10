@@ -24,9 +24,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
-import org.horaapps.leafpic.model.ContentProviderHelper;
-import org.horaapps.leafpic.model.HandlingAlbums;
-import org.horaapps.leafpic.model.base.ImageFileFilter;
+import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.data.filter.ImageFileFilter;
+import org.horaapps.leafpic.data.provider.ContentProviderHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 

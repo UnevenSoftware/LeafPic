@@ -19,10 +19,10 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.model.Media;
-import org.horaapps.leafpic.model.base.MediaComparators;
-import org.horaapps.leafpic.model.base.SortingMode;
-import org.horaapps.leafpic.model.base.SortingOrder;
+import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.sort.MediaComparators;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.CardViewStyle;
 import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.ThemeHelper;
@@ -280,6 +280,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             for (int index = Math.min(targetIndex, indexRightBeforeOrAfter); index <= Math.max(targetIndex, indexRightBeforeOrAfter); index++) {
                 if (media.get(index) != null) {
                     if (media.get(index).setSelected(true)) {
+                        notifySelected(true);
                         notifyItemChanged(index);
                     }
                 }
