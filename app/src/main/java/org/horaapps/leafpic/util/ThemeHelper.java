@@ -150,10 +150,12 @@ public class ThemeHelper {
 	}
 
 	public int getIconColor(){
-		switch (baseTheme){
-			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_white_1000);
-			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
-		}
+	    if(!(SP.getBoolean(this.context.getString(R.string.preference_custom_icon_color), false))){
+            switch (baseTheme){
+                case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_white_1000);
+                case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
+            }
+	    } else return getAccentColor();
 	}
 
 	public int getButtonBackgroundColor(){

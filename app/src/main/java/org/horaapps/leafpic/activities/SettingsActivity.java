@@ -196,6 +196,12 @@ public class SettingsActivity extends ThemedActivity {
         }, getAccentColor());
     }
 
+    @OnClick(R.id.ll_custom_icon_color)
+    public void onChangedCustomIconClicked(View view) {
+        updateTheme();
+        updateUiElements();
+    }
+
     @OnClick(R.id.ll_white_list)
     public void onWhiteListClicked(View view) {
         startActivity(new Intent(getApplicationContext(), BlackWhiteListActivity.class));

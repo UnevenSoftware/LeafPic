@@ -170,6 +170,18 @@
                         app:settingIcon="gmd-dashboard"
                         app:settingTitle="@string/album_card_view"/>
 
+                    <!-- CUSTOM ICON COLOR -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/ll_custom_icon_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/custom_icon_color_sub"
+                        app:settingDefaultValue="false"
+                        app:settingIcon="gmd-border-color"
+                        app:settingMinApi="21"
+                        app:settingPreferenceKey="@string/preference_custom_icon_color"
+                        app:settingTitle="@string/custom_icon_color"/>
+
                     <!-- TRANSLUCENT STATUS BAR-->
                     <org.horaapps.leafpic.views.SettingWithSwitchView
                         android:id="@+id/option_statusbar"

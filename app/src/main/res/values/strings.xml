@@ -218,6 +218,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="colored_navbar_sub">Apply the primary color to the navigation bar.</string>
     <string name="internal_player">Internal Video Player</string>
     <string name="internal_player_sub">Use the embedded video player</string>
+    <string name="custom_icon_color">Custom Icon Color</string>
+    <string name="custom_icon_color_sub">Apply Accent color on icons.</string>
 
     <!--DONATE STRINGS-->
     <string name="donate_googleplay">Google Play Store</string>

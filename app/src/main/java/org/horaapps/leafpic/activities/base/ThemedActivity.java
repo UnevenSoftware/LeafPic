@@ -45,6 +45,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     private boolean coloredNavBar;
     private boolean obscuredStatusBar;
     private boolean applyThemeSingleImgAct;
+    private boolean customIconColor;
 
 
     @Override
@@ -68,6 +69,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
         obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
         applyThemeSingleImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
+        customIconColor = SP.getBoolean(getString(R.string.preference_custom_icon_color), false);
     }
 
     @CallSuper
