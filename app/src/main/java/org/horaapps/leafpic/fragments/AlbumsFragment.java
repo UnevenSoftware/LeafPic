@@ -96,7 +96,10 @@ public class AlbumsFragment extends BaseFragment{
                                 .subscribe(
                                         album::setLastMedia,
                                         throwable -> {},
-                                        () -> adapter.add(album)),
+                                        () ->{
+                                            int pos = adapter.add(album);
+                                            getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
+                                        }),
                         throwable -> refresh.setRefreshing(false),
                         () -> {
                             db.close();

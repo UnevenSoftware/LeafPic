@@ -62,6 +62,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         updateTheme(ThemeHelper.getThemeHelper(context));
         this.sortingMode = sortingMode;
         this.sortingOrder = sortingOrder;
+        setHasStableIds(true);
     }
 
     public void sort() {
@@ -74,6 +75,11 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             reverseOrder();*/
 
         notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return media.get(position).getPath().hashCode() ^ 1312;
     }
 
     public SortingOrder sortingOrder() {
@@ -294,12 +300,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public void add(Media album) {
+    public int add(Media album) {
         int i = Collections.binarySearch(
                 media, album, MediaComparators.getComparator(sortingMode, sortingOrder));
         if (i < 0) i = ~i;
         media.add(i, album);
-        notifyItemInserted(i);
+
+        //notifyItemRangeInserted(0, media.size()-1);
+        //notifyItemInserted(i);
+        //notifyDataSetChanged();
+        return i;
     }
 
     @Override

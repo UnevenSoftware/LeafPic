@@ -48,12 +48,16 @@ android {
             resValue "string", "app_name", "LeafPic (debug)"
         }
     }
+
+    flavorDimensions "default"
+
     productFlavors {
         noGPlay {
-            //versionNameSuffix '-fdroid'
+            dimension "default"
         }
+
         withGPlay {
-            //signingConfig signingConfigs.GPlayConfig
+            dimension "default"
         }
     }
 }

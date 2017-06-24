@@ -58,12 +58,14 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     private ThemeHelper theme;
     private BitmapDrawable placeholder;
     private CardViewStyle cvs;
+    Context context;
 
     public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
         albums = new ArrayList<>();
         updateTheme(ThemeHelper.getThemeHelper(context));
         this.sortingMode = sortingMode;
         this.sortingOrder = sortingOrder;
+        this.context = context;
     }
 
     public void sort() {
@@ -268,12 +270,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void add(Album album) {
+    public int add(Album album) {
         int i = Collections.binarySearch(
                 albums, album, AlbumsComparators.getComparator(sortingMode, sortingOrder));
         if (i < 0) i = ~i;
         albums.add(i, album);
-        notifyItemInserted(i);
+        //notifyDataSetChanged();
+        //int finalI = i;
+        //((ThemedActivity) context).runOnUiThread(() -> notifyItemInserted(finalI));
+        return i;
+
     }
 
     private void reverseOrder() {

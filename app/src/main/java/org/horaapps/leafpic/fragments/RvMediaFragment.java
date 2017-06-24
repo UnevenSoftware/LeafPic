@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -101,10 +100,14 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
-                .subscribe(media -> adapter.add(media),
+                .subscribe(media ->{
+                            int pos = adapter.add(media);
+                            getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
+                        },
                         throwable -> refresh.setRefreshing(false),
                         () -> {
                             act.nothingToShow(getCount() == 0);
+                            //adapter.notifyItemRangeInserted(0, adapter.getItemCount());
                             refresh.setRefreshing(false);
                         });
 
@@ -123,7 +126,8 @@ public class RvMediaFragment extends BaseFragment {
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
 
         rv.setHasFixedSize(true);
-        rv.setItemAnimator(new DefaultItemAnimator());
+        //rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setItemAnimator(null);
 
         adapter = new MediaAdapter(
                 getContext(), sortingMode(), sortingOrder());
@@ -151,6 +155,8 @@ public class RvMediaFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         display();
     }
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
