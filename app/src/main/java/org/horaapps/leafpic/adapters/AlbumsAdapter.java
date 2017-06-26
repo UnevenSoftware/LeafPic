@@ -198,7 +198,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 .centerCrop()
                 .error(org.horaapps.leafpic.R.drawable.ic_error)
                 .placeholder(placeholder)
-                .animate(org.horaapps.leafpic.R.anim.fade_in)
+                //.animate(org.horaapps.leafpic.R.anim.fade_in)
                 .into(holder.picture);
 
         //holder.name.setTag(a);
@@ -275,7 +275,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
                 albums, album, AlbumsComparators.getComparator(sortingMode, sortingOrder));
         if (i < 0) i = ~i;
         albums.add(i, album);
-        //notifyDataSetChanged();
+        notifyItemInserted(i);
         //int finalI = i;
         //((ThemedActivity) context).runOnUiThread(() -> notifyItemInserted(finalI));
         return i;

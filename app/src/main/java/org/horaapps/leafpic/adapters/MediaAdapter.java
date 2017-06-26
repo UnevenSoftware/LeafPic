@@ -196,7 +196,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .thumbnail(0.5f)
                     //.placeholder(drawable)
-                    .animate(R.anim.fade_in)//TODO:DONT WORK WELL
+                    //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                     .into(holder.imageView);
             holder.gifIcon.setVisibility(View.GONE);
         }
@@ -307,7 +307,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         media.add(i, album);
 
         //notifyItemRangeInserted(0, media.size()-1);
-        //notifyItemInserted(i);
+        notifyItemInserted(i);
         //notifyDataSetChanged();
         return i;
     }

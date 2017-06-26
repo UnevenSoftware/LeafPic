@@ -2,7 +2,6 @@ package org.horaapps.leafpic.data.provider;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.util.Log;
 
 import org.horaapps.leafpic.new_way.CursorHandler;
 
@@ -20,7 +19,6 @@ public class QueryUtils {
             Cursor cursor = null;
             try {
                 cursor = q.getCursor(cr);
-                Log.wtf("asd", cursor.toString());
                 if (cursor != null && cursor.getCount() > 0)
                     while (cursor.moveToNext()) subscriber.onNext(ch.handle(cursor));
                 subscriber.onComplete();

@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -44,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 /**
  * Created by dnld on 3/13/17.
@@ -96,13 +98,13 @@ public class RvMediaFragment extends BaseFragment {
 
         adapter.clear();
 
-        CPHelper.getMedia(getContext(), album)
+        CPHelper.getMedia(getContext(), album, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
                 .subscribe(media ->{
                             int pos = adapter.add(media);
-                            getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
+                            //getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
                         },
                         throwable -> refresh.setRefreshing(false),
                         () -> {
@@ -122,12 +124,11 @@ public class RvMediaFragment extends BaseFragment {
 
         int spanCount = columnsCount();
         spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
+        rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-
-        rv.setHasFixedSize(true);
-        //rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setItemAnimator(null);
+        rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+        //rv.setItemAnimator(null);
 
         adapter = new MediaAdapter(
                 getContext(), sortingMode(), sortingOrder());

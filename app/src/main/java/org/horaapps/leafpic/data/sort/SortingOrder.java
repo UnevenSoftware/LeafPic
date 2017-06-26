@@ -17,6 +17,10 @@ public enum SortingOrder {
     return value;
   }
 
+  public boolean isAscending(){
+    return value == ASCENDING.getValue();
+  }
+
   public static SortingOrder fromValue(boolean value) {
     return value ? ASCENDING : DESCENDING;
   }

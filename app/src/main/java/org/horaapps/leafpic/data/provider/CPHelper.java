@@ -8,6 +8,8 @@ import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.data.filter.ImageFileFilter;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;
@@ -24,16 +26,18 @@ import io.reactivex.ObservableEmitter;
 public class CPHelper {
 
 
-    public static Observable<Album> getAlbums(Context context, boolean hidden) {
+    public static Observable<Album> getAlbums(Context context, boolean hidden, SortingMode sortingMode, SortingOrder sortingOrder) {
         HashSet<String> excluded = new HashSet<>();
-        return !hidden ? getAlbums(context, excluded) : getHiddenAlbums(context, excluded);
+        return !hidden ? getAlbums(context, excluded, sortingMode, sortingOrder) : getHiddenAlbums(context, excluded);
     }
 
-    private static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums) {
+    private static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
-                .projection(Album.getProjection());
+                .projection(Album.getProjection())
+                .sort(sortingMode.getColumn())
+                .ascending(sortingOrder.isAscending());
 
         if (PreferenceUtil.getBool(context, "set_include_video", true)) {
             query.selection(String.format("%s=? or %s=?) group by ( %s ",
@@ -141,14 +145,13 @@ public class CPHelper {
         return QueryUtils.querySingle(query.build(), context.getContentResolver(), Media::new);
     }
 
-    public static Observable<Media> getMedia(Context context, Album album) {
+    public static Observable<Media> getMedia(Context context, Album album, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
-                .projection(Media.getProjection());
-               /* .sort(MediaStore.Images.Media.DATE_TAKEN)
-                .ascending(false)
-                .limit(n);*/
+                .projection(Media.getProjection())
+                .sort(sortingMode.getColumn())
+                .ascending(sortingOrder.isAscending());
 
         if(PreferenceUtil.getBool(context, "set_include_video", true)) {
             query.selection(String.format("(%s=? or %s=?) and %s=?",

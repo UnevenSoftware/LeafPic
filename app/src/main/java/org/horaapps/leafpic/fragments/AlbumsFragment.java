@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 /**
  * Created by dnld on 3/13/17.
@@ -85,7 +86,7 @@ public class AlbumsFragment extends BaseFragment{
         adapter.clear();
 
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
-        CPHelper.getAlbums(getContext(), hidden)
+        CPHelper.getAlbums(getContext(), hidden, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -98,7 +99,7 @@ public class AlbumsFragment extends BaseFragment{
                                         throwable -> {},
                                         () ->{
                                             int pos = adapter.add(album);
-                                            getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
+                                            //getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
                                         }),
                         throwable -> refresh.setRefreshing(false),
                         () -> {
@@ -157,11 +158,10 @@ public class AlbumsFragment extends BaseFragment{
 
         int spanCount = columnsCount();
         spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
+        rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-
-        rv.setHasFixedSize(true);
-        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
 
         adapter = new AlbumsAdapter(
                 getContext(), sortingMode(), sortingOrder());
@@ -181,8 +181,6 @@ public class AlbumsFragment extends BaseFragment{
 
         refresh.setOnRefreshListener(this::displayAlbums);
         rv.setAdapter(adapter);
-
-        //displayAlbums(false);
         return v;
     }
 

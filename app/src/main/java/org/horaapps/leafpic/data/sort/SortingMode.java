@@ -1,16 +1,28 @@
 package org.horaapps.leafpic.data.sort;
 
+import android.provider.MediaStore;
+
 /**
  * Created by dnld on 18/08/16.
  */
 
 public enum SortingMode {
-  NAME (0), DATE (1), SIZE(2), TYPE(3), NUMERIC(4);
+  NAME (0, MediaStore.MediaColumns.DISPLAY_NAME),
+  DATE (1, MediaStore.MediaColumns.DATE_MODIFIED),
+  SIZE(2, MediaStore.MediaColumns.SIZE),
+  TYPE(3, MediaStore.MediaColumns.MIME_TYPE),
+  NUMERIC(4, MediaStore.MediaColumns.DISPLAY_NAME);
 
   int value;
+  String column;
 
-  SortingMode(int value) {
+  SortingMode(int value, String column) {
     this.value = value;
+    this.column = column;
+  }
+
+  public String getColumn() {
+    return column;
   }
 
   public int getValue() {

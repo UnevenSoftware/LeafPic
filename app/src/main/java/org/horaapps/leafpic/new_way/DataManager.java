@@ -1,17 +1,12 @@
 package org.horaapps.leafpic.new_way;
 
 
-import android.content.Context;
-
 import com.jakewharton.rxrelay2.PublishRelay;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.provider.CPHelper;
 
 import java.util.List;
-
-import io.reactivex.Observable;
 
 
 public class DataManager {
@@ -38,19 +33,6 @@ public class DataManager {
 
     private DataManager() {
 
-    }
-
-    public Observable<Album> getAlbumsRelay(Context context, boolean hidden) {
-        CPHelper.getAlbums(context, hidden)
-                .subscribe(albumsRelay);
-        return albumsRelay;
-    }
-
-    public Observable<Media> getMediaRelay(Context context, Album album) {
-        CPHelper.getMedia(context, album)
-                .subscribe(mediaRelay);
-
-        return mediaRelay;
     }
 
 
