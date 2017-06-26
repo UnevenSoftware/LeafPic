@@ -18,7 +18,6 @@ import android.view.animation.OvershootInterpolator;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
-import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
@@ -91,16 +90,7 @@ public class AlbumsFragment extends BaseFragment{
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        album -> CPHelper.getLastMedia(App.getInstance(), album.getId())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(
-                                        album::setLastMedia,
-                                        throwable -> {},
-                                        () ->{
-                                            int pos = adapter.add(album);
-                                            //getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
-                                        }),
+                        album -> adapter.add(album),
                         throwable -> refresh.setRefreshing(false),
                         () -> {
                             db.close();

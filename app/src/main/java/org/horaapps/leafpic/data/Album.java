@@ -49,6 +49,7 @@ public class Album implements CursorHandler, Parcelable {
 				cur.getLong(0),
 				cur.getInt(2));
 		dateModified = cur.getLong(4);
+		setLastMedia(new Media(cur.getString(3)));
 	}
 
 	public static String[] getProjection() {

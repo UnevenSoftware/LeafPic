@@ -31,12 +31,14 @@ public class CPHelper {
         return !hidden ? getAlbums(context, excluded, sortingMode, sortingOrder) : getHiddenAlbums(context, excluded);
     }
 
+
+
     private static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
                 .projection(Album.getProjection())
-                .sort(sortingMode.getColumn())
+                .sort(sortingMode.getAlbumsColumn())
                 .ascending(sortingOrder.isAscending());
 
         if (PreferenceUtil.getBool(context, "set_include_video", true)) {
@@ -150,7 +152,7 @@ public class CPHelper {
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
                 .projection(Media.getProjection())
-                .sort(sortingMode.getColumn())
+                .sort(sortingMode.getMediaColumn())
                 .ascending(sortingOrder.isAscending());
 
         if(PreferenceUtil.getBool(context, "set_include_video", true)) {
