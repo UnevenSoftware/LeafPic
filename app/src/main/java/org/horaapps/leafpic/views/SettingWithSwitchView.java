@@ -56,14 +56,14 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
         inflater.inflate(R.layout.view_setting_switch, this);
 
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SettingWithSwitchView);
-        iconString = a.getString(R.styleable.SettingBasic_settingIcon);
+        iconString = a.getString(R.styleable.SettingWithSwitchView_settingIcon);
         final int prefKeyRes = a.getResourceId(R.styleable.SettingWithSwitchView_settingPreferenceKey, 0);
         if (prefKeyRes == 0) throw new IllegalArgumentException("Invalid preference reference");
         preferenceKey = getResources().getString(prefKeyRes);
-        titleRes = a.getResourceId(R.styleable.SettingBasic_settingTitle, 0);
-        captionRes = a.getResourceId(R.styleable.SettingBasic_settingCaption, 0);
+        titleRes = a.getResourceId(R.styleable.SettingWithSwitchView_settingTitle, 0);
+        captionRes = a.getResourceId(R.styleable.SettingWithSwitchView_settingCaption, 0);
         defaultValue = a.getBoolean(R.styleable.SettingWithSwitchView_settingDefaultValue, false);
-        int minimumApi = a.getInteger(R.styleable.SettingBasic_settingMinApi, 0);
+        int minimumApi = 0;//a.getInteger(R.styleable.SettingWithSwitchView_settingMinApi, 0);
         a.recycle();
 
         preferences = PreferenceUtil.getInstance(getContext());
