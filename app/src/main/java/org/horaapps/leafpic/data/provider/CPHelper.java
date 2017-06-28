@@ -2,6 +2,7 @@ package org.horaapps.leafpic.data.provider;
 
 import android.content.Context;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.ContentHelper;
@@ -13,6 +14,7 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import io.reactivex.Observable;
@@ -31,9 +33,29 @@ public class CPHelper {
         return !hidden ? getAlbums(context, excluded, sortingMode, sortingOrder) : getHiddenAlbums(context, excluded);
     }
 
+    private static String getHavingCluause(HashSet<String> excluded){
+        if (excluded.size() == 0) return "";
 
 
-    private static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
+        //String[] paths = excluded.toArray(new String[excluded.size()]);
+        StringBuilder res = new StringBuilder();
+        res.append("HAVING (");
+        //res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE '").append(pa.).append("%'");
+        res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE ?");
+
+        for (int i = 1; i < excluded.size(); i++)
+            res.append(" AND ")
+                    .append(MediaStore.Images.Media.DATA)
+                    .append(" NOT LIKE ?");
+
+
+        res.append(")");
+
+        return res.toString();
+
+    }
+
+    public static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
@@ -41,20 +63,31 @@ public class CPHelper {
                 .sort(sortingMode.getAlbumsColumn())
                 .ascending(sortingOrder.isAscending());
 
-        if (PreferenceUtil.getBool(context, "set_include_video", true)) {
-            query.selection(String.format("%s=? or %s=?) group by ( %s ",
-                    MediaStore.Files.FileColumns.MEDIA_TYPE,
-                    MediaStore.Files.FileColumns.MEDIA_TYPE,
-                    MediaStore.Files.FileColumns.PARENT));
+        ArrayList<Object> args = new ArrayList<>();
 
-            query.args(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO);
-        } else {
-            query.selection(String.format("%s=?) group by ( %s ",
+        if (PreferenceUtil.getBool(context, "set_include_video", true)) {
+            query.selection(String.format("%s=? or %s=?) group by (%s) %s ",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
-                    MediaStore.Files.FileColumns.PARENT));
-            query.args(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE);
+                    MediaStore.Files.FileColumns.MEDIA_TYPE,
+                    MediaStore.Files.FileColumns.PARENT,
+                    getHavingCluause(excludedAlbums)));
+            args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE);
+            args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO);
+        } else {
+            query.selection(String.format("%s=?) group by (%s) %s ",
+                    MediaStore.Files.FileColumns.MEDIA_TYPE,
+                    MediaStore.Files.FileColumns.PARENT,
+                    getHavingCluause(excludedAlbums)));
+            args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE);
+            //query.args(, excludedAlbums);
         }
+
+        Log.wtf("asd", query.selection);
+        for (String s : excludedAlbums) {
+            args.add(s+"%");
+        }
+        //args.addAll(excludedAlbums);
+        query.args(args.toArray());
 
 
         return QueryUtils.query(query.build(), context.getContentResolver(), Album::new);

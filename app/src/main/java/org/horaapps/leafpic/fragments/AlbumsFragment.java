@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,7 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
+import java.util.HashSet;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -56,10 +58,14 @@ public class AlbumsFragment extends BaseFragment{
 
     private MainActivity act;
     private boolean hidden = false;
+    HashSet<String> excuded = new HashSet<>();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        excuded.add("/storage/emulated/0/Pictures");
+        excuded.add("/storage/emulated/0/Download/apk");
         setHasOptionsMenu(true);
     }
 
@@ -81,21 +87,37 @@ public class AlbumsFragment extends BaseFragment{
         displayAlbums();
     }
 
-    private void displayAlbums() {
-        adapter.clear();
 
+    private boolean isOk(String path){
+        for (String s : excuded) {
+            if (path.startsWith(s)) return false;
+        }
+        return true;
+    }
+
+    private void displayAlbums() {
+
+
+        adapter.clear();
+        long start = System.currentTimeMillis();
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
-        CPHelper.getAlbums(getContext(), hidden, sortingMode(), sortingOrder())
+        CPHelper.getAlbums(getContext(), excuded, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
+                //.filter(album -> isOk(album.getPath()))
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        album -> adapter.add(album),
+                        album -> {
+                            adapter.add(album);
+                            Log.wtf("asd", album.getPath());
+                            },
                         throwable -> refresh.setRefreshing(false),
                         () -> {
                             db.close();
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
+                            long end = System.currentTimeMillis() - start;
+                            Log.wtf("time", end+"");
                         });
     }
 
