@@ -2,7 +2,6 @@ package org.horaapps.leafpic.data.provider;
 
 import android.content.Context;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.ContentHelper;
@@ -32,10 +31,13 @@ public class CPHelper {
     }
 
     private static String getHavingCluause(int excludedCount){
-        if (excludedCount == 0) return "";
 
         StringBuilder res = new StringBuilder();
         res.append("HAVING (");
+
+        if (excludedCount == 0)
+            return res.append("1<>2goo").toString();
+
         res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE ?");
 
         for (int i = 1; i < excludedCount; i++)
@@ -90,8 +92,6 @@ public class CPHelper {
 
 
     private static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
-
-        Log.wtf("asd", "yeeee");
         return Observable.create(subscriber -> {
             try {
                 for (File storage : ContentHelper.getStorageRoots(context))

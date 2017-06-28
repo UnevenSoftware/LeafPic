@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -102,7 +103,11 @@ public class AlbumsFragment extends BaseFragment{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         album -> adapter.add(album),
-                        throwable -> refresh.setRefreshing(false),
+                        throwable -> {
+                            refresh.setRefreshing(false);
+
+                            Log.wtf("asd", throwable);
+                        },
                         () -> {
                             db.close();
                             act.nothingToShow(getCount() == 0);
