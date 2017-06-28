@@ -2,7 +2,6 @@ package org.horaapps.leafpic.data.provider;
 
 import android.content.Context;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.ContentHelper;
@@ -15,7 +14,6 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -28,34 +26,30 @@ import io.reactivex.ObservableEmitter;
 public class CPHelper {
 
 
-    public static Observable<Album> getAlbums(Context context, boolean hidden, SortingMode sortingMode, SortingOrder sortingOrder) {
-        HashSet<String> excluded = new HashSet<>();
+    public static Observable<Album> getAlbums(Context context, boolean hidden, ArrayList<String> excluded ,SortingMode sortingMode, SortingOrder sortingOrder) {
         return !hidden ? getAlbums(context, excluded, sortingMode, sortingOrder) : getHiddenAlbums(context, excluded);
     }
 
-    private static String getHavingCluause(HashSet<String> excluded){
-        if (excluded.size() == 0) return "";
+    private static String getHavingCluause(int excludedCount){
+        if (excludedCount == 0) return "";
 
-
-        //String[] paths = excluded.toArray(new String[excluded.size()]);
         StringBuilder res = new StringBuilder();
         res.append("HAVING (");
-        //res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE '").append(pa.).append("%'");
         res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE ?");
 
-        for (int i = 1; i < excluded.size(); i++)
+        for (int i = 1; i < excludedCount; i++)
             res.append(" AND ")
                     .append(MediaStore.Images.Media.DATA)
                     .append(" NOT LIKE ?");
 
-
-        res.append(")");
+        // NOTE: dont close ths parenthesis it will be closed by ContentResolver
+        //res.append(")");
 
         return res.toString();
 
     }
 
-    public static Observable<Album> getAlbums(Context context, HashSet<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
+    public static Observable<Album> getAlbums(Context context, ArrayList<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
@@ -70,23 +64,23 @@ public class CPHelper {
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.PARENT,
-                    getHavingCluause(excludedAlbums)));
+                    getHavingCluause(excludedAlbums.size())));
             args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE);
             args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO);
         } else {
             query.selection(String.format("%s=?) group by (%s) %s ",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.PARENT,
-                    getHavingCluause(excludedAlbums)));
+                    getHavingCluause(excludedAlbums.size())));
             args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE);
-            //query.args(, excludedAlbums);
         }
 
-        Log.wtf("asd", query.selection);
-        for (String s : excludedAlbums) {
+
+        //NOTE: LIKE params for query
+        for (String s : excludedAlbums)
             args.add(s+"%");
-        }
-        //args.addAll(excludedAlbums);
+
+
         query.args(args.toArray());
 
 
@@ -94,7 +88,7 @@ public class CPHelper {
     }
 
 
-    public static Observable<Album> getHiddenAlbums(Context context, HashSet<String> excludedAlbums) {
+    public static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
         return Observable.create(subscriber -> {
             try {
                 for (File storage : ContentHelper.getStorageRoots(context))
@@ -107,7 +101,7 @@ public class CPHelper {
     }
 
 
-    private static void fetchRecursivelyHiddenFolder(Context context, File dir, ObservableEmitter<Album> emitter, HashSet<String> excludedAlbums, boolean includeVideo) {
+    private static void fetchRecursivelyHiddenFolder(Context context, File dir, ObservableEmitter<Album> emitter, ArrayList<String> excludedAlbums, boolean includeVideo) {
         if (!isExcluded(dir.getPath(), excludedAlbums)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             if (folders != null) {
@@ -145,10 +139,9 @@ public class CPHelper {
         }
     }
 
-    private static boolean isExcluded(String path, HashSet<String> excludedAlbums) {
+    private static boolean isExcluded(String path, ArrayList<String> excludedAlbums) {
+        for(String s : excludedAlbums) if (path.startsWith(s)) return true;
         return false;
-        /*for(String s : excludedAlbums) if (path.startsWith(s)) return true;
-        return false;*/
     }
 
 

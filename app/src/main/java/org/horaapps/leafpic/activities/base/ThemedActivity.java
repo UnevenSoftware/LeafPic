@@ -72,6 +72,8 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         customIconColor = SP.getBoolean(getString(R.string.preference_custom_icon_color), false);
     }
 
+
+
     @CallSuper
     @Override
     public void updateUiElements() {

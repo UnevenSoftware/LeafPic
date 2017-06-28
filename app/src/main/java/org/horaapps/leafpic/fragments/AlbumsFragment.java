@@ -3,12 +3,14 @@ package org.horaapps.leafpic.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
@@ -33,7 +37,7 @@ import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -58,14 +62,14 @@ public class AlbumsFragment extends BaseFragment{
 
     private MainActivity act;
     private boolean hidden = false;
-    HashSet<String> excuded = new HashSet<>();
+    ArrayList<String> excuded = new ArrayList<>();
+    ThemeHelper t;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        excuded.add("/storage/emulated/0/Pictures");
-        excuded.add("/storage/emulated/0/Download/apk");
+        excuded = db().getFolders(HandlingAlbums.EXCLUDED);
         setHasOptionsMenu(true);
     }
 
@@ -73,6 +77,7 @@ public class AlbumsFragment extends BaseFragment{
     public void onAttach(Context context) {
         super.onAttach(context);
         act = ((MainActivity) context);
+        t = act.getThemeHelper();
     }
 
     @Override
@@ -87,37 +92,21 @@ public class AlbumsFragment extends BaseFragment{
         displayAlbums();
     }
 
-
-    private boolean isOk(String path){
-        for (String s : excuded) {
-            if (path.startsWith(s)) return false;
-        }
-        return true;
-    }
-
     private void displayAlbums() {
 
-
         adapter.clear();
-        long start = System.currentTimeMillis();
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
-        CPHelper.getAlbums(getContext(), excuded, sortingMode(), sortingOrder())
+        CPHelper.getAlbums(getContext(), hidden, excuded, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
-                //.filter(album -> isOk(album.getPath()))
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        album -> {
-                            adapter.add(album);
-                            Log.wtf("asd", album.getPath());
-                            },
+                        album -> adapter.add(album),
                         throwable -> refresh.setRefreshing(false),
                         () -> {
                             db.close();
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
-                            long end = System.currentTimeMillis() - start;
-                            Log.wtf("time", end+"");
                         });
     }
 
@@ -324,6 +313,53 @@ public class AlbumsFragment extends BaseFragment{
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
                 adapter.changeSortingOrder(sortingOrder);
                 AlbumsHelper.setSortingOrder(getContext(), sortingOrder);
+                return true;
+
+            case R.id.exclude:
+                final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(getActivity(), t.getDialogStyle());
+
+                final View excludeDialogLayout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_exclude, null);
+                TextView textViewExcludeTitle = excludeDialogLayout.findViewById(R.id.text_dialog_title);
+                TextView textViewExcludeMessage = excludeDialogLayout.findViewById(R.id.text_dialog_message);
+                final Spinner spinnerParents = excludeDialogLayout.findViewById(R.id.parents_folder);
+
+                spinnerParents.getBackground().setColorFilter(t.getIconColor(), PorterDuff.Mode.SRC_ATOP);
+
+                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(t.getCardBackgroundColor());
+                textViewExcludeTitle.setBackgroundColor(t.getPrimaryColor());
+                textViewExcludeTitle.setText(getString(R.string.exclude));
+
+                if(adapter.getSelectedCount() > 1) {
+                    textViewExcludeMessage.setText(R.string.exclude_albums_message);
+                    spinnerParents.setVisibility(View.GONE);
+                } else {
+                    textViewExcludeMessage.setText(R.string.exclude_album_message);
+                    spinnerParents.setAdapter(t.getSpinnerAdapter(adapter.getFirstSelectedAlbum().getParentsFolders()));
+                }
+
+                textViewExcludeMessage.setTextColor(t.getTextColor());
+                excludeDialogBuilder.setView(excludeDialogLayout);
+
+                excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude).toUpperCase(), (dialog, id) -> {
+
+                    if (adapter.getSelectedCount() > 1) {
+                        for (Album album : adapter.getSelectedAlbums()) {
+                            db().excludeAlbum(album.getPath());
+                            excuded.add(album.getPath());
+                        }
+                        adapter.removeSelectedAlbums();
+
+                    } else {
+                        String path = spinnerParents.getSelectedItem().toString();
+                        db().excludeAlbum(path);
+                        excuded.add(path);
+                        adapter.removeAlbumsThatStartsWith(path);
+                        adapter.forceSelectedCount(0);
+                    }
+                    updateToolbar();
+                });
+                excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
+                excludeDialogBuilder.show();
                 return true;
 
         }

@@ -366,8 +366,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="add">Add</string>
     <string name="exclude">Exclude</string>
     <string name="exclude_albums_message">Are you sure you want to exclude the selected
-        albums? \n If you want to exclude the parent of these albums, try excluding only
-    one album. A dropdown there will allow you to select the parent of the folder.</string>
+        albums?\nIf you want to exclude the parent of these albums, keep in mind that selecting
+    one album a dropdown will appear allow you to select the parent of the folder.</string>
     <string name="exclude_album_message">
         By excluding this folder you will also exclude all sub-folders. Below you can find a list
         that allows you to choose a parent, if you have to exclude more folders which are on the same level.
