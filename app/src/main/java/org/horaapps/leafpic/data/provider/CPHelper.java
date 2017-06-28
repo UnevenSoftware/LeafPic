@@ -36,7 +36,7 @@ public class CPHelper {
         res.append("HAVING (");
 
         if (excludedCount == 0)
-            return res.append("1<>2goo").toString();
+            return res.append("13 <> 12").toString();
 
         res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE ?");
 
