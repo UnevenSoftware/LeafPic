@@ -245,7 +245,7 @@ public class MainActivity extends SharedMediaActivity {
                     });
                 } else {
                     drawer.closeDrawer(GravityCompat.START);
-                    displayAlbums(false);
+                    displayAlbums(true);
                 }
             }
         });

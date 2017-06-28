@@ -37,18 +37,23 @@ public class Album implements CursorHandler, Parcelable {
 		this.path = path;
 	}
 
-	public Album(String path, String name, long id, int count) {
+	public Album(String path, String name, long id, int count, long dateModified) {
 		this(path, name);
 		this.count = count;
 		this.id = id;
+		this.dateModified = dateModified;
+	}
+
+	public Album(String path, String name, int count, long dateModified) {
+		this(path, name, -1, count, dateModified);
 	}
 
 	public Album(Cursor cur) {
 		this(StringUtils.getBucketPathByImagePath(cur.getString(3)),
 				cur.getString(1),
 				cur.getLong(0),
-				cur.getInt(2));
-		dateModified = cur.getLong(4);
+				cur.getInt(2),
+				cur.getLong(4));
 		setLastMedia(new Media(cur.getString(3)));
 	}
 
@@ -69,7 +74,7 @@ public class Album implements CursorHandler, Parcelable {
 
 	@Deprecated
 	public Album(Context context, String path, long id, String name, int count) {
-		this(path, name, id, count);
+		this(path, name, id, count, 0);
 		settings = AlbumSettings.getDefaults();
 	}
 

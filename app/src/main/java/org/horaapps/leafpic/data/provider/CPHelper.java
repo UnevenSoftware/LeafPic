@@ -2,6 +2,7 @@ package org.horaapps.leafpic.data.provider;
 
 import android.content.Context;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.ContentHelper;
@@ -27,7 +28,7 @@ public class CPHelper {
 
 
     public static Observable<Album> getAlbums(Context context, boolean hidden, ArrayList<String> excluded ,SortingMode sortingMode, SortingOrder sortingOrder) {
-        return !hidden ? getAlbums(context, excluded, sortingMode, sortingOrder) : getHiddenAlbums(context, excluded);
+        return hidden ? getHiddenAlbums(context, excluded) : getAlbums(context, excluded, sortingMode, sortingOrder);
     }
 
     private static String getHavingCluause(int excludedCount){
@@ -49,7 +50,7 @@ public class CPHelper {
 
     }
 
-    public static Observable<Album> getAlbums(Context context, ArrayList<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
+    private static Observable<Album> getAlbums(Context context, ArrayList<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
@@ -88,7 +89,9 @@ public class CPHelper {
     }
 
 
-    public static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
+    private static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
+
+        Log.wtf("asd", "yeeee");
         return Observable.create(subscriber -> {
             try {
                 for (File storage : ContentHelper.getStorageRoots(context))
@@ -108,9 +111,9 @@ public class CPHelper {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!isExcluded(temp.getPath(), excludedAlbums) && (nomedia.exists() || temp.isHidden()))
-                        checkAndAddFolder(context, temp, emitter, includeVideo);
+                        checkAndAddFolder(null, temp, emitter, includeVideo);
 
-                    fetchRecursivelyHiddenFolder(context, temp, emitter, excludedAlbums, includeVideo);
+                    fetchRecursivelyHiddenFolder(null, temp, emitter, excludedAlbums, includeVideo);
                 }
             }
         }
@@ -120,23 +123,23 @@ public class CPHelper {
         File[] files = dir.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
-            Album asd = new Album( dir.getAbsolutePath(), dir.getName(), -1, files.length);
-            if (!asd.hasCover()) {
 
-                long lastMod = Long.MIN_VALUE;
-                File choice = null;
-                for (File file : files) {
-                    if (file.lastModified() > lastMod) {
-                        choice = file;
-                        lastMod = file.lastModified();
-                    }
+            long lastMod = Long.MIN_VALUE;
+            File choice = null;
+            for (File file : files) {
+                if (file.lastModified() > lastMod) {
+                    choice = file;
+                    lastMod = file.lastModified();
                 }
-                if (choice != null)
-                    asd.setCover(choice.getAbsolutePath());
+            }
+            if (choice != null) {
+                Album asd = new Album(dir.getAbsolutePath(), dir.getName(), files.length, lastMod);
+                asd.setLastMedia(new Media(choice.getAbsolutePath()));
+                emitter.onNext(asd);
             }
 
-            emitter.onNext(asd);
         }
+
     }
 
     private static boolean isExcluded(String path, ArrayList<String> excludedAlbums) {
