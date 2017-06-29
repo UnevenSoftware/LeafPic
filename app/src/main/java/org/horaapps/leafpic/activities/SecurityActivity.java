@@ -18,10 +18,11 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
+
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by dnld on 22/05/16.

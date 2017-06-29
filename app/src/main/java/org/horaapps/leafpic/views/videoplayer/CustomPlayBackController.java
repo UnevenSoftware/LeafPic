@@ -23,11 +23,12 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.util.Util;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 
 import java.util.Formatter;
 import java.util.Locale;
+
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.ThemeHelper;
 
 /**
  * Created by dnld on 12/6/16.

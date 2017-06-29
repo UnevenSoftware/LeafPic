@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="height_bottombar">50dp</dimen>
+
+    <!--ICONS-->
+    <dimen name="icon_margin">24dp</dimen>
+    <dimen name="icon_width_height">20dp</dimen>
+    <dimen name="big_icon">36dp</dimen>
+    <dimen name="icon_sub_width_height">16dp</dimen>
+    <dimen name="icon_elevation">10dp</dimen>
+    <dimen name="big_background_icon">72dp</dimen>
+
+    <!--PADDING & MARGIN-->
+    <dimen name="big_spacing">24dp</dimen>
+    <dimen name="sub_big_spacing">20dp</dimen>
+    <dimen name="medium_spacing">16dp</dimen>
+    <dimen name="sub_medium_spacing_2">14dp</dimen>
+    <dimen name="sub_medium_spacing">10dp</dimen>
+    <dimen name="small_spacing">8dp</dimen>
+    <dimen name="sub_small_spacing">5dp</dimen>
+
+    <!---->
+    <dimen name="setting_margin_end">44dp</dimen>
+
+    <!--TEXT-->
+    <dimen name="super_big_text">32sp</dimen>
+    <dimen name="big_text">24sp</dimen>
+    <dimen name="sub_big_text">18sp</dimen>
+    <dimen name="medium_text">16sp</dimen>
+    <dimen name="sub_medium_text">14sp</dimen>
+    <dimen name="medium_small_text">10sp</dimen>
+    <dimen name="small_text">8sp</dimen>
+
+    <!--VIEWS-->
+    <dimen name="scroll_bar_size">4dip</dimen>
+    <dimen name="card_corner_radius">1dp</dimen>
+    <dimen name="card_elevation">5dp</dimen>
+    <dimen name="card_spacing">10dp</dimen>
+
+    <!--FAB-->
+    <dimen name="fab_border_width">0dp</dimen>
+    <dimen name="fab_elevation">8dp</dimen>
+    <dimen name="fab_layout_margin">16dp</dimen>
+    <dimen name="fab_pressed_translationZ">12dp</dimen>
+
+    <!--OTHER OBJECT-->
+    <dimen name="progress_circle_width_height">48dp</dimen>
+    <dimen name="snackbar_elevation">10dp</dimen>
+
+    <!-- List items -->
+    <dimen name="listitem_height_twoline">72dp</dimen>
+</resources>

@@ -1,11 +1,9 @@
-package org.horaapps.leafpic.activities.theme;
+package horaapps.org.liz;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
-
-import org.horaapps.leafpic.R;
 
 /**
  * Created by dnld on 24/02/16.

@@ -1,10 +1,8 @@
-package org.horaapps.leafpic.activities.theme;
+package horaapps.org.liz;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.View;
-
-import org.horaapps.leafpic.util.ViewUtil;
 
 /**
  * Created by dnld on 4/16/17.

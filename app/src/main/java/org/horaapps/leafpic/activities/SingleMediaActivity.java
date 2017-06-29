@@ -38,7 +38,6 @@ import com.yalantis.ucrop.UCrop;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Album;
@@ -58,6 +57,8 @@ import org.horaapps.leafpic.views.HackyViewPager;
 
 import java.io.File;
 import java.io.InputStream;
+
+import horaapps.org.liz.ColorPalette;
 
 /**
  * Created by dnld on 18/02/16.

@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.activities.theme;
+package horaapps.org.liz;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

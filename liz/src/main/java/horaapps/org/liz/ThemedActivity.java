@@ -1,9 +1,7 @@
-package org.horaapps.leafpic.activities.base;
+package horaapps.org.liz;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,14 +21,7 @@ import android.widget.TextView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.iconics.typeface.IIcon;
-
-import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
-import org.horaapps.leafpic.activities.theme.Theme;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
-import org.horaapps.leafpic.activities.theme.Themed;
-import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.ViewUtil;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 
@@ -40,7 +31,6 @@ import java.util.ArrayList;
 public abstract class ThemedActivity extends AppCompatActivity implements UiElementInizializer {
 
     private ThemeHelper themeHelper;
-    private PreferenceUtil SP;
 
     private boolean coloredNavBar;
     private boolean obscuredStatusBar;
@@ -51,7 +41,6 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SP = PreferenceUtil.getInstance(getApplicationContext());
         themeHelper = ThemeHelper.getInstance(getApplicationContext());
     }
 
@@ -66,10 +55,10 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
 
     public void updateTheme(){
         themeHelper.updateTheme();
-        coloredNavBar = SP.getBoolean(getString(R.string.preference_colored_nav_bar), false);
-        obscuredStatusBar = SP.getBoolean(getString(R.string.preference_translucent_status_bar),true);
-        applyThemeSingleImgAct = SP.getBoolean(getString(R.string.preference_apply_theme_pager), true);
-        customIconColor = SP.getBoolean(getString(R.string.preference_custom_icon_color), false);
+        coloredNavBar = Hawk.get(getString(R.string.preference_colored_nav_bar), false);
+        obscuredStatusBar = Hawk.get(getString(R.string.preference_translucent_status_bar), true);
+        applyThemeSingleImgAct = true;//Hawk.get(getString(R.string.preference_apply_theme_pager), true);
+        customIconColor = Hawk.get(getString(R.string.preference_custom_icon_color), false);
     }
 
 
@@ -114,10 +103,11 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setRecentApp(String text){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        // TODO: 6/29/17 find a way
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             BitmapDrawable drawable = ((BitmapDrawable) getDrawable(R.mipmap.ic_launcher));
             setTaskDescription(new ActivityManager.TaskDescription(text, drawable.getBitmap(), getPrimaryColor()));
-        }
+        }*/
     }
 
 
@@ -134,11 +124,13 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     }
 
     protected boolean isTransparencyZero() {
-        return 255 - SP.getInt(getString(R.string.preference_transparency), 0) == 255;
+        return true;
+       /* return 255 - (getString(R.string.preference_transparency), 0) == 255;*/
     }
 
     public int getTransparency() {
-        return 255 - SP.getInt(getString(org.horaapps.leafpic.R.string.preference_transparency), 0);
+        return 0;
+        /*return 255 - SP.getInt(getString(org.horaapps.leafpic.R.string.preference_transparency), 0);*/
     }
 
     public void setBaseTheme(Theme baseTheme) {

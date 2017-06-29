@@ -16,17 +16,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.CardViewStyle;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
-import org.horaapps.leafpic.activities.theme.Theme;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
-import static org.horaapps.leafpic.activities.theme.CardViewStyle.COMPACT;
-import static org.horaapps.leafpic.activities.theme.CardViewStyle.FLAT;
-import static org.horaapps.leafpic.activities.theme.CardViewStyle.MATERIAL;
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.Theme;
+import horaapps.org.liz.ThemedActivity;
+
+import static org.horaapps.leafpic.CardViewStyle.COMPACT;
+import static org.horaapps.leafpic.CardViewStyle.FLAT;
+import static org.horaapps.leafpic.CardViewStyle.MATERIAL;
+
 
 /**
  * Created by dnld on 12/9/16.
@@ -140,9 +142,15 @@ public class CardViewStyleSetting extends ThemedSetting {
             public void onClick(DialogInterface dialog, int which) {
                 switch (rGroup.getCheckedRadioButtonId()) {
                     case R.id.radio_card_material:
-                    default: getSP().putInt("card_view_style", CardViewStyle.MATERIAL.getValue()); break;
-                    case R.id.radio_card_flat: getSP().putInt("card_view_style", CardViewStyle.FLAT.getValue()); break;
-                    case R.id.radio_card_compact: getSP().putInt("card_view_style", CardViewStyle.COMPACT.getValue()); break;
+                    default:
+                        getSP().putInt("card_view_style", MATERIAL.getValue());
+                        break;
+                    case R.id.radio_card_flat:
+                        getSP().putInt("card_view_style", FLAT.getValue());
+                        break;
+                    case R.id.radio_card_compact:
+                        getSP().putInt("card_view_style", COMPACT.getValue());
+                        break;
                 }
                 getSP().putBoolean("show_media_count", chkShowMediaCount.isChecked());
                 getSP().putBoolean("show_album_path", chkShowAlbumPath.isChecked());

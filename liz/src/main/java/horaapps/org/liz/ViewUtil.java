@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.util;
+package horaapps.org.liz;
 
 import android.app.Activity;
 import android.content.res.Resources;

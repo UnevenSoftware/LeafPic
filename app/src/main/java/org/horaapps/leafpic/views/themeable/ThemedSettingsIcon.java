@@ -6,8 +6,8 @@ import android.util.AttributeSet;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
-import org.horaapps.leafpic.activities.theme.Themed;
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.

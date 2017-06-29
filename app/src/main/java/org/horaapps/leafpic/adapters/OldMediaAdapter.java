@@ -18,11 +18,12 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.data.Media;
 
 import java.util.ArrayList;
+
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.ThemeHelper;
 
 
 /**

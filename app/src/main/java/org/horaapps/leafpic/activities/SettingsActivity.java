@@ -14,8 +14,6 @@ import android.widget.Toast;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
 import org.horaapps.leafpic.settings.CardViewStyleSetting;
 import org.horaapps.leafpic.settings.ColorsSetting;
 import org.horaapps.leafpic.settings.GeneralSetting;
@@ -23,13 +21,15 @@ import org.horaapps.leafpic.settings.MapProviderSetting;
 import org.horaapps.leafpic.settings.SinglePhotoSetting;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
-import org.horaapps.leafpic.util.ViewUtil;
 import org.horaapps.leafpic.views.SettingWithSwitchView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.ThemedActivity;
+import horaapps.org.liz.ViewUtil;
 
 public class SettingsActivity extends ThemedActivity {
     private PreferenceUtil SP;

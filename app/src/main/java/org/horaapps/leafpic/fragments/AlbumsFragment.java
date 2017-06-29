@@ -1,9 +1,11 @@
 package org.horaapps.leafpic.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,12 +23,12 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
@@ -34,15 +36,21 @@ import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.dialog.DeleteAlbumsDialog;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.ThemedActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
@@ -363,6 +371,79 @@ public class AlbumsFragment extends BaseFragment {
                 });
                 excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
                 excludeDialogBuilder.show();
+                return true;
+            case R.id.delete:
+                class DeleteAlbums extends AsyncTask<String, Integer, Boolean> {
+
+                    private AlertDialog dialog;
+                    List<Album> selectedAlbums;
+                    DeleteAlbumsDialog newFragment;
+
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        newFragment = new DeleteAlbumsDialog();
+                        newFragment.show(getFragmentManager(), "dialog");
+                        selectedAlbums = adapter.getSelectedAlbums();
+                        //newFragment.setTitle("asd");
+
+                        //dialog = AlertDialogsHelper.getProgressDialog(((ThemedActivity) getActivity()), getString(R.string.delete), getString(R.string.deleting_images));
+                        //dialog.show();
+
+
+                    }
+
+                    @Override
+                    protected Boolean doInBackground(String... arg0) {
+
+                        return true;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean result) {
+                        /*if (result) {
+                            if (albumsMode) {
+                                albumsAdapter.clearSelected();
+                                //albumsAdapter.notifyDataSetChanged();
+                            } else {
+                                if (getAlbum().getMedia().size() == 0) {
+                                    getAlbums().removeCurrentAlbum();
+                                    albumsAdapter.notifyDataSetChanged();
+                                    displayAlbums();
+                                } else
+                                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
+                            }
+                        } else requestSdCardPermissions();
+
+                        supportInvalidateOptionsMenu();
+                        checkNothing();
+                        dialog.dismiss();*/
+                    }
+                }
+
+
+                final AlertDialog alertDialog = AlertDialogsHelper.getTextDialog(((ThemedActivity) getActivity()), R.string.delete, R.string.delete_album_message);
+
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> alertDialog.dismiss());
+
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), (dialog, id) -> {
+                    if (Security.isPasswordOnDelete(getContext())) {
+
+                        Security.askPassword(((ThemedActivity) getActivity()), new Security.PasswordInterface() {
+                            @Override
+                            public void onSuccess() {
+                                new DeleteAlbums().execute();
+                            }
+
+                            @Override
+                            public void onError() {
+                                Toast.makeText(getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else new DeleteAlbums().execute();
+                });
+                alertDialog.show();
                 return true;
 
         }

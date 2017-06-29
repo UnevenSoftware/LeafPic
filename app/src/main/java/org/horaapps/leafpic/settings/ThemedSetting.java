@@ -1,7 +1,8 @@
 package org.horaapps.leafpic.settings;
 
-import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.PreferenceUtil;
+
+import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by dnld on 12/9/16.

@@ -438,49 +438,6 @@ public class MainActivity extends SharedMediaActivity {
                 dialog.show();
                 return true;
 
-            case R.id.exclude_action:
-                final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-
-                final View excludeDialogLayout = getLayoutInflater().inflate(R.layout.dialog_exclude, null);
-                TextView textViewExcludeTitle = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_title);
-                TextView textViewExcludeMessage = (TextView) excludeDialogLayout.findViewById(R.id.text_dialog_message);
-                final Spinner spinnerParents = (Spinner) excludeDialogLayout.findViewById(R.id.parents_folder);
-
-                spinnerParents.getBackground().setColorFilter(getIconColor(), PorterDuff.Mode.SRC_ATOP);
-
-                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
-                textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
-                textViewExcludeTitle.setText(getString(R.string.exclude));
-
-                if((albumsMode && albumsAdapter.getSelectedCount() > 1)) {
-                    textViewExcludeMessage.setText(R.string.exclude_albums_message);
-                    spinnerParents.setVisibility(View.GONE);
-                } else {
-                    textViewExcludeMessage.setText(R.string.exclude_album_message);
-                    spinnerParents.setAdapter(getSpinnerAdapter(albumsMode ? firstSelectedAlbum.getParentsFolders() : getAlbum().getParentsFolders()));
-                }
-
-                textViewExcludeMessage.setTextColor(getTextColor());
-                excludeDialogBuilder.setView(excludeDialogLayout);
-
-                excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        if ((albumsMode && albumsAdapter.getSelectedCount() > 1)) {
-                            getAlbums().excludeSelectedAlbums();
-                            albumsAdapter.clearSelected();
-                            //albumsAdapter.notifyDataSetChanged();
-                            supportInvalidateOptionsMenu();
-                        } else {
-                            getAlbums().excludeAlbum(spinnerParents.getSelectedItem().toString());
-                            finishEditMode();
-                            displayAlbums(true);
-                        }
-                    }
-                });
-                excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-                excludeDialogBuilder.show();
-                return true;
 
             case R.id.delete_action:
                 class DeletePhotos extends AsyncTask<String, Integer, Boolean> {

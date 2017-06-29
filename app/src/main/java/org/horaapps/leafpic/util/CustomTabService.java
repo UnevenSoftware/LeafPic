@@ -8,7 +8,7 @@ import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 import android.widget.Toast;
 
-import org.horaapps.leafpic.activities.base.ThemedActivity;
+import horaapps.org.liz.ThemedActivity;
 
 
 public class CustomTabService {

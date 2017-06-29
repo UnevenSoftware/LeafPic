@@ -3,6 +3,10 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
@@ -12,6 +16,7 @@ buildscript {
 }
 
 project.ext {
+    //supportVersion = "26.0.0-beta1"
     supportVersion = "25.3.1"
     sdkVersion = 26
     buildToolsVersion = '26.0.0'

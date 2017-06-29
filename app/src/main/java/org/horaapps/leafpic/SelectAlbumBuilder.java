@@ -36,8 +36,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -47,6 +45,9 @@ import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.ThemedActivity;
 
 public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 

@@ -17,9 +17,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
-import org.horaapps.leafpic.activities.theme.ThemedAdapter;
-import org.horaapps.leafpic.activities.theme.ThemedViewHolder;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
@@ -33,6 +30,9 @@ import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.ThemedAdapter;
+import horaapps.org.liz.ThemedViewHolder;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 

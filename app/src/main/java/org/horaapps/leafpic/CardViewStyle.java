@@ -1,7 +1,5 @@
-package org.horaapps.leafpic.activities.theme;
+package org.horaapps.leafpic;
 
-
-import org.horaapps.leafpic.R;
 
 /**
  * Created by Jibo on 20/11/2016.

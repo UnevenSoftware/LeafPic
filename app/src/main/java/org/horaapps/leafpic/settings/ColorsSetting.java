@@ -9,16 +9,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.ThemedActivity;
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
 
-import static org.horaapps.leafpic.activities.theme.Theme.AMOLED;
-import static org.horaapps.leafpic.activities.theme.Theme.DARK;
-import static org.horaapps.leafpic.activities.theme.Theme.LIGHT;
+import static horaapps.org.liz.Theme.AMOLED;
+import static horaapps.org.liz.Theme.DARK;
+import static horaapps.org.liz.Theme.LIGHT;
+
 
 /**
  * Created by dnld on 12/9/16.

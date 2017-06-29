@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
-import org.horaapps.leafpic.activities.theme.Themed;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.

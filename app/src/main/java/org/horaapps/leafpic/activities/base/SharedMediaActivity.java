@@ -13,6 +13,8 @@ import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 
+import horaapps.org.liz.ThemedActivity;
+
 /**
  * Created by dnld on 03/08/16.
  */

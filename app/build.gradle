@@ -82,6 +82,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
+    compile "com.orhanobut:hawk:2.0.1"
 
     // rxJava
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -90,7 +91,7 @@ dependencies {
     compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     // icons
-    compile 'com.mikepenz:iconics-core:2.8.1@aar'
+    compile 'com.mikepenz:iconics-core:2.8.6@aar'
     compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
     compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.6.0.1@aar'
@@ -104,7 +105,7 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     compile 'jp.wasabeef:recyclerview-animators:2.2.6'
 
-
+    compile project(':liz')
     // debug Only
     //debugCompile project(':inappstoragereader')
 

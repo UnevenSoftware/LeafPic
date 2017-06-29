@@ -14,13 +14,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.orhanobut.hawk.Hawk;
 
+import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
-import org.horaapps.leafpic.activities.theme.Theme;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
-import org.horaapps.leafpic.activities.theme.ThemedAdapter;
-import org.horaapps.leafpic.activities.theme.ThemedViewHolder;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.AlbumsComparators;
@@ -37,6 +34,11 @@ import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.Theme;
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.ThemedAdapter;
+import horaapps.org.liz.ThemedViewHolder;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
@@ -56,11 +58,13 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     private SortingMode sortingMode;
 
     private Drawable placeholder;
+    private CardViewStyle cvs;
 
     public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
         super(context);
         albums = new ArrayList<>();
         placeholder = getThemeHelper().getPlaceHolder();
+        cvs = CardViewStyle.fromValue(Hawk.get("card_view_style", 0));
         this.sortingMode = sortingMode;
         this.sortingOrder = sortingOrder;
     }
@@ -186,13 +190,15 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     @Override
     public void refreshTheme(ThemeHelper theme) {
         placeholder = theme.getPlaceHolder();
+
+        cvs = CardViewStyle.fromValue(Hawk.get("card_view_style", 0));
         super.refreshTheme(theme);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        switch (getThemeHelper().getCardViewStyle()) {
+        switch (cvs) {
             default:
             case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
@@ -221,7 +227,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
 
         Album a = albums.get(position);
-        holder.refreshTheme(getThemeHelper(), a.isSelected());
+        holder.refreshTheme(getThemeHelper(), cvs, a.isSelected());
 
         Media f = a.getCover();
 
@@ -329,7 +335,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
             ButterKnife.bind(this, itemView);
         }
 
-        public void refreshTheme(ThemeHelper theme, boolean selected) {
+        public void refreshTheme(ThemeHelper theme, CardViewStyle cvs, boolean selected) {
 
             if (selected) {
                 footer.setBackgroundColor(theme.getPrimaryColor());
@@ -338,7 +344,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
             } else {
                 picture.clearColorFilter();
                 selectedIcon.setVisibility(View.GONE);
-                switch (theme.getCardViewStyle()) {
+                switch (cvs) {
                     default: case MATERIAL:
                         footer.setBackgroundColor(theme.getCardBackgroundColor());
                         break;

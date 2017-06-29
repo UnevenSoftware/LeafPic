@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
-import org.horaapps.leafpic.activities.theme.Themed;
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.

@@ -9,8 +9,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
 import org.horaapps.leafpic.util.PreferenceUtil;
+
+import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by dnld on 12/9/16.

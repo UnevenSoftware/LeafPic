@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.activities.theme;
+package horaapps.org.liz;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -23,9 +23,7 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
-
-import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.PreferenceUtil;
+import com.orhanobut.hawk.Hawk;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -37,15 +35,13 @@ import java.util.ArrayList;
 
 public class ThemeHelper {
 
-	private PreferenceUtil SP;
 	private Context context;
 
-	private Theme baseTheme;
+	Theme baseTheme;
 	private int primaryColor;
 	private int accentColor;
 
 	private ThemeHelper(Context context) {
-		this.SP = PreferenceUtil.getInstance(context);
 		this.context = context;
 	}
 
@@ -60,11 +56,11 @@ public class ThemeHelper {
 	}
 
 	public void updateTheme(){
-		this.primaryColor = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
-				getColor(org.horaapps.leafpic.R.color.md_indigo_500));
-		this.accentColor = SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_accent_color),
-				getColor(org.horaapps.leafpic.R.color.md_light_blue_500));
-		baseTheme = Theme.fromValue(SP.getInt(context.getString(R.string.preference_base_theme), 1));
+		this.primaryColor = Hawk.get(context.getString(R.string.preference_primary_color),
+				getColor(R.color.md_indigo_500));
+		this.accentColor = Hawk.get(context.getString(R.string.preference_accent_color),
+				getColor(R.color.md_light_blue_500));
+		baseTheme = Theme.fromValue(Hawk.get(context.getString(R.string.preference_base_theme), 1));
 	}
 
 	public int getPrimaryColor() {
@@ -79,27 +75,24 @@ public class ThemeHelper {
 
 	public void setBaseTheme(Theme baseTheme) {
 		this.baseTheme = baseTheme;
-		SP.putInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), getBaseTheme().getValue());
+		Hawk.put(context.getString(R.string.preference_base_theme), getBaseTheme().getValue());
 	}
 
 	public static int getPrimaryColor(Context context) {
-		PreferenceUtil SP = PreferenceUtil.getInstance(context);
-		return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_primary_color),
-				ContextCompat.getColor(context, org.horaapps.leafpic.R.color.md_indigo_500));
+		return Hawk.get(context.getString(R.string.preference_primary_color),
+				ContextCompat.getColor(context, R.color.md_indigo_500));
 	}
 
 
 	public boolean isPrimaryEqualAccent(){return (this.primaryColor == this.accentColor);}
 
 	public static int getAccentColor(Context context) {
-		PreferenceUtil SP = PreferenceUtil.getInstance(context);
-		return SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_accent_color),
-				ContextCompat.getColor(context, org.horaapps.leafpic.R.color.md_light_blue_500));
+		return Hawk.get(context.getString(R.string.preference_accent_color),
+				ContextCompat.getColor(context, R.color.md_light_blue_500));
 	}
 
 	public static Theme getBaseTheme(Context context) {
-		PreferenceUtil SP = PreferenceUtil.getInstance(context);
-		return Theme.fromValue(SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), Theme.LIGHT.value));
+		return Theme.fromValue(Hawk.get(context.getString(R.string.preference_base_theme), Theme.LIGHT.value));
 	}
 
 	public int getColor(@ColorRes int color) {
@@ -117,46 +110,68 @@ public class ThemeHelper {
 
 	public int getBackgroundColor(){
 		switch (baseTheme){
-			case DARK: return getColor(org.horaapps.leafpic.R.color.md_dark_background);
-			case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
-			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_background);
+			case DARK:
+				return getColor(R.color.md_dark_background);
+			case AMOLED:
+				return getColor(R.color.md_black_1000);
+			case LIGHT:
+			default:
+				return getColor(R.color.md_light_background);
 		}
 	}
 
 	public int getInvertedBackgroundColor(){
 		switch (baseTheme){
-			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_light_background);
+			case DARK:
+			case AMOLED:
+				return getColor(R.color.md_light_background);
 			case LIGHT: default: return getColor(R.color.md_dark_background);
 		}
 	}
 
 	public int getTextColor(){
 		switch (baseTheme){
-			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_grey_200);
-			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_grey_800);
+			case DARK:
+			case AMOLED:
+				return getColor(R.color.md_grey_200);
+			case LIGHT:
+			default:
+				return getColor(R.color.md_grey_800);
 		}
 	}
 
 	public int getSubTextColor(){
 		switch (baseTheme){
-			case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_grey_400);
-			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_grey_600);
+			case DARK:
+			case AMOLED:
+				return getColor(R.color.md_grey_400);
+			case LIGHT:
+			default:
+				return getColor(R.color.md_grey_600);
 		}
 	}
 
 	public int getCardBackgroundColor(){
 		switch (baseTheme){
-			case DARK: return getColor(org.horaapps.leafpic.R.color.md_dark_cards);
-			case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
-			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_cards);
+			case DARK:
+				return getColor(R.color.md_dark_cards);
+			case AMOLED:
+				return getColor(R.color.md_black_1000);
+			case LIGHT:
+			default:
+				return getColor(R.color.md_light_cards);
 		}
 	}
 
 	public int getIconColor(){
-		if(!(SP.getBoolean(this.context.getString(R.string.preference_custom_icon_color), false))){
+		if (!(Hawk.get(this.context.getString(R.string.preference_custom_icon_color), false))) {
 			switch (baseTheme){
-				case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_white_1000);
-				case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
+				case DARK:
+				case AMOLED:
+					return getColor(R.color.md_white_1000);
+				case LIGHT:
+				default:
+					return getColor(R.color.md_light_primary_icon);
 			}
 		} else return getAccentColor();
 	}
@@ -184,30 +199,40 @@ public class ThemeHelper {
 
 	public int getDrawerBackground(){
 		switch (baseTheme){
-			case DARK: return getColor(org.horaapps.leafpic.R.color.md_dark_cards);
-			case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
-			case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_cards);
+			case DARK:
+				return getColor(R.color.md_dark_cards);
+			case AMOLED:
+				return getColor(R.color.md_black_1000);
+			case LIGHT:
+			default:
+				return getColor(R.color.md_light_cards);
 		}
 	}
 
 	public Drawable getPlaceHolder(){
 		switch (baseTheme){
-			case DARK: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);
-			case AMOLED: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_amoled);
-			case LIGHT: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_white);
+			case DARK:
+				return ContextCompat.getDrawable(context, R.drawable.ic_empty);
+			case AMOLED:
+				return ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled);
+			case LIGHT:
+				return ContextCompat.getDrawable(context, R.drawable.ic_empty_white);
 		}
 		return null;
 	}
 
-	public CardViewStyle getCardViewStyle() {
-		return CardViewStyle.fromValue(SP.getInt("card_view_style", CardViewStyle.MATERIAL.getValue()));
-	}
+	/*public CardViewStyle getCardViewStyle() {
+		return CardViewStyle.fromValue(Hawk.get("card_view_style", CardViewStyle.MATERIAL.getValue()));
+	}*/
 
 	public static Drawable getPlaceHolder(Context context){
 		switch (getBaseTheme(context)){
-			case DARK: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty);
-			case AMOLED: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_amoled);
-			case LIGHT: return ContextCompat.getDrawable(context, org.horaapps.leafpic.R.drawable.ic_empty_white);
+			case DARK:
+				return ContextCompat.getDrawable(context, R.drawable.ic_empty);
+			case AMOLED:
+				return ContextCompat.getDrawable(context, R.drawable.ic_empty_amoled);
+			case LIGHT:
+				return ContextCompat.getDrawable(context, R.drawable.ic_empty_white);
 		}
 		return null;
 	}
@@ -237,8 +262,12 @@ public class ThemeHelper {
 
 	public int getDefaultThemeToolbarColor3th(){
 		switch (baseTheme){
-			case DARK: return getColor(org.horaapps.leafpic.R.color.md_black_1000);
-			case LIGHT: default: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_blue_grey_800);
+			case DARK:
+				return getColor(R.color.md_black_1000);
+			case LIGHT:
+			default:
+			case AMOLED:
+				return getColor(R.color.md_blue_grey_800);
 		}
 	}
 

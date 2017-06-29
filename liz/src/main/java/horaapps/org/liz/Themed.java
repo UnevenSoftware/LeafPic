@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.activities.theme;
+package horaapps.org.liz;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.

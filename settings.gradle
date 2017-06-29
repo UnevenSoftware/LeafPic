@@ -1,1 +1,1 @@
-include ':app', 'inappstoragereader'
+include ':app', ':liz', 'inappstoragereader'

@@ -24,7 +24,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.activities.PaletteActivity;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
@@ -44,6 +43,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import horaapps.org.liz.ThemeHelper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;

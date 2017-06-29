@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.ColorPalette;
 import org.horaapps.leafpic.util.PreferenceUtil;
 
+import horaapps.org.liz.ColorPalette;
+import horaapps.org.liz.ThemedActivity;
 import uz.shift.colorpicker.LineColorPicker;
 
 /**

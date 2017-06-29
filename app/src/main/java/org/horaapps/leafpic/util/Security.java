@@ -12,10 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.activities.theme.ThemeHelper;
 
 import java.security.MessageDigest;
+
+import horaapps.org.liz.ThemeHelper;
+import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by Jibo on 06/05/2016.
