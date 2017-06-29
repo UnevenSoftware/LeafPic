@@ -9,8 +9,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.orhanobut.hawk.Hawk;
+
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StaticMapProvider;
 
 import horaapps.org.liz.ThemedActivity;
@@ -21,8 +22,8 @@ import horaapps.org.liz.ThemedActivity;
 
 public class MapProviderSetting extends ThemedSetting {
 
-    public MapProviderSetting(ThemedActivity activity, PreferenceUtil SP) {
-        super(activity, SP);
+    public MapProviderSetting(ThemedActivity activity) {
+        super(activity);
     }
 
     public  void choseProvider() {
@@ -47,7 +48,7 @@ public class MapProviderSetting extends ThemedSetting {
 
         ((TextView) dialogLayout.findViewById(R.id.header_proprietary_maps)).setTextColor(getActivity().getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.header_free_maps)).setTextColor(getActivity().getTextColor());
-        switch (StaticMapProvider.fromValue(getSP().getInt(getActivity().getString(R.string.preference_map_provider),
+        switch (StaticMapProvider.fromValue(Hawk.get(getActivity().getString(R.string.preference_map_provider),
                 StaticMapProvider.GOOGLE_MAPS.getValue()))) {
             case GOOGLE_MAPS:
             default: radioGoogleMaps.setChecked(true); break;
@@ -63,11 +64,21 @@ public class MapProviderSetting extends ThemedSetting {
             public void onClick(DialogInterface dialog, int which) {
                 switch (mapProvider.getCheckedRadioButtonId()) {
                     case R.id.radio_google_maps:
-                    default: getSP().putInt(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue()); break;
-                    case R.id.radio_mapb_streets: getSP().putInt(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX.getValue()); break;
-                    case R.id.radio_osm_tyler: getSP().putInt(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.TYLER.getValue()); break;
-                    case R.id.radio_mapb_dark: getSP().putInt(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX_DARK.getValue()); break;
-                    case R.id.radio_mapb_light: getSP().putInt(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX_LIGHT.getValue()); break;
+                    default:
+                        Hawk.put(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue());
+                        break;
+                    case R.id.radio_mapb_streets:
+                        Hawk.put(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX.getValue());
+                        break;
+                    case R.id.radio_osm_tyler:
+                        Hawk.put(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.TYLER.getValue());
+                        break;
+                    case R.id.radio_mapb_dark:
+                        Hawk.put(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX_DARK.getValue());
+                        break;
+                    case R.id.radio_mapb_light:
+                        Hawk.put(getActivity().getString(R.string.preference_map_provider), StaticMapProvider.MAP_BOX_LIGHT.getValue());
+                        break;
                 }
             }
         });

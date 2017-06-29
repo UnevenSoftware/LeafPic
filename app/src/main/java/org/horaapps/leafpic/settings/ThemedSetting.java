@@ -1,7 +1,5 @@
 package org.horaapps.leafpic.settings;
 
-import org.horaapps.leafpic.util.PreferenceUtil;
-
 import horaapps.org.liz.ThemedActivity;
 
 /**
@@ -11,22 +9,16 @@ import horaapps.org.liz.ThemedActivity;
 class ThemedSetting {
 
     private ThemedActivity activity;
-    private PreferenceUtil SP;
 
-    ThemedSetting(ThemedActivity activity, PreferenceUtil SP) {
+    ThemedSetting(ThemedActivity activity) {
         this.activity = activity;
-        this.SP = SP;
     }
 
-    public ThemedSetting(PreferenceUtil SP) {
-        this.SP = SP;
+    public ThemedSetting() {
     }
 
     public ThemedActivity getActivity() {
         return activity;
     }
 
-    public PreferenceUtil getSP() {
-        return SP;
-    }
 }

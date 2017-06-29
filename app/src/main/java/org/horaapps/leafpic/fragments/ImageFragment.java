@@ -11,11 +11,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.views.RotateTransformation;
 
 import java.util.Date;
@@ -50,7 +50,7 @@ public class ImageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (PreferenceUtil.getInstance(getContext()).getBoolean(getString(R.string.preference_sub_scaling) , true)) {
+        if (Hawk.get(getString(R.string.preference_sub_scaling), true)) {
             SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(getContext());
             imageView.setImage(ImageSource.uri(img.getUri()).tilingEnabled());
             imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_0);

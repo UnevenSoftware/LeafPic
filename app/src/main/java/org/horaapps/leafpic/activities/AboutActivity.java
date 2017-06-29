@@ -19,12 +19,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,7 +38,6 @@ public class AboutActivity extends ThemedActivity {
     private Toolbar toolbar;
     private CustomTabService cts;
     private ScrollView scr;
-    PreferenceUtil SP;
     int emojiEasterEggCount=0;
 
     @Override
@@ -48,7 +47,6 @@ public class AboutActivity extends ThemedActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
         cts = new CustomTabService(AboutActivity.this);
-        SP = PreferenceUtil.getInstance(getApplicationContext());
 
         initUi();
         setUpActions();
@@ -156,11 +154,11 @@ public class AboutActivity extends ThemedActivity {
         emojiEasterEggCount++;
         if(emojiEasterEggCount > 3) {
             Toast.makeText(this,
-                    (SP.getInt("emoji_easter_egg",0)==0
+                    (Hawk.get("emoji_easter_egg", 0) == 0
                     ? this.getString(R.string.easter_egg_enable)
                     : this.getString(R.string.easter_egg_disable))
                     + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
-            SP.putInt("emoji_easter_egg", SP.getInt("emoji_easter_egg", 0) == 0 ? 1 : 0);
+            Hawk.put("emoji_easter_egg", Hawk.get("emoji_easter_egg", 0) == 0 ? 1 : 0);
             emojiEasterEggCount = 0;
         } else Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
     }

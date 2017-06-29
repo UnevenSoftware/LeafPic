@@ -11,6 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.orhanobut.hawk.Hawk;
+
 import org.horaapps.leafpic.R;
 
 import java.security.MessageDigest;
@@ -24,37 +26,35 @@ import horaapps.org.liz.ThemedActivity;
 public class Security {
 
     public static void setPasswordOnDelete(Context context, boolean passwordOnDelete) {
-        PreferenceUtil.getInstance(context).putBoolean("password_on_delete", passwordOnDelete);
+        Hawk.put("password_on_delete", passwordOnDelete);
     }
 
     public static void setPasswordOnHidden(Context context, boolean passwordOnHidden) {
-        PreferenceUtil.getInstance(context).putBoolean("password_on_hidden", passwordOnHidden);
+        Hawk.put("password_on_hidden", passwordOnHidden);
     }
 
     public static boolean isPasswordSet(Context context) {
-        return PreferenceUtil.getInstance(context).getString("password_hash", null) != null;
+        return Hawk.get("password_hash", null) != null;
     }
 
     public static boolean isPasswordOnHidden(Context context) {
-        PreferenceUtil SP = PreferenceUtil.getInstance(context);
-        return SP.getString("password_hash", null) != null && SP.getBoolean("password_on_hidden", false);
+        return Hawk.get("password_hash", null) != null && Hawk.get("password_on_hidden", false);
     }
 
     public static boolean isPasswordOnDelete(Context context) {
-        PreferenceUtil SP = PreferenceUtil.getInstance(context);
-        return SP.getString("password_hash", null) != null && SP.getBoolean("password_on_delete", false);
+        return Hawk.get("password_hash", null) != null && Hawk.get("password_on_delete", false);
     }
 
     private static boolean checkPassword(Context context, String pass){
-        return sha256(pass).equals(PreferenceUtil.getInstance(context).getString("password_hash", null));
+        return sha256(pass).equals(Hawk.get("password_hash", null));
     }
 
     public static boolean setPassword(Context context, String newValue) {
-        return PreferenceUtil.getInstance(context).putString("password_hash", sha256(newValue));
+        return Hawk.put("password_hash", sha256(newValue));
     }
 
     public static boolean clearPassword(Context context) {
-        return PreferenceUtil.getInstance(context).putString("password_hash", null);
+        return Hawk.delete("password_hash");
     }
 
     public static void askPassword(final ThemedActivity activity, final PasswordInterface passwordInterface) {

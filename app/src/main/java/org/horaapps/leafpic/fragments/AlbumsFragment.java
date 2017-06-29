@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
@@ -39,7 +40,6 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.dialog.DeleteAlbumsDialog;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
@@ -146,8 +146,8 @@ public class AlbumsFragment extends BaseFragment {
 
     public int columnsCount() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                ? PreferenceUtil.getInt(getContext(), "n_columns_folders", 2)
-                : PreferenceUtil.getInt(getContext(), "n_columns_folders_landscape", 3);
+                ? Hawk.get("n_columns_folders", 2)
+                : Hawk.get("n_columns_folders_landscape", 3);
     }
 
     private void updateToolbar() {
@@ -372,6 +372,7 @@ public class AlbumsFragment extends BaseFragment {
                 excludeDialogBuilder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
                 excludeDialogBuilder.show();
                 return true;
+
             case R.id.delete:
                 class DeleteAlbums extends AsyncTask<String, Integer, Boolean> {
 

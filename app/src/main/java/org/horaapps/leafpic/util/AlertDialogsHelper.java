@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.drew.lang.GeoLocation;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
@@ -78,7 +79,7 @@ public class AlertDialogsHelper {
 
     public static AlertDialog getTextDialog(ThemedActivity activity, @StringRes int title, @StringRes int Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity,activity.getDialogStyle());
-        View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_text, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_delete_album_progress, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_title);
         TextView dialogMessage = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_message);
@@ -124,7 +125,7 @@ public class AlertDialogsHelper {
         if ((location = f.getGeoLocation()) != null) {
 
             StaticMapProvider staticMapProvider = StaticMapProvider.fromValue(
-                    PreferenceUtil.getInt(activity, activity.getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue()));
+                    Hawk.get(activity.getString(R.string.preference_map_provider), StaticMapProvider.GOOGLE_MAPS.getValue()));
 
             Glide.with(activity.getApplicationContext())
                     .load(staticMapProvider.getUrl(location))

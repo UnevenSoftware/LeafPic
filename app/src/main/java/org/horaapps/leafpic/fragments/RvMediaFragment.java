@@ -20,6 +20,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
@@ -35,7 +36,6 @@ import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Measure;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -178,8 +178,8 @@ public class RvMediaFragment extends BaseFragment {
 
     public int columnsCount() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                ? PreferenceUtil.getInt(getContext(), "n_columns_media", 3)
-                : PreferenceUtil.getInt(getContext(), "n_columns_media_landscape", 4);
+                ? Hawk.get("n_columns_media", 3)
+                : Hawk.get("n_columns_media_landscape", 4);
     }
 
     private void updateToolbar() {

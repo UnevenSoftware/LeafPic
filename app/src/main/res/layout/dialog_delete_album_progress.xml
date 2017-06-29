@@ -1,10 +1,10 @@
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="2dp"
-    android:id="@+id/message_card">
+    android:id="@+id/message_card"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_dialog_message"
+                    android:id="@+id/folder_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/sub_big_spacing"
@@ -42,6 +42,29 @@
                     android:text="null"
                     android:singleLine="false"
                     android:textSize="@dimen/medium_text" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="134dp" />
+
+                <TextView
+                    android:id="@+id/file_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/sub_big_spacing"
+                    android:paddingRight="@dimen/sub_big_spacing"
+                    android:paddingLeft="@dimen/sub_big_spacing"
+                    android:text="null"
+                    android:singleLine="false"
+                    android:textSize="@dimen/medium_text" />
+
+
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

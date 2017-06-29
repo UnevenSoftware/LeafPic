@@ -13,9 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.PreferenceUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +36,6 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
     @BindView(R.id.title) TextView title;
     @BindView(R.id.caption) TextView caption;
     @BindView(R.id.toggle) SwitchCompat toggle;
-    private PreferenceUtil preferences;
     @Nullable private OnClickListener clickListener;
 
     public SettingWithSwitchView(Context context) {
@@ -66,7 +65,6 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
         int minimumApi = 0;//a.getInteger(R.styleable.SettingWithSwitchView_settingMinApi, 0);
         a.recycle();
 
-        preferences = PreferenceUtil.getInstance(getContext());
         if (Build.VERSION.SDK_INT < minimumApi) setVisibility(GONE);
     }
 
@@ -111,11 +109,11 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
     }
 
     public boolean isChecked() {
-        return preferences.getBoolean(preferenceKey, defaultValue);
+        return Hawk.get(preferenceKey, defaultValue);
     }
 
     public boolean toggle() {
-        preferences.getEditor().putBoolean(preferenceKey, !isChecked()).apply();
+        Hawk.put(preferenceKey, !isChecked());
         boolean checked = isChecked();
         toggle.setChecked(checked);
         return checked;

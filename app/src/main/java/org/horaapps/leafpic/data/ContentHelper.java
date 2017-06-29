@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -19,8 +18,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
+import com.orhanobut.hawk.Hawk;
+
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
@@ -441,7 +441,7 @@ public class ContentHelper {
 	 * @param context context
 	 */
 	private static Uri getTreeUri(Context context) {
-		String uriString = PreferenceUtil.getInstance(context).getString(context.getString(R.string.preference_internal_uri_extsdcard_photos), null);
+		String uriString = Hawk.get(context.getString(R.string.preference_internal_uri_extsdcard_photos), null);
 
 		if (uriString == null) return null;
 		return Uri.parse(uriString);
@@ -454,15 +454,13 @@ public class ContentHelper {
 	 * @param uri          the target value of the preference.
 	 */
 	public static void saveSdCardInfo(Context context, @Nullable final Uri uri) {
-		SharedPreferences.Editor editor = PreferenceUtil.getInstance(context).getEditor();
-		editor.putString(context.getString(R.string.preference_internal_uri_extsdcard_photos),
+		Hawk.put(context.getString(R.string.preference_internal_uri_extsdcard_photos),
 						uri == null ? null : uri.toString());
-		editor.putString("sd_card_path", ContentHelper.getSdcardPath(context));
-		editor.commit();
+		Hawk.put("sd_card_path", ContentHelper.getSdcardPath(context));
 	}
 
 	private static String getSavedSdcardPath(Context context) {
-		return PreferenceUtil.getInstance(context).getString("sd_card_path", null);
+		return Hawk.get("sd_card_path", null);
 	}
 
 

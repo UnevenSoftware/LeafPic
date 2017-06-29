@@ -16,9 +16,9 @@ import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 
 import horaapps.org.liz.ThemeHelper;
@@ -46,7 +46,6 @@ public class SecurityActivity extends ThemedActivity {
         swApplySecurityDelete = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_switch);
         swApplySecurityHidden = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_switch);
 
-        PreferenceUtil SP = PreferenceUtil.getInstance(getApplicationContext());
 
         initUi();
         /** - SWITCHES - **/
@@ -65,7 +64,7 @@ public class SecurityActivity extends ThemedActivity {
         });
 
         /** - ACTIVE SECURITY ON HIDDEN FOLDER - **/
-        swApplySecurityHidden.setChecked(SP.getBoolean("password_on_hidden", false));
+        swApplySecurityHidden.setChecked(Hawk.get("password_on_hidden", false));
         swApplySecurityHidden.setClickable(false);
         findViewById(R.id.ll_security_body_apply_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +76,7 @@ public class SecurityActivity extends ThemedActivity {
         });
 
         /**ACTIVE SECURITY ON DELETE ACTION**/
-        swApplySecurityDelete.setChecked(SP.getBoolean("password_on_delete", false));
+        swApplySecurityDelete.setChecked(Hawk.get("password_on_delete", false));
         swApplySecurityDelete.setClickable(false);
         findViewById(R.id.ll_security_body_apply_delete).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,13 +184,13 @@ public class SecurityActivity extends ThemedActivity {
         llroot.setBackgroundColor(getBackgroundColor());
         ((CardView) findViewById(org.horaapps.leafpic.R.id.security_dialog_card)).setCardBackgroundColor(getCardBackgroundColor());
 
-        /**ICONS**/
+        /** ICONS **/
         int color = getIconColor();
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_icon)).setColor(color);
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(color);
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(color);
 
-        /**TEXTVIEWS**/
+        /** TEXTVIEWS **/
         color = getTextColor();
         ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_item_title)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_on)).setTextColor(color);

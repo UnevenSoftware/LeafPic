@@ -23,7 +23,6 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.AlbumsComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.util.ArrayList;
@@ -256,10 +255,10 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         holder.mediaLabel.setTextColor(textColor);
 
-        holder.llCount.setVisibility(PreferenceUtil.getBool(holder.llCount.getContext(), "show_n_photos", true) ? View.VISIBLE : View.GONE);
+        holder.llCount.setVisibility(Hawk.get("show_n_photos", true) ? View.VISIBLE : View.GONE);
         holder.name.setText(StringUtils.htmlFormat(a.getName(), textColor, false, true));
         holder.nMedia.setText(StringUtils.htmlFormat(String.valueOf(a.getCount()), accentColor, true, false));
-        holder.path.setVisibility(PreferenceUtil.getBool(holder.path.getContext(),"show_album_path", false) ? View.VISIBLE : View.GONE);
+        holder.path.setVisibility(Hawk.get("show_album_path", false) ? View.VISIBLE : View.GONE);
         holder.path.setText(a.getPath());
 
         //START Animation MAKES BUG ON FAST TAP ON CARD

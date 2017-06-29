@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.orhanobut.hawk.Hawk;
 import com.yalantis.ucrop.UCrop;
 
 import org.horaapps.leafpic.R;
@@ -50,7 +51,6 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
@@ -74,7 +74,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     private HackyViewPager mViewPager;
     private MediaPagerAdapter adapter;
-    private PreferenceUtil SP;
     private RelativeLayout activityBackground;
 
     private Toolbar toolbar;
@@ -88,7 +87,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
         activityBackground = (RelativeLayout) findViewById(R.id.PhotoPager_Layout);
         mViewPager = (HackyViewPager) findViewById(R.id.photos_pager);
 
-        SP = PreferenceUtil.getInstance(getApplicationContext());
 
         if (savedInstanceState != null)
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -118,8 +116,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
                     } catch (Exception ex) {
                         //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
                         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setText(R.string.error_occured_open_media);
-                        findViewById(R.id.nothing_to_show_placeholder).setVisibility(SP.getInt("emoji_easter_egg", 0)==0 ? View.VISIBLE: View.GONE);
-                        findViewById(R.id.ll_emoji_easter_egg).setVisibility(SP.getInt("emoji_easter_egg", 0)==1 ? View.VISIBLE : View.GONE);
+                        findViewById(R.id.nothing_to_show_placeholder).setVisibility(Hawk.get("emoji_easter_egg", 0) == 0 ? View.VISIBLE : View.GONE);
+                        findViewById(R.id.ll_emoji_easter_egg).setVisibility(Hawk.get("emoji_easter_egg", 0) == 1 ? View.VISIBLE : View.GONE);
                     }
 
                     media = new Media(getApplicationContext(), mediaUri);
@@ -207,7 +205,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         /**** SETTINGS ****/
 
-        if (SP.getBoolean("set_max_luminosity", false))
+        if (Hawk.get("set_max_luminosity", false))
             updateBrightness(1.0F);
         else try {
             // TODO: 12/4/16 redo
@@ -219,7 +217,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             e.printStackTrace();
         }
 
-        if (SP.getBoolean("set_picture_orientation", false))
+        if (Hawk.get("set_picture_orientation", false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 

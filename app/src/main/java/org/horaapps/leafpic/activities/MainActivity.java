@@ -39,6 +39,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
@@ -52,7 +53,6 @@ import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -67,7 +67,6 @@ public class MainActivity extends SharedMediaActivity {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
-    private PreferenceUtil SP;
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
 
@@ -86,7 +85,7 @@ public class MainActivity extends SharedMediaActivity {
             if (!pickMode) {
                 {
                     // TODO: 4/5/17 moveout
-                    if(SP.getBoolean("video_instant_play", false) && m.isVideo()) {
+                    if (Hawk.get("video_instant_play", false) && m.isVideo()) {
                         startActivity(new Intent(Intent.ACTION_VIEW)
                                 .setDataAndType(ContentHelper.getUriForFile(getApplicationContext(), m.getFile()), m.getMimeType()));
                     } else {
@@ -111,8 +110,6 @@ public class MainActivity extends SharedMediaActivity {
 
         if (savedInstanceState != null)
             return;
-
-        SP = PreferenceUtil.getInstance(getApplicationContext());
 
         initUi();
 
@@ -274,7 +271,7 @@ public class MainActivity extends SharedMediaActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (SP.getInt("last_version_code", 0) < BuildConfig.VERSION_CODE) {
+                if (Hawk.get("last_version_code", 0) < BuildConfig.VERSION_CODE) {
                     String titleHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s <b>%s</b></font>", getTextColor(), getString(R.string.changelog), BuildConfig.VERSION_NAME),
                             buttonHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s</font>", getAccentColor(), getString(R.string.view).toUpperCase());
                     Snackbar snackbar = Snackbar
@@ -290,7 +287,7 @@ public class MainActivity extends SharedMediaActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                         snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
                     snackbar.show();
-                    SP.putInt("last_version_code", BuildConfig.VERSION_CODE);
+                    Hawk.put("last_version_code", BuildConfig.VERSION_CODE);
                 }
             }
         }).start();
@@ -310,7 +307,7 @@ public class MainActivity extends SharedMediaActivity {
         setNavBarColor();
 
         fab.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-        fab.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
+        fab.setVisibility(Hawk.get(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
         mainLayout.setBackgroundColor(getBackgroundColor());
 
         setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
@@ -370,7 +367,7 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
 
-        if(status && SP.getInt("emoji_easter_egg", 0) == 1) {
+        if (status && Hawk.get("emoji_easter_egg", 0) == 1) {
             findViewById(R.id.ll_emoji_easter_egg).setVisibility(View.VISIBLE);
             findViewById(R.id.nothing_to_show_placeholder).setVisibility(View.VISIBLE);
         } else {
@@ -583,7 +580,7 @@ public class MainActivity extends SharedMediaActivity {
                 //region Example
                 final LinearLayout llExample = (LinearLayout) dialogLayout.findViewById(R.id.affix_example);
                 llExample.setBackgroundColor(getBackgroundColor());
-                llExample.setVisibility(SP.getBoolean("show_tips", true) ? View.VISIBLE : View.GONE);
+                llExample.setVisibility(Hawk.get("show_tips", true) ? View.VISIBLE : View.GONE);
                 final LinearLayout llExampleH = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_horizontal);
                 //llExampleH.setBackgroundColor(getCardBackgroundColor());
                 final LinearLayout llExampleV = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_vertical);

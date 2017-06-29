@@ -3,6 +3,8 @@ package org.horaapps.leafpic.data.provider;
 import android.content.Context;
 import android.provider.MediaStore;
 
+import com.orhanobut.hawk.Hawk;
+
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.Media;
@@ -10,7 +12,6 @@ import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.data.filter.ImageFileFilter;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CPHelper {
 
         ArrayList<Object> args = new ArrayList<>();
 
-        if (PreferenceUtil.getBool(context, "set_include_video", true)) {
+        if (Hawk.get("set_include_video", true)) {
             query.selection(String.format("%s=? or %s=?) group by (%s) %s ",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
@@ -95,7 +96,7 @@ public class CPHelper {
         return Observable.create(subscriber -> {
             try {
                 for (File storage : ContentHelper.getStorageRoots(context))
-                    fetchRecursivelyHiddenFolder(storage, subscriber, excludedAlbums, PreferenceUtil.getBool(context, "set_include_video", true));
+                    fetchRecursivelyHiddenFolder(storage, subscriber, excludedAlbums, Hawk.get("set_include_video", true));
                 subscriber.onComplete();
             } catch (Exception err) {
                 subscriber.onError(err);
@@ -160,7 +161,7 @@ public class CPHelper {
 
         return Observable.create(subscriber -> {
             File dir = new File(album.getPath());
-            File[] files = dir.listFiles(new ImageFileFilter(PreferenceUtil.getBool(context, "set_include_video", true)));
+            File[] files = dir.listFiles(new ImageFileFilter(Hawk.get("set_include_video", true)));
             try {
                 if (files != null && files.length > 0)
                     for (File file : files)
@@ -181,7 +182,7 @@ public class CPHelper {
                 .sort(sortingMode.getMediaColumn())
                 .ascending(sortingOrder.isAscending());
 
-        if(PreferenceUtil.getBool(context, "set_include_video", true)) {
+        if (Hawk.get("set_include_video", true)) {
             query.selection(String.format("(%s=? or %s=?) and %s=?",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE,

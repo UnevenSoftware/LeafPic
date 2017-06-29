@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.PreferenceUtil;
 
 import horaapps.org.liz.ColorPalette;
 import horaapps.org.liz.ThemedActivity;
@@ -27,8 +26,8 @@ import static horaapps.org.liz.Theme.LIGHT;
 
 public class ColorsSetting extends ThemedSetting {
 
-    public ColorsSetting(ThemedActivity activity, PreferenceUtil SP) {
-        super(activity, SP);
+    public ColorsSetting(ThemedActivity activity) {
+        super(activity);
     }
 
     public void chooseBaseTheme() {
