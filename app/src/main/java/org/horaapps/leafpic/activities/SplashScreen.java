@@ -21,9 +21,9 @@ import android.widget.Toast;
 import org.horaapps.leafpic.LookForMediaJob;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
+import org.horaapps.leafpic.activities.theme.ColorPalette;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
-import org.horaapps.leafpic.util.ColorPalette;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.StringUtils;
 

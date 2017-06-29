@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.activities.PaletteActivity;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
@@ -35,7 +37,6 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -102,14 +103,13 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
-                .subscribe(media ->{
-                            int pos = adapter.add(media);
-                            //getActivity().runOnUiThread(() -> adapter.notifyItemInserted(pos));
+                .subscribe(media -> adapter.add(media),
+                        throwable -> {
+                            refresh.setRefreshing(false);
+                            Log.wtf("asd", throwable);
                         },
-                        throwable -> refresh.setRefreshing(false),
                         () -> {
                             act.nothingToShow(getCount() == 0);
-                            //adapter.notifyItemRangeInserted(0, adapter.getItemCount());
                             refresh.setRefreshing(false);
                         });
 
@@ -128,7 +128,6 @@ public class RvMediaFragment extends BaseFragment {
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
-        //rv.setItemAnimator(null);
 
         adapter = new MediaAdapter(
                 getContext(), sortingMode(), sortingOrder());
@@ -199,13 +198,13 @@ public class RvMediaFragment extends BaseFragment {
     public SortingMode sortingMode() {
         return adapter != null
                 ? adapter.sortingMode()
-                : AlbumsHelper.getSortingMode(getContext());
+                : album.settings.getSortingMode();
     }
 
     public SortingOrder sortingOrder() {
         return adapter != null
                 ? adapter.sortingOrder()
-                : AlbumsHelper.getSortingOrder(getContext());
+                : album.settings.getSortingOrder();
     }
 
     private HandlingAlbums db() {
@@ -375,7 +374,7 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public void refreshTheme(ThemeHelper t) {
         rv.setBackgroundColor(t.getBackgroundColor());
-        adapter.updateTheme(t);
+        adapter.refreshTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
     }

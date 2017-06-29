@@ -1,14 +1,13 @@
 package org.horaapps.leafpic.fragments;
 
-import android.support.v4.app.Fragment;
-
-import org.horaapps.leafpic.util.Themeable;
+import org.horaapps.leafpic.activities.theme.Themed;
+import org.horaapps.leafpic.activities.theme.ThemedFragment;
 
 /**
  * Created by dnld on 4/3/17.
  */
 
-public abstract class BaseFragment extends Fragment implements IFragment, Themeable {
+public abstract class BaseFragment extends ThemedFragment implements IFragment, Themed {
     public boolean onBackPressed(){
         if (editMode()){
             clearSelected();

@@ -32,11 +32,11 @@ public class CPHelper {
 
     private static String getHavingCluause(int excludedCount){
 
+        if (excludedCount == 0)
+            return "(";
+
         StringBuilder res = new StringBuilder();
         res.append("HAVING (");
-
-        if (excludedCount == 0)
-            return res.append("13 <> 12").toString();
 
         res.append(MediaStore.Images.Media.DATA).append(" NOT LIKE ?");
 
@@ -95,7 +95,7 @@ public class CPHelper {
         return Observable.create(subscriber -> {
             try {
                 for (File storage : ContentHelper.getStorageRoots(context))
-                    fetchRecursivelyHiddenFolder(context, storage, subscriber, excludedAlbums, PreferenceUtil.getBool(context, "set_include_video", true));
+                    fetchRecursivelyHiddenFolder(storage, subscriber, excludedAlbums, PreferenceUtil.getBool(context, "set_include_video", true));
                 subscriber.onComplete();
             } catch (Exception err) {
                 subscriber.onError(err);
@@ -104,22 +104,22 @@ public class CPHelper {
     }
 
 
-    private static void fetchRecursivelyHiddenFolder(Context context, File dir, ObservableEmitter<Album> emitter, ArrayList<String> excludedAlbums, boolean includeVideo) {
+    private static void fetchRecursivelyHiddenFolder(File dir, ObservableEmitter<Album> emitter, ArrayList<String> excludedAlbums, boolean includeVideo) {
         if (!isExcluded(dir.getPath(), excludedAlbums)) {
             File[] folders = dir.listFiles(new FoldersFileFilter());
             if (folders != null) {
                 for (File temp : folders) {
                     File nomedia = new File(temp, ".nomedia");
                     if (!isExcluded(temp.getPath(), excludedAlbums) && (nomedia.exists() || temp.isHidden()))
-                        checkAndAddFolder(null, temp, emitter, includeVideo);
+                        checkAndAddFolder(temp, emitter, includeVideo);
 
-                    fetchRecursivelyHiddenFolder(null, temp, emitter, excludedAlbums, includeVideo);
+                    fetchRecursivelyHiddenFolder( temp, emitter, excludedAlbums, includeVideo);
                 }
             }
         }
     }
 
-    private static void checkAndAddFolder(Context context, File dir, ObservableEmitter<Album> emitter, boolean includeVideo) {
+    private static void checkAndAddFolder(File dir, ObservableEmitter<Album> emitter, boolean includeVideo) {
         File[] files = dir.listFiles(new ImageFileFilter(includeVideo));
         if (files != null && files.length > 0) {
             //valid folder
@@ -149,34 +149,31 @@ public class CPHelper {
 
 
     //region Media
-    public static Observable<Media> getLastMedia(Context context, long albumId) {
-        Query.Builder query = new Query.Builder()
-                .uri(MediaStore.Files.getContentUri("external"))
-                .projection(Media.getProjection())
-                .sort(MediaStore.Images.Media.DATE_TAKEN)
-                .ascending(false)
-                .limit(1);
-
-        if(PreferenceUtil.getBool(context, "set_include_video", true)) {
-            query.selection(String.format("(%s=? or %s=?) and %s=?",
-                    MediaStore.Files.FileColumns.MEDIA_TYPE,
-                    MediaStore.Files.FileColumns.MEDIA_TYPE,
-                    MediaStore.Files.FileColumns.PARENT));
-            query.args(
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
-                    albumId);
-        } else {
-            query.selection(String.format("%s=? and %s=?",
-                    MediaStore.Files.FileColumns.MEDIA_TYPE,
-                    MediaStore.Files.FileColumns.PARENT));
-            query.args(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, albumId);
-        }
-
-        return QueryUtils.querySingle(query.build(), context.getContentResolver(), Media::new);
-    }
 
     public static Observable<Media> getMedia(Context context, Album album, SortingMode sortingMode, SortingOrder sortingOrder) {
+
+        if (album.getId()==-1)return getMediaFromStorage(context, album);
+        else return getMediaFromMediaStore(context, album, sortingMode, sortingOrder);
+    }
+
+    private static Observable<Media> getMediaFromStorage(Context context, Album album) {
+
+        return Observable.create(subscriber -> {
+            File dir = new File(album.getPath());
+            File[] files = dir.listFiles(new ImageFileFilter(PreferenceUtil.getBool(context, "set_include_video", true)));
+            try {
+                if (files != null && files.length > 0)
+                    for (File file : files)
+                        subscriber.onNext(new Media(file));
+                subscriber.onComplete();
+
+            }
+            catch (Exception err) { subscriber.onError(err); }
+        });
+
+    }
+
+    private static Observable<Media> getMediaFromMediaStore(Context context, Album album, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))

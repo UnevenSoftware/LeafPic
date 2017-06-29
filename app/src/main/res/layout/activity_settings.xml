@@ -25,7 +25,7 @@
             android:orientation="vertical">
 
             <!--GENERAL-->
-            <org.horaapps.leafpic.views.themeable.ThemeableCardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/general_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
-                    <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/general_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,10 +97,10 @@
                         app:settingPreferenceKey="@string/preference_show_tips"
                         app:settingTitle="@string/option_show_tips"/>
                 </LinearLayout>
-            </org.horaapps.leafpic.views.themeable.ThemeableCardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--THEME-->
-            <org.horaapps.leafpic.views.themeable.ThemeableCardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/theme_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
-                    <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/theme_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -206,10 +206,10 @@
                         app:settingPreferenceKey="@string/preference_colored_nav_bar"
                         app:settingTitle="@string/colored_navbar"/>
                 </LinearLayout>
-            </org.horaapps.leafpic.views.themeable.ThemeableCardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--MEDIA VIEWER SETTING-->
-            <org.horaapps.leafpic.views.themeable.ThemeableCardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/preview_picture_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,7 +223,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
-                    <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/picture_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -276,10 +276,10 @@
                         app:settingPreferenceKey="@string/preference_swipe_direction_inverted"
                         app:settingTitle="@string/media_viewer_swipe_direction"/>
                 </LinearLayout>
-            </org.horaapps.leafpic.views.themeable.ThemeableCardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--VIDEO PLAYER SETTINGS-->
-            <org.horaapps.leafpic.views.themeable.ThemeableCardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/video_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -293,7 +293,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
-                    <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/video_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -324,10 +324,10 @@
                         app:settingTitle="@string/video_instant_play"/>
 
                 </LinearLayout>
-            </org.horaapps.leafpic.views.themeable.ThemeableCardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--ADVANCED SETTING-->
-            <org.horaapps.leafpic.views.themeable.ThemeableCardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/advanced_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
-                    <org.horaapps.leafpic.views.themeable.ThemeableSettingsCategory
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/advanced_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -381,7 +381,7 @@
                         app:settingPreferenceKey="@string/preference_auto_update_media"
                         app:settingTitle="@string/auto_update_media"/>
                 </LinearLayout>
-            </org.horaapps.leafpic.views.themeable.ThemeableCardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

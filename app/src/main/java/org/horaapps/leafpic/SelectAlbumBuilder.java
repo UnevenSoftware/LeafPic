@@ -37,11 +37,11 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.base.ThemedActivity;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
-import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.io.File;
@@ -128,7 +128,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         exploreModePanel = (LinearLayout) contentView.findViewById(R.id.ll_explore_mode_panel);
         imgExploreMode = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
 
-        theme = ThemeHelper.getThemeHelper(getContext());
+        theme = ThemeHelper.getInstanceLoaded(getContext());
         sdCardPath = ContentHelper.getSdcardPath(getContext());
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));

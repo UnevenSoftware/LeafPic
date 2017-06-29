@@ -5,22 +5,22 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
-public class ThemeableScrollView extends ScrollView implements Themeable {
-    public ThemeableScrollView(Context context) {
+public class ThemedScrollView extends ScrollView implements Themed {
+    public ThemedScrollView(Context context) {
         this(context, null);
     }
 
-    public ThemeableScrollView(Context context, @Nullable AttributeSet attrs) {
+    public ThemedScrollView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ThemeableScrollView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ThemedScrollView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

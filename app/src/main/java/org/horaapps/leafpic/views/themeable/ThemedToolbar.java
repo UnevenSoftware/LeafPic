@@ -5,22 +5,22 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
-public class ThemeableToolbar extends Toolbar implements Themeable {
-    public ThemeableToolbar(Context context) {
+public class ThemedToolbar extends Toolbar implements Themed {
+    public ThemedToolbar(Context context) {
         this(context, null);
     }
 
-    public ThemeableToolbar(Context context, @Nullable AttributeSet attrs) {
+    public ThemedToolbar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ThemeableToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ThemedToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

@@ -25,11 +25,11 @@ import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.mikepenz.iconics.typeface.IIcon;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.activities.theme.ColorPalette;
+import org.horaapps.leafpic.activities.theme.Theme;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.Themed;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.Theme;
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
 import org.horaapps.leafpic.util.ViewUtil;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SP = PreferenceUtil.getInstance(getApplicationContext());
-        themeHelper = new ThemeHelper(getApplicationContext());
+        themeHelper = ThemeHelper.getInstance(getApplicationContext());
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
     @Override
     public void updateUiElements() {
         for (View view : ViewUtil.getAllChildren(findViewById(android.R.id.content))) {
-            if (view instanceof Themeable) ((Themeable) view).refreshTheme(getThemeHelper());
+            if (view instanceof Themed) ((Themed) view).refreshTheme(getThemeHelper());
         }
     }
 

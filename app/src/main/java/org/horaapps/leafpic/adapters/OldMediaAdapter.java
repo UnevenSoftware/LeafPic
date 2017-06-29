@@ -18,9 +18,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.theme.ColorPalette;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.util.ColorPalette;
-import org.horaapps.leafpic.util.ThemeHelper;
 
 import java.util.ArrayList;
 

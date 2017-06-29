@@ -16,9 +16,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.Themed;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
-public class SettingWithSwitchView extends FrameLayout implements View.OnClickListener, Themeable {
+public class SettingWithSwitchView extends FrameLayout implements View.OnClickListener, Themed {
     private final String iconString;
     private final String preferenceKey;
     @StringRes private final int titleRes;

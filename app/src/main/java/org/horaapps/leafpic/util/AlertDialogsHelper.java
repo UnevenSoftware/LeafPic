@@ -30,6 +30,7 @@ import com.drew.lang.GeoLocation;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.metadata.MediaDetailsMap;
 

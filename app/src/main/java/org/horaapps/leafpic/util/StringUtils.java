@@ -8,6 +8,8 @@ import android.text.Spanned;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import org.horaapps.leafpic.activities.theme.ColorPalette;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -134,6 +136,14 @@ public class StringUtils {
 
     public static String i(String content) {
         return String.format(Locale.ENGLISH, "<i>%s</i>", content);
+    }
+
+    public static Spanned htmlFormat(String content, int color, boolean bold, boolean italic) {
+        String res = content;
+        if (color != -1) res = color(color, res);
+        if (bold) res = b(res);
+        if (italic) res = i(res);
+        return html(res);
     }
 
     public static Spanned htmlFormat(String content, @Nullable String hexcolor, boolean bold, boolean italic) {

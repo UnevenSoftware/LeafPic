@@ -82,8 +82,8 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         db.close();
     }
 
-    private HashSet<String> getExcludedFolders(Context context) {
-        HashSet<String>  list = new HashSet<>();
+    public ArrayList<String> getExcludedFolders(Context context) {
+        ArrayList<String>  list = new ArrayList<>();
         HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
         for(File file : storageRoots)
             // it has a lot of garbage
@@ -158,7 +158,8 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     }
 
     private static boolean exist(SQLiteDatabase db, String path) {
-        Cursor cur = db.rawQuery("SELECT EXISTS(SELECT 1 FROM "+TABLE_ALBUMS+" WHERE "+ALBUM_PATH+"=? LIMIT 1);",
+        Cursor cur = db.rawQuery(
+                String.format("SELECT EXISTS(SELECT 1 FROM %s WHERE %s=? LIMIT 1)", TABLE_ALBUMS, ALBUM_PATH),
                 new String[]{ path });
         boolean tracked = cur.moveToFirst() &&  cur.getInt(0) == 1;
         cur.close();

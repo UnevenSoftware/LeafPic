@@ -6,22 +6,22 @@ import android.util.AttributeSet;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
-public class ThemeableSettingsIcon extends IconicsImageView implements Themeable {
-    public ThemeableSettingsIcon(Context context) {
+public class ThemedSettingsIcon extends IconicsImageView implements Themed {
+    public ThemedSettingsIcon(Context context) {
         this(context, null);
     }
 
-    public ThemeableSettingsIcon(Context context, @Nullable AttributeSet attrs) {
+    public ThemedSettingsIcon(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ThemeableSettingsIcon(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ThemedSettingsIcon(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

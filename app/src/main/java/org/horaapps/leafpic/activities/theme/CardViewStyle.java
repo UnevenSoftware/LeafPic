@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.util;
+package org.horaapps.leafpic.activities.theme;
 
 
 import org.horaapps.leafpic.R;

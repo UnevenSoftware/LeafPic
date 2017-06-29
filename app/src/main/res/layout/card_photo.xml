@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:paddingStart="2dp"
+        android:textColor="@color/md_dark_primary_text"
+        android:background="@color/md_black_1000_transparent"
         android:paddingEnd="2dp"
         android:elevation="10dp"
         android:textSize="@dimen/medium_small_text"

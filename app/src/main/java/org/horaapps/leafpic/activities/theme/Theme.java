@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.util;
+package org.horaapps.leafpic.activities.theme;
 
 /**
  * Created by dnld on 12/4/16.

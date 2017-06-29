@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.ThemeHelper;
-import org.horaapps.leafpic.util.Themeable;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.Themed;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
-public class SettingBasic extends FrameLayout implements Themeable {
+public class SettingBasic extends FrameLayout implements Themed {
     private final String iconString;
     @StringRes private final int titleRes;
     @StringRes private final int captionRes;

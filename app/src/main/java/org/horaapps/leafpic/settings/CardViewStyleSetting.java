@@ -18,15 +18,15 @@ import com.bumptech.glide.Glide;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.ThemedActivity;
-import org.horaapps.leafpic.util.CardViewStyle;
-import org.horaapps.leafpic.util.ColorPalette;
+import org.horaapps.leafpic.activities.theme.CardViewStyle;
+import org.horaapps.leafpic.activities.theme.ColorPalette;
+import org.horaapps.leafpic.activities.theme.Theme;
 import org.horaapps.leafpic.util.PreferenceUtil;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.Theme;
 
-import static org.horaapps.leafpic.util.CardViewStyle.COMPACT;
-import static org.horaapps.leafpic.util.CardViewStyle.FLAT;
-import static org.horaapps.leafpic.util.CardViewStyle.MATERIAL;
+import static org.horaapps.leafpic.activities.theme.CardViewStyle.COMPACT;
+import static org.horaapps.leafpic.activities.theme.CardViewStyle.FLAT;
+import static org.horaapps.leafpic.activities.theme.CardViewStyle.MATERIAL;
 
 /**
  * Created by dnld on 12/9/16.

@@ -311,8 +311,7 @@ public class MainActivity extends SharedMediaActivity {
 
         fab.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
         fab.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
-       /* rv.setBackgroundColor(getBackgroundColor());
-        oldMediaAdapter.updatePlaceholder(getApplicationContext());*/
+        mainLayout.setBackgroundColor(getBackgroundColor());
 
         setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
         Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);

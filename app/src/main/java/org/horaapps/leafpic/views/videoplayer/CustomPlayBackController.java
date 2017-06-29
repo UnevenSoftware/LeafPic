@@ -23,8 +23,8 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.util.Util;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.ColorPalette;
-import org.horaapps.leafpic.util.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.ColorPalette;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 
 import java.util.Formatter;
 import java.util.Locale;
@@ -137,7 +137,7 @@ public class CustomPlayBackController extends FrameLayout {
         fastForwardButton.setOnClickListener(componentListener);
 
         /**** THEMING THINGS ****/
-        themeHelper = ThemeHelper.getThemeHelper(getContext());
+        themeHelper = ThemeHelper.getInstanceLoaded(getContext());
 
         //themeHelper.themeSeekBar(progressBar);
         progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()

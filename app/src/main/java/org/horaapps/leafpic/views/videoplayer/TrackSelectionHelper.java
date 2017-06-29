@@ -39,7 +39,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.MimeTypes;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.ThemeHelper;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 
 import java.util.Arrays;
 import java.util.Locale;

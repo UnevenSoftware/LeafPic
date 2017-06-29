@@ -20,6 +20,9 @@
 
     <!--MATERIAL COLORS-->
     <color name="md_black_1000">#000000</color>
+    <color name="md_black_1000_transparent">#64000000</color>
+    <color name="md_album_color">@color/md_grey_50</color>
+    <color name="md_album_color_2">#2B2B2B</color>
 
     <color name="md_light_primary_icon">#8A000000</color>
     <color name="md_light_primary_text">#DE000000</color>

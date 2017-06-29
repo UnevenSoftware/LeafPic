@@ -26,6 +26,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
+import org.horaapps.leafpic.activities.theme.ThemeHelper;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
@@ -35,7 +36,6 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.util.ThemeHelper;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by dnld on 3/13/17.
  */
 
-public class AlbumsFragment extends BaseFragment{
+public class AlbumsFragment extends BaseFragment {
 
     private static final String TAG = "asd";
 
@@ -64,13 +64,12 @@ public class AlbumsFragment extends BaseFragment{
     private MainActivity act;
     private boolean hidden = false;
     ArrayList<String> excuded = new ArrayList<>();
-    ThemeHelper t;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        excuded = db().getFolders(HandlingAlbums.EXCLUDED);
+        excuded = db().getExcludedFolders(getContext());
         setHasOptionsMenu(true);
     }
 
@@ -78,7 +77,6 @@ public class AlbumsFragment extends BaseFragment{
     public void onAttach(Context context) {
         super.onAttach(context);
         act = ((MainActivity) context);
-        t = act.getThemeHelper();
     }
 
     @Override
@@ -321,17 +319,17 @@ public class AlbumsFragment extends BaseFragment{
                 return true;
 
             case R.id.exclude:
-                final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(getActivity(), t.getDialogStyle());
+                final AlertDialog.Builder excludeDialogBuilder = new AlertDialog.Builder(getActivity(), getDialogStyle());
 
                 final View excludeDialogLayout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_exclude, null);
                 TextView textViewExcludeTitle = excludeDialogLayout.findViewById(R.id.text_dialog_title);
                 TextView textViewExcludeMessage = excludeDialogLayout.findViewById(R.id.text_dialog_message);
                 final Spinner spinnerParents = excludeDialogLayout.findViewById(R.id.parents_folder);
 
-                spinnerParents.getBackground().setColorFilter(t.getIconColor(), PorterDuff.Mode.SRC_ATOP);
+                spinnerParents.getBackground().setColorFilter(getIconColor(), PorterDuff.Mode.SRC_ATOP);
 
-                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(t.getCardBackgroundColor());
-                textViewExcludeTitle.setBackgroundColor(t.getPrimaryColor());
+                ((CardView) excludeDialogLayout.findViewById(R.id.message_card)).setCardBackgroundColor(getCardBackgroundColor());
+                textViewExcludeTitle.setBackgroundColor(getPrimaryColor());
                 textViewExcludeTitle.setText(getString(R.string.exclude));
 
                 if(adapter.getSelectedCount() > 1) {
@@ -339,10 +337,10 @@ public class AlbumsFragment extends BaseFragment{
                     spinnerParents.setVisibility(View.GONE);
                 } else {
                     textViewExcludeMessage.setText(R.string.exclude_album_message);
-                    spinnerParents.setAdapter(t.getSpinnerAdapter(adapter.getFirstSelectedAlbum().getParentsFolders()));
+                    spinnerParents.setAdapter(getThemeHelper().getSpinnerAdapter(adapter.getFirstSelectedAlbum().getParentsFolders()));
                 }
 
-                textViewExcludeMessage.setTextColor(t.getTextColor());
+                textViewExcludeMessage.setTextColor(getTextColor());
                 excludeDialogBuilder.setView(excludeDialogLayout);
 
                 excludeDialogBuilder.setPositiveButton(this.getString(R.string.exclude).toUpperCase(), (dialog, id) -> {
@@ -393,7 +391,7 @@ public class AlbumsFragment extends BaseFragment{
     @Override
     public void refreshTheme(ThemeHelper t) {
         rv.setBackgroundColor(t.getBackgroundColor());
-        adapter.updateTheme(t);
+        adapter.refreshTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
     }

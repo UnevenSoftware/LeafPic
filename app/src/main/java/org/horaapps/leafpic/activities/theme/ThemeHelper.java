@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.util;
+package org.horaapps.leafpic.activities.theme;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -25,12 +25,11 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.PreferenceUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import static org.horaapps.leafpic.util.Theme.LIGHT;
 
 /**
  * Created by dnld on 02/08/16.
@@ -45,15 +44,19 @@ public class ThemeHelper {
 	private int primaryColor;
 	private int accentColor;
 
-	public ThemeHelper(Context context) {
+	private ThemeHelper(Context context) {
 		this.SP = PreferenceUtil.getInstance(context);
 		this.context = context;
 	}
 
-	public static ThemeHelper getThemeHelper(Context context) {
-		ThemeHelper t = new ThemeHelper(context);
-		t.updateTheme();
-		return t;
+	public static ThemeHelper getInstance(Context context) {
+		return new ThemeHelper(context);
+	}
+
+	public static ThemeHelper getInstanceLoaded(Context context) {
+		ThemeHelper instance = getInstance(context);
+		instance.updateTheme();
+		return instance;
 	}
 
 	public void updateTheme(){
@@ -96,10 +99,10 @@ public class ThemeHelper {
 
 	public static Theme getBaseTheme(Context context) {
 		PreferenceUtil SP = PreferenceUtil.getInstance(context);
-		return Theme.fromValue(SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), LIGHT.value));
+		return Theme.fromValue(SP.getInt(context.getString(org.horaapps.leafpic.R.string.preference_base_theme), Theme.LIGHT.value));
 	}
 
-	private int getColor(@ColorRes int color) {
+	public int getColor(@ColorRes int color) {
 		return ContextCompat.getColor(context, color);
 	}
 
@@ -150,12 +153,12 @@ public class ThemeHelper {
 	}
 
 	public int getIconColor(){
-	    if(!(SP.getBoolean(this.context.getString(R.string.preference_custom_icon_color), false))){
-            switch (baseTheme){
-                case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_white_1000);
-                case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
-            }
-	    } else return getAccentColor();
+		if(!(SP.getBoolean(this.context.getString(R.string.preference_custom_icon_color), false))){
+			switch (baseTheme){
+				case DARK: case AMOLED: return getColor(org.horaapps.leafpic.R.color.md_white_1000);
+				case LIGHT: default: return getColor(org.horaapps.leafpic.R.color.md_light_primary_icon);
+			}
+		} else return getAccentColor();
 	}
 
 	public int getButtonBackgroundColor(){
@@ -270,12 +273,12 @@ public class ThemeHelper {
 		/** SWITCH HEAD **/
 		sw.getThumbDrawable().setColorFilter(
 				sw.isChecked() ? color :
-				(baseTheme.equals(LIGHT) ? getColor(R.color.md_grey_200) : getColor(R.color.md_grey_600)),
+						(baseTheme.equals(Theme.LIGHT) ? getColor(R.color.md_grey_200) : getColor(R.color.md_grey_600)),
 				PorterDuff.Mode.MULTIPLY);
 		/** SWITCH BODY **/
 		sw.getTrackDrawable().setColorFilter(
 				sw.isChecked() ? ColorPalette.getTransparentColor(color, 100):
-				(baseTheme.equals(LIGHT) ? getColor(R.color.md_grey_400) : getColor(R.color.md_grey_900)),
+						(baseTheme.equals(Theme.LIGHT) ? getColor(R.color.md_grey_400) : getColor(R.color.md_grey_900)),
 				PorterDuff.Mode.MULTIPLY);
 	}
 
