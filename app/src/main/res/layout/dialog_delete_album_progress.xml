@@ -20,50 +20,44 @@
                 android:layout_width="match_parent"
                 android:textColor="@color/md_dark_primary_text"
                 android:layout_height="wrap_content"
-                android:background="@color/md_red_500"
                 android:padding="@dimen/big_spacing"
                 android:textSize="@dimen/sub_big_text"
                 android:textStyle="bold"
-                android:text="Dialog title..." />
+                android:text="Wait when we throw away your memories" />
 
             <RelativeLayout
                 android:id="@+id/text_dialog_rl"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:paddingStart="@dimen/medium_spacing"
+                android:paddingEnd="@dimen/medium_spacing">
 
-                <TextView
-                    android:id="@+id/folder_name"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_folders"
+                    android:clipToPadding="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/sub_big_spacing"
-                    android:paddingRight="@dimen/sub_big_spacing"
-                    android:paddingLeft="@dimen/sub_big_spacing"
-                    android:text="null"
-                    android:singleLine="false"
-                    android:textSize="@dimen/medium_text" />
+                    android:layout_height="wrap_content" />
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
+                    android:layout_below="@+id/rv_folders"
+                    android:paddingTop="@dimen/medium_spacing"
+                    android:indeterminate="true"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginEnd="134dp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/file_name"
                     android:layout_width="match_parent"
+                    android:layout_below="@+id/progress_bar"
+                    android:paddingTop="@dimen/medium_spacing"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/sub_big_spacing"
-                    android:paddingRight="@dimen/sub_big_spacing"
-                    android:paddingLeft="@dimen/sub_big_spacing"
-                    android:text="null"
+                    android:text=""
                     android:singleLine="false"
-                    android:textSize="@dimen/medium_text" />
-
+                    android:textStyle="italic"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="@dimen/small_text" />
 
             </RelativeLayout>
         </LinearLayout>

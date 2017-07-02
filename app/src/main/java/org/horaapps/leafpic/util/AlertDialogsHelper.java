@@ -79,7 +79,7 @@ public class AlertDialogsHelper {
 
     public static AlertDialog getTextDialog(ThemedActivity activity, @StringRes int title, @StringRes int Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity,activity.getDialogStyle());
-        View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_delete_album_progress, null);
+        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_text, null);
 
         TextView dialogTitle = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_title);
         TextView dialogMessage = (TextView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.text_dialog_message);
