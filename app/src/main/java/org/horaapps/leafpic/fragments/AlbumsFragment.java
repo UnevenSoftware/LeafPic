@@ -37,7 +37,7 @@ import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.dialog.DeleteAlbumsDialog;
+import org.horaapps.leafpic.delete.DeleteAlbumsDialog;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -385,8 +385,11 @@ public class AlbumsFragment extends BaseFragment {
                     protected void onPreExecute() {
                         super.onPreExecute();
                         newFragment = new DeleteAlbumsDialog();
+                        Bundle b = new Bundle();
+                        b.putParcelableArrayList("albums", ((ArrayList<Album>) adapter.getSelectedAlbums()));
+
+                        newFragment.setArguments(b);
                         newFragment.show(getFragmentManager(), "dialog");
-                        selectedAlbums = adapter.getSelectedAlbums();
                         //newFragment.setTitle("asd");
 
                         //dialog = AlertDialogsHelper.getProgressDialog(((ThemedActivity) getActivity()), getString(R.string.delete), getString(R.string.deleting_images));

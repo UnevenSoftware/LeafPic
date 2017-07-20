@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ll_album_bottom_sheet_item"
+<RelativeLayout android:id="@+id/text_dialog_rl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="@drawable/ripple"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:background="@drawable/ripple"
-    android:paddingTop="@dimen/sub_medium_spacing_2"
-    android:paddingBottom="@dimen/sub_medium_spacing_2">
+    android:paddingStart="@dimen/medium_spacing"
+    android:paddingEnd="@dimen/medium_spacing"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.mikepenz.iconics.view.IconicsImageView
-        android:id="@+id/folder_icon_bottom_sheet_item"
-        android:layout_height="@dimen/icon_width_height"
-        android:layout_width="@dimen/icon_width_height"
-        app:iiv_icon="gmd-folder"
-        android:layout_marginLeft="@dimen/big_spacing"
-        android:layout_marginRight="@dimen/big_spacing" />
-
-    <TextView
-        android:id="@+id/name_folder"
+    <horaapps.org.liz.ui.ThemedTextView
+        android:id="@+id/folder_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="2"
-        android:ellipsize="middle"
-        android:textColor="@color/md_dark_background"
-        android:textSize="16sp" />
-</LinearLayout>
+        android:paddingTop="@dimen/small_spacing"
+        android:text="Camera"
+        android:textStyle="bold"
+        android:singleLine="false"
+        android:textSize="@dimen/medium_text" />
+
+    <horaapps.org.liz.ui.ThemedTextView
+        android:id="@+id/file_count"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/folder_name"
+        android:text="1/80"
+        android:singleLine="false"
+        android:textSize="@dimen/medium_text" />
+</RelativeLayout>
