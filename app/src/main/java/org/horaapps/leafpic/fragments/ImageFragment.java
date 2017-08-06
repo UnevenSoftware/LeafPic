@@ -9,19 +9,15 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.orhanobut.hawk.Hawk;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.views.RotateTransformation;
 
 import java.util.Date;
 
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
+
 
 /**
  * Created by dnld on 18/02/16.
@@ -30,6 +26,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 @SuppressWarnings("ResourceType")
 public class ImageFragment extends Fragment {
 
+    View view;
     private Media img;
     private final String TAG = "asd";
 
@@ -49,37 +46,30 @@ public class ImageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_photo, container, false);
 
-        if (Hawk.get(getString(R.string.preference_sub_scaling), true)) {
+
+        /*if (Hawk.get(getString(R.string.preference_sub_scaling), true)) {
             SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(getContext());
             imageView.setImage(ImageSource.uri(img.getUri()).tilingEnabled());
             imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_0);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
-                }
-            });
+            imageView.setOnClickListener(v -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
             return imageView;
         } else {
             PhotoView photoView = new PhotoView(getContext());
             displayMedia(photoView, true);
-            photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float x, float y) {
-                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
-                }
-
-                @Override
-                public void onOutsidePhotoTap() {
-                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
-                }
-            });
+            photoView.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
             photoView.setMaximumScale(5.0F);
             photoView.setMediumScale(3.0F);
 
             return photoView;
-        }
+        }*/
+
+        return view;
+    }
+
+    private void loadImage() {
+
     }
 
    /* private void rotateLoop() { //april fools

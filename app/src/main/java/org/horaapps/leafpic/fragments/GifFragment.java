@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.koushikdutta.ion.Ion;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
-
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by dnld on 18/02/16.
@@ -45,18 +43,7 @@ public class GifFragment extends Fragment {
                 .load(gif.getPath())
                 .intoImageView(photoView);
 
-        photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-            @Override
-            public void onPhotoTap(View view, float x, float y) {
-                ((SingleMediaActivity) getActivity()).toggleSystemUI();
-            }
-
-            @Override
-            public void onOutsidePhotoTap() {
-                ((SingleMediaActivity) getActivity()).toggleSystemUI();
-            }
-        });
-
+        photoView.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
         return photoView;
     }
 }
