@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.new_way;
+package org.horaapps.leafpic.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -12,7 +12,6 @@ import android.util.Log;
 import org.horaapps.leafpic.data.filter.FilterMode;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;

@@ -99,6 +99,7 @@ public class RvMediaFragment extends BaseFragment {
 
         adapter.clear();
 
+
         CPHelper.getMedia(getContext(), album, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

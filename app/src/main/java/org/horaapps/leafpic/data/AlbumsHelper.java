@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import static org.horaapps.leafpic.new_way.BitmapUtils.addWhiteBorder;
-import static org.horaapps.leafpic.new_way.BitmapUtils.getCroppedBitmap;
+import static org.horaapps.leafpic.util.BitmapUtils.addWhiteBorder;
+import static org.horaapps.leafpic.util.BitmapUtils.getCroppedBitmap;
 
 /**
  * Created by dnld on 3/25/17.

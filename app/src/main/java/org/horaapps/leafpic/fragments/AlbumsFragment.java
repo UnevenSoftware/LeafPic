@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,7 +99,6 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     private void displayAlbums() {
-
         adapter.clear();
         SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
         CPHelper.getAlbums(getContext(), hidden, excuded, sortingMode(), sortingOrder())
@@ -111,8 +109,7 @@ public class AlbumsFragment extends BaseFragment {
                         album -> adapter.add(album),
                         throwable -> {
                             refresh.setRefreshing(false);
-
-                            Log.wtf("asd", throwable);
+                            throwable.printStackTrace();
                         },
                         () -> {
                             db.close();

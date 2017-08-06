@@ -3,7 +3,7 @@ package org.horaapps.leafpic.data.provider;
 import android.content.ContentResolver;
 import android.database.Cursor;
 
-import org.horaapps.leafpic.new_way.CursorHandler;
+import org.horaapps.leafpic.data.CursorHandler;
 
 import io.reactivex.Observable;
 

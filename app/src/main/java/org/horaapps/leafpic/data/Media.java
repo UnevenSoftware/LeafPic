@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.annotations.NotNull;
 
-import org.horaapps.leafpic.new_way.CursorHandler;
 import org.horaapps.leafpic.util.MediaSignature;
 import org.horaapps.leafpic.util.StringUtils;
 

@@ -6,6 +6,10 @@
 *.iml
 /local.properties
 
+# release
+/signing.properties
+*.jks
+
 .DS_Store
 /build
 /captures

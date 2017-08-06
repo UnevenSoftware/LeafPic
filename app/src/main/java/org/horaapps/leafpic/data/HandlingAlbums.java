@@ -20,9 +20,9 @@ import java.util.HashSet;
  */
 public class HandlingAlbums extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 8;
-    private static final String DATABASE_NAME = "tracked_albums.db";
-    private static final String TABLE_ALBUMS = "tracked_albums";
+    private static final int DATABASE_VERSION = 12;
+    private static final String DATABASE_NAME = "folders.db";
+    private static final String TABLE_ALBUMS = "folders";
 
     public static final int EXCLUDED = 1;
     public static final int INCLUDED = 2;
@@ -58,10 +58,13 @@ public class HandlingAlbums extends SQLiteOpenHelper {
                 ALBUM_STATUS + " INTEGER, " +
                 ALBUM_SORTING_MODE + " INTEGER, " +
                 ALBUM_SORTING_ORDER + " INTEGER)");
+
+        db.execSQL(String.format("CREATE UNIQUE INDEX idx_path ON %s (%s)", TABLE_ALBUMS, ALBUM_PATH));
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALBUMS);
+        db.execSQL("DROP INDEX IF EXISTS idx_path");
         onCreate(db);
     }
 
