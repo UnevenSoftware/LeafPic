@@ -89,10 +89,11 @@ public class MainActivity extends SharedMediaActivity {
                         startActivity(new Intent(Intent.ACTION_VIEW)
                                 .setDataAndType(ContentHelper.getUriForFile(getApplicationContext(), m.getFile()), m.getMimeType()));
                     } else {
-                        getAlbum().setCurrentMedia(m);
+
                         Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
                         intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
                         startActivity(intent);
+
                     }
                 }
             } else {

@@ -213,27 +213,6 @@ public class Album implements CursorHandler, Parcelable {
 	}
 
 
-	@Deprecated
-	public void setCurrentMedia(int index){  }
-
-	@Deprecated
-	public void setCurrentMedia(Media m){ }
-
-	@Deprecated
-	public Media getCurrentMedia() { return new Media(); }
-
-	@Deprecated
-	public int getCurrentMediaIndex() { return -1; }
-
-	@Deprecated
-	public void setCurrentMedia(String path) {
-		/*for (int i = 0; i < media.size(); i++)
-			if (media.get(i).getPath().equals(path)) {
-				currentMediaIndex = i;
-				break;
-			}*/
-	}
-
 
 
 	//region Album Properties Setters
@@ -280,12 +259,12 @@ public class Album implements CursorHandler, Parcelable {
 	public boolean renameCurrentMedia(Context context, String newName) {
 		boolean success = false;
 		try {
-			File from = new File(getCurrentMedia().getPath());
+			/*File from = new File(getCurrentMedia().getPath());
 			File to = new File(StringUtils.getPhotoPathRenamed(getCurrentMedia().getPath(), newName));
 			if (success =  ContentHelper.moveFile(context, from, to)) {
 				scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
 				getCurrentMedia().setPath(to.getAbsolutePath());
-			}
+			}*/
 		} catch (Exception e) { e.printStackTrace(); }
 		return success;
 	}
@@ -352,13 +331,13 @@ public class Album implements CursorHandler, Parcelable {
 
 	public boolean copyPhoto(Context context, String olderPath, String folderPath) {
 		boolean success = false;
-		try {
+		/*try {
 			File from = new File(olderPath);
 			File to = new File(folderPath);
 			if (success = ContentHelper.copyFile(context, from, to))
 				scanFile(context, new String[]{ StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), folderPath) });
 
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) { e.printStackTrace(); }*/
 		return success;
 	}
 

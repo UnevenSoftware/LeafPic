@@ -139,6 +139,7 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribe(pos -> {
 
                     Intent intent = new Intent(getActivity(), SingleMediaActivity.class);
+                    intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
                     intent.putExtra("album", RvMediaFragment.this.album);
                     intent.putExtra("media", adapter.getMedia());
                     intent.putExtra("position", pos);

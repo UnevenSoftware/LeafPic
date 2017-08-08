@@ -115,7 +115,7 @@ public class ImageFragment extends Fragment {
 
         RequestOptions options = new RequestOptions()
                 .signature(img.getSignature())
-                .centerCrop()
+                //.centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);

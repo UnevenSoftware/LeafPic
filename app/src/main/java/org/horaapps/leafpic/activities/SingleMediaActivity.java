@@ -42,6 +42,7 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.AlbumSettings;
 import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.SortingMode;
@@ -54,7 +55,9 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +72,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private static final String TAG = SingleMediaActivity.class.getSimpleName();
 
     private static final String ISLOCKED_ARG = "isLocked";
-    static final String ACTION_OPEN_ALBUM = "android.intent.action.pagerAlbumMedia";
+    public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
 
@@ -96,16 +99,36 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         ButterKnife.bind(this);
 
-        album = getIntent().getParcelableExtra("album");
-        position = getIntent().getIntExtra("position", 0);
-        media = getIntent().getParcelableArrayListExtra("media");
+        String action = getIntent().getAction();
+        Log.wtf("Asd", action);
+
+        if (action != null && action.equals(ACTION_OPEN_ALBUM)) {
+            Log.wtf("asd", "asd");
+            album = getIntent().getParcelableExtra("album");
+            position = getIntent().getIntExtra("position", 0);
+            media = getIntent().getParcelableArrayListExtra("media");
+        } else if (getIntent().getData() != null) {
+            loadUri(getIntent().getData());
+        }
 
         if (savedInstanceState != null) {
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
+        }
 
-           /* if ((getIntent().getAction().equals(Intent.ACTION_VIEW) || getIntent().getAction().equals(ACTION_REVIEW)) && getIntent().getData() != null) {
+        adapter = new MediaPagerAdapter(getSupportFragmentManager(), media);
+        initUi();
+    }
 
-                String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
+    private boolean checkAction(String action) {
+        return action.equals(Intent.ACTION_VIEW) || action.equals(ACTION_REVIEW);
+    }
+
+    private void loadUri(Uri uri) {
+        album = new Album(uri.toString(), uri.getPath());
+        album.settings = AlbumSettings.getDefaults();
+
+        /*
+        String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
                 Album album = null;
 
                 if (path != null) {
@@ -115,34 +138,23 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         album.setCurrentMedia(path);
                     }
                 }
+        */
 
-                if (album == null || album.getCount() == 0) {
-                    Uri mediaUri = getIntent().getData();
-                    Media media;
-                    album = new Album(mediaUri.toString(), mediaUri.getPath());
-                    album.settings = AlbumSettings.getDefaults();
-
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
-                        if (inputStream != null) inputStream.close();
-                    } catch (Exception ex) {
-                        //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
-                        ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setText(R.string.error_occured_open_media);
-                        findViewById(R.id.nothing_to_show_placeholder).setVisibility(Hawk.get("emoji_easter_egg", 0) == 0 ? View.VISIBLE : View.GONE);
-                        findViewById(R.id.ll_emoji_easter_egg).setVisibility(Hawk.get("emoji_easter_egg", 0) == 1 ? View.VISIBLE : View.GONE);
-                    }
-
-                    media = new Media(getApplicationContext(), mediaUri);
-                    if (album.addMedia(media)) album.setCount(1);
-                    customUri = true;
-                }
-                //getAlbums().add(0, album);
-                */
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            if (inputStream != null) inputStream.close();
+        } catch (Exception ex) {
+            //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+            ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setText(R.string.error_occured_open_media);
+            findViewById(R.id.nothing_to_show_placeholder).setVisibility(Hawk.get("emoji_easter_egg", 0) == 0 ? View.VISIBLE : View.GONE);
+            findViewById(R.id.ll_emoji_easter_egg).setVisibility(Hawk.get("emoji_easter_egg", 0) == 1 ? View.VISIBLE : View.GONE);
         }
 
-        adapter = new MediaPagerAdapter(getSupportFragmentManager(), media);
-        initUi();
+        media = new ArrayList<>(Collections.singletonList(new Media(getApplicationContext(), uri)));
+        position = 0;
+        customUri = true;
     }
+
 
     private void initUi() {
 
@@ -270,7 +282,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
 
-        menu.setGroupVisible(R.id.only_photos_options, !this.album.getCurrentMedia().isVideo());
+        menu.setGroupVisible(R.id.only_photos_options, !getCurrentMedia().isVideo());
 
         if (customUri) {
             menu.setGroupVisible(R.id.on_internal_storage, false);
@@ -337,19 +349,19 @@ public class SingleMediaActivity extends SharedMediaActivity {
         switch (item.getItemId()) {
 
             case R.id.rotate_180:
-                if (!((ImageFragment) adapter.getRegisteredFragment(this.album.getCurrentMediaIndex())).rotatePicture(180)) {
+                if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(180)) {
                     Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.rotate_right_90:
-                if (!((ImageFragment) adapter.getRegisteredFragment(this.album.getCurrentMediaIndex())).rotatePicture(90)) {
+                if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(90)) {
                     Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.rotate_left_90:
-                if (!((ImageFragment) adapter.getRegisteredFragment(this.album.getCurrentMediaIndex())).rotatePicture(-90)) {
+                if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(-90)) {
                     Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -361,7 +373,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                             @Override
                             public void folderSelected(String path) {
-                                //this.album.copyPhoto(getApplicationContext(), this.album.getCurrentMedia().getPath(), path);
+                                //this.album.copyPhoto(getApplicationContext(), getCurrentMedia().getPath(), path);
                             }
                         }).show();
                 break;
@@ -412,14 +424,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(this.album.getCurrentMedia().getMimeType());
-                share.putExtra(Intent.EXTRA_STREAM, this.album.getCurrentMedia().getUri());
+                share.setType(getCurrentMedia().getMimeType());
+                share.putExtra(Intent.EXTRA_STREAM, getCurrentMedia().getUri());
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
             case R.id.action_edit:
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
-                Uri uri = Uri.fromFile(new File(this.album.getCurrentMedia().getPath()));
+                Uri uri = Uri.fromFile(new File(getCurrentMedia().getPath()));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
                 uCrop.withOptions(getUcropOptions());
                 uCrop.start(SingleMediaActivity.this);
@@ -428,14 +440,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
             case R.id.action_use_as:
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
                 intent.setDataAndType(
-                        this.album.getCurrentMedia().getUri(), this.album.getCurrentMedia().getMimeType());
+                        getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
                 startActivity(Intent.createChooser(intent, getString(R.string.use_as)));
                 return true;
 
             case R.id.action_open_with:
                 Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
                 intentopenWith.setDataAndType(
-                        this.album.getCurrentMedia().getUri(), this.album.getCurrentMedia().getMimeType());
+                        getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
                 startActivity(Intent.createChooser(intentopenWith, getString(R.string.open_with)));
                 break;
 
@@ -493,7 +505,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_rename:
                 final EditText editTextNewName = new EditText(getApplicationContext());
-                editTextNewName.setText(StringUtils.getPhotoNameByPath(this.album.getCurrentMedia().getPath()));
+                editTextNewName.setText(StringUtils.getPhotoNameByPath(getCurrentMedia().getPath()));
 
                 AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(this, editTextNewName, R.string.rename_photo_action);
 
@@ -514,14 +526,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_edit_with:
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(this.album.getCurrentMedia().getUri(), this.album.getCurrentMedia().getMimeType());
+                editIntent.setDataAndType(getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(editIntent, getString(R.string.edit_with)));
                 break;
 
             case R.id.action_details:
 
-                final AlertDialog detailsDialog = AlertDialogsHelper.getDetailsDialog(this, this.album.getCurrentMedia());
+                final AlertDialog detailsDialog = AlertDialogsHelper.getDetailsDialog(this, getCurrentMedia());
 
                 detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
                         .ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
@@ -531,7 +543,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //if (!this.album.getCurrentMedia().fixDate())
+                        //if (!getCurrentMedia().fixDate())
                         Toast.makeText(SingleMediaActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -545,7 +557,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_palette:
                 Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
-                paletteIntent.putExtra("imageUri", this.album.getCurrentMedia().getUri().toString());
+                paletteIntent.putExtra("imageUri", getCurrentMedia().getUri().toString());
                 startActivity(paletteIntent);
                 break;
 
@@ -555,6 +567,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 //return super.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public Media getCurrentMedia() {
+        return media.get(position);
     }
 
 
