@@ -1,9 +1,9 @@
 package org.horaapps.leafpic;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.orhanobut.hawk.Hawk;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
@@ -18,9 +18,16 @@ public class App extends /*horaapps.org.liz.App*/ Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+
         Hawk.init(this).build();
 
-        Log.wtf("asd", Hawk.get("card_view_style") + "");
         mInstance = this;
     }
 

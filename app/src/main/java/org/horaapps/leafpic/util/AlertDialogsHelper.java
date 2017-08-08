@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.drew.lang.GeoLocation;
 import com.orhanobut.hawk.Hawk;
 
@@ -129,10 +128,6 @@ public class AlertDialogsHelper {
 
             Glide.with(activity.getApplicationContext())
                     .load(staticMapProvider.getUrl(location))
-                    .asBitmap()
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .animate(org.horaapps.leafpic.R.anim.fade_in)
                     .into(imgMap);
 
             imgMap.setOnClickListener(new View.OnClickListener() {

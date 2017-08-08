@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.koushikdutta.ion.Ion;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -27,7 +29,6 @@ import org.horaapps.leafpic.views.SquareRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
@@ -43,9 +44,9 @@ import io.reactivex.subjects.PublishSubject;
  */
 public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
-    private List<Media> media;
+    private ArrayList<Media> media;
 
-    private final PublishSubject<Media> onClickSubject = PublishSubject.create();
+    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
     private final PublishSubject<Media> onChangeSelectedSubject = PublishSubject.create();
 
     private int selectedCount = 0;
@@ -100,9 +101,9 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         sort();
     }
 
-    public List<Media> getSelected() {
+    public ArrayList<Media> getSelected() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return media.stream().filter(Media::isSelected).collect(Collectors.toList());
+            return new ArrayList<>(media.stream().filter(Media::isSelected).collect(Collectors.toList()));
         } else {
             ArrayList<Media> arrayList = new ArrayList<>(selectedCount);
             for (Media m : media)
@@ -122,6 +123,10 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                         return m;
         }
         return null;
+    }
+
+    public ArrayList<Media> getMedia() {
+        return media;
     }
 
 
@@ -158,7 +163,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         return selectedCount > 0;
     }
 
-    public Observable<Media> getClicks() {
+    public Observable<Integer> getClicks() {
         return onClickSubject;
     }
 
@@ -180,15 +185,20 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                     .intoImageView(holder.imageView);
             holder.gifIcon.setVisibility(View.VISIBLE);
         } else {
-            Glide.with(holder.imageView.getContext())
-                    .load(f.getUri())
-                    .asBitmap()
+
+            RequestOptions options = new RequestOptions()
                     .signature(f.getSignature())
+                    .format(DecodeFormat.PREFER_ARGB_8888)
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .thumbnail(0.5f)
                     .placeholder(placeholder)
                     //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
+
+            Glide.with(holder.imageView.getContext())
+                    .load(f.getUri())
+                    .apply(options)
+                    .thumbnail(0.5f)
                     .into(holder.imageView);
             holder.gifIcon.setVisibility(View.GONE);
         }
@@ -233,7 +243,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 notifyItemChanged(position);
                 onChangeSelectedSubject.onNext(f);
             } else
-                onClickSubject.onNext(f);
+                onClickSubject.onNext(position);
         });
 
         holder.layout.setOnLongClickListener(v -> {

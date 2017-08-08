@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
@@ -60,22 +61,18 @@ public class VideoFragment extends Fragment {
             }
         });
 
-        Glide.with(getContext())
-                .load(video.getUri())
-                .asBitmap()
+        RequestOptions options = new RequestOptions()
                 .signature(video.getSignature())
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .thumbnail(0.5f)
-                .animate(org.horaapps.leafpic.R.anim.fade_in)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+
+        Glide.with(getContext())
+                .load(video.getUri())
+                .apply(options)
                 .into(picture);
 
-        picture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SingleMediaActivity) getActivity()).toggleSystemUI();
-            }
-        });
+        picture.setOnClickListener(v -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
         return view;
     }
 }

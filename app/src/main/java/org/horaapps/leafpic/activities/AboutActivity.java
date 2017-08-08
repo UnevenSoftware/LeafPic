@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
@@ -179,28 +178,19 @@ public class AboutActivity extends ThemedActivity {
 
         Glide.with(this)
                 .load(R.drawable.donald_header)
-                //.placeholder(getPlaceHolder())
-                .priority(Priority.HIGH)
-                .animate(R.anim.fade_in)
                 .into((ImageView) findViewById(R.id.donald_header_img));
         Glide.with(this)
                 .load(R.drawable.donald_profile)
-                .priority(Priority.HIGH)
                 //.error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()).paddingDp(24))
-                .animate(R.anim.fade_in)
+
                 .into((CircleImageView) findViewById(R.id.donald_profile_img));
 
         Glide.with(this)
                 .load(R.drawable.gilbert_header)
-                .priority(Priority.HIGH)
-                //.placeholder(getPlaceHolder())
-                .animate(R.anim.fade_in)
                 .into((ImageView) findViewById(R.id.gilbert_header_img));
         Glide.with(this)
                 .load(R.drawable.gilbert_profile)
-                .priority(Priority.HIGH)
-                //.error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color(getIconColor()).paddingDp(24))
-                .animate(R.anim.fade_in)
+                //.error(new IconicsDrawable(this, "gmd-person").sizeDp(90).color)
                 .into((CircleImageView) findViewById(R.id.gilbert_profile_img));
 
         ((TextView) findViewById(R.id.about_version_item_sub)).setText(BuildConfig.VERSION_NAME);

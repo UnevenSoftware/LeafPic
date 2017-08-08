@@ -191,9 +191,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <meta-data
+        <!-- <meta-data
             android:name="org.horaapps.leafpic.CustomGlideModule"
-            android:value="GlideModule" />
+            android:value="GlideModule" /> -->
 
         <provider
             android:name="android.support.v4.content.FileProvider"

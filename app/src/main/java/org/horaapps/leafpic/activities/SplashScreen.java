@@ -86,7 +86,7 @@ public class SplashScreen extends SharedMediaActivity {
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        startLookingForMedia();
+        //startLookingForMedia();
     }
 
     private void start() {

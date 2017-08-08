@@ -12,8 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.CardViewStyle;
@@ -230,16 +231,18 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         Media f = a.getCover();
 
+        RequestOptions options = new RequestOptions()
+                .signature(f.getSignature())
+                .format(DecodeFormat.PREFER_ARGB_8888)
+                .centerCrop()
+                .placeholder(placeholder)
+                .error(org.horaapps.leafpic.R.drawable.ic_error)
+                //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
         Glide.with(holder.picture.getContext())
                 .load(f.getPath())
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .priority(Priority.HIGH)
-                .signature(f.getSignature())
-                .centerCrop()
-                .error(org.horaapps.leafpic.R.drawable.ic_error)
-                .placeholder(placeholder)
-                //.animate(org.horaapps.leafpic.R.anim.fade_in)
+                .apply(options)
                 .into(holder.picture);
 
 

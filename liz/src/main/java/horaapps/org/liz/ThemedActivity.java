@@ -57,7 +57,7 @@ public abstract class ThemedActivity extends AppCompatActivity implements UiElem
         themeHelper.updateTheme();
         coloredNavBar = Hawk.get(getString(R.string.preference_colored_nav_bar), false);
         obscuredStatusBar = Hawk.get(getString(R.string.preference_translucent_status_bar), true);
-        applyThemeSingleImgAct = true;//Hawk.get(getString(R.string.preference_apply_theme_pager), true);
+        applyThemeSingleImgAct = Hawk.get("apply_theme_img_act", true);
         customIconColor = Hawk.get(getString(R.string.preference_custom_icon_color), false);
     }
 
