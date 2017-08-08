@@ -46,8 +46,8 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
@@ -87,7 +87,7 @@ public class MainActivity extends SharedMediaActivity {
                     // TODO: 4/5/17 moveout
                     if (Hawk.get("video_instant_play", false) && m.isVideo()) {
                         startActivity(new Intent(Intent.ACTION_VIEW)
-                                .setDataAndType(ContentHelper.getUriForFile(getApplicationContext(), m.getFile()), m.getMimeType()));
+                                .setDataAndType(StorageHelper.getUriForFile(getApplicationContext(), m.getFile()), m.getMimeType()));
                     } else {
 
                         Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
@@ -706,8 +706,9 @@ public class MainActivity extends SharedMediaActivity {
                         .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                             @Override
                             public void folderSelected(String path) {
+                                //TODo
                                 //swipeRefreshLayout.setRefreshing(true);
-                                if (getAlbum().moveSelectedMedia(getApplicationContext(), path) > 0) {
+                                /*if (getAlbum().moveSelectedMedia(getApplicationContext(), path) > 0) {
                                     if (getAlbum().getMedia().size() == 0) {
                                         //getAlbums().removeCurrentAlbum();
                                         //albumsAdapter.notifyDataSetChanged();
@@ -716,7 +717,7 @@ public class MainActivity extends SharedMediaActivity {
                                     //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
                                     //finishEditMode();
                                     supportInvalidateOptionsMenu();
-                                } else requestSdCardPermissions();
+                                } else requestSdCardPermissions();*/
 
                                 //swipeRefreshLayout.setRefreshing(false);
                             }}).show();

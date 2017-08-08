@@ -49,7 +49,7 @@ public class PaletteActivity extends ThemedActivity {
         paletteImg = (ImageView) findViewById(R.id.palette_image);
 
         setSupportActionBar(toolbar);
-        uri = Uri.parse(getIntent().getExtras().getString("imageUri"));
+        uri = getIntent().getData();
         paletteImg.setImageURI(null);
         paletteImg.setImageURI(uri);
 
@@ -85,7 +85,7 @@ public class PaletteActivity extends ThemedActivity {
         Bitmap myBitmap = ((BitmapDrawable) paletteImg.getDrawable()).getBitmap();
         ((TextView) findViewById(R.id.palette_image_title)).setText(uri.getPath().substring(uri.getPath().lastIndexOf("/")+1));
         ((TextView)findViewById(R.id.palette_image_caption)).setText(uri.getPath());
-        palette = Palette.generate(myBitmap);
+        palette = Palette.from(myBitmap).generate();
         rvPalette = (RecyclerView) findViewById(R.id.paletteRecycler);
         rvPalette.setLayoutManager(new LinearLayoutManager(this));
         rvPalette.setNestedScrollingEnabled(false);

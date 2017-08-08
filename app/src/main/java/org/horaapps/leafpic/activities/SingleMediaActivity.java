@@ -43,8 +43,9 @@ import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumSettings;
-import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.MediaHelper;
+import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
@@ -100,10 +101,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
         ButterKnife.bind(this);
 
         String action = getIntent().getAction();
-        Log.wtf("Asd", action);
 
         if (action != null && action.equals(ACTION_OPEN_ALBUM)) {
-            Log.wtf("asd", "asd");
             album = getIntent().getParcelableExtra("album");
             position = getIntent().getIntExtra("position", 0);
             media = getIntent().getParcelableArrayListExtra("media");
@@ -119,16 +118,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
         initUi();
     }
 
-    private boolean checkAction(String action) {
-        return action.equals(Intent.ACTION_VIEW) || action.equals(ACTION_REVIEW);
-    }
-
     private void loadUri(Uri uri) {
         album = new Album(uri.toString(), uri.getPath());
         album.settings = AlbumSettings.getDefaults();
 
         /*
-        String path = ContentHelper.getMediaPath(getApplicationContext(), getIntent().getData());
+        String path = StorageHelper.getMediaPath(getApplicationContext(), getIntent().getData());
                 Album album = null;
 
                 if (path != null) {
@@ -177,16 +172,21 @@ public class SingleMediaActivity extends SharedMediaActivity {
         mViewPager.setCurrentItem(position);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {    }
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
-            @Override public void onPageSelected(int position) {
+            @Override
+            public void onPageSelected(int position) {
                 SingleMediaActivity.this.position = position;
 
                 updatePageTitle(position);
                 supportInvalidateOptionsMenu();
             }
 
-            @Override public void onPageScrollStateChanged(int state) {    }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         if (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getRotation() == Surface.ROTATION_90) {
@@ -202,7 +202,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         /**** Theme ****/
         toolbar.setBackgroundColor(
                 themeOnSingleImgAct()
-                        ? ColorPalette.getTransparentColor (getPrimaryColor(), getTransparency())
+                        ? ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())
                         : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
@@ -272,9 +272,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            params.setMargins(0,0,Measure.getNavigationBarSize(SingleMediaActivity.this).x,0);
+            params.setMargins(0, 0, Measure.getNavigationBarSize(SingleMediaActivity.this).x, 0);
         else
-            params.setMargins(0,0,0,0);
+            params.setMargins(0, 0, 0, 0);
 
         toolbar.setLayoutParams(params);
     }
@@ -303,7 +303,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         try {
                             //copyFileToDownloads(imageUri);
                             // TODO: 21/08/16 handle this better
-                            if (ContentHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(this.album.getPath()))) {
+                            if (StorageHelper.copyFile(getApplicationContext(), new File(imageUri.getPath()), new File(this.album.getPath()))) {
                                 //((ImageFragment) adapter.getRegisteredFragment(this.album.getCurrentMediaIndex())).displayMedia(true);
                                 Toast.makeText(this, R.string.new_file_created, Toast.LENGTH_SHORT).show();
                             }
@@ -322,23 +322,24 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
 
-    private void displayAlbums(boolean reload) {
-        Intent i = new Intent(SingleMediaActivity.this, MainActivity.class);
-        Bundle b = new Bundle();
-        b.putInt(SplashScreen.CONTENT, SplashScreen.ALBUMS_PREFETCHED);
-        if (!reload) i.putExtras(b);
-        startActivity(i);
+    private void displayAlbums() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 
     private void deleteCurrentMedia() {
-        this.album.deleteCurrentMedia(getApplicationContext());
-        if (this.album.getMedia().size() == 0) {
-            if (customUri) finish();
-            else {
-                //getAlbums().removeCurrentAlbum();
-                displayAlbums(false);
+        Media currentMedia = getCurrentMedia();
+
+        boolean success = MediaHelper.deleteMedia(getApplicationContext(), currentMedia);
+
+        if (success) {
+            media.remove(currentMedia);
+
+            if (media.size() == 0) {
+                displayAlbums();
             }
+        } else {
+            Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
         }
         adapter.notifyDataSetChanged();
         updatePageTitle(mViewPager.getCurrentItem());
@@ -370,11 +371,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
             case R.id.action_copy:
                 SelectAlbumBuilder.with(getSupportFragmentManager())
                         .title(getString(R.string.copy_to))
-                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
-                            @Override
-                            public void folderSelected(String path) {
-                                //this.album.copyPhoto(getApplicationContext(), getCurrentMedia().getPath(), path);
-                            }
+                        .onFolderSelected(path -> {
+
+                            Media currentMedia = getCurrentMedia();
+                            boolean b = MediaHelper.copyMedia(getApplicationContext(), currentMedia, path);
+                            if (!b)
+                                Toast.makeText(getApplicationContext(), R.string.copy_error, Toast.LENGTH_SHORT).show();
                         }).show();
                 break;
 
@@ -484,21 +486,25 @@ public class SingleMediaActivity extends SharedMediaActivity {
             case R.id.action_move:
                 SelectAlbumBuilder.with(getSupportFragmentManager())
                         .title(getString(R.string.move_to))
-                        .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
-                            @Override
-                            public void folderSelected(String path) {
-                                //this.album.moveCurrentMedia(getApplicationContext(), path);
+                        .exploreMode(true)
+                        .force(true)
+                        .onFolderSelected(path -> {
+
+                            Media currentMedia = getCurrentMedia();
+
+                            boolean success = MediaHelper.moveMedia(getApplicationContext(), currentMedia, path);
+
+                            if (success) {
+                                media.remove(currentMedia);
 
                                 if (media.size() == 0) {
-                                    if (customUri) finish();
-                                    else {
-                                        //getAlbums().removeCurrentAlbum();
-                                        displayAlbums(false);
-                                    }
+                                    displayAlbums();
                                 }
-                                adapter.notifyDataSetChanged();
-                                updatePageTitle(mViewPager.getCurrentItem());
+                            } else {
+                                Toast.makeText(getApplicationContext(), R.string.move_error, Toast.LENGTH_SHORT).show();
                             }
+                            adapter.notifyDataSetChanged();
+                            updatePageTitle(mViewPager.getCurrentItem());
                         }).show();
 
                 return true;
@@ -512,15 +518,18 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (editTextNewName.length() != 0)
-                            StringUtils.showToast(getApplicationContext(), "TODO");
-                            //this.album.renameCurrentMedia(getApplicationContext(), editTextNewName.getText().toString());
-                        else
+                        if (editTextNewName.length() != 0) {
+                            Media currentMedia = getCurrentMedia();
+                            boolean b = MediaHelper.renameMedia(getApplicationContext(), currentMedia, editTextNewName.getText().toString());
+                            if (!b) {
+                                StringUtils.showToast(getApplicationContext(), getString(R.string.rename_error));
+                                //adapter.notifyDataSetChanged();
+                            }
+                        } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
-                    }});
-                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); } });
+                    }
+                });
+                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), (dialog, which) -> dialog.dismiss());
                 renameDialog.show();
                 break;
 
@@ -536,16 +545,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 final AlertDialog detailsDialog = AlertDialogsHelper.getDetailsDialog(this, getCurrentMedia());
 
                 detailsDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string
-                        .ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); }});
+                        .ok_action).toUpperCase(), (dialog, which) -> dialog.dismiss());
 
-                detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //if (!getCurrentMedia().fixDate())
-                        Toast.makeText(SingleMediaActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
-                    }
+                detailsDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.fix_date).toUpperCase(), (dialog, which) -> {
+                    // todo
+                    //if (!getCurrentMedia().fixDate())
+                    Toast.makeText(SingleMediaActivity.this, R.string.unable_to_fix_date, Toast.LENGTH_SHORT).show();
                 });
 
                 detailsDialog.show();
@@ -557,7 +562,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_palette:
                 Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
-                paletteIntent.putExtra("imageUri", getCurrentMedia().getUri().toString());
+                paletteIntent.setData(getCurrentMedia().getUri());
                 startActivity(paletteIntent);
                 break;
 
@@ -644,7 +649,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
                     @Override
                     public void onSystemUiVisibilityChange(int visibility) {
-                        Log.wtf(TAG, "ui changed: "+visibility);
+                        Log.wtf(TAG, "ui changed: " + visibility);
                     }
                 });
                 getWindow().getDecorView().setSystemUiVisibility(

@@ -36,7 +36,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import org.horaapps.leafpic.data.ContentHelper;
+import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
@@ -83,8 +83,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         return this;
     }
 
-    public SelectAlbumBuilder exploreMode(boolean enabled, boolean force) {
-        exploreMode = enabled;
+    public SelectAlbumBuilder force(boolean force) {
         forzed = force;
         return this;
     }
@@ -130,7 +129,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         imgExploreMode = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
 
         theme = ThemeHelper.getInstanceLoaded(getContext());
-        sdCardPath = ContentHelper.getSdcardPath(getContext());
+        sdCardPath = StorageHelper.getSdcardPath(getContext());
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Measure.pxToDp(3, getContext()), true));
@@ -148,15 +147,15 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
                     default:
                         // TODO: 12/11/16 check this plis
 //                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-//                            DocumentFile documentFile = ContentHelper.getDocumentFile(getContext(), new File(ContentHelper.getExtSdCardPaths(getContext())[pos - 1]), true, false);
+//                            DocumentFile documentFile = StorageHelper.getDocumentFile(getContext(), new File(StorageHelper.getExtSdCardPaths(getContext())[pos - 1]), true, false);
 //                            if(documentFile != null){
-//                                displayContentFolder(new File(ContentHelper.getExtSdCardPaths(getContext())[pos - 1]));
+//                                displayContentFolder(new File(StorageHelper.getExtSdCardPaths(getContext())[pos - 1]));
 //                            } else {
 //                                Toast.makeText(getContext(), getString(R.string.no_permission), Toast.LENGTH_LONG).choseProvider();
 //                                spinner.setSelection(0);
 //                            }
 //                        } else {
-//                            displayContentFolder(new File(ContentHelper.getExtSdCardPaths(getContext())[pos - 1]));
+//                            displayContentFolder(new File(StorageHelper.getExtSdCardPaths(getContext())[pos - 1]));
 //                        }
                         break;
                 }

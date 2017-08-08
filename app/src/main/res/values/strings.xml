@@ -48,6 +48,12 @@
     <string name="date">Date</string>
     <string name="date_taken">Date taken</string>
 
+    <string name="delete_error">Unable to delete this file</string>
+    <string name="rename_error">Unable to rename this file</string>
+    <string name="move_error">Unable to move this file</string>
+    <string name="copy_error">Unable to copy this file</string>
+
+
     <string name="size">Size</string>
     <string name="numeric">As number</string>
     <string name="ascending">Ascending</string>

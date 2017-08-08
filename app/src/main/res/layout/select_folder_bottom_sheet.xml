@@ -107,6 +107,7 @@
         android:id="@+id/folders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="400dp"
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
     </LinearLayout>

@@ -87,7 +87,7 @@ public class HandlingAlbums extends SQLiteOpenHelper {
 
     public ArrayList<String> getExcludedFolders(Context context) {
         ArrayList<String>  list = new ArrayList<>();
-        HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
+        HashSet<File> storageRoots = StorageHelper.getStorageRoots(context);
         for(File file : storageRoots)
             // it has a lot of garbage
             list.add(new File(file.getPath(), "Android").getPath());

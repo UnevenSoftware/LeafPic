@@ -106,7 +106,7 @@ public class AlbumsHelper {
     }
 
     public static boolean deleteAlbum(Album album, Context context) {
-        return ContentHelper.deleteFilesInFolder(context, new File(album.getPath()));
+        return StorageHelper.deleteFilesInFolder(context, new File(album.getPath()));
     }
 
 }

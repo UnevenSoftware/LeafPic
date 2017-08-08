@@ -95,7 +95,7 @@ public class DeleteAlbumsDialog extends DialogFragment {
 
                     for (int j = 0; j < files.length; j++) {
                         final int finJ = j;
-                        //ContentHelper.deleteFile(getContext(), files[j]);
+                        //StorageHelper.deleteFile(getContext(), files[j]);
                         if (isCancelled()) break;
 
                         try {

@@ -14,8 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
-import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.StorageHelper;
 
 /**
  * Created by dnld on 18/02/16.
@@ -56,7 +56,7 @@ public class VideoFragment extends Fragment {
             public void onClick(View v) {
                 startActivity(
                         new Intent(Intent.ACTION_VIEW)
-                                .setDataAndType(ContentHelper.getUriForFile(getContext(), video.getFile()),
+                                .setDataAndType(StorageHelper.getUriForFile(getContext(), video.getFile()),
                                         video.getMimeType()));
             }
         });

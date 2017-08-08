@@ -35,9 +35,9 @@ import java.util.HashSet;
 /**
  * Created by dnld on 26/05/16.
  */
-public class ContentHelper {
+public class StorageHelper {
 
-	private static final String TAG = "ContentHelper";
+	private static final String TAG = "StorageHelper";
 	private static final String PRIMARY_VOLUME_NAME = "primary";
 
 	/**
@@ -398,7 +398,7 @@ public class ContentHelper {
 			if((file.getPath().indexOf(sdcardPath)) != -1)
 				suffixPathPart = file.getAbsolutePath().substring(sdcardPath.length());
 		} else {
-			HashSet<File> storageRoots = ContentHelper.getStorageRoots(context);
+			HashSet<File> storageRoots = StorageHelper.getStorageRoots(context);
 			for(File root : storageRoots) {
 				if (root != null) {
 					if ((file.getPath().indexOf(root.getPath())) != -1)
@@ -456,7 +456,7 @@ public class ContentHelper {
 	public static void saveSdCardInfo(Context context, @Nullable final Uri uri) {
 		Hawk.put(context.getString(R.string.preference_internal_uri_extsdcard_photos),
 						uri == null ? null : uri.toString());
-		Hawk.put("sd_card_path", ContentHelper.getSdcardPath(context));
+		Hawk.put("sd_card_path", StorageHelper.getSdcardPath(context));
 	}
 
 	private static String getSavedSdcardPath(Context context) {
@@ -545,7 +545,7 @@ public class ContentHelper {
 					partialPath.append(split[i]).append('/');
 
 				String p = partialPath.toString();
-				for (File file : ContentHelper.getStorageRoots(context)) {
+				for (File file : StorageHelper.getStorageRoots(context)) {
 					File f = new File(file, p);
 					if (f.exists()) return f.getPath();
 				}

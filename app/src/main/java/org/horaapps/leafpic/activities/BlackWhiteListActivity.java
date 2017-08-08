@@ -130,7 +130,8 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
             case R.id.action_add:
                 SelectAlbumBuilder.with(getSupportFragmentManager())
                         .title(getString(R.string.chose_folders))
-                        .exploreMode(true, true)
+                        .exploreMode(true)
+                        .force(true)
                         .onFolderSelected(new SelectAlbumBuilder.OnFolderSelected() {
                             @Override
                             public void folderSelected(String path) {

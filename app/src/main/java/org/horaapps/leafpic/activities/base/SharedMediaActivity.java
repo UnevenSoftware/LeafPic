@@ -9,8 +9,8 @@ import android.widget.Toast;
 import org.horaapps.leafpic.App;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.ContentHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 
 import horaapps.org.liz.ThemedActivity;
@@ -51,7 +51,7 @@ public abstract class SharedMediaActivity extends ThemedActivity {
             if (requestCode == REQUEST_CODE_SD_CARD_PERMISSIONS) {
                 Uri treeUri = resultData.getData();
                 // Persist URI in shared preference so that you can use it later.
-                ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
+                StorageHelper.saveSdCardInfo(getApplicationContext(), treeUri);
                 getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
             }
