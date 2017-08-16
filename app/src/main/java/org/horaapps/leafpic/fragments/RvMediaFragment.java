@@ -110,6 +110,7 @@ public class RvMediaFragment extends BaseFragment {
                             Log.wtf("asd", throwable);
                         },
                         () -> {
+                            album.setCount(getCount());
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
                         });

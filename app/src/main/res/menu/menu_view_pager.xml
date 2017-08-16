@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.horaapps.leafpic.activities.SingleMediaActivity"
 >
+    <item
+        android:id="@+id/slide_show"
+        android:title="@string/start_slide_show"
+        app:showAsAction="never"/>
 
     <group android:id="@+id/only_photos_options">
         <item

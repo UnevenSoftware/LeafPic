@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -59,6 +60,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +75,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     private static final String TAG = SingleMediaActivity.class.getSimpleName();
 
+    private static final int SLIDE_SHOW_INTERVAL = 5000;
     private static final String ISLOCKED_ARG = "isLocked";
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
@@ -91,6 +95,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private Album album;
     private ArrayList<Media> media;
     private MediaPagerAdapter adapter;
+    private boolean isSlideShowOn = false;
 
 
     @Override
@@ -196,6 +201,22 @@ public class SingleMediaActivity extends SharedMediaActivity {
         }
     }
 
+    Handler handler = new Handler();
+    Runnable slideShowRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1) % album.getCount());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally{
+                handler.postDelayed(this, SLIDE_SHOW_INTERVAL);
+            }
+        }
+    };
+
     @CallSuper
     public void updateUiElements() {
         super.updateUiElements();
@@ -254,15 +275,18 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_pager, menu);
+        if (isSlideShowOn) {
+            getMenuInflater().inflate(R.menu.menu_view_page_slide_on, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_view_pager, menu);
 
-        menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
-        menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
-        menu.findItem(R.id.action_rotate).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right));
-        menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right).color(getIconColor()));
-        menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_left).color(getIconColor()));
-        menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_replay).color(getIconColor()));
-
+            menu.findItem(R.id.action_delete).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_delete));
+            menu.findItem(R.id.action_share).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_share));
+            menu.findItem(R.id.action_rotate).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right));
+            menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right).color(getIconColor()));
+            menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_left).color(getIconColor()));
+            menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_replay).color(getIconColor()));
+        }
         return true;
     }
 
@@ -281,13 +305,14 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
+        if (!isSlideShowOn) {
+            menu.setGroupVisible(R.id.only_photos_options, !getCurrentMedia().isVideo());
 
-        menu.setGroupVisible(R.id.only_photos_options, !getCurrentMedia().isVideo());
-
-        if (customUri) {
-            menu.setGroupVisible(R.id.on_internal_storage, false);
-            menu.setGroupVisible(R.id.only_photos_options, false);
-            menu.findItem(R.id.sort_action).setVisible(false);
+            if (customUri) {
+                menu.setGroupVisible(R.id.on_internal_storage, false);
+                menu.setGroupVisible(R.id.only_photos_options, false);
+                menu.findItem(R.id.sort_action).setVisible(false);
+            }
         }
         return super.onPrepareOptionsMenu(menu);
 
@@ -566,6 +591,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 startActivity(paletteIntent);
                 break;
 
+            case R.id.slide_show:
+                isSlideShowOn = !isSlideShowOn;
+                if (isSlideShowOn) handler.postDelayed(slideShowRunnable, SLIDE_SHOW_INTERVAL);
+                else handler.removeCallbacks(slideShowRunnable);
+                supportInvalidateOptionsMenu();
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -710,6 +741,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         });
         colorAnimation.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(slideShowRunnable);
+        handler = null;
     }
 }
 
