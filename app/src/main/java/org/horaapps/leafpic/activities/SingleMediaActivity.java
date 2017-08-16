@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -59,6 +60,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +75,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     private static final String TAG = SingleMediaActivity.class.getSimpleName();
 
+    private static final int SLIDE_SHOW_INTERVAL = 5000;
     private static final String ISLOCKED_ARG = "isLocked";
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
@@ -91,6 +95,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private Album album;
     private ArrayList<Media> media;
     private MediaPagerAdapter adapter;
+    private boolean isSlideShowOn = false;
 
 
     @Override
@@ -196,6 +201,22 @@ public class SingleMediaActivity extends SharedMediaActivity {
         }
     }
 
+    Handler handler = new Handler();
+    Runnable slideShowRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1) % album.getCount());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally{
+                handler.postDelayed(this, SLIDE_SHOW_INTERVAL);
+            }
+        }
+    };
+
     @CallSuper
     public void updateUiElements() {
         super.updateUiElements();
@@ -262,7 +283,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         menu.findItem(R.id.rotate_right_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_right).color(getIconColor()));
         menu.findItem(R.id.rotate_left_90).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_rotate_left).color(getIconColor()));
         menu.findItem(R.id.rotate_180).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_replay).color(getIconColor()));
-
+        menu.findItem(R.id.slide_show).setTitle(isSlideShowOn ? getString(R.string.stop_slide_show) : getString(R.string.start_slide_show));
         return true;
     }
 
@@ -565,6 +586,16 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 paletteIntent.setData(getCurrentMedia().getUri());
                 startActivity(paletteIntent);
                 break;
+
+            case R.id.slide_show:
+                isSlideShowOn = !isSlideShowOn;
+                if (isSlideShowOn) {
+                    item.setTitle(getString(R.string.stop_slide_show));
+                    handler.postDelayed(slideShowRunnable, SLIDE_SHOW_INTERVAL);
+                } else {
+                    item.setTitle(getString(R.string.start_slide_show));
+                    handler.removeCallbacks(slideShowRunnable);
+                }
 
             default:
                 // If we got here, the user's action was not recognized.
