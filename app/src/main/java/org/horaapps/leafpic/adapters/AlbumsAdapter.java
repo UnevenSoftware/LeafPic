@@ -60,9 +60,9 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     private Drawable placeholder;
     private CardViewStyle cvs;
 
-    public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
+    public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder, ArrayList<Album> albums) {
         super(context);
-        albums = new ArrayList<>();
+        this.albums = albums;
         placeholder = getThemeHelper().getPlaceHolder();
         cvs = CardViewStyle.fromValue(Hawk.get("card_view_style", 0));
         this.sortingMode = sortingMode;
