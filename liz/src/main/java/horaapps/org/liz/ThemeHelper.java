@@ -294,8 +294,10 @@ public class ThemeHelper {
 	}
 
 	public void themeButton(Button btn){
-		btn.setTextColor(getTextColor());
-		btn.setBackgroundColor(getButtonBackgroundColor());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			btn.setTextColor(getTextColor());
+			btn.setBackgroundColor(getButtonBackgroundColor());
+		}
 	}
 
 	public void setSwitchCompactColor(SwitchCompat sw, int color){
