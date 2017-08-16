@@ -742,5 +742,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
         });
         colorAnimation.start();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(slideShowRunnable);
+        handler = null;
+    }
 }
 
