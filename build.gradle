@@ -15,9 +15,9 @@ buildscript {
 }
 
 project.ext {
-    supportVersion = "26.0.0"
+    supportVersion = "26.0.1"
     sdkVersion = 26
-    buildToolsVersion = '26.0.0'
+    buildToolsVersion = '26.0.1'
 }
 
 allprojects {

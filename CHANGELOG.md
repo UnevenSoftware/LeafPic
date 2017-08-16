@@ -1,7 +1,13 @@
-v0.6-beta-1 
-==================
-* Fixed crash on startup and some random crash
-* Fixed crash opening video (Nougat)
-* fixed zoom out issue with SubScaling ImageView enabled
-* Updated translations
-* General improvements
+v0.9
+====
+
+### Features
+* Color Palette
+* Affix
+* Show all Images Feature #416
+* Delete/Move/Copy/Rename with progress dialog, and cancel feature #386
+
+### Fixes
+
+* Fixed crashes KitKAT #418 #410
+* Improved opening from other apps #417 #403
