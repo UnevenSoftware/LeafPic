@@ -4,6 +4,7 @@ v0.9
 ### Features
 * Color Palette
 * Affix
+* Slide Show #266
 * Show all Images Feature #416
 * Delete/Move/Copy/Rename with progress dialog, and cancel feature #386
 
