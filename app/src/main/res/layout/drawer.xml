@@ -102,7 +102,9 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <!-- ALL MEDIA IN DEVICE -->
+
+                <LinearLayout
                     android:id="@+id/ll_drawer_all_media"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,7 +119,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/big_spacing"
                         android:layout_marginRight="@dimen/big_spacing"
-                        app:iiv_icon="gmd-folder" />
+                        app:iiv_icon="gmd_photo_library" />
 
                     <TextView
                         android:id="@+id/Drawer_Allmedia_Item"
@@ -125,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="16dp"
                         android:paddingTop="16dp"
-                        android:text="@string/local_folder"
+                        android:text="@string/all_media"
                         android:textColor="@color/md_dark_background"
                         android:textSize="16sp" />
                 </LinearLayout>
