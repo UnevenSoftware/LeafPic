@@ -223,6 +223,14 @@ public class MainActivity extends SharedMediaActivity {
             }
         });
 
+        findViewById(R.id.ll_drawer_all_media).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                displayMedia(Album.getAllMediaAlbum());
+            }
+        });
+
         findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
