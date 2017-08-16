@@ -20,6 +20,7 @@ import java.util.ArrayList;
  */
 public class Album implements CursorHandler, Parcelable {
 
+	public static final long ALL_MEDIA_ALBUM_ID = 8000;
 	private String name, path;
 	private long id = -1, dateModified;
 	private int count = -1;
@@ -31,6 +32,11 @@ public class Album implements CursorHandler, Parcelable {
 	public Album(String path, String name) {
 		this.name = name;
 		this.path = path;
+	}
+
+	public Album(String name, long id) {
+		this.name = name;
+		this.id = id;
 	}
 
 	public Album(String path, String name, long id, int count, long dateModified) {
@@ -76,6 +82,12 @@ public class Album implements CursorHandler, Parcelable {
 
 	public static Album getEmptyAlbum() {
 		Album album = new Album(null, null);
+		album.settings = AlbumSettings.getDefaults();
+		return album;
+	}
+
+	public static Album getAllMediaAlbum() {
+		Album album = new Album("All Media", ALL_MEDIA_ALBUM_ID);
 		album.settings = AlbumSettings.getDefaults();
 		return album;
 	}

@@ -306,6 +306,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
 
     <!--DRAWER ITEMS -->
     <string name="local_folder">Local Folders</string>
+    <string name="all_media">All Media</string>
     <string name="hidden_folder">Hidden Folders</string>
     <string name="tags">Tags</string>
     <string name="timeline">Timeline</string>
