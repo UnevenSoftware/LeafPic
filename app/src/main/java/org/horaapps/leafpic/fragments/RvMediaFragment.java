@@ -460,6 +460,8 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribe(success -> {
                         },
                         (e) -> {
+                            progressDialog.dismiss();
+                            act.requestSdCardPermissions();
                         },
                         () -> {
                             progressDialog.dismiss();

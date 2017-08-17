@@ -366,6 +366,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         }
                     } else {
                         Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
+                        requestSdCardPermissions();
                     }
                     adapter.notifyDataSetChanged();
                     updatePageTitle(mViewPager.getCurrentItem());

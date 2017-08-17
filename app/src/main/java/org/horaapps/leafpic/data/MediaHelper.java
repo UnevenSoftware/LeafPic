@@ -26,7 +26,12 @@ public class MediaHelper {
     public static Observable<Boolean> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
         return Observable.create(subscriber -> {
             for (Media media : mediaToDelete) {
-                subscriber.onNext(isDeleteSuccess(context, media));
+                boolean deleteSuccess = isDeleteSuccess(context, media);
+                if (deleteSuccess) {
+                    subscriber.onNext(true);
+                } else {
+                    subscriber.onError(new Exception("Cannot delete file"));
+                }
             }
             subscriber.onComplete();
         });
