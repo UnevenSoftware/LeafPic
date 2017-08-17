@@ -2,6 +2,7 @@ package org.horaapps.leafpic.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -359,6 +360,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(success -> {
                     if (success) {
+                        setResult(Activity.RESULT_OK);
                         media.remove(currentMedia);
 
                         if (media.size() == 0) {

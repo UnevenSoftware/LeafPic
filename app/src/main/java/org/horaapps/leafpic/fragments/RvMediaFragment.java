@@ -1,13 +1,12 @@
 package org.horaapps.leafpic.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -74,8 +73,6 @@ public class RvMediaFragment extends BaseFragment {
 
     private MainActivity act;
 
-    private boolean isContentObserverRegistered = false;
-
     private Album album;
 
     public static RvMediaFragment make(Album album) {
@@ -91,21 +88,6 @@ public class RvMediaFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         album = getArguments().getParcelable("album");
-    }
-
-    ContentObserver contentObserver = new ContentObserver(new Handler()) {
-        @Override
-        public void onChange(boolean selfChange) {
-            display();
-        }
-    };
-
-    private void registerContentObserver() {
-        if (!isContentObserverRegistered) {
-            isContentObserverRegistered = true;
-            act.getContentResolver().registerContentObserver(MediaHelper.external,
-                    true, contentObserver);
-        }
     }
 
     @Override
@@ -171,8 +153,7 @@ public class RvMediaFragment extends BaseFragment {
                     intent.putExtra("media", adapter.getMedia());
                     intent.putExtra("position", pos);
 
-                    getContext().startActivity(intent);
-                    registerContentObserver();
+                    startActivityForResult(intent, 100);
                     //Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show();
                 });
 
@@ -448,12 +429,6 @@ public class RvMediaFragment extends BaseFragment {
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        act.getContentResolver().unregisterContentObserver(contentObserver);
-    }
-
     private void deleteSelected() {
         ArrayList<Media> selected = adapter.getSelected();
         AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act
@@ -473,5 +448,13 @@ public class RvMediaFragment extends BaseFragment {
                             clearSelected();
                             display();
                         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            display();
+        }
     }
 }

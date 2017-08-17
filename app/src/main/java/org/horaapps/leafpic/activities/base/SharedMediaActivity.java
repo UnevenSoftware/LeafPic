@@ -56,5 +56,6 @@ public abstract class SharedMediaActivity extends ThemedActivity {
                 Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
             }
         }
+        super.onActivityResult(requestCode, resultCode, resultData);
     }
 }
