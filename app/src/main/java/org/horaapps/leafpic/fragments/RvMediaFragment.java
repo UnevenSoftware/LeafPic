@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
@@ -38,7 +41,9 @@ import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -312,6 +317,36 @@ public class RvMediaFragment extends BaseFragment {
                 display();
                 return true;
 
+            case R.id.delete:
+                final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(act, R.string.delete, R.string.delete_photo_message);
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        textDialog.dismiss();
+                    }
+                });
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (Security.isPasswordOnDelete(act)) {
+
+                            Security.askPassword(act, new Security.PasswordInterface() {
+                                @Override
+                                public void onSuccess() {
+                                    deleteSelected();
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Toast.makeText(act, R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else
+                            deleteSelected();
+                    }
+                });
+                textDialog.show();
+                return true;
+
             case R.id.sharePhotos:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
@@ -410,5 +445,16 @@ public class RvMediaFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         act.getContentResolver().unregisterContentObserver(contentObserver);
+    }
+
+    private void deleteSelected() {
+        ArrayList<Media> selected = adapter.getSelected();
+        AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act, getString(R.string.delete), getString(R.string.delete_in_progress));
+        progressDialog.show();
+        MediaHelper.deleteMedia(act, selected)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(success -> {
+                }, (e) -> {}, progressDialog::dismiss);
     }
 }
