@@ -8,6 +8,9 @@ import android.provider.MediaStore;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
 
 /**
  * Created by dnld on 8/8/17.
@@ -16,13 +19,15 @@ import java.io.File;
 public class MediaHelper {
     private static Uri external = MediaStore.Files.getContentUri("external");
 
-    public static boolean deleteMedia(Context context, Media media) {
-        File file = new File(media.getPath());
-        boolean success = StorageHelper.deleteFile(context, file);
-        if (success)
-            context.getContentResolver().delete(external,
-                    MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
-        return success;
+    public static Observable<Boolean> deleteMedia(Context context, Media media) {
+        return Observable.fromCallable(() -> {
+            File file = new File(media.getPath());
+            boolean success = StorageHelper.deleteFile(context, file);
+            if (success)
+                context.getContentResolver().delete(external,
+                        MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
+            return success;
+        });
     }
 
     public static boolean renameMedia(Context context, Media media, String newName) {

@@ -60,12 +60,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import horaapps.org.liz.ColorPalette;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by dnld on 18/02/16.
@@ -354,20 +354,22 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     private void deleteCurrentMedia() {
         Media currentMedia = getCurrentMedia();
+        MediaHelper.deleteMedia(getApplicationContext(), currentMedia)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(success -> {
+                    if (success) {
+                        media.remove(currentMedia);
 
-        boolean success = MediaHelper.deleteMedia(getApplicationContext(), currentMedia);
-
-        if (success) {
-            media.remove(currentMedia);
-
-            if (media.size() == 0) {
-                displayAlbums();
-            }
-        } else {
-            Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
-        }
-        adapter.notifyDataSetChanged();
-        updatePageTitle(mViewPager.getCurrentItem());
+                        if (media.size() == 0) {
+                            displayAlbums();
+                        }
+                    } else {
+                        Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
+                    }
+                    adapter.notifyDataSetChanged();
+                    updatePageTitle(mViewPager.getCurrentItem());
+                });
     }
 
     @Override
