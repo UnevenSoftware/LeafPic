@@ -9,6 +9,7 @@ import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.util.concurrent.Callable;
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
 
@@ -27,6 +28,20 @@ public class MediaHelper {
                 context.getContentResolver().delete(external,
                         MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
             return success;
+        });
+    }
+
+    public static Observable<Boolean> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
+        return Observable.create(subscriber -> {
+            for(Media media : mediaToDelete) {
+                File file = new File(media.getPath());
+                boolean success = StorageHelper.deleteFile(context, file);
+                if (success)
+                    context.getContentResolver().delete(external,
+                            MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
+                subscriber.onNext(success);
+            }
+            subscriber.onComplete();
         });
     }
 
