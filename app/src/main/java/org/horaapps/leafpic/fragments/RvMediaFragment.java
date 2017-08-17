@@ -74,6 +74,8 @@ public class RvMediaFragment extends BaseFragment {
 
     private MainActivity act;
 
+    private boolean isContentObserverRegistered = false;
+
     private Album album;
 
     public static RvMediaFragment make(Album album) {
@@ -99,8 +101,11 @@ public class RvMediaFragment extends BaseFragment {
     };
 
     private void registerContentObserver() {
-        act.getContentResolver().registerContentObserver(MediaHelper.external,
-                true, contentObserver);
+        if (!isContentObserverRegistered) {
+            isContentObserverRegistered = true;
+            act.getContentResolver().registerContentObserver(MediaHelper.external,
+                    true, contentObserver);
+        }
     }
 
     @Override
