@@ -64,8 +64,10 @@ public class RvMediaFragment extends BaseFragment {
 
     private static final String TAG = "asd";
 
-    @BindView(R.id.media) RecyclerView rv;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
+    @BindView(R.id.media)
+    RecyclerView rv;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout refresh;
 
     private MediaAdapter adapter;
     private GridSpacingItemDecoration spacingDecoration;
@@ -86,7 +88,6 @@ public class RvMediaFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        registerContentObserver();
         album = getArguments().getParcelable("album");
     }
 
@@ -166,6 +167,7 @@ public class RvMediaFragment extends BaseFragment {
                     intent.putExtra("position", pos);
 
                     getContext().startActivity(intent);
+                    registerContentObserver();
                     //Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show();
                 });
 
@@ -187,7 +189,6 @@ public class RvMediaFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         display();
     }
-
 
 
     @Override
@@ -251,8 +252,8 @@ public class RvMediaFragment extends BaseFragment {
 
         menu.findItem(R.id.select_all).setIcon(ThemeHelper.getToolbarIcon(getContext(), GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
-        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_share)));
-        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_sort)));
+        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_share)));
+        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_sort)));
         menu.findItem(R.id.filter_menu).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_filter_list)));
     }
 
@@ -279,11 +280,19 @@ public class RvMediaFragment extends BaseFragment {
 
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
             switch (sortingMode()) {
-                case NAME:  menu.findItem(R.id.name_sort_mode).setChecked(true); break;
-                case SIZE:  menu.findItem(R.id.size_sort_mode).setChecked(true); break;
-                case DATE: default:
-                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true); break;
-                case NUMERIC:  menu.findItem(R.id.numeric_sort_mode).setChecked(true); break;
+                case NAME:
+                    menu.findItem(R.id.name_sort_mode).setChecked(true);
+                    break;
+                case SIZE:
+                    menu.findItem(R.id.size_sort_mode).setChecked(true);
+                    break;
+                case DATE:
+                default:
+                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true);
+                    break;
+                case NUMERIC:
+                    menu.findItem(R.id.numeric_sort_mode).setChecked(true);
+                    break;
             }
         }
     }
@@ -442,6 +451,7 @@ public class RvMediaFragment extends BaseFragment {
 
     private void deleteSelected() {
         ArrayList<Media> selected = adapter.getSelected();
+        clearSelected();
         AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act
                 , getString(R.string.delete), getString(R.string.delete_in_progress));
         progressDialog.show();
@@ -449,6 +459,12 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(success -> {
-                }, (e) -> {}, progressDialog::dismiss);
+                        },
+                        (e) -> {
+                        },
+                        () -> {
+                            progressDialog.dismiss();
+                            display();
+                        });
     }
 }

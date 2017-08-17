@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
-import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
