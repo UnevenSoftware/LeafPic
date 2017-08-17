@@ -20,28 +20,25 @@ public class MediaHelper {
     public static Uri external = MediaStore.Files.getContentUri("external");
 
     public static Observable<Boolean> deleteMedia(Context context, Media media) {
-        return Observable.fromCallable(() -> {
-            File file = new File(media.getPath());
-            boolean success = StorageHelper.deleteFile(context, file);
-            if (success)
-                context.getContentResolver().delete(external,
-                        MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
-            return success;
-        });
+        return Observable.fromCallable(() -> isDeleteSuccess(context, media));
     }
 
     public static Observable<Boolean> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
         return Observable.create(subscriber -> {
-            for(Media media : mediaToDelete) {
-                File file = new File(media.getPath());
-                boolean success = StorageHelper.deleteFile(context, file);
-                if (success)
-                    context.getContentResolver().delete(external,
-                            MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
-                subscriber.onNext(success);
+            for (Media media : mediaToDelete) {
+                subscriber.onNext(isDeleteSuccess(context, media));
             }
             subscriber.onComplete();
         });
+    }
+
+    private static boolean isDeleteSuccess(Context context, Media media) {
+        File file = new File(media.getPath());
+        boolean success = StorageHelper.deleteFile(context, file);
+        if (success)
+            context.getContentResolver().delete(external,
+                    MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
+        return success;
     }
 
     public static boolean renameMedia(Context context, Media media, String newName) {

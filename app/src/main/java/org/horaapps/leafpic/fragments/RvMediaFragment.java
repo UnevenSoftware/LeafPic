@@ -451,7 +451,6 @@ public class RvMediaFragment extends BaseFragment {
 
     private void deleteSelected() {
         ArrayList<Media> selected = adapter.getSelected();
-        clearSelected();
         AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act
                 , getString(R.string.delete), getString(R.string.delete_in_progress));
         progressDialog.show();
@@ -464,6 +463,7 @@ public class RvMediaFragment extends BaseFragment {
                         },
                         () -> {
                             progressDialog.dismiss();
+                            clearSelected();
                             display();
                         });
     }
