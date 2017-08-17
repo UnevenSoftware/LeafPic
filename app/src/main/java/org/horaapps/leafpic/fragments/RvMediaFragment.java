@@ -318,31 +318,24 @@ public class RvMediaFragment extends BaseFragment {
                 return true;
 
             case R.id.delete:
-                final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(act, R.string.delete, R.string.delete_photo_message);
-                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        textDialog.dismiss();
-                    }
-                });
-                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (Security.isPasswordOnDelete(act)) {
+                final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(act, R.string.delete, R.string.delete_photos_message);
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> textDialog.dismiss());
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), (dialog, id) -> {
+                    if (Security.isPasswordOnDelete(act)) {
 
-                            Security.askPassword(act, new Security.PasswordInterface() {
-                                @Override
-                                public void onSuccess() {
-                                    deleteSelected();
-                                }
+                        Security.askPassword(act, new Security.PasswordInterface() {
+                            @Override
+                            public void onSuccess() {
+                                deleteSelected();
+                            }
 
-                                @Override
-                                public void onError() {
-                                    Toast.makeText(act, R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else
-                            deleteSelected();
-                    }
+                            @Override
+                            public void onError() {
+                                Toast.makeText(act, R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else
+                        deleteSelected();
                 });
                 textDialog.show();
                 return true;
@@ -449,7 +442,8 @@ public class RvMediaFragment extends BaseFragment {
 
     private void deleteSelected() {
         ArrayList<Media> selected = adapter.getSelected();
-        AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act, getString(R.string.delete), getString(R.string.delete_in_progress));
+        AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act
+                , getString(R.string.delete), getString(R.string.delete_in_progress));
         progressDialog.show();
         MediaHelper.deleteMedia(act, selected)
                 .subscribeOn(Schedulers.io())
