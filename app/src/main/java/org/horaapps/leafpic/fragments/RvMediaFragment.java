@@ -320,7 +320,7 @@ public class RvMediaFragment extends BaseFragment {
 
             case R.id.action_palette:
                 Intent paletteIntent = new Intent(act, PaletteActivity.class);
-                paletteIntent.putExtra("imageUri", adapter.getFirstSelected().getUri().toString());
+                paletteIntent.setData(adapter.getFirstSelected().getUri());
                 startActivity(paletteIntent);
                 return true;
 
