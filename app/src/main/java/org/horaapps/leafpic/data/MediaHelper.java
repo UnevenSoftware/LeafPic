@@ -8,15 +8,36 @@ import android.provider.MediaStore;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import io.reactivex.Observable;
 
 /**
  * Created by dnld on 8/8/17.
  */
 
 public class MediaHelper {
-    private static Uri external = MediaStore.Files.getContentUri("external");
+    public static Uri external = MediaStore.Files.getContentUri("external");
 
-    public static boolean deleteMedia(Context context, Media media) {
+    public static Observable<Boolean> deleteMedia(Context context, Media media) {
+        return Observable.fromCallable(() -> isDeleteSuccess(context, media));
+    }
+
+    public static Observable<Boolean> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
+        return Observable.create(subscriber -> {
+            for (Media media : mediaToDelete) {
+                boolean deleteSuccess = isDeleteSuccess(context, media);
+                if (deleteSuccess) {
+                    subscriber.onNext(true);
+                } else {
+                    subscriber.onError(new Exception("Cannot delete file"));
+                }
+            }
+            subscriber.onComplete();
+        });
+    }
+
+    private static boolean isDeleteSuccess(Context context, Media media) {
         File file = new File(media.getPath());
         boolean success = StorageHelper.deleteFile(context, file);
         if (success)

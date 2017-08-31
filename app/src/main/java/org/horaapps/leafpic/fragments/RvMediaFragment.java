@@ -1,12 +1,15 @@
 package org.horaapps.leafpic.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
@@ -30,12 +34,15 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.filter.FilterMode;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -56,8 +63,10 @@ public class RvMediaFragment extends BaseFragment {
 
     private static final String TAG = "asd";
 
-    @BindView(R.id.media) RecyclerView rv;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
+    @BindView(R.id.media)
+    RecyclerView rv;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout refresh;
 
     private MediaAdapter adapter;
     private GridSpacingItemDecoration spacingDecoration;
@@ -78,7 +87,6 @@ public class RvMediaFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         album = getArguments().getParcelable("album");
     }
 
@@ -145,7 +153,7 @@ public class RvMediaFragment extends BaseFragment {
                     intent.putExtra("media", adapter.getMedia());
                     intent.putExtra("position", pos);
 
-                    getContext().startActivity(intent);
+                    startActivityForResult(intent, 100);
                     //Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show();
                 });
 
@@ -167,7 +175,6 @@ public class RvMediaFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         display();
     }
-
 
 
     @Override
@@ -231,8 +238,8 @@ public class RvMediaFragment extends BaseFragment {
 
         menu.findItem(R.id.select_all).setIcon(ThemeHelper.getToolbarIcon(getContext(), GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
-        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_share)));
-        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_sort)));
+        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_share)));
+        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_sort)));
         menu.findItem(R.id.filter_menu).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_filter_list)));
     }
 
@@ -259,11 +266,19 @@ public class RvMediaFragment extends BaseFragment {
 
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
             switch (sortingMode()) {
-                case NAME:  menu.findItem(R.id.name_sort_mode).setChecked(true); break;
-                case SIZE:  menu.findItem(R.id.size_sort_mode).setChecked(true); break;
-                case DATE: default:
-                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true); break;
-                case NUMERIC:  menu.findItem(R.id.numeric_sort_mode).setChecked(true); break;
+                case NAME:
+                    menu.findItem(R.id.name_sort_mode).setChecked(true);
+                    break;
+                case SIZE:
+                    menu.findItem(R.id.size_sort_mode).setChecked(true);
+                    break;
+                case DATE:
+                default:
+                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true);
+                    break;
+                case NUMERIC:
+                    menu.findItem(R.id.numeric_sort_mode).setChecked(true);
+                    break;
             }
         }
     }
@@ -295,6 +310,29 @@ public class RvMediaFragment extends BaseFragment {
                 album.setFilterMode(FilterMode.GIF);
                 item.setChecked(true);
                 display();
+                return true;
+
+            case R.id.delete:
+                final AlertDialog textDialog = AlertDialogsHelper.getTextDialog(act, R.string.delete, R.string.delete_photos_message);
+                textDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> textDialog.dismiss());
+                textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), (dialog, id) -> {
+                    if (Security.isPasswordOnDelete(act)) {
+
+                        Security.askPassword(act, new Security.PasswordInterface() {
+                            @Override
+                            public void onSuccess() {
+                                deleteSelected();
+                            }
+
+                            @Override
+                            public void onError() {
+                                Toast.makeText(act, R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else
+                        deleteSelected();
+                });
+                textDialog.show();
                 return true;
 
             case R.id.sharePhotos:
@@ -389,5 +427,34 @@ public class RvMediaFragment extends BaseFragment {
         adapter.refreshTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
+    }
+
+    private void deleteSelected() {
+        ArrayList<Media> selected = adapter.getSelected();
+        AlertDialog progressDialog = AlertDialogsHelper.getProgressDialog(act
+                , getString(R.string.delete), getString(R.string.delete_in_progress));
+        progressDialog.show();
+        MediaHelper.deleteMedia(act, selected)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(success -> {
+                        },
+                        (e) -> {
+                            progressDialog.dismiss();
+                            act.requestSdCardPermissions();
+                        },
+                        () -> {
+                            progressDialog.dismiss();
+                            clearSelected();
+                            display();
+                        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            display();
+        }
     }
 }

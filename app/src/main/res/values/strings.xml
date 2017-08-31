@@ -96,6 +96,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="delete_photos_message">Are you sure you want to delete all the selected media?</string>
     <string name="hide_albums_message">Are you sure you want to hide the selected albums?</string>
     <string name="unhide_album_message">Un-hiding this album you will also make the media available for other apps.</string>
+    <string name="delete_in_progress">Deleting&#8230;</string>
 
     <string name="new_folder_message">The new folder will be created in the current path, and
         then the media will be copied or moved in the new folder.
