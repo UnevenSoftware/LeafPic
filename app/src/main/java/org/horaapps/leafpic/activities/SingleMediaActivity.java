@@ -60,8 +60,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -535,7 +533,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 return true;
 
             case R.id.action_rename:
-                final EditText editTextNewName = new EditText(getApplicationContext());
+                final EditText editTextNewName = new EditText(this);
                 editTextNewName.setText(StringUtils.getPhotoNameByPath(getCurrentMedia().getPath()));
 
                 AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(this, editTextNewName, R.string.rename_photo_action);
