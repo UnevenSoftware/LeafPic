@@ -746,8 +746,8 @@ public class MainActivity extends SharedMediaActivity {
 
                 return true;
 
-            case R.id.rename:
-                /*final EditText editTextNewName = new EditText(getApplicationContext());
+            /*case R.id.rename:
+                final EditText editTextNewName = new EditText(getApplicationContext());
                 editTextNewName.setText(albumsMode ? firstSelectedAlbum.getName() : getAlbum().getName());
 
                 final AlertDialog insertTextDialog = AlertDialogsHelper.getInsertTextDialog(MainActivity.this, editTextNewName, R.string.rename_album);
@@ -787,8 +787,8 @@ public class MainActivity extends SharedMediaActivity {
                     }
                 });
 
-                insertTextDialog.show();*/
-                return true;
+                insertTextDialog.show();
+                return true;*/
 
 
 

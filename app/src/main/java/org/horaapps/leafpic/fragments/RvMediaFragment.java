@@ -1,12 +1,14 @@
 package org.horaapps.leafpic.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
@@ -30,12 +33,15 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.filter.FilterMode;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
+import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -322,6 +328,27 @@ public class RvMediaFragment extends BaseFragment {
                 Intent paletteIntent = new Intent(act, PaletteActivity.class);
                 paletteIntent.setData(adapter.getFirstSelected().getUri());
                 startActivity(paletteIntent);
+                return true;
+
+            case R.id.rename:
+                final EditText editTextNewName = new EditText(getActivity());
+                editTextNewName.setText(StringUtils.getPhotoNameByPath(adapter.getFirstSelected().getPath()));
+
+                AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(act, editTextNewName, R.string.rename_photo_action);
+
+                renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), (dialog, which) -> {
+                    if (editTextNewName.length() != 0) {
+                        boolean b = MediaHelper.renameMedia(getActivity(), adapter.getFirstSelected(), editTextNewName.getText().toString());
+                        if (!b) {
+                            StringUtils.showToast(getActivity(), getString(R.string.rename_error));
+                            //adapter.notifyDataSetChanged();
+                        } else
+                            adapter.clearSelected(); // Deselect media if rename successful
+                    } else
+                        StringUtils.showToast(getActivity(), getString(R.string.nothing_changed));
+                });
+                renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), (dialog, which) -> dialog.dismiss());
+                renameDialog.show();
                 return true;
 
             case R.id.select_all:
