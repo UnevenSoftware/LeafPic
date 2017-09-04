@@ -71,6 +71,7 @@ public class AlbumsFragment extends BaseFragment {
     private MainActivity act;
     private boolean hidden = false;
     ArrayList<String> excuded = new ArrayList<>();
+    private ArrayList<Album> albumList = new ArrayList<>();
 
 
     @Override
@@ -121,7 +122,9 @@ public class AlbumsFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        displayAlbums();
+        if (albumList.isEmpty()) {
+            displayAlbums();
+        }
     }
 
     @Override
@@ -173,7 +176,7 @@ public class AlbumsFragment extends BaseFragment {
         rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
 
         adapter = new AlbumsAdapter(
-                getContext(), sortingMode(), sortingOrder());
+                getContext(), sortingMode(), sortingOrder(), albumList);
 
         adapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
