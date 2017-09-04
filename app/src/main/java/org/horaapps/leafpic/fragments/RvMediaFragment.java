@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -84,8 +86,20 @@ public class RvMediaFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        registerContentObserver();
         album = getArguments().getParcelable("album");
+    }
+
+    ContentObserver contentObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            display();
+        }
+    };
+
+    private void registerContentObserver() {
+        act.getContentResolver().registerContentObserver(MediaHelper.external,
+                true, contentObserver);
     }
 
     @Override
@@ -416,5 +430,11 @@ public class RvMediaFragment extends BaseFragment {
         adapter.refreshTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        act.getContentResolver().unregisterContentObserver(contentObserver);
     }
 }
