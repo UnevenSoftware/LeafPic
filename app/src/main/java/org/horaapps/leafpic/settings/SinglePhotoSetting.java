@@ -53,7 +53,7 @@ public class SinglePhotoSetting extends ThemedSetting {
 
         final LineColorPicker transparencyColorPicker = (LineColorPicker) dialogLayout.findViewById(R.id.pickerTransparent);
         transparencyColorPicker.setColors(ColorPalette.getTransparencyShadows(getActivity().getPrimaryColor()));
-        transparencyColorPicker.setSelectedColor(ColorPalette.getTransparentColor(getActivity().getPrimaryColor(), getActivity().getTransparency()));
+        transparencyColorPicker.setSelectedColor(ColorPalette.getTransparentColor(getActivity().getPrimaryColor(), 255 - Hawk.get(getActivity().getString(R.string.preference_transparency), 0)));
 
         /**TEXT VIEWS**/
         ((TextView) dialogLayout.findViewById(R.id.seek_bar_alpha_title)).setTextColor(getActivity().getTextColor());

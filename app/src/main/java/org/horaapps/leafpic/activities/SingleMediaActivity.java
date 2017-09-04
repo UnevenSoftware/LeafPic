@@ -60,8 +60,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -223,7 +221,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         /**** Theme ****/
         toolbar.setBackgroundColor(
                 themeOnSingleImgAct()
-                        ? ColorPalette.getTransparentColor(getPrimaryColor(), getTransparency())
+                        ? ColorPalette.getTransparentColor(getPrimaryColor(), 255 - Hawk.get(getString(R.string.preference_transparency), 0))
                         : ColorPalette.getTransparentColor(getDefaultThemeToolbarColor3th(), 175));
 
         toolbar.setPopupTheme(getPopupToolbarStyle());
