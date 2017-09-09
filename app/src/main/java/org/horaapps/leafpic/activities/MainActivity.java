@@ -53,6 +53,7 @@ import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -70,10 +71,14 @@ public class MainActivity extends SharedMediaActivity {
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
 
-    @BindView(R.id.fab_camera) FloatingActionButton fab;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.coordinator_main_layout) CoordinatorLayout mainLayout;
+    @BindView(R.id.fab_camera)
+    FloatingActionButton fab;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.coordinator_main_layout)
+    CoordinatorLayout mainLayout;
 
     private boolean pickMode = false;
     private boolean albumsMode = true;
@@ -156,7 +161,7 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     @Deprecated
-    private boolean displayData(Intent data){
+    private boolean displayData(Intent data) {
 
         // TODO: 3/25/17 pick porcodio
         pickMode = data.getBooleanExtra(SplashScreen.PICK_MODE, false);
@@ -184,8 +189,11 @@ public class MainActivity extends SharedMediaActivity {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) { }
-            public void onDrawerOpened(View drawerView) { }
+            public void onDrawerClosed(View view) {
+            }
+
+            public void onDrawerOpened(View drawerView) {
+            }
         };
 
 
@@ -231,21 +239,32 @@ public class MainActivity extends SharedMediaActivity {
         findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Security.isPasswordOnHidden(getApplicationContext()) && Security.isFingerprintUsed(getApplicationContext()) && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    FingerprintHandler fingerprintHandler = new FingerprintHandler(getApplicationContext());
+                    if (fingerprintHandler.isFingerprintSupported()) {
+                        Security.AskFingerprint askFingerprint = new Security().new AskFingerprint();
+                        askFingerprint.ask(MainActivity.this, new Security.FingerprintInterface() {
+                            @Override
+                            public void onSuccess() {
+                                drawer.closeDrawer(GravityCompat.START);
+                                displayAlbums(true);
+                            }
 
-                // TODO: 3/25/17 redo
-                if (Security.isPasswordOnHidden(getApplicationContext())){
-                    Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
-                        @Override
-                        public void onSuccess() {
-                            drawer.closeDrawer(GravityCompat.START);
-                            displayAlbums(true);
-                        }
+                            @Override
+                            public void onError() {
+                                Toast.makeText(getApplicationContext(), R.string.fingerprint_error, Toast.LENGTH_SHORT).show();
+                            }
 
-                        @Override
-                        public void onError() {
-                            Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onUsePsw() {
+                                askPassword();
+                            }
+                        });
+                    }else {
+                        askPassword();
+                    }
+                }else if (Security.isPasswordOnHidden(getApplicationContext())) {
+                    askPassword();
                 } else {
                     drawer.closeDrawer(GravityCompat.START);
                     displayAlbums(true);
@@ -266,6 +285,21 @@ public class MainActivity extends SharedMediaActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+            }
+        });
+    }
+
+    private void askPassword() {
+        Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
+            @Override
+            public void onSuccess() {
+                drawer.closeDrawer(GravityCompat.START);
+                displayAlbums(true);
+            }
+
+            @Override
+            public void onError() {
+                Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -525,11 +559,12 @@ public class MainActivity extends SharedMediaActivity {
 
             //region Affix
             // TODO: 11/21/16 move away from here
-            case  R.id.affix:
+            case R.id.affix:
 
                 //region Async MediaAffix
                 class affixMedia extends AsyncTask<Affix.Options, Integer, Void> {
                     private AlertDialog dialog;
+
                     @Override
                     protected void onPreExecute() {
                         super.onPreExecute();
@@ -555,6 +590,7 @@ public class MainActivity extends SharedMediaActivity {
                         });
                         return null;
                     }
+
                     @Override
                     protected void onPostExecute(Void result) {
                         //editMode = false;
@@ -595,7 +631,6 @@ public class MainActivity extends SharedMediaActivity {
                 //llExampleV.setBackgroundColor(getCardBackgroundColor());
 
 
-
                 //endregion
 
                 //region THEME STUFF
@@ -629,14 +664,14 @@ public class MainActivity extends SharedMediaActivity {
                 ((IconicsImageView) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
 
                 //Example bg
-                color=getCardBackgroundColor();
+                color = getCardBackgroundColor();
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setBackgroundColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setBackgroundColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setBackgroundColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setBackgroundColor(color);
 
                 seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
-                seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(),PorterDuff.Mode.SRC_IN));
+                seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
 
                 themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
                 themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_png));
@@ -649,10 +684,12 @@ public class MainActivity extends SharedMediaActivity {
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         txtQuality.setText(StringUtils.html(String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
                     }
+
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
 
                     }
+
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -685,12 +722,16 @@ public class MainActivity extends SharedMediaActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         Bitmap.CompressFormat compressFormat;
                         switch (radioFormatGroup.getCheckedRadioButtonId()) {
-                            case R.id.radio_jpeg: default:
-                                compressFormat = Bitmap.CompressFormat.JPEG; break;
+                            case R.id.radio_jpeg:
+                            default:
+                                compressFormat = Bitmap.CompressFormat.JPEG;
+                                break;
                             case R.id.radio_png:
-                                compressFormat = Bitmap.CompressFormat.PNG; break;
+                                compressFormat = Bitmap.CompressFormat.PNG;
+                                break;
                             case R.id.radio_webp:
-                                compressFormat = Bitmap.CompressFormat.WEBP; break;
+                                compressFormat = Bitmap.CompressFormat.WEBP;
+                                break;
                         }
 
                         Affix.Options options = new Affix.Options(
@@ -699,7 +740,8 @@ public class MainActivity extends SharedMediaActivity {
                                 seekQuality.getProgress(),
                                 swVertical.isChecked());
                         new affixMedia().execute(options);
-                    }});
+                    }
+                });
                 builder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
                 builder.show();
 
@@ -727,7 +769,8 @@ public class MainActivity extends SharedMediaActivity {
                                 } else requestSdCardPermissions();*/
 
                                 //swipeRefreshLayout.setRefreshing(false);
-                            }}).show();
+                            }
+                        }).show();
                 return true;
 
             case R.id.action_copy:
@@ -791,11 +834,6 @@ public class MainActivity extends SharedMediaActivity {
                 return true;*/
 
 
-
-
-
-
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -815,7 +853,7 @@ public class MainActivity extends SharedMediaActivity {
             }
         } else {
             if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
-               goBackToAlbums();
+                goBackToAlbums();
         }
     }
 }

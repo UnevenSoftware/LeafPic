@@ -66,7 +66,7 @@
                 </RelativeLayout>
             </LinearLayout>
             <!--USE FINGERPRINT-->
-            <!--
+
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/ll_active_security_fingerprint"
@@ -76,8 +76,8 @@
                 >
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/active_security_fingerprint_icon"
-                    android:layout_width="@dimen/20dp"
-                    android:layout_height="@dimen/20dp"
+                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_height="@dimen/icon_width_height"
                     android:layout_gravity="center_vertical"
                     app:iiv_icon="gmd-fingerprint"
                     android:layout_margin="@dimen/big_spacing"
@@ -114,7 +114,6 @@
                         />
                 </RelativeLayout>
             </LinearLayout>
-            -->
             <!--BODY-->
             <LinearLayout
                 android:id="@+id/ll_security_dialog_body"

@@ -2,6 +2,7 @@ package org.horaapps.leafpic.activities;
 
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AlertDialog;
@@ -19,9 +20,12 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
+
+import static android.view.View.GONE;
 
 /**
  * Created by dnld on 22/05/16.
@@ -34,19 +38,36 @@ public class SecurityActivity extends ThemedActivity {
     private SwitchCompat swActiveSecurity;
     private SwitchCompat swApplySecurityDelete;
     private SwitchCompat swApplySecurityHidden;
+    private SwitchCompat swFingerPrint;
+    private LinearLayout llFingerprint;
+    private FingerprintHandler fingerprintHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(org.horaapps.leafpic.R.layout.activity_security);
-        llroot = (LinearLayout) findViewById(org.horaapps.leafpic.R.id.root);
-        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
-        swActiveSecurity = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.active_security_switch);
-        swApplySecurityDelete = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_switch);
-        swApplySecurityHidden = (SwitchCompat) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_switch);
+        setContentView(R.layout.activity_security);
+        llroot = (LinearLayout) findViewById(R.id.root);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        swActiveSecurity = (SwitchCompat) findViewById(R.id.active_security_switch);
+        swApplySecurityDelete = (SwitchCompat) findViewById(R.id.security_body_apply_delete_switch);
+        swApplySecurityHidden = (SwitchCompat) findViewById(R.id.security_body_apply_hidden_switch);
+        swFingerPrint = (SwitchCompat) findViewById(R.id.active_security_fingerprint_switch);
+        llFingerprint = (LinearLayout) findViewById(R.id.ll_active_security_fingerprint);
 
 
         initUi();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fingerprintHandler = new FingerprintHandler(this);
+            if(fingerprintHandler.isFingerprintSupported()){
+                llFingerprint.setVisibility(View.VISIBLE);
+            }else{
+                llFingerprint.setVisibility(View.GONE);
+            }
+        }else{
+            llFingerprint.setVisibility(View.GONE);
+        }
+
+
         /** - SWITCHES - **/
         /** - ACTIVE SECURITY - **/
         swActiveSecurity.setChecked(Security.isPasswordSet(getApplicationContext()));
@@ -57,7 +78,19 @@ public class SecurityActivity extends ThemedActivity {
                 swActiveSecurity.setChecked(!swActiveSecurity.isChecked());
                 setSwitchColor(getAccentColor(), swActiveSecurity);
                 if (swActiveSecurity.isChecked()) setPasswordDialog();
-                else Security.clearPassword(getApplicationContext());
+                else{
+                    Security.clearPassword(getApplicationContext());
+                    swApplySecurityHidden.setChecked(false);
+                    swApplySecurityDelete.setChecked(false);
+                    swFingerPrint.setChecked(false);
+                    Security.setFingerprintUnlock(getApplicationContext(), swFingerPrint.isChecked());
+                    Security.setPasswordOnDelete(getApplicationContext(), swApplySecurityDelete.isChecked());
+                    Security.setPasswordOnHidden(getApplicationContext(), swApplySecurityHidden.isChecked());
+                    setSwitchColor(getAccentColor(), swApplySecurityHidden);
+                    setSwitchColor(getAccentColor(), swApplySecurityDelete);
+                    setSwitchColor(getAccentColor(), swFingerPrint);
+
+                }
                 toggleEnabledChild(swActiveSecurity.isChecked());
             }
         });
@@ -83,6 +116,18 @@ public class SecurityActivity extends ThemedActivity {
                 swApplySecurityDelete.setChecked(!swApplySecurityDelete.isChecked());
                 Security.setPasswordOnDelete(getApplicationContext(), swApplySecurityDelete.isChecked());
                 setSwitchColor(getAccentColor(), swApplySecurityDelete);
+            }
+        });
+
+        /** - FINGERPRINT - **/
+        swFingerPrint.setChecked(Hawk.get("fingerprint_security", false));
+        swFingerPrint.setClickable(false);
+        findViewById(R.id.ll_active_security_fingerprint).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swFingerPrint.setChecked(!swFingerPrint.isChecked());
+                Security.setFingerprintUnlock(getApplicationContext(), swFingerPrint.isChecked());
+                setSwitchColor(getAccentColor(), swFingerPrint);
             }
         });
     }
@@ -153,16 +198,22 @@ public class SecurityActivity extends ThemedActivity {
     private void toggleEnabledChild(boolean enable) {
         findViewById(R.id.ll_security_body_apply_hidden).setEnabled(enable);
         findViewById(R.id.ll_security_body_apply_delete).setClickable(enable);
+        findViewById(R.id.ll_active_security_fingerprint).setClickable(enable);
+
         if(enable){
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getIconColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(getTextColor());
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getIconColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(getTextColor());
+            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(getIconColor());
+            ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_item_title)).setTextColor(getTextColor());
         } else {
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getSubTextColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(getSubTextColor());
             ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getSubTextColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(getSubTextColor());
+            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(getSubTextColor());
+            ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_item_title)).setTextColor(getSubTextColor());
         }
     }
 
@@ -174,7 +225,7 @@ public class SecurityActivity extends ThemedActivity {
         setRecentApp(getString(R.string.security));
         toolbar.setBackgroundColor(getPrimaryColor());
 
-        setSwitchColor(getAccentColor(), swActiveSecurity, swApplySecurityHidden, swApplySecurityDelete);
+        setSwitchColor(getAccentColor(), swActiveSecurity, swApplySecurityHidden, swApplySecurityDelete, swFingerPrint);
         toggleEnabledChild(swActiveSecurity.isChecked());
 
         setStatusBarColor();
@@ -188,6 +239,7 @@ public class SecurityActivity extends ThemedActivity {
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_icon)).setColor(color);
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(color);
         ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(color);
+        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(color);
 
         /** TEXTVIEWS **/
         color = getTextColor();
@@ -195,5 +247,7 @@ public class SecurityActivity extends ThemedActivity {
         ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_on)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(color);
         ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(color);
+        ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_item_title)).setTextColor(color);
+
     }
 }

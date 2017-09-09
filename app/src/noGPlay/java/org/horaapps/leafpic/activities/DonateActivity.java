@@ -35,6 +35,8 @@ public class DonateActivity extends ThemedActivity {
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scr = (ScrollView)findViewById(R.id.donateAct_scrollView);
+        btnDonatePP = findViewById(R.id.button_donate_paypal);
+
         iniUi();
         cts = new CustomTabService(DonateActivity.this);
     }
@@ -52,8 +54,8 @@ public class DonateActivity extends ThemedActivity {
 
         findViewById(R.id.donate_googleplay_card).setVisibility(View.GONE);
 
-        ((Button) findViewById(R.id.button_donate_paypal)).setText(getString(R.string.donate).toUpperCase());
-        findViewById(R.id.button_donate_paypal).setOnClickListener(new View.OnClickListener() {
+        btnDonatePP.setText(getString(R.string.donate).toUpperCase());
+        btnDonatePP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cts.launchUrl("https://www.paypal.me/HoraApps");
