@@ -2,13 +2,13 @@ package org.horaapps.leafpic.adapters;
 
 import android.content.Context;
 
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.Themed;
+import org.horaapps.liz.ThemedAdapter;
+import org.horaapps.liz.ThemedViewHolder;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.Themed;
-import horaapps.org.liz.ThemedAdapter;
-import horaapps.org.liz.ThemedViewHolder;
 
 /**
  * Created by dnld on 01/04/17.

@@ -41,13 +41,12 @@ import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.ThemedActivity;
 
 public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 

@@ -31,6 +31,8 @@ import com.orhanobut.hawk.Hawk;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.metadata.MediaDetailsMap;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,8 +40,6 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.ThemedActivity;
 import in.uncod.android.bypass.Bypass;
 
 /**

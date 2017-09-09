@@ -25,6 +25,11 @@ import org.horaapps.leafpic.data.sort.AlbumsComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.liz.ColorPalette;
+import org.horaapps.liz.Theme;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedAdapter;
+import org.horaapps.liz.ThemedViewHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,11 +39,6 @@ import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import horaapps.org.liz.ColorPalette;
-import horaapps.org.liz.Theme;
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.ThemedAdapter;
-import horaapps.org.liz.ThemedViewHolder;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 

@@ -6,7 +6,7 @@
     android:paddingEnd="@dimen/medium_spacing"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <horaapps.org.liz.ui.ThemedTextView
+    <org.horaapps.liz.ui.ThemedTextView
         android:id="@+id/folder_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:singleLine="false"
         android:textSize="@dimen/medium_text" />
 
-    <horaapps.org.liz.ui.ThemedTextView
+    <org.horaapps.liz.ui.ThemedTextView
         android:id="@+id/file_count"
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"

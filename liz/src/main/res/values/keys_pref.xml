@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="preference_base_theme">basic_theme</string>
-    <string name="preference_primary_color">primary_color</string>
-    <string name="preference_accent_color">accent_color</string>
-    <string name="preference_custom_icon_color">custom_icon_color</string>
-    <string name="preference_translucent_status_bar">set_translucent_statusbar</string>
-    <string name="preference_colored_nav_bar">nav_bar</string>
-</resources>

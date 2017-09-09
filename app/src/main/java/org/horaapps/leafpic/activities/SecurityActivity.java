@@ -22,9 +22,8 @@ import com.orhanobut.hawk.Hawk;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
-
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.ThemedActivity;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedActivity;
 
 import static android.view.View.GONE;
 

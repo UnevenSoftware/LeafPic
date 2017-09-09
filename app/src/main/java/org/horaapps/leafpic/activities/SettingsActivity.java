@@ -24,14 +24,14 @@ import org.horaapps.leafpic.settings.SinglePhotoSetting;
 import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.SettingWithSwitchView;
+import org.horaapps.liz.ColorPalette;
+import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import horaapps.org.liz.ColorPalette;
-import horaapps.org.liz.ThemedActivity;
-import horaapps.org.liz.ViewUtil;
 
 public class SettingsActivity extends ThemedActivity {
     private Toolbar toolbar;

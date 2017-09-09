@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.Themed;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.Themed;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.

@@ -13,9 +13,9 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.liz.ColorPalette;
+import org.horaapps.liz.ThemedActivity;
 
-import horaapps.org.liz.ColorPalette;
-import horaapps.org.liz.ThemedActivity;
 import uz.shift.colorpicker.LineColorPicker;
 
 /**

@@ -1,8 +1,8 @@
 package org.horaapps.leafpic.fragments;
 
 
-import horaapps.org.liz.Themed;
-import horaapps.org.liz.ThemedFragment;
+import org.horaapps.liz.Themed;
+import org.horaapps.liz.ThemedFragment;
 
 /**
  * Created by dnld on 4/3/17.

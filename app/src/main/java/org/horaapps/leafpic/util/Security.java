@@ -17,12 +17,10 @@ import android.widget.TextView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedActivity;
 
 import java.security.MessageDigest;
-
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.ThemedActivity;
-import horaapps.org.liz.ui.ThemedIcon;
 
 /**
  * Created by Jibo on 06/05/2016.
