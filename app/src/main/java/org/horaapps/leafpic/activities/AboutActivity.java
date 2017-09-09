@@ -25,9 +25,9 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.liz.ThemedActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by Jibo on 02/03/2016.

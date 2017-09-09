@@ -84,6 +84,7 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.videoplayer.CustomExoPlayerView;
 import org.horaapps.leafpic.views.videoplayer.CustomPlayBackController;
 import org.horaapps.leafpic.views.videoplayer.TrackSelectionHelper;
+import org.horaapps.liz.ThemedActivity;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -91,8 +92,6 @@ import java.net.CookiePolicy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import horaapps.org.liz.ThemedActivity;
 
 public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventListener,
         TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener {

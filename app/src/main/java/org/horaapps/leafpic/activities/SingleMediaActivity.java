@@ -55,6 +55,7 @@ import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.HackyViewPager;
+import org.horaapps.liz.ColorPalette;
 
 import java.io.File;
 import java.io.InputStream;
@@ -63,7 +64,6 @@ import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import horaapps.org.liz.ColorPalette;
 
 /**
  * Created by dnld on 18/02/16.

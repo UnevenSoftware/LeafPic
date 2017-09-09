@@ -23,10 +23,9 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.liz.ThemedActivity;
 
 import java.util.List;
-
-import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by Jibo on 02/03/2016.

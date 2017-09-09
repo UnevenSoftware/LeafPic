@@ -8,12 +8,12 @@ import android.text.Spanned;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import org.horaapps.liz.ColorPalette;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import horaapps.org.liz.ColorPalette;
 
 /**
  * Created by dnld on 1/3/16.

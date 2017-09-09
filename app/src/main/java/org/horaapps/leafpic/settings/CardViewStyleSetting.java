@@ -20,10 +20,9 @@ import com.orhanobut.hawk.Hawk;
 import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.StringUtils;
-
-import horaapps.org.liz.ColorPalette;
-import horaapps.org.liz.Theme;
-import horaapps.org.liz.ThemedActivity;
+import org.horaapps.liz.ColorPalette;
+import org.horaapps.liz.Theme;
+import org.horaapps.liz.ThemedActivity;
 
 import static org.horaapps.leafpic.CardViewStyle.COMPACT;
 import static org.horaapps.leafpic.CardViewStyle.FLAT;

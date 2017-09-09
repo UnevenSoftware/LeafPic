@@ -1,6 +1,6 @@
 package org.horaapps.leafpic.settings;
 
-import horaapps.org.liz.ThemedActivity;
+import org.horaapps.liz.ThemedActivity;
 
 /**
  * Created by dnld on 12/9/16.

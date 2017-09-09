@@ -8,14 +8,14 @@ import android.widget.RelativeLayout;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.adapters.BaseAdapter;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedViewHolder;
+import org.horaapps.liz.ui.ThemedTextView;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.ThemedViewHolder;
-import horaapps.org.liz.ui.ThemedTextView;
 
 /**
  * Created by dnld on 6/29/17.

@@ -25,10 +25,9 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.liz.ColorPalette;
 
 import java.io.File;
-
-import horaapps.org.liz.ColorPalette;
 
 /**
  * Created by dnld on 01/04/16.

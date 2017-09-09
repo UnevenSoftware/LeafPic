@@ -39,11 +39,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.MimeTypes;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.liz.ThemeHelper;
 
 import java.util.Arrays;
 import java.util.Locale;
-
-import horaapps.org.liz.ThemeHelper;
 
 /**
  * Helper class for displaying track selection dialogs.

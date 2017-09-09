@@ -17,8 +17,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
-
-import horaapps.org.liz.ThemedActivity;
+import org.horaapps.liz.ThemedActivity;
 
 /**
  * Created by Jibo on 02/03/2016.

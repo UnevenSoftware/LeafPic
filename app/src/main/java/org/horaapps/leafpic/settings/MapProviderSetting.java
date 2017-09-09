@@ -13,8 +13,7 @@ import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.StaticMapProvider;
-
-import horaapps.org.liz.ThemedActivity;
+import org.horaapps.liz.ThemedActivity;
 
 /**
  * Created by dnld on 12/9/16.

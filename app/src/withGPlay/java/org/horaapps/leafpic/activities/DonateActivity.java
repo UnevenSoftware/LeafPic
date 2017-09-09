@@ -25,8 +25,7 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.inapppurchase.IabHelper;
 import org.horaapps.leafpic.util.inapppurchase.IabResult;
 import org.horaapps.leafpic.util.inapppurchase.Purchase;
-
-import horaapps.org.liz.ThemedActivity;
+import org.horaapps.liz.ThemedActivity;
 
 /**
  * Created by Jibo on 02/03/2016.

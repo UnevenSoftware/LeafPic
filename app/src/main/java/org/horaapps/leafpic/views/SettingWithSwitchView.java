@@ -16,12 +16,12 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.Themed;
+import org.horaapps.liz.ThemedActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import horaapps.org.liz.ThemeHelper;
-import horaapps.org.liz.Themed;
-import horaapps.org.liz.ThemedActivity;
 
 /**
  * Created by darken (darken@darken.eu) on 04.03.2017.

@@ -9,15 +9,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.liz.ColorPalette;
+import org.horaapps.liz.ThemedActivity;
 
-import horaapps.org.liz.ColorPalette;
-import horaapps.org.liz.ThemedActivity;
 import uz.shift.colorpicker.LineColorPicker;
 import uz.shift.colorpicker.OnColorChangedListener;
 
-import static horaapps.org.liz.Theme.AMOLED;
-import static horaapps.org.liz.Theme.DARK;
-import static horaapps.org.liz.Theme.LIGHT;
+import static org.horaapps.liz.Theme.AMOLED;
+import static org.horaapps.liz.Theme.DARK;
+import static org.horaapps.liz.Theme.LIGHT;
 
 
 /**
