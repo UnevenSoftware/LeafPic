@@ -282,6 +282,12 @@ and this could make the media inaccessible from other apps. Use the exclude opti
         to you for using the app
     </string>
 
+    <!--FINGERPRINT-->
+    <string name="fingerprint_instruction">Place your fingertip on the Home button to verify your identity</string>
+    <string name="fingerprint_instruction_short">Use Fingerprint</string>
+    <string name="fingerprint_alt_mode">Or use password</string>
+    <string name="fingerprint_error">Fingerprint Error</string>
+
     <string name="about_support">Support Development</string>
     <string name="about_support_translate">Translate</string>
     <string name="about_support_translate_sub">Help us to translate LeafPic in more languages.</string>

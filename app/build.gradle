@@ -93,7 +93,7 @@ dependencies {
     // rxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //it is recommended to keep the same version of rxAndroid
-    implementation 'io.reactivex.rxjava2:rxjava:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     // icons
@@ -120,7 +120,7 @@ dependencies {
 
     // TODO check them out
     implementation 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.0'
+    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
 }
 
 Properties props = new Properties()
