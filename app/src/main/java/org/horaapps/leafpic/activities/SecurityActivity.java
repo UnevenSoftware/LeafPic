@@ -25,8 +25,6 @@ import org.horaapps.leafpic.util.Security;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 
-import static android.view.View.GONE;
-
 /**
  * Created by dnld on 22/05/16.
  */
@@ -57,7 +55,7 @@ public class SecurityActivity extends ThemedActivity {
 
         initUi();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            fingerprintHandler = new FingerprintHandler(this);
+            fingerprintHandler = new FingerprintHandler(this, null);
             if(fingerprintHandler.isFingerprintSupported()){
                 llFingerprint.setVisibility(View.VISIBLE);
             }else{
@@ -70,7 +68,7 @@ public class SecurityActivity extends ThemedActivity {
 
         /** - SWITCHES - **/
         /** - ACTIVE SECURITY - **/
-        swActiveSecurity.setChecked(Security.isPasswordSet(getApplicationContext()));
+        swActiveSecurity.setChecked(Security.isPasswordSet());
         swActiveSecurity.setClickable(false);
         findViewById(R.id.ll_active_security).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,13 +77,13 @@ public class SecurityActivity extends ThemedActivity {
                 setSwitchColor(getAccentColor(), swActiveSecurity);
                 if (swActiveSecurity.isChecked()) setPasswordDialog();
                 else{
-                    Security.clearPassword(getApplicationContext());
+                    Security.clearPassword();
                     swApplySecurityHidden.setChecked(false);
                     swApplySecurityDelete.setChecked(false);
                     swFingerPrint.setChecked(false);
-                    Security.setFingerprintUnlock(getApplicationContext(), swFingerPrint.isChecked());
-                    Security.setPasswordOnDelete(getApplicationContext(), swApplySecurityDelete.isChecked());
-                    Security.setPasswordOnHidden(getApplicationContext(), swApplySecurityHidden.isChecked());
+                    Security.setFingerprintUnlock(swFingerPrint.isChecked());
+                    Security.setPasswordOnDelete(swApplySecurityDelete.isChecked());
+                    Security.setPasswordOnHidden(swApplySecurityHidden.isChecked());
                     setSwitchColor(getAccentColor(), swApplySecurityHidden);
                     setSwitchColor(getAccentColor(), swApplySecurityDelete);
                     setSwitchColor(getAccentColor(), swFingerPrint);
@@ -102,7 +100,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 swApplySecurityHidden.setChecked(!swApplySecurityHidden.isChecked());
-                Security.setPasswordOnHidden(getApplicationContext(), swApplySecurityHidden.isChecked());
+                Security.setPasswordOnHidden(swApplySecurityHidden.isChecked());
                 setSwitchColor(getAccentColor(), swApplySecurityHidden);
             }
         });
@@ -114,7 +112,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 swApplySecurityDelete.setChecked(!swApplySecurityDelete.isChecked());
-                Security.setPasswordOnDelete(getApplicationContext(), swApplySecurityDelete.isChecked());
+                Security.setPasswordOnDelete(swApplySecurityDelete.isChecked());
                 setSwitchColor(getAccentColor(), swApplySecurityDelete);
             }
         });
@@ -126,7 +124,7 @@ public class SecurityActivity extends ThemedActivity {
             @Override
             public void onClick(View v) {
                 swFingerPrint.setChecked(!swFingerPrint.isChecked());
-                Security.setFingerprintUnlock(getApplicationContext(), swFingerPrint.isChecked());
+                Security.setFingerprintUnlock(swFingerPrint.isChecked());
                 setSwitchColor(getAccentColor(), swFingerPrint);
             }
         });
@@ -174,7 +172,7 @@ public class SecurityActivity extends ThemedActivity {
                 swActiveSecurity.setChecked(false);
                 setSwitchColor(getAccentColor(), swActiveSecurity);
                 toggleEnabledChild(swActiveSecurity.isChecked());
-                Security.clearPassword(getApplicationContext());
+                Security.clearPassword();
             }
         });
 
@@ -183,7 +181,7 @@ public class SecurityActivity extends ThemedActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (editTextPassword.length() > 3) {
                     if (editTextPassword.getText().toString().equals(editTextConfirmPassword.getText().toString())) {
-                        if(Security.setPassword(getApplicationContext(), editTextPassword.getText().toString())) {
+                        if (Security.setPassword(editTextPassword.getText().toString())) {
                             swActiveSecurity.setChecked(true);
                             toggleEnabledChild(true);
                             Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.remember_password_message, Toast.LENGTH_SHORT).show();

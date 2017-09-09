@@ -429,11 +429,11 @@ public class AlbumsFragment extends BaseFragment {
                 alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> alertDialog.dismiss());
 
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), (dialog, id) -> {
-                    if (Security.isPasswordOnDelete(getContext())) {
+                    if (Security.isPasswordOnDelete()) {
 
-                        Security.askPassword(((ThemedActivity) getActivity()), new Security.PasswordInterface() {
+                        Security.authenticateUser(((ThemedActivity) getActivity()), new Security.AuthCallBack() {
                             @Override
-                            public void onSuccess() {
+                            public void onAuthenticated() {
                                 new DeleteAlbums().execute();
                             }
 

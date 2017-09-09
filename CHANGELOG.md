@@ -3,6 +3,7 @@ v0.9
 
 ### Features
 * Color Palette
+* FingerPrint unlock #396 #235
 * Affix
 * Slide Show #266
 * Show all Images Feature #416

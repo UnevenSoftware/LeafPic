@@ -16,8 +16,6 @@ import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -53,9 +51,17 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     private KeyguardManager keyguardManager;
     private Context context;
     private boolean fingerprintSupported = true;
-    private OnFingerprintResult onFingerprintResult;
+    private CallBack onFingerprintResult;
+    CancellationSignal signal;
 
-    public FingerprintHandler(Context context) {
+    interface CallBack {
+        void onSuccess();
+
+        void onError(String s);
+    }
+
+    public FingerprintHandler(Context context, CancellationSignal signal) {
+        this.signal = signal;
         this.context = context;
         keyguardManager =
                 (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
@@ -63,7 +69,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
                 (FingerprintManager) context.getSystemService(FINGERPRINT_SERVICE);
     }
 
-    public void setOnFingerprintResult(OnFingerprintResult fingerprintResult) {
+    public void setOnFingerprintResult(CallBack fingerprintResult) {
         this.onFingerprintResult = fingerprintResult;
     }
 
@@ -103,7 +109,6 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
             }
             if (initCipher()) {
                 cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                FingerprintHandler helper = new FingerprintHandler(context);
                 doAuth(fingerprintManager, cryptoObject);
             }
         }
@@ -173,8 +178,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
 
     private class FingerprintException extends Exception {
-
-        public FingerprintException(Exception e) {
+        FingerprintException(Exception e) {
             super(e);
         }
     }
@@ -183,7 +187,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     public void onAuthenticationError(int errorCode, CharSequence errString) {
         super.onAuthenticationError(errorCode, errString);
         if (onFingerprintResult != null)
-            onFingerprintResult.onError();
+            onFingerprintResult.onError(errString.toString());
     }
 
     @Override
@@ -205,17 +209,9 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     }
 
     public void doAuth(FingerprintManager manager, FingerprintManager.CryptoObject obj) {
-        CancellationSignal signal = new CancellationSignal();
-
         try {
             manager.authenticate(obj, signal, 0, this, null);
         } catch (SecurityException sce) {
         }
-    }
-
-    public interface OnFingerprintResult {
-        void onSuccess();
-
-        void onError();
     }
 }

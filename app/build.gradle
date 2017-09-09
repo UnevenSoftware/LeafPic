@@ -111,7 +111,7 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.6'
-    implementation 'com.gitlab.dnldsht:Liz:0.5.1'
+    implementation 'com.gitlab.dnldsht:Liz:0.5.2'
 
     // debug Only
     //debugCompile project(':inappstoragereader')
@@ -120,7 +120,7 @@ dependencies {
 
     // TODO check them out
     implementation 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
+    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.0'
 }
 
 Properties props = new Properties()

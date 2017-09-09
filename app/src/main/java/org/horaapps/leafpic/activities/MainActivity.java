@@ -53,7 +53,6 @@ import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -239,31 +238,7 @@ public class MainActivity extends SharedMediaActivity {
         findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Security.isPasswordOnHidden(getApplicationContext()) && Security.isFingerprintUsed(getApplicationContext()) && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    FingerprintHandler fingerprintHandler = new FingerprintHandler(getApplicationContext());
-                    if (fingerprintHandler.isFingerprintSupported()) {
-                        Security.AskFingerprint askFingerprint = new Security().new AskFingerprint();
-                        askFingerprint.ask(MainActivity.this, new Security.FingerprintInterface() {
-                            @Override
-                            public void onSuccess() {
-                                drawer.closeDrawer(GravityCompat.START);
-                                displayAlbums(true);
-                            }
-
-                            @Override
-                            public void onError() {
-                                Toast.makeText(getApplicationContext(), R.string.fingerprint_error, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onUsePsw() {
-                                askPassword();
-                            }
-                        });
-                    }else {
-                        askPassword();
-                    }
-                }else if (Security.isPasswordOnHidden(getApplicationContext())) {
+                if (Security.isPasswordOnHidden()) {
                     askPassword();
                 } else {
                     drawer.closeDrawer(GravityCompat.START);
@@ -290,9 +265,10 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     private void askPassword() {
-        Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
+
+        Security.authenticateUser(MainActivity.this, new Security.AuthCallBack() {
             @Override
-            public void onSuccess() {
+            public void onAuthenticated() {
                 drawer.closeDrawer(GravityCompat.START);
                 displayAlbums(true);
             }
@@ -540,9 +516,9 @@ public class MainActivity extends SharedMediaActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Security.isPasswordOnDelete(getApplicationContext())) {
 
-                            Security.askPassword(MainActivity.this, new Security.PasswordInterface() {
+                            Security.authenticateUser(MainActivity.this, new Security.AuthCallBack() {
                                 @Override
-                                public void onSuccess() {
+                                public void onAuthenticated() {
                                     new DeletePhotos().execute();
                                 }
 

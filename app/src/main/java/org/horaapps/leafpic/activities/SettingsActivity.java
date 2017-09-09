@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ScrollView;
@@ -21,7 +20,6 @@ import org.horaapps.leafpic.settings.ColorsSetting;
 import org.horaapps.leafpic.settings.GeneralSetting;
 import org.horaapps.leafpic.settings.MapProviderSetting;
 import org.horaapps.leafpic.settings.SinglePhotoSetting;
-import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.views.SettingWithSwitchView;
 import org.horaapps.liz.ColorPalette;
@@ -132,38 +130,17 @@ public class SettingsActivity extends ThemedActivity {
 
     @OnClick(R.id.ll_security)
     public void onSecurityClicked(View view) {
-        if (Security.isPasswordSet(getApplicationContext()) && Security.isFingerprintUsed(getApplicationContext()) && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            FingerprintHandler fingerprintHandler = new FingerprintHandler(getApplicationContext());
-            if (fingerprintHandler.isFingerprintSupported()) {
-                Security.AskFingerprint askFingerprint = new Security().new AskFingerprint();
-                askFingerprint.ask(SettingsActivity.this, new Security.FingerprintInterface() {
-                    @Override
-                    public void onSuccess() {
-                        startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
-                    }
-
-                    @Override
-                    public void onError() {
-                        Toast.makeText(getApplicationContext(), R.string.fingerprint_error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onUsePsw() {
-                        askPassword();
-                    }
-                });
-            }else {
-                askPassword();
-            }
-        }else if (Security.isPasswordSet(getApplicationContext())) {
+        if (Security.isPasswordSet()) {
             askPassword();
         }else  startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
     }
 
     private void askPassword(){
-        Security.askPassword(SettingsActivity.this, new Security.PasswordInterface() {
+        Security.authenticateUser(SettingsActivity.this, new Security.AuthCallBack() {
             @Override
-            public void onSuccess() {startActivity(new Intent(getApplicationContext(), SecurityActivity.class));}
+            public void onAuthenticated() {
+                startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
+            }
             @Override
             public void onError() {Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();}
         });

@@ -486,11 +486,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 });
                 textDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (Security.isPasswordOnDelete(getApplicationContext())) {
+                        if (Security.isPasswordOnDelete()) {
 
-                            Security.askPassword(SingleMediaActivity.this, new Security.PasswordInterface() {
+                            Security.authenticateUser(SingleMediaActivity.this, new Security.AuthCallBack() {
                                 @Override
-                                public void onSuccess() {
+                                public void onAuthenticated() {
                                     deleteCurrentMedia();
                                 }
 
