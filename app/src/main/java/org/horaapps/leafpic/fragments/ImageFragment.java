@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.fragments;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,6 +41,10 @@ public class ImageFragment extends Fragment {
     View view;
     private Media img;
 
+
+    private Matrix imageMatrix;
+
+
     @BindView(R.id.subsampling_view)
     SubsamplingScaleImageView subsampling;
 
@@ -58,6 +63,7 @@ public class ImageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         img = getArguments().getParcelable("image");
+
     }
 
     @Override
@@ -66,10 +72,15 @@ public class ImageFragment extends Fragment {
         ButterKnife.bind(this, view);
 
 
+
         displayMedia();
         photoView.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
         photoView.setMaximumScale(8.0F);
         photoView.setMediumScale(3.0F);
+
+        // Copying the photoView Matrix, used for rotation
+        imageMatrix = photoView.getMatrix();
+
 
 
         /*if (Hawk.get(getString(R.string.preference_sub_scaling), true)) {
@@ -91,6 +102,7 @@ public class ImageFragment extends Fragment {
         super.onDestroyView();
         if (!getActivity().isDestroyed())
             Glide.with(getContext()).clear(photoView);
+
     }
 
     /* private void rotateLoop() { //april fools
@@ -211,15 +223,15 @@ public class ImageFragment extends Fragment {
 
     public boolean rotatePicture(int rotation) {
         // TODO: 28/08/16 not working yet
-        /*PhotoView photoView = (PhotoView) getView();
+        PhotoView photoView = (PhotoView) getView();
 
-        int orientation = Measure.rotateBy(img.getOrientation(), rotation);
+ /*       int orientation = Measure.rotateBy(img.getOrientation(), rotation);
         Log.wtf("asd", img.getOrientation()+" + "+ rotation+" = " +orientation);
 
         if(photoView != null && img.setOrientation(orientation)) {
-            Glide.clear(photoView);
+           // Glide.clear(photoView);
             Glide.with(getContext())
-                    .load(img.getUri())
+                    .load(img.getUri();
                     .asBitmap()
                     .signature(img.getSignature())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -228,7 +240,48 @@ public class ImageFragment extends Fragment {
                     .into(photoView);
 
             return true;
-        }*/
+        }
+*/
+
+//        Matrix newMatrix = new Matrix();
+//        newMatrix.set(photoView.getImageMatrix());
+//
+//        int imageHeight;
+//        int imageWidth;
+//        int bitMapHeight;
+//        int bitMapWidth;
+//        float scaleWidth;
+//        float scaleHeight;
+//
+//
+//        imageHeight = photoView.getLayoutParams().height;
+//        imageWidth = photoView.getLayoutParams().width;
+//        photoView.setImageBitmap(img.getBitmap());
+//
+//        bitMapHeight = photoView.getBackground().getIntrinsicHeight();
+//        bitMapWidth = photoView.getBackground().getIntrinsicWidth();
+//        scaleHeight = ((float) imageHeight) / bitMapHeight;
+//        scaleWidth = ((float) imageWidth) / bitMapWidth;
+//
+//        newMatrix.preTranslate(-(photoView.getLayoutParams().height/2), -(photoView.getLayoutParams().width/2));
+//        newMatrix.preScale(scaleWidth, scaleHeight);
+//        newMatrix.postTranslate(((photoView.getWidth()/2)), (photoView.getHeight()/2));
+//
+//        photoView.setRotation(photoView.getRotation() + (float) rotation);
+        Log.wtf("asd", "" + photoView.getRotation());
+
+//            Glide
+//                    .with( getContext() )
+//                    .load( img )
+//                    .transition()
+//
+//                    .transform( new RotateTransformation( context, 90f ))
+//                    .into( imageView3 );
+//        }
+
+
+        photoView.setRotationBy(rotation);
+
         return false;
     }
 }

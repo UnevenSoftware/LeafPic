@@ -258,4 +258,5 @@ public class Media implements CursorHandler, Parcelable {
             return new Media[size];
         }
     };
+
 }
