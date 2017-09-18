@@ -118,7 +118,7 @@ public class ImageFragment extends Fragment {
                 //.centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .format(DecodeFormat.PREFER_ARGB_8888)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+                /*.transform(new GLideRotateTransformation(img.getOrientation()))*/;
 
 
         Glide.with(getContext())
@@ -133,6 +133,7 @@ public class ImageFragment extends Fragment {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        Log.wtf("asd", "glide finised");
                         //addZoomableView();
                         return false;
                     }
@@ -149,12 +150,12 @@ public class ImageFragment extends Fragment {
         subsampling.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
             @Override
             public void onReady() {
-
+                Log.wtf("asd", "reasdy");
             }
 
             @Override
             public void onImageLoaded() {
-                Log.wtf("Asd", "yeeeee");
+                Log.wtf("asd", "subsampling finised");
                 subsampling.setVisibility(View.VISIBLE);
                 subsampling.setDoubleTapZoomScale(getDoubleTapZoomScale());
             }
@@ -177,7 +178,7 @@ public class ImageFragment extends Fragment {
 
             @Override
             public void onPreviewReleased() {
-
+                Log.wtf("asd", "released");
             }
         });
     }
