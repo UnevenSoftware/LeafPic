@@ -46,8 +46,6 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
@@ -85,7 +83,7 @@ public class MainActivity extends SharedMediaActivity {
     private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Media m = (Media) v.findViewById(R.id.photo_path).getTag();
+           /* Media m = (Media) v.findViewById(R.id.photo_path).getTag();
             if (!pickMode) {
                 {
                     // TODO: 4/5/17 moveout
@@ -103,7 +101,7 @@ public class MainActivity extends SharedMediaActivity {
             } else {
                 setResult(RESULT_OK, new Intent().setData(m.getUri()));
                 finish();
-            }
+            }*/
         }
     };
 
