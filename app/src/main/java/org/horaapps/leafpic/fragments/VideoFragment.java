@@ -2,7 +2,6 @@ package org.horaapps.leafpic.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,14 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.StorageHelper;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedFragment;
 
 /**
  * Created by dnld on 18/02/16.
  */
 
-public class VideoFragment extends Fragment {
+public class VideoFragment extends ThemedFragment {
 
     private Media video;
 
@@ -61,6 +62,9 @@ public class VideoFragment extends Fragment {
             }
         });
 
+        //TODO: this need to be fixed better, wont get the color
+        //videoInd.setColor(getThemeHelper().getPrimaryColor());
+
         RequestOptions options = new RequestOptions()
                 .signature(video.getSignature())
                 .centerCrop()
@@ -74,5 +78,10 @@ public class VideoFragment extends Fragment {
 
         picture.setOnClickListener(v -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
         return view;
+    }
+
+    @Override
+    public void refreshTheme(ThemeHelper themeHelper) {
+
     }
 }

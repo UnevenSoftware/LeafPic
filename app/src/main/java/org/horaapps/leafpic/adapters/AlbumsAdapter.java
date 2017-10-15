@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.CardViewStyle;
@@ -324,7 +325,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         @BindView(R.id.album_card) CardView card;
         @BindView(R.id.album_preview) ImageView picture;
-        @BindView(R.id.selected_icon) View selectedIcon;
+        @BindView(R.id.selected_icon) IconicsImageView selectedIcon;
         @BindView(R.id.ll_album_info) View footer;
         @BindView(R.id.ll_media_count) View llCount;
         @BindView(R.id.album_name) TextView name;
@@ -343,6 +344,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
                 footer.setBackgroundColor(theme.getPrimaryColor());
                 picture.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
                 selectedIcon.setVisibility(View.VISIBLE);
+                selectedIcon.setColor(theme.getPrimaryColor());
             } else {
                 picture.clearColorFilter();
                 selectedIcon.setVisibility(View.GONE);
