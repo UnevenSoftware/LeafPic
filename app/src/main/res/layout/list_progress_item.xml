@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_album_bottom_sheet_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/ripple"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:background="@drawable/ripple"
+    android:paddingTop="@dimen/small_spacing"
+    android:paddingBottom="@dimen/small_spacing">
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/folder_icon_bottom_sheet_item"
+        android:layout_height="14dp"
+        android:layout_width="14dp"
+        app:iiv_icon="gmd-folder"
+        android:layout_marginLeft="@dimen/big_spacing"
+        android:layout_marginRight="@dimen/big_spacing" />
+
+    <TextView
+        android:id="@+id/name_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="middle"
+        android:textColor="@color/md_dark_background"
+        android:textSize="14sp" />
+</LinearLayout>

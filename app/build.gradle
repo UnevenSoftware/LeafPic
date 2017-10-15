@@ -115,7 +115,8 @@ dependencies {
 
     // debug Only
     //debugCompile project(':inappstoragereader')
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.3'
 
 
     // TODO check them out

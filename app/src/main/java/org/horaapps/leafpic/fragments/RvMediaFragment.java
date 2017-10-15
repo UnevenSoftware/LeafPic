@@ -29,6 +29,7 @@ import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
+import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
@@ -42,8 +43,10 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedActivity;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -386,6 +389,37 @@ public class RvMediaFragment extends BaseFragment {
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
                 adapter.changeSortingOrder(sortingOrder);
                 AlbumsHelper.setSortingOrder(getContext(), sortingOrder);
+                return true;
+
+            case R.id.delete:
+
+                ProgressAdapter errorsAdapter = new ProgressAdapter(getContext());
+                ArrayList<Media> selected = adapter.getSelected();
+
+                AlertDialog alertDialog = AlertDialogsHelper.getProgressDialogWithErrors(((ThemedActivity) getActivity()), R.string.deleting_images, errorsAdapter, selected.size());
+
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), (dialog, id) -> {
+                    alertDialog.dismiss();
+                });
+                alertDialog.show();
+
+                MediaHelper.deleteMedia(getContext(), selected)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(m -> {
+                                    adapter.remove(m);
+                                    errorsAdapter.add(new ProgressAdapter.ListItem(m.getName()), false);
+                                },
+                                throwable -> {
+                                    if (throwable instanceof DeleteException)
+                                        errorsAdapter.add(new ProgressAdapter.ListItem(
+                                                (DeleteException) throwable), true);
+                                },
+                                () -> {
+                                    if (errorsAdapter.getItemCount() == 0)
+                                        alertDialog.dismiss();
+                                    adapter.clearSelected();
+                                });
                 return true;
         }
 

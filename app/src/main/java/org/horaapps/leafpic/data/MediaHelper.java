@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.file.DeleteException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,18 +20,13 @@ import io.reactivex.Observable;
 public class MediaHelper {
     private static Uri external = MediaStore.Files.getContentUri("external");
 
-    public static class DeleteException extends Exception {
 
-        public DeleteException() {
-            super("Cannot delete file");
-        }
-    }
 
     public static Observable<Media> deleteMedia(Context context, Media mediaToDelete) {
         return Observable.create(subscriber -> {
             boolean deleteSuccess = internalDeleteMedia(context, mediaToDelete);
             if (deleteSuccess) subscriber.onNext(mediaToDelete);
-            else subscriber.onError(new DeleteException());
+            else subscriber.onError(new DeleteException(mediaToDelete));
             subscriber.onComplete();
         });
     }
@@ -41,7 +37,7 @@ public class MediaHelper {
             for (Media media : mediaToDelete) {
                 boolean deleteSuccess = internalDeleteMedia(context, media);
                 if (deleteSuccess) subscriber.onNext(media);
-                else subscriber.onError(new DeleteException());
+                else subscriber.onError(new DeleteException(media));
             }
             subscriber.onComplete();
         });

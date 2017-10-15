@@ -28,3 +28,5 @@
 }
 
 -keepnames class * { @butterknife.Bind *;}
+
+-dontwarn okio.**

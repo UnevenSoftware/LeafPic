@@ -262,11 +262,18 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         });
     }
 
+    public void remove(Media media) {
+        int i = this.media.indexOf(media);
+        this.media.remove(i);
+        notifyItemRemoved(i);
+    }
+
     @Override
     public void refreshTheme(ThemeHelper theme) {
         placeholder = theme.getPlaceHolder();
         //super.refreshTheme(theme);
     }
+
 
     /**
      * On longpress, it finds the last or the first selected image before or after the targetIndex

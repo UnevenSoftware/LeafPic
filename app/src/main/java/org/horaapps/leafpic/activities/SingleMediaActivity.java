@@ -54,6 +54,7 @@ import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.views.HackyViewPager;
 import org.horaapps.liz.ColorPalette;
 
@@ -365,7 +366,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                             }
                         },
                         err -> {
-                            if (err instanceof MediaHelper.DeleteException)
+                            if (err instanceof DeleteException)
                                 Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
                             else
                                 Toast.makeText(this, err.getMessage(), Toast.LENGTH_SHORT).show();
