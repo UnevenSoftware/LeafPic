@@ -215,7 +215,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
             holder.path.animate().alpha(1).setDuration(250);
-
+            holder.icon.setColor(getThemeHelper().getPrimaryColor());
         } else {
             holder.icon.setVisibility(View.GONE);
             holder.path.setVisibility(View.GONE);
@@ -229,6 +229,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             holder.icon.setVisibility(View.VISIBLE);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
             holder.layout.setPadding(15,15,15,15);
+            holder.icon.setColor(getThemeHelper().getPrimaryColor());
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
             //holder.layout.setBackgroundColor(ThemeHelper.getPrimaryColor(holder.path.getContext()));
