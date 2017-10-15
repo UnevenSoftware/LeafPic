@@ -278,6 +278,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (isSlideShowOn) {
             getMenuInflater().inflate(R.menu.menu_view_page_slide_on, menu);
+            menu.findItem(R.id.slide_show).setIcon(getToolbarIcon(CommunityMaterial.Icon.cmd_stop_circle_outline));
         } else {
             getMenuInflater().inflate(R.menu.menu_view_pager, menu);
 
@@ -602,7 +603,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.slide_show:
                 isSlideShowOn = !isSlideShowOn;
-                if (isSlideShowOn) handler.postDelayed(slideShowRunnable, SLIDE_SHOW_INTERVAL);
+                if (isSlideShowOn) {
+                    handler.postDelayed(slideShowRunnable, SLIDE_SHOW_INTERVAL);
+                    hideSystemUI();
+                }
                 else handler.removeCallbacks(slideShowRunnable);
                 supportInvalidateOptionsMenu();
 
