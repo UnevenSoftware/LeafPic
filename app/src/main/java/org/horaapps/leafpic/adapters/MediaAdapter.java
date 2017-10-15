@@ -211,7 +211,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             holder.path.setBackgroundColor(
                     ColorPalette.getTransparentColor(
                             ContextCompat.getColor(holder.path.getContext(), R.color.md_black_1000), 100));*/
-            holder.icon.setIcon(CommunityMaterial.Icon.cmd_play_circle);
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
             holder.path.animate().alpha(1).setDuration(250);
