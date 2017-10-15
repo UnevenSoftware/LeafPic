@@ -81,7 +81,7 @@ public class Security {
         ThemeHelper.setCursorColor(editTextPassword, activity.getTextColor());
         editTextPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextPassword.setTextColor(activity.getTextColor());
-
+        fingerprintIcon.setColor(activity.getIconColor());
 
         builder.setView(view);
 
@@ -102,6 +102,7 @@ public class Security {
                 fingerprintHandler.setOnFingerprintResult(new FingerprintHandler.CallBack() {
                     @Override
                     public void onSuccess() {
+                        hideKeyboard(activity, editTextPassword.getWindowToken());
                         dialog.dismiss();
                         passwordInterface.onAuthenticated();
                     }
