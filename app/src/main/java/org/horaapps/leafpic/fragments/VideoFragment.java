@@ -2,7 +2,6 @@ package org.horaapps.leafpic.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,23 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.StorageHelper;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.ThemedFragment;
 
 /**
  * Created by dnld on 18/02/16.
  */
 
-public class VideoFragment extends Fragment {
+public class VideoFragment extends ThemedFragment {
 
+    IconicsImageView videoInd;
     private Media video;
 
     public static VideoFragment newInstance(Media media) {
@@ -50,7 +54,7 @@ public class VideoFragment extends Fragment {
         View view = inflater.inflate(org.horaapps.leafpic.R.layout.fragment_video, container, false);
 
         ImageView picture = (ImageView) view.findViewById(org.horaapps.leafpic.R.id.media_view);
-        IconicsImageView videoInd = (IconicsImageView) view.findViewById(org.horaapps.leafpic.R.id.icon);
+        videoInd = (IconicsImageView) view.findViewById(org.horaapps.leafpic.R.id.icon);
         videoInd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +64,8 @@ public class VideoFragment extends Fragment {
                                         video.getMimeType()));
             }
         });
+
+
 
         RequestOptions options = new RequestOptions()
                 .signature(video.getSignature())
@@ -74,5 +80,10 @@ public class VideoFragment extends Fragment {
 
         picture.setOnClickListener(v -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
         return view;
+    }
+
+    @Override
+    public void refreshTheme(ThemeHelper themeHelper) {
+        videoInd.setIcon(new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_play_circle_filled).color(getThemeHelper().getPrimaryColor()));
     }
 }
