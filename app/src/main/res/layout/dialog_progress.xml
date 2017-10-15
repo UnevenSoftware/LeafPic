@@ -33,7 +33,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/sub_big_spacing">
+                    android:paddingTop="@dimen/sub_big_spacing"
+                    android:paddingLeft="@dimen/sub_big_spacing"
+                    android:paddingRight="@dimen/sub_big_spacing"
+                    android:paddingBottom="@dimen/small_spacing">
                     <ProgressBar
                         android:id="@+id/progress_dialog_loading"
                         android:layout_width="@dimen/progress_circle_width_height"

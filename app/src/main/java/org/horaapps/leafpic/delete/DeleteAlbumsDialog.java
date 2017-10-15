@@ -165,7 +165,7 @@ public class DeleteAlbumsDialog extends DialogFragment {
 
         builder.setView(view);
 
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+        builder.setNegativeButton(getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> {
             Toast.makeText(getContext(), "No Way", Toast.LENGTH_SHORT).show();
             dialogInterface.dismiss();
         });

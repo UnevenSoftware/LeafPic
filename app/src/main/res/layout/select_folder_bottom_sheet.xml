@@ -90,6 +90,7 @@
                 android:clickable="true"
                 >
                 <com.mikepenz.iconics.view.IconicsImageView
+                    android:id="@+id/create_new_folder_icon"
                     android:layout_height="@dimen/icon_width_height"
                     android:layout_width="@dimen/icon_width_height"
                     android:layout_marginEnd="@dimen/big_spacing"
