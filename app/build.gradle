@@ -97,8 +97,8 @@ dependencies {
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     // icons
-    implementation 'com.mikepenz:iconics-core:2.9.1@aar'
-    implementation "com.mikepenz:iconics-views:2.9.1@aar"
+    implementation 'com.mikepenz:iconics-core:2.9.3@aar'
+    implementation "com.mikepenz:iconics-views:2.9.3@aar"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
     implementation 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
     implementation 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
