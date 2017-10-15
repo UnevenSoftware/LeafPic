@@ -384,19 +384,28 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.rotate_180:
                 if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(180)) {
-                    Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+
+                  // ((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(180);
+
+                 //   Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.rotate_right_90:
                 if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(90)) {
-                    Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+
+                  //  ((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(90);
+
+                 //   Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.rotate_left_90:
                 if (!((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(-90)) {
-                    Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+
+                    //((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(-90);
+
+                  //  Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
