@@ -395,7 +395,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="error_thumbnail">Unable to find a thumbnail for the album!</string>
     <string name="no_app_to_perform">Unable to found an app to perform this action.</string>
     <string name="deleting_images">Threw away %d/%d media!</string>
-    <string name="start_slide_show">Start Slide</string>
-    <string name="stop_slide_show">Stop Slide</string>
+    <string name="start_slide_show">Start Slideshow</string>
+    <string name="stop_slide_show">Stop Slideshow</string>
     <string name="errors">Errors</string>
 </resources>
