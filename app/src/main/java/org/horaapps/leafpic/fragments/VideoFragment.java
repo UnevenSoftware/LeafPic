@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
@@ -24,6 +26,7 @@ import org.horaapps.liz.ThemedFragment;
 
 public class VideoFragment extends ThemedFragment {
 
+    IconicsImageView videoInd;
     private Media video;
 
     public static VideoFragment newInstance(Media media) {
@@ -51,7 +54,7 @@ public class VideoFragment extends ThemedFragment {
         View view = inflater.inflate(org.horaapps.leafpic.R.layout.fragment_video, container, false);
 
         ImageView picture = (ImageView) view.findViewById(org.horaapps.leafpic.R.id.media_view);
-        IconicsImageView videoInd = (IconicsImageView) view.findViewById(org.horaapps.leafpic.R.id.icon);
+        videoInd = (IconicsImageView) view.findViewById(org.horaapps.leafpic.R.id.icon);
         videoInd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,8 +65,7 @@ public class VideoFragment extends ThemedFragment {
             }
         });
 
-        //TODO: this need to be fixed better, wont get the color
-        //videoInd.setColor(getThemeHelper().getPrimaryColor());
+
 
         RequestOptions options = new RequestOptions()
                 .signature(video.getSignature())
@@ -82,6 +84,6 @@ public class VideoFragment extends ThemedFragment {
 
     @Override
     public void refreshTheme(ThemeHelper themeHelper) {
-
+        videoInd.setIcon(new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_play_circle_filled).color(getThemeHelper().getPrimaryColor()));
     }
 }
