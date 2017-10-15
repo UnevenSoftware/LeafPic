@@ -35,6 +35,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_folders"
                     android:clipToPadding="false"
+                    android:paddingTop="@dimen/medium_spacing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -57,7 +58,7 @@
                     android:singleLine="false"
                     android:textStyle="italic"
                     android:layout_alignParentEnd="true"
-                    android:textSize="@dimen/small_text" />
+                    android:textSize="@dimen/medium_text" />
 
             </RelativeLayout>
         </LinearLayout>

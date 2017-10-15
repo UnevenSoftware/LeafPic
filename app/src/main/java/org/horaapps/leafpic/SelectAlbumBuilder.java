@@ -184,6 +184,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         });
 
         ((TextView) contentView.findViewById(R.id.bottom_sheet_title)).setText(title);
+        ((IconicsImageView) contentView.findViewById(R.id.create_new_folder_icon)).setColor(theme.getIconColor());
 
         contentView.findViewById(R.id.rl_create_new_folder).setOnClickListener(new View.OnClickListener() {
             @Override
