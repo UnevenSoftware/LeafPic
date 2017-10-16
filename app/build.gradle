@@ -65,6 +65,7 @@ android {
             dimension "default"
         }
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
@@ -121,7 +122,7 @@ dependencies {
 
     // TODO check them out
     implementation 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.0'
+    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
 }
 
 Properties props = new Properties()
