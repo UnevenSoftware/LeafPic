@@ -199,8 +199,8 @@
             android:value="GlideModule" /> -->
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:name=".util.LegacyCompatFileProvider"
+            android:authorities="org.horaapps.leafpic.provider"
             android:exported="false"
             android:grantUriPermissions="true">
 
