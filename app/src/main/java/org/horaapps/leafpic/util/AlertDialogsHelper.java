@@ -219,7 +219,7 @@ public class AlertDialogsHelper {
             label.setTextSize(16);
             value.setTextColor(activity.getTextColor());
             value.setTextSize(16);
-            value.setPaddingRelative(tenPxInDp, 0, 0, 0);
+            value.setPaddingRelative(tenPxInDp, 0, tenPxInDp, 0);
             row.addView(label);
             row.addView(value);
             detailsTable.addView(row, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));

@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +38,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 import com.yalantis.ucrop.UCrop;
 
+import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -51,6 +53,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
@@ -206,13 +209,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
     Runnable slideShowRunnable = new Runnable() {
         @Override
         public void run() {
-            try{
+            try {
                 mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1) % album.getCount());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally{
+            } finally {
                 handler.postDelayed(this, SLIDE_SHOW_INTERVAL);
             }
         }
@@ -460,13 +461,17 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
 
             case R.id.action_share:
+                // TODO: 16/10/17 check if it works everywhere
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(getCurrentMedia().getMimeType());
-                share.putExtra(Intent.EXTRA_STREAM, getCurrentMedia().getUri());
+                Uri uri1 = LegacyCompatFileProvider.getUri(this, getCurrentMedia().getFile());
+                share.putExtra(Intent.EXTRA_STREAM, uri1);
+                share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
             case R.id.action_edit:
+                // TODO: 16/10/17 redo
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
                 Uri uri = Uri.fromFile(new File(getCurrentMedia().getPath()));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
@@ -476,15 +481,17 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_use_as:
                 Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-                intent.setDataAndType(
-                        getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
+                intent.setDataAndType(LegacyCompatFileProvider.getUri(this,
+                        getCurrentMedia().getFile()), getCurrentMedia().getMimeType());
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, getString(R.string.use_as)));
                 return true;
 
             case R.id.action_open_with:
                 Intent intentopenWith = new Intent(Intent.ACTION_VIEW);
-                intentopenWith.setDataAndType(
-                        getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
+                intentopenWith.setDataAndType(LegacyCompatFileProvider.getUri(this,
+                        getCurrentMedia().getFile()), getCurrentMedia().getMimeType());
+                intentopenWith.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intentopenWith, getString(R.string.open_with)));
                 break;
 
@@ -570,7 +577,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_edit_with:
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
+                editIntent.setDataAndType(LegacyCompatFileProvider.getUri(this,
+                        getCurrentMedia().getFile()), getCurrentMedia().getMimeType());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(editIntent, getString(R.string.edit_with)));
                 break;
@@ -597,7 +605,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_palette:
                 Intent paletteIntent = new Intent(getApplicationContext(), PaletteActivity.class);
-                paletteIntent.setData(getCurrentMedia().getUri());
+                paletteIntent.setData(LegacyCompatFileProvider.getUri(this,
+                        getCurrentMedia().getFile()));
+                paletteIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(paletteIntent);
                 break;
 
@@ -606,8 +616,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 if (isSlideShowOn) {
                     handler.postDelayed(slideShowRunnable, SLIDE_SHOW_INTERVAL);
                     hideSystemUI();
-                }
-                else handler.removeCallbacks(slideShowRunnable);
+                } else handler.removeCallbacks(slideShowRunnable);
                 supportInvalidateOptionsMenu();
 
             default:

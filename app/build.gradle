@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 repositories {
     maven { url  "http://dl.bintray.com/dasar/maven" }
+    maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
 }
 
 
@@ -90,6 +91,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
     implementation 'com.drewnoakes:metadata-extractor:2.9.1'
     implementation "com.orhanobut:hawk:2.0.1"
+    implementation 'com.commonsware.cwac:provider:0.4.3'
 
     // rxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
