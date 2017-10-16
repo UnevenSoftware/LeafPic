@@ -1,15 +1,12 @@
 package org.horaapps.leafpic.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,17 +18,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,12 +39,10 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
-import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -530,198 +518,6 @@ public class MainActivity extends SharedMediaActivity {
                 });
                 alertDialog.show();
                 return true;*/
-
-            //region Affix
-            // TODO: 11/21/16 move away from here
-            case R.id.affix:
-
-                //region Async MediaAffix
-                class affixMedia extends AsyncTask<Affix.Options, Integer, Void> {
-                    private AlertDialog dialog;
-
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-                        dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, getString(R.string.affix), getString(R.string.affix_text));
-                        dialog.show();
-                    }
-
-                    @Override
-                    protected Void doInBackground(Affix.Options... arg0) {
-                        ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-                       /* for (int i = 0; i<getAlbum().getSelectedMediaCount(); i++) {
-                            if(!getAlbum().getSelectedMedia(i).isVideo())
-                                bitmapArray.add(getAlbum().getSelectedMedia(i).getBitmap());
-                        }*/
-
-                        if (bitmapArray.size() > 1)
-                            Affix.AffixBitmapList(getApplicationContext(), bitmapArray, arg0[0]);
-                        else runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), R.string.affix_error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        //editMode = false;
-                        //getAlbum().clearSelectedMedia();
-                        dialog.dismiss();
-                        supportInvalidateOptionsMenu();
-                        //oldMediaAdapter.notifyDataSetChanged();
-                        //new PreparePhotosTask().execute();
-                    }
-                }
-                //endregion
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, getDialogStyle());
-                final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
-
-                dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
-                ((CardView) dialogLayout.findViewById(R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
-
-                //ITEMS
-                final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(R.id.affix_vertical_switch);
-                final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
-
-                final LinearLayout llSwVertical = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_vertical);
-                final LinearLayout llSwSaveHere = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_save_here);
-
-                final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
-
-                final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
-                final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
-
-                //region Example
-                final LinearLayout llExample = (LinearLayout) dialogLayout.findViewById(R.id.affix_example);
-                llExample.setBackgroundColor(getBackgroundColor());
-                llExample.setVisibility(Hawk.get("show_tips", true) ? View.VISIBLE : View.GONE);
-                final LinearLayout llExampleH = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_horizontal);
-                //llExampleH.setBackgroundColor(getCardBackgroundColor());
-                final LinearLayout llExampleV = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_vertical);
-                //llExampleV.setBackgroundColor(getCardBackgroundColor());
-
-
-                //endregion
-
-                //region THEME STUFF
-                setScrollViewColor((ScrollView) dialogLayout.findViewById(R.id.affix_scrollView));
-
-                /** TextViews **/
-                int color = getTextColor();
-                ((TextView) dialogLayout.findViewById(R.id.affix_vertical_title)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.compression_settings_title)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
-
-                //Example Stuff
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setTextColor(color);
-
-
-                /** Sub TextViews **/
-                color = getSubTextColor();
-                ((TextView) dialogLayout.findViewById(R.id.save_here_sub)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_vertical_sub)).setTextColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_format_sub)).setTextColor(color);
-                txtQuality.setTextColor(color);
-
-                /** Icons **/
-                color = getIconColor();
-                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_quality_icon)).setColor(color);
-                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
-                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
-                ((IconicsImageView) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
-
-                //Example bg
-                color = getCardBackgroundColor();
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setBackgroundColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setBackgroundColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setBackgroundColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setBackgroundColor(color);
-
-                seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
-                seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
-
-                themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
-                themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_png));
-                themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_webp));
-                setSwitchColor(getAccentColor(), swSaveHere, swVertical);
-                //endregion
-
-                seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        txtQuality.setText(StringUtils.html(String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    }
-                });
-                seekQuality.setProgress(50);
-
-                swVertical.setClickable(false);
-                llSwVertical.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        swVertical.setChecked(!swVertical.isChecked());
-                        setSwitchColor(getAccentColor(), swVertical);
-                        llExampleH.setVisibility(swVertical.isChecked() ? View.GONE : View.VISIBLE);
-                        llExampleV.setVisibility(swVertical.isChecked() ? View.VISIBLE : View.GONE);
-                    }
-                });
-
-                swSaveHere.setClickable(false);
-                llSwSaveHere.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        swSaveHere.setChecked(!swSaveHere.isChecked());
-                        setSwitchColor(getAccentColor(), swSaveHere);
-                    }
-                });
-
-                builder.setView(dialogLayout);
-                builder.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Bitmap.CompressFormat compressFormat;
-                        switch (radioFormatGroup.getCheckedRadioButtonId()) {
-                            case R.id.radio_jpeg:
-                            default:
-                                compressFormat = Bitmap.CompressFormat.JPEG;
-                                break;
-                            case R.id.radio_png:
-                                compressFormat = Bitmap.CompressFormat.PNG;
-                                break;
-                            case R.id.radio_webp:
-                                compressFormat = Bitmap.CompressFormat.WEBP;
-                                break;
-                        }
-
-                        Affix.Options options = new Affix.Options(
-                                swSaveHere.isChecked() ? getAlbum().getPath() : Affix.getDefaultDirectoryPath(),
-                                compressFormat,
-                                seekQuality.getProgress(),
-                                swVertical.isChecked());
-                        new affixMedia().execute(options);
-                    }
-                });
-                builder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
-                builder.show();
-
-
-                return true;
-            //endregion
 
             case R.id.action_move:
                 SelectAlbumBuilder.with(getSupportFragmentManager())

@@ -234,7 +234,7 @@ public class AlbumsFragment extends BaseFragment {
         menu.findItem(R.id.select_all).setTitle(
                 getSelectedCount() == getCount()
                         ? R.string.clear_selected
-                        : R.string.clear_selected);
+                        : R.string.select_all);
 
         if (!editMode) {
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
