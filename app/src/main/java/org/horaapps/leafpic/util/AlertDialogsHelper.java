@@ -35,6 +35,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.metadata.MediaDetailsMap;
+import org.horaapps.leafpic.data.metadata.MetadataHelper;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 
@@ -148,7 +149,8 @@ public class AlertDialogsHelper {
 
     public static AlertDialog getDetailsDialog(final ThemedActivity activity, final Media f) {
         AlertDialog.Builder detailsDialogBuilder = new AlertDialog.Builder(activity, activity.getDialogStyle());
-        MediaDetailsMap<String, String> mainDetails = new MediaDetailsMap<>();//f.getMainDetails(activity.getApplicationContext());
+        MetadataHelper mdhelper = new MetadataHelper();
+        MediaDetailsMap<String, String> mainDetails = mdhelper.getMainDetails(activity, f);
         final View dialogLayout = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_media_detail, null);
         ImageView imgMap = dialogLayout.findViewById(R.id.photo_map);
         dialogLayout.findViewById(org.horaapps.leafpic.R.id.details_title).setBackgroundColor(activity.getPrimaryColor());
@@ -199,18 +201,18 @@ public class AlertDialogsHelper {
         LinearLayout detailsTable = dialogLayout.findViewById(R.id.ll_list_details);
 
         int tenPxInDp = Measure.pxToDp (10, activity);
+        int hundredPxInDp = Measure.pxToDp (125, activity);//more or less an hundred. Did not used weight for a strange bug
 
         for (int index : metadata.getKeySet()) {
             LinearLayout row = new LinearLayout(activity.getApplicationContext());
             row.setOrientation(LinearLayout.HORIZONTAL);
-            row.setWeightSum(10);
 
             TextView label = new TextView(activity.getApplicationContext());
             TextView value = new TextView(activity.getApplicationContext());
             label.setText(metadata.getLabel(index));
-            label.setLayoutParams((new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 3f)));
+            label.setLayoutParams((new LinearLayout.LayoutParams(hundredPxInDp, LinearLayout.LayoutParams.WRAP_CONTENT)));
             value.setText(metadata.getValue(index));
-            value.setLayoutParams((new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 7f)));
+            value.setLayoutParams((new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)));
             label.setTextColor(activity.getTextColor());
             label.setTypeface(null, Typeface.BOLD);
             label.setGravity(Gravity.END);
