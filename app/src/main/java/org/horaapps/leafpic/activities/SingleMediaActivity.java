@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +38,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 import com.yalantis.ucrop.UCrop;
 
+import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -206,13 +208,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
     Runnable slideShowRunnable = new Runnable() {
         @Override
         public void run() {
-            try{
+            try {
                 mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1) % album.getCount());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally{
+            } finally {
                 handler.postDelayed(this, SLIDE_SHOW_INTERVAL);
             }
         }
@@ -570,7 +570,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
             case R.id.action_edit_with:
                 Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                editIntent.setDataAndType(getCurrentMedia().getUri(), getCurrentMedia().getMimeType());
+                editIntent.setDataAndType(FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider",
+                        getCurrentMedia().getFile()), getCurrentMedia().getMimeType());
                 editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(editIntent, getString(R.string.edit_with)));
                 break;
@@ -606,8 +607,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 if (isSlideShowOn) {
                     handler.postDelayed(slideShowRunnable, SLIDE_SHOW_INTERVAL);
                     hideSystemUI();
-                }
-                else handler.removeCallbacks(slideShowRunnable);
+                } else handler.removeCallbacks(slideShowRunnable);
                 supportInvalidateOptionsMenu();
 
             default:
