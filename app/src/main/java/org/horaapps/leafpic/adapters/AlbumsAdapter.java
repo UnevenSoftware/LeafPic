@@ -82,6 +82,16 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public List<String> getAlbumsPaths() {
+        ArrayList<String> list = new ArrayList<>();
+
+        for (Album album : albums) {
+            list.add(album.getPath());
+        }
+
+        return list;
+    }
+
     public void notifyItemChanaged(Album album) {
         notifyItemChanged(albums.indexOf(album));
     }

@@ -18,6 +18,7 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.horaapps.leafpic.util.BitmapUtils.addWhiteBorder;
@@ -107,6 +108,14 @@ public class AlbumsHelper {
 
     public static boolean deleteAlbum(Album album, Context context) {
         return StorageHelper.deleteFilesInFolder(context, new File(album.getPath()));
+    }
+
+    public static void saveLastHiddenPaths(ArrayList<String> list) {
+        Hawk.put("h", list);
+    }
+
+    public static ArrayList<String> getLastHiddenPaths() {
+        return Hawk.get("h", new ArrayList<>());
     }
 
 }

@@ -22,7 +22,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +33,6 @@ import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
@@ -54,8 +52,6 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends SharedMediaActivity {
-
-    private static String TAG = MainActivity.class.getSimpleName();
 
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
@@ -115,7 +111,6 @@ public class MainActivity extends SharedMediaActivity {
 
                 if (!pickMode) {
                     try {
-
                         Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
                         intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
                         intent.putExtra("album", album);
@@ -185,33 +180,15 @@ public class MainActivity extends SharedMediaActivity {
         drawerToggle.syncState();
 
 
-        findViewById(R.id.ll_drawer_Donate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, DonateActivity.class));
-            }
-        });
+        findViewById(R.id.ll_drawer_Donate).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonateActivity.class)));
 
-        findViewById(R.id.ll_drawer_Setting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        });
+        findViewById(R.id.ll_drawer_Setting).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
 
-        findViewById(R.id.ll_drawer_About).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-            }
-        });
+        findViewById(R.id.ll_drawer_About).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AboutActivity.class)));
 
-        findViewById(R.id.ll_drawer_Default).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
-                displayAlbums(false);
-            }
+        findViewById(R.id.ll_drawer_Default).setOnClickListener(v -> {
+            drawer.closeDrawer(GravityCompat.START);
+            displayAlbums(false);
         });
 
         findViewById(R.id.ll_drawer_all_media).setOnClickListener(v -> {
@@ -219,33 +196,20 @@ public class MainActivity extends SharedMediaActivity {
             displayMedia(Album.getAllMediaAlbum());
         });
 
-        findViewById(R.id.ll_drawer_hidden).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Security.isPasswordOnHidden()) {
-                    askPassword();
-                } else {
-                    drawer.closeDrawer(GravityCompat.START);
-                    displayAlbums(true);
-                }
+        findViewById(R.id.ll_drawer_hidden).setOnClickListener(v -> {
+            if (Security.isPasswordOnHidden()) {
+                askPassword();
+            } else {
+                drawer.closeDrawer(GravityCompat.START);
+                displayAlbums(true);
             }
         });
 
-        findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(v -> Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show());
 
         /**** FAB ***/
         fab.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
-            }
-        });
+        fab.setOnClickListener(v -> startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)));
     }
 
     private void askPassword() {
@@ -268,27 +232,19 @@ public class MainActivity extends SharedMediaActivity {
     protected void onPostResume() {
         super.onPostResume();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (Hawk.get("last_version_code", 0) < BuildConfig.VERSION_CODE) {
-                    String titleHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s <b>%s</b></font>", getTextColor(), getString(R.string.changelog), BuildConfig.VERSION_NAME),
-                            buttonHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s</font>", getAccentColor(), getString(R.string.view).toUpperCase());
-                    Snackbar snackbar = Snackbar
-                            .make(mainLayout, StringUtils.html(titleHtml), Snackbar.LENGTH_LONG)
-                            .setAction(StringUtils.html(buttonHtml), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AlertDialogsHelper.showChangelogDialog(MainActivity.this);
-                                }
-                            });
-                    View snackbarView = snackbar.getView();
-                    snackbarView.setBackgroundColor(getBackgroundColor());
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
-                    snackbar.show();
-                    Hawk.put("last_version_code", BuildConfig.VERSION_CODE);
-                }
+        new Thread(() -> {
+            if (Hawk.get("last_version_code", 0) < BuildConfig.VERSION_CODE) {
+                String titleHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s <b>%s</b></font>", getTextColor(), getString(R.string.changelog), BuildConfig.VERSION_NAME),
+                        buttonHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s</font>", getAccentColor(), getString(R.string.view).toUpperCase());
+                Snackbar snackbar = Snackbar
+                        .make(mainLayout, StringUtils.html(titleHtml), Snackbar.LENGTH_LONG)
+                        .setAction(StringUtils.html(buttonHtml), view -> AlertDialogsHelper.showChangelogDialog(MainActivity.this));
+                View snackbarView = snackbar.getView();
+                snackbarView.setBackgroundColor(getBackgroundColor());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
+                snackbar.show();
+                Hawk.put("last_version_code", BuildConfig.VERSION_CODE);
             }
         }).start();
     }
@@ -310,7 +266,7 @@ public class MainActivity extends SharedMediaActivity {
         fab.setVisibility(Hawk.get(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
         mainLayout.setBackgroundColor(getBackgroundColor());
 
-        setScrollViewColor((ScrollView) findViewById(R.id.drawer_scrollbar));
+        setScrollViewColor(findViewById(R.id.drawer_scrollbar));
         Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
 
@@ -390,133 +346,7 @@ public class MainActivity extends SharedMediaActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
 
-
-
-
-/*            case R.id.hideAlbumButton:
-                final AlertDialog dialog = AlertDialogsHelper.getTextDialog(MainActivity.this,
-                        hidden ? R.string.unhide : R.string.hide,
-                        hidden ? R.string.unhide_album_message : R.string.hide_album_message);
-
-                dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(hidden ? R.string.unhide : R.string.hide).toUpperCase(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (albumsMode) {
-                            if (hidden) getAlbums().unHideSelectedAlbums(getApplicationContext());
-                            else getAlbums().hideSelectedAlbums(getApplicationContext());
-                            albumsAdapter.notifyDataSetChanged();
-                            supportInvalidateOptionsMenu();
-                        } else {
-                            if(hidden) getAlbums().unHideAlbum(getAlbum().getPath(), getApplicationContext());
-                            else getAlbums().hideAlbum(getAlbum().getPath(), getApplicationContext());
-                            displayAlbums(true);
-                        }
-                    }
-                });
-
-                if (!hidden) {
-                    dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.exclude).toUpperCase(), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (albumsMode) {
-                                getAlbums().excludeSelectedAlbums();
-                                albumsAdapter.notifyDataSetChanged();
-                                supportInvalidateOptionsMenu();
-                            } else {
-                                getAlbums().excludeAlbum(getAlbum().getPath());
-                                displayAlbums(true);
-                            }
-                        }
-                    });
-                }
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-                return true;
-
-
-            case R.id.delete_action:
-                class DeletePhotos extends AsyncTask<String, Integer, Boolean> {
-                    private AlertDialog dialog;
-
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-                        dialog = AlertDialogsHelper.getProgressDialog(MainActivity.this, getString(R.string.delete), getString(R.string.deleting_images));
-                        dialog.show();
-                    }
-
-                    @Override
-                    protected Boolean doInBackground(String... arg0) {
-                        if (albumsMode)
-                            return getAlbums().deleteSelectedAlbums(MainActivity.this);
-                        else {
-                            if (editMode())
-                                return getAlbum().deleteSelectedMedia(getApplicationContext());
-                            else {
-                                boolean succ = getAlbums().deleteAlbum(getAlbum(), getApplicationContext());
-                                getAlbum().getMedia().clear();
-                                return succ;
-                            }
-                        }
-                    }
-
-                    @Override
-                    protected void onPostExecute(Boolean result) {
-                        if (result) {
-                            if (albumsMode) {
-                                albumsAdapter.clearSelected();
-                                //albumsAdapter.notifyDataSetChanged();
-                            } else {
-                                if (getAlbum().getMedia().size() == 0) {
-                                    getAlbums().removeCurrentAlbum();
-                                    albumsAdapter.notifyDataSetChanged();
-                                    displayAlbums();
-                                } else
-                                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                            }
-                        } else requestSdCardPermissions();
-
-                        supportInvalidateOptionsMenu();
-                        checkNothing();
-                        dialog.dismiss();
-                    }
-                }
-
-
-                final AlertDialog alertDialog = AlertDialogsHelper.getTextDialog(this, R.string.delete, albumsMode || !editMode() ? R.string.delete_album_message : R.string.delete_photos_message);
-
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        alertDialog.dismiss();
-                    }
-                });
-
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (Security.isPasswordOnDelete(getApplicationContext())) {
-
-                            Security.authenticateUser(MainActivity.this, new Security.AuthCallBack() {
-                                @Override
-                                public void onAuthenticated() {
-                                    new DeletePhotos().execute();
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else new DeletePhotos().execute();
-                    }
-                });
-                alertDialog.show();
-                return true;*/
-
+            /*
             case R.id.action_move:
                 SelectAlbumBuilder.with(getSupportFragmentManager())
                         .title(getString(R.string.move_to))
@@ -534,13 +364,15 @@ public class MainActivity extends SharedMediaActivity {
                                     //oldMediaAdapter.swapDataSet(getAlbum().getMedia());
                                     //finishEditMode();
                                     supportInvalidateOptionsMenu();
-                                } else requestSdCardPermissions();*/
+                                } else requestSdCardPermissions();
 
                                 //swipeRefreshLayout.setRefreshing(false);
                             }
                         }).show();
                 return true;
+                */
 
+            /*
             case R.id.action_copy:
                 SelectAlbumBuilder.with(getSupportFragmentManager())
                         .title(getString(R.string.copy_to))
@@ -556,6 +388,9 @@ public class MainActivity extends SharedMediaActivity {
                         }).show();
 
                 return true;
+
+                */
+
 
             /*case R.id.rename:
                 final EditText editTextNewName = new EditText(getApplicationContext());

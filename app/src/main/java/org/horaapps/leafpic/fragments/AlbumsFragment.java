@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,7 +35,6 @@ import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.delete.DeleteAlbumsDialog;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -45,7 +43,6 @@ import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -116,6 +113,10 @@ public class AlbumsFragment extends BaseFragment {
                             db.close();
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
+
+                            if (hidden) {
+                                Hawk.put("h", adapter.getAlbumsPaths());
+                            }
                         });
     }
 
@@ -237,7 +238,9 @@ public class AlbumsFragment extends BaseFragment {
                         ? R.string.clear_selected
                         : R.string.select_all);
 
-        if (!editMode) {
+        if (editMode) {
+            menu.findItem(R.id.hide).setTitle(hidden ? R.string.unhide : R.string.hide);
+        } else {
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
             switch (sortingMode()) {
                 case NAME:  menu.findItem(R.id.name_sort_mode).setChecked(true); break;
@@ -287,6 +290,41 @@ public class AlbumsFragment extends BaseFragment {
                 }
 
                 return false;
+
+            case R.id.hide:
+                final AlertDialog hideDialog = AlertDialogsHelper.getTextDialog(((ThemedActivity) getActivity()),
+                        hidden ? R.string.unhide : R.string.hide,
+                        hidden ? R.string.unhide_album_message : R.string.hide_album_message);
+
+                hideDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(hidden ? R.string.unhide : R.string.hide).toUpperCase(), (dialog, id) -> {
+                    ArrayList<String> hiddenPaths = AlbumsHelper.getLastHiddenPaths();
+
+                    for (Album album : adapter.getSelectedAlbums()) {
+                        if (hidden) { // unhide
+                            AlbumsHelper.unHideAlbum(album.getPath(), getContext());
+                            hiddenPaths.remove(album.getPath());
+                        } else { // hide
+                            AlbumsHelper.hideAlbum(album.getPath(), getContext());
+                            hiddenPaths.add(album.getPath());
+                        }
+                    }
+                    AlbumsHelper.saveLastHiddenPaths(hiddenPaths);
+                    adapter.removeSelectedAlbums();
+                    updateToolbar();
+                });
+
+                if (!hidden) {
+                    hideDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.exclude).toUpperCase(), (dialog, which) -> {
+                        for (Album album : adapter.getSelectedAlbums()) {
+                            db().excludeAlbum(album.getPath());
+                            excuded.add(album.getPath());
+                        }
+                        adapter.removeSelectedAlbums();
+                    });
+                }
+                hideDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> hideDialog.dismiss());
+                hideDialog.show();
+                return true;
 
             case R.id.shortcut:
                 AlbumsHelper.createShortcuts(getContext(), adapter.getSelectedAlbums());
@@ -372,9 +410,9 @@ public class AlbumsFragment extends BaseFragment {
                 return true;
 
             case R.id.delete:
-                class DeleteAlbums extends AsyncTask<String, Integer, Boolean> {
+               /* class DeleteAlbums extends AsyncTask<String, Integer, Boolean> {
 
-                    private AlertDialog dialog;
+                    //private AlertDialog dialog;
                     List<Album> selectedAlbums;
                     DeleteAlbumsDialog newFragment;
 
@@ -404,7 +442,7 @@ public class AlbumsFragment extends BaseFragment {
 
                     @Override
                     protected void onPostExecute(Boolean result) {
-                        /*if (result) {
+                        *//*if (result) {
                             if (albumsMode) {
                                 albumsAdapter.clearSelected();
                                 //albumsAdapter.notifyDataSetChanged();
@@ -420,22 +458,22 @@ public class AlbumsFragment extends BaseFragment {
 
                         supportInvalidateOptionsMenu();
                         checkNothing();
-                        dialog.dismiss();*/
+                        dialog.dismiss();*//*
                     }
-                }
+                }*/
 
 
                 final AlertDialog alertDialog = AlertDialogsHelper.getTextDialog(((ThemedActivity) getActivity()), R.string.delete, R.string.delete_album_message);
 
                 alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, this.getString(R.string.cancel).toUpperCase(), (dialogInterface, i) -> alertDialog.dismiss());
 
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), (dialog, id) -> {
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.delete).toUpperCase(), (dialog1, id) -> {
                     if (Security.isPasswordOnDelete()) {
 
                         Security.authenticateUser(((ThemedActivity) getActivity()), new Security.AuthCallBack() {
                             @Override
                             public void onAuthenticated() {
-                                new DeleteAlbums().execute();
+                                /*new DeleteAlbums().execute();*/
                             }
 
                             @Override
@@ -443,7 +481,7 @@ public class AlbumsFragment extends BaseFragment {
                                 Toast.makeText(getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                             }
                         });
-                    } else new DeleteAlbums().execute();
+                    }/* else new DeleteAlbums().execute();*/
                 });
                 alertDialog.show();
                 return true;
