@@ -101,7 +101,7 @@ public class AlbumsFragment extends BaseFragment {
 
     private void displayAlbums() {
         adapter.clear();
-        SQLiteDatabase db = HandlingAlbums.getInstance(getContext()).getReadableDatabase();
+        SQLiteDatabase db = HandlingAlbums.getInstance(getContext().getApplicationContext()).getReadableDatabase();
         CPHelper.getAlbums(getContext(), hidden, excuded, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
                 .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
@@ -207,7 +207,7 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     private HandlingAlbums db() {
-        return HandlingAlbums.getInstance(getContext());
+        return HandlingAlbums.getInstance(getContext().getApplicationContext());
     }
 
 

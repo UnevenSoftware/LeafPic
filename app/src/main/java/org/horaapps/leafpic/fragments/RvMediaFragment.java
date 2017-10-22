@@ -245,7 +245,7 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     private HandlingAlbums db() {
-        return HandlingAlbums.getInstance(getContext());
+        return HandlingAlbums.getInstance(getContext().getApplicationContext());
     }
 
 
