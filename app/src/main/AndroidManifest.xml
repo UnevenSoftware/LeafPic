@@ -200,7 +200,7 @@
 
         <provider
             android:name=".util.LegacyCompatFileProvider"
-            android:authorities="org.horaapps.leafpic.provider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
 
