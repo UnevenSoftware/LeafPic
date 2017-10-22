@@ -117,6 +117,7 @@ public class RvMediaFragment extends BaseFragment {
         super.onResume();
         clearSelected();
         updateToolbar();
+        setUpColumns();
     }
 
     private void display() {

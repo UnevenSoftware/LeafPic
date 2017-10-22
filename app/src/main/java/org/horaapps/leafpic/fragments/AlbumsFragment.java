@@ -91,6 +91,7 @@ public class AlbumsFragment extends BaseFragment {
         super.onResume();
         clearSelected();
         updateToolbar();
+        setUpColumns();
     }
 
     public void displayAlbums(boolean hidden) {
