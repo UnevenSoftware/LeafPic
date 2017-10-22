@@ -46,7 +46,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/medium_text"
                             android:text="@string/portrait"
-                            android:textColor="@color/md_white_1000"
+                            android:textColor="@color/md_blue_500"
                             android:textStyle="bold"
                             android:paddingBottom="@dimen/small_spacing"
                             />
@@ -125,7 +125,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/medium_text"
-                            android:textColor="@color/md_white_1000"
+                            android:textColor="@color/md_blue_500"
                             android:textStyle="bold"
                             android:text="@string/landscape"
                             android:paddingBottom="@dimen/small_spacing"/>
