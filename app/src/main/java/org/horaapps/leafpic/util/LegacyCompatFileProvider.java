@@ -17,14 +17,12 @@ import java.io.File;
 
 public class LegacyCompatFileProvider extends FileProvider {
 
-    public static final String AUTHORITIES = "org.horaapps.leafpic.provider";
-
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return(new LegacyCompatCursorWrapper(super.query(uri, projection, selection, selectionArgs, sortOrder)));
     }
 
     public static Uri getUri(Context context, File file) {
-        return getUriForFile(context, AUTHORITIES, file);
+        return getUriForFile(context, context.getPackageName() + ".provider", file);
     }
 }
