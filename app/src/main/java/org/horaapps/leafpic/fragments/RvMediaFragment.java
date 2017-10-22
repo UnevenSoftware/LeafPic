@@ -41,7 +41,6 @@ import com.orhanobut.hawk.Hawk;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.activities.PaletteActivity;
-import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Album;
@@ -121,10 +120,12 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     private void display() {
+        loadAlbum(album);
+    }
 
+    public void loadAlbum(Album album) {
+        this.album = album;
         adapter.clear();
-
-
         CPHelper.getMedia(getContext(), album, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -140,6 +141,18 @@ public class RvMediaFragment extends BaseFragment {
                             refresh.setRefreshing(false);
                         });
 
+    }
+
+    public interface MediaClickListener {
+        void onCreated();
+
+        void onClick(Album album, ArrayList<Media> media, int position);
+    }
+
+    private MediaClickListener listener;
+
+    public void setListener(MediaClickListener listener) {
+        this.listener = listener;
     }
 
     @Nullable
@@ -163,15 +176,9 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pos -> {
-
-                    Intent intent = new Intent(getActivity(), SingleMediaActivity.class);
-                    intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                    intent.putExtra("album", RvMediaFragment.this.album);
-                    intent.putExtra("media", adapter.getMedia());
-                    intent.putExtra("position", pos);
-
-                    getContext().startActivity(intent);
-                    //Toast.makeText(getContext(), album.toString(), Toast.LENGTH_SHORT).show();
+                    if (RvMediaFragment.this.listener != null) {
+                        RvMediaFragment.this.listener.onClick(RvMediaFragment.this.album, adapter.getMedia(), pos);
+                    }
                 });
 
         adapter.getSelectedClicks()
@@ -190,7 +197,9 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        display();
+        if (listener != null)
+            listener.onCreated();
+        //display();
     }
 
 
@@ -456,10 +465,10 @@ public class RvMediaFragment extends BaseFragment {
                     @Override
                     protected Void doInBackground(Affix.Options... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
-                       for (int i = 0; i<adapter.getSelectedCount(); i++) {
+                        for (int i = 0; i < adapter.getSelectedCount(); i++) {
                             if(!adapter.getSelected().get(i).isVideo())
                                 bitmapArray.add(adapter.getSelected().get(i).getBitmap());
-                       }
+                        }
 
                         if (bitmapArray.size() > 1)
                             Affix.AffixBitmapList(getActivity(), bitmapArray, arg0[0]);

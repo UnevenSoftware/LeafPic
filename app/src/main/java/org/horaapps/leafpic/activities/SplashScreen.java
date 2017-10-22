@@ -21,7 +21,6 @@ import android.widget.Toast;
 import org.horaapps.leafpic.LookForMediaJob;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
-import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.StringUtils;
@@ -45,10 +44,10 @@ public class SplashScreen extends SharedMediaActivity {
     final static int ALBUMS_PREFETCHED = 2376;
     final static int PHOTOS_PREFETCHED = 2567;
     final static int ALBUMS_BACKUP = 1312;
-    private boolean PICK_INTENT = false;
+    private boolean pickMode = false;
     public final static String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.OPEN_ALBUM";
 
-    private Album tmpAlbum;
+    //private Album tmpAlbum;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,15 +63,18 @@ public class SplashScreen extends SharedMediaActivity {
         setNavBarColor();
         setStatusBarColor();
 
+        pickMode = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
+
         if (PermissionUtils.isDeviceInfoGranted(this)) {
 
-                if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
+
+            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
                     Bundle data = getIntent().getExtras();
                     if (data != null) {
                         String ab = data.getString("albumPath");
                         if (ab != null) {
                             File dir = new File(ab);
-                            tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
+                            //tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
                             // TODO: 4/10/17 handle
                             start();
                         }
@@ -80,7 +82,7 @@ public class SplashScreen extends SharedMediaActivity {
                 } else  // default intent
                     start();
 
-                PICK_INTENT = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
+
 
         } else
             PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -89,8 +91,15 @@ public class SplashScreen extends SharedMediaActivity {
     }
 
     private void start() {
-        startActivity(new Intent(SplashScreen.this, MainActivity.class));
-        finish();
+        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+
+        if (pickMode) {
+            intent.putExtra(SplashScreen.PICK_MODE, pickMode);
+            startActivityForResult(intent, PICK_MEDIA_REQUEST);
+        } else {
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void startLookingForMedia() {

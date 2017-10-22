@@ -115,7 +115,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="send_to">Send to</string>
     <string name="search_menu">search</string>
     <string name="full_resolution">Full resolution</string>
-    <string name="of">of</string>
+    <string name="of">%d of %d</string>
 
     <!-- PALETTE-->
     <string name="palette">Palette</string>

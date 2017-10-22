@@ -15,7 +15,6 @@ import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +37,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 import com.yalantis.ucrop.UCrop;
 
-import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -263,7 +261,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     private void updatePageTitle(int position) {
-        getSupportActionBar().setTitle((position + 1) + " " + getString(R.string.of) + " " + adapter.getCount());
+        getSupportActionBar().setTitle(getString(R.string.of, position + 1, adapter.getCount()));
     }
 
     @Override

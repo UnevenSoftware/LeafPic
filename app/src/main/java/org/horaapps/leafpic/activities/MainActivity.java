@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,13 +37,16 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -55,6 +59,7 @@ public class MainActivity extends SharedMediaActivity {
 
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
+    RvMediaFragment rvMediaFragment = RvMediaFragment.make(Album.getEmptyAlbum());
 
     @BindView(R.id.fab_camera)
     FloatingActionButton fab;
@@ -68,36 +73,13 @@ public class MainActivity extends SharedMediaActivity {
     private boolean pickMode = false;
     private boolean albumsMode = true;
 
-    private View.OnClickListener photosOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-           /* Media m = (Media) v.findViewById(R.id.photo_path).getTag();
-            if (!pickMode) {
-                {
-                    // TODO: 4/5/17 moveout
-                    if (Hawk.get("video_instant_play", false) && m.isVideo()) {
-                        startActivity(new Intent(Intent.ACTION_VIEW)
-                                .setDataAndType(StorageHelper.getUriForFile(getApplicationContext(), m.getFile()), m.getMimeType()));
-                    } else {
-
-                        Intent intent = new Intent(MainActivity.this, SingleMediaActivity.class);
-                        intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                        startActivity(intent);
-
-                    }
-                }
-            } else {
-                setResult(RESULT_OK, new Intent().setData(m.getUri()));
-                finish();
-            }*/
-        }
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        pickMode = getIntent().getBooleanExtra(SplashScreen.PICK_MODE, false);
 
         if (savedInstanceState != null)
             return;
@@ -107,6 +89,7 @@ public class MainActivity extends SharedMediaActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content, albumsFragment, "albums")
+                .addToBackStack(null)
                 .commit();
 
     }
@@ -121,9 +104,44 @@ public class MainActivity extends SharedMediaActivity {
         albumsMode = false;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
+        rvMediaFragment.setListener(new RvMediaFragment.MediaClickListener() {
+            @Override
+            public void onCreated() {
+                rvMediaFragment.loadAlbum(album);
+            }
+
+            @Override
+            public void onClick(Album album, ArrayList<Media> media, int position) {
+
+                if (!pickMode) {
+                    try {
+
+                        Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
+                        intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
+                        intent.putExtra("album", album);
+                        intent.putExtra("media", media);
+                        intent.putExtra("position", position);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "dio cane", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Media m = media.get(position);
+                    Uri uri = LegacyCompatFileProvider.getUri(getApplicationContext(), m.getFile());
+                    Intent intent = new Intent();
+                    intent.setData(uri);
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
+
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content, RvMediaFragment.make(album), "media")
+                .replace(R.id.content, rvMediaFragment, "media")
                 .addToBackStack(null)
                 .commit();
     }
@@ -143,26 +161,6 @@ public class MainActivity extends SharedMediaActivity {
         albumsMode = true;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportFragmentManager().popBackStack();
-    }
-
-    @Deprecated
-    private boolean displayData(Intent data) {
-
-        // TODO: 3/25/17 pick porcodio
-        pickMode = data.getBooleanExtra(SplashScreen.PICK_MODE, false);
-        switch (data.getIntExtra(SplashScreen.CONTENT, SplashScreen.ALBUMS_BACKUP)) {
-
-            case SplashScreen.PHOTOS_PREFETCHED:
-                //TODO ask password if hidden
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //getAlbums().loadAlbums(getApplicationContext(), getAlbum().isHidden());
-                    }
-                }).start();
-                return true;
-        }
-        return false;
     }
 
     private void initUi() {
