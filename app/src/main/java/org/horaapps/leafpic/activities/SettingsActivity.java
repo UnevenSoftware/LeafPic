@@ -87,7 +87,7 @@ public class SettingsActivity extends ThemedActivity {
                 });
             } else optionColoredNavbar.setVisibility(View.GONE);
         }
-        ScrollView scrollView = ButterKnife.findById(this, R.id.settingAct_scrollView);
+        ScrollView scrollView = findViewById(R.id.settingAct_scrollView);
         setScrollViewColor(scrollView);
     }
 
