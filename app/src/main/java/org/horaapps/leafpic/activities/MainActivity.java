@@ -110,18 +110,22 @@ public class MainActivity extends SharedMediaActivity {
             public void onClick(Album album, ArrayList<Media> media, int position) {
 
                 if (!pickMode) {
+                    Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
+                    intent.putExtra("album", album);
                     try {
-                        Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
                         intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                        intent.putExtra("album", album);
                         intent.putExtra("media", media);
                         intent.putExtra("position", position);
                         startActivity(intent);
                     } catch (Exception e) {
+                        intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
+                        intent.putExtra("media", media.get(position));
+                        startActivity(intent);
                         Toast.makeText(MainActivity.this, "dio cane", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
+
                     Media m = media.get(position);
                     Uri uri = LegacyCompatFileProvider.getUri(getApplicationContext(), m.getFile());
                     Intent intent = new Intent();

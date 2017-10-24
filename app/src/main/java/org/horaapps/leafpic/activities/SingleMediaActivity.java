@@ -80,6 +80,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private static final int SLIDE_SHOW_INTERVAL = 5000;
     private static final String ISLOCKED_ARG = "isLocked";
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
+    public static final String ACTION_OPEN_ALBUM_LAZY = "org.horaapps.leafpic.intent.VIEW_ALBUM_LAZY";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
 
@@ -109,13 +110,26 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         String action = getIntent().getAction();
 
-        if (action != null && action.equals(ACTION_OPEN_ALBUM)) {
-            album = getIntent().getParcelableExtra("album");
-            position = getIntent().getIntExtra("position", 0);
-            media = getIntent().getParcelableArrayListExtra("media");
-        } else if (getIntent().getData() != null) {
-            loadUri(getIntent().getData());
+        if (action != null) {
+            switch (action) {
+                case ACTION_OPEN_ALBUM:
+                    loadAlbum(getIntent());
+                    break;
+                case ACTION_OPEN_ALBUM_LAZY:
+                    loadAlbumsLazy(getIntent());
+                    break;
+                default:
+                    loadUri(getIntent().getData());
+                    break;
+
+            }
         }
+
+        /*if (action != null && action.equals(ACTION_OPEN_ALBUM)) {
+            loadAlbum(getIntent());
+        } else if (getIntent().getData() != null) {
+
+        }*/
 
         if (savedInstanceState != null) {
             mViewPager.setLocked(savedInstanceState.getBoolean(ISLOCKED_ARG, false));
@@ -123,6 +137,21 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         adapter = new MediaPagerAdapter(getSupportFragmentManager(), media);
         initUi();
+    }
+
+    private void loadAlbum(Intent intent) {
+        album = intent.getParcelableExtra("album");
+        position = intent.getIntExtra("position", 0);
+        media = intent.getParcelableArrayListExtra("media");
+    }
+
+    private void loadAlbumsLazy(Intent intent) {
+        album = intent.getParcelableExtra("album");
+        //position = intent.getIntExtra("position", 0);
+        Media m = intent.getParcelableExtra("media");
+        media = new ArrayList<>();
+        media.add(m);
+        position = 0;
     }
 
     private void loadUri(Uri uri) {
