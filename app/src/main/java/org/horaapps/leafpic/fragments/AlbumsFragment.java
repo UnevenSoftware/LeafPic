@@ -186,6 +186,7 @@ public class AlbumsFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(album -> {
+                    refresh.setEnabled(!adapter.selecting());
                     updateToolbar();
                     getActivity().invalidateOptionsMenu();
                 });

@@ -178,6 +178,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
         //holder.path.setTag(f);
         holder.icon.setVisibility(View.GONE);
+        holder.layout.setBackgroundColor(getThemeHelper().getPrimaryColor());
 
         if (f.isGif()) {
             Ion.with(holder.imageView.getContext())
@@ -231,7 +232,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             holder.icon.setColor(getThemeHelper().getPrimaryColor());
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
-            //holder.layout.setBackgroundColor(ThemeHelper.getPrimaryColor(holder.path.getContext()));
         } else {
             holder.imageView.clearColorFilter();
             holder.layout.setPadding(0,0,0,0);
