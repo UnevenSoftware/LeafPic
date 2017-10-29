@@ -83,7 +83,7 @@ Al ocultar este álbum, se creará un archivo .nomedia en la carpeta
   <string name="send_to">Enviar a</string>
   <string name="search_menu">buscar</string>
   <string name="full_resolution">Resolución completa</string>
-  <string name="of">de</string>
+    <string name="of">%d de %d</string>
   <!-- AFFIX -->
   <string name="affix">Anteponer</string>
   <string name="affix_vertical">Anteponer verticalmente</string>

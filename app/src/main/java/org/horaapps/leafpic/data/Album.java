@@ -211,11 +211,11 @@ public class Album implements CursorHandler, Parcelable {
 		settings.coverPath = null;
 	}
 
-	public void setDefaultSortingMode(Context context, SortingMode column) {
+	public void setSortingMode(SortingMode column) {
 		settings.sortingMode = column.getValue();
 	}
 
-	public void setDefaultSortingAscending(Context context, SortingOrder sortingOrder) {
+	public void setSortingOrder(SortingOrder sortingOrder) {
 		settings.sortingOrder = sortingOrder.getValue();
 	}
 

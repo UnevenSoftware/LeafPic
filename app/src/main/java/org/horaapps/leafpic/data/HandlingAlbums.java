@@ -181,13 +181,13 @@ public class HandlingAlbums extends SQLiteOpenHelper {
         setValue(path, values);
     }
 
-    void setSortingMode(String path, int column) {
+    public void setSortingMode(String path, int column) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_SORTING_MODE, column);
         setValue(path, values);
     }
 
-    void setSortingOrder(String path, int sortingOrder) {
+    public void setSortingOrder(String path, int sortingOrder) {
         ContentValues values = new ContentValues();
         values.put(ALBUM_SORTING_ORDER, sortingOrder);
         setValue(path, values);

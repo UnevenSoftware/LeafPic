@@ -75,7 +75,7 @@
   <string name="send_to">ส่งไปยัง</string>
   <string name="search_menu">ค้นหา</string>
   <string name="full_resolution">ความละเอียดเต็ม</string>
-  <string name="of">จาก</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">ปะติด</string>
   <string name="affix_vertical">ปะติดแนวตั้ง</string>

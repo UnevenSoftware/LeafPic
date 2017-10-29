@@ -189,6 +189,14 @@ public class Media implements CursorHandler, Parcelable {
         return true;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Media)
+            return getPath().equals(((Media) obj).getPath());
+
+        return super.equals(obj);
+    }
+
     @Deprecated
     private long getDateTaken() {
         /*// TODO: 16/08/16 improved

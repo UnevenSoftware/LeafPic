@@ -87,7 +87,7 @@
   <string name="send_to">共有先を選択</string>
   <string name="search_menu">検索</string>
   <string name="full_resolution">フル解像度</string>
-  <string name="of">/</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">貼付</string>
   <string name="affix_vertical">縦に貼付</string>

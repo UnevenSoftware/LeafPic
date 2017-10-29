@@ -72,7 +72,7 @@
   <string name="send_to">Envoyer vers</string>
   <string name="search_menu">Rechercher</string>
   <string name="full_resolution">Résolution haute</string>
-  <string name="of">sur</string>
+    <string name="of">%d sur %d</string>
   <!-- AFFIX -->
   <string name="affix">Affixe</string>
   <string name="affix_vertical">Affixe vertical</string>

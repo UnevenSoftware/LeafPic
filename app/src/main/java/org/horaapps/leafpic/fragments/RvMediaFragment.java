@@ -27,9 +27,7 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +42,6 @@ import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
@@ -77,8 +74,6 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class RvMediaFragment extends BaseFragment {
 
-    private static final String TAG = "asd";
-
     @BindView(R.id.media) RecyclerView rv;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
 
@@ -87,22 +82,14 @@ public class RvMediaFragment extends BaseFragment {
 
     private MainActivity act;
 
-    private Album album;
-
-    public static RvMediaFragment make(Album album) {
-        RvMediaFragment f = new RvMediaFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("album", album);
-        f.setArguments(bundle);
-        return f;
-    }
+    private Album album = Album.getEmptyAlbum();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        album = getArguments().getParcelable("album");
+        //album = getArguments().getParcelable("album");
     }
 
     @Override
@@ -125,8 +112,8 @@ public class RvMediaFragment extends BaseFragment {
 
     public void loadAlbum(Album album) {
         this.album = album;
-        adapter.clear();
-        CPHelper.getMedia(getContext(), album, sortingMode(), sortingOrder())
+        adapter.setupFor(album);
+        CPHelper.getMedia(getContext(), album)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
@@ -169,8 +156,7 @@ public class RvMediaFragment extends BaseFragment {
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
 
-        adapter = new MediaAdapter(
-                getContext(), sortingMode(), sortingOrder());
+        adapter = new MediaAdapter(getContext());
 
         adapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
@@ -200,7 +186,6 @@ public class RvMediaFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         if (listener != null)
             listener.onCreated();
-        //display();
     }
 
 
@@ -243,15 +228,11 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     public SortingMode sortingMode() {
-        return adapter != null
-                ? adapter.sortingMode()
-                : album.settings.getSortingMode();
+        return album.settings.getSortingMode();
     }
 
     public SortingOrder sortingOrder() {
-        return adapter != null
-                ? adapter.sortingOrder()
-                : album.settings.getSortingOrder();
+        return album.settings.getSortingOrder();
     }
 
     private HandlingAlbums db() {
@@ -388,25 +369,29 @@ public class RvMediaFragment extends BaseFragment {
 
             case R.id.name_sort_mode:
                 adapter.changeSortingMode(SortingMode.NAME);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.NAME);
+                HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.NAME.getValue());
+                album.setSortingMode(SortingMode.NAME);
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_mode:
                 adapter.changeSortingMode(SortingMode.DATE);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.DATE);
+                HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.DATE.getValue());
+                album.setSortingMode(SortingMode.DATE);
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_mode:
                 adapter.changeSortingMode(SortingMode.SIZE);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.SIZE);
+                HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.SIZE.getValue());
+                album.setSortingMode(SortingMode.SIZE);
                 item.setChecked(true);
                 return true;
 
             case R.id.numeric_sort_mode:
                 adapter.changeSortingMode(SortingMode.NUMERIC);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.NUMERIC);
+                HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.NUMERIC.getValue());
+                album.setSortingMode(SortingMode.NUMERIC);
                 item.setChecked(true);
                 return true;
 
@@ -414,7 +399,8 @@ public class RvMediaFragment extends BaseFragment {
                 item.setChecked(!item.isChecked());
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
                 adapter.changeSortingOrder(sortingOrder);
-                AlbumsHelper.setSortingOrder(getContext(), sortingOrder);
+                HandlingAlbums.getInstance(getContext()).setSortingOrder(album.getPath(), sortingOrder.getValue());
+                album.setSortingOrder(sortingOrder);
                 return true;
 
             case R.id.delete:
@@ -490,38 +476,38 @@ public class RvMediaFragment extends BaseFragment {
                 }
                 //endregion
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder((ThemedActivity) getActivity(), getDialogStyle());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), getDialogStyle());
                 final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
 
                 dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
                 ((CardView) dialogLayout.findViewById(R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
 
                 //ITEMS
-                final SwitchCompat swVertical = (SwitchCompat) dialogLayout.findViewById(R.id.affix_vertical_switch);
-                final SwitchCompat swSaveHere = (SwitchCompat) dialogLayout.findViewById(R.id.save_here_switch);
+                final SwitchCompat swVertical = dialogLayout.findViewById(R.id.affix_vertical_switch);
+                final SwitchCompat swSaveHere = dialogLayout.findViewById(R.id.save_here_switch);
 
-                final LinearLayout llSwVertical = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_vertical);
-                final LinearLayout llSwSaveHere = (LinearLayout) dialogLayout.findViewById(R.id.ll_affix_save_here);
+                final LinearLayout llSwVertical = dialogLayout.findViewById(R.id.ll_affix_vertical);
+                final LinearLayout llSwSaveHere = dialogLayout.findViewById(R.id.ll_affix_save_here);
 
-                final RadioGroup radioFormatGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_format);
+                final RadioGroup radioFormatGroup = dialogLayout.findViewById(R.id.radio_format);
 
-                final TextView txtQuality = (TextView) dialogLayout.findViewById(R.id.affix_quality_title);
-                final SeekBar seekQuality = (SeekBar) dialogLayout.findViewById(R.id.seek_bar_quality);
+                final TextView txtQuality = dialogLayout.findViewById(R.id.affix_quality_title);
+                final SeekBar seekQuality = dialogLayout.findViewById(R.id.seek_bar_quality);
 
                 //region Example
-                final LinearLayout llExample = (LinearLayout) dialogLayout.findViewById(R.id.affix_example);
+                final LinearLayout llExample = dialogLayout.findViewById(R.id.affix_example);
                 llExample.setBackgroundColor(getBackgroundColor());
                 llExample.setVisibility(Hawk.get("show_tips", true) ? View.VISIBLE : View.GONE);
-                final LinearLayout llExampleH = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_horizontal);
+                final LinearLayout llExampleH = dialogLayout.findViewById(R.id.affix_example_horizontal);
                 //llExampleH.setBackgroundColor(getCardBackgroundColor());
-                final LinearLayout llExampleV = (LinearLayout) dialogLayout.findViewById(R.id.affix_example_vertical);
+                final LinearLayout llExampleV = dialogLayout.findViewById(R.id.affix_example_vertical);
                 //llExampleV.setBackgroundColor(getCardBackgroundColor());
 
 
                 //endregion
 
                 //region THEME STUFF
-                getThemeHelper().setScrollViewColor((ScrollView) dialogLayout.findViewById(R.id.affix_scrollView));
+                getThemeHelper().setScrollViewColor(dialogLayout.findViewById(R.id.affix_scrollView));
 
                 /** TextViews **/
                 int color = getTextColor();
@@ -552,17 +538,17 @@ public class RvMediaFragment extends BaseFragment {
 
                 //Example bg
                 color = getCardBackgroundColor();
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setBackgroundColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setBackgroundColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setBackgroundColor(color);
-                ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setBackgroundColor(color);
+                dialogLayout.findViewById(R.id.affix_example_horizontal_txt1).setBackgroundColor(color);
+                dialogLayout.findViewById(R.id.affix_example_horizontal_txt2).setBackgroundColor(color);
+                dialogLayout.findViewById(R.id.affix_example_vertical_txt1).setBackgroundColor(color);
+                dialogLayout.findViewById(R.id.affix_example_vertical_txt2).setBackgroundColor(color);
 
                 seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
                 seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
 
-                getThemeHelper().themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_jpeg));
-                getThemeHelper().themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_png));
-                getThemeHelper().themeRadioButton((RadioButton) dialogLayout.findViewById(R.id.radio_webp));
+                getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_jpeg));
+                getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_png));
+                getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_webp));
                 getThemeHelper().setSwitchCompactColor( swSaveHere, getAccentColor());
                 getThemeHelper().setSwitchCompactColor( swVertical, getAccentColor());
                 //#endregion

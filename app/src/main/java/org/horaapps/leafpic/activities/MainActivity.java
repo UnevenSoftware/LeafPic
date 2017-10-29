@@ -55,7 +55,7 @@ public class MainActivity extends SharedMediaActivity {
 
 
     AlbumsFragment albumsFragment = new AlbumsFragment();
-    RvMediaFragment rvMediaFragment = RvMediaFragment.make(Album.getEmptyAlbum());
+    RvMediaFragment rvMediaFragment = new RvMediaFragment();
 
     @BindView(R.id.fab_camera)
     FloatingActionButton fab;
@@ -118,6 +118,7 @@ public class MainActivity extends SharedMediaActivity {
                         intent.putExtra("position", position);
                         startActivity(intent);
                     } catch (Exception e) {
+
                         intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
                         intent.putExtra("media", media.get(position));
                         startActivity(intent);
@@ -128,10 +129,10 @@ public class MainActivity extends SharedMediaActivity {
 
                     Media m = media.get(position);
                     Uri uri = LegacyCompatFileProvider.getUri(getApplicationContext(), m.getFile());
-                    Intent intent = new Intent();
-                    intent.setData(uri);
-                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    setResult(RESULT_OK, intent);
+                    Intent res = new Intent();
+                    res.setData(uri);
+                    res.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    setResult(RESULT_OK, res);
                     finish();
                 }
             }

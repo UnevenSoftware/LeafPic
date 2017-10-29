@@ -160,10 +160,20 @@ public class CPHelper {
 
     //region Media
 
+    public static Observable<Media> getMedia(Context context, Album album) {
+
+        if (album.getId() == -1) return getMediaFromStorage(context, album);
+        else if (album.getId() == Album.ALL_MEDIA_ALBUM_ID)
+            return getAllMediaFromMediaStore(context, album.settings.getSortingMode(), album.settings.getSortingOrder());
+        else
+            return getMediaFromMediaStore(context, album, album.settings.getSortingMode(), album.settings.getSortingOrder());
+    }
+
     public static Observable<Media> getMedia(Context context, Album album, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         if (album.getId() == -1) return getMediaFromStorage(context, album);
-        else if(album.getId() == Album.ALL_MEDIA_ALBUM_ID) return getAllMediaFromMediaStore(context, sortingMode, sortingOrder);
+        else if (album.getId() == Album.ALL_MEDIA_ALBUM_ID)
+            return getAllMediaFromMediaStore(context, sortingMode, sortingOrder);
         else return getMediaFromMediaStore(context, album, sortingMode, sortingOrder);
     }
 

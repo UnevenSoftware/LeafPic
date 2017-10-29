@@ -69,7 +69,7 @@
   <string name="send_to">Отправить в</string>
   <string name="search_menu">искать</string>
   <string name="full_resolution">Полное разрешение</string>
-  <string name="of">из</string>
+    <string name="of">%d из %d</string>
   <!-- AFFIX -->
   <string name="affix">Сшить</string>
   <string name="affix_vertical">Сшить вертикально</string>

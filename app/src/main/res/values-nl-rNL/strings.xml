@@ -75,7 +75,7 @@ Door deze map uit te sluiten zal u ook alle sub-mappen uitsluiten. Hieronder vin
   <string name="send_to">Verzend naar</string>
   <string name="search_menu">zoeken</string>
   <string name="full_resolution">Volledige resolutie</string>
-  <string name="of">van</string>
+    <string name="of">%d van %d</string>
   <!-- AFFIX -->
   <string name="affix">Affix</string>
   <string name="affix_vertical">Affix verticaal</string>

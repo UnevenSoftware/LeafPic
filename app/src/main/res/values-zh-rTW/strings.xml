@@ -73,7 +73,7 @@
   <string name="send_to">發送到</string>
   <string name="search_menu">搜尋</string>
   <string name="full_resolution">完整解析度</string>
-  <string name="of">/</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix_vertical_sub">設定轉向，橫向為預設值。</string>
   <string name="affix_save_here">儲存在此相簿中</string>

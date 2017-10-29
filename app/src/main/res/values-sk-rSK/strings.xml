@@ -77,7 +77,7 @@ Vylúčením adresára vylúčite aj všetky jeho podadresáre. V prípade, že 
   <string name="send_to">Odoslať</string>
   <string name="search_menu">hľadať</string>
   <string name="full_resolution">Plné rozlíšenie</string>
-  <string name="of">z</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">Kombinovať</string>
   <string name="affix_vertical">Kombinovať zvislo</string>

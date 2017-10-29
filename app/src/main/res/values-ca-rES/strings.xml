@@ -87,7 +87,7 @@
   <string name="send_to">Envia a</string>
   <string name="search_menu">cerca</string>
   <string name="full_resolution">Resolució completa</string>
-  <string name="of">de</string>
+    <string name="of">%d de %d</string>
   <!-- AFFIX -->
   <string name="affix">Adjunta</string>
   <string name="affix_vertical">Adjunta verticalment</string>

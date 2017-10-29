@@ -76,7 +76,7 @@ wtedy media zostaną skopiowane bądź przeniesione do nowego folderu.    </stri
   <string name="send_to">Wyślij do</string>
   <string name="search_menu">szukaj</string>
   <string name="full_resolution">Pełna rozdzielczość</string>
-  <string name="of">z</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">Złącz</string>
   <string name="affix_vertical">Złącz pionowo</string>

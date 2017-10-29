@@ -72,7 +72,7 @@
   <string name="send_to">Trimite la</string>
   <string name="search_menu">cautare</string>
   <string name="full_resolution">Rezolutie maxima</string>
-  <string name="of">din</string>
+    <string name="of">%d din %d</string>
   <!-- AFFIX -->
   <string name="affix">Uneste</string>
   <string name="affix_vertical">Uneste vertical</string>

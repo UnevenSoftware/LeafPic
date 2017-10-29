@@ -83,7 +83,7 @@ Escludendo questa cartella escluderai anche tutte le sottocartelle. Qui sotto pu
   <string name="send_to">Invia a</string>
   <string name="search_menu">Cerca</string>
   <string name="full_resolution">Versione ad alta risoluzione</string>
-  <string name="of">di</string>
+    <string name="of">%d di %d</string>
   <!-- AFFIX -->
   <string name="affix">Affissa</string>
   <string name="affix_vertical">Affisso verticale</string>

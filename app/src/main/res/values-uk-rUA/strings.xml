@@ -60,7 +60,7 @@
   <string name="media">Медіа</string>
   <string name="send_to">Відправити до</string>
   <string name="search_menu">Пошук</string>
-  <string name="of">із</string>
+    <string name="of">%d із %d</string>
   <!-- AFFIX -->
   <!-- RANDOM -->
   <string name="done">зроблено!</string>

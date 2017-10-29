@@ -44,9 +44,13 @@ import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumSettings;
+import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.StorageHelper;
+import org.horaapps.leafpic.data.filter.MediaFilter;
+import org.horaapps.leafpic.data.provider.CPHelper;
+import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
@@ -152,6 +156,36 @@ public class SingleMediaActivity extends SharedMediaActivity {
         media = new ArrayList<>();
         media.add(m);
         position = 0;
+
+        ArrayList<Media> list = new ArrayList<>();
+
+        CPHelper.getMedia(getApplicationContext(), album)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media) && !media.equals(m))
+                .subscribe(ma -> {
+                            int i = Collections.binarySearch(
+                                    list, ma, MediaComparators.getComparator(album.settings.getSortingMode(), album.settings.getSortingOrder()));
+                            if (i < 0) i = ~i;
+                            list.add(i, ma);
+                        },
+                        throwable -> {
+                            Log.wtf("asd", throwable);
+                        },
+                        () -> {
+                            int i = Collections.binarySearch(
+                                    list, m, MediaComparators.getComparator(album.settings.getSortingMode(), album.settings.getSortingOrder()));
+                            if (i < 0) i = ~i;
+                            list.add(i, m);
+                            media.clear();
+                            media.addAll(list);
+                            adapter.notifyDataSetChanged();
+                            position = i;
+                            mViewPager.setCurrentItem(position);
+
+                            updatePageTitle(position);
+
+                        });
     }
 
     private void loadUri(Uri uri) {
@@ -444,46 +478,59 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 break;
 
             case R.id.name_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.NAME);
+                HandlingAlbums.getInstance(getApplicationContext())
+                        .setSortingMode(album.getPath(), SortingMode.NAME.getValue());
+                album.setSortingMode(SortingMode.NAME);
                 this.album.sortPhotos();
                 adapter.swapDataSet(media);
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.DATE);
+                HandlingAlbums.getInstance(getApplicationContext())
+                        .setSortingMode(album.getPath(), SortingMode.DATE.getValue());
+                album.setSortingMode(SortingMode.DATE);
                 this.album.sortPhotos();
                 adapter.swapDataSet(media);
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.SIZE);
+                HandlingAlbums.getInstance(getApplicationContext())
+                        .setSortingMode(album.getPath(), SortingMode.SIZE.getValue());
+                album.setSortingMode(SortingMode.SIZE);
                 this.album.sortPhotos();
                 adapter.swapDataSet(media);
                 item.setChecked(true);
                 return true;
 
             case R.id.type_sort_action:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.TYPE);
+                HandlingAlbums.getInstance(getApplicationContext())
+                        .setSortingMode(album.getPath(), SortingMode.TYPE.getValue());
+                album.setSortingMode(SortingMode.TYPE);
                 this.album.sortPhotos();
                 adapter.swapDataSet(media);
                 item.setChecked(true);
                 return true;
 
             case R.id.numeric_sort_mode:
-                this.album.setDefaultSortingMode(getApplicationContext(), SortingMode.NUMERIC);
+                HandlingAlbums.getInstance(getApplicationContext())
+                        .setSortingMode(album.getPath(), SortingMode.NUMERIC.getValue());
+                album.setSortingMode(SortingMode.NUMERIC);
                 this.album.sortPhotos();
                 adapter.swapDataSet(media);
                 item.setChecked(true);
                 return true;
 
             case R.id.ascending_sort_order:
-                this.album.setDefaultSortingAscending(getApplicationContext(), !item.isChecked() ? SortingOrder.ASCENDING : SortingOrder.DESCENDING);
+                item.setChecked(!item.isChecked());
+                SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
+
+                HandlingAlbums.getInstance(getApplicationContext())
+                        .setSortingOrder(album.getPath(), sortingOrder.getValue());
+                album.setSortingOrder(sortingOrder);
                 this.album.sortPhotos();
                 adapter.swapDataSet(media);
-
-                item.setChecked(!item.isChecked());
                 return true;
 
 

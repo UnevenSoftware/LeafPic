@@ -21,6 +21,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
@@ -56,6 +57,15 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
     private Drawable placeholder;
 
+    public MediaAdapter(Context context) {
+        super(context);
+        media = new ArrayList<>();
+        this.sortingMode = SortingMode.DATE;
+        this.sortingOrder = SortingOrder.DESCENDING;
+        placeholder = getThemeHelper().getPlaceHolder();
+        setHasStableIds(true);
+    }
+
     public MediaAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
         super(context);
         media = new ArrayList<>();
@@ -82,18 +92,11 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         return media.get(position).getUri().hashCode() ^ 1312;
     }
 
-    public SortingOrder sortingOrder() {
-        return sortingOrder;
-    }
 
     public void changeSortingOrder(SortingOrder sortingOrder) {
         this.sortingOrder = sortingOrder;
         Collections.reverse(media);
         notifyDataSetChanged();
-    }
-
-    public SortingMode sortingMode() {
-        return sortingMode;
     }
 
     public void changeSortingMode(SortingMode sortingMode) {
@@ -307,6 +310,13 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             }
 
         }
+    }
+
+    public void setupFor(Album album) {
+        media.clear();
+        changeSortingMode(album.settings.getSortingMode());
+        changeSortingOrder(album.settings.getSortingOrder());
+        notifyDataSetChanged();
     }
 
     public void clear() {

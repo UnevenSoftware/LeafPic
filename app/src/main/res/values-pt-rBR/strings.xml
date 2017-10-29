@@ -89,7 +89,7 @@
   <string name="send_to">Enviar para</string>
   <string name="search_menu">procurar</string>
   <string name="full_resolution">Resolução completa</string>
-  <string name="of">de</string>
+    <string name="of">%d de %d</string>
   <!-- AFFIX -->
   <string name="affix">Afixar</string>
   <string name="affix_vertical">Afixar na vertical</string>

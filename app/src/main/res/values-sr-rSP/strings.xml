@@ -72,7 +72,7 @@
   <string name="send_to">Пошаљи</string>
   <string name="search_menu">Претрага</string>
   <string name="full_resolution">Пуна резолуција</string>
-  <string name="of">од</string>
+    <string name="of">%d од %d</string>
   <!-- AFFIX -->
   <string name="affix">Слепљивање</string>
   <string name="affix_vertical">Слепи вертикално</string>

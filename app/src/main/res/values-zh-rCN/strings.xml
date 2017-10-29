@@ -84,7 +84,7 @@
   <string name="send_to">发送至</string>
   <string name="search_menu">搜索</string>
   <string name="full_resolution">全分辨率</string>
-  <string name="of">/</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">拼接</string>
   <string name="affix_vertical">垂直拼接</string>

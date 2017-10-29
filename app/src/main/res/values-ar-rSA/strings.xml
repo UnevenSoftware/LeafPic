@@ -78,7 +78,7 @@
   <string name="send_to">ارسال إلى</string>
   <string name="search_menu">بحث</string>
   <string name="full_resolution">الدقة الكاملة</string>
-  <string name="of">من</string>
+    <string name="of">"%d من %d "</string>
   <!-- AFFIX -->
   <string name="affix">Affix</string>
   <string name="affix_vertical">Affix عمودي</string>

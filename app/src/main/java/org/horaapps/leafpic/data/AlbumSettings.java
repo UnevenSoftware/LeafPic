@@ -19,8 +19,6 @@ public class AlbumSettings implements Serializable, Parcelable {
     boolean pinned;
     FilterMode filterMode = FilterMode.ALL;
 
-
-
     public static AlbumSettings getDefaults() {
         return new AlbumSettings(null, SortingMode.DATE.getValue(), 1, 0);
     }
