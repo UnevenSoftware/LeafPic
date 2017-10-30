@@ -64,16 +64,15 @@ public class VideoFragment extends ThemedFragment {
 		videoInd = view.findViewById(org.horaapps.leafpic.R.id.icon);
 		videoInd.setOnClickListener(v -> {
 			Uri uri = StorageHelper.getUriForFile(getContext(), video.getFile());
-			Intent intent =
-					new Intent(Intent.ACTION_VIEW).setDataAndType(uri, video.getMimeType());
+			Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(uri, video.getMimeType
+					());
 			List<ResolveInfo> resInfoList =
 					getContext().getPackageManager().queryIntentActivities(intent,
 							PackageManager.MATCH_DEFAULT_ONLY);
 			for (ResolveInfo resolveInfo : resInfoList) {
 				String packageName = resolveInfo.activityInfo.packageName;
 				getContext().grantUriPermission(packageName, uri,
-						Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent
-								.FLAG_GRANT_READ_URI_PERMISSION);
+						Intent.FLAG_GRANT_READ_URI_PERMISSION);
 			}
 			startActivity(intent);
 		});
