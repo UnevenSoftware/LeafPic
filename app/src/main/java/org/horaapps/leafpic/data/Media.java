@@ -53,10 +53,10 @@ public class Media implements CursorHandler, Parcelable {
         this(path, -1);
     }
 
-    public Media(Context context, Uri mediaUri) {
+    public Media(Uri mediaUri) {
         this.uriString = mediaUri.toString();
         this.path = null;
-        this.mimeType = context.getContentResolver().getType(getUri());
+        this.mimeType = StringUtils.getMimeType(uriString);
     }
 
     public Media(@NotNull Cursor cur) {

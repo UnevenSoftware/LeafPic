@@ -215,7 +215,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             findViewById(R.id.ll_emoji_easter_egg).setVisibility(Hawk.get("emoji_easter_egg", 0) == 1 ? View.VISIBLE : View.GONE);
         }
 
-        media = new ArrayList<>(Collections.singletonList(new Media(getApplicationContext(), uri)));
+        media = new ArrayList<>(Collections.singletonList(new Media(uri)));
         position = 0;
         customUri = true;
     }
