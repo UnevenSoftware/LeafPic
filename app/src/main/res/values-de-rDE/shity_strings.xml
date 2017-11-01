@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!--<string name="video">Video</string>
+    <string name="audio">Audio</string>
+    <string name="text">Text</string>
+    <string name="retry">Nochmals versuchen</string>-->
+    <!--<string name="error_drm_not_supported">Geschützter Inhalt kann unter API Level 18 nicht angezeigt werden</string>
+    <string name="error_drm_unsupported_scheme">Dieses Gerät unterstützt das benötigte DRM (Digital Restrictions Management) nicht</string>
+    <string name="error_drm_unknown">Ein unbekannter DRM-Fehler ist aufgetreten</string>
+    <string name="error_querying_decoders">Vom Gerät unterstützte Decoder können nicht abgefragt werden</string>-->
+    <!--<string name="storage_permission_denied">Zugriffsberechtigung auf den Speicher verweigert! Bilder können folglich nicht angezeigt werden.</string>-->
+</resources>
