@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.koushikdutta.ion.Ion;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -183,29 +182,22 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         holder.icon.setVisibility(View.GONE);
         holder.layout.setBackgroundColor(getThemeHelper().getPrimaryColor());
 
-        if (f.isGif()) {
-            Ion.with(holder.imageView.getContext())
-                    .load(f.getPath())
-                    .intoImageView(holder.imageView);
-            holder.gifIcon.setVisibility(View.VISIBLE);
-        } else {
+        holder.gifIcon.setVisibility(f.isGif() ? View.VISIBLE : View.GONE);
 
-            RequestOptions options = new RequestOptions()
-                    .signature(f.getSignature())
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .centerCrop()
-                    .placeholder(placeholder)
-                    //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        RequestOptions options = new RequestOptions()
+                .signature(f.getSignature())
+                .format(DecodeFormat.PREFER_RGB_565)
+                .centerCrop()
+                .placeholder(placeholder)
+                //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
 
-            Glide.with(holder.imageView.getContext())
-                    .load(f.getUri())
-                    .apply(options)
-                    .thumbnail(0.5f)
-                    .into(holder.imageView);
-            holder.gifIcon.setVisibility(View.GONE);
-        }
+        Glide.with(holder.imageView.getContext())
+                .load(f.getUri())
+                .apply(options)
+                .thumbnail(0.5f)
+                .into(holder.imageView);
 
         if(f.isVideo()) {
             holder.icon.setVisibility(View.VISIBLE);

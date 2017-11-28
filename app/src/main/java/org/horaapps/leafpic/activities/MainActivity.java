@@ -118,11 +118,9 @@ public class MainActivity extends SharedMediaActivity {
                         intent.putExtra("position", position);
                         startActivity(intent);
                     } catch (Exception e) {
-
                         intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
                         intent.putExtra("media", media.get(position));
                         startActivity(intent);
-                        Toast.makeText(MainActivity.this, "dio cane", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {

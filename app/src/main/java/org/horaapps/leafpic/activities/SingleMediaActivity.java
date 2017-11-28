@@ -165,7 +165,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media) && !media.equals(m))
                 .subscribe(ma -> {
                             int i = Collections.binarySearch(
-                                    list, ma, MediaComparators.getComparator(album.settings.getSortingMode(), album.settings.getSortingOrder()));
+                                    list, ma, MediaComparators.getComparator(album.settings));
                             if (i < 0) i = ~i;
                             list.add(i, ma);
                         },
@@ -174,8 +174,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
                         },
                         () -> {
                             int i = Collections.binarySearch(
-                                    list, m, MediaComparators.getComparator(album.settings.getSortingMode(), album.settings.getSortingOrder()));
+                                    list, m, MediaComparators.getComparator(album.settings));
                             if (i < 0) i = ~i;
+
                             list.add(i, m);
                             media.clear();
                             media.addAll(list);

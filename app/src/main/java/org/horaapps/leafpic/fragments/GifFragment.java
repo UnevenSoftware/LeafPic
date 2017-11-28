@@ -6,11 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.koushikdutta.ion.Ion;
-
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
+
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Created by dnld on 18/02/16.
@@ -37,12 +36,8 @@ public class GifFragment extends Fragment {
 
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PhotoView photoView = new PhotoView(container.getContext());
-
-        Ion.with(getContext())
-                .load(gif.getPath())
-                .intoImageView(photoView);
-
+        GifImageView photoView = new GifImageView(container.getContext());
+        photoView.setImageURI(gif.getUri());
         photoView.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
         return photoView;
     }

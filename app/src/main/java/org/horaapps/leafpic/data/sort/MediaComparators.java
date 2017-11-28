@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.data.sort;
 
+import org.horaapps.leafpic.data.AlbumSettings;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.NumericComparator;
 
@@ -11,6 +12,9 @@ import java.util.Comparator;
 
 public class MediaComparators {
 
+    public static Comparator<Media> getComparator(AlbumSettings settings) {
+        return getComparator(settings.getSortingMode(), settings.getSortingOrder());
+    }
     public static Comparator<Media> getComparator(SortingMode sortingMode, SortingOrder sortingOrder) {
         return  sortingOrder == SortingOrder.ASCENDING
                 ? getComparator(sortingMode) : reverse(getComparator(sortingMode));
