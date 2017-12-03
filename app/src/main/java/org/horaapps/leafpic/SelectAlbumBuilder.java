@@ -35,6 +35,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.filter.FoldersFileFilter;
@@ -121,11 +122,11 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         View contentView = View.inflate(getContext(), R.layout.select_folder_bottom_sheet, null);
-        final RecyclerView mRecyclerView = (RecyclerView) contentView.findViewById(R.id.folders);
-        final Spinner spinner = (Spinner) contentView.findViewById(R.id.storage_spinner);
-        currentFolderPath = (TextView) contentView.findViewById(R.id.bottom_sheet_sub_title);
-        exploreModePanel = (LinearLayout) contentView.findViewById(R.id.ll_explore_mode_panel);
-        imgExploreMode = (IconicsImageView) contentView.findViewById(R.id.toggle_hidden_icon);
+        final RecyclerView mRecyclerView = contentView.findViewById(R.id.folders);
+        final Spinner spinner = contentView.findViewById(R.id.storage_spinner);
+        currentFolderPath = contentView.findViewById(R.id.bottom_sheet_sub_title);
+        exploreModePanel = contentView.findViewById(R.id.ll_explore_mode_panel);
+        imgExploreMode = contentView.findViewById(R.id.toggle_hidden_icon);
 
         theme = ThemeHelper.getInstanceLoaded(getContext());
         sdCardPath = StorageHelper.getSdcardPath(getContext());
@@ -171,7 +172,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
         mRecyclerView.setBackgroundColor(theme.getBackgroundColor());
 
-        fabDone = (FloatingActionButton) contentView.findViewById(R.id.fab_bottomsheet_done);
+        fabDone = contentView.findViewById(R.id.fab_bottomsheet_done);
         fabDone.setBackgroundTintList(ColorStateList.valueOf(theme.getAccentColor()));
         fabDone.setImageDrawable(new IconicsDrawable(getContext()).icon(GoogleMaterial.Icon.gmd_done).color(Color.WHITE));
         fabDone.setVisibility(exploreMode ? View.VISIBLE : View.GONE);
@@ -264,6 +265,9 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             exploreModePanel.setVisibility(View.VISIBLE);
         } else {
             currentFolderPath.setText(R.string.local_folder);
+
+            for (String al : Hawk.get("albums", new ArrayList<String>()))
+                folders.add(new File(al));
             /*for (Album album : ((App) getActivity().getApplicationContext()).getAlbums().albums) {
                 folders.add(new File(album.getPath()));
             }*/
@@ -350,9 +354,9 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
             LinearLayout llItemBackground;
             ViewHolder(View itemView) {
                 super(itemView);
-                folderName = (TextView) itemView.findViewById(R.id.name_folder);
-                imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon_bottom_sheet_item);
-                llItemBackground = (LinearLayout) itemView.findViewById(R.id.ll_album_bottom_sheet_item);
+                folderName = itemView.findViewById(R.id.name_folder);
+                imgFolder = itemView.findViewById(R.id.folder_icon_bottom_sheet_item);
+                llItemBackground = itemView.findViewById(R.id.ll_album_bottom_sheet_item);
             }
         }
     }

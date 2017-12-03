@@ -114,9 +114,7 @@ public class AlbumsFragment extends BaseFragment {
                             act.nothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
 
-                            if (hidden) {
-                                Hawk.put("h", adapter.getAlbumsPaths());
-                            }
+                            Hawk.put(hidden ? "h" : "albums", adapter.getAlbumsPaths());
                         });
     }
 
