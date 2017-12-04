@@ -12,7 +12,8 @@
     android:background="@drawable/ripple"
     android:paddingTop="@dimen/sub_medium_spacing_2"
     android:paddingBottom="@dimen/sub_medium_spacing_2">
-    <com.mikepenz.iconics.view.IconicsImageView
+
+    <org.horaapps.liz.ui.ThemedIcon
         android:id="@+id/folder_icon_bottom_sheet_item"
         android:layout_height="@dimen/icon_width_height"
         android:layout_width="@dimen/icon_width_height"

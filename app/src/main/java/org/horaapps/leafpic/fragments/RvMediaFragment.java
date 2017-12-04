@@ -33,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
@@ -58,6 +57,7 @@ import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -531,10 +531,10 @@ public class RvMediaFragment extends BaseFragment {
 
                 /** Icons **/
                 color = getIconColor();
-                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_quality_icon)).setColor(color);
-                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
-                ((IconicsImageView) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
-                ((IconicsImageView) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
+                ((ThemedIcon) dialogLayout.findViewById(R.id.affix_quality_icon)).setColor(color);
+                ((ThemedIcon) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
+                ((ThemedIcon) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
+                ((ThemedIcon) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
 
                 //Example bg
                 color = getCardBackgroundColor();

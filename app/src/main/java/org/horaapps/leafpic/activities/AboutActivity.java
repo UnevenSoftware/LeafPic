@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
@@ -26,6 +25,7 @@ import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -258,13 +258,13 @@ public class AboutActivity extends ThemedActivity {
         color = getIconColor();
 
         //ABOUT SUPPORT
-        ((IconicsImageView) findViewById(R.id.about_support_translate_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.about_support_rate_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.about_support_github_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.about_support_report_bug_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.about_support_donate_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.about_license_icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.about_changelog_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_support_translate_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_support_rate_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_support_github_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_support_report_bug_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_support_donate_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_license_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.about_changelog_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();

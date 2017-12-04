@@ -34,7 +34,6 @@ import android.widget.TextView;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.data.StorageHelper;
@@ -44,6 +43,7 @@ import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
     private BottomSheetAlbumsAdapter adapter;
     private ThemeHelper theme;
     private boolean exploreMode = false, canGoBack = false, forzed = false;
-    private IconicsImageView imgExploreMode;
+    private ThemedIcon imgExploreMode;
     private LinearLayout exploreModePanel;
     private TextView currentFolderPath;
     private OnFolderSelected onFolderSelected;
@@ -185,7 +185,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         });
 
         ((TextView) contentView.findViewById(R.id.bottom_sheet_title)).setText(title);
-        ((IconicsImageView) contentView.findViewById(R.id.create_new_folder_icon)).setColor(theme.getIconColor());
+        ((ThemedIcon) contentView.findViewById(R.id.create_new_folder_icon)).setColor(theme.getIconColor());
 
         contentView.findViewById(R.id.rl_create_new_folder).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,7 +308,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
                 case INTERNAL_STORAGE: icon = GoogleMaterial.Icon.gmd_storage; break;
                 default: icon = GoogleMaterial.Icon.gmd_sd_card; break;
             }
-            ((IconicsImageView) view.findViewById(R.id.volume_image)).setIcon(icon);
+            ((ThemedIcon) view.findViewById(R.id.volume_image)).setIcon(icon);
             view.setBackgroundColor(theme.getPrimaryColor());
             return view;
         }
@@ -350,7 +350,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView folderName;
-            IconicsImageView imgFolder;
+            ThemedIcon imgFolder;
             LinearLayout llItemBackground;
             ViewHolder(View itemView) {
                 super(itemView);

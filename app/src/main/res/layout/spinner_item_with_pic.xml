@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:padding="@dimen/medium_spacing"
     android:layout_height="match_parent">
-    <com.mikepenz.iconics.view.IconicsImageView
+
+    <org.horaapps.liz.ui.ThemedIcon
         android:layout_height="@dimen/icon_width_height"
         android:layout_width="@dimen/icon_width_height"
         android:id="@+id/volume_image"

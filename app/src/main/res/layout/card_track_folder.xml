@@ -7,7 +7,8 @@
     android:orientation="horizontal"
     android:foreground="@drawable/ripple"
     android:clickable="true">
-    <com.mikepenz.iconics.view.IconicsImageView
+
+    <org.horaapps.liz.ui.ThemedIcon
         android:id="@+id/folder_icon"
         android:layout_width="@dimen/icon_width_height"
         android:layout_height="@dimen/icon_width_height"
@@ -46,7 +47,7 @@
                 />
         </LinearLayout>
 
-        <com.mikepenz.iconics.view.IconicsImageView
+        <org.horaapps.liz.ui.ThemedIcon
             android:id="@+id/remove_icon"
             android:layout_width="@dimen/icon_width_height"
             android:layout_height="@dimen/icon_width_height"

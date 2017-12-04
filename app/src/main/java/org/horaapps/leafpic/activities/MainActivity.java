@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
@@ -43,6 +42,7 @@ import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -290,13 +290,13 @@ public class MainActivity extends SharedMediaActivity {
 
         /** ICONS **/
         color = getIconColor();
-        ((IconicsImageView) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_Allmedia_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_About_Icon)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_Allmedia_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_About_Icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
 
         setRecentApp(getString(R.string.app_name));
     }

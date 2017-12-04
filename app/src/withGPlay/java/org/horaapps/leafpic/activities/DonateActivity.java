@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SecretConstants;
@@ -26,6 +25,7 @@ import org.horaapps.leafpic.util.inapppurchase.IabHelper;
 import org.horaapps.leafpic.util.inapppurchase.IabResult;
 import org.horaapps.leafpic.util.inapppurchase.Purchase;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by Jibo on 02/03/2016.
@@ -193,10 +193,10 @@ public class DonateActivity extends ThemedActivity {
         /** Icons **/
         color = getIconColor();
 
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.donate_googleplay_icon_title)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.donate_paypal_icon_title)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.donate_bitcoin_icon_title)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.donate_header_icon)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.donate_googleplay_icon_title)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.donate_paypal_icon_title)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.donate_bitcoin_icon_title)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.donate_header_icon)).setColor(color);
 
         /** TextViews **/
         color = getTextColor();

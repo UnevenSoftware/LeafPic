@@ -29,7 +29,8 @@
                 android:orientation="horizontal"
                 android:background="@drawable/ripple"
                 android:clickable="true">
-                <com.mikepenz.iconics.view.IconicsImageView
+
+                <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/active_security_icon"
                     android:layout_width="@dimen/icon_width_height"
                     android:layout_height="@dimen/icon_width_height"
@@ -74,7 +75,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
-                <com.mikepenz.iconics.view.IconicsImageView
+
+                <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/active_security_fingerprint_icon"
                     android:layout_width="@dimen/icon_width_height"
                     android:layout_height="@dimen/icon_width_height"
@@ -140,7 +142,8 @@
                     android:orientation="horizontal"
                     android:background="@drawable/ripple"
                     android:clickable="true">
-                    <com.mikepenz.iconics.view.IconicsImageView
+
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/security_body_apply_hidden_icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -185,7 +188,8 @@
                     android:orientation="horizontal"
                     android:background="@drawable/ripple"
                     android:clickable="true">
-                    <com.mikepenz.iconics.view.IconicsImageView
+
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/security_body_apply_delete_icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"

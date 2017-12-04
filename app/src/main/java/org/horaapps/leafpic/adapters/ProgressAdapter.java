@@ -9,12 +9,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedViewHolder;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,7 +85,7 @@ public class ProgressAdapter extends BaseAdapter<ProgressAdapter.ListItem, Progr
     static class ViewHolder extends ThemedViewHolder {
 
         @BindView(R.id.folder_icon_bottom_sheet_item)
-        IconicsImageView icon;
+        ThemedIcon icon;
         @BindView(R.id.name_folder)
         TextView name;
         @BindView(R.id.ll_album_bottom_sheet_item)

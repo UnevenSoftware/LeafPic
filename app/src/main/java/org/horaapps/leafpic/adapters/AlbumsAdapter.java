@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.CardViewStyle;
@@ -31,6 +30,7 @@ import org.horaapps.liz.Theme;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
 import org.horaapps.liz.ThemedViewHolder;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -335,7 +335,8 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         @BindView(R.id.album_card) CardView card;
         @BindView(R.id.album_preview) ImageView picture;
-        @BindView(R.id.selected_icon) IconicsImageView selectedIcon;
+        @BindView(R.id.selected_icon)
+        ThemedIcon selectedIcon;
         @BindView(R.id.ll_album_info) View footer;
         @BindView(R.id.ll_media_count) View llCount;
         @BindView(R.id.album_name) TextView name;

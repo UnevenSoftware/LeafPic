@@ -10,11 +10,10 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.mikepenz.iconics.view.IconicsImageView;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +25,8 @@ public class SettingBasic extends FrameLayout implements Themed {
     private final String iconString;
     @StringRes private final int titleRes;
     @StringRes private final int captionRes;
-    @BindView(R.id.icon) IconicsImageView icon;
+    @BindView(R.id.icon)
+    ThemedIcon icon;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.caption) TextView caption;
 
@@ -60,7 +60,7 @@ public class SettingBasic extends FrameLayout implements Themed {
     protected void onFinishInflate() {
         ButterKnife.bind(this);
 
-        icon.setIcon(iconString);
+        icon.setIcon(icon.getIcon().icon(iconString));
         title.setText(titleRes);
         caption.setText(captionRes);
 

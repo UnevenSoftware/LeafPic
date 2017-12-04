@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
@@ -24,6 +23,7 @@ import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by dnld on 22/05/16.
@@ -199,18 +199,18 @@ public class SecurityActivity extends ThemedActivity {
         findViewById(R.id.ll_active_security_fingerprint).setClickable(enable);
 
         if(enable){
-            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getIconColor());
+            ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getIconColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(getTextColor());
-            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getIconColor());
+            ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getIconColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(getTextColor());
-            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(getIconColor());
+            ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(getIconColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_item_title)).setTextColor(getTextColor());
         } else {
-            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getSubTextColor());
+            ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(getSubTextColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_title)).setTextColor(getSubTextColor());
-            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getSubTextColor());
+            ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(getSubTextColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_title)).setTextColor(getSubTextColor());
-            ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(getSubTextColor());
+            ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(getSubTextColor());
             ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_item_title)).setTextColor(getSubTextColor());
         }
     }
@@ -234,10 +234,10 @@ public class SecurityActivity extends ThemedActivity {
 
         /** ICONS **/
         int color = getIconColor();
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(color);
-        ((IconicsImageView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.active_security_icon)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.security_body_apply_hidden_icon)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.security_body_apply_delete_icon)).setColor(color);
+        ((ThemedIcon) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_icon)).setColor(color);
 
         /** TEXTVIEWS **/
         color = getTextColor();

@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/small_spacing"
     android:paddingBottom="@dimen/small_spacing">
 
-    <com.mikepenz.iconics.view.IconicsImageView
+    <org.horaapps.liz.ui.ThemedIcon
         android:id="@+id/folder_icon_bottom_sheet_item"
         android:layout_height="14dp"
         android:layout_width="14dp"

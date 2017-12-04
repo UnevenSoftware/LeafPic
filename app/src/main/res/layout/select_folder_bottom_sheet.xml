@@ -57,7 +57,8 @@
                     android:textStyle="italic"
                     />
             </LinearLayout>
-            <com.mikepenz.iconics.view.IconicsImageView
+
+            <org.horaapps.liz.ui.ThemedIcon
                 android:id="@+id/toggle_hidden_icon"
                 android:layout_height="@dimen/icon_width_height"
                 android:layout_width="@dimen/icon_width_height"
@@ -89,7 +90,8 @@
                 android:foreground="@drawable/ripple"
                 android:clickable="true"
                 >
-                <com.mikepenz.iconics.view.IconicsImageView
+
+                <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/create_new_folder_icon"
                     android:layout_height="@dimen/icon_width_height"
                     android:layout_width="@dimen/icon_width_height"

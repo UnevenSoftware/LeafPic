@@ -9,12 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ColorPalette;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import uz.shift.colorpicker.LineColorPicker;
 
@@ -38,7 +38,7 @@ public class SinglePhotoSetting extends ThemedSetting {
         dialogLayout.findViewById(R.id.dialog_title).setBackgroundColor(getActivity().getPrimaryColor());
         ((TextView) dialogLayout.findViewById(R.id.apply_theme)).setTextColor(getActivity().getTextColor());
         ((TextView) dialogLayout.findViewById(R.id.apply_theme_3thAct_title_Sub)).setTextColor(getActivity().getSubTextColor());
-        ((IconicsImageView) dialogLayout.findViewById(R.id.ll_apply_theme_icon)).setColor(getActivity().getIconColor());
+        ((ThemedIcon) dialogLayout.findViewById(R.id.ll_apply_theme_icon)).setColor(getActivity().getIconColor());
 
         swApplyTheme.setChecked(getActivity().themeOnSingleImgAct());
         swApplyTheme.setClickable(false);

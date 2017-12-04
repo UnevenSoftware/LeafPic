@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
@@ -29,6 +28,7 @@ import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.filter.ImageFileFilter;
 import org.horaapps.leafpic.data.provider.ContentProviderHelper;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -222,14 +222,14 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             LinearLayout layout;
-            IconicsImageView imgFolder, imgRemove;
+            ThemedIcon imgFolder, imgRemove;
             TextView name, path;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
-                imgFolder = (IconicsImageView) itemView.findViewById(R.id.folder_icon);
-                imgRemove = (IconicsImageView) itemView.findViewById(R.id.remove_icon);
+                imgFolder = (ThemedIcon) itemView.findViewById(R.id.folder_icon);
+                imgRemove = (ThemedIcon) itemView.findViewById(R.id.remove_icon);
                 name = (TextView) itemView.findViewById(R.id.folder_name);
                 path = (TextView) itemView.findViewById(R.id.folder_path);
             }

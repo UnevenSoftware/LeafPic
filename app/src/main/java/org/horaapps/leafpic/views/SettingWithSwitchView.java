@@ -12,13 +12,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.mikepenz.iconics.view.IconicsImageView;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +32,8 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
     @StringRes private final int titleRes;
     @StringRes private final int captionRes;
     private final boolean defaultValue;
-    @BindView(R.id.icon) IconicsImageView icon;
+    @BindView(R.id.icon)
+    ThemedIcon icon;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.caption) TextView caption;
     @BindView(R.id.toggle) SwitchCompat toggle;
@@ -72,7 +73,7 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
     protected void onFinishInflate() {
         ButterKnife.bind(this);
 
-        icon.setIcon(iconString);
+        icon.setIcon(icon.getIcon().icon(iconString));
         title.setText(titleRes);
         caption.setText(captionRes);
         toggle.setChecked(isChecked());

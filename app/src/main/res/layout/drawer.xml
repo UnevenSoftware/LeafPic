@@ -82,7 +82,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_Default_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -112,7 +112,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_Allmedia_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -141,7 +141,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_hidden_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -173,7 +173,7 @@
                         android:clickable="true"
                         >
 
-                        <com.mikepenz.iconics.view.IconicsImageView
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/Drawer_Tags_Icon"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -206,7 +206,7 @@
                         android:clickable="true"
                         >
 
-                        <com.mikepenz.iconics.view.IconicsImageView
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/Drawer_Moments_Icon"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -236,7 +236,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_wallpapers_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -276,7 +276,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_Donate_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -305,7 +305,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_Setting_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"
@@ -334,7 +334,7 @@
                     android:clickable="true"
                     android:orientation="horizontal">
 
-                    <com.mikepenz.iconics.view.IconicsImageView
+                    <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/Drawer_About_Icon"
                         android:layout_width="@dimen/icon_width_height"
                         android:layout_height="@dimen/icon_width_height"

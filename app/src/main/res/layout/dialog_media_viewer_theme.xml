@@ -39,7 +39,8 @@
                         android:orientation="horizontal"
                         android:background="@drawable/ripple"
                         android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
+
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/ll_apply_theme_icon"
                             app:iiv_icon="gmd-brush"
                             android:layout_width="@dimen/icon_width_height"

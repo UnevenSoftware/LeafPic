@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Album;
@@ -29,6 +27,7 @@ import org.horaapps.leafpic.views.SquareRelativeLayout;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
 import org.horaapps.liz.ThemedViewHolder;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,15 +60,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         media = new ArrayList<>();
         this.sortingMode = SortingMode.DATE;
         this.sortingOrder = SortingOrder.DESCENDING;
-        placeholder = getThemeHelper().getPlaceHolder();
-        setHasStableIds(true);
-    }
-
-    public MediaAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
-        super(context);
-        media = new ArrayList<>();
-        this.sortingMode = sortingMode;
-        this.sortingOrder = sortingOrder;
         placeholder = getThemeHelper().getPlaceHolder();
         setHasStableIds(true);
     }
@@ -210,7 +200,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
             holder.path.animate().alpha(1).setDuration(250);
-            holder.icon.setColor(getThemeHelper().getPrimaryColor());
         } else {
             holder.icon.setVisibility(View.GONE);
             holder.path.setVisibility(View.GONE);
@@ -224,7 +213,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             holder.icon.setVisibility(View.VISIBLE);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
             holder.layout.setPadding(15,15,15,15);
-            holder.icon.setColor(getThemeHelper().getPrimaryColor());
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
         } else {
@@ -251,7 +239,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 selectAllUpTo(f);
                 onChangeSelectedSubject.onNext(new Media());
             }
-
 
             return true;
         });
@@ -339,9 +326,9 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         @BindView(R.id.photo_path)
         TextView path;
         @BindView(R.id.gif_icon)
-        IconicsImageView gifIcon;
+        ThemedIcon gifIcon;
         @BindView(R.id.icon)
-        IconicsImageView icon;
+        ThemedIcon icon;
         @BindView(R.id.media_card_layout)
         SquareRelativeLayout layout;
 
@@ -353,7 +340,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         @Override
         public void refreshTheme(ThemeHelper themeHelper) {
             icon.setColor(Color.WHITE);
-            Log.wtf("asd", "asdasd");
         }
     }
 }

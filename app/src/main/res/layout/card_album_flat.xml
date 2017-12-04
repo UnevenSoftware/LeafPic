@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/header_album_card"
             >
-            <com.mikepenz.iconics.view.IconicsImageView
+
+            <org.horaapps.liz.ui.ThemedIcon
                 android:id="@+id/selected_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

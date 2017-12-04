@@ -12,7 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.view.IconicsImageView;
+import org.horaapps.liz.ui.ThemedIcon;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.CustomTabService;
@@ -97,9 +97,9 @@ public class DonateActivity extends ThemedActivity {
         ((CardView) findViewById(R.id.donate_bitcoin_card)).setCardBackgroundColor(color);
 
         color = getIconColor();
-        ((IconicsImageView) findViewById(R.id.donate_paypal_icon_title)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.donate_bitcoin_icon_title)).setColor(color);
-        ((IconicsImageView) findViewById(R.id.donate_header_icon)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.donate_paypal_icon_title)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.donate_bitcoin_icon_title)).setColor(color);
+        ((ThemedIcon) findViewById(R.id.donate_header_icon)).setColor(color);
 
         color = getTextColor();
         ((TextView) findViewById(R.id.donate_paypal_item)).setTextColor(color);

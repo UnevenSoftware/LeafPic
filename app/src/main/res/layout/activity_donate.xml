@@ -40,7 +40,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <com.mikepenz.iconics.view.IconicsImageView
+
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/donate_header_icon"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
@@ -90,7 +91,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <com.mikepenz.iconics.view.IconicsImageView
+
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/donate_googleplay_icon_title"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
@@ -162,7 +164,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <com.mikepenz.iconics.view.IconicsImageView
+
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/donate_paypal_icon_title"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
@@ -224,7 +227,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <com.mikepenz.iconics.view.IconicsImageView
+
+                        <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/donate_bitcoin_icon_title"
                             android:layout_width="@dimen/icon_width_height"
                             android:layout_height="@dimen/icon_width_height"
