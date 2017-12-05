@@ -233,7 +233,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                         trackSelector.getCurrentSelections().info, audio);
                 return true;
             case R.id.text_stuff:
-                trackSelectionHelper.showSelectionDialog(this, getString(R.string.gmd_subtitles),
+                trackSelectionHelper.showSelectionDialog(this, getString(R.string.subtitles),
                         trackSelector.getCurrentSelections().info, text);
                 return true;
 

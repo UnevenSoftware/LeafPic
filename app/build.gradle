@@ -103,9 +103,9 @@ dependencies {
     // icons
     implementation 'com.mikepenz:iconics-core:3.0.0@aar'
     implementation "com.mikepenz:iconics-views:3.0.0@aar"
-    implementation 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
-    implementation 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
-    implementation 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
+    implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
+    implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+    implementation 'com.mikepenz:fontawesome-typeface:4.7.0.2@aar'
 
     // ui
     implementation 'uz.shift:colorpicker:0.5@aar'

@@ -324,6 +324,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="enable_background_audio">Play in background</string>
     <string name="video">Video</string>
     <string name="audio">Audio</string>
+    <string name="subtitles">Subtitles</string>
     <string name="text">Text</string>
     <string name="retry">Retry</string>
     <string name="off">off</string>
