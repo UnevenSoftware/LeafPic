@@ -104,7 +104,7 @@
                         <ImageView
                             android:id="@+id/donald_header_img"
                             android:layout_width="match_parent"
-                            android:layout_height="150dp"
+                            android:layout_height="151dp"
                             android:scaleType="centerCrop" />
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/donald_profile_img"
