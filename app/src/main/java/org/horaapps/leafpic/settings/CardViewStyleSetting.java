@@ -20,6 +20,7 @@ import com.orhanobut.hawk.Hawk;
 import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ColorPalette;
 import org.horaapps.liz.Theme;
 import org.horaapps.liz.ThemedActivity;
@@ -54,8 +55,8 @@ public class CardViewStyleSetting extends ThemedSetting {
         RadioButton rFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
         RadioButton rMaterial = (RadioButton) dialogLayout.findViewById(R.id.radio_card_material);
 
-        chkShowMediaCount.setChecked(Hawk.get("show_media_count", true));
-        chkShowAlbumPath.setChecked(Hawk.get("show_album_path", false));
+        chkShowMediaCount.setChecked(Prefs.showMediaCount());
+        chkShowAlbumPath.setChecked(Prefs.showAlbumPath());
 
         getActivity().themeRadioButton(rCompact);
         getActivity().themeRadioButton(rFlat);
@@ -129,7 +130,7 @@ public class CardViewStyleSetting extends ThemedSetting {
             }
         });
 
-        switch (CardViewStyle.fromValue(Hawk.get("card_view_style", 0))) {
+        switch (Prefs.getCardStyle()) {
             case COMPACT: rCompact.setChecked(true); break;
             case FLAT: rFlat.setChecked(true); break;
             case MATERIAL: default: rMaterial.setChecked(true); break;
@@ -139,20 +140,22 @@ public class CardViewStyleSetting extends ThemedSetting {
         builder.setPositiveButton(getActivity().getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                CardViewStyle cardViewStyle;
                 switch (rGroup.getCheckedRadioButtonId()) {
                     case R.id.radio_card_material:
                     default:
-                        Hawk.put("card_view_style", MATERIAL.getValue());
+                        cardViewStyle = MATERIAL;
                         break;
                     case R.id.radio_card_flat:
-                        Hawk.put("card_view_style", FLAT.getValue());
+                        cardViewStyle = FLAT;
                         break;
                     case R.id.radio_card_compact:
-                        Hawk.put("card_view_style", COMPACT.getValue());
+                        cardViewStyle = COMPACT;
                         break;
                 }
-                Hawk.put("show_media_count", chkShowMediaCount.isChecked());
-                Hawk.put("show_album_path", chkShowAlbumPath.isChecked());
+                Prefs.setCardStyle(cardViewStyle);
+                Prefs.setShowMediaCount(chkShowMediaCount.isChecked());
+                Prefs.setShowAlbumPath(chkShowAlbumPath.isChecked());
                 Toast.makeText(getActivity(), getActivity().getString(R.string.card_style_alert), Toast.LENGTH_SHORT).show();
             }
         });

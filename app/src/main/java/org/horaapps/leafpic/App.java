@@ -7,28 +7,28 @@ import com.squareup.leakcanary.LeakCanary;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.util.preferences.Prefs;
 
 /**
  * Created by dnld on 28/04/16.
  */
-public class App extends /*org.horaapps.liz.App*/ Application {
+public class App extends Application {
 
     private static App mInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
+
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
         LeakCanary.install(this);
-        // Normal app init code...
 
-        Hawk.init(this).build();
-
-        mInstance = this;
+        initialiseStorage();
     }
 
     public static App getInstance() {
@@ -43,5 +43,10 @@ public class App extends /*org.horaapps.liz.App*/ Application {
     @Deprecated
     public HandlingAlbums getAlbums() {
         return HandlingAlbums.getInstance(getApplicationContext());
+    }
+
+    private void initialiseStorage() {
+        Prefs.init(this);
+        Hawk.init(this).build();
     }
 }

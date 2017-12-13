@@ -28,6 +28,7 @@ import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.filter.ImageFileFilter;
 import org.horaapps.leafpic.data.provider.ContentProviderHelper;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ui.ThemedIcon;
 
 import java.io.File;
@@ -118,10 +119,26 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        findViewById(R.id.white_list_decription_card).setVisibility((isExcludedMode() || !(Hawk.get("preference_show_tips", true))) ? View.GONE : View.VISIBLE);
-        //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
-        findViewById(R.id.nothing_to_show_placeholder).setVisibility(folders.size() < 1 && isExcludedMode() && Hawk.get("emoji_easter_egg", 0) == 0 ? View.VISIBLE : View.GONE);
-        findViewById(R.id.ll_emoji_easter_egg).setVisibility(folders.size() < 1 && isExcludedMode() && Hawk.get("emoji_easter_egg", 0) == 1 ? View.VISIBLE : View.GONE);
+        findViewById(R.id.white_list_decription_card).setVisibility(
+                showDescriptionCard() ? View.VISIBLE : View.GONE);
+
+        findViewById(R.id.nothing_to_show_placeholder).setVisibility(
+                showNothingToShowPlaceholder() ? View.VISIBLE : View.GONE);
+
+        findViewById(R.id.ll_emoji_easter_egg).setVisibility(
+                showEasterEgg() ? View.VISIBLE : View.GONE);
+    }
+
+    private boolean showDescriptionCard() {
+        return !isExcludedMode() && Prefs.getToggleValue(getString(R.string.preference_show_tips), true);
+    }
+
+    private boolean showNothingToShowPlaceholder() {
+        return folders.size() < 1 && isExcludedMode() && !Prefs.showEasterEgg();
+    }
+
+    private boolean showEasterEgg() {
+        return folders.size() < 1 && isExcludedMode() && Prefs.showEasterEgg();
     }
 
     @Override

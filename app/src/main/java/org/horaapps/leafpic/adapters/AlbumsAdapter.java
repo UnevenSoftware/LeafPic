@@ -25,6 +25,7 @@ import org.horaapps.leafpic.data.sort.AlbumsComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ColorPalette;
 import org.horaapps.liz.Theme;
 import org.horaapps.liz.ThemeHelper;
@@ -59,13 +60,13 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     private SortingMode sortingMode;
 
     private Drawable placeholder;
-    private CardViewStyle cvs;
+    private CardViewStyle cardViewStyle;
 
     public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
         super(context);
         albums = new ArrayList<>();
         placeholder = getThemeHelper().getPlaceHolder();
-        cvs = CardViewStyle.fromValue(Hawk.get("card_view_style", 0));
+        cardViewStyle = Prefs.getCardStyle();
         this.sortingMode = sortingMode;
         this.sortingOrder = sortingOrder;
     }
@@ -202,14 +203,14 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     public void refreshTheme(ThemeHelper theme) {
         placeholder = theme.getPlaceHolder();
 
-        cvs = CardViewStyle.fromValue(Hawk.get("card_view_style", 0));
+        cardViewStyle = Prefs.getCardStyle();
         super.refreshTheme(theme);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        switch (cvs) {
+        switch (cardViewStyle) {
             default:
             case MATERIAL: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_material, parent, false); break;
             case FLAT: v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_album_flat, parent, false); break;
@@ -236,9 +237,9 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
-
+        // TODO Calvin: Major Refactor - No business logic here.
         Album a = albums.get(position);
-        holder.refreshTheme(getThemeHelper(), cvs, a.isSelected());
+        holder.refreshTheme(getThemeHelper(), cardViewStyle, a.isSelected());
 
         Media f = a.getCover();
 
@@ -269,10 +270,11 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         holder.mediaLabel.setTextColor(textColor);
 
+        // TODO Calvin: Check if "show_n_photos" is being set anywhere
         holder.llCount.setVisibility(Hawk.get("show_n_photos", true) ? View.VISIBLE : View.GONE);
         holder.name.setText(StringUtils.htmlFormat(a.getName(), textColor, false, true));
         holder.nMedia.setText(StringUtils.htmlFormat(String.valueOf(a.getCount()), accentColor, true, false));
-        holder.path.setVisibility(Hawk.get("show_album_path", false) ? View.VISIBLE : View.GONE);
+        holder.path.setVisibility(Prefs.showAlbumPath() ? View.VISIBLE : View.GONE);
         holder.path.setText(a.getPath());
 
         //START Animation MAKES BUG ON FAST TAP ON CARD

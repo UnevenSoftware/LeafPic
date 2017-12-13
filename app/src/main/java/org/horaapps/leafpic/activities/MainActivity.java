@@ -42,6 +42,7 @@ import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
@@ -236,7 +237,7 @@ public class MainActivity extends SharedMediaActivity {
         super.onPostResume();
 
         new Thread(() -> {
-            if (Hawk.get("last_version_code", 0) < BuildConfig.VERSION_CODE) {
+            if (Prefs.getLastVersionCode() < BuildConfig.VERSION_CODE) {
                 String titleHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s <b>%s</b></font>", getTextColor(), getString(R.string.changelog), BuildConfig.VERSION_NAME),
                         buttonHtml = String.format(Locale.ENGLISH, "<font color='%d'>%s</font>", getAccentColor(), getString(R.string.view).toUpperCase());
                 Snackbar snackbar = Snackbar
@@ -247,7 +248,7 @@ public class MainActivity extends SharedMediaActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     snackbarView.setElevation(getResources().getDimension(R.dimen.snackbar_elevation));
                 snackbar.show();
-                Hawk.put("last_version_code", BuildConfig.VERSION_CODE);
+                Prefs.setLastVersionCode(BuildConfig.VERSION_CODE);
             }
         }).start();
     }
@@ -328,7 +329,7 @@ public class MainActivity extends SharedMediaActivity {
         ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
 
-        if (status && Hawk.get("emoji_easter_egg", 0) == 1) {
+        if (status && Prefs.showEasterEgg()) {
             findViewById(R.id.ll_emoji_easter_egg).setVisibility(View.VISIBLE);
             findViewById(R.id.nothing_to_show_placeholder).setVisibility(View.VISIBLE);
         } else {

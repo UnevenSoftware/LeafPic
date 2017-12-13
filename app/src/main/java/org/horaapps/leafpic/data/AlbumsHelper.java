@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
@@ -15,6 +16,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SplashScreen;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.util.preferences.Prefs;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,20 +66,22 @@ public class AlbumsHelper {
         }
     }
 
-    public static SortingMode getSortingMode(Context context) {
-        return SortingMode.fromValue(Hawk.get("albums_sorting_mode", SortingMode.DATE.getValue()));
+    @NonNull
+    public static SortingMode getSortingMode() {
+        return Prefs.getAlbumSortingMode();
     }
 
-    public static SortingOrder getSortingOrder(Context context) {
-        return SortingOrder.fromValue(Hawk.get("albums_sorting_order", SortingOrder.DESCENDING.getValue()));
+    @NonNull
+    public static SortingOrder getSortingOrder() {
+        return Prefs.getAlbumSortingOrder();
     }
 
-    public static void setSortingMode(Context context, SortingMode sortingMode) {
-        Hawk.put("albums_sorting_mode", sortingMode.getValue());
+    public static void setSortingMode(@NonNull SortingMode sortingMode) {
+        Prefs.setAlbumSortingMode(sortingMode);
     }
 
-    public static void setSortingOrder(Context context, SortingOrder sortingOrder) {
-        Hawk.put("albums_sorting_order", sortingOrder.getValue());
+    public static void setSortingOrder(@NonNull SortingOrder sortingOrder) {
+        Prefs.setAlbumSortingOrder(sortingOrder);
     }
 
     public static void scanFile(Context context, String[] path) {  MediaScannerConnection.scanFile(context, path, null, null); }

@@ -12,9 +12,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.orhanobut.hawk.Hawk;
-
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
 import org.horaapps.liz.ThemedActivity;
@@ -110,14 +109,13 @@ public class SettingWithSwitchView extends FrameLayout implements View.OnClickLi
     }
 
     public boolean isChecked() {
-        return Hawk.get(preferenceKey, defaultValue);
+        return Prefs.getToggleValue(preferenceKey, defaultValue);
     }
 
-    public boolean toggle() {
-        Hawk.put(preferenceKey, !isChecked());
+    public void toggle() {
+        Prefs.setToggleValue(preferenceKey, !isChecked());
         boolean checked = isChecked();
         toggle.setChecked(checked);
-        return checked;
     }
 
 }

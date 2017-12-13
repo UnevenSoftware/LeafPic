@@ -311,7 +311,7 @@
                         android:layout_height="wrap_content"
                         app:settingCaption="@string/include_video_sub"
                         app:settingIcon="gmd-videocam"
-                        app:settingPreferenceKey="@string/preference_swipe_direction_inverted"
+                        app:settingPreferenceKey="@string/preference_include_video"
                         app:settingTitle="@string/include_video"/>
 
                     <org.horaapps.leafpic.views.SettingWithSwitchView

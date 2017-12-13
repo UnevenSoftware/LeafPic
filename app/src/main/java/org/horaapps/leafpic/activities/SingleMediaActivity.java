@@ -60,6 +60,7 @@ import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.HackyViewPager;
 import org.horaapps.liz.ColorPalette;
 
@@ -210,10 +211,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             if (inputStream != null) inputStream.close();
         } catch (Exception ex) {
-            //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
+            boolean showEasterEgg = Prefs.showEasterEgg();
             ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setText(R.string.error_occured_open_media);
-            findViewById(R.id.nothing_to_show_placeholder).setVisibility(Hawk.get("emoji_easter_egg", 0) == 0 ? View.VISIBLE : View.GONE);
-            findViewById(R.id.ll_emoji_easter_egg).setVisibility(Hawk.get("emoji_easter_egg", 0) == 1 ? View.VISIBLE : View.GONE);
+            findViewById(R.id.nothing_to_show_placeholder).setVisibility(!showEasterEgg ? View.VISIBLE : View.GONE);
+            findViewById(R.id.ll_emoji_easter_egg).setVisibility(showEasterEgg ? View.VISIBLE : View.GONE);
         }
 
         media = new ArrayList<>(Collections.singletonList(new Media(uri)));
@@ -306,7 +307,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         /**** SETTINGS ****/
 
-        if (Hawk.get("set_max_luminosity", false))
+        if (Prefs.getToggleValue(getString(R.string.preference_max_brightness), false))
             updateBrightness(1.0F);
         else try {
             // TODO: 12/4/16 redo
@@ -318,7 +319,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             e.printStackTrace();
         }
 
-        if (Hawk.get("set_picture_orientation", false))
+        if (Prefs.getToggleValue(getString(R.string.preference_auto_rotate), false))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 

@@ -24,6 +24,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
@@ -152,12 +153,11 @@ public class AboutActivity extends ThemedActivity {
     private void emojiEasterEgg(){
         emojiEasterEggCount++;
         if(emojiEasterEggCount > 3) {
+            boolean showEasterEgg = Prefs.showEasterEgg();
             Toast.makeText(this,
-                    (Hawk.get("emoji_easter_egg", 0) == 0
-                    ? this.getString(R.string.easter_egg_enable)
-                    : this.getString(R.string.easter_egg_disable))
+                    (!showEasterEgg ? this.getString(R.string.easter_egg_enable) : this.getString(R.string.easter_egg_disable))
                     + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
-            Hawk.put("emoji_easter_egg", Hawk.get("emoji_easter_egg", 0) == 0 ? 1 : 0);
+            Prefs.setShowEasterEgg(!showEasterEgg);
             emojiEasterEggCount = 0;
         } else Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
     }

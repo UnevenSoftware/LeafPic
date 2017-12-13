@@ -38,6 +38,7 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
@@ -143,8 +144,8 @@ public class AlbumsFragment extends BaseFragment {
 
     public int columnsCount() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                ? Hawk.get("n_columns_folders", 2)
-                : Hawk.get("n_columns_folders_landscape", 3);
+                ? Prefs.getFolderColumnsPortrait()
+                : Prefs.getFolderColumnsLandscape();
     }
 
     private void updateToolbar() {
@@ -197,13 +198,13 @@ public class AlbumsFragment extends BaseFragment {
     public SortingMode sortingMode() {
         return adapter != null
                 ? adapter.sortingMode()
-                : AlbumsHelper.getSortingMode(getContext());
+                : AlbumsHelper.getSortingMode();
     }
 
     public SortingOrder sortingOrder() {
         return adapter != null
                 ? adapter.sortingOrder()
-                : AlbumsHelper.getSortingOrder(getContext());
+                : AlbumsHelper.getSortingOrder();
     }
 
     private HandlingAlbums db() {
@@ -332,25 +333,25 @@ public class AlbumsFragment extends BaseFragment {
 
             case R.id.name_sort_mode:
                 adapter.changeSortingMode(SortingMode.NAME);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.NAME);
+                AlbumsHelper.setSortingMode(SortingMode.NAME);
                 item.setChecked(true);
                 return true;
 
             case R.id.date_taken_sort_mode:
                 adapter.changeSortingMode(SortingMode.DATE);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.DATE);
+                AlbumsHelper.setSortingMode(SortingMode.DATE);
                 item.setChecked(true);
                 return true;
 
             case R.id.size_sort_mode:
                 adapter.changeSortingMode(SortingMode.SIZE);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.SIZE);
+                AlbumsHelper.setSortingMode(SortingMode.SIZE);
                 item.setChecked(true);
                 return true;
 
             case R.id.numeric_sort_mode:
                 adapter.changeSortingMode(SortingMode.NUMERIC);
-                AlbumsHelper.setSortingMode(getContext(), SortingMode.NUMERIC);
+                AlbumsHelper.setSortingMode(SortingMode.NUMERIC);
                 item.setChecked(true);
                 return true;
 
@@ -358,7 +359,7 @@ public class AlbumsFragment extends BaseFragment {
                 item.setChecked(!item.isChecked());
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
                 adapter.changeSortingOrder(sortingOrder);
-                AlbumsHelper.setSortingOrder(getContext(), sortingOrder);
+                AlbumsHelper.setSortingOrder(sortingOrder);
                 return true;
 
             case R.id.exclude:
