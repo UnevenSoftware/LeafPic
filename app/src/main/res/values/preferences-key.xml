@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="preference_internal_player">set_internal_player</string>
-    <string name="preference_include_video">set_include_video</string>
+    <string name="preference_include_video">show_videos</string>
     <string name="preference_swipe_direction_inverted">swipe_opposite</string>
     <string name="preference_video_instant_play">video_instant_play</string>
     <string name="preference_auto_update_media">auto_update_media</string>

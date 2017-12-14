@@ -12,6 +12,7 @@ import org.horaapps.leafpic.data.filter.FoldersFileFilter;
 import org.horaapps.leafpic.data.filter.ImageFileFilter;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.util.preferences.Prefs;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class CPHelper {
 
         ArrayList<Object> args = new ArrayList<>();
 
-        if (Hawk.get("set_include_video", true)) {
+        if (Prefs.showVideos()) {
             query.selection(String.format("%s=? or %s=?) group by (%s) %s ",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
@@ -94,7 +95,7 @@ public class CPHelper {
 
     private static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
 
-        boolean includeVideo = Hawk.get("set_include_video", true);
+        boolean includeVideo = Prefs.showVideos();
         return Observable.create(subscriber -> {
             try {
 
@@ -184,7 +185,7 @@ public class CPHelper {
                 .sort(sortingMode.getMediaColumn())
                 .ascending(sortingOrder.isAscending());
 
-        if (Hawk.get("set_include_video", true)) {
+        if (Prefs.showVideos()) {
             query.selection(String.format("(%s=? or %s=?)",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE));
@@ -204,7 +205,7 @@ public class CPHelper {
 
         return Observable.create(subscriber -> {
             File dir = new File(album.getPath());
-            File[] files = dir.listFiles(new ImageFileFilter(Hawk.get("set_include_video", true)));
+            File[] files = dir.listFiles(new ImageFileFilter(Prefs.showVideos()));
             try {
                 if (files != null && files.length > 0)
                     for (File file : files)
@@ -225,7 +226,7 @@ public class CPHelper {
                 .sort(sortingMode.getMediaColumn())
                 .ascending(sortingOrder.isAscending());
 
-        if (Hawk.get("set_include_video", true)) {
+        if (Prefs.showVideos()) {
             query.selection(String.format("(%s=? or %s=?) and %s=?",
                     MediaStore.Files.FileColumns.MEDIA_TYPE,
                     MediaStore.Files.FileColumns.MEDIA_TYPE,

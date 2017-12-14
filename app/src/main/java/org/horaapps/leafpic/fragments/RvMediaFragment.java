@@ -54,6 +54,7 @@ import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
@@ -210,8 +211,8 @@ public class RvMediaFragment extends BaseFragment {
 
     public int columnsCount() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                ? Hawk.get("n_columns_media", 3)
-                : Hawk.get("n_columns_media_landscape", 4);
+                ? Prefs.getMediaColumnsPortrait()
+                : Prefs.getMediaColumnsLandscape();
     }
 
     private void updateToolbar() {
