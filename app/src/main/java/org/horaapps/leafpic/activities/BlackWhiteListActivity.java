@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
@@ -51,15 +50,15 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_white_list);
-        toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
-        mRecyclerView = (RecyclerView) findViewById(org.horaapps.leafpic.R.id.excluded_albums);
+        toolbar = findViewById(R.id.toolbar);
+        mRecyclerView = findViewById(R.id.excluded_albums);
         initUi();
         loadFolders(getIntent().getIntExtra(EXTRA_TYPE, HandlingAlbums.EXCLUDED));
     }
 
     private void loadFolders(int type) {
         this.typeExcluded = type == HandlingAlbums.EXCLUDED;
-        folders = getAlbums().getFolders(type);
+        folders = HandlingAlbums.getInstance(getApplicationContext()).getFolders(type);
         checkNothing();
         if (isExcludedMode()) setTitle(getString(R.string.excluded_items));
         else setTitle(getString(R.string.white_list));
@@ -108,7 +107,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
                     }
                 }
             });
-            getAlbums().addFolderToWhiteList(dir.getPath());
+            HandlingAlbums.getInstance(getApplicationContext()).addFolderToWhiteList(dir.getPath());
             folders.add(0, dir.getPath());
             adapter.notifyItemInserted(0);
             checkNothing();
@@ -201,16 +200,13 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
 
     private class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
 
-        private View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String path = (String) v.getTag();
-                int i = folders.indexOf(path);
-                getAlbums().clearStatusFolder(path);
-                folders.remove(i);
-                notifyItemRemoved(i);
-                checkNothing();
-            }
+        private View.OnClickListener listener = v -> {
+            String path = (String) v.getTag();
+            int i = folders.indexOf(path);
+            HandlingAlbums.getInstance(getApplicationContext()).clearStatusFolder(path);
+            folders.remove(i);
+            notifyItemRemoved(i);
+            checkNothing();
         };
 
         public ItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -244,11 +240,11 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
 
             ViewHolder(View itemView) {
                 super(itemView);
-                layout = (LinearLayout) itemView.findViewById(R.id.linear_card_excluded);
-                imgFolder = (ThemedIcon) itemView.findViewById(R.id.folder_icon);
-                imgRemove = (ThemedIcon) itemView.findViewById(R.id.remove_icon);
-                name = (TextView) itemView.findViewById(R.id.folder_name);
-                path = (TextView) itemView.findViewById(R.id.folder_path);
+                layout = itemView.findViewById(R.id.linear_card_excluded);
+                imgFolder = itemView.findViewById(R.id.folder_icon);
+                imgRemove = itemView.findViewById(R.id.remove_icon);
+                name = itemView.findViewById(R.id.folder_name);
+                path = itemView.findViewById(R.id.folder_path);
             }
         }
     }

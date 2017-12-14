@@ -9,8 +9,6 @@ import com.mikepenz.iconics.Iconics;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.leakcanary.LeakCanary;
 
-import org.horaapps.leafpic.data.Album;
-import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.util.preferences.Prefs;
 
 /**
@@ -40,20 +38,10 @@ public class App extends Application {
         return mInstance;
     }
 
-    @Deprecated
-    public Album getAlbum() {
-        return Album.getEmptyAlbum();
-    }
-
     private void registerFontIcons() {
         Iconics.registerFont(new GoogleMaterial());
         Iconics.registerFont(new CommunityMaterial());
         Iconics.registerFont(new FontAwesome());
-    }
-
-    @Deprecated
-    public HandlingAlbums getAlbums() {
-        return HandlingAlbums.getInstance(getApplicationContext());
     }
 
     private void initialiseStorage() {
