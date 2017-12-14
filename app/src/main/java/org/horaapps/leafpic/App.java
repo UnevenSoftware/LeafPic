@@ -2,6 +2,10 @@ package org.horaapps.leafpic;
 
 import android.app.Application;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.Iconics;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -28,6 +32,7 @@ public class App extends Application {
         }
         LeakCanary.install(this);
 
+        registerFontIcons();
         initialiseStorage();
     }
 
@@ -38,6 +43,12 @@ public class App extends Application {
     @Deprecated
     public Album getAlbum() {
         return Album.getEmptyAlbum();
+    }
+
+    private void registerFontIcons() {
+        Iconics.registerFont(new GoogleMaterial());
+        Iconics.registerFont(new CommunityMaterial());
+        Iconics.registerFont(new FontAwesome());
     }
 
     @Deprecated
