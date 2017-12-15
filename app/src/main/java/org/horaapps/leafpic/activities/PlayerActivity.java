@@ -39,17 +39,18 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
 import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
-import com.google.android.exoplayer2.drm.StreamingDrmSessionManager;
 import com.google.android.exoplayer2.drm.UnsupportedDrmException;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
@@ -63,13 +64,13 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelections;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -82,24 +83,21 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.videoplayer.CustomExoPlayerView;
-import org.horaapps.leafpic.views.videoplayer.CustomPlayBackController;
 import org.horaapps.leafpic.views.videoplayer.TrackSelectionHelper;
 import org.horaapps.liz.ThemedActivity;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventListener,
-        TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener {
+public class PlayerActivity extends ThemedActivity implements PlaybackControlView.VisibilityListener, Player.EventListener/*
+        TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener*/ {
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
     public static final String DRM_LICENSE_URL = "drm_license_url";
     public static final String DRM_KEY_REQUEST_PROPERTIES = "drm_key_request_properties";
-    public static final String PREFER_EXTENSION_DECODERS = "prefer_extension_decoders";
+    public static final String DRM_MULTI_SESSION = "drm_multi_session";
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
@@ -143,8 +141,9 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         initUi();
         rootView = findViewById(R.id.root);
 
-        simpleExoPlayerView = (CustomExoPlayerView) findViewById(R.id.player_view);
-        simpleExoPlayerView.setControllerVisibilityListener(this);
+        simpleExoPlayerView = findViewById(R.id.player_view);
+        // TODO: 12/15/17
+        //simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
     }
 
@@ -162,7 +161,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     }
 
     private void initUi() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -179,13 +178,12 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(org.horaapps.leafpic.R.menu.menu_video_player, menu);
 
-        TrackSelections<MappedTrackInfo> trackSelections = trackSelector.getCurrentSelections();
-
-        if (trackSelections != null) {
-            int rendererCount = trackSelections.length;
-            for (int i = 0; i < rendererCount; i++) {
-                TrackGroupArray trackGroups = trackSelections.info.getTrackGroups(i);
+        MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
+        if (player != null && mappedTrackInfo != null) {
+            for (int i = 0; i < mappedTrackInfo.length; i++) {
+                TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
                 if (trackGroups.length != 0) {
+                    int label;
                     switch (player.getRendererType(i)) {
                         case C.TRACK_TYPE_AUDIO:
                             menu.findItem(R.id.audio_stuff).setVisible(true);
@@ -201,7 +199,9 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                     }
                 }
             }
+
         }
+
         return true;
     }
 
@@ -225,16 +225,17 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
 
         switch (item.getItemId()) {
             case R.id.video_stuff:
+
                 trackSelectionHelper.showSelectionDialog(this, getString(R.string.video),
-                        trackSelector.getCurrentSelections().info, video);
+                        trackSelector.getCurrentMappedTrackInfo(), video);
                 return true;
             case R.id.audio_stuff:
                 trackSelectionHelper.showSelectionDialog(this, getString(R.string.audio),
-                        trackSelector.getCurrentSelections().info, audio);
+                        trackSelector.getCurrentMappedTrackInfo(), audio);
                 return true;
             case R.id.text_stuff:
                 trackSelectionHelper.showSelectionDialog(this, getString(R.string.subtitles),
-                        trackSelector.getCurrentSelections().info, text);
+                        trackSelector.getCurrentMappedTrackInfo(), text);
                 return true;
 
             case org.horaapps.leafpic.R.id.action_share:
@@ -300,39 +301,53 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
     private void initializePlayer() {
         Intent intent = getIntent();
         if (player == null) {
-            boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
-            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA) ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
+
+            TrackSelection.Factory adaptiveTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+
+            trackSelector = new DefaultTrackSelector(adaptiveTrackSelectionFactory);
+            //trackSelector.addListener(this);
+            trackSelectionHelper = new TrackSelectionHelper(trackSelector, adaptiveTrackSelectionFactory, getThemeHelper());
+
+
+            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
+                    ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
             DrmSessionManager<FrameworkMediaCrypto> drmSessionManager = null;
             if (drmSchemeUuid != null) {
                 String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
                 String[] keyRequestPropertiesArray = intent.getStringArrayExtra(DRM_KEY_REQUEST_PROPERTIES);
-                Map<String, String> keyRequestProperties;
-                if (keyRequestPropertiesArray == null || keyRequestPropertiesArray.length < 2) {
-                    keyRequestProperties = null;
-                } else {
-                    keyRequestProperties = new HashMap<>();
-                    for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
-                        keyRequestProperties.put(keyRequestPropertiesArray[i],
-                                keyRequestPropertiesArray[i + 1]);
-                    }
-                }
-                try { drmSessionManager = buildDrmSessionManager(drmSchemeUuid, drmLicenseUrl, keyRequestProperties);
+                boolean multiSession = intent.getBooleanExtra(DRM_MULTI_SESSION, false);
+                int errorStringId = R.string.error_drm_unknown;
+
+                try {
+                    drmSessionManager = buildDrmSessionManagerV18(drmSchemeUuid, drmLicenseUrl,
+                            keyRequestPropertiesArray, multiSession);
                 } catch (UnsupportedDrmException e) {
-                    int errorStringId = e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
+                    errorStringId = e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
                             ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown;
+                }
+                if (drmSessionManager == null) {
                     showToast(errorStringId);
                     return;
                 }
             }
 
-            TrackSelection.Factory videoTrackSelectionFactory =
-                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-            trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
-            trackSelector.addListener(this);
-            trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory, getThemeHelper());
-            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
-                    drmSessionManager, preferExtensionDecoders);
+           /* player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
+                    drmSessionManager, preferExtensionDecoders);*/
+
+           /* boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
+            @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode =
+                    ((DemoApplication) getApplication()).useExtensionRenderers()
+                            ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;*/
+            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
+                    drmSessionManager, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
+
+            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
             player.addListener(this);
+            //player.addListener(new PlayerEventListener());
+
             simpleExoPlayerView.setPlayer(player);
             if (isTimelineStatic) {
                 if (playerPosition == C.TIME_UNSET) {
@@ -369,6 +384,21 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         }
     }
 
+    private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManagerV18(UUID uuid,
+                                                                              String licenseUrl, String[] keyRequestPropertiesArray, boolean multiSession)
+            throws UnsupportedDrmException {
+        HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
+                buildHttpDataSourceFactory(false));
+        if (keyRequestPropertiesArray != null) {
+            for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
+                drmCallback.setKeyRequestProperty(keyRequestPropertiesArray[i],
+                        keyRequestPropertiesArray[i + 1]);
+            }
+        }
+        return new DefaultDrmSessionManager<>(uuid, FrameworkMediaDrm.newInstance(uuid), drmCallback,
+                null, mainHandler, null, multiSession);
+    }
+
     private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
         int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension : uri.getLastPathSegment());
         switch (type) {
@@ -380,12 +410,12 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         }
     }
 
-    private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManager(UUID uuid, String licenseUrl, Map<String, String> keyRequestProperties) throws UnsupportedDrmException {
+    /*private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManager(UUID uuid, String licenseUrl, Map<String, String> keyRequestProperties) throws UnsupportedDrmException {
         HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
                 buildHttpDataSourceFactory(false), keyRequestProperties);
         return new StreamingDrmSessionManager<>(uuid,
                 FrameworkMediaDrm.newInstance(uuid), drmCallback, null, mainHandler, null);
-    }
+    }*/
 
     private void releasePlayer() {
         if (player != null) {
@@ -421,18 +451,30 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == ExoPlayer.STATE_ENDED)
+        if (playbackState == Player.STATE_ENDED)
             showControls();
         supportInvalidateOptionsMenu();
     }
 
     @Override
-    public void onPositionDiscontinuity() {}
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
         isTimelineStatic = timeline != null && timeline.getWindowCount() > 0
                 && !timeline.getWindow(timeline.getWindowCount() - 1, window).isDynamic;
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
     }
 
     @Override
@@ -462,8 +504,23 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
         showControls();
     }
 
-    // MappingTrackSelector.EventListener implementation
     @Override
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
+    }
+
+    // MappingTrackSelector.EventListener implementation
+    /*@Override
     public void onTrackSelectionsChanged(TrackSelections<? extends MappedTrackInfo> trackSelections) {
         supportInvalidateOptionsMenu();
         MappedTrackInfo trackInfo = trackSelections.info;
@@ -471,7 +528,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
             showToast(R.string.error_unsupported_video);
         if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_AUDIO))
             showToast(R.string.error_unsupported_audio);
-    }
+    }*/
 
     //User controls
     private void showToast(int messageId) {

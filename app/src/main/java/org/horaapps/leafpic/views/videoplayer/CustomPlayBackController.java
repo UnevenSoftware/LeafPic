@@ -12,14 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.util.Util;
 
 import org.horaapps.leafpic.R;
@@ -120,12 +123,12 @@ public class CustomPlayBackController extends FrameLayout {
         componentListener = new ComponentListener();
 
         LayoutInflater.from(context).inflate(R.layout.exo_media_control, this);
-        time = (TextView) findViewById(R.id.time);
-        timeCurrent = (TextView) findViewById(R.id.time_current);
-        progressBar = (SeekBar) findViewById(R.id.mediacontroller_progress);
+        time = findViewById(R.id.time);
+        timeCurrent = findViewById(R.id.time_current);
+        progressBar = findViewById(R.id.mediacontroller_progress);
         progressBar.setOnSeekBarChangeListener(componentListener);
         progressBar.setMax(PROGRESS_BAR_MAX);
-        playButton = (ImageButton) findViewById(R.id.play);
+        playButton = findViewById(R.id.play);
         playButton.setOnClickListener(componentListener);
         previousButton = findViewById(R.id.prev);
         previousButton.setOnClickListener(componentListener);
@@ -145,7 +148,7 @@ public class CustomPlayBackController extends FrameLayout {
         progressBar.getThumb().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
                 ? ColorPalette.getDarkerColor(themeHelper.getAccentColor()): themeHelper.getAccentColor(),PorterDuff.Mode.SRC_IN));
 
-        ((LinearLayout) findViewById(R.id.exoplayer_controller_background))
+        findViewById(R.id.exoplayer_controller_background)
                 .setBackgroundColor(themeHelper.getPrimaryColor());
     }
 
@@ -424,7 +427,7 @@ public class CustomPlayBackController extends FrameLayout {
         return true;
     }
 
-    private final class ComponentListener implements ExoPlayer.EventListener,
+    private final class ComponentListener implements Player.EventListener,
             SeekBar.OnSeekBarChangeListener, OnClickListener {
 
         @Override
@@ -454,15 +457,30 @@ public class CustomPlayBackController extends FrameLayout {
         }
 
         @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+        }
+
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+       /* @Override
         public void onPositionDiscontinuity() {
             updateNavigation();
             updateProgress();
-        }
+        }*/
 
         @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             updateNavigation();
             updateProgress();
+        }
+
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
         }
 
         @Override
@@ -473,6 +491,21 @@ public class CustomPlayBackController extends FrameLayout {
         @Override
         public void onPlayerError(ExoPlaybackException error) {
             // Do nothing.
+        }
+
+        @Override
+        public void onPositionDiscontinuity(int reason) {
+
+        }
+
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+        }
+
+        @Override
+        public void onSeekProcessed() {
+
         }
 
         @Override

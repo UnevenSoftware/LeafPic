@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.views.videoplayer;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.text.Cue;
-import com.google.android.exoplayer2.text.TextRenderer;
+import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SubtitleView;
 
@@ -58,7 +55,7 @@ public final class CustomExoPlayerView extends FrameLayout {
         int rewindMs = CustomPlayBackController.DEFAULT_REWIND_MS;
         int fastForwardMs = CustomPlayBackController.DEFAULT_FAST_FORWARD_MS;
         int controllerShowTimeoutMs = CustomPlayBackController.DEFAULT_SHOW_TIMEOUT_MS;
-        if (attrs != null) {
+        /*if (attrs != null) {
             TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                     com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView, 0, 0);
             try {
@@ -75,18 +72,18 @@ public final class CustomExoPlayerView extends FrameLayout {
             } finally {
                 a.recycle();
             }
-        }
+        }*/
 
         LayoutInflater.from(context).inflate(R.layout.exo_player, this);
         componentListener = new ComponentListener();
-        layout = (AspectRatioFrameLayout) findViewById(R.id.video_frame);
+        layout = findViewById(R.id.video_frame);
         layout.setResizeMode(resizeMode);
         shutterView = findViewById(R.id.shutter);
-        subtitleLayout = (SubtitleView) findViewById(R.id.subtitles);
+        subtitleLayout = findViewById(R.id.subtitles);
         subtitleLayout.setUserDefaultStyle();
         subtitleLayout.setUserDefaultTextSize();
 
-        controller = (CustomPlayBackController) findViewById(R.id.control);
+        controller = findViewById(R.id.control);
         controller.hide();
         controller.setRewindIncrementMs(rewindMs);
         controller.setFastForwardIncrementMs(fastForwardMs);
@@ -110,17 +107,43 @@ public final class CustomExoPlayerView extends FrameLayout {
             return;
         }
         if (this.player != null) {
-            this.player.setTextOutput(null);
+
+            this.player.removeListener(componentListener);
+            this.player.removeTextOutput(componentListener);
+            this.player.removeVideoListener(componentListener);
+            if (surfaceView instanceof TextureView) {
+                this.player.clearVideoTextureView((TextureView) surfaceView);
+            } else if (surfaceView instanceof SurfaceView) {
+                this.player.clearVideoSurfaceView((SurfaceView) surfaceView);
+            }
+
+            /*this.player.setTextOutput(null);
             this.player.setVideoListener(null);
             this.player.removeListener(componentListener);
-            this.player.setVideoSurface(null);
+            this.player.setVideoSurface(null);*/
         }
         this.player = player;
         if (useController) {
             controller.setPlayer(player);
         }
+        if (shutterView != null) {
+            shutterView.setVisibility(VISIBLE);
+        }
+
         if (player != null) {
+
             if (surfaceView instanceof TextureView) {
+                player.setVideoTextureView((TextureView) surfaceView);
+            } else if (surfaceView instanceof SurfaceView) {
+                player.setVideoSurfaceView((SurfaceView) surfaceView);
+            }
+            player.addVideoListener(componentListener);
+            player.addTextOutput(componentListener);
+            player.addListener(componentListener);
+            maybeShowController(false);
+            //updateForCurrentTrackSelections();
+
+            /*if (surfaceView instanceof TextureView) {
                 player.setVideoTextureView((TextureView) surfaceView);
             } else if (surfaceView instanceof SurfaceView) {
                 player.setVideoSurfaceView((SurfaceView) surfaceView);
@@ -128,7 +151,7 @@ public final class CustomExoPlayerView extends FrameLayout {
             player.setVideoListener(componentListener);
             player.addListener(componentListener);
             player.setTextOutput(componentListener);
-            maybeShowController(false);
+            maybeShowController(false);*/
         } else {
             shutterView.setVisibility(VISIBLE);
             controller.hide();
@@ -200,49 +223,63 @@ public final class CustomExoPlayerView extends FrameLayout {
         return useController ? controller.dispatchKeyEvent(event) : super.dispatchKeyEvent(event);
     }
 
+    private boolean shouldShowControllerIndefinitely() {
+        if (player == null) {
+            return true;
+        }
+        int playbackState = player.getPlaybackState();
+        return (playbackState == Player.STATE_IDLE
+                || playbackState == Player.STATE_ENDED || !player.getPlayWhenReady());
+    }
+
+
     private void maybeShowController(boolean isForced) {
         if (!useController || player == null) {
             return;
         }
-        int playbackState = player.getPlaybackState();
+
+        boolean wasShowingIndefinitely = controller.isVisible() && controller.getShowTimeoutMs() <= 0;
+        boolean shouldShowIndefinitely = shouldShowControllerIndefinitely();
+        if (isForced || wasShowingIndefinitely || shouldShowIndefinitely) {
+            //showController(shouldShowIndefinitely);
+            controller.show();
+        }
+
+        /*int playbackState = player.getPlaybackState();
         boolean showIndefinitely = playbackState == ExoPlayer.STATE_IDLE
                 || playbackState == ExoPlayer.STATE_ENDED || !player.getPlayWhenReady();
         boolean wasShowingIndefinitely = controller.isVisible() && controller.getShowTimeoutMs() <= 0;
         controller.setShowTimeoutMs(showIndefinitely ? 0 : controllerShowTimeoutMs);
         if (isForced || showIndefinitely || wasShowingIndefinitely) {
             controller.show();
-        }
+        }*/
     }
 
-    private final class ComponentListener implements SimpleExoPlayer.VideoListener,
-            TextRenderer.Output, ExoPlayer.EventListener {
+    private final class ComponentListener extends Player.DefaultEventListener implements TextOutput,
+            SimpleExoPlayer.VideoListener {
 
         // TextRenderer.Output implementation
         @Override
         public void onCues(List<Cue> cues) {
-            subtitleLayout.onCues(cues);
+            if (subtitleLayout != null) {
+                subtitleLayout.onCues(cues);
+            }
         }
 
         // SimpleExoPlayer.VideoListener implementation
         @Override
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-            layout.setAspectRatio(height == 0 ? 1 : (width * pixelWidthHeightRatio) / height);
+            if (layout != null) {
+                float aspectRatio = height == 0 ? 1 : (width * pixelWidthHeightRatio) / height;
+                layout.setAspectRatio(aspectRatio);
+            }
         }
 
         @Override
         public void onRenderedFirstFrame() {
-            shutterView.setVisibility(GONE);
-        }
-
-        @Override
-        public void onVideoTracksDisabled() {
-            shutterView.setVisibility(VISIBLE);
-        }
-
-        // ExoPlayer.EventListener implementation
-        @Override
-        public void onLoadingChanged(boolean isLoading) {
-            // Do nothing.
+            if (shutterView != null) {
+                shutterView.setVisibility(INVISIBLE);
+            }
         }
 
         @Override
@@ -250,19 +287,5 @@ public final class CustomExoPlayerView extends FrameLayout {
             maybeShowController(false);
         }
 
-        @Override
-        public void onPlayerError(ExoPlaybackException e) {
-            // Do nothing.
-        }
-
-        @Override
-        public void onPositionDiscontinuity() {
-            // Do nothing.
-        }
-
-        @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
-            // Do nothing.
-        }
     }
 }
