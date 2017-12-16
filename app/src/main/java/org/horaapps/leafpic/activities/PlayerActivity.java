@@ -70,7 +70,6 @@ import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -83,6 +82,7 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.videoplayer.CustomExoPlayerView;
+import org.horaapps.leafpic.views.videoplayer.CustomPlayBackController;
 import org.horaapps.leafpic.views.videoplayer.TrackSelectionHelper;
 import org.horaapps.liz.ThemedActivity;
 
@@ -91,7 +91,7 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.UUID;
 
-public class PlayerActivity extends ThemedActivity implements PlaybackControlView.VisibilityListener, Player.EventListener/*
+public class PlayerActivity extends ThemedActivity implements CustomPlayBackController.VisibilityListener, Player.EventListener/*
         TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener*/ {
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
@@ -107,7 +107,7 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
     }
 
     private Handler mainHandler;
-    private Timeline.Window window;
+    //private Timeline.Window window;
     private CustomExoPlayerView simpleExoPlayerView;
 
     private DataSource.Factory mediaDataSourceFactory;
@@ -116,7 +116,14 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
     private TrackSelectionHelper trackSelectionHelper;
     private boolean playerNeedsSource;
 
+
+    private TrackGroupArray lastSeenTrackGroupArray;
+
+    private int resumeWindow;
+    private long resumePosition;
     private boolean shouldAutoPlay;
+
+
     private boolean isTimelineStatic;
     private int playerWindow,video, audio, text;
     private long playerPosition;
@@ -130,9 +137,10 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
         super.onCreate(savedInstanceState);
         updateTheme();
         shouldAutoPlay = true;
+        clearResumePosition();
         mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
-        window = new Timeline.Window();
+        //window = new Timeline.Window();
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
@@ -142,8 +150,7 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
         rootView = findViewById(R.id.root);
 
         simpleExoPlayerView = findViewById(R.id.player_view);
-        // TODO: 12/15/17
-        //simpleExoPlayerView.setControllerVisibilityListener(this);
+        simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
     }
 
@@ -157,7 +164,33 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
     @Override
     public void onStart() {
         super.onStart();
-        if (Util.SDK_INT > 23) initializePlayer();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 || player == null) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     private void initUi() {
@@ -171,6 +204,23 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
             }
         });
         getSupportActionBar().setTitle(StringUtils.getName(getIntent().getData().getPath()));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            initializePlayer();
+        } else {
+            showToast(R.string.storage_permission_denied);
+            finish();
+        }
+    }
+
+
+    private void clearResumePosition() {
+        resumeWindow = C.INDEX_UNSET;
+        resumePosition = C.TIME_UNSET;
     }
 
     @Override
@@ -219,10 +269,6 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-    /*if (view == retryButton) {
-      initializePlayer();
-    } */
-
         switch (item.getItemId()) {
             case R.id.video_stuff:
 
@@ -262,40 +308,7 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
-        }
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            initializePlayer();
-        } else {
-            showToast(R.string.storage_permission_denied);
-            finish();
-        }
-    }
 
     // Internal methods
     private void initializePlayer() {
@@ -420,16 +433,17 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
     private void releasePlayer() {
         if (player != null) {
             shouldAutoPlay = player.getPlayWhenReady();
-            playerWindow = player.getCurrentWindowIndex();
-            playerPosition = C.TIME_UNSET;
-            Timeline timeline = player.getCurrentTimeline();
-            if (timeline != null && timeline.getWindow(playerWindow, window).isSeekable)
-                playerPosition = player.getCurrentPosition();
+            updateResumePosition();
             player.release();
             player = null;
             trackSelector = null;
             trackSelectionHelper = null;
         }
+    }
+
+    private void updateResumePosition() {
+        resumeWindow = player.getCurrentWindowIndex();
+        resumePosition = Math.max(0, player.getContentPosition());
     }
 
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
@@ -556,7 +570,7 @@ public class PlayerActivity extends ThemedActivity implements PlaybackControlVie
     @Override
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setNavigationBarColor(getPrimaryColor());
+            getWindow().setNavigationBarColor(getPrimaryColor());
         }
     }
 

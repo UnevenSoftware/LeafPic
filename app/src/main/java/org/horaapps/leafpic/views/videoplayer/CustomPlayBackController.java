@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,7 +22,9 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.util.Util;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ColorPalette;
@@ -56,7 +57,7 @@ public class CustomPlayBackController extends FrameLayout {
     private final ComponentListener componentListener;
     private final View previousButton;
     private final View nextButton;
-    private final ImageButton playButton;
+    private final IconicsImageView playButton;
     private final TextView time;
     private final TextView timeCurrent;
     private final SeekBar progressBar;
@@ -64,7 +65,7 @@ public class CustomPlayBackController extends FrameLayout {
     private final View rewindButton;
     private final StringBuilder formatBuilder;
     private final Formatter formatter;
-    private final Timeline.Window currentWindow;
+    private final Timeline.Window window;
 
     private ExoPlayer player;
     private VisibilityListener visibilityListener;
@@ -117,7 +118,7 @@ public class CustomPlayBackController extends FrameLayout {
             }
         }
 
-        currentWindow = new Timeline.Window();
+        window = new Timeline.Window();
         formatBuilder = new StringBuilder();
         formatter = new Formatter(formatBuilder, Locale.getDefault());
         componentListener = new ComponentListener();
@@ -247,31 +248,34 @@ public class CustomPlayBackController extends FrameLayout {
         String contentDescription = getResources().getString(
                 playing ? R.string.exo_controls_pause_description : R.string.exo_controls_play_description);
         playButton.setContentDescription(contentDescription);
-        playButton.setImageResource(
-                playing ? R.drawable.exo_controls_pause : R.drawable.exo_controls_play);
+        IconicsDrawable icon = playButton.getIcon();
+        icon.icon(playing ? CommunityMaterial.Icon.cmd_pause_circle_outline : CommunityMaterial.Icon.cmd_play_circle_outline);
+        playButton.setIcon(icon);
     }
 
     private void updateNavigation() {
         if (!isVisible() || !isAttachedToWindow) {
             return;
         }
-        Timeline currentTimeline = player != null ? player.getCurrentTimeline() : null;
-        boolean haveTimeline = currentTimeline != null;
+        Timeline timeline = player != null ? player.getCurrentTimeline() : null;
+        boolean haveNonEmptyTimeline = timeline != null && !timeline.isEmpty();
         boolean isSeekable = false;
         boolean enablePrevious = false;
         boolean enableNext = false;
-        if (haveTimeline) {
-            int currentWindowIndex = player.getCurrentWindowIndex();
-            currentTimeline.getWindow(currentWindowIndex, currentWindow);
-            isSeekable = currentWindow.isSeekable;
-            enablePrevious = currentWindowIndex > 0 || isSeekable || !currentWindow.isDynamic;
-            enableNext = (currentWindowIndex < currentTimeline.getWindowCount() - 1)
-                    || currentWindow.isDynamic;
+        if (haveNonEmptyTimeline && !player.isPlayingAd()) {
+            int windowIndex = player.getCurrentWindowIndex();
+            timeline.getWindow(windowIndex, window);
+            isSeekable = window.isSeekable;
+            enablePrevious = isSeekable || !window.isDynamic
+                    || player.getPreviousWindowIndex() != C.INDEX_UNSET;
+            enableNext = window.isDynamic || player.getNextWindowIndex() != C.INDEX_UNSET;
         }
-        setButtonEnabled(enablePrevious , previousButton);
-        setButtonEnabled(enableNext, nextButton);
-        setButtonEnabled(fastForwardMs > 0 && isSeekable, fastForwardButton);
-        setButtonEnabled(rewindMs > 0 && isSeekable, rewindButton);
+        // TODO: 12/16/17  
+        setButtonEnabled(enablePrevious && false, previousButton, true);
+        setButtonEnabled(enableNext && false, nextButton, true);
+
+        setButtonEnabled(fastForwardMs > 0 && isSeekable, fastForwardButton, false);
+        setButtonEnabled(rewindMs > 0 && isSeekable, rewindButton, false);
         progressBar.setEnabled(isSeekable);
     }
 
@@ -291,10 +295,10 @@ public class CustomPlayBackController extends FrameLayout {
         // Remove scheduled updates.
         removeCallbacks(updateProgressAction);
         // Schedule an update if necessary.
-        int playbackState = player == null ? ExoPlayer.STATE_IDLE : player.getPlaybackState();
-        if (playbackState != ExoPlayer.STATE_IDLE && playbackState != ExoPlayer.STATE_ENDED) {
+        int playbackState = player == null ? Player.STATE_IDLE : player.getPlaybackState();
+        if (playbackState != Player.STATE_IDLE && playbackState != Player.STATE_ENDED) {
             long delayMs;
-            if (player.getPlayWhenReady() && playbackState == ExoPlayer.STATE_READY) {
+            if (player.getPlayWhenReady() && playbackState == Player.STATE_READY) {
                 delayMs = 1000 - (position % 1000);
                 if (delayMs < 200) {
                     delayMs += 1000;
@@ -306,13 +310,13 @@ public class CustomPlayBackController extends FrameLayout {
         }
     }
 
-    private void setButtonEnabled(boolean enabled, View view) {
+    private void setButtonEnabled(boolean enabled, View view, boolean hide) {
         view.setEnabled(enabled);
-        if (Util.SDK_INT >= 11) {
+        if (!hide) {
             setViewAlphaV11(view, enabled ? 1f : 0.3f);
             view.setVisibility(VISIBLE);
         } else {
-            view.setVisibility(enabled ? VISIBLE : INVISIBLE);
+            view.setVisibility(enabled ? VISIBLE : GONE);
         }
     }
 
@@ -351,9 +355,9 @@ public class CustomPlayBackController extends FrameLayout {
             return;
         }
         int currentWindowIndex = player.getCurrentWindowIndex();
-        currentTimeline.getWindow(currentWindowIndex, currentWindow);
+        currentTimeline.getWindow(currentWindowIndex, window);
         if (currentWindowIndex > 0 && (player.getCurrentPosition() <= MAX_POSITION_FOR_SEEK_TO_PREVIOUS
-                || (currentWindow.isDynamic && !currentWindow.isSeekable))) {
+                || (window.isDynamic && !window.isSeekable))) {
             player.seekToDefaultPosition(currentWindowIndex - 1);
         } else {
             player.seekTo(0);
@@ -368,7 +372,7 @@ public class CustomPlayBackController extends FrameLayout {
         int currentWindowIndex = player.getCurrentWindowIndex();
         if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
             player.seekToDefaultPosition(currentWindowIndex + 1);
-        } else if (currentTimeline.getWindow(currentWindowIndex, currentWindow, false).isDynamic) {
+        } else if (currentTimeline.getWindow(currentWindowIndex, window, false).isDynamic) {
             player.seekToDefaultPosition();
         }
     }
