@@ -303,7 +303,7 @@ public class AlbumsFragment extends BaseFragment {
                         if (hidden) { // unhide
                             AlbumsHelper.unHideAlbum(album.getPath(), getContext());
                             hiddenPaths.remove(album.getPath());
-                        } else { // hide
+                        } else { // hideController
                             AlbumsHelper.hideAlbum(album.getPath(), getContext());
                             hiddenPaths.add(album.getPath());
                         }

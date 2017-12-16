@@ -29,6 +29,7 @@ import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
@@ -42,10 +43,8 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
@@ -91,7 +90,7 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.UUID;
 
-public class PlayerActivity extends ThemedActivity implements CustomPlayBackController.VisibilityListener, Player.EventListener/*
+public class PlayerActivity extends ThemedActivity implements CustomPlayBackController.VisibilityListener/*, Player.EventListener*//*
         TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener*/ {
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
@@ -107,31 +106,27 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
     }
 
     private Handler mainHandler;
-    //private Timeline.Window window;
     private CustomExoPlayerView simpleExoPlayerView;
 
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
     private MappingTrackSelector trackSelector;
     private TrackSelectionHelper trackSelectionHelper;
-    private boolean playerNeedsSource;
-
 
     private TrackGroupArray lastSeenTrackGroupArray;
 
     private int resumeWindow;
     private long resumePosition;
     private boolean shouldAutoPlay;
+    private boolean fullScreenMode;
+    private boolean inErrorState;
 
-
-    private boolean isTimelineStatic;
-    private int playerWindow,video, audio, text;
-    private long playerPosition;
+    private int video, audio, text;
     Toolbar toolbar;
 
     View rootView;
-    private boolean fullScreenMode;
-    // Activity lifecycle
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +135,7 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
         clearResumePosition();
         mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
-        //window = new Timeline.Window();
+
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
@@ -157,7 +152,8 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
     @Override
     public void onNewIntent(Intent intent) {
         releasePlayer();
-        isTimelineStatic = false;
+        shouldAutoPlay = true;
+        clearResumePosition();
         setIntent(intent);
     }
 
@@ -197,12 +193,7 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         getSupportActionBar().setTitle(StringUtils.getName(getIntent().getData().getPath()));
     }
 
@@ -217,10 +208,218 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
         }
     }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        // See whether the player view wants to handle media or DPAD keys events.
+        return simpleExoPlayerView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
+    }
+
+    // Internal methods
+    private void initializePlayer() {
+        Intent intent = getIntent();
+        boolean needNewPlayer = player == null;
+        if (needNewPlayer) {
+
+            TrackSelection.Factory adaptiveTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+
+            trackSelector = new DefaultTrackSelector(adaptiveTrackSelectionFactory);
+            trackSelectionHelper = new TrackSelectionHelper(trackSelector, adaptiveTrackSelectionFactory, getThemeHelper());
+            lastSeenTrackGroupArray = null;
+
+            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
+                    ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
+            DrmSessionManager<FrameworkMediaCrypto> drmSessionManager = null;
+            if (drmSchemeUuid != null) {
+                String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
+                String[] keyRequestPropertiesArray = intent.getStringArrayExtra(DRM_KEY_REQUEST_PROPERTIES);
+                boolean multiSession = intent.getBooleanExtra(DRM_MULTI_SESSION, false);
+                int errorStringId = R.string.error_drm_unknown;
+
+                try {
+                    drmSessionManager = buildDrmSessionManagerV18(drmSchemeUuid, drmLicenseUrl,
+                            keyRequestPropertiesArray, multiSession);
+                } catch (UnsupportedDrmException e) {
+                    errorStringId = e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
+                            ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown;
+                }
+                if (drmSessionManager == null) {
+                    showToast(errorStringId);
+                    return;
+                }
+            }
+
+           /* boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
+            @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode =
+                    ((DemoApplication) getApplication()).useExtensionRenderers()
+                            ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
+                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;*/
+            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
+                    drmSessionManager, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
+
+            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+            player.addListener(new PlayerEventListener());
+            simpleExoPlayerView.setPlayer(player);
+            player.setPlayWhenReady(shouldAutoPlay);
+
+        }
+
+        String action = intent.getAction();
+        Uri uris[];
+        String extensions[];
+        if (intent.getData() != null && intent.getType() != null) {
+            uris = new Uri[]{intent.getData()};
+            extensions = new String[]{intent.getType()};
+        } else {
+            // TODO: 12/7/16 asdasd
+            showToast(getString(R.string.unexpected_intent_action, action));
+            return;
+        }
+
+        MediaSource[] mediaSources = new MediaSource[uris.length];
+        for (int i = 0; i < uris.length; i++) {
+            mediaSources[i] = buildMediaSource(uris[i], extensions[i]);
+        }
+        MediaSource mediaSource = mediaSources.length == 1 ? mediaSources[0]
+                : new ConcatenatingMediaSource(mediaSources);
+
+        boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
+        if (haveResumePosition) {
+            player.seekTo(resumeWindow, resumePosition);
+        }
+        player.prepare(mediaSource, !haveResumePosition, false);
+        inErrorState = false;
+        supportInvalidateOptionsMenu();
+
+    }
+
+    private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManagerV18(UUID uuid,
+                                                                              String licenseUrl, String[] keyRequestPropertiesArray, boolean multiSession)
+            throws UnsupportedDrmException {
+        HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
+                buildHttpDataSourceFactory(false));
+        if (keyRequestPropertiesArray != null) {
+            for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
+                drmCallback.setKeyRequestProperty(keyRequestPropertiesArray[i],
+                        keyRequestPropertiesArray[i + 1]);
+            }
+        }
+        return new DefaultDrmSessionManager<>(uuid, FrameworkMediaDrm.newInstance(uuid), drmCallback,
+                null, mainHandler, null, multiSession);
+    }
+
+    private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
+        int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension : uri.getLastPathSegment());
+        switch (type) {
+            case C.TYPE_SS:return new SsMediaSource(uri, buildDataSourceFactory(false), new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
+            case C.TYPE_DASH:return new DashMediaSource(uri, buildDataSourceFactory(false), new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
+            case C.TYPE_HLS:return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
+            case C.TYPE_OTHER:return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(), mainHandler, null);
+            default: throw new IllegalStateException("Unsupported type: " + type);
+        }
+    }
+
+
+    private void releasePlayer() {
+        if (player != null) {
+            shouldAutoPlay = player.getPlayWhenReady();
+            updateResumePosition();
+            player.release();
+            player = null;
+            trackSelector = null;
+            trackSelectionHelper = null;
+        }
+    }
+
+    private void updateResumePosition() {
+        resumeWindow = player.getCurrentWindowIndex();
+        resumePosition = Math.max(0, player.getContentPosition());
+    }
 
     private void clearResumePosition() {
         resumeWindow = C.INDEX_UNSET;
         resumePosition = C.TIME_UNSET;
+    }
+
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return new DefaultDataSourceFactory(this, useBandwidthMeter ? BANDWIDTH_METER : null,
+                buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null));
+    }
+
+    HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "LeafPic"), bandwidthMeter);
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "LeafPic"), useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
+
+    private class PlayerEventListener extends Player.DefaultEventListener {
+
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            if (playbackState == Player.STATE_ENDED)
+                showControls();
+            supportInvalidateOptionsMenu();
+        }
+
+        @Override
+        public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
+            if (inErrorState) {
+                // This will only occur if the user has performed a seek whilst in the error state. Update
+                // the resume position so that if the user then retries, playback will resume from the
+                // position to which they seeked.
+                updateResumePosition();
+            }
+        }
+
+        @Override
+        public void onPlayerError(ExoPlaybackException e) {
+            String errorString = null;
+            if (e.type == ExoPlaybackException.TYPE_RENDERER) {
+                Exception cause = e.getRendererException();
+                if (cause instanceof DecoderInitializationException) {
+                    // Special case for decoder initialization failures.
+                    DecoderInitializationException decoderInitializationException =
+                            (DecoderInitializationException) cause;
+                    if (decoderInitializationException.decoderName == null)
+                        if (decoderInitializationException.getCause() instanceof DecoderQueryException)
+                            errorString = getString(R.string.error_querying_decoders);
+                        else if (decoderInitializationException.secureDecoderRequired)
+                            errorString = getString(R.string.error_no_secure_decoder, decoderInitializationException.mimeType);
+                        else
+                            errorString = getString(R.string.error_no_decoder, decoderInitializationException.mimeType);
+                    else
+                        errorString = getString(R.string.error_instantiating_decoder, decoderInitializationException.decoderName);
+                }
+            }
+            if (errorString != null)
+                showToast(errorString);
+            inErrorState = true;
+            supportInvalidateOptionsMenu();
+            showControls();
+        }
+
+        @Override
+        @SuppressWarnings("ReferenceEquality")
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+            if (trackGroups != lastSeenTrackGroupArray) {
+                MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
+                if (mappedTrackInfo != null) {
+                    if (mappedTrackInfo.getTrackTypeRendererSupport(C.TRACK_TYPE_VIDEO)
+                            == MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
+                        showToast(R.string.error_unsupported_video);
+                    }
+                    if (mappedTrackInfo.getTrackTypeRendererSupport(C.TRACK_TYPE_AUDIO)
+                            == MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
+                        showToast(R.string.error_unsupported_audio);
+                    }
+                }
+                lastSeenTrackGroupArray = trackGroups;
+            }
+        }
+
     }
 
     @Override
@@ -241,7 +440,8 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
                             break;
                         case C.TRACK_TYPE_VIDEO:
                             menu.findItem(R.id.video_stuff).setVisible(true);
-                            video = i;              break;
+                            video = i;
+                            break;
                         case C.TRACK_TYPE_TEXT:
                             menu.findItem(R.id.text_stuff).setVisible(true);
                             text = i;
@@ -297,9 +497,14 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
 
             case org.horaapps.leafpic.R.id.rotate_layout:
                 int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
-                if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270)
+                if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    simpleExoPlayerView.hideController();
+                    hideControls();
+
+                }
         /*showControls();*/
                 return true;
 
@@ -307,242 +512,6 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-    // Internal methods
-    private void initializePlayer() {
-        Intent intent = getIntent();
-        if (player == null) {
-
-            TrackSelection.Factory adaptiveTrackSelectionFactory =
-                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
-
-            trackSelector = new DefaultTrackSelector(adaptiveTrackSelectionFactory);
-            //trackSelector.addListener(this);
-            trackSelectionHelper = new TrackSelectionHelper(trackSelector, adaptiveTrackSelectionFactory, getThemeHelper());
-
-
-            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
-                    ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
-            DrmSessionManager<FrameworkMediaCrypto> drmSessionManager = null;
-            if (drmSchemeUuid != null) {
-                String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
-                String[] keyRequestPropertiesArray = intent.getStringArrayExtra(DRM_KEY_REQUEST_PROPERTIES);
-                boolean multiSession = intent.getBooleanExtra(DRM_MULTI_SESSION, false);
-                int errorStringId = R.string.error_drm_unknown;
-
-                try {
-                    drmSessionManager = buildDrmSessionManagerV18(drmSchemeUuid, drmLicenseUrl,
-                            keyRequestPropertiesArray, multiSession);
-                } catch (UnsupportedDrmException e) {
-                    errorStringId = e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
-                            ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown;
-                }
-                if (drmSessionManager == null) {
-                    showToast(errorStringId);
-                    return;
-                }
-            }
-
-           /* player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
-                    drmSessionManager, preferExtensionDecoders);*/
-
-           /* boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
-            @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode =
-                    ((DemoApplication) getApplication()).useExtensionRenderers()
-                            ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;*/
-            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
-                    drmSessionManager, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
-
-            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
-            player.addListener(this);
-            //player.addListener(new PlayerEventListener());
-
-            simpleExoPlayerView.setPlayer(player);
-            if (isTimelineStatic) {
-                if (playerPosition == C.TIME_UNSET) {
-                    player.seekToDefaultPosition(playerWindow);
-                } else {
-                    player.seekTo(playerWindow, playerPosition);
-                }
-            }
-            player.setPlayWhenReady(shouldAutoPlay);
-            playerNeedsSource = true;
-        }
-        if (playerNeedsSource) {
-            String action = intent.getAction();
-            Uri uris[];
-            String extensions[];
-            if (intent.getData() != null && intent.getType() != null) {
-                uris = new Uri[] { intent.getData() };
-                extensions = new String[] { intent.getType()};
-            } else {
-                // TODO: 12/7/16 asdasd
-                showToast(getString(R.string.unexpected_intent_action, action));
-                return;
-            }
-
-            MediaSource[] mediaSources = new MediaSource[uris.length];
-            for (int i = 0; i < uris.length; i++) {
-                mediaSources[i] = buildMediaSource(uris[i], extensions[i]);
-            }
-            MediaSource mediaSource = mediaSources.length == 1 ? mediaSources[0]
-                    : new ConcatenatingMediaSource(mediaSources);
-            player.prepare(mediaSource, !isTimelineStatic, !isTimelineStatic);
-            playerNeedsSource = false;
-            supportInvalidateOptionsMenu();
-        }
-    }
-
-    private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManagerV18(UUID uuid,
-                                                                              String licenseUrl, String[] keyRequestPropertiesArray, boolean multiSession)
-            throws UnsupportedDrmException {
-        HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
-                buildHttpDataSourceFactory(false));
-        if (keyRequestPropertiesArray != null) {
-            for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
-                drmCallback.setKeyRequestProperty(keyRequestPropertiesArray[i],
-                        keyRequestPropertiesArray[i + 1]);
-            }
-        }
-        return new DefaultDrmSessionManager<>(uuid, FrameworkMediaDrm.newInstance(uuid), drmCallback,
-                null, mainHandler, null, multiSession);
-    }
-
-    private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
-        int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension : uri.getLastPathSegment());
-        switch (type) {
-            case C.TYPE_SS:return new SsMediaSource(uri, buildDataSourceFactory(false), new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
-            case C.TYPE_DASH:return new DashMediaSource(uri, buildDataSourceFactory(false), new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
-            case C.TYPE_HLS:return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
-            case C.TYPE_OTHER:return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(), mainHandler, null);
-            default: throw new IllegalStateException("Unsupported type: " + type);
-        }
-    }
-
-    /*private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManager(UUID uuid, String licenseUrl, Map<String, String> keyRequestProperties) throws UnsupportedDrmException {
-        HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
-                buildHttpDataSourceFactory(false), keyRequestProperties);
-        return new StreamingDrmSessionManager<>(uuid,
-                FrameworkMediaDrm.newInstance(uuid), drmCallback, null, mainHandler, null);
-    }*/
-
-    private void releasePlayer() {
-        if (player != null) {
-            shouldAutoPlay = player.getPlayWhenReady();
-            updateResumePosition();
-            player.release();
-            player = null;
-            trackSelector = null;
-            trackSelectionHelper = null;
-        }
-    }
-
-    private void updateResumePosition() {
-        resumeWindow = player.getCurrentWindowIndex();
-        resumePosition = Math.max(0, player.getContentPosition());
-    }
-
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return new DefaultDataSourceFactory(this, useBandwidthMeter ? BANDWIDTH_METER : null,
-                buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null));
-    }
-
-    HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "LeafPic"), bandwidthMeter);
-    }
-
-    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "LeafPic"), useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
-
-    // ExoPlayer.EventListener implementation
-    @Override
-    public void onLoadingChanged(boolean isLoading) { }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == Player.STATE_ENDED)
-            showControls();
-        supportInvalidateOptionsMenu();
-    }
-
-    @Override
-    public void onRepeatModeChanged(int repeatMode) {
-
-    }
-
-    @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-    }
-
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-        isTimelineStatic = timeline != null && timeline.getWindowCount() > 0
-                && !timeline.getWindow(timeline.getWindowCount() - 1, window).isDynamic;
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException e) {
-        String errorString = null;
-        if (e.type == ExoPlaybackException.TYPE_RENDERER) {
-            Exception cause = e.getRendererException();
-            if (cause instanceof DecoderInitializationException) {
-                // Special case for decoder initialization failures.
-                DecoderInitializationException decoderInitializationException =
-                        (DecoderInitializationException) cause;
-                if (decoderInitializationException.decoderName == null)
-                    if (decoderInitializationException.getCause() instanceof DecoderQueryException)
-                        errorString = getString(R.string.error_querying_decoders);
-                    else if (decoderInitializationException.secureDecoderRequired)
-                        errorString = getString(R.string.error_no_secure_decoder, decoderInitializationException.mimeType);
-                    else
-                        errorString = getString(R.string.error_no_decoder, decoderInitializationException.mimeType);
-                else
-                    errorString = getString(R.string.error_instantiating_decoder, decoderInitializationException.decoderName);
-            }
-        }
-        if (errorString != null)
-            showToast(errorString);
-        playerNeedsSource = true;
-        supportInvalidateOptionsMenu();
-        showControls();
-    }
-
-    @Override
-    public void onPositionDiscontinuity(int reason) {
-
-    }
-
-    @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-    }
-
-    @Override
-    public void onSeekProcessed() {
-
-    }
-
-    // MappingTrackSelector.EventListener implementation
-    /*@Override
-    public void onTrackSelectionsChanged(TrackSelections<? extends MappedTrackInfo> trackSelections) {
-        supportInvalidateOptionsMenu();
-        MappedTrackInfo trackInfo = trackSelections.info;
-        if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_VIDEO))
-            showToast(R.string.error_unsupported_video);
-        if (trackInfo.hasOnlyUnplayableTracks(C.TRACK_TYPE_AUDIO))
-            showToast(R.string.error_unsupported_audio);
-    }*/
 
     //User controls
     private void showToast(int messageId) {
@@ -575,44 +544,40 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
     }
 
     private void hideControls() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
-                        .setDuration(200).start();
-                fullScreenMode = true;
-                changeBackGroundColor();
-            }
+        runOnUiThread(() -> {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hideController nav bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hideController status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+            toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+                    .setDuration(200).start();
+            fullScreenMode = true;
+            changeBackGroundColor();
         });
     }
 
     private void showControls(){
-        runOnUiThread(new Runnable() {
-            public void run() {
-                int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
-                if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) { //Landscape
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                    simpleExoPlayerView.setPaddingRelative(0, 0, 0, 0);
-                } else {
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    simpleExoPlayerView.setPaddingRelative(0, 0, 0, Measure.getNavBarHeight(getApplicationContext()));
-                }
-                toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-                        .setDuration(240).start();
-                fullScreenMode = false;
-                changeBackGroundColor();
+        runOnUiThread(() -> {
+            int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
+            if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) { //Landscape
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                simpleExoPlayerView.setPaddingRelative(0, 0, 0, 0);
+            } else {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                simpleExoPlayerView.setPaddingRelative(0, 0, 0, Measure.getNavBarHeight(getApplicationContext()));
             }
+            toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+                    .setDuration(240).start();
+            fullScreenMode = false;
+            changeBackGroundColor();
         });
     }
 
@@ -636,12 +601,7 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
         }
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(240);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                rootView.setBackgroundColor((Integer) animator.getAnimatedValue());
-            }
-        });
+        colorAnimation.addUpdateListener(animator -> rootView.setBackgroundColor((Integer) animator.getAnimatedValue()));
         colorAnimation.start();
     }
 }

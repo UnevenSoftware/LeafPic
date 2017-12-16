@@ -255,6 +255,10 @@ public final class CustomExoPlayerView extends FrameLayout {
         }*/
     }
 
+    public void hideController() {
+        controller.hide();
+    }
+
     private final class ComponentListener extends Player.DefaultEventListener implements TextOutput,
             SimpleExoPlayer.VideoListener {
 
