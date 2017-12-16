@@ -68,7 +68,7 @@ public class MainActivity extends SharedMediaActivity {
     @BindView(R.id.coordinator_main_layout) CoordinatorLayout mainLayout;
 
     private AlbumsFragment albumsFragment;
-    private RvMediaFragment rvMediaFragment = new RvMediaFragment();
+    private RvMediaFragment rvMediaFragment;
 
     private boolean pickMode = false;
     private boolean albumsMode;
@@ -91,11 +91,17 @@ public class MainActivity extends SharedMediaActivity {
                     .addToBackStack(null)
                     .commit();
 
+            rvMediaFragment = new RvMediaFragment();
+
             return;
         }
 
         // We have some instance state
         restoreState(savedInstanceState);
+
+        if (!albumsMode) {
+            rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
+        }
         albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
     }
 
@@ -158,7 +164,7 @@ public class MainActivity extends SharedMediaActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content, rvMediaFragment, "media")
+                .replace(R.id.content, rvMediaFragment, RvMediaFragment.TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -477,7 +483,7 @@ public class MainActivity extends SharedMediaActivity {
                 else finish();
             }
         } else {
-            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag("media")).onBackPressed())
+            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG)).onBackPressed())
                 goBackToAlbums();
         }
     }
