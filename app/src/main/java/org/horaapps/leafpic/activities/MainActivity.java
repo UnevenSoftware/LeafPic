@@ -56,7 +56,7 @@ import butterknife.ButterKnife;
 /**
  * The Main Activity used to display Albums / Media.
  */
-public class MainActivity extends SharedMediaActivity {
+public class MainActivity extends SharedMediaActivity implements RvMediaFragment.MediaClickListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
@@ -91,8 +91,6 @@ public class MainActivity extends SharedMediaActivity {
                     .addToBackStack(null)
                     .commit();
 
-            rvMediaFragment = new RvMediaFragment();
-
             return;
         }
 
@@ -101,6 +99,7 @@ public class MainActivity extends SharedMediaActivity {
 
         if (!albumsMode) {
             rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
+            rvMediaFragment.setListener(this);
         }
         albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
     }
@@ -122,51 +121,46 @@ public class MainActivity extends SharedMediaActivity {
     }
 
     public void displayMedia(Album album) {
+        rvMediaFragment = RvMediaFragment.make(album);
         albumsMode = false;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        rvMediaFragment.setListener(new RvMediaFragment.MediaClickListener() {
-            @Override
-            public void onCreated() {
-                rvMediaFragment.loadAlbum(album);
-            }
-
-            @Override
-            public void onClick(Album album, ArrayList<Media> media, int position) {
-
-                if (!pickMode) {
-                    Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
-                    intent.putExtra("album", album);
-                    try {
-                        intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                        intent.putExtra("media", media);
-                        intent.putExtra("position", position);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
-                        intent.putExtra("media", media.get(position));
-                        startActivity(intent);
-                    }
-
-                } else {
-
-                    Media m = media.get(position);
-                    Uri uri = LegacyCompatFileProvider.getUri(getApplicationContext(), m.getFile());
-                    Intent res = new Intent();
-                    res.setData(uri);
-                    res.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    setResult(RESULT_OK, res);
-                    finish();
-                }
-            }
-        });
-
+        rvMediaFragment.setListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content, rvMediaFragment, RvMediaFragment.TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onClick(Album album, ArrayList<Media> media, int position) {
+
+        if (!pickMode) {
+            Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
+            intent.putExtra("album", album);
+            try {
+                intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
+                intent.putExtra("media", media);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            } catch (Exception e) {
+                intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
+                intent.putExtra("media", media.get(position));
+                startActivity(intent);
+            }
+
+        } else {
+
+            Media m = media.get(position);
+            Uri uri = LegacyCompatFileProvider.getUri(getApplicationContext(), m.getFile());
+            Intent res = new Intent();
+            res.setData(uri);
+            res.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            setResult(RESULT_OK, res);
+            finish();
+        }
     }
 
 
