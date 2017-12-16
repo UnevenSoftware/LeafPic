@@ -77,7 +77,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 public class RvMediaFragment extends BaseFragment {
 
     public static final String TAG = "RvMediaFragment";
-    private final String BUNDLE_ALBUM = "album";
+    private static final String BUNDLE_ALBUM = "album";
 
     @BindView(R.id.media) RecyclerView rv;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
@@ -94,11 +94,19 @@ public class RvMediaFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
-            album = Album.getEmptyAlbum();
+            album = getArguments().getParcelable(BUNDLE_ALBUM);
             return;
         }
 
         album = savedInstanceState.getParcelable(BUNDLE_ALBUM);
+    }
+
+    public static RvMediaFragment make(Album album) {
+        RvMediaFragment fragment = new RvMediaFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BUNDLE_ALBUM, album);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -119,7 +127,7 @@ public class RvMediaFragment extends BaseFragment {
         loadAlbum(album);
     }
 
-    public void loadAlbum(Album album) {
+    private void loadAlbum(Album album) {
         this.album = album;
         adapter.setupFor(album);
         CPHelper.getMedia(getContext(), album)
@@ -146,8 +154,6 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     public interface MediaClickListener {
-        void onCreated();
-
         void onClick(Album album, ArrayList<Media> media, int position);
     }
 
@@ -159,7 +165,7 @@ public class RvMediaFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_rv_media, container, false);
         ButterKnife.bind(this, v);
@@ -194,17 +200,13 @@ public class RvMediaFragment extends BaseFragment {
         refresh.setOnRefreshListener(this::reload);
         rv.setAdapter(adapter);
 
-        if (savedInstanceState != null) {
-            reload();
-        }
         return v;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (listener != null)
-            listener.onCreated();
+        reload();
     }
 
 
