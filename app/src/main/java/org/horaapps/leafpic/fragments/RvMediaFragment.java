@@ -10,6 +10,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -75,6 +76,9 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class RvMediaFragment extends BaseFragment {
 
+    public static final String TAG = "RvMediaFragment";
+    private final String BUNDLE_ALBUM = "album";
+
     @BindView(R.id.media) RecyclerView rv;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
 
@@ -83,14 +87,18 @@ public class RvMediaFragment extends BaseFragment {
 
     private MainActivity act;
 
-    private Album album = Album.getEmptyAlbum();
+    private Album album;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if (savedInstanceState == null) {
+            album = Album.getEmptyAlbum();
+            return;
+        }
 
-        //album = getArguments().getParcelable("album");
+        album = savedInstanceState.getParcelable(BUNDLE_ALBUM);
     }
 
     @Override
@@ -107,7 +115,7 @@ public class RvMediaFragment extends BaseFragment {
         setUpColumns();
     }
 
-    private void display() {
+    private void reload() {
         loadAlbum(album);
     }
 
@@ -131,6 +139,12 @@ public class RvMediaFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(BUNDLE_ALBUM, album);
+        super.onSaveInstanceState(outState);
+    }
+
     public interface MediaClickListener {
         void onCreated();
 
@@ -147,7 +161,7 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_rv_media, null);
+        View v = inflater.inflate(R.layout.fragment_rv_media, container, false);
         ButterKnife.bind(this, v);
 
         int spanCount = columnsCount();
@@ -177,8 +191,12 @@ public class RvMediaFragment extends BaseFragment {
                     getActivity().invalidateOptionsMenu();
                 });
 
-        refresh.setOnRefreshListener(this::display);
+        refresh.setOnRefreshListener(this::reload);
         rv.setAdapter(adapter);
+
+        if (savedInstanceState != null) {
+            reload();
+        }
         return v;
     }
 
@@ -293,25 +311,25 @@ public class RvMediaFragment extends BaseFragment {
             case R.id.all_media_filter:
                 album.setFilterMode(FilterMode.ALL);
                 item.setChecked(true);
-                display();
+                reload();
                 return true;
 
             case R.id.video_media_filter:
                 album.setFilterMode(FilterMode.VIDEO);
                 item.setChecked(true);
-                display();
+                reload();
                 return true;
 
             case R.id.image_media_filter:
                 album.setFilterMode(FilterMode.IMAGES);
                 item.setChecked(true);
-                display();
+                reload();
                 return true;
 
             case R.id.gifs_media_filter:
                 album.setFilterMode(FilterMode.GIF);
                 item.setChecked(true);
-                display();
+                reload();
                 return true;
 
             case R.id.sharePhotos:
