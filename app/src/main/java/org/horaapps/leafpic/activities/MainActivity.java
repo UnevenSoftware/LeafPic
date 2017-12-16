@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -51,44 +53,60 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
+/**
+ * The Main Activity used to display Albums / Media.
+ */
 public class MainActivity extends SharedMediaActivity {
 
+    public static final String ARGS_PICK_MODE = "pick_mode";
 
-    AlbumsFragment albumsFragment = new AlbumsFragment();
-    RvMediaFragment rvMediaFragment = new RvMediaFragment();
+    private static final String SAVE_ALBUM_MODE = "album_mode";
 
-    @BindView(R.id.fab_camera)
-    FloatingActionButton fab;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.coordinator_main_layout)
-    CoordinatorLayout mainLayout;
+    @BindView(R.id.fab_camera) FloatingActionButton fab;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.coordinator_main_layout) CoordinatorLayout mainLayout;
+
+    private AlbumsFragment albumsFragment;
+    private RvMediaFragment rvMediaFragment = new RvMediaFragment();
 
     private boolean pickMode = false;
-    private boolean albumsMode = true;
+    private boolean albumsMode;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        pickMode = getIntent().getBooleanExtra(SplashScreen.PICK_MODE, false);
-
-        if (savedInstanceState != null)
-            return;
-
         initUi();
+        pickMode = getIntent().getBooleanExtra(ARGS_PICK_MODE, false);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content, albumsFragment, "albums")
-                .addToBackStack(null)
-                .commit();
+        if (savedInstanceState == null) {
+            // Add AlbumsFragment to UI
+            albumsFragment = new AlbumsFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content, albumsFragment, AlbumsFragment.TAG)
+                    .addToBackStack(null)
+                    .commit();
 
+            return;
+        }
+
+        // We have some instance state
+        restoreState(savedInstanceState);
+        albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(SAVE_ALBUM_MODE, albumsMode);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restoreState(@NonNull Bundle savedInstance) {
+        albumsMode = savedInstance.getBoolean(SAVE_ALBUM_MODE, true);
     }
 
     private void displayAlbums(boolean hidden) {

@@ -58,7 +58,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class AlbumsFragment extends BaseFragment {
 
-    private static final String TAG = "asd";
+    public static final String TAG = "AlbumsFragment";
 
     @BindView(R.id.albums) RecyclerView rv;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
