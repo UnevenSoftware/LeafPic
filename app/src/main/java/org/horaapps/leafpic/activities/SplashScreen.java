@@ -38,7 +38,6 @@ public class SplashScreen extends SharedMediaActivity {
     private static final int PICK_MEDIA_REQUEST = 44;
 
     final static String CONTENT = "content";
-    final static String PICK_MODE = "pick_mode";
 
     final static int ALBUMS_PREFETCHED = 2376;
     final static int PHOTOS_PREFETCHED = 2567;
@@ -93,7 +92,7 @@ public class SplashScreen extends SharedMediaActivity {
         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
 
         if (pickMode) {
-            intent.putExtra(SplashScreen.PICK_MODE, pickMode);
+            intent.putExtra(MainActivity.ARGS_PICK_MODE, pickMode);
             startActivityForResult(intent, PICK_MEDIA_REQUEST);
         } else {
             startActivity(intent);
