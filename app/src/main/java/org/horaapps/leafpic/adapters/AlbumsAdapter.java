@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
@@ -279,8 +278,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
         holder.mediaLabel.setTextColor(textColor);
 
-        // TODO Calvin: Check if "show_n_photos" is being set anywhere
-        holder.llCount.setVisibility(Hawk.get("show_n_photos", true) ? View.VISIBLE : View.GONE);
+        holder.llCount.setVisibility(Prefs.showMediaCount() ? View.VISIBLE : View.GONE);
         holder.name.setText(StringUtils.htmlFormat(a.getName(), textColor, false, true));
         holder.nMedia.setText(StringUtils.htmlFormat(String.valueOf(a.getCount()), accentColor, true, false));
         holder.path.setVisibility(Prefs.showAlbumPath() ? View.VISIBLE : View.GONE);
