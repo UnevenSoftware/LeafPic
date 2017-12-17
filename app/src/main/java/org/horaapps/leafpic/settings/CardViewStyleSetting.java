@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
@@ -44,16 +43,16 @@ public class CardViewStyleSetting extends ThemedSetting {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), getActivity().getDialogStyle());
         final View dialogLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_album_card_style, null);
 
-        TextView dialogTitle = (TextView) dialogLayout.findViewById(R.id.dialog_card_view_style_title);
+        TextView dialogTitle = dialogLayout.findViewById(R.id.dialog_card_view_style_title);
         ((CardView) dialogLayout.findViewById(R.id.dialog_card_view_style)).setCardBackgroundColor(getActivity().getCardBackgroundColor());
         dialogTitle.setBackgroundColor(getActivity().getPrimaryColor());
 
-        final RadioGroup rGroup = (RadioGroup) dialogLayout.findViewById(R.id.radio_group_card_view_style);
-        final CheckBox chkShowMediaCount = (CheckBox) dialogLayout.findViewById(R.id.show_media_count);
-        final CheckBox chkShowAlbumPath = (CheckBox) dialogLayout.findViewById(R.id.show_album_path);
-        RadioButton rCompact = (RadioButton) dialogLayout.findViewById(R.id.radio_card_compact);
-        RadioButton rFlat = (RadioButton) dialogLayout.findViewById(R.id.radio_card_flat);
-        RadioButton rMaterial = (RadioButton) dialogLayout.findViewById(R.id.radio_card_material);
+        final RadioGroup rGroup = dialogLayout.findViewById(R.id.radio_group_card_view_style);
+        final CheckBox chkShowMediaCount = dialogLayout.findViewById(R.id.show_media_count);
+        final CheckBox chkShowAlbumPath = dialogLayout.findViewById(R.id.show_album_path);
+        RadioButton rCompact = dialogLayout.findViewById(R.id.radio_card_compact);
+        RadioButton rFlat = dialogLayout.findViewById(R.id.radio_card_flat);
+        RadioButton rMaterial = dialogLayout.findViewById(R.id.radio_card_material);
 
         chkShowMediaCount.setChecked(Prefs.showMediaCount());
         chkShowAlbumPath.setChecked(Prefs.showAlbumPath());
@@ -83,7 +82,7 @@ public class CardViewStyleSetting extends ThemedSetting {
                         break;
                 }
 
-                ImageView img = (ImageView) v.findViewById(org.horaapps.leafpic.R.id.album_preview);
+                ImageView img = v.findViewById(R.id.album_preview);
                 img.setBackgroundColor(getActivity().getPrimaryColor());
 
                 Glide.with(getActivity())
@@ -120,7 +119,7 @@ public class CardViewStyleSetting extends ThemedSetting {
                 });
 
                 ((TextView) v.findViewById(R.id.album_name)).setText(StringUtils.html("<i><font color='" + textColor + "'>PraiseDuarte</font></i>"));
-                ((TextView) v.findViewById(R.id.album_path)).setText(getActivity().getString(R.string.album_path));
+                ((TextView) v.findViewById(R.id.album_path)).setText("~/home/PraiseDuarte");
 
                 ((CardView) v).setUseCompatPadding(true);
                 ((CardView) v).setRadius(2);
