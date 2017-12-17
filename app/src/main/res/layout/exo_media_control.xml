@@ -67,7 +67,7 @@
 
         <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/rew"
-            app:iiv_icon="cmd-rewind"
+            app:iiv_icon="faw-backward"
             app:iiv_color="@color/md_white_1000"
             android:layout_height="@dimen/icon_player_size"
             android:layout_width="@dimen/icon_player_size"
@@ -77,12 +77,12 @@
         <com.mikepenz.iconics.view.IconicsImageView
             app:iiv_icon="cmd-play"
             app:iiv_color="@color/md_white_1000"
-            android:layout_height="30dp"
-            android:layout_width="30dp"
+            android:layout_height="@dimen/icon_player_size"
+            android:layout_width="@dimen/icon_player_size"
             android:id="@+id/play" />
 
         <com.mikepenz.iconics.view.IconicsImageView
-            app:iiv_icon="cmd-fast-forward"
+            app:iiv_icon="faw-forward"
             app:iiv_color="@color/md_white_1000"
             android:layout_height="@dimen/icon_player_size"
             android:layout_width="@dimen/icon_player_size"

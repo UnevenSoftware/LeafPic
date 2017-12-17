@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -44,8 +44,6 @@ public class CustomPlayBackController extends FrameLayout {
         //@param visibility The new visibility. Either {@link View#VISIBLE} or {@link View#GONE}.
         void onVisibilityChange(int visibility);
     }
-
-    private ThemeHelper themeHelper;
 
     public static final int DEFAULT_FAST_FORWARD_MS = 15000;
     public static final int DEFAULT_REWIND_MS = 5000;
@@ -141,7 +139,7 @@ public class CustomPlayBackController extends FrameLayout {
         fastForwardButton.setOnClickListener(componentListener);
 
         /**** THEMING THINGS ****/
-        themeHelper = ThemeHelper.getInstanceLoaded(getContext());
+        ThemeHelper themeHelper = ThemeHelper.getInstanceLoaded(getContext());
 
         //themeHelper.themeSeekBar(progressBar);
         progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
@@ -249,7 +247,9 @@ public class CustomPlayBackController extends FrameLayout {
                 playing ? R.string.exo_controls_pause_description : R.string.exo_controls_play_description);
         playButton.setContentDescription(contentDescription);
         IconicsDrawable icon = playButton.getIcon();
-        icon.icon(playing ? CommunityMaterial.Icon.cmd_pause_circle_outline : CommunityMaterial.Icon.cmd_play_circle_outline);
+        //icon.icon(playing ? CommunityMaterial.Icon.cmd_pause : CommunityMaterial.Icon.cmd_play);
+        icon.icon(playing ? FontAwesome.Icon.faw_pause : FontAwesome.Icon.faw_play);
+        //icon.icon(FontAwesome.Icon.faw_pause);
         playButton.setIcon(icon);
     }
 

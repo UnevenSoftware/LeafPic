@@ -90,8 +90,7 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.UUID;
 
-public class PlayerActivity extends ThemedActivity implements CustomPlayBackController.VisibilityListener/*, Player.EventListener*//*
-        TrackSelector.EventListener<MappedTrackInfo>, CustomPlayBackController.VisibilityListener*/ {
+public class PlayerActivity extends ThemedActivity implements CustomPlayBackController.VisibilityListener {
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
     public static final String DRM_LICENSE_URL = "drm_license_url";
@@ -249,12 +248,6 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
                 }
             }
 
-           /* boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
-            @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode =
-                    ((DemoApplication) getApplication()).useExtensionRenderers()
-                            ? (preferExtensionDecoders ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-                            : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;*/
             DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
                     drmSessionManager, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
 
@@ -432,7 +425,6 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
             for (int i = 0; i < mappedTrackInfo.length; i++) {
                 TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
                 if (trackGroups.length != 0) {
-                    int label;
                     switch (player.getRendererType(i)) {
                         case C.TRACK_TYPE_AUDIO:
                             menu.findItem(R.id.audio_stuff).setVisible(true);
@@ -457,7 +449,6 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        // TODO: 12/7/16 check them out
         menu.findItem(R.id.audio_stuff).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_audiotrack));
         menu.findItem(R.id.video_stuff).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_switch_video));
         menu.findItem(R.id.text_stuff).setIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_subtitles));
@@ -503,9 +494,7 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     simpleExoPlayerView.hideController();
                     hideControls();
-
                 }
-        /*showControls();*/
                 return true;
 
             default:
