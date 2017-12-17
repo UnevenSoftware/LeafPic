@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start">
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,12 +23,11 @@
                 layout="@layout/toolbar" />
 
             <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:id="@+id/content"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-            <include layout="@layout/there_is_nothing_to_show"/>
+            <include layout="@layout/there_is_nothing_to_show" />
 
         </LinearLayout>
 
@@ -34,20 +35,22 @@
             android:id="@+id/fab_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_layout_margin"
-            app:elevation="@dimen/fab_elevation"
-            app:borderWidth="@dimen/fab_border_width"
-            app:pressedTranslationZ="@dimen/fab_pressed_translationZ"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_layout_margin"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:borderWidth="@dimen/fab_border_width"
+            app:elevation="@dimen/fab_elevation"
             app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"
-            />
+            app:pressedTranslationZ="@dimen/fab_pressed_translationZ" />
+
     </android.support.design.widget.CoordinatorLayout>
-    <include
-        android:id="@+id/drawer_items"
-        layout="@layout/drawer"/>
+
+    <org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer
+        android:id="@+id/home_navigation_drawer"
+        android:layout_width="@dimen/nav_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+
 </android.support.v4.widget.DrawerLayout>
-
-

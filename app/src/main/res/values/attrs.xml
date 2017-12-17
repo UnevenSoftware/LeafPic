@@ -20,4 +20,9 @@
         <attr name="settingPreferenceKey" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="NavigationEntry">
+        <attr name="itemText" format="reference"/>
+        <attr name="itemIcon" format="string"/>
+    </declare-styleable>
+
 </resources>

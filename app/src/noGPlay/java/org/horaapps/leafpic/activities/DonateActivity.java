@@ -2,8 +2,11 @@ package org.horaapps.leafpic.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,12 +15,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import org.horaapps.liz.ui.ThemedIcon;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.CustomTabService;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by Jibo on 02/03/2016.
@@ -29,12 +32,16 @@ public class DonateActivity extends ThemedActivity {
     private ScrollView scr;
     private Button btnDonatePP;
 
+    public static void startActivity(@NonNull Context context) {
+        context.startActivity(new Intent(context, DonateActivity.class));
+    }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        scr = (ScrollView)findViewById(R.id.donateAct_scrollView);
+        scr = (ScrollView) findViewById(R.id.donateAct_scrollView);
         btnDonatePP = findViewById(R.id.button_donate_paypal);
 
         iniUi();

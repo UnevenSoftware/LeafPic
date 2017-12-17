@@ -245,7 +245,7 @@ public class PlayerActivity extends ThemedActivity implements  ExoPlayer.EventLi
                 return true;
 
             case org.horaapps.leafpic.R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                SettingsActivity.startActivity(this);
                 return true;
 
             case org.horaapps.leafpic.R.id.rotate_layout:

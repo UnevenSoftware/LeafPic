@@ -48,7 +48,7 @@ import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
-import org.horaapps.liz.ui.ThemedIcon;
+import org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -59,15 +59,17 @@ import butterknife.ButterKnife;
 /**
  * The Main Activity used to display Albums / Media.
  */
-public class MainActivity extends SharedMediaActivity
-        implements RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener, NothingToShowListener, EditModeListener {
+public class MainActivity extends SharedMediaActivity implements
+        RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener,
+        NothingToShowListener, EditModeListener, NavigationDrawer.ItemListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
     private static final String SAVE_ALBUM_MODE = "album_mode";
 
     @BindView(R.id.fab_camera) FloatingActionButton fab;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.drawer_layout) DrawerLayout navigationDrawer;
+    @BindView(R.id.home_navigation_drawer) NavigationDrawer navigationDrawerView;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.coordinator_main_layout) CoordinatorLayout mainLayout;
 
@@ -132,7 +134,7 @@ public class MainActivity extends SharedMediaActivity
 
     private void displayAlbums(boolean hidden) {
         albumsMode = true;
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         albumsFragment.displayAlbums(hidden);
     }
 
@@ -140,7 +142,7 @@ public class MainActivity extends SharedMediaActivity
         rvMediaFragment = RvMediaFragment.make(album);
 
         albumsMode = false;
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         rvMediaFragment.setListener(this);
         rvMediaFragment.setEditModeListener(this);
@@ -211,62 +213,35 @@ public class MainActivity extends SharedMediaActivity
 
     public void goBackToAlbums() {
         albumsMode = true;
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportFragmentManager().popBackStack();
     }
 
     private void initUi() {
-
         setSupportActionBar(toolbar);
-        //resetToolbar();
+        setupNavigationDrawer();
+        setupFAB();
+    }
 
-        // TODO: 3/25/17 organize better
-        /**** DRAWER ****/
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
-                R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) {
-            }
+    private void setupNavigationDrawer() {
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle
+                (this, navigationDrawer, toolbar,
+                        R.string.drawer_open, R.string.drawer_close);
 
-            public void onDrawerOpened(View drawerView) {
-            }
-        };
-
-
-        ((TextView) findViewById(R.id.txtVersion)).setText(BuildConfig.VERSION_NAME);
-        drawer.addDrawerListener(drawerToggle);
+        navigationDrawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        findViewById(R.id.ll_drawer_Donate).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonateActivity.class)));
+        navigationDrawerView.setListener(this);
+        navigationDrawerView.setAppVersion(BuildConfig.VERSION_NAME);
+    }
 
-        findViewById(R.id.ll_drawer_Setting).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
-
-        findViewById(R.id.ll_drawer_About).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AboutActivity.class)));
-
-        findViewById(R.id.ll_drawer_Default).setOnClickListener(v -> {
-            drawer.closeDrawer(GravityCompat.START);
-            displayAlbums(false);
-        });
-
-        findViewById(R.id.ll_drawer_all_media).setOnClickListener(v -> {
-            drawer.closeDrawer(GravityCompat.START);
-            displayMedia(Album.getAllMediaAlbum());
-        });
-
-        findViewById(R.id.ll_drawer_hidden).setOnClickListener(v -> {
-            if (Security.isPasswordOnHidden()) {
-                askPassword();
-            } else {
-                drawer.closeDrawer(GravityCompat.START);
-                displayAlbums(true);
-            }
-        });
-
-        findViewById(R.id.ll_drawer_Wallpapers).setOnClickListener(v -> Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show());
-
-        /**** FAB ***/
+    private void setupFAB() {
         fab.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
         fab.setOnClickListener(v -> startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)));
+    }
+
+    private void closeDrawer() {
+        navigationDrawer.closeDrawer(GravityCompat.START);
     }
 
     private void askPassword() {
@@ -274,7 +249,7 @@ public class MainActivity extends SharedMediaActivity
         Security.authenticateUser(MainActivity.this, new Security.AuthCallBack() {
             @Override
             public void onAuthenticated() {
-                drawer.closeDrawer(GravityCompat.START);
+                closeDrawer();
                 displayAlbums(true);
             }
 
@@ -323,36 +298,18 @@ public class MainActivity extends SharedMediaActivity
         fab.setVisibility(Hawk.get(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
         mainLayout.setBackgroundColor(getBackgroundColor());
 
-        setScrollViewColor(findViewById(R.id.drawer_scrollbar));
+        setScrollViewColor(navigationDrawerView);
+        setAllScrollbarsColor();
+
+        navigationDrawerView.setTheme(getPrimaryColor(), getBackgroundColor(), getTextColor(), getIconColor());
+
+        // TODO Calvin: This performs a NO-OP. Find out what this is used for
+        setRecentApp(getString(R.string.app_name));
+    }
+
+    private void setAllScrollbarsColor() {
         Drawable drawableScrollBar = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_scrollbar);
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
-
-        findViewById(R.id.Drawer_Header).setBackgroundColor(getPrimaryColor());
-        findViewById(R.id.Drawer_Body).setBackgroundColor(getDrawerBackground());
-        findViewById(R.id.drawer_scrollbar).setBackgroundColor(getDrawerBackground());
-        findViewById(R.id.Drawer_Body_Divider).setBackgroundColor(getIconColor());
-
-        /** TEXT VIEWS **/
-        int color = getTextColor();
-        ((TextView) findViewById(R.id.Drawer_Default_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_Allmedia_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_Setting_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_Donate_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_wallpapers_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_About_Item)).setTextColor(color);
-        ((TextView) findViewById(R.id.Drawer_hidden_Item)).setTextColor(color);
-
-        /** ICONS **/
-        color = getIconColor();
-        ((ThemedIcon) findViewById(R.id.Drawer_Default_Icon)).setColor(color);
-        ((ThemedIcon) findViewById(R.id.Drawer_Allmedia_Icon)).setColor(color);
-        ((ThemedIcon) findViewById(R.id.Drawer_Donate_Icon)).setColor(color);
-        ((ThemedIcon) findViewById(R.id.Drawer_Setting_Icon)).setColor(color);
-        ((ThemedIcon) findViewById(R.id.Drawer_wallpapers_Icon)).setColor(color);
-        ((ThemedIcon) findViewById(R.id.Drawer_About_Icon)).setColor(color);
-        ((ThemedIcon) findViewById(R.id.Drawer_hidden_Icon)).setColor(color);
-
-        setRecentApp(getString(R.string.app_name));
     }
 
     public void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
@@ -367,7 +324,7 @@ public class MainActivity extends SharedMediaActivity
         updateToolbar(
                 getString(R.string.app_name),
                 GoogleMaterial.Icon.gmd_menu,
-                v -> drawer.openDrawer(GravityCompat.START));
+                v -> navigationDrawer.openDrawer(GravityCompat.START));
     }
 
     public void enableNothingToSHowPlaceHolder(boolean status) {
@@ -398,7 +355,7 @@ public class MainActivity extends SharedMediaActivity
         switch (item.getItemId()) {
 
             case R.id.settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                SettingsActivity.startActivity(this);
                 return true;
 
             /*
@@ -505,8 +462,8 @@ public class MainActivity extends SharedMediaActivity
 
         if (albumsMode) {
             if (!albumsFragment.onBackPressed()) {
-                if (drawer.isDrawerOpen(GravityCompat.START))
-                    drawer.closeDrawer(GravityCompat.START);
+                if (navigationDrawer.isDrawerOpen(GravityCompat.START))
+                    closeDrawer();
                 else finish();
             }
         } else {
@@ -518,5 +475,43 @@ public class MainActivity extends SharedMediaActivity
     @Override
     public void onAlbumClick(Album album) {
         displayMedia(album);
+    }
+
+    public void onItemSelected(@NavigationDrawer.NavigationItem int navigationItemSelected) {
+        closeDrawer();
+        switch (navigationItemSelected) {
+
+            case NavigationDrawer.NAVIGATION_ITEM_ALL_ALBUMS:
+                displayAlbums(false);
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_ALL_MEDIA:
+                displayMedia(Album.getAllMediaAlbum());
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS:
+                if (Security.isPasswordOnHidden()) {
+                    askPassword();
+                } else {
+                    displayAlbums(true);
+                }
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS:
+                Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_DONATE:
+                DonateActivity.startActivity(this);
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_SETTINGS:
+                SettingsActivity.startActivity(this);
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_ABOUT:
+                AboutActivity.startActivity(this);
+                break;
+        }
     }
 }
