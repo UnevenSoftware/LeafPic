@@ -134,12 +134,19 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         onChangeSelectedSubject.onNext(new Media());
     }
 
-    public void clearSelected() {
-        for (int i = 0; i < media.size(); i++)
-            if (media.get(i).setSelected(false))
+    public boolean clearSelected() {
+        boolean changed = true;
+        for (int i = 0; i < media.size(); i++) {
+            boolean b = media.get(i).setSelected(false);
+            if (b)
                 notifyItemChanged(i);
+            changed &= b;
+        }
+
         selectedCount = 0;
-        onChangeSelectedSubject.onNext(new Media());
+        if (changed)
+            onChangeSelectedSubject.onNext(new Media());
+        return changed;
     }
 
     @Override

@@ -22,6 +22,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -39,6 +40,8 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
 import org.horaapps.leafpic.fragments.BaseFragment;
+import org.horaapps.leafpic.fragments.EditModeListener;
+import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
@@ -56,7 +59,8 @@ import butterknife.ButterKnife;
 /**
  * The Main Activity used to display Albums / Media.
  */
-public class MainActivity extends SharedMediaActivity implements RvMediaFragment.MediaClickListener {
+public class MainActivity extends SharedMediaActivity
+        implements RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener, NothingToShowListener, EditModeListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
@@ -84,12 +88,18 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
 
         if (savedInstanceState == null) {
             // Add AlbumsFragment to UI
+            albumsMode = true;
+
             albumsFragment = new AlbumsFragment();
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.content, albumsFragment, AlbumsFragment.TAG)
                     .addToBackStack(null)
                     .commit();
+
+            albumsFragment.setListener(this);
+            albumsFragment.setEditModeListener(this);
+            albumsFragment.setNothingToShowListener(this);
 
             return;
         }
@@ -100,8 +110,14 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
         if (!albumsMode) {
             rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
             rvMediaFragment.setListener(this);
+            rvMediaFragment.setEditModeListener(this);
+            rvMediaFragment.setNothingToShowListener(this);
         }
+
         albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+        albumsFragment.setListener(this);
+        albumsFragment.setEditModeListener(this);
+        albumsFragment.setNothingToShowListener(this);
     }
 
     @Override
@@ -122,10 +138,13 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
 
     public void displayMedia(Album album) {
         rvMediaFragment = RvMediaFragment.make(album);
+
         albumsMode = false;
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         rvMediaFragment.setListener(this);
+        rvMediaFragment.setEditModeListener(this);
+        rvMediaFragment.setNothingToShowListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -135,7 +154,7 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
     }
 
     @Override
-    public void onClick(Album album, ArrayList<Media> media, int position) {
+    public void onMediaClick(Album album, ArrayList<Media> media, int position) {
 
         if (!pickMode) {
             Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
@@ -163,6 +182,22 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
         }
     }
 
+    @Override
+    public void changedNothingToShow(boolean nothingToShow) {
+        enableNothingToSHowPlaceHolder(nothingToShow);
+    }
+
+    @Override
+    public void changedEditMode(boolean editMode, int selected, int total, @javax.annotation.Nullable View.OnClickListener listener, @javax.annotation.Nullable String title) {
+        if (editMode) {
+            updateToolbar(
+                    String.format(Locale.ENGLISH, "%d/%d", selected, total),
+                    GoogleMaterial.Icon.gmd_check, listener);
+        } else {
+            if (albumsMode) resetToolbar();
+            else updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -183,6 +218,7 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
     private void initUi() {
 
         setSupportActionBar(toolbar);
+        //resetToolbar();
 
         // TODO: 3/25/17 organize better
         /**** DRAWER ****/
@@ -200,7 +236,6 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
         ((TextView) findViewById(R.id.txtVersion)).setText(BuildConfig.VERSION_NAME);
         drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-
 
         findViewById(R.id.ll_drawer_Donate).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonateActivity.class)));
 
@@ -321,23 +356,21 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
     }
 
     public void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
-        updateToolbar(title, icon);
-        toolbar.setNavigationOnClickListener(onClickListener);
-    }
-
-    public void updateToolbar(String title, IIcon icon) {
         toolbar.setTitle(title);
         toolbar.setNavigationIcon(getToolbarIcon(icon));
+        toolbar.setNavigationOnClickListener(onClickListener);
+        Log.wtf("asd-sel", "updateToolbar() called with: title = [" + title + "], icon = [" + icon + "], onClickListener = [" + onClickListener + "]");
     }
 
-    public void resetToolbar() {
+    private void resetToolbar() {
+        Log.wtf("asd-sel", "reset");
         updateToolbar(
                 getString(R.string.app_name),
                 GoogleMaterial.Icon.gmd_menu,
                 v -> drawer.openDrawer(GravityCompat.START));
     }
 
-    public void nothingToShow(boolean status) {
+    public void enableNothingToSHowPlaceHolder(boolean status) {
         findViewById(R.id.nothing_to_show_placeholder).setVisibility(status ? View.VISIBLE : View.GONE);
     }
 
@@ -422,14 +455,14 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
 
                 insertTextDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onMediaClick(DialogInterface dialogInterface, int i) {
                         insertTextDialog.dismiss();
                     }
                 });
 
                 insertTextDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onMediaClick(DialogInterface dialogInterface, int i) {
                         if (editTextNewName.length() != 0) {
                             swipeRefreshLayout.setRefreshing(true);
                             boolean success;
@@ -480,5 +513,10 @@ public class MainActivity extends SharedMediaActivity implements RvMediaFragment
             if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG)).onBackPressed())
                 goBackToAlbums();
         }
+    }
+
+    @Override
+    public void onAlbumClick(Album album) {
+        displayMedia(album);
     }
 }
