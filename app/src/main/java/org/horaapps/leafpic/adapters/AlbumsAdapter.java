@@ -187,12 +187,21 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void clearSelected() {
-        for (int i = 0; i < albums.size(); i++)
-            if (albums.get(i).setSelected(false))
+    public boolean clearSelected() {
+
+        boolean changed = true;
+        for (int i = 0; i < albums.size(); i++) {
+            boolean b = albums.get(i).setSelected(false);
+            if (b)
                 notifyItemChanged(i);
+            changed &= b;
+        }
+
         selectedCount = 0;
-        onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
+
+        if (changed)
+            onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
+        return changed;
     }
 
     public void forceSelectedCount(int count) {

@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +28,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
@@ -44,7 +44,6 @@ import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,11 +64,18 @@ public class AlbumsFragment extends BaseFragment {
 
     private AlbumsAdapter adapter;
     private GridSpacingItemDecoration spacingDecoration;
+    private AlbumClickListener clickListener;
 
-    private MainActivity act;
     private boolean hidden = false;
     ArrayList<String> excuded = new ArrayList<>();
 
+    public interface AlbumClickListener {
+        void onAlbumClick(Album album);
+    }
+
+    public void setListener(AlbumClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,14 +87,13 @@ public class AlbumsFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        act = ((MainActivity) context);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        clearSelected();
-        updateToolbar();
+        if (!clearSelected())
+            updateToolbar();
         setUpColumns();
     }
 
@@ -112,7 +117,8 @@ public class AlbumsFragment extends BaseFragment {
                         },
                         () -> {
                             db.close();
-                            act.nothingToShow(getCount() == 0);
+                            if (getNothingToShowListener() != null)
+                                getNothingToShowListener().changedNothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
 
                             Hawk.put(hidden ? "h" : "albums", adapter.getAlbumsPaths());
@@ -149,21 +155,18 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     private void updateToolbar() {
-        if (editMode())
-            //todo improve
-            act.updateToolbar(
-                    String.format(Locale.ENGLISH, "%d/%d",
-                            adapter.getSelectedCount(), adapter.getItemCount()),
-                    GoogleMaterial.Icon.gmd_check,
-                    v -> adapter.clearSelected());
-        else act.resetToolbar();
+        if (getEditModeListener() != null) {
+            if (editMode())
+                getEditModeListener().changedEditMode(true, adapter.getSelectedCount(), adapter.getItemCount(), v -> adapter.clearSelected(), null);
+            else getEditModeListener().changedEditMode(false, 0, 0, null, null);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_albums, null);
+        View v = inflater.inflate(R.layout.fragment_albums, container, false);
         ButterKnife.bind(this, v);
 
         int spanCount = columnsCount();
@@ -179,12 +182,16 @@ public class AlbumsFragment extends BaseFragment {
         adapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> act.displayMedia(album));
+                .subscribe(album -> {
+                    if (clickListener != null)
+                        clickListener.onAlbumClick(album);
+                });
 
         adapter.getSelectedClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(album -> {
+                    Log.wtf("asd-sel", "1");
                     refresh.setEnabled(!adapter.selecting());
                     updateToolbar();
                     getActivity().invalidateOptionsMenu();
@@ -505,8 +512,8 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     @Override
-    public void clearSelected() {
-        adapter.clearSelected();
+    public boolean clearSelected() {
+        return adapter.clearSelected();
     }
 
     @Override

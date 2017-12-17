@@ -37,7 +37,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.MainActivity;
 import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.adapters.ProgressAdapter;
@@ -85,9 +84,11 @@ public class RvMediaFragment extends BaseFragment {
     private MediaAdapter adapter;
     private GridSpacingItemDecoration spacingDecoration;
 
-    private MainActivity act;
-
     private Album album;
+
+    public interface MediaClickListener {
+        void onMediaClick(Album album, ArrayList<Media> media, int position);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,14 +113,13 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        act = ((MainActivity) context);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        clearSelected();
-        updateToolbar();
+        if (!clearSelected())
+            updateToolbar();
         setUpColumns();
     }
 
@@ -141,7 +141,8 @@ public class RvMediaFragment extends BaseFragment {
                         },
                         () -> {
                             album.setCount(getCount());
-                            act.nothingToShow(getCount() == 0);
+                            if (getNothingToShowListener() != null)
+                                getNothingToShowListener().changedNothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
                         });
 
@@ -151,10 +152,6 @@ public class RvMediaFragment extends BaseFragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(BUNDLE_ALBUM, album);
         super.onSaveInstanceState(outState);
-    }
-
-    public interface MediaClickListener {
-        void onClick(Album album, ArrayList<Media> media, int position);
     }
 
     private MediaClickListener listener;
@@ -184,7 +181,7 @@ public class RvMediaFragment extends BaseFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pos -> {
                     if (RvMediaFragment.this.listener != null) {
-                        RvMediaFragment.this.listener.onClick(RvMediaFragment.this.album, adapter.getMedia(), pos);
+                        RvMediaFragment.this.listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), pos);
                     }
                 });
 
@@ -236,16 +233,12 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     private void updateToolbar() {
-        if (editMode())
-            act.updateToolbar(
-                    String.format(Locale.ENGLISH, "%d/%d",
-                            adapter.getSelectedCount(), adapter.getItemCount()),
-                    GoogleMaterial.Icon.gmd_check,
-                    v -> adapter.clearSelected());
-        else act.updateToolbar(
-                album.getName(),
-                GoogleMaterial.Icon.gmd_arrow_back,
-                v -> act.goBackToAlbums());
+        if (getEditModeListener() != null) {
+            if (editMode())
+                getEditModeListener().changedEditMode(true, adapter.getSelectedCount(), adapter.getItemCount(), v -> adapter.clearSelected(), null);
+
+            else getEditModeListener().changedEditMode(false, 0, 0, null, album.getName());
+        }
     }
 
     public SortingMode sortingMode() {
@@ -356,7 +349,7 @@ public class RvMediaFragment extends BaseFragment {
                 return true;
 
             case R.id.action_palette:
-                Intent paletteIntent = new Intent(act, PaletteActivity.class);
+                Intent paletteIntent = new Intent(getActivity(), PaletteActivity.class);
                 paletteIntent.setData(adapter.getFirstSelected().getUri());
                 startActivity(paletteIntent);
                 return true;
@@ -365,7 +358,7 @@ public class RvMediaFragment extends BaseFragment {
                 final EditText editTextNewName = new EditText(getActivity());
                 editTextNewName.setText(StringUtils.getPhotoNameByPath(adapter.getFirstSelected().getPath()));
 
-                AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(act, editTextNewName, R.string.rename_photo_action);
+                AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(((ThemedActivity) getActivity()), editTextNewName, R.string.rename_photo_action);
 
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), (dialog, which) -> {
                     if (editTextNewName.length() != 0) {
@@ -660,8 +653,8 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     @Override
-    public void clearSelected() {
-        adapter.clearSelected();
+    public boolean clearSelected() {
+        return adapter.clearSelected();
     }
 
     @Override
