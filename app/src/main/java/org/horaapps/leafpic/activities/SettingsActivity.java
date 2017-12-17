@@ -1,10 +1,12 @@
 package org.horaapps.leafpic.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -49,6 +51,10 @@ public class SettingsActivity extends ThemedActivity {
     @BindView(R.id.option_sub_scaling) SettingWithSwitchView optionSubScaling;
 
     private Unbinder unbinder;
+
+    public static void startActivity(@NonNull Context context) {
+        context.startActivity(new Intent(context, SettingsActivity.class));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,10 +117,12 @@ public class SettingsActivity extends ThemedActivity {
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = getThemeHelper().getPrimaryColor();
-            if (isTranslucentStatusBar()) getWindow().setStatusBarColor(ColorPalette.getObscuredColor(color));
+            if (isTranslucentStatusBar())
+                getWindow().setStatusBarColor(ColorPalette.getObscuredColor(color));
             else getWindow().setStatusBarColor(color);
             if (isNavigationBarColored()) getWindow().setNavigationBarColor(color);
-            else getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_black_1000));
+            else
+                getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_black_1000));
         }
     }
 
@@ -132,17 +140,20 @@ public class SettingsActivity extends ThemedActivity {
     public void onSecurityClicked(View view) {
         if (Security.isPasswordSet()) {
             askPassword();
-        }else  startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
+        } else startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
     }
 
-    private void askPassword(){
+    private void askPassword() {
         Security.authenticateUser(SettingsActivity.this, new Security.AuthCallBack() {
             @Override
             public void onAuthenticated() {
                 startActivity(new Intent(getApplicationContext(), SecurityActivity.class));
             }
+
             @Override
-            public void onError() {Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();}
+            public void onError() {
+                Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

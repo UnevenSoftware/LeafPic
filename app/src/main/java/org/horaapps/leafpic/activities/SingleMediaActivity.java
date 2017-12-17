@@ -670,7 +670,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 break;
 
             case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                SettingsActivity.startActivity(this);
                 break;
 
             case R.id.action_palette:

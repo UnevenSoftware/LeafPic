@@ -1,10 +1,12 @@
 package org.horaapps.leafpic.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
@@ -38,14 +39,18 @@ public class AboutActivity extends ThemedActivity {
     private Toolbar toolbar;
     private CustomTabService cts;
     private ScrollView scr;
-    int emojiEasterEggCount=0;
+    int emojiEasterEggCount = 0;
+
+    public static void startActivity(@NonNull Context context) {
+        context.startActivity(new Intent(context, AboutActivity.class));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        scr = (ScrollView)findViewById(R.id.aboutAct_scrollView);
+        scr = (ScrollView) findViewById(R.id.aboutAct_scrollView);
         cts = new CustomTabService(AboutActivity.this);
 
         initUi();
@@ -70,7 +75,9 @@ public class AboutActivity extends ThemedActivity {
         //Crowdin
         findViewById(R.id.ll_about_support_translate).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { cts.launchUrl("https://crowdin.com/project/leafpic");}
+            public void onClick(View v) {
+                cts.launchUrl("https://crowdin.com/project/leafpic");
+            }
         });
 
         //Donate
@@ -86,18 +93,21 @@ public class AboutActivity extends ThemedActivity {
         //License
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");}
+            public void onClick(View v) {
+                cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");
+            }
         });
 
         //ChangeLog
-        ((TextView) findViewById(R.id.about_changelog_item_sub)).setText(StringUtils.html(getString(R.string.changelog)+" <b>"+BuildConfig.VERSION_NAME+"</b>"));
+        ((TextView) findViewById(R.id.about_changelog_item_sub)).setText(StringUtils.html(getString(R.string.changelog) + " <b>" + BuildConfig.VERSION_NAME + "</b>"));
         findViewById(R.id.ll_about_changelog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog alertDialog = AlertDialogsHelper.showChangelogDialog(AboutActivity.this);
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {}
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
                 });
                 alertDialog.show();
             }
@@ -106,11 +116,15 @@ public class AboutActivity extends ThemedActivity {
         /*** Donald Shtjefni ***/
         findViewById(R.id.about_author_donald_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { cts.launchUrl("https://plus.google.com/103359244653769120543/about");}
+            public void onClick(View v) {
+                cts.launchUrl("https://plus.google.com/103359244653769120543/about");
+            }
         });
         findViewById(R.id.about_author_donald_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { cts.launchUrl("https://github.com/DNLDsht");}
+            public void onClick(View v) {
+                cts.launchUrl("https://github.com/DNLDsht");
+            }
         });
         findViewById(R.id.about_author_donald_mail_item).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,11 +136,15 @@ public class AboutActivity extends ThemedActivity {
         /*** Gilbert Ndresaj ***/
         findViewById(R.id.about_author_gilbert_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { cts.launchUrl("https://plus.google.com/118430643662868782426/about");}
+            public void onClick(View v) {
+                cts.launchUrl("https://plus.google.com/118430643662868782426/about");
+            }
         });
         findViewById(R.id.about_author_gilbert_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { cts.launchUrl("https://github.com/Mow3l");}
+            public void onClick(View v) {
+                cts.launchUrl("https://github.com/Mow3l");
+            }
         });
         findViewById(R.id.about_author_gilbert_mail_item).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,25 +168,26 @@ public class AboutActivity extends ThemedActivity {
     }
 
     //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
-    private void emojiEasterEgg(){
+    private void emojiEasterEgg() {
         emojiEasterEggCount++;
-        if(emojiEasterEggCount > 3) {
+        if (emojiEasterEggCount > 3) {
             boolean showEasterEgg = Prefs.showEasterEgg();
             Toast.makeText(this,
                     (!showEasterEgg ? this.getString(R.string.easter_egg_enable) : this.getString(R.string.easter_egg_disable))
-                    + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
+                            + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
             Prefs.setShowEasterEgg(!showEasterEgg);
             emojiEasterEggCount = 0;
-        } else Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
     }
 
     private void mail(String mail) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"+mail));
+        intent.setData(Uri.parse("mailto:" + mail));
         try {
             startActivity(intent);
-        } catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(AboutActivity.this, getString(R.string.send_mail_error), Toast.LENGTH_SHORT).show();
         }
     }
