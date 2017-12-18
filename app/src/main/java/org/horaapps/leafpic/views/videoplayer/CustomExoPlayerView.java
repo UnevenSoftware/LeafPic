@@ -55,24 +55,6 @@ public final class CustomExoPlayerView extends FrameLayout {
         int rewindMs = CustomPlayBackController.DEFAULT_REWIND_MS;
         int fastForwardMs = CustomPlayBackController.DEFAULT_FAST_FORWARD_MS;
         int controllerShowTimeoutMs = CustomPlayBackController.DEFAULT_SHOW_TIMEOUT_MS;
-        /*if (attrs != null) {
-            TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-                    com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView, 0, 0);
-            try {
-                useController = a.getBoolean(com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView_use_controller, useController);
-                useTextureView = a.getBoolean(com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView_use_texture_view,
-                        useTextureView);
-                resizeMode = a.getInt(com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView_resize_mode,
-                        AspectRatioFrameLayout.RESIZE_MODE_FIT);
-                rewindMs = a.getInt(com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView_rewind_increment, rewindMs);
-                fastForwardMs = a.getInt(com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView_fastforward_increment,
-                        fastForwardMs);
-                controllerShowTimeoutMs = a.getInt(com.google.android.exoplayer2.R.styleable.SimpleExoPlayerView_show_timeout,
-                        controllerShowTimeoutMs);
-            } finally {
-                a.recycle();
-            }
-        }*/
 
         LayoutInflater.from(context).inflate(R.layout.exo_player, this);
         componentListener = new ComponentListener();
@@ -116,11 +98,6 @@ public final class CustomExoPlayerView extends FrameLayout {
             } else if (surfaceView instanceof SurfaceView) {
                 this.player.clearVideoSurfaceView((SurfaceView) surfaceView);
             }
-
-            /*this.player.setTextOutput(null);
-            this.player.setVideoListener(null);
-            this.player.removeListener(componentListener);
-            this.player.setVideoSurface(null);*/
         }
         this.player = player;
         if (useController) {
@@ -141,17 +118,6 @@ public final class CustomExoPlayerView extends FrameLayout {
             player.addTextOutput(componentListener);
             player.addListener(componentListener);
             maybeShowController(false);
-            //updateForCurrentTrackSelections();
-
-            /*if (surfaceView instanceof TextureView) {
-                player.setVideoTextureView((TextureView) surfaceView);
-            } else if (surfaceView instanceof SurfaceView) {
-                player.setVideoSurfaceView((SurfaceView) surfaceView);
-            }
-            player.setVideoListener(componentListener);
-            player.addListener(componentListener);
-            player.setTextOutput(componentListener);
-            maybeShowController(false);*/
         } else {
             shutterView.setVisibility(VISIBLE);
             controller.hide();
@@ -241,18 +207,8 @@ public final class CustomExoPlayerView extends FrameLayout {
         boolean wasShowingIndefinitely = controller.isVisible() && controller.getShowTimeoutMs() <= 0;
         boolean shouldShowIndefinitely = shouldShowControllerIndefinitely();
         if (isForced || wasShowingIndefinitely || shouldShowIndefinitely) {
-            //showController(shouldShowIndefinitely);
             controller.show();
         }
-
-        /*int playbackState = player.getPlaybackState();
-        boolean showIndefinitely = playbackState == ExoPlayer.STATE_IDLE
-                || playbackState == ExoPlayer.STATE_ENDED || !player.getPlayWhenReady();
-        boolean wasShowingIndefinitely = controller.isVisible() && controller.getShowTimeoutMs() <= 0;
-        controller.setShowTimeoutMs(showIndefinitely ? 0 : controllerShowTimeoutMs);
-        if (isForced || showIndefinitely || wasShowingIndefinitely) {
-            controller.show();
-        }*/
     }
 
     public void hideController() {

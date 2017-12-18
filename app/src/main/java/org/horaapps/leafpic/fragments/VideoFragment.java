@@ -78,9 +78,6 @@ public class VideoFragment extends ThemedFragment {
 	
 	@Override
 	public void refreshTheme(ThemeHelper themeHelper) {
-		/*videoInd.setIcon(
-				new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_play_circle_filled)
-						.color(
-						getThemeHelper().getPrimaryColor()));*/
+		videoInd.refreshTheme(themeHelper);
 	}
 }

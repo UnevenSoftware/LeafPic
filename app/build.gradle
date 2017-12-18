@@ -81,7 +81,7 @@ dependencies {
     implementation "com.android.support:customtabs:$supportVersion"
     implementation "com.android.support:support-v4:$supportVersion"
 
-    //todo update exoplayer
+    //exo-player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.6.0'
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.6.0'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.6.0'
