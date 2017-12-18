@@ -1,4 +1,4 @@
-v0.9
+v0.7
 ====
 
 ### Features
@@ -11,5 +11,6 @@ v0.9
 
 ### Fixes
 
+* Fixed crashes resuming from recents #475 #398
 * Fixed crashes KitKAT #418 #410
 * Improved opening from other apps #417 #403
