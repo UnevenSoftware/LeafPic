@@ -1,7 +1,10 @@
 package org.horaapps.leafpic.data.sort;
 
+import android.support.annotation.NonNull;
+
 import org.horaapps.leafpic.data.AlbumSettings;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.timeline.data.TimelineModel;
 import org.horaapps.leafpic.util.NumericComparator;
 
 import java.util.Comparator;
@@ -15,9 +18,14 @@ public class MediaComparators {
     public static Comparator<Media> getComparator(AlbumSettings settings) {
         return getComparator(settings.getSortingMode(), settings.getSortingOrder());
     }
+
     public static Comparator<Media> getComparator(SortingMode sortingMode, SortingOrder sortingOrder) {
-        return  sortingOrder == SortingOrder.ASCENDING
+        return sortingOrder == SortingOrder.ASCENDING
                 ? getComparator(sortingMode) : reverse(getComparator(sortingMode));
+    }
+
+    public static Comparator<TimelineModel> getTimelineComparator(@NonNull SortingOrder sortingOrder) {
+        return sortingOrder.isAscending() ? getTimelineComparator() : reverse(getTimelineComparator());
     }
 
     public static Comparator<Media> getComparator(SortingMode sortingMode) {
@@ -30,11 +38,11 @@ public class MediaComparators {
         }
     }
 
-    private static Comparator<Media> reverse(Comparator<Media> comparator) {
+    private static <T> Comparator<T> reverse(Comparator<T> comparator) {
         return (o1, o2) -> comparator.compare(o2, o1);
     }
 
-    private static Comparator<Media> getDateComparator(){
+    private static Comparator<Media> getDateComparator() {
         return (f1, f2) -> f1.getDateModified().compareTo(f2.getDateModified());
     }
 
@@ -52,5 +60,9 @@ public class MediaComparators {
 
     private static Comparator<Media> getNumericComparator() {
         return (f1, f2) -> NumericComparator.filevercmp(f1.getPath(), f2.getPath());
+    }
+
+    private static Comparator<TimelineModel> getTimelineComparator() {
+        return (t1, t2) -> t1.getDate().compareTo(t2.getDate());
     }
 }

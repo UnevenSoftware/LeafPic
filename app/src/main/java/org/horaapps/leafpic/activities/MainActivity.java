@@ -43,6 +43,7 @@ import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.EditModeListener;
 import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
+import org.horaapps.leafpic.timeline.TimelineFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
@@ -151,6 +152,22 @@ public class MainActivity extends SharedMediaActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content, rvMediaFragment, RvMediaFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void displayTimeline(Album album) {
+        TimelineFragment fragment = TimelineFragment.newInstance(album);
+
+        albumsMode = false;
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        fragment.setEditModeListener(this);
+        fragment.setNothingToShowListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, fragment, TimelineFragment.TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -487,6 +504,10 @@ public class MainActivity extends SharedMediaActivity implements
 
             case NavigationDrawer.NAVIGATION_ITEM_ALL_MEDIA:
                 displayMedia(Album.getAllMediaAlbum());
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_TIMELINE:
+                displayTimeline(Album.getAllMediaAlbum());
                 break;
 
             case NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS:

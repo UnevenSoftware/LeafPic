@@ -26,13 +26,15 @@ public class NavigationDrawer extends ScrollView {
 
     public static final int NAVIGATION_ITEM_ALL_ALBUMS = 1001;
     public static final int NAVIGATION_ITEM_ALL_MEDIA = 1002;
-    public static final int NAVIGATION_ITEM_HIDDEN_FOLDERS = 1003;
-    public static final int NAVIGATION_ITEM_WALLPAPERS = 1004;
-    public static final int NAVIGATION_ITEM_DONATE = 1005;
-    public static final int NAVIGATION_ITEM_SETTINGS = 1006;
-    public static final int NAVIGATION_ITEM_ABOUT = 1007;
+    public static final int NAVIGATION_ITEM_TIMELINE = 1003;
+    public static final int NAVIGATION_ITEM_HIDDEN_FOLDERS = 1004;
+    public static final int NAVIGATION_ITEM_WALLPAPERS = 1005;
+    public static final int NAVIGATION_ITEM_DONATE = 1006;
+    public static final int NAVIGATION_ITEM_SETTINGS = 1007;
+    public static final int NAVIGATION_ITEM_ABOUT = 1008;
 
-    @IntDef({NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_HIDDEN_FOLDERS,
+    @IntDef({NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_TIMELINE,
+            NAVIGATION_ITEM_HIDDEN_FOLDERS,
             NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS,
             NAVIGATION_ITEM_ABOUT})
     public @interface NavigationItem {}
@@ -41,6 +43,7 @@ public class NavigationDrawer extends ScrollView {
 
     @BindView(R.id.navigation_item_albums) NavigationEntry albumsEntry;
     @BindView(R.id.navigation_item_all_media) NavigationEntry mediaEntry;
+    @BindView(R.id.navigation_item_timeline) NavigationEntry timelineEntry;
     @BindView(R.id.navigation_item_hidden_albums) NavigationEntry hiddenFoldersEntry;
     @BindView(R.id.navigation_item_wallpapers) NavigationEntry wallpapersEntry;
     @BindView(R.id.navigation_item_donate) NavigationEntry donateEntry;
@@ -109,8 +112,8 @@ public class NavigationDrawer extends ScrollView {
         ButterKnife.bind(this);
 
         navigationEntries = new NavigationEntry[]
-                {albumsEntry, mediaEntry, hiddenFoldersEntry, wallpapersEntry, donateEntry,
-                        settingsEntry, aboutEntry};
+                {albumsEntry, mediaEntry, timelineEntry, hiddenFoldersEntry, wallpapersEntry,
+                        donateEntry, settingsEntry, aboutEntry};
         setupListeners();
     }
 
@@ -136,6 +139,7 @@ public class NavigationDrawer extends ScrollView {
         switch (viewId) {
             case R.id.navigation_item_albums: return NAVIGATION_ITEM_ALL_ALBUMS;
             case R.id.navigation_item_all_media: return NAVIGATION_ITEM_ALL_MEDIA;
+            case R.id.navigation_item_timeline: return NAVIGATION_ITEM_TIMELINE;
             case R.id.navigation_item_hidden_albums: return NAVIGATION_ITEM_HIDDEN_FOLDERS;
             case R.id.navigation_item_wallpapers: return NAVIGATION_ITEM_WALLPAPERS;
             case R.id.navigation_item_donate: return NAVIGATION_ITEM_DONATE;
