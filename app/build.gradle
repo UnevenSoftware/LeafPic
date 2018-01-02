@@ -8,7 +8,6 @@ repositories {
 
 android {
     compileSdkVersion project.sdkVersion
-    buildToolsVersion project.buildToolsVersion
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
@@ -66,7 +65,6 @@ android {
             dimension "default"
         }
     }
-    buildToolsVersion '26.0.2'
 }
 
 dependencies {
@@ -118,6 +116,7 @@ dependencies {
 
     // debug Only
     //debugCompile project(':inappstoragereader')
+    implementation 'cat.ereza:customactivityoncrash:2.2.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.3'
 
