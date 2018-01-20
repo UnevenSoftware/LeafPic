@@ -2,8 +2,11 @@ package org.horaapps.leafpic.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -89,6 +92,9 @@ public class DonateActivity extends ThemedActivity {
         mHelper = null;
     }
 
+    public static void startActivity(@NonNull Context context) {
+        context.startActivity(new Intent(context, SettingsActivity.class));
+    }
 
     private void initUi(){
 
