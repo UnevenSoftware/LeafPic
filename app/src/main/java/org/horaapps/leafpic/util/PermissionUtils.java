@@ -26,8 +26,8 @@ public final class PermissionUtils {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static boolean isDeviceInfoGranted(Context context) {
-        return checkPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+    public static boolean isStoragePermissionsGranted(Context context) {
+        return checkPermissions(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     public static void requestPermissions(Object o, int permissionId, String... permissions) {

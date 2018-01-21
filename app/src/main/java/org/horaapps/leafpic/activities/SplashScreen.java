@@ -34,7 +34,7 @@ public class SplashScreen extends SharedMediaActivity {
 
     private final String TAG = SplashScreen.class.getSimpleName();
 
-    private final int READ_EXTERNAL_STORAGE_ID = 12;
+    private final int EXTERNAL_STORAGE_PERMISSIONS = 12;
     private static final int PICK_MEDIA_REQUEST = 44;
 
     final static String CONTENT = "content";
@@ -63,7 +63,7 @@ public class SplashScreen extends SharedMediaActivity {
 
         pickMode = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
 
-        if (PermissionUtils.isDeviceInfoGranted(this)) {
+        if (PermissionUtils.isStoragePermissionsGranted(this)) {
 
 
             if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
@@ -83,7 +83,7 @@ public class SplashScreen extends SharedMediaActivity {
 
 
         } else
-            PermissionUtils.requestPermissions(this, READ_EXTERNAL_STORAGE_ID, Manifest.permission.READ_EXTERNAL_STORAGE);
+            PermissionUtils.requestPermissions(this, EXTERNAL_STORAGE_PERMISSIONS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 
         //startLookingForMedia();
     }
@@ -151,10 +151,17 @@ public class SplashScreen extends SharedMediaActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case READ_EXTERNAL_STORAGE_ID:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) start();
-                else {
-                    Toast.makeText(SplashScreen.this, getString(org.horaapps.leafpic.R.string.storage_permission_denied), Toast.LENGTH_LONG).show();
+            case EXTERNAL_STORAGE_PERMISSIONS:
+                boolean gotPermission = grantResults.length > 0;
+
+                for (int result : grantResults) {
+                    gotPermission &= result == PackageManager.PERMISSION_GRANTED;
+                }
+
+                if (gotPermission) {
+                    start();
+                } else {
+                    Toast.makeText(SplashScreen.this, getString(R.string.storage_permission_denied), Toast.LENGTH_LONG).show();
                     finish();
                 }
                 break;
