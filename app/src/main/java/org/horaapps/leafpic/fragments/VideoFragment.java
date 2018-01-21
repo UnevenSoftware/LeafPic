@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
@@ -80,9 +78,6 @@ public class VideoFragment extends ThemedFragment {
 	
 	@Override
 	public void refreshTheme(ThemeHelper themeHelper) {
-		videoInd.setIcon(
-				new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_play_circle_filled)
-						.color(
-						getThemeHelper().getPrimaryColor()));
+		videoInd.refreshTheme(themeHelper);
 	}
 }

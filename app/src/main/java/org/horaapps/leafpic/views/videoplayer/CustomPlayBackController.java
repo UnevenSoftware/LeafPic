@@ -11,16 +11,20 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ColorPalette;
@@ -41,8 +45,6 @@ public class CustomPlayBackController extends FrameLayout {
         void onVisibilityChange(int visibility);
     }
 
-    private ThemeHelper themeHelper;
-
     public static final int DEFAULT_FAST_FORWARD_MS = 15000;
     public static final int DEFAULT_REWIND_MS = 5000;
     public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
@@ -53,7 +55,7 @@ public class CustomPlayBackController extends FrameLayout {
     private final ComponentListener componentListener;
     private final View previousButton;
     private final View nextButton;
-    private final ImageButton playButton;
+    private final IconicsImageView playButton;
     private final TextView time;
     private final TextView timeCurrent;
     private final SeekBar progressBar;
@@ -61,7 +63,7 @@ public class CustomPlayBackController extends FrameLayout {
     private final View rewindButton;
     private final StringBuilder formatBuilder;
     private final Formatter formatter;
-    private final Timeline.Window currentWindow;
+    private final Timeline.Window window;
 
     private ExoPlayer player;
     private VisibilityListener visibilityListener;
@@ -73,19 +75,9 @@ public class CustomPlayBackController extends FrameLayout {
     private int showTimeoutMs;
     private long hideAtMs;
 
-    private final Runnable updateProgressAction = new Runnable() {
-        @Override
-        public void run() {
-            updateProgress();
-        }
-    };
+    private final Runnable updateProgressAction = this::updateProgress;
 
-    private final Runnable hideAction = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
+    private final Runnable hideAction = this::hide;
 
     public CustomPlayBackController(Context context) {
         this(context, null);
@@ -114,18 +106,18 @@ public class CustomPlayBackController extends FrameLayout {
             }
         }
 
-        currentWindow = new Timeline.Window();
+        window = new Timeline.Window();
         formatBuilder = new StringBuilder();
         formatter = new Formatter(formatBuilder, Locale.getDefault());
         componentListener = new ComponentListener();
 
         LayoutInflater.from(context).inflate(R.layout.exo_media_control, this);
-        time = (TextView) findViewById(R.id.time);
-        timeCurrent = (TextView) findViewById(R.id.time_current);
-        progressBar = (SeekBar) findViewById(R.id.mediacontroller_progress);
+        time = findViewById(R.id.time);
+        timeCurrent = findViewById(R.id.time_current);
+        progressBar = findViewById(R.id.mediacontroller_progress);
         progressBar.setOnSeekBarChangeListener(componentListener);
         progressBar.setMax(PROGRESS_BAR_MAX);
-        playButton = (ImageButton) findViewById(R.id.play);
+        playButton = findViewById(R.id.play);
         playButton.setOnClickListener(componentListener);
         previousButton = findViewById(R.id.prev);
         previousButton.setOnClickListener(componentListener);
@@ -137,15 +129,14 @@ public class CustomPlayBackController extends FrameLayout {
         fastForwardButton.setOnClickListener(componentListener);
 
         /**** THEMING THINGS ****/
-        themeHelper = ThemeHelper.getInstanceLoaded(getContext());
+        ThemeHelper themeHelper = ThemeHelper.getInstanceLoaded(getContext());
 
-        //themeHelper.themeSeekBar(progressBar);
         progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
                 ? ColorPalette.getDarkerColor(themeHelper.getAccentColor()): themeHelper.getAccentColor(), PorterDuff.Mode.SRC_IN));
         progressBar.getThumb().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
                 ? ColorPalette.getDarkerColor(themeHelper.getAccentColor()): themeHelper.getAccentColor(),PorterDuff.Mode.SRC_IN));
 
-        ((LinearLayout) findViewById(R.id.exoplayer_controller_background))
+        findViewById(R.id.exoplayer_controller_background)
                 .setBackgroundColor(themeHelper.getPrimaryColor());
     }
 
@@ -244,31 +235,36 @@ public class CustomPlayBackController extends FrameLayout {
         String contentDescription = getResources().getString(
                 playing ? R.string.exo_controls_pause_description : R.string.exo_controls_play_description);
         playButton.setContentDescription(contentDescription);
-        playButton.setImageResource(
-                playing ? R.drawable.exo_controls_pause : R.drawable.exo_controls_play);
+        IconicsDrawable icon = playButton.getIcon();
+        //icon.icon(playing ? CommunityMaterial.Icon.cmd_pause : CommunityMaterial.Icon.cmd_play);
+        icon.icon(playing ? FontAwesome.Icon.faw_pause : FontAwesome.Icon.faw_play);
+        //icon.icon(FontAwesome.Icon.faw_pause);
+        playButton.setIcon(icon);
     }
 
     private void updateNavigation() {
         if (!isVisible() || !isAttachedToWindow) {
             return;
         }
-        Timeline currentTimeline = player != null ? player.getCurrentTimeline() : null;
-        boolean haveTimeline = currentTimeline != null;
+        Timeline timeline = player != null ? player.getCurrentTimeline() : null;
+        boolean haveNonEmptyTimeline = timeline != null && !timeline.isEmpty();
         boolean isSeekable = false;
         boolean enablePrevious = false;
         boolean enableNext = false;
-        if (haveTimeline) {
-            int currentWindowIndex = player.getCurrentWindowIndex();
-            currentTimeline.getWindow(currentWindowIndex, currentWindow);
-            isSeekable = currentWindow.isSeekable;
-            enablePrevious = currentWindowIndex > 0 || isSeekable || !currentWindow.isDynamic;
-            enableNext = (currentWindowIndex < currentTimeline.getWindowCount() - 1)
-                    || currentWindow.isDynamic;
+        if (haveNonEmptyTimeline && !player.isPlayingAd()) {
+            int windowIndex = player.getCurrentWindowIndex();
+            timeline.getWindow(windowIndex, window);
+            isSeekable = window.isSeekable;
+            enablePrevious = isSeekable || !window.isDynamic
+                    || player.getPreviousWindowIndex() != C.INDEX_UNSET;
+            enableNext = window.isDynamic || player.getNextWindowIndex() != C.INDEX_UNSET;
         }
-        setButtonEnabled(enablePrevious , previousButton);
-        setButtonEnabled(enableNext, nextButton);
-        setButtonEnabled(fastForwardMs > 0 && isSeekable, fastForwardButton);
-        setButtonEnabled(rewindMs > 0 && isSeekable, rewindButton);
+        // TODO: 12/16/17  
+        setButtonEnabled(enablePrevious && false, previousButton, true);
+        setButtonEnabled(enableNext && false, nextButton, true);
+
+        setButtonEnabled(fastForwardMs > 0 && isSeekable, fastForwardButton, false);
+        setButtonEnabled(rewindMs > 0 && isSeekable, rewindButton, false);
         progressBar.setEnabled(isSeekable);
     }
 
@@ -288,10 +284,10 @@ public class CustomPlayBackController extends FrameLayout {
         // Remove scheduled updates.
         removeCallbacks(updateProgressAction);
         // Schedule an update if necessary.
-        int playbackState = player == null ? ExoPlayer.STATE_IDLE : player.getPlaybackState();
-        if (playbackState != ExoPlayer.STATE_IDLE && playbackState != ExoPlayer.STATE_ENDED) {
+        int playbackState = player == null ? Player.STATE_IDLE : player.getPlaybackState();
+        if (playbackState != Player.STATE_IDLE && playbackState != Player.STATE_ENDED) {
             long delayMs;
-            if (player.getPlayWhenReady() && playbackState == ExoPlayer.STATE_READY) {
+            if (player.getPlayWhenReady() && playbackState == Player.STATE_READY) {
                 delayMs = 1000 - (position % 1000);
                 if (delayMs < 200) {
                     delayMs += 1000;
@@ -303,13 +299,13 @@ public class CustomPlayBackController extends FrameLayout {
         }
     }
 
-    private void setButtonEnabled(boolean enabled, View view) {
+    private void setButtonEnabled(boolean enabled, View view, boolean hide) {
         view.setEnabled(enabled);
-        if (Util.SDK_INT >= 11) {
+        if (!hide) {
             setViewAlphaV11(view, enabled ? 1f : 0.3f);
             view.setVisibility(VISIBLE);
         } else {
-            view.setVisibility(enabled ? VISIBLE : INVISIBLE);
+            view.setVisibility(enabled ? VISIBLE : GONE);
         }
     }
 
@@ -348,9 +344,9 @@ public class CustomPlayBackController extends FrameLayout {
             return;
         }
         int currentWindowIndex = player.getCurrentWindowIndex();
-        currentTimeline.getWindow(currentWindowIndex, currentWindow);
+        currentTimeline.getWindow(currentWindowIndex, window);
         if (currentWindowIndex > 0 && (player.getCurrentPosition() <= MAX_POSITION_FOR_SEEK_TO_PREVIOUS
-                || (currentWindow.isDynamic && !currentWindow.isSeekable))) {
+                || (window.isDynamic && !window.isSeekable))) {
             player.seekToDefaultPosition(currentWindowIndex - 1);
         } else {
             player.seekTo(0);
@@ -365,7 +361,7 @@ public class CustomPlayBackController extends FrameLayout {
         int currentWindowIndex = player.getCurrentWindowIndex();
         if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
             player.seekToDefaultPosition(currentWindowIndex + 1);
-        } else if (currentTimeline.getWindow(currentWindowIndex, currentWindow, false).isDynamic) {
+        } else if (currentTimeline.getWindow(currentWindowIndex, window, false).isDynamic) {
             player.seekToDefaultPosition();
         }
     }
@@ -424,7 +420,7 @@ public class CustomPlayBackController extends FrameLayout {
         return true;
     }
 
-    private final class ComponentListener implements ExoPlayer.EventListener,
+    private final class ComponentListener implements Player.EventListener,
             SeekBar.OnSeekBarChangeListener, OnClickListener {
 
         @Override
@@ -454,15 +450,30 @@ public class CustomPlayBackController extends FrameLayout {
         }
 
         @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+        }
+
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+       /* @Override
         public void onPositionDiscontinuity() {
             updateNavigation();
             updateProgress();
-        }
+        }*/
 
         @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             updateNavigation();
             updateProgress();
+        }
+
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
         }
 
         @Override
@@ -473,6 +484,21 @@ public class CustomPlayBackController extends FrameLayout {
         @Override
         public void onPlayerError(ExoPlaybackException error) {
             // Do nothing.
+        }
+
+        @Override
+        public void onPositionDiscontinuity(int reason) {
+
+        }
+
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+        }
+
+        @Override
+        public void onSeekProcessed() {
+
         }
 
         @Override

@@ -76,6 +76,12 @@ import java.util.Locale;
     this.themeHelper = themeHelper;
   }
 
+  /*public TrackSelectionHelper(MappingTrackSelector selector,
+                              TrackSelection.Factory adaptiveTrackSelectionFactory) {
+    this.selector = selector;
+    this.adaptiveVideoTrackSelectionFactory = adaptiveTrackSelectionFactory;
+  }*/
+
   /**
    * Shows the selection dialog for a given renderer.
    *
@@ -112,7 +118,7 @@ import java.util.Locale;
   @SuppressLint("InflateParams")
   private View buildView(LayoutInflater inflater) {
     View view = inflater.inflate(R.layout.track_selection_dialog, null);
-    ViewGroup root = (ViewGroup) view.findViewById(R.id.root);
+    ViewGroup root = view.findViewById(R.id.root);
 
     trackViews = new CheckedTextView[trackGroups.length][];
     for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {

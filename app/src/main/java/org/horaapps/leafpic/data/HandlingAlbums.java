@@ -35,7 +35,6 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     private static final String ALBUM_SORTING_MODE = "sorting_mode";
     private static final String ALBUM_SORTING_ORDER = "sorting_order";
 
-    private static final String backupFile = "albums2.bck";
     private static HandlingAlbums mInstance = null;
 
     private HandlingAlbums(Context context) {
@@ -202,7 +201,6 @@ public class HandlingAlbums extends SQLiteOpenHelper {
     @NonNull public static AlbumSettings getSettings(SQLiteDatabase db, String path) {
         Cursor cursor = null;
         try {
-
             if (exist(db, path)) {
                 cursor = db.query(
                         TABLE_ALBUMS,

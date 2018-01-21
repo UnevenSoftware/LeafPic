@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icon_player_size">18dp</dimen>
+    <dimen name="icon_play_pause_size">20dp</dimen>
+    <dimen name="v_spacing_player_bars">8dp</dimen>
+</resources>
