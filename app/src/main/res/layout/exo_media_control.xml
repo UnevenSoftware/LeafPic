@@ -72,13 +72,13 @@
             android:layout_height="@dimen/icon_player_size"
             android:layout_width="@dimen/icon_player_size"
             android:contentDescription="@string/exo_controls_rewind_description"
-            android:layout_marginRight="@dimen/medium_spacing" />
-        <!--style="@style/ExoMediaButton.Rewind"-->
+            android:layout_marginRight="@dimen/big_spacing" />
+
         <com.mikepenz.iconics.view.IconicsImageView
             app:iiv_icon="cmd-play"
             app:iiv_color="@color/md_white_1000"
-            android:layout_height="@dimen/icon_player_size"
-            android:layout_width="@dimen/icon_player_size"
+            android:layout_height="@dimen/icon_play_pause_size"
+            android:layout_width="@dimen/icon_play_pause_size"
             android:id="@+id/play" />
 
         <com.mikepenz.iconics.view.IconicsImageView
@@ -88,7 +88,7 @@
             android:layout_width="@dimen/icon_player_size"
             android:id="@+id/ffwd"
             android:contentDescription="@string/exo_controls_fastforward_description"
-            android:layout_marginLeft="@dimen/medium_spacing" />
+            android:layout_marginLeft="@dimen/big_spacing" />
 
         <ImageButton
             android:id="@+id/next"

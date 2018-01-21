@@ -475,25 +475,26 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
                         trackSelector.getCurrentMappedTrackInfo(), text);
                 return true;
 
-            case org.horaapps.leafpic.R.id.action_share:
+            case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType(getIntent().getType());
                 share.putExtra(Intent.EXTRA_STREAM, getIntent().getData());
-                startActivity(Intent.createChooser(share, getString(org.horaapps.leafpic.R.string.send_to)));
+                startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
-            case org.horaapps.leafpic.R.id.action_settings:
+            case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
 
-            case org.horaapps.leafpic.R.id.rotate_layout:
+            case R.id.rotate_layout:
                 int rotation = (((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay()).getRotation();
                 if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 } else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     simpleExoPlayerView.hideController();
                     hideControls();
+
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
                 return true;
 

@@ -75,19 +75,9 @@ public class CustomPlayBackController extends FrameLayout {
     private int showTimeoutMs;
     private long hideAtMs;
 
-    private final Runnable updateProgressAction = new Runnable() {
-        @Override
-        public void run() {
-            updateProgress();
-        }
-    };
+    private final Runnable updateProgressAction = this::updateProgress;
 
-    private final Runnable hideAction = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
+    private final Runnable hideAction = this::hide;
 
     public CustomPlayBackController(Context context) {
         this(context, null);
@@ -141,7 +131,6 @@ public class CustomPlayBackController extends FrameLayout {
         /**** THEMING THINGS ****/
         ThemeHelper themeHelper = ThemeHelper.getInstanceLoaded(getContext());
 
-        //themeHelper.themeSeekBar(progressBar);
         progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
                 ? ColorPalette.getDarkerColor(themeHelper.getAccentColor()): themeHelper.getAccentColor(), PorterDuff.Mode.SRC_IN));
         progressBar.getThumb().setColorFilter(new PorterDuffColorFilter(themeHelper.isPrimaryEqualAccent()
