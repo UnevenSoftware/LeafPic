@@ -69,7 +69,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // google & support
     implementation "com.android.support:appcompat-v7:$supportVersion"

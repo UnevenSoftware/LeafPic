@@ -399,4 +399,5 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="start_slide_show">Start Slideshow</string>
     <string name="stop_slide_show">Stop Slideshow</string>
     <string name="errors">Errors</string>
+    <string name="waring_share_multiple_file_types">There may be problems sharing multiple file types</string>
 </resources>
