@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 repositories {
     maven { url  "http://dl.bintray.com/dasar/maven" }
     maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
+    maven { url "https://jitpack.io" }
 }
 
 
@@ -113,7 +114,7 @@ dependencies {
     // ui
     implementation 'uz.shift:colorpicker:0.5@aar'
     implementation 'com.github.jetradarmobile:desertplaceholder:1.1.1'
-    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.yalantis:ucrop:1.5.0'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.8.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
@@ -122,8 +123,8 @@ dependencies {
     // debug Only
     //debugCompile project(':inappstoragereader')
     implementation 'cat.ereza:customactivityoncrash:2.2.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.3'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
 
     // TODO check them out
