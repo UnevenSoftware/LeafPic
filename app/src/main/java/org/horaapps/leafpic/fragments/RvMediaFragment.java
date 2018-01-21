@@ -51,7 +51,9 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
+import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.util.preferences.Prefs;
@@ -61,7 +63,9 @@ import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -332,16 +336,39 @@ public class RvMediaFragment extends BaseFragment {
                 return true;
 
             case R.id.sharePhotos:
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sent_to_action));
+                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 
+                HashMap<String, Integer> types = new HashMap<>();
                 ArrayList<Uri> files = new ArrayList<>();
-                for (Media f : adapter.getSelected())
-                    files.add(f.getUri());
+
+                for (Media f : adapter.getSelected()) {
+                    String mimeType = MimeTypeUtils.getTypeMime(f.getMimeType());
+                    int count = 0;
+                    if (types.containsKey(mimeType)) {
+                        count = types.get(mimeType);
+                    }
+                    types.put(mimeType, count);
+                    files.add(LegacyCompatFileProvider.getUri(getContext(), f.getFile()));
+                }
+
+                Set<String> fileTypes = types.keySet();
+                if (fileTypes.size() > 1) {
+                    Toast.makeText(getContext(), R.string.waring_share_multiple_file_types, Toast.LENGTH_SHORT).show();
+                }
+
+                int max = -1;
+                String type = null;
+                for (String fileType : fileTypes) {
+                    Integer count = types.get(fileType);
+                    if (count > max) {
+                        type = fileType;
+                    }
+                }
+
+                intent.setType(type + "/*");
 
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                intent.setType("*/*");
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
                 return true;
 

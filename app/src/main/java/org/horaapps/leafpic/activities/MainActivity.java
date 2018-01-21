@@ -22,7 +22,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -316,11 +315,9 @@ public class MainActivity extends SharedMediaActivity implements
         toolbar.setTitle(title);
         toolbar.setNavigationIcon(getToolbarIcon(icon));
         toolbar.setNavigationOnClickListener(onClickListener);
-        Log.wtf("asd-sel", "updateToolbar() called with: title = [" + title + "], icon = [" + icon + "], onClickListener = [" + onClickListener + "]");
     }
 
     private void resetToolbar() {
-        Log.wtf("asd-sel", "reset");
         updateToolbar(
                 getString(R.string.app_name),
                 GoogleMaterial.Icon.gmd_menu,
