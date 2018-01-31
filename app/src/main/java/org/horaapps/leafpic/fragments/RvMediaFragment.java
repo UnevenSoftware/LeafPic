@@ -121,6 +121,7 @@ public class RvMediaFragment extends BaseFragment {
         if (!clearSelected())
             updateToolbar();
         setUpColumns();
+        reload();
     }
 
     private void reload() {
@@ -203,7 +204,6 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        reload();
     }
 
 
