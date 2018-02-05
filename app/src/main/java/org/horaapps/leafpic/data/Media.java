@@ -3,7 +3,7 @@ package org.horaapps.leafpic.data;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,6 +13,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.annotations.NotNull;
 
+import org.horaapps.leafpic.timeline.data.TimelineItem;
 import org.horaapps.leafpic.util.ArrayUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -23,9 +24,9 @@ import java.io.IOException;
 // Ideally, we should have separate data classes for images, videos & gifs
 // Base class can be Media, and others should extend
 // Try to separate out Database logic and projections from this class
-public class Media implements CursorHandler, Parcelable {
+public class Media implements TimelineItem, CursorHandler, Parcelable {
 
-    private static String[] sProjection = new String[] {
+    private static final String[] sProjection = new String[] {
             MediaStore.Images.Media.DATA,
             MediaStore.Images.Media.DATE_TAKEN,
             MediaStore.Images.Media.MIME_TYPE,
@@ -290,4 +291,9 @@ public class Media implements CursorHandler, Parcelable {
             return new Media[size];
         }
     };
+
+    @Override
+    public int getTimelineType() {
+        return TYPE_MEDIA;
+    }
 }

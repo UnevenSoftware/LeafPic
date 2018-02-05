@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +16,14 @@ import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
+import org.horaapps.leafpic.data.sort.MediaComparators;
+import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.liz.ThemeHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,10 +102,11 @@ public class TimelineFragment extends BaseFragment {
 
     private void setupRecyclerView() {
         timelineItems.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
-        timelineItems.setLayoutManager(new LinearLayoutManager(
-                getContext(), LinearLayoutManager.VERTICAL, false));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
+        timelineItems.setLayoutManager(gridLayoutManager);
 
         timelineAdapter = new TimelineAdapter(getContext());
+        timelineAdapter.setGridLayoutManager(gridLayoutManager);
         timelineAdapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -115,23 +120,23 @@ public class TimelineFragment extends BaseFragment {
     }
 
     private void loadAlbum() {
-        timelineAdapter.clearAll();
+        List<Media> mediaList = new ArrayList<>();
         CPHelper.getMedia(getContext(), contentAlbum)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(contentAlbum.filterMode()).accept(media))
-                .subscribe(media -> timelineAdapter.add(media),
+                .subscribe(mediaList::add,
                         throwable -> refreshLayout.setRefreshing(false),
                         () -> {
-                            contentAlbum.setCount(getCount());
-                            if (getNothingToShowListener() != null)
-                                getNothingToShowListener().changedNothingToShow(getCount() == 0);
+                            contentAlbum.setCount(mediaList.size());
                             refreshLayout.setRefreshing(false);
+                            setAdapterMedia(mediaList);
                         });
     }
 
-    public int getCount() {
-        return timelineAdapter.getItemCount();
+    private void setAdapterMedia(List<Media> mediaList) {
+        Collections.sort(mediaList, MediaComparators.getComparator(SortingMode.DATE));
+        timelineAdapter.setMedia(mediaList);
     }
 
     @Override

@@ -1,54 +1,49 @@
 package org.horaapps.leafpic.timeline;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.adapters.MediaAdapter;
 import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.timeline.data.TimelineModel;
-import org.horaapps.leafpic.util.StringUtils;
+import org.horaapps.leafpic.timeline.data.TimelineHeaderModel;
+import org.horaapps.leafpic.timeline.data.TimelineItem;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
-import org.horaapps.liz.ThemedViewHolder;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
+import static org.horaapps.leafpic.timeline.ViewHolder.TimelineHeaderViewHolder;
+import static org.horaapps.leafpic.timeline.ViewHolder.TimelineMediaViewHolder;
+import static org.horaapps.leafpic.timeline.ViewHolder.TimelineViewHolder;
+
 /**
  * Adapter for showing Timeline.
- * Internally uses {@link MediaAdapter} for rendering items per date
  */
-public class TimelineAdapter extends ThemedAdapter<TimelineAdapter.TimelineViewHolder> {
+public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
-    private ArrayList<TimelineModel> timelineList;
+    private List<TimelineItem> timelineItems;
+    private static Drawable mediaPlaceholder;
 
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
     private SortingOrder sortingOrder;
+    private GroupingMode groupingMode;
 
-    public TimelineAdapter(Context context) {
+    public TimelineAdapter(@NonNull Context context) {
         super(context);
-        timelineList = new ArrayList<>();
-        this.sortingOrder = SortingOrder.DESCENDING;
-    }
+        timelineItems = new ArrayList<>();
 
-    public void sort() {
-        Collections.sort(timelineList, MediaComparators.getTimelineComparator(sortingOrder));
-        notifyDataSetChanged();
+        this.sortingOrder = SortingOrder.DESCENDING;
     }
 
     public ArrayList<Media> getMedia() {
@@ -59,16 +54,54 @@ public class TimelineAdapter extends ThemedAdapter<TimelineAdapter.TimelineViewH
         return true;
     }
 
-    @Override
-    public TimelineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View timelineView = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.view_timeline_container, parent, false);
-
-        return new TimelineViewHolder(timelineView);
+    /**
+     * Set the grouping mode (DAY, WEEK, MONTH, YEAR) of the Timeline.
+     */
+    public void setGroupingMode(@NonNull GroupingMode groupingMode) {
+        this.groupingMode = groupingMode;
+        notifyDataSetChanged();
     }
 
-    public void clearAll() {
-        timelineList.clear();
+    /**
+     * Set the sorting order (ASCENDING, DESCENDING) of the Timeline.
+     */
+    public void setSortingOrder(@NonNull SortingOrder sortingOrder) {
+        this.sortingOrder = sortingOrder;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public ViewHolder.TimelineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        if (viewType == TimelineItem.TYPE_HEADER) {
+            return new TimelineHeaderViewHolder(LayoutInflater.from(context).inflate(
+                    R.layout.view_timeline_header,
+                    parent,
+                    false));
+
+        } else if (viewType == TimelineItem.TYPE_MEDIA) {
+            return new TimelineMediaViewHolder(LayoutInflater.from(context).inflate(
+                    R.layout.card_photo,
+                    parent,
+                    false),
+                    ThemeHelper.getPlaceHolder(context));
+        }
+        return null;
+    }
+
+    public void setGridLayoutManager(GridLayoutManager gridLayoutManager) {
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                TimelineItem timelineItem = getItem(position);
+                if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) return 4;
+                return 1;
+            }
+        });
+    }
+
+    private void clearAll() {
+        timelineItems.clear();
         notifyDataSetChanged();
     }
 
@@ -81,75 +114,67 @@ public class TimelineAdapter extends ThemedAdapter<TimelineAdapter.TimelineViewH
     }
 
     @Override
-    public void onBindViewHolder(final TimelineViewHolder holder, int position) {
-        holder.setupForModel(timelineList.get(position));
-        holder.refreshTheme(getThemeHelper());
+    public int getItemViewType(int position) {
+        return getItem(position).getTimelineType();
     }
 
-    public int add(@NonNull Media media) {
-        TimelineModel timelineModel = getTimelineModelForDate(media.getDateModified());
-        timelineModel.addMedia(media);
-
-        // TODO: Find the timeline ViewHolder for this and refresh instead of sorting & notifying
-        sort();
-        notifyDataSetChanged();
-        /*
-        int i = Collections.binarySearch(
-                timelineList, media, MediaComparators.getComparator(sortingMode, sortingOrder));
-        if (i < 0) i = ~i;
-        media.add(i, media);
-
-        //notifyItemRangeInserted(0, media.size()-1);
-        notifyItemInserted(i);
-        //notifyDataSetChanged();
-        return i;
-        */
-
-        return -1;
+    @NonNull
+    private TimelineItem getItem(int position) {
+        return timelineItems.get(position);
     }
 
-    private TimelineModel getTimelineModelForDate(long timeInMillis) {
-        Date mediaDate = new Date(timeInMillis);
-        for (TimelineModel timelineModel : timelineList) {
-            Date timelineDate = timelineModel.getDate();
-            if (timelineDate.getDate() == mediaDate.getDate()
-                    && timelineDate.getMonth() == mediaDate.getMonth()
-                    && timelineDate.getYear() == mediaDate.getYear()) return timelineModel;
+    @Override
+    public void onBindViewHolder(TimelineViewHolder viewHolder, int position) {
+        TimelineItem timelineItem = getItem(position);
+
+        if (viewHolder instanceof TimelineHeaderViewHolder) {
+            TimelineHeaderViewHolder headerViewHolder = (TimelineHeaderViewHolder) viewHolder;
+            headerViewHolder.bind((TimelineHeaderModel) timelineItem);
+
+        } else if (viewHolder instanceof TimelineMediaViewHolder) {
+            TimelineMediaViewHolder mediaHolder = (TimelineMediaViewHolder) viewHolder;
+            mediaHolder.bind((Media) timelineItem);
         }
-        TimelineModel timelineModel = new TimelineModel(timeInMillis);
-        timelineList.add(timelineModel);
-        return timelineModel;
+    }
+
+    public void setMedia(@NonNull List<Media> mediaList) {
+        clearAll();
+        timelineItems = getTimelineItems(mediaList);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Get the list of Timeline Items to show.
+     * Internally adds the headers to the list.
+     *
+     * @param mediaList The list of media items to show.
+     * @return A list with headers to be inflated for Timeline.
+     */
+    private List<TimelineItem> getTimelineItems(@NonNull List<Media> mediaList) {
+        // Preprocessing - Add headers in the list of media
+        // TODO: Think of ways to optimise / improve this logic
+
+        List<TimelineItem> timelineItemList = new ArrayList<>();
+
+        int headersAdded = 0;
+        Calendar currentDate = null;
+        for (int position = 0; position < mediaList.size(); position++) {
+            Calendar mediaDate = new GregorianCalendar();
+            mediaDate.setTimeInMillis(mediaList.get(position).getDateModified());
+            if (currentDate == null || !groupingMode.isInGroup(currentDate, mediaDate)) {
+                currentDate = mediaDate;
+                TimelineHeaderModel timelineHeaderModel = new TimelineHeaderModel(mediaDate);
+                timelineItemList.add(position + headersAdded, timelineHeaderModel);
+                headersAdded++;
+            }
+
+            timelineItemList.add(mediaList.get(position));
+        }
+        return timelineItemList;
     }
 
     @Override
     public int getItemCount() {
-        return timelineList.size();
-    }
-
-    protected static class TimelineViewHolder extends ThemedViewHolder {
-
-        @BindView(R.id.timeline_container_header) TextView headerText;
-        @BindView(R.id.timeline_content) RecyclerView timelineContent;
-
-        private MediaAdapter mediaAdapter;
-
-        private TimelineViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-
-            mediaAdapter = new MediaAdapter(view.getContext());
-            timelineContent.setLayoutManager(new GridLayoutManager(view.getContext(), 4));
-            timelineContent.setAdapter(mediaAdapter);
-        }
-
-        private void setupForModel(@NonNull TimelineModel timelineModel) {
-            headerText.setText(StringUtils.getUserReadableDate(timelineModel.getDate()));
-            mediaAdapter.setMedia(timelineModel.getMedia());
-        }
-
-        @Override
-        public void refreshTheme(ThemeHelper themeHelper) {
-            headerText.setTextColor(themeHelper.getTextColor());
-        }
+        return timelineItems.size();
     }
 }
