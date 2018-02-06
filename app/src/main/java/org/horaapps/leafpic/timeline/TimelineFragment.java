@@ -107,6 +107,7 @@ public class TimelineFragment extends BaseFragment {
 
         timelineAdapter = new TimelineAdapter(getContext());
         timelineAdapter.setGridLayoutManager(gridLayoutManager);
+        timelineAdapter.setGroupingMode(GroupingMode.DAY); // TODO: This will be decided by user menu
         timelineAdapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

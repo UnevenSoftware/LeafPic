@@ -17,7 +17,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.timeline.data.TimelineHeaderModel;
-import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.SquareRelativeLayout;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedViewHolder;
@@ -51,7 +50,7 @@ public class ViewHolder {
         }
 
         void bind(@NonNull TimelineHeaderModel timelineHeaderModel) {
-            headerText.setText(StringUtils.getUserReadableDate(timelineHeaderModel.getDate().getTime()));
+            headerText.setText(timelineHeaderModel.getHeaderText());
         }
 
         @Override

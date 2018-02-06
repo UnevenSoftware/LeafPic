@@ -33,6 +33,7 @@ import static org.horaapps.leafpic.timeline.ViewHolder.TimelineViewHolder;
 public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
     private List<TimelineItem> timelineItems;
+    private List<Media> mediaItems;
     private static Drawable mediaPlaceholder;
 
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
@@ -59,7 +60,11 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
      */
     public void setGroupingMode(@NonNull GroupingMode groupingMode) {
         this.groupingMode = groupingMode;
-        notifyDataSetChanged();
+
+        if (mediaItems == null) return;
+
+        // Rebuild the Timeline Items
+        buildTimelineItems();
     }
 
     /**
@@ -102,7 +107,6 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
     private void clearAll() {
         timelineItems.clear();
-        notifyDataSetChanged();
     }
 
     public boolean selecting() {
@@ -138,8 +142,13 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     }
 
     public void setMedia(@NonNull List<Media> mediaList) {
+        mediaItems = mediaList;
+        buildTimelineItems();
+    }
+
+    private void buildTimelineItems() {
         clearAll();
-        timelineItems = getTimelineItems(mediaList);
+        timelineItems = getTimelineItems(mediaItems);
         notifyDataSetChanged();
     }
 
@@ -164,6 +173,7 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
             if (currentDate == null || !groupingMode.isInGroup(currentDate, mediaDate)) {
                 currentDate = mediaDate;
                 TimelineHeaderModel timelineHeaderModel = new TimelineHeaderModel(mediaDate);
+                timelineHeaderModel.setHeaderText(groupingMode.getGroupHeader(mediaDate));
                 timelineItemList.add(position + headersAdded, timelineHeaderModel);
                 headersAdded++;
             }

@@ -167,17 +167,4 @@ public class StringUtils {
                 "<font color='%s'>%s</font>",
                 color, content);
     }
-
-    /**
-     * Returns a user-readable date formatted.
-     * eg: Sunday, 31 December 2017
-     *
-     * @param date The date object
-     * @return A user-readable date string.
-     */
-    public static String getUserReadableDate(@NonNull Date date) {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("E, d MMM yyyy");
-        return dateFormatter.format(date);
-    }
-
 }
