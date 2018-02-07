@@ -50,6 +50,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
@@ -224,7 +225,7 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     public int columnsCount() {
-        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        return DeviceUtils.isPortrait(getResources())
                 ? Prefs.getMediaColumnsPortrait()
                 : Prefs.getMediaColumnsLandscape();
     }

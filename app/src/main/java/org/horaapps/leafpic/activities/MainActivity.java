@@ -45,6 +45,7 @@ import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.timeline.TimelineFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
@@ -221,7 +222,7 @@ public class MainActivity extends SharedMediaActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        if (DeviceUtils.isPortrait(getResources())) {
             fab.setVisibility(View.VISIBLE);
             fab.animate().translationY(fab.getHeight() * 2).start();
         } else

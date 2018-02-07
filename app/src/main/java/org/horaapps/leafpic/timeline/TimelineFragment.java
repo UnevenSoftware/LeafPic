@@ -1,15 +1,19 @@
 package org.horaapps.leafpic.timeline;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Album;
@@ -18,7 +22,10 @@ import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.BaseFragment;
+import org.horaapps.leafpic.util.DeviceUtils;
+import org.horaapps.leafpic.util.preferences.Defaults;
 import org.horaapps.liz.ThemeHelper;
 
 import java.util.ArrayList;
@@ -29,7 +36,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 /**
  * Fragment which shows the Timeline.
@@ -40,13 +46,19 @@ public class TimelineFragment extends BaseFragment {
 
     private static final String ARGS_ALBUM = "args_album";
 
+    private static final String KEY_ALBUM = "key_album";
+    private static final String KEY_GROUPING_MODE = "key_grouping_mode";
+
     @BindView(R.id.timeline_items) RecyclerView timelineItems;
     @BindView(R.id.timeline_swipe_refresh_layout) SwipeRefreshLayout refreshLayout;
 
     private TimelineAdapter timelineAdapter;
     private TimelineListener timelineListener;
+    private GridLayoutManager gridLayoutManager;
 
     private Album contentAlbum;
+
+    private GroupingMode groupingMode;
 
     public static TimelineFragment newInstance(@NonNull Album album) {
         TimelineFragment fragment = new TimelineFragment();
@@ -59,8 +71,11 @@ public class TimelineFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         if (savedInstanceState != null) {
-            contentAlbum = savedInstanceState.getParcelable(ARGS_ALBUM);
+            contentAlbum = savedInstanceState.getParcelable(KEY_ALBUM);
+            groupingMode = (GroupingMode) savedInstanceState.get(KEY_GROUPING_MODE);
             return;
         }
 
@@ -68,6 +83,7 @@ public class TimelineFragment extends BaseFragment {
         Bundle arguments = getArguments();
         if (arguments == null) return;
         contentAlbum = arguments.getParcelable(ARGS_ALBUM);
+        groupingMode = GroupingMode.DAY; // Default
     }
 
     @Nullable
@@ -91,9 +107,45 @@ public class TimelineFragment extends BaseFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_timeline, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        GroupingMode selectedGrouping = getGroupingMode(item.getItemId());
+        if (selectedGrouping == null) return false;
+
+        groupingMode = selectedGrouping;
+        timelineAdapter.setGroupingMode(groupingMode);
+        item.setChecked(true);
+        return true;
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable(ARGS_ALBUM, contentAlbum);
+        outState.putParcelable(KEY_ALBUM, contentAlbum);
+        outState.putSerializable(KEY_GROUPING_MODE, groupingMode);
         super.onSaveInstanceState(outState);
+    }
+
+    @Nullable
+    private GroupingMode getGroupingMode(@IdRes int menuId) {
+        switch (menuId) {
+            case R.id.timeline_grouping_day: return GroupingMode.DAY;
+            case R.id.timeline_grouping_week: return GroupingMode.WEEK;
+            case R.id.timeline_grouping_month: return GroupingMode.MONTH;
+            case R.id.timeline_grouping_year: return GroupingMode.YEAR;
+            default: return null;
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int gridSize = getTimelineGridSize();
+        timelineAdapter.setTimelineGridSize(gridSize);
+        gridLayoutManager.setSpanCount(gridSize);
     }
 
     public void setTimelineListener(@NonNull TimelineListener timelineListener) {
@@ -101,13 +153,14 @@ public class TimelineFragment extends BaseFragment {
     }
 
     private void setupRecyclerView() {
-        timelineItems.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
+        TimelineAdapter.TimelineItemDecorator decorator = new TimelineAdapter.TimelineItemDecorator(getContext(), R.dimen.timeline_decorator_spacing);
+        gridLayoutManager = new GridLayoutManager(getContext(), getTimelineGridSize());
         timelineItems.setLayoutManager(gridLayoutManager);
+        timelineItems.addItemDecoration(decorator);
 
-        timelineAdapter = new TimelineAdapter(getContext());
+        timelineAdapter = new TimelineAdapter(getContext(), getTimelineGridSize());
         timelineAdapter.setGridLayoutManager(gridLayoutManager);
-        timelineAdapter.setGroupingMode(GroupingMode.DAY); // TODO: This will be decided by user menu
+        timelineAdapter.setGroupingMode(groupingMode);
         timelineAdapter.getClicks()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -135,9 +188,15 @@ public class TimelineFragment extends BaseFragment {
                         });
     }
 
-    private void setAdapterMedia(List<Media> mediaList) {
-        Collections.sort(mediaList, MediaComparators.getComparator(SortingMode.DATE));
+    private void setAdapterMedia(@NonNull List<Media> mediaList) {
+        Collections.sort(mediaList, MediaComparators.getComparator(SortingMode.DATE, SortingOrder.DESCENDING));
         timelineAdapter.setMedia(mediaList);
+    }
+
+    private int getTimelineGridSize() {
+        return DeviceUtils.isPortrait(getResources())
+                ? Defaults.TIMELINE_ITEMS_PORTRAIT
+                : Defaults.TIMELINE_ITEMS_LANDSCAPE;
     }
 
     @Override

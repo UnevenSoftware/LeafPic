@@ -3,6 +3,7 @@
     android:id="@+id/timeline_container_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/timeline_header_text_padding"
+    android:paddingBottom="@dimen/timeline_header_text_padding"
+    android:paddingTop="@dimen/timeline_header_text_padding"
     android:textSize="@dimen/text_size_medium"
     android:textStyle="bold" />

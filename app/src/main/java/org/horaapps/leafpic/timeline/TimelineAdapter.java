@@ -1,10 +1,14 @@
 package org.horaapps.leafpic.timeline;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.horaapps.leafpic.R;
@@ -39,10 +43,12 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
     private SortingOrder sortingOrder;
     private GroupingMode groupingMode;
+    private int timelineGridSize;
 
-    public TimelineAdapter(@NonNull Context context) {
+    public TimelineAdapter(@NonNull Context context, int timelineGridSize) {
         super(context);
         timelineItems = new ArrayList<>();
+        this.timelineGridSize = timelineGridSize;
 
         this.sortingOrder = SortingOrder.DESCENDING;
     }
@@ -75,6 +81,10 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void setTimelineGridSize(int timelineGridSize) {
+        this.timelineGridSize = timelineGridSize;
+    }
+
     @Override
     public ViewHolder.TimelineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -99,7 +109,11 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
             @Override
             public int getSpanSize(int position) {
                 TimelineItem timelineItem = getItem(position);
-                if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) return 4;
+
+                // If we have a header item, occupy the entire width
+                if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) return timelineGridSize;
+
+                // Else, a media item takes up a single space
                 return 1;
             }
         });
@@ -186,5 +200,20 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     @Override
     public int getItemCount() {
         return timelineItems.size();
+    }
+
+    public static class TimelineItemDecorator extends RecyclerView.ItemDecoration {
+
+        private int pixelOffset;
+
+        public TimelineItemDecorator(@NonNull Context context, @DimenRes int dimenRes) {
+            pixelOffset = context.getResources().getDimensionPixelOffset(dimenRes);
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.set(pixelOffset, pixelOffset, pixelOffset, pixelOffset);
+        }
     }
 }
