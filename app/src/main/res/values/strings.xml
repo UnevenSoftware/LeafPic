@@ -399,4 +399,12 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="start_slide_show">Start Slideshow</string>
     <string name="stop_slide_show">Stop Slideshow</string>
     <string name="errors">Errors</string>
+
+    <!-- Timeline -->
+    <string name="timeline_grouping_menu_label">Grouping</string>
+    <string name="timeline_grouping_menu_day">Day</string>
+    <string name="timeline_grouping_menu_week">Week</string>
+    <string name="timeline_grouping_menu_month">Month</string>
+    <string name="timeline_grouping_menu_year">Year</string>
+
 </resources>

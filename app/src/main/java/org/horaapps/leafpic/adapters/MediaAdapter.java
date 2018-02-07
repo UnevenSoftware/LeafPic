@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
@@ -307,6 +309,12 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
     public void clear() {
         media.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setMedia(@NonNull List<Media> mediaList) {
+        media.clear();
+        media.addAll(mediaList);
         notifyDataSetChanged();
     }
 

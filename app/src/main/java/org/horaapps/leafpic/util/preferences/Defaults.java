@@ -18,6 +18,9 @@ public final class Defaults {
     public static final int MEDIA_COLUMNS_PORTRAIT = 3;
     public static final int MEDIA_COLUMNS_LANDSCAPE = 4;
 
+    public static final int TIMELINE_ITEMS_PORTRAIT = 4;
+    public static final int TIMELINE_ITEMS_LANDSCAPE = 5;
+
     public static final int ALBUM_SORTING_MODE = SortingMode.DATE.getValue();
     public static final int ALBUM_SORTING_ORDER = SortingOrder.DESCENDING.getValue();
     public static final int CARD_STYLE = CardViewStyle.MATERIAL.getValue();

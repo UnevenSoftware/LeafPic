@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.PaletteActivity;
@@ -51,6 +50,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
@@ -206,8 +206,6 @@ public class RvMediaFragment extends BaseFragment {
         reload();
     }
 
-
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -227,7 +225,7 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     public int columnsCount() {
-        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        return DeviceUtils.isPortrait(getResources())
                 ? Prefs.getMediaColumnsPortrait()
                 : Prefs.getMediaColumnsLandscape();
     }
@@ -261,8 +259,8 @@ public class RvMediaFragment extends BaseFragment {
 
         menu.findItem(R.id.select_all).setIcon(ThemeHelper.getToolbarIcon(getContext(), GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
-        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_share)));
-        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_sort)));
+        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_share)));
+        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_sort)));
         menu.findItem(R.id.filter_menu).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_filter_list)));
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -471,7 +469,7 @@ public class RvMediaFragment extends BaseFragment {
                     protected Void doInBackground(Affix.Options... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
                         for (int i = 0; i < adapter.getSelectedCount(); i++) {
-                            if(!adapter.getSelected().get(i).isVideo())
+                            if (!adapter.getSelected().get(i).isVideo())
                                 bitmapArray.add(adapter.getSelected().get(i).getBitmap());
                         }
 
@@ -515,7 +513,7 @@ public class RvMediaFragment extends BaseFragment {
                 //region Example
                 final LinearLayout llExample = dialogLayout.findViewById(R.id.affix_example);
                 llExample.setBackgroundColor(getBackgroundColor());
-                llExample.setVisibility(Hawk.get("show_tips", true) ? View.VISIBLE : View.GONE);
+                llExample.setVisibility(Prefs.getToggleValue(getContext().getString(R.string.preference_show_tips), true) ? View.VISIBLE : View.GONE);
                 final LinearLayout llExampleH = dialogLayout.findViewById(R.id.affix_example_horizontal);
                 //llExampleH.setBackgroundColor(getCardBackgroundColor());
                 final LinearLayout llExampleV = dialogLayout.findViewById(R.id.affix_example_vertical);
@@ -567,8 +565,8 @@ public class RvMediaFragment extends BaseFragment {
                 getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_jpeg));
                 getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_png));
                 getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_webp));
-                getThemeHelper().setSwitchCompactColor( swSaveHere, getAccentColor());
-                getThemeHelper().setSwitchCompactColor( swVertical, getAccentColor());
+                getThemeHelper().setSwitchCompactColor(swSaveHere, getAccentColor());
+                getThemeHelper().setSwitchCompactColor(swVertical, getAccentColor());
                 //#endregion
 
                 seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

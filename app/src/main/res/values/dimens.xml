@@ -19,4 +19,8 @@
     <dimen name="nav_entry_icon_size">20dp</dimen>
     <dimen name="nav_entry_text_padding">3dp</dimen>
 
+    <!-- Timeline Header -->
+    <dimen name="timeline_header_text_padding">10dp</dimen>
+    <dimen name="timeline_decorator_spacing">1dp</dimen>
+
 </resources>

@@ -55,6 +55,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -361,7 +362,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
         super.onConfigurationChanged(newConfig);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        if (DeviceUtils.isLandscape(getResources()))
             params.setMargins(0, 0, Measure.getNavigationBarSize(SingleMediaActivity.this).x, 0);
         else
             params.setMargins(0, 0, 0, 0);
