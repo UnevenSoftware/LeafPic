@@ -49,6 +49,7 @@ public class SettingsActivity extends ThemedActivity {
     @BindView(R.id.option_colored_navbar) SettingWithSwitchView optionColoredNavbar;
 
     @BindView(R.id.option_sub_scaling) SettingWithSwitchView optionSubScaling;
+    @BindView(R.id.option_disable_animations) SettingWithSwitchView optionDisableAnimations;
 
     private Unbinder unbinder;
 
@@ -236,4 +237,5 @@ public class SettingsActivity extends ThemedActivity {
     public void onChangeColumnsClicked(View view) {
         new GeneralSetting(SettingsActivity.this).editNumberOfColumns();
     }
+
 }

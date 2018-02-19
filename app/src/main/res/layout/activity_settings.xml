@@ -380,6 +380,15 @@
                         app:settingIcon="gmd-update"
                         app:settingPreferenceKey="@string/preference_auto_update_media"
                         app:settingTitle="@string/auto_update_media"/>
+
+                    <!-- DISABLE ANIMATIONS -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_disable_animations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/disable_animations_sub"
+                        app:settingPreferenceKey="@string/preference_disable_animations"
+                        app:settingTitle="@string/disable_animations"/>
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>
         </LinearLayout>

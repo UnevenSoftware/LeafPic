@@ -242,7 +242,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(position);
-        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        if(Prefs.animationsEnabled()) {
+            mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        }
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -767,8 +770,13 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private void hideSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
-                toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
-                        .setDuration(200).start();
+                if(Prefs.animationsEnabled()){
+                    toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
+                            .setDuration(200).start();
+                } else {
+                    toolbar.animate().alpha(0.0f).setDuration(200).start();
+                }
+
                 getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
                     @Override
                     public void onSystemUiVisibilityChange(int visibility) {
@@ -802,8 +810,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private void showSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
-                toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
-                        .setDuration(240).start();
+                if (Prefs.animationsEnabled()) {
+                    toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+                            .setDuration(240).start();
+                } else {
+                    toolbar.animate().alpha(1.0f).setDuration(240).start();
+                }
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

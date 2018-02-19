@@ -176,7 +176,9 @@ public class RvMediaFragment extends BaseFragment {
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-        rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+        if(Prefs.animationsEnabled()) {
+            rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+        }
 
         adapter = new MediaAdapter(getContext());
 

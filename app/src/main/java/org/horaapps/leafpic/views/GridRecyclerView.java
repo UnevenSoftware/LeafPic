@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.GridLayoutAnimationController;
 
+import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.preferences.Prefs;
+
 /**
  * Created by gilbert on 30/03/2017.
  */
@@ -45,6 +48,10 @@ public class GridRecyclerView extends RecyclerView {
             if (animationParams == null) {
                 animationParams = new GridLayoutAnimationController.AnimationParameters();
                 params.layoutAnimationParameters = animationParams;
+            }
+
+            if(Prefs.getToggleValue(child.getContext().getString(R.string.disable_animations), false)) {
+                return;
             }
 
             int columns = ((GridLayoutManager) getLayoutManager()).getSpanCount();
