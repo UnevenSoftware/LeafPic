@@ -182,6 +182,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="option_show_tips">Show Tips</string>
     <string name="option_show_tips_sub">It help you to understand the use of some feature.</string>
+    <string name="disable_animations">Disable Animations</string>
+    <string name="disable_animations_sub">Disable animations if there are performance issues.</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>

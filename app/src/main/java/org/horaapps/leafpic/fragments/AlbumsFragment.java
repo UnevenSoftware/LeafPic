@@ -174,7 +174,9 @@ public class AlbumsFragment extends BaseFragment {
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-        rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+        if(Prefs.animationsEnabled()) {
+            rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+        }
 
         adapter = new AlbumsAdapter(
                 getContext(), sortingMode(), sortingOrder());

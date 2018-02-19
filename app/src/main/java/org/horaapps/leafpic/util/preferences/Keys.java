@@ -25,4 +25,7 @@ public final class Keys {
 
     public static final String LAST_VERSION_CODE = "last_version_code";
     public static final String SHOW_EASTER_EGG = "show_easter_egg";
+
+    public static final String ANIMATIONS_DISABLED = "disable_animations";
+
 }
