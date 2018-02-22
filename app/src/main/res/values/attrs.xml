@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PlaybackControlView">
+        <attr name="show_timeout"/>
+        <attr name="rewind_increment"/>
+        <attr name="fastforward_increment"/>
+    </declare-styleable>
+    <declare-styleable name="SettingBasic">
+        <attr name="settingIcon" format="string"/>
+        <attr name="settingTitle" format="reference"/>
+        <attr name="settingCaption" format="reference"/>
+        <attr name="settingMinApi" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="SettingWithSwitchView">
+        <attr name="settingIcon"/>
+        <attr name="settingTitle"/>
+        <attr name="settingCaption"/>
+        <attr name="settingMinApi"/>
+        <attr name="settingDefaultValue" format="boolean"/>
+        <attr name="settingPreferenceKey" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="NavigationEntry">
+        <attr name="itemText" format="reference"/>
+        <attr name="itemIcon" format="string"/>
+    </declare-styleable>
+
+</resources>

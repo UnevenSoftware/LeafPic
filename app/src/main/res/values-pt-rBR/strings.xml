@@ -89,7 +89,7 @@
   <string name="send_to">Enviar para</string>
   <string name="search_menu">procurar</string>
   <string name="full_resolution">Resolução completa</string>
-  <string name="of">de</string>
+    <string name="of">%d de %d</string>
   <!-- AFFIX -->
   <string name="affix">Afixar</string>
   <string name="affix_vertical">Afixar na vertical</string>
@@ -155,11 +155,11 @@
   <string name="primary_color_sub">A cor principal a ser usada na interface.</string>
   <string name="accent_color">Cor dos detalhes</string>
   <string name="accent_color_sub">A cor secundária a ser usada nos elementos dos detalhes da interface.</string>
-  <string name="basic_theme">Tema básico</string>
-  <string name="basic_theme_sub">Seleciona um tema básico.</string>
-  <string name="white_basic_theme">Branco</string>
-  <string name="dark_basic_theme">Escuro</string>
-  <string name="dark_amoled_basic_theme">AMOLED escuro</string>
+  <string name="base_theme">Tema básico</string>
+  <string name="base_theme_sub">Seleciona um tema básico.</string>
+  <string name="white">Branco</string>
+  <string name="dark">Escuro</string>
+  <string name="dark_amoled">AMOLED escuro</string>
   <string name="colored_navbar">Barra de navegação colorida</string>
   <string name="colored_navbar_sub">Aplica a cor primária na barra de navegação.</string>
   <string name="internal_player">Reprodutor de vídeo interno</string>

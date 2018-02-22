@@ -75,7 +75,7 @@
   <string name="send_to">ส่งไปยัง</string>
   <string name="search_menu">ค้นหา</string>
   <string name="full_resolution">ความละเอียดเต็ม</string>
-  <string name="of">จาก</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">ปะติด</string>
   <string name="affix_vertical">ปะติดแนวตั้ง</string>
@@ -141,11 +141,11 @@
   <string name="primary_color_sub">สีหลักที่ใช้ใน UI</string>
   <string name="accent_color">สีรอง</string>
   <string name="accent_color_sub">สีรองที่ใช้ในวิดเจ็ตและรายละเอียดต่างๆ ของ UI</string>
-  <string name="basic_theme">ธีมพื้นฐาน</string>
-  <string name="basic_theme_sub">เลือกธีมพื้นฐาน</string>
-  <string name="white_basic_theme">ขาว</string>
-  <string name="dark_basic_theme">มืด</string>
-  <string name="dark_amoled_basic_theme">มืด AMOLED</string>
+  <string name="base_theme">ธีมพื้นฐาน</string>
+  <string name="base_theme_sub">เลือกธีมพื้นฐาน</string>
+  <string name="white">ขาว</string>
+  <string name="dark">มืด</string>
+  <string name="dark_amoled">มืด AMOLED</string>
   <string name="colored_navbar">สีแถบนำทาง</string>
   <string name="colored_navbar_sub">ใช้สีหลักกับแถบนำทาง</string>
   <string name="internal_player">ตัวเล่นวิดีโอภายใน</string>

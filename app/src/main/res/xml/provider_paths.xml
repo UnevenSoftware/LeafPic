@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen>
-    <paths>
-        <external-path name="external_files" path="."/>
-    </paths>
-</PreferenceScreen>
+<paths>
+    <root-path name="external_files" path=""/>
+    <!--<files-path
+        name="media"
+        path="."/>
+    <external-files-path name="media" path="." />-->
+</paths>
+

@@ -60,7 +60,7 @@
   <string name="send_to">Siųsti į</string>
   <string name="search_menu">ieškoti</string>
   <string name="full_resolution">Pilna raiška</string>
-  <string name="of">iš</string>
+    <string name="of">%d iš %d</string>
   <!-- AFFIX -->
   <!-- RANDOM -->
   <string name="done">atlikta!</string>

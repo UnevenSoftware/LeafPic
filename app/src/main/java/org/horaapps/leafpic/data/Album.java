@@ -1,185 +1,181 @@
 package org.horaapps.leafpic.data;
 
 import android.content.Context;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 
-import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.data.base.FilterMode;
-import org.horaapps.leafpic.data.base.MediaComparators;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
-import org.horaapps.leafpic.data.providers.MediaStoreProvider;
-import org.horaapps.leafpic.data.providers.StorageProvider;
-import org.horaapps.leafpic.util.ContentHelper;
-import org.horaapps.leafpic.util.PreferenceUtil;
+import org.horaapps.leafpic.data.filter.FilterMode;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by dnld on 26/04/16.
  */
-public class Album implements Serializable {
+public class Album implements CursorHandler, Parcelable {
 
-	private String name = null;
-	private String path = null;
-	private long id = -1;
+	public static final long ALL_MEDIA_ALBUM_ID = 8000;
+	private String name, path;
+	private long id = -1, dateModified;
 	private int count = -1;
-	private int currentMediaIndex = 0;
 
 	private boolean selected = false;
 	public AlbumSettings settings = null;
+	private Media lastMedia = null;
 
-	private ArrayList<Media> media;
-	private ArrayList<Media> selectedMedias;
-
-	private Album() {
-		media = new ArrayList<Media>();
-		selectedMedias = new ArrayList<Media>();
+	public Album(String path, String name) {
+		this.name = name;
+		this.path = path;
 	}
 
-	public Album(Context context, String path, long id, String name, int count) {
-		this();
-		this.path = path;
+	public Album(String name, long id) {
 		this.name = name;
+		this.id = id;
+	}
+
+	public Album(String path, String name, long id, int count, long dateModified) {
+		this(path, name);
 		this.count = count;
 		this.id = id;
-		settings = AlbumSettings.getSettings(context, this);
+		this.dateModified = dateModified;
 	}
 
-	public Album(Context context, @NotNull File mediaPath) {
-		super();
-		File folder = mediaPath.getParentFile();
-		this.path = folder.getPath();
-		this.name = folder.getName();
-		settings = AlbumSettings.getSettings(context, this);
-		updatePhotos(context);
-		setCurrentPhoto(mediaPath.getAbsolutePath());
+	public Album(String path, String name, int count, long dateModified) {
+		this(path, name, -1, count, dateModified);
 	}
 
-	/**
-	 * used for open an image from an unknown content storage
-	 *
-	 * @param context context
-	 * @param mediaUri uri of the media to display
-   */
-	public Album(Context context, Uri mediaUri) {
-		super();
-		media.add(0, new Media(context, mediaUri));
-		setCurrentPhotoIndex(0);
+	public Album(Cursor cur) {
+		this(StringUtils.getBucketPathByImagePath(cur.getString(3)),
+				cur.getString(1),
+				cur.getLong(0),
+				cur.getInt(2),
+				cur.getLong(4));
+		setLastMedia(new Media(cur.getString(3)));
+	}
+
+	public static String[] getProjection() {
+		return new String[]{
+				MediaStore.Files.FileColumns.PARENT,
+				MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+				"count(*)",
+				MediaStore.Images.Media.DATA,
+				"max(" + MediaStore.Images.Media.DATE_MODIFIED + ")"
+		};
+	}
+
+	@Override
+	public Album handle(Cursor cur) throws SQLException {
+		return new Album(cur);
+	}
+
+	@Deprecated
+	public Album(Context context, String path, long id, String name, int count) {
+		this(path, name, id, count, 0);
+		settings = AlbumSettings.getDefaults();
 	}
 
 	public static Album getEmptyAlbum() {
-		Album album = new Album();
+		Album album = new Album(null, null);
 		album.settings = AlbumSettings.getDefaults();
 		return album;
 	}
 
-	public ArrayList<Media> getMedia() {
-		ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-		switch (getFilterMode()) {
-			case ALL:
-				mediaArrayList = media;
-			default:
-				break;
-			case GIF:
-				for (Media media1 : media)
-					if (media1.isGif()) mediaArrayList.add(media1);
-				break;
-			case IMAGES:
-				for (Media media1 : media)
-					if (media1.isImage()) mediaArrayList.add(media1);
-				break;
-			case VIDEO:
-				for (Media media1 : media)
-					if (media1.isVideo()) mediaArrayList.add(media1);
-				break;
-		}
-		return mediaArrayList;
+	public static Album getAllMediaAlbum() {
+		Album album = new Album("All Media", ALL_MEDIA_ALBUM_ID);
+		album.settings = AlbumSettings.getDefaults();
+		return album;
 	}
 
-	public void updatePhotos(Context context) {
-		media = getMedia(context);
-		sortPhotos();
-		setCount(media.size());
+	static Album withPath(String path) {
+		Album emptyAlbum = getEmptyAlbum();
+		emptyAlbum.path = path;
+		return emptyAlbum;
 	}
 
-	private void updatePhotos(Context context, FilterMode filterMode) {
-
-		ArrayList<Media> media = getMedia(context), mediaArrayList = new ArrayList<Media>();
-
-		switch (filterMode) {
-			case ALL:
-				mediaArrayList = media;
-			default:
-				break;
-			case GIF:
-				for (Media media1 : media)
-					if (media1.isGif()) mediaArrayList.add(media1);
-				break;
-			case IMAGES:
-				for (Media media1 : media)
-					if (media1.isImage()) mediaArrayList.add(media1);
-				break;
-			case VIDEO:
-				for (Media media1 : media)
-					if (media1.isVideo()) mediaArrayList.add(media1);
-				break;
-		}
-
-		this.media = mediaArrayList;
-		sortPhotos();
-		setCount(this.media.size());
+	public Album withSettings(AlbumSettings settings) {
+		this.settings = settings;
+		return this;
 	}
 
-	private ArrayList<Media> getMedia(Context context) {
-		PreferenceUtil SP = PreferenceUtil.getInstance(context);
-		ArrayList<Media> mediaArrayList = new ArrayList<Media>();
-		// TODO: 18/08/16
-		if (isFromMediaStore()) {
-			mediaArrayList.addAll(
-							MediaStoreProvider.getMedia(
-											context, id, SP.getBoolean("set_include_video", true)));
-		} else {
-			mediaArrayList.addAll(StorageProvider.getMedia(
-							getPath(), SP.getBoolean("set_include_video", true)));
-		}
-		return mediaArrayList;
+	//region Album Properties Getters
+	public String getName() {
+		return name;
 	}
 
-	public ArrayList<Media> getSelectedMedia() {
-		return selectedMedias;
+	public String getPath() {
+		return path;
 	}
 
-	public Media getSelectedMedia(int index) {
-		return selectedMedias.get(index);
+	public int getCount() {
+		return count;
 	}
 
-	private boolean isFromMediaStore() {
-		return id != -1;
+	public Long getDateModified() {
+		return dateModified;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Media getCover() {
+		if (hasCover())
+			return new Media(settings.coverPath);
+		if (lastMedia != null)
+			return lastMedia;
+		// TODO: 11/20/16 how should i handle this?
+		return new Media();
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setLastMedia(Media lastMedia) {
+		this.lastMedia = lastMedia;
+	}
+
+	public void setCover(String path) {
+		settings.coverPath = path;
 	}
 
 	public long getId() {
 		return  this.id;
 	}
 
+	public boolean isHidden() {
+		return new File(path, ".nomedia").exists();
+	}
+
+	public boolean isPinned(){ return settings.pinned; }
+
+	public boolean hasCover() {
+		return settings.coverPath != null;
+	}
+
+	public FilterMode filterMode() {
+		return settings != null ? settings.filterMode : FilterMode.ALL;
+	}
+
+	public void setFilterMode(FilterMode newMode) {
+		settings.filterMode = newMode;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	@Override
+	public String toString() {
+		return "Album{" +
+				"name='" + name + '\'' +
+				", path='" + path + '\'' +
+				", id=" + id +
+				", count=" + count +
+				'}';
+	}
+	//endregion
+
 	public ArrayList<String> getParentsFolders() {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 
 		File f = new File(getPath());
 		while(f != null && f.canRead()) {
@@ -189,298 +185,129 @@ public class Album implements Serializable {
 		return result;
 	}
 
-	public boolean isPinned(){ return settings.isPinned(); }
+	//region Album Properties Setters
 
-	public void filterMedias(Context context, FilterMode filter) {
-		settings.setFilterMode(filter);
-		updatePhotos(context, filter);
-	}
-
-	public boolean addMedia(@Nullable Media media) {
-		if(media == null) return false;
-		this.media.add(media);
-		return true;
-	}
-
-	public boolean hasCustomCover() {
-		return settings.getCoverPath() != null;
-	}
-
-	void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-
-	public boolean isSelected() {
-		return selected;
-	}
-
-	public Media getMedia(int index) { return media.get(index); }
-
-	public void setCurrentPhotoIndex(int index){ currentMediaIndex = index; }
-
-	public void setCurrentPhotoIndex(Media m){ setCurrentPhotoIndex(media.indexOf(m)); }
-
-	public Media getCurrentMedia() { return getMedia(currentMediaIndex); }
-
-	public int getCurrentMediaIndex() { return currentMediaIndex; }
-
-	public String getName() {
-		return name;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	private void setCount(int count) {
+	public void setCount(int count) {
 		this.count = count;
 	}
 
-	public int getCount() {
-		return count;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public boolean isHidden() {
-		return new File(getPath(), ".nomedia").exists();
+	public boolean setSelected(boolean selected) {
+		if (this.selected == selected)
+			return false;
+		this.selected = selected;
+		return true;
 	}
 
-	public Media getCoverAlbum() {
-		if (hasCustomCover())
-			return new Media(settings.getCoverPath());
-		if (media.size() > 0)
-			return media.get(0);
-		return new Media();
+	public boolean toggleSelected() {
+		selected = !selected;
+		return selected;
 	}
 
-	public void removeCoverAlbum(Context context) {
-		settings.changeCoverPath(context, null);
+	public void removeCoverAlbum() {
+		settings.coverPath = null;
 	}
 
-	public void setSelectedPhotoAsPreview(Context context) {
-		if (selectedMedias.size() > 0)
-			settings.changeCoverPath(context, selectedMedias.get(0).getPath());
+	public void setSortingMode(SortingMode column) {
+		settings.sortingMode = column.getValue();
 	}
 
-	private void setCurrentPhoto(String path) {
-		for (int i = 0; i < media.size(); i++)
-			if (media.get(i).getPath().equals(path)) currentMediaIndex = i;
+	public void setSortingOrder(SortingOrder sortingOrder) {
+		settings.sortingOrder = sortingOrder.getValue();
 	}
 
-	public int getSelectedCount() {
-		return selectedMedias.size();
+	public boolean togglePinAlbum() {
+		settings.pinned = !settings.pinned;
+		return settings.pinned;
 	}
 
-	public boolean areMediaSelected() { return getSelectedCount() != 0;}
+	//endregion
 
-	public void selectAllPhotos() {
-		for (int i = 0; i < media.size(); i++) {
-			if (!media.get(i).isSelected()) {
-				media.get(i).setSelected(true);
-				selectedMedias.add(media.get(i));
-			}
-		}
-	}
-
-	private int toggleSelectPhoto(int index) {
-		if (media.get(index) != null) {
-			media.get(index).setSelected(!media.get(index).isSelected());
-			if (media.get(index).isSelected())
-				selectedMedias.add(media.get(index));
-			else
-				selectedMedias.remove(media.get(index));
-		}
-		return index;
-	}
-
-	public int toggleSelectPhoto(Media m) {
-		return toggleSelectPhoto(media.indexOf(m));
-	}
-
-	public void setDefaultSortingMode(Context context, SortingMode column) {
-		settings.changeSortingMode(context, column);
-	}
-
-	public boolean renameCurrentMedia(Context context, String newName) {
-		boolean success = false;
-		try {
-			File from = new File(getCurrentMedia().getPath());
-			File to = new File(StringUtils.getPhotoPathRenamed(getCurrentMedia().getPath(), newName));
-			if (success =  ContentHelper.moveFile(context, from, to)) {
-				scanFile(context, new String[]{ to.getAbsolutePath(), from.getAbsolutePath() });
-				getCurrentMedia().setPath(to.getAbsolutePath());
-			}
-		} catch (Exception e) { e.printStackTrace(); }
-		return success;
-	}
-
-	public boolean moveCurrentMedia(Context context, String targetDir) {
-		boolean success = false;
-		try {
-			String from = getCurrentMedia().getPath();
-			if (success = moveMedia(context, from, targetDir)) {
-				scanFile(context, new String[]{ from, StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), targetDir) });
-				media.remove(getCurrentMediaIndex());
-				setCount(media.size());
-			}
-		} catch (Exception e) { e.printStackTrace(); }
-		return success;
-	}
-
+	@Deprecated
 	public int moveSelectedMedia(Context context, String targetDir) {
-		int n = 0;
+		/*int n = 0;
 		try
 		{
-			for (int i = 0; i < selectedMedias.size(); i++) {
+			for (int i = 0; i < selectedMedia.size(); i++) {
 
-				if (moveMedia(context, selectedMedias.get(i).getPath(), targetDir)) {
-					String from = selectedMedias.get(i).getPath();
-					scanFile(context, new String[]{ from, StringUtils.getPhotoPathMoved(selectedMedias.get(i).getPath(), targetDir) },
-									new MediaScannerConnection.OnScanCompletedListener() {
-										@Override
-										public void onScanCompleted(String s, Uri uri) {
-											Log.d("scanFile", "onScanCompleted: " + s);
-										}
-									});
-					media.remove(selectedMedias.get(i));
+				if (moveMedia(context, selectedMedia.get(i).getPath(), targetDir)) {
+					String from = selectedMedia.get(i).getPath();
+					scanFile(context, new String[]{ from, StringUtils.getPhotoPathMoved(selectedMedia.get(i).getPath(), targetDir) },
+							new MediaScannerConnection.OnScanCompletedListener() {
+								@Override
+								public void onScanCompleted(String s, Uri uri) {
+									Log.d("scanFile", "onScanCompleted: " + s);
+								}
+							});
+					media.remove(selectedMedia.get(i));
 					n++;
 				}
 			}
 		} catch (Exception e) { e.printStackTrace(); }
 		setCount(media.size());
-		return n;
+		return n;*/
+		return -1;
 	}
 
-	private boolean moveMedia(Context context, String source, String targetDir) {
-		File from = new File(source);
-		File to = new File(targetDir);
-		return ContentHelper.moveFile(context, from, to);
-	}
-
-	public void setDefaultSortingAscending(Context context, SortingOrder sortingOrder) {
-		settings.changeSortingOrder(context, sortingOrder);
-	}
-
-
-	/**
-	 * On longpress, it finds the last or the first selected image before or after the targetIndex
-	 * and selects them all.
-	 *
-	 * @param targetIndex
-	 * @param adapter
-	 */
-	public void selectAllPhotosUpTo(int targetIndex, MediaAdapter adapter) {
-		int indexRightBeforeOrAfter = -1;
-		int indexNow;
-		for (Media sm : selectedMedias) {
-			indexNow = media.indexOf(sm);
-			if (indexRightBeforeOrAfter == -1) indexRightBeforeOrAfter = indexNow;
-
-			if (indexNow > targetIndex) break;
-			indexRightBeforeOrAfter = indexNow;
-		}
-
-		if (indexRightBeforeOrAfter != -1) {
-			for (int index = Math.min(targetIndex, indexRightBeforeOrAfter); index <= Math.max(targetIndex, indexRightBeforeOrAfter); index++) {
-				if (media.get(index) != null) {
-					if (!media.get(index).isSelected()) {
-						media.get(index).setSelected(true);
-						selectedMedias.add(media.get(index));
-						adapter.notifyItemChanged(index);
-					}
-				}
-			}
-		}
-	}
-
-	public int getIndex(Media m) { return  media.indexOf(m); }
-
-	public void clearSelectedPhotos() {
-		for (Media m : media)
-			m.setSelected(false);
-		selectedMedias.clear();
-	}
 
 	public void sortPhotos() {
-		Collections.sort(media, MediaComparators.getComparator(settings.getSortingMode(), settings.getSortingOrder()));
+		/*Collections.sort(media, MediaComparators.getComparator(settings.getSortingMode(), settings.getSortingOrder()));*/
 	}
 
 	public boolean copySelectedPhotos(Context context, String folderPath) {
-		boolean success = true;
-		for (Media media : selectedMedias)
+		/*boolean success = true;
+		for (Media media : selectedMedia)
 			if(!copyPhoto(context, media.getPath(), folderPath))
 				success = false;
-		return success;
-	}
-
-	public boolean copyPhoto(Context context, String olderPath, String folderPath) {
-		boolean success = false;
-		try {
-			File from = new File(olderPath);
-			File to = new File(folderPath);
-			if (success = ContentHelper.copyFile(context, from, to))
-				scanFile(context, new String[]{ StringUtils.getPhotoPathMoved(getCurrentMedia().getPath(), folderPath) });
-
-		} catch (Exception e) { e.printStackTrace(); }
-		return success;
-	}
-
-	public boolean deleteCurrentMedia(Context context) {
-		boolean success = deleteMedia(context, getCurrentMedia());
-		if (success) {
-			media.remove(getCurrentMediaIndex());
-			setCount(media.size());
-		}
-		return success;
-	}
-
-	private boolean deleteMedia(Context context, Media media) {
-		boolean success;
-		File file = new File(media.getPath());
-		if (success = ContentHelper.deleteFile(context, file))
-			scanFile(context, new String[]{ file.getAbsolutePath() });
-		return success;
+		return success;*/
+		return false;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Album) {
-			return getPath().equals(((Album) obj).getPath());
+			return path.equals(((Album) obj).getPath());
 		}
 		return super.equals(obj);
 	}
 
 	public boolean deleteSelectedMedia(Context context) {
-		boolean success = true;
-		for (Media selectedMedia : selectedMedias) {
+		/*boolean success = true;
+		for (Media selectedMedia : this.selectedMedia) {
 			if (deleteMedia(context, selectedMedia))
 				media.remove(selectedMedia);
 			else success = false;
 		}
 		if (success) {
-			clearSelectedPhotos();
+			clearSelectedMedia();
 			setCount(media.size());
 		}
-		return success;
+		return success;*/
+		return false;
 	}
+
 	private boolean found_id_album = false;
 
 	public boolean renameAlbum(final Context context, String newName) {
-		found_id_album = false;
+		/*found_id_album = false;
 		boolean success;
 		File dir = new File(StringUtils.getAlbumPathRenamed(getPath(), newName));
-		if (success = ContentHelper.mkdir(context, dir)) {
+		if (success = StorageHelper.mkdir(context, dir)) {
 			for (final Media m : media) {
 				File from = new File(m.getPath());
 				File to = new File(StringUtils.getPhotoPathRenamedAlbumChange(m.getPath(), newName));
-				if (ContentHelper.moveFile(context, from, to)) {
+				if (StorageHelper.moveFile(context, from, to)) {
 					scanFile(context, new String[]{from.getAbsolutePath() });
 					scanFile(context, new String[]{ to.getAbsolutePath() }, new MediaScannerConnection.OnScanCompletedListener() {
 						@Override
 						public void onScanCompleted(String s, Uri uri) {
-							// TODO: 05/08/16 it sucks! look for a better solution
+							// TODO: 05/08/16 it sucks! look for a better solution!
 
 							if (!found_id_album) {
-								id = MediaStoreProvider.getAlbumId(context, s);
+								id = ContentProviderHelper.getAlbumId(context, s);
 								found_id_album = true;
 							}
 							Log.d(s, "onScanCompleted: "+s);
@@ -495,19 +322,54 @@ public class Album implements Serializable {
 			path = dir.getAbsolutePath();
 			name = newName;
 			// NOTE: the following line doesn't work
-			//id = MediaStoreProvider.getAlbumId(context, media.getValue(0).getPath());
+			//id = ContentProviderHelper.getAlbumId(context, media.getValue(0).getPath());
 
 		}
-		return success;
+		return success;*/
+
+		return false;
 	}
 
-	public void scanFile(Context context, String[] path) { MediaScannerConnection.scanFile(context, path, null, null); }
+	@Deprecated
 
-	public void scanFile(Context context, String[] path, MediaScannerConnection.OnScanCompletedListener onScanCompletedListener) {
-		MediaScannerConnection.scanFile(context, path, null, onScanCompletedListener);
+
+	@Override
+	public int describeContents() {
+		return 0;
 	}
 
-	public FilterMode getFilterMode() {
-		return settings != null ? settings.getFilterMode() : FilterMode.ALL;
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.name);
+		dest.writeString(this.path);
+		dest.writeLong(this.id);
+		dest.writeLong(this.dateModified);
+		dest.writeInt(this.count);
+		dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
+		dest.writeSerializable(this.settings);
+		dest.writeParcelable(this.lastMedia, flags);
 	}
+
+	protected Album(Parcel in) {
+		this.name = in.readString();
+		this.path = in.readString();
+		this.id = in.readLong();
+		this.dateModified = in.readLong();
+		this.count = in.readInt();
+		this.selected = in.readByte() != 0;
+		this.settings = (AlbumSettings) in.readSerializable();
+		this.lastMedia = in.readParcelable(Media.class.getClassLoader());
+	}
+
+	public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
+		@Override
+		public Album createFromParcel(Parcel source) {
+			return new Album(source);
+		}
+
+		@Override
+		public Album[] newArray(int size) {
+			return new Album[size];
+		}
+	};
 }

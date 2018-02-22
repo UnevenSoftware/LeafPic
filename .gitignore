@@ -6,8 +6,15 @@
 *.iml
 /local.properties
 
+# release
+/signing.properties
+*.jks
+
 .DS_Store
 /build
 /captures
 /scripts/crowdin.key
 /app/src/main/assets/secretconstants.properties
+
+# debug purpose
+inappstoragereader

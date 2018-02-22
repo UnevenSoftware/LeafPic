@@ -77,7 +77,7 @@ Vylúčením adresára vylúčite aj všetky jeho podadresáre. V prípade, že 
   <string name="send_to">Odoslať</string>
   <string name="search_menu">hľadať</string>
   <string name="full_resolution">Plné rozlíšenie</string>
-  <string name="of">z</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">Kombinovať</string>
   <string name="affix_vertical">Kombinovať zvislo</string>
@@ -143,11 +143,11 @@ Vylúčením adresára vylúčite aj všetky jeho podadresáre. V prípade, že 
   <string name="primary_color_sub">Hlavná farba, ktorá sa používa v UI.</string>
   <string name="accent_color">Farba zvýraznenia</string>
   <string name="accent_color_sub">Sekundárna farba, ktorá sa používa na odtiene widgetov v detailoch UI.</string>
-  <string name="basic_theme">Základný motív</string>
-  <string name="basic_theme_sub">Veberte si základný motív.</string>
-  <string name="white_basic_theme">Svetlý</string>
-  <string name="dark_basic_theme">Tmavý</string>
-  <string name="dark_amoled_basic_theme">Tmavý AMOLED</string>
+  <string name="base_theme">Základný motív</string>
+  <string name="base_theme_sub">Veberte si základný motív.</string>
+  <string name="white">Svetlý</string>
+  <string name="dark">Tmavý</string>
+  <string name="dark_amoled">Tmavý AMOLED</string>
   <string name="colored_navbar">Farebná navigačná lišta</string>
   <string name="colored_navbar_sub">Použiť hlavnú farbu na navigačnú lištu.</string>
   <string name="internal_player">Vstavaný prehrávač videa</string>

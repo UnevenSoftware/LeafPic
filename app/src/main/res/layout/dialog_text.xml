@@ -1,82 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="2dp"
+    android:id="@+id/message_card">
 
-    <android.support.v7.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp"
-        android:id="@+id/message_card"
-        >
-        <ScrollView
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_dialog_title"
                 android:layout_width="match_parent"
+                android:textColor="@color/md_dark_primary_text"
                 android:layout_height="wrap_content"
+                android:background="@color/md_red_500"
+                android:padding="@dimen/big_spacing"
+                android:textSize="@dimen/sub_big_text"
+                android:textStyle="bold"
+                android:text="Dialog title..." />
+
+            <RelativeLayout
+                android:id="@+id/text_dialog_rl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <TextView
-                    android:id="@+id/text_dialog_title"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/md_dark_primary_text"
-                    android:layout_height="wrap_content"
-                    android:background="@color/md_red_500"
-                    android:padding="24dp"
-                    android:text=""
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-                <RelativeLayout
-                    android:id="@+id/text_dialog_rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
-                    <TextView
-                        android:id="@+id/text_dialog_message"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingLeft="20dp"
-                        android:text="null"
-                        android:singleLine="false"
-                        android:textSize="16sp"
-                        />
-                </RelativeLayout>
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_checkbox_dialog"
+                    android:id="@+id/text_dialog_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:weightSum="10"
-                    android:visibility="gone"
-                    >
-                    <TextView
-                        android:id="@+id/checkbox_text_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="null"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="16sp"
-                        android:layout_weight="9"
-                        />
-                    <CheckBox
-                        android:id="@+id/checkbox_text_dialog_cb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="1"
-                        />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+                    android:paddingTop="@dimen/sub_big_spacing"
+                    android:paddingRight="@dimen/sub_big_spacing"
+                    android:paddingLeft="@dimen/sub_big_spacing"
+                    android:text="null"
+                    android:singleLine="false"
+                    android:textSize="@dimen/medium_text" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</android.support.v7.widget.CardView>

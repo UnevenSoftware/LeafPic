@@ -72,7 +72,7 @@
   <string name="send_to">Trimite la</string>
   <string name="search_menu">cautare</string>
   <string name="full_resolution">Rezolutie maxima</string>
-  <string name="of">din</string>
+    <string name="of">%d din %d</string>
   <!-- AFFIX -->
   <string name="affix">Uneste</string>
   <string name="affix_vertical">Uneste vertical</string>
@@ -138,11 +138,11 @@
   <string name="primary_color_sub">Culoarea principala utilizata in interfata.</string>
   <string name="accent_color">Culoare accent</string>
   <string name="accent_color_sub">Culoarea secundara utilizata la nuantarea widget-urilor si a detaliilor interfetei.</string>
-  <string name="basic_theme">Tema de baza</string>
-  <string name="basic_theme_sub">Selecteaza tema de baza.</string>
-  <string name="white_basic_theme">Alb</string>
-  <string name="dark_basic_theme">Culoare inchisa</string>
-  <string name="dark_amoled_basic_theme">Culoare inchisa pentru AMOLED</string>
+  <string name="base_theme">Tema de baza</string>
+  <string name="base_theme_sub">Selecteaza tema de baza.</string>
+  <string name="white">Alb</string>
+  <string name="dark">Culoare inchisa</string>
+  <string name="dark_amoled">Culoare inchisa pentru AMOLED</string>
   <string name="colored_navbar">Bara de navigare colorata</string>
   <string name="colored_navbar_sub">Aplica culoarea primara pe bara de navigare.</string>
   <string name="internal_player">Player video intern</string>

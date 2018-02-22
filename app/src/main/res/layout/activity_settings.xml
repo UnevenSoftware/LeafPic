@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/setting_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <!--TOOLBAR-->
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
         android:background="@color/md_dark_appbar"
-        android:windowActionBarOverlay="true" />
+        android:windowActionBarOverlay="true"/>
+
     <ScrollView
         android:id="@+id/settingAct_scrollView"
-        android:scrollbarSize="4dip"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbarSize="4dip">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <!--GENERAL-->
-
-            <android.support.v7.widget.CardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/general_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
+                android:clickable="true"
                 android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/general_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -51,208 +51,70 @@
                         android:textStyle="bold"/>
 
                     <!-- SECURITY -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_security"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/security_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="faw-user-secret"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <TextView
-                                android:id="@+id/security_item_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/security"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/security_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/security_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/security_sub"
+                        app:settingIcon="faw-user-secret"
+                        app:settingTitle="@string/security"/>
 
                     <!-- NUMBER OF COLUMNS -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_n_columns"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/n_columns_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-view-column"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/sub_small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/n_columns_Item_Title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/multi_column"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/n_columns_Item_Title_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/multi_column_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/multi_column_sub"
+                        app:settingIcon="gmd-view-column"
+                        app:settingTitle="@string/multi_column"/>
 
                     <!-- EXCLUDED ALBUM-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_excluded_album"
+                    <org.horaapps.leafpic.views.SettingBasic
+                        android:id="@+id/ll_white_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/excluded_album_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-folder"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/Excluded_Album_Item_Title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/excluded_albums"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/Excluded_Album_Item_Title_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/excluded_albums_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/manage_your_folders_sub"
+                        app:settingIcon="gmd-burst-mode"
+                        app:settingTitle="@string/manage_your_folders"/>
 
                     <!-- FAB OPTIONS -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_fab_options"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_fab"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/fab_options_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-add-circle"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="44dp">
-                                <TextView
-                                    android:id="@+id/fab_options_item_title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/fab_options"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp" />
-                                <TextView
-                                    android:id="@+id/fab_options_item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/fab_options_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/sw_show_fab"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/fab_options_sub"
+                        app:settingIcon="gmd-add-circle"
+                        app:settingPreferenceKey="@string/preference_show_fab"
+                        app:settingTitle="@string/fab_options"/>
+
+                    <!-- TIPS -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_tips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/option_show_tips_sub"
+                        app:settingIcon="gmd-info"
+                        app:settingPreferenceKey="@string/preference_show_tips"
+                        app:settingTitle="@string/option_show_tips"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--THEME-->
-
-            <android.support.v7.widget.CardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/theme_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
+                android:clickable="true"
                 android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/theme_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -264,311 +126,104 @@
                         android:textStyle="bold"/>
 
                     <!--BASIC THEME-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_basic_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/basic_theme_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-invert-colors"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/basic_theme_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/basic_theme"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text"/>
-                            <TextView
-                                android:id="@+id/basic_theme_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/basic_theme_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/base_theme_sub"
+                        app:settingIcon="gmd-invert-colors"
+                        app:settingTitle="@string/base_theme"/>
 
                     <!--PRIMARY COLOR-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_primaryColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/primary_color_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-color-lens"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/PrimaryColor_Item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/primary_color"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/PrimaryColor_Item_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/primary_color_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/primary_color_sub"
+                        app:settingIcon="gmd-color-lens"
+                        app:settingTitle="@string/primary_color"/>
 
                     <!--ACCENT COLOR-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_accentColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/accent_color_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-format-color-fill"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/accentColor_Item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/accent_color"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/accentColor_Item_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/accent_color_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/accent_color_sub"
+                        app:settingIcon="gmd-format-color-fill"
+                        app:settingTitle="@string/accent_color"/>
 
                     <!-- APPLY THEME ON 3TH ACT -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_custom_thirdAct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/custom_3thact_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="faw-paint-brush"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/custom_3thAct_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/custom_3thAct"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/custom_3thAct_Sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/custom_3thAct_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/custom_3thAct_sub"
+                        app:settingIcon="gmd-colorize"
+                        app:settingTitle="@string/media_viewer"/>
+
+                    <!-- CARD VIEW STYLE -->
+                    <org.horaapps.leafpic.views.SettingBasic
+                        android:id="@+id/ll_card_view_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/album_card_view_sub"
+                        app:settingIcon="gmd-dashboard"
+                        app:settingTitle="@string/album_card_view"/>
+
+                    <!-- CUSTOM ICON COLOR -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/ll_custom_icon_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/custom_icon_color_sub"
+                        app:settingDefaultValue="false"
+                        app:settingIcon="gmd-border-color"
+                        app:settingMinApi="21"
+                        app:settingPreferenceKey="@string/preference_custom_icon_color"
+                        app:settingTitle="@string/custom_icon_color"/>
 
                     <!-- TRANSLUCENT STATUS BAR-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_TraslucentStatusBar"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_statusbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/traslucent_statusbar_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-web-asset"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                        />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/Traslucent_StatusBar_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/traslucent_statusbar"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/Traslucent_StatusBar_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/traslucent_statusbar_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/SetTraslucentStatusBar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/traslucent_statusbar_sub"
+                        app:settingDefaultValue="true"
+                        app:settingIcon="gmd-web-asset"
+                        app:settingMinApi="21"
+                        app:settingPreferenceKey="@string/preference_translucent_status_bar"
+                        app:settingTitle="@string/traslucent_statusbar"/>
 
                     <!--COLORED NAV BAR-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_ColoredNavBar"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_colored_navbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/nav_bar_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-video-label"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                        />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/NavBar_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/colored_navbar"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/NavBar_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/colored_navbar_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/SetColoredNavBar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/colored_navbar_sub"
+                        app:settingDefaultValue="false"
+                        app:settingIcon="gmd-video-label"
+                        app:settingMinApi="21"
+                        app:settingPreferenceKey="@string/preference_colored_nav_bar"
+                        app:settingTitle="@string/colored_navbar"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--MEDIA VIEWER SETTING-->
-
-            <android.support.v7.widget.CardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/preview_picture_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
+                android:clickable="true"
                 android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/picture_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -577,261 +232,68 @@
                         android:text="@string/media_viewer"
                         android:textColor="@color/md_dark_background"
                         android:textSize="@dimen/medium_text"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <!--MAX BRIGHTNESS-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_max_luminosity"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_max_brightness"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_switch_max_luminosity_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-settings-brightness"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/max_luminosity_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/max_brightness"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/max_luminosity_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/max_brightness_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_max_luminosity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/max_brightness_sub"
+                        app:settingIcon="gmd-settings-brightness"
+                        app:settingPreferenceKey="@string/preference_max_brightness"
+                        app:settingTitle="@string/max_brightness"/>
 
                     <!-- PICTURE ORIENTATION-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_picture_orientation"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_picture_orientation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_switch_picture_orientation_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-screen-rotation"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/picture_orientation_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/picture_orientation"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/picture_orientation_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/picture_orientation_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_picture_orientation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/picture_orientation_sub"
+                        app:settingIcon="gmd-screen-rotation"
+                        app:settingPreferenceKey="@string/preference_auto_rotate"
+                        app:settingTitle="@string/picture_orientation"/>
 
                     <!-- FULL resolution TODO: do something -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_full_resolution"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_full_resolution"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true"
-                        android:visibility="gone">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/ll_switch_full_resolution_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-image"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/full_resolution_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/delay_load_full_size_image"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/full_resolution_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/load_full_image_when_zoom_in"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_full_resolution"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        android:visibility="gone"
+                        app:settingCaption="@string/load_full_image_when_zoom_in"
+                        app:settingIcon="gmd-image"
+                        app:settingPreferenceKey="@string/preference_delay_full_image"
+                        app:settingTitle="@string/delay_load_full_size_image"/>
 
                     <!--SWIPE ORIENTATION TODO: implement feature -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_media_viewer_swipe_direction"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_swipe_direction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true"
-                        android:visibility="gone">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/media_viewer_swipe_direction_Icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-compare-arrows"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="44dp">
-                                <TextView
-                                    android:id="@+id/media_viewer_swipe_direction_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/media_viewer_swipe_direction"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/media_viewer_swipe_direction_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/media_viewer_swipe_direction_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/Set_media_viewer_swipe_direction"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        android:visibility="gone"
+                        app:settingCaption="@string/media_viewer_swipe_direction_sub"
+                        app:settingIcon="gmd-compare-arrows"
+                        app:settingPreferenceKey="@string/preference_swipe_direction_inverted"
+                        app:settingTitle="@string/media_viewer_swipe_direction"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--VIDEO PLAYER SETTINGS-->
-
-            <android.support.v7.widget.CardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/video_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
+                android:clickable="true"
                 android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/video_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -840,142 +302,46 @@
                         android:text="@string/video"
                         android:textColor="@color/md_dark_background"
                         android:textSize="@dimen/medium_text"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <!-- INCLUDE VIDEO -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_include_video"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_include_video"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/internal_include_video"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-videocam"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/include_video_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/include_video"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/include_video_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Display also video"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_include_video"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/include_video_sub"
+                        app:settingIcon="gmd-videocam"
+                        app:settingPreferenceKey="@string/preference_include_video"
+                        app:settingTitle="@string/include_video"/>
 
-                    <!-- USE EXTERNAL Player-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_switch_internal_player"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_instant_play_video"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/internal_player_Icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-ondemand-video"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="45dp">
-                                <TextView
-                                    android:id="@+id/internal_player_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/internal_player"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/internal_player_Item_Sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/internal_player_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/set_internal_player"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/video_instant_play_sub"
+                        app:settingIcon="gmd-play-arrow"
+                        app:settingPreferenceKey="@string/preference_video_instant_play"
+                        app:settingTitle="@string/video_instant_play"/>
+
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
             <!--ADVANCED SETTING-->
-
-            <android.support.v7.widget.CardView
+            <org.horaapps.leafpic.views.themeable.ThemedCardView
                 android:id="@+id/advanced_setting_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
+                android:clickable="true"
                 android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/small_spacing">
+                    <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/advanced_setting_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -984,227 +350,38 @@
                         android:text="@string/advanced"
                         android:textColor="@color/md_dark_background"
                         android:textSize="@dimen/medium_text"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_sub_scaling"
+                    <!-- SUB SCALING-->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_sub_scaling"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/sub_scaling_Icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-photo-library"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_text"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="44dp">
-                                <TextView
-                                    android:id="@+id/sub_scaling_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/sub_scaling_image_view"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/sub_scaling_Item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/sub_scaling_image_view_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/sw_sub_scaling"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <!-- USE MEDIA STORE -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_use_media_mediastore"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/use_media_mediastore_Icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-photo-library"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_text"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="44dp">
-                                <TextView
-                                    android:id="@+id/use_media_mediastore_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/use_mediastore_provider"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/use_media_mediastore_Item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/use_media_store_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/sw_use_media_mediastore"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/sub_scaling_image_view_sub"
+                        app:settingIcon="gmd-photo-library"
+                        app:settingPreferenceKey="@string/preference_sub_scaling"
+                        app:settingTitle="@string/sub_scaling_image_view"/>
 
                     <!-- MAPS PROVIDER-->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <org.horaapps.leafpic.views.SettingBasic
                         android:id="@+id/ll_map_provider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/map_provider_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="faw-map-signs"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_text"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/map_provider_item_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/map_provider"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/map_provider_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/map_provider_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/map_provider_sub"
+                        app:settingIcon="faw-map-signs"
+                        app:settingTitle="@string/map_provider"/>
 
                     <!-- AUTO UPDATE MEDIA -->
-
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_auto_update_media"
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_auto_update_media"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
-                        <com.mikepenz.iconics.view.IconicsImageView
-                            android:id="@+id/auto_update_media_Icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-update"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="44dp">
-                                <TextView
-                                    android:id="@+id/auto_update_media_Item"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/auto_update_media"
-                                    android:textColor="@color/md_dark_background"
-                                    android:textSize="@dimen/medium_text" />
-                                <TextView
-                                    android:id="@+id/auto_update_media_Item_sub"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/auto_update_media_sub"
-                                    android:textColor="@color/md_grey_400"
-                                    android:textSize="@dimen/sub_medium_text" />
-                            </LinearLayout>
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/SetAutoUpdateMedia"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:button="@null"
-                                android:hapticFeedbackEnabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        app:settingCaption="@string/auto_update_media_sub"
+                        app:settingIcon="gmd-update"
+                        app:settingPreferenceKey="@string/preference_auto_update_media"
+                        app:settingTitle="@string/auto_update_media"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </org.horaapps.leafpic.views.themeable.ThemedCardView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

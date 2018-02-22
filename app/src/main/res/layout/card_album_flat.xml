@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/album_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="0dp"
+    android:foreground="@drawable/ripple"
+    app:cardElevation="@dimen/cardview_default_elevation">
+    <LinearLayout
+        android:id="@+id/cont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <org.horaapps.leafpic.views.SquareRelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/header_album_card"
+            >
+
+            <org.horaapps.liz.ui.ThemedIcon
+                android:id="@+id/selected_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:elevation="@dimen/icon_elevation"
+                android:visibility="gone"
+                app:iiv_color="@color/md_white_1000"
+                app:iiv_icon="gmd-check"
+                tools:targetApi="lollipop" />
+            <org.horaapps.leafpic.views.SquareImageView
+                android:id="@+id/album_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop" />
+            <LinearLayout
+                android:id="@+id/ll_album_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/sub_medium_spacing"
+                android:paddingRight="@dimen/sub_medium_spacing"
+                android:paddingBottom="@dimen/small_spacing"
+                android:paddingTop="@dimen/small_spacing">
+                <TextView
+                    android:id="@+id/album_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/medium_text" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_media_count"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/album_media_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:paddingEnd="4dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sub_medium_text" />
+                    <TextView
+                        android:id="@+id/album_media_label"
+                        android:layout_width="wrap_content"
+                        android:text="@string/media"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sub_medium_text" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/album_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/medium_small_text"
+                    android:textColor="@color/md_grey_400"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:maxLines="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollHorizontally="true"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </org.horaapps.leafpic.views.SquareRelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

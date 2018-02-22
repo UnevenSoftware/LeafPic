@@ -78,7 +78,7 @@
   <string name="send_to">ارسال إلى</string>
   <string name="search_menu">بحث</string>
   <string name="full_resolution">الدقة الكاملة</string>
-  <string name="of">من</string>
+    <string name="of">"%d من %d "</string>
   <!-- AFFIX -->
   <string name="affix">Affix</string>
   <string name="affix_vertical">Affix عمودي</string>
@@ -144,11 +144,11 @@
   <string name="primary_color_sub">اللون الرئيسي الذي يتم استخدامه في واجهة المستخدم.</string>
   <string name="accent_color">لون مميز</string>
   <string name="accent_color_sub">اللون الثانوي الذي يتم استخدامه لصبغ الودجات widgets في تفاصيل واجهة مستخدم.</string>
-  <string name="basic_theme">السمة الإفتراضية</string>
-  <string name="basic_theme_sub">حدد سمةً إفتراضية.</string>
-  <string name="white_basic_theme">أبيض</string>
-  <string name="dark_basic_theme">مظلم</string>
-  <string name="dark_amoled_basic_theme">مظلم أموليد AMOLED</string>
+  <string name="base_theme">السمة الإفتراضية</string>
+  <string name="base_theme_sub">حدد سمةً إفتراضية.</string>
+  <string name="white">أبيض</string>
+  <string name="dark">مظلم</string>
+  <string name="dark_amoled">مظلم أموليد AMOLED</string>
   <string name="colored_navbar">شريط تنقل ملون</string>
   <string name="colored_navbar_sub">تطبيق اللون الأساسي لشريط التنقل.</string>
   <string name="internal_player">مشغل الفيديو الداخلي</string>

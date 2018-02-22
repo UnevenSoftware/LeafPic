@@ -69,7 +69,7 @@
   <string name="send_to">Send til</string>
   <string name="search_menu">søk</string>
   <string name="full_resolution">Full oppløsning</string>
-  <string name="of">av</string>
+    <string name="of">%d av %d</string>
   <!-- AFFIX -->
   <string name="affix_format">Bildeformat</string>
   <string name="affix_format_sub">Tilgjengelige formater</string>
@@ -123,11 +123,11 @@
   <string name="primary_color_sub">Hovedfargen brukt i UI.</string>
   <string name="accent_color">Aksentfarge</string>
   <string name="accent_color_sub">Sekundærfargen brukt i widgets og UI detaljer.</string>
-  <string name="basic_theme">Basis tema</string>
-  <string name="basic_theme_sub">Velg et basis tema.</string>
-  <string name="white_basic_theme">Hvit</string>
-  <string name="dark_basic_theme">Mørk</string>
-  <string name="dark_amoled_basic_theme">Mørk AMOLED</string>
+  <string name="base_theme">Basis tema</string>
+  <string name="base_theme_sub">Velg et basis tema.</string>
+  <string name="white">Hvit</string>
+  <string name="dark">Mørk</string>
+  <string name="dark_amoled">Mørk AMOLED</string>
   <string name="colored_navbar">Farget navigasjonsfelt</string>
   <string name="colored_navbar_sub">Bruke den primære fargen på navigasjonsfeltet.</string>
   <string name="internal_player">Intern videoavspiller</string>

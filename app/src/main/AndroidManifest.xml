@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.horaapps.leafpic">
+    package="org.horaapps.leafpic"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
+    <uses-feature android:name="android.hardware.fingerprint"
+        android:required="false"/>
 
     <application
         android:allowBackup="true"
-        android:name="org.horaapps.leafpic.MyApplication"
+        android:name="org.horaapps.leafpic.App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -85,7 +90,7 @@
         <activity
             android:name="org.horaapps.leafpic.activities.SingleMediaActivity"
             android:label="@string/app_name"
-            android:configChanges="orientation|screenSize|uiMode|touchscreen|screenLayout"
+            android:configChanges="orientation|screenSize|uiMode|screenLayout|navigation"
             android:parentActivityName="org.horaapps.leafpic.activities.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
@@ -160,8 +165,8 @@
         </activity>
 
         <activity
-            android:name="org.horaapps.leafpic.activities.ExcludedAlbumsActivity"
-            android:label="@string/excluded_albums"
+            android:name="org.horaapps.leafpic.activities.BlackWhiteListActivity"
+            android:label="@string/chose_folders"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.ExcludedAlbums" />
@@ -170,16 +175,31 @@
         </activity>
 
         <activity
+            android:name="org.horaapps.leafpic.activities.PaletteActivity"
+            android:label="@string/palette"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.PALETTE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <meta-data
+        <!-- <meta-data
             android:name="org.horaapps.leafpic.CustomGlideModule"
-            android:value="GlideModule" />
+            android:value="GlideModule" /> -->
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name=".util.LegacyCompatFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -188,6 +208,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+
+        <service
+            android:name=".LookForMediaJob"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
 
     </application>
 </manifest>

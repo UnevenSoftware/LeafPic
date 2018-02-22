@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="preference_internal_player">set_internal_player</string>
-    <string name="preference_include_video">set_include_video</string>
+    <string name="preference_include_video">show_videos</string>
     <string name="preference_swipe_direction_inverted">swipe_opposite</string>
+    <string name="preference_video_instant_play">video_instant_play</string>
     <string name="preference_auto_update_media">auto_update_media</string>
-    <string name="preference_use_alternative_provider">alternative_provider</string>
     <string name="preference_delay_full_image">set_delay_full_image</string>
     <string name="preference_auto_rotate">set_picture_orientation</string>
     <string name="preference_max_brightness">set_max_luminosity</string>
-    <string name="preference_translucent_status_bar">set_translucent_statusbar</string>
-    <string name="preference_colored_nav_bar">nav_bar</string>
-    <string name="preference_base_theme">basic_theme</string>
-    <string name="preference_primary_color">primary_color</string>
-    <string name="preference_accent_color">accent_color</string>
+
+
     <string name="preference_apply_theme_pager">apply_theme_img_act</string>
     <string name="preference_transparency">set_alpha</string>
     <string name="preference_map_provider">map_provider</string>
+    <string name="preference_show_tips">show_tips</string>
+    <string name="preference_custom_icon_color">custom_icon_color</string>
 
-    <string name="preference_password_value">password_value</string>
-    <string name="preference_use_password">active_security</string>
-    <string name="preference_use_password_on_hidden">password_on_hidden</string>
-    <string name="preference_use_password_on_delete">password_on_delete</string>
     <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>
     <string name="preference_show_fab">show_fab</string>
     <string name="preference_sub_scaling">use_sub_scaling</string>

@@ -1,55 +1,33 @@
 package org.horaapps.leafpic.data;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import org.horaapps.leafpic.data.base.FilterMode;
-import org.horaapps.leafpic.data.base.SortingMode;
-import org.horaapps.leafpic.data.base.SortingOrder;
+import org.horaapps.leafpic.data.filter.FilterMode;
+import org.horaapps.leafpic.data.sort.SortingMode;
+import org.horaapps.leafpic.data.sort.SortingOrder;
 
 import java.io.Serializable;
 
 /**
  * Created by dnld on 2/4/16.
  */
-public class AlbumSettings implements Serializable {
+public class AlbumSettings implements Serializable, Parcelable {
 
-    private String path;
-    private String coverPath;
-    private int sortingMode;
-    private int sortingOrder;
-    private boolean pinned;
+    String coverPath;
+    int sortingMode, sortingOrder;
+    boolean pinned;
+    FilterMode filterMode = FilterMode.ALL;
 
-    private FilterMode filterMode = FilterMode.ALL;
-
-    static AlbumSettings getSettings(Context context, Album album) {
-        CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        return h.getSettings(album.getPath());
+    public static AlbumSettings getDefaults() {
+        return new AlbumSettings(null, SortingMode.DATE.getValue(), 1, 0);
     }
 
-    static AlbumSettings getDefaults() {
-        return new AlbumSettings(null, null, SortingMode.DATE.getValue(), SortingOrder.DESCENDING.getValue(), 0);
-    }
-
-
-    AlbumSettings(String path, String cover, int sortingMode, int sortingOrder, int pinned) {
-        this.path = path;
+    AlbumSettings(String cover, int sortingMode, int sortingOrder, int pinned) {
         this.coverPath = cover;
         this.sortingMode = sortingMode;
         this.sortingOrder = sortingOrder;
         this.pinned = pinned == 1;
-    }
-
-    FilterMode getFilterMode() {
-        return filterMode;
-    }
-
-    void setFilterMode(FilterMode filterMode) {
-        this.filterMode = filterMode;
-    }
-
-    String getCoverPath() {
-        return coverPath;
     }
 
     public SortingMode getSortingMode() {
@@ -60,31 +38,38 @@ public class AlbumSettings implements Serializable {
         return SortingOrder.fromValue(sortingOrder);
     }
 
-    void changeSortingMode(Context context, SortingMode sortingMode) {
-        this.sortingMode = sortingMode.getValue();
-        CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.setAlbumSortingMode(path, sortingMode.getValue());
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    void changeSortingOrder(Context context, SortingOrder sortingOrder) {
-        this.sortingOrder = sortingOrder.getValue();
-        CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.setAlbumSortingOrder(path, sortingOrder.getValue());
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.coverPath);
+        dest.writeInt(this.sortingMode);
+        dest.writeInt(this.sortingOrder);
+        dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.filterMode == null ? -1 : this.filterMode.ordinal());
     }
 
-    void changeCoverPath(Context context, @Nullable String coverPath) {
-        this.coverPath = coverPath;
-        CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.setAlbumPhotoPreview(path, coverPath);
+    protected AlbumSettings(Parcel in) {
+        this.coverPath = in.readString();
+        this.sortingMode = in.readInt();
+        this.sortingOrder = in.readInt();
+        this.pinned = in.readByte() != 0;
+        int tmpFilterMode = in.readInt();
+        this.filterMode = tmpFilterMode == -1 ? null : FilterMode.values()[tmpFilterMode];
     }
 
-    boolean isPinned() {
-        return pinned;
-    }
+    public static final Parcelable.Creator<AlbumSettings> CREATOR = new Parcelable.Creator<AlbumSettings>() {
+        @Override
+        public AlbumSettings createFromParcel(Parcel source) {
+            return new AlbumSettings(source);
+        }
 
-    public void togglePin(Context context) {
-        this.pinned = !pinned;
-        CustomAlbumsHelper h = CustomAlbumsHelper.getInstance(context);
-        h.pinAlbum(path, pinned);
-    }
+        @Override
+        public AlbumSettings[] newArray(int size) {
+            return new AlbumSettings[size];
+        }
+    };
 }

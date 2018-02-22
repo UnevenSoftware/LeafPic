@@ -69,7 +69,7 @@
   <string name="send_to">Enviar a</string>
   <string name="search_menu">buscar</string>
   <string name="full_resolution">Resolución máxima</string>
-  <string name="of">de</string>
+    <string name="of">%d des %d</string>
   <!-- AFFIX -->
   <string name="affix">Fixar</string>
   <string name="affix_vertical">Fixar vertical</string>
@@ -135,11 +135,11 @@
   <string name="primary_color_sub">Cor principal usada no entorno.</string>
   <string name="accent_color">Cor acentuada</string>
   <string name="accent_color_sub">Cor secundaria para tinguir os widgets e detalles UI.</string>
-  <string name="basic_theme">Tema base</string>
-  <string name="basic_theme_sub">Escoller o tema base.</string>
-  <string name="white_basic_theme">Branco</string>
-  <string name="dark_basic_theme">Escuro</string>
-  <string name="dark_amoled_basic_theme">Escuro AMOLED</string>
+  <string name="base_theme">Tema base</string>
+  <string name="base_theme_sub">Escoller o tema base.</string>
+  <string name="white">Branco</string>
+  <string name="dark">Escuro</string>
+  <string name="dark_amoled">Escuro AMOLED</string>
   <string name="colored_navbar">Barra de navegación coloreada</string>
   <string name="colored_navbar_sub">Aplicar a cor primaria á barra de navegación.</string>
   <string name="internal_player">Reprodutor de Vídeo Interno</string>

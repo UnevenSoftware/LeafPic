@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Text Sizes -->
+    <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+
+    <!-- Navigation Drawer -->
+    <dimen name="nav_drawer_top_padding">50dp</dimen>
+    <dimen name="nav_drawer_width">300dp</dimen>
+    <dimen name="nav_drawer_header_small_spacing">2dp</dimen>
+    <dimen name="nav_drawer_header_spacing">8dp</dimen>
+    <item name="nav_drawer_header_text_spacing" format="float" type="dimen">0.15</item>
+    <dimen name="nav_drawer_scrollbar_size">4dip</dimen>
+
+    <!-- Navigation Entry -->
+    <dimen name="nav_entry_vertical_spacing">16dp</dimen>
+    <dimen name="nav_entry_horizontal_spacing">22dp</dimen>
+    <dimen name="nav_entry_icon_size">20dp</dimen>
+    <dimen name="nav_entry_text_padding">3dp</dimen>
+
+</resources>

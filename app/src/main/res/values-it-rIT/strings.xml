@@ -83,7 +83,7 @@ Escludendo questa cartella escluderai anche tutte le sottocartelle. Qui sotto pu
   <string name="send_to">Invia a</string>
   <string name="search_menu">Cerca</string>
   <string name="full_resolution">Versione ad alta risoluzione</string>
-  <string name="of">di</string>
+    <string name="of">%d di %d</string>
   <!-- AFFIX -->
   <string name="affix">Affissa</string>
   <string name="affix_vertical">Affisso verticale</string>
@@ -149,11 +149,11 @@ Escludendo questa cartella escluderai anche tutte le sottocartelle. Qui sotto pu
   <string name="primary_color_sub">Il colore principale che viene utilizzato nell\'interfaccia utente.</string>
   <string name="accent_color">Colore Secondario</string>
   <string name="accent_color_sub">Colore utilizzato per i dettagli dell\'interfaccia.</string>
-  <string name="basic_theme">Tema base</string>
-  <string name="basic_theme_sub">Selezionare un tema di base.</string>
-  <string name="white_basic_theme">Bianco</string>
-  <string name="dark_basic_theme">Scuro</string>
-  <string name="dark_amoled_basic_theme">Scuro AMOLED</string>
+  <string name="base_theme">Tema base</string>
+  <string name="base_theme_sub">Selezionare un tema di base.</string>
+  <string name="white">Bianco</string>
+  <string name="dark">Scuro</string>
+  <string name="dark_amoled">Scuro AMOLED</string>
   <string name="colored_navbar">Barra di navigazione colorata</string>
   <string name="colored_navbar_sub">Applica il colore primario alla barra di navigazione.</string>
   <string name="internal_player">Lettore multimediale interno</string>

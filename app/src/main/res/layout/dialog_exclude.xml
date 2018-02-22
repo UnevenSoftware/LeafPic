@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +36,6 @@
                     android:paddingLeft="@dimen/medium_spacing"
                     android:singleLine="false"
                     android:textSize="@dimen/medium_text" />
-
                 <android.support.v7.widget.AppCompatSpinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

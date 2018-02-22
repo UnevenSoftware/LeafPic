@@ -6,22 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.StringSignature;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
-import org.horaapps.leafpic.util.PreferenceUtil;
-import org.horaapps.leafpic.views.RotateTransformation;
 
-import java.util.Date;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by dnld on 18/02/16.
@@ -30,14 +25,18 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 @SuppressWarnings("ResourceType")
 public class ImageFragment extends Fragment {
 
+    View view;
     private Media img;
+    private Unbinder unbinder;
+
+    @BindView(R.id.subsampling_view)
+    SubsamplingScaleImageView subsampling;
 
     public static ImageFragment newInstance(Media media) {
         ImageFragment imageFragment = new ImageFragment();
         Bundle args = new Bundle();
         args.putParcelable("image", media);
         imageFragment.setArguments(args);
-
         return imageFragment;
     }
 
@@ -49,39 +48,25 @@ public class ImageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_photo, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-        if (PreferenceUtil.getInstance(getContext()).getBoolean(getString(R.string.preference_sub_scaling) , false)) {
-            SubsamplingScaleImageView imageView = new SubsamplingScaleImageView(getContext());
-            imageView.setImage(ImageSource.uri(img.getUri()));
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
-                }
-            });
-            return imageView;
-        } else {
-            PhotoView photoView = new PhotoView(getContext());
-            displayMedia(photoView, true);
-            photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float x, float y) {
-                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
-                }
+        subsampling.setOrientation(SubsamplingScaleImageView.ORIENTATION_0);
+        subsampling.setImage(ImageSource.uri(img.getUri()));
+        subsampling.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
 
-                @Override
-                public void onOutsidePhotoTap() {
-                    ((SingleMediaActivity) getActivity()).toggleSystemUI();
-                }
-            });
-            photoView.setMaximumScale(5.0F);
-            photoView.setMediumScale(3.0F);
-
-            return photoView;
-        }
+        return view;
     }
 
-   /* private void rotateLoop() { //april fools
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        subsampling.recycle();
+        unbinder.unbind();
+    }
+
+    /* private void rotateLoop() { //april fools
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -91,41 +76,10 @@ public class ImageFragment extends Fragment {
         }, 5);
     }*/
 
-    private void displayMedia(PhotoView photoView, boolean useCache) {
-        //PreferenceUtil SP = PreferenceUtil.getInstance(getContext());
-
-        Glide.with(getContext())
-                .load(img.getUri())
-                .asBitmap()
-                .signature(useCache ? img.getSignature(): new StringSignature(new Date().getTime()+""))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .thumbnail(0.5f)
-                .transform(new RotateTransformation(getContext(), img.getOrientation(), false))
-                .animate(R.anim.fade_in)
-                .into(photoView);
-
-    }
-
-    public boolean rotatePicture(int rotation) {
-        // TODO: 28/08/16 not working yet
-        /*PhotoView photoView = (PhotoView) getView();
-
-        int orientation = Measure.rotateBy(img.getOrientation(), rotation);
-        Log.wtf("asd", img.getOrientation()+" + "+ rotation+" = " +orientation);
-
-        if(photoView != null && img.setOrientation(orientation)) {
-            Glide.clear(photoView);
-            Glide.with(getContext())
-                    .load(img.getUri())
-                    .asBitmap()
-                    .signature(img.getSignature())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    //.thumbnail(0.5f)
-                    .transform(new RotateTransformation(getContext(), rotation , true))
-                    .into(photoView);
-
-            return true;
-        }*/
-        return false;
+    public void rotatePicture(int rotation) {
+        if (rotation == -90 && subsampling.getOrientation() == 0)
+            subsampling.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
+        else
+            subsampling.setOrientation((subsampling.getOrientation() + rotation) % 360);
     }
 }

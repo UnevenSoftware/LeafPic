@@ -69,7 +69,7 @@
   <string name="send_to">Отправить в</string>
   <string name="search_menu">искать</string>
   <string name="full_resolution">Полное разрешение</string>
-  <string name="of">из</string>
+    <string name="of">%d из %d</string>
   <!-- AFFIX -->
   <string name="affix">Сшить</string>
   <string name="affix_vertical">Сшить вертикально</string>
@@ -126,11 +126,11 @@
   <string name="primary_color_sub">Основной цвет для пользовательского интерфейса.</string>
   <string name="accent_color">Цвет акцента</string>
   <string name="accent_color_sub">Второстепенный цвет для элементов интерфейса.</string>
-  <string name="basic_theme">Основная тема</string>
-  <string name="basic_theme_sub">Выбрать основную тему.</string>
-  <string name="white_basic_theme">Белая</string>
-  <string name="dark_basic_theme">Тёмная</string>
-  <string name="dark_amoled_basic_theme">Тёмный AMOLED</string>
+  <string name="base_theme">Основная тема</string>
+  <string name="base_theme_sub">Выбрать основную тему.</string>
+  <string name="white">Белая</string>
+  <string name="dark">Тёмная</string>
+  <string name="dark_amoled">Тёмный AMOLED</string>
   <string name="colored_navbar">Цветная панель навигации</string>
   <string name="colored_navbar_sub">Применить основной цвет к панели навигации.</string>
   <string name="internal_player">Встроенный видеопроигрыватель</string>

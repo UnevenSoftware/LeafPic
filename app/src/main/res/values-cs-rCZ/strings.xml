@@ -73,7 +73,7 @@
   <string name="send_to">Odeslat do</string>
   <string name="search_menu">hledat</string>
   <string name="full_resolution">Plné rozlišení</string>
-  <string name="of">z</string>
+    <string name="of">%d/%d</string>
   <!-- AFFIX -->
   <string name="affix">Spojit</string>
   <string name="affix_vertical">Spojit svisle</string>
@@ -139,11 +139,11 @@
   <string name="primary_color_sub">Hlavní barva požitá v uživatelském rozhraní.</string>
   <string name="accent_color">Barva zvýraznění</string>
   <string name="accent_color_sub">Druhá barva použitá pro odstín widgetů a detailů v uživatelském rozhraní.</string>
-  <string name="basic_theme">Základní téma</string>
-  <string name="basic_theme_sub">Vyberte základní téma.</string>
-  <string name="white_basic_theme">Světlé</string>
-  <string name="dark_basic_theme">Tmavé</string>
-  <string name="dark_amoled_basic_theme">Tmavé AMOLED</string>
+  <string name="base_theme">Základní téma</string>
+  <string name="base_theme_sub">Vyberte základní téma.</string>
+  <string name="white">Světlé</string>
+  <string name="dark">Tmavé</string>
+  <string name="dark_amoled">Tmavé AMOLED</string>
   <string name="colored_navbar">Barevný navigační panel</string>
   <string name="colored_navbar_sub">Použít primární barvu pro navigační panel.</string>
   <string name="internal_player">Interní přehrávač videa</string>

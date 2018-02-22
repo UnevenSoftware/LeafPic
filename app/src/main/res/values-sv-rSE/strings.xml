@@ -75,7 +75,7 @@ Genom att exkludera den här mappen så kommer alla eventuella undermappar ocks�
   <string name="send_to">Skicka till</string>
   <string name="search_menu">sök</string>
   <string name="full_resolution">Full upplösning</string>
-  <string name="of">av</string>
+    <string name="of">%d av %d</string>
   <!-- AFFIX -->
   <string name="affix">Sätt ihop</string>
   <string name="affix_vertical">Sätt ihop vertikalt</string>
@@ -141,11 +141,11 @@ Genom att exkludera den här mappen så kommer alla eventuella undermappar ocks�
   <string name="primary_color_sub">Huvudfärgen som kommer användas i appen.</string>
   <string name="accent_color">Accentfärg</string>
   <string name="accent_color_sub">Den sekundära färgen som används för detaljer i appen.</string>
-  <string name="basic_theme">Standardtema</string>
-  <string name="basic_theme_sub">Välj standardtema.</string>
-  <string name="white_basic_theme">Vit</string>
-  <string name="dark_basic_theme">Mörk</string>
-  <string name="dark_amoled_basic_theme">Mörk (AMOLED)</string>
+  <string name="base_theme">Standardtema</string>
+  <string name="base_theme_sub">Välj standardtema.</string>
+  <string name="white">Vit</string>
+  <string name="dark">Mörk</string>
+  <string name="dark_amoled">Mörk (AMOLED)</string>
   <string name="colored_navbar">Färgad navigationslist</string>
   <string name="colored_navbar_sub">Använd den primära färgen för navigationsfältet.</string>
   <string name="internal_player">Appens videospelare</string>

@@ -7,140 +7,144 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/third_act_theme_card"
+        android:id="@+id/dialog_card_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="@dimen/card_corner_radius"
         >
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/dialog_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/third_act_theme_title"
+                android:background="@color/md_dark_appbar"
+                android:padding="24dp"
+                android:text="@string/media_viewer_theme"
+                android:textColor="@color/md_dark_primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/md_dark_appbar"
-                    android:padding="24dp"
-                    android:text="@string/media_viewer_theme"
-                    android:textColor="@color/md_dark_primary_text"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_apply_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true">
 
-                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_apply_theme_3thAct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="15dp"
-                            android:weightSum="10"
-                    >
-
-                    <com.mikepenz.iconics.view.IconicsImageView
-                        android:id="@+id/ll_apply_theme_3thAct_icon"
-                        android:layout_width="0dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
-                        app:iiv_icon="gmd-brush" />
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:id="@+id/apply_theme_3thAct_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/apply_theme"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
+                        <org.horaapps.liz.ui.ThemedIcon
+                            android:id="@+id/ll_apply_theme_icon"
+                            app:iiv_icon="gmd-brush"
+                            android:layout_width="@dimen/icon_width_height"
+                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/big_spacing"
+                            android:layout_marginRight="@dimen/big_spacing"
                             />
-                        <TextView
-                            android:id="@+id/apply_theme_3thAct_title_Sub"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Use primary color in the viewer"
-                            android:textColor="@color/md_grey_400"
-                            android:textSize="14sp"
-                            />
-                    </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/apply_theme_3th_act_enabled"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-
-                        android:background="?android:selectableItemBackground"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:hapticFeedbackEnabled="true"
-                        android:paddingRight="5dp"
-                        />
-                </LinearLayout>
-
-                <!-- TRANSPARENCY -->
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ll_seek_bar_alpha"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="8dp"
-                    android:weightSum="5"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:id="@+id/seek_bar_alpha_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="20dp"
-                            android:text="@string/transparency"
-                            android:textColor="@color/md_dark_background"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/seek_bar_alpha_title_Sub"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="20dp"
-                            android:text="@string/transparency_sub"
-                            android:textColor="@color/md_grey_400"
-                            android:textSize="14sp"
-                            />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/medium_spacing"
+                            android:paddingRight="@dimen/medium_spacing"
+                            android:paddingBottom="@dimen/small_spacing">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="44dp">
+                                <TextView
+                                    android:id="@+id/apply_theme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/apply_theme"
+                                    android:textColor="@color/md_dark_background"
+                                    android:textSize="16sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/apply_theme_3thAct_title_Sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/use_primary_color_in_the_viewer"
+                                    android:textColor="@color/md_grey_400"
+                                    android:textSize="14sp"
+                                    />
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/sw_apply_theme"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:button="@null"
+                                android:hapticFeedbackEnabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                />
+                        </RelativeLayout>
                     </LinearLayout>
 
-                </LinearLayout>
-                <RelativeLayout
-                    android:id="@+id/container_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    >
-                    <uz.shift.colorpicker.LineColorPicker
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/pickerTransparent"
+                    <!-- TRANSPARENCY -->
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ll_seek_bar_alpha"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        app:orientation="horizontal"
-                        app:selectedColorIndex="0" />
-                </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        android:padding="8dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:id="@+id/seek_bar_alpha_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:text="@string/transparency"
+                                android:textColor="@color/md_dark_background"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/seek_bar_alpha_title_Sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:text="@string/transparency_sub"
+                                android:textColor="@color/md_grey_400"
+                                android:textSize="14sp"
+                                />
+                        </LinearLayout>
                     </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/container_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        >
+                        <uz.shift.colorpicker.LineColorPicker
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/pickerTransparent"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            app:orientation="horizontal"
+                            app:selectedColorIndex="0" />
+                    </RelativeLayout>
             </LinearLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

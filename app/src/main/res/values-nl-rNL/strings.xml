@@ -75,7 +75,7 @@ Door deze map uit te sluiten zal u ook alle sub-mappen uitsluiten. Hieronder vin
   <string name="send_to">Verzend naar</string>
   <string name="search_menu">zoeken</string>
   <string name="full_resolution">Volledige resolutie</string>
-  <string name="of">van</string>
+    <string name="of">%d van %d</string>
   <!-- AFFIX -->
   <string name="affix">Affix</string>
   <string name="affix_vertical">Affix verticaal</string>
@@ -142,11 +142,11 @@ Door deze map uit te sluiten zal u ook alle sub-mappen uitsluiten. Hieronder vin
   <string name="primary_color_sub">De primaire kleur die wordt gebruikt in de interface.</string>
   <string name="accent_color">Accentkleur</string>
   <string name="accent_color_sub">De secundaire kleur die wordt gebruikt voor de tint van widgets en UI details.</string>
-  <string name="basic_theme">Basis thema</string>
-  <string name="basic_theme_sub">Selecteer een basis thema.</string>
-  <string name="white_basic_theme">Wit</string>
-  <string name="dark_basic_theme">Donker</string>
-  <string name="dark_amoled_basic_theme">Donker AMOLED</string>
+  <string name="base_theme">Basis thema</string>
+  <string name="base_theme_sub">Selecteer een basis thema.</string>
+  <string name="white">Wit</string>
+  <string name="dark">Donker</string>
+  <string name="dark_amoled">Donker AMOLED</string>
   <string name="colored_navbar">Gekleurde navigatiebalk</string>
   <string name="colored_navbar_sub">Primaire kleur toepassen op de navigatiebalk.</string>
   <string name="internal_player">Interne videospeler</string>

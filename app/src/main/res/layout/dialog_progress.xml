@@ -8,54 +8,50 @@
         android:id="@+id/progress_dialog_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp"
-        >
+        app:cardCornerRadius="@dimen/card_corner_radius">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/progress_dialog_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/md_dark_appbar"
-                android:padding="24dp"
+                android:padding="@dimen/big_spacing"
                 android:text="Progress Dialog"
                 android:textColor="@color/md_dark_primary_text"
-                android:textSize="18sp"
+                android:textSize="@dimen/sub_big_text"
                 android:textStyle="bold" />
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ll_progress_dialog_bg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:weightSum="10">
+                    android:paddingTop="@dimen/sub_big_spacing"
+                    android:paddingLeft="@dimen/sub_big_spacing"
+                    android:paddingRight="@dimen/sub_big_spacing"
+                    android:paddingBottom="@dimen/small_spacing">
                     <ProgressBar
                         android:id="@+id/progress_dialog_loading"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/progress_circle_width_height"
+                        android:layout_height="@dimen/progress_circle_width_height"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="3"
-                        android:paddingRight="10dp"
-                        android:indeterminateTint="@color/md_white_1000"
-                        />
+                        android:paddingRight="@dimen/sub_medium_spacing"
+                        android:indeterminateTint="@color/md_white_1000" />
                     <TextView
                         android:id="@+id/progress_dialog_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="Doing Something"
-                        android:layout_weight="7"
+                        android:text="Doing Something..."
                         android:textColor="@color/md_grey_400"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/medium_text" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

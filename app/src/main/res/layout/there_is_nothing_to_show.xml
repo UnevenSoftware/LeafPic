@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_nothing_to_show"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/ll_emoji_easter_egg"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/emoji_easter_egg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/emoji_easter_egg"
+            android:textColor="@color/md_white_1000"
+            android:textSize="@dimen/super_big_text"
+            android:layout_margin="@dimen/small_spacing"
+            android:gravity="center_horizontal"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nothing_to_show_text_emoji_easter_egg"
+            android:text="@string/there_is_nothing_to_show"
+            android:textColor="@color/md_white_1000"
+            android:textSize="@dimen/sub_big_text"
+            android:layout_margin="@dimen/small_spacing"
+            android:gravity="center_horizontal"/>
+    </LinearLayout>
+    <com.jetradar.desertplaceholder.DesertPlaceholder
+        android:id="@+id/nothing_to_show_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:dp_message="@string/there_is_nothing_to_show"
+
+        android:visibility="gone"/>
+</RelativeLayout>
