@@ -12,6 +12,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.util.BitmapUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +52,8 @@ public class ImageFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_photo, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        subsampling.setOrientation(SubsamplingScaleImageView.ORIENTATION_0);
+        int orientation = BitmapUtils.getOrientation(img.getPath());
+        subsampling.setOrientation(orientation);
         subsampling.setImage(ImageSource.uri(img.getUri()));
         subsampling.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
 
