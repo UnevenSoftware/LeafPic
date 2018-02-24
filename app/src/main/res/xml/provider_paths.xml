@@ -5,8 +5,5 @@
         name="media"
         path="."/>
     <external-files-path name="media" path="." />-->
-    <external-files-path
-        name="media"
-        path="." />
 </paths>
 
