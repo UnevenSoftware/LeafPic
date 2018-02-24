@@ -40,7 +40,7 @@ public class LookForMediaJob extends JobService {
             @Override
             public void run() {
                 try {
-                    ArrayList<String> whiteList = HandlingAlbums.getInstance(getApplicationContext()).getFolders(HandlingAlbums.INCLUDED);
+                    ArrayList<String> whiteList = HandlingAlbums.getInstance(getApplicationContext()).getIncludedFolders();
                     for (String s : whiteList) {
                         scanFolder(s);
                         Log.wtf(TAG, "Scanned: " + s);

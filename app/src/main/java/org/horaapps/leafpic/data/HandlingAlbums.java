@@ -1,234 +1,199 @@
 package org.horaapps.leafpic.data;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.orhanobut.hawk.Hawk;
+
+import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by dnld on 27/04/16.
  */
-public class HandlingAlbums extends SQLiteOpenHelper {
+public class HandlingAlbums {
 
-    private static final int DATABASE_VERSION = 12;
-    private static final String DATABASE_NAME = "folders.db";
-    private static final String TABLE_ALBUMS = "folders";
+    public static final String TAG = "handling-albums";
 
-    public static final int EXCLUDED = 1;
-    public static final int INCLUDED = 2;
+    public static final String KEY_EXCLUDED_FOLDERS = "excluded_folders";
+    public static final String KEY_INCLUDED_FOLDERS = "included_folders";
 
-    private static final String ALBUM_PATH = "path";
-    private static final String ALBUM_ID = "id";
-    private static final String ALBUM_PINNED = "pinned";
-    private static final String ALBUM_COVER_PATH = "cover_path";
-    private static final String ALBUM_STATUS = "status";
-    private static final String ALBUM_SORTING_MODE = "sorting_mode";
-    private static final String ALBUM_SORTING_ORDER = "sorting_order";
+
+    private static final String CACHE_KEY_LOCAL_ALBUMS = "local";
+    private static final String CACHE_KEY_HIDDEN_ALBUMS = "hidden";
 
     private static HandlingAlbums mInstance = null;
+    private Context context;
+
+    private HashMap<String, ArrayList<Album>> cachedAlbums;
+    private Disposable cachedAlbumsSubscibe;
+
 
     private HandlingAlbums(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+        cachedAlbums = new HashMap<>(2);
     }
 
     public static HandlingAlbums getInstance(Context context) {
-        if(mInstance == null)
-            mInstance = new HandlingAlbums(context);
+        if (mInstance == null) {
+            mInstance = new HandlingAlbums(context.getApplicationContext());
+        }
         return mInstance;
     }
 
-    @Override public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " +
-                TABLE_ALBUMS + "(" +
-                ALBUM_PATH + " TEXT," +
-                ALBUM_ID + " INTEGER," +
-                ALBUM_PINNED + " INTEGER," +
-                ALBUM_COVER_PATH + " TEXT, " +
-                ALBUM_STATUS + " INTEGER, " +
-                ALBUM_SORTING_MODE + " INTEGER, " +
-                ALBUM_SORTING_ORDER + " INTEGER)");
+    public Observable<Album> getAlbums(boolean hidden, SortingMode sortingMode, SortingOrder sortingOrder) {
 
-        db.execSQL(String.format("CREATE UNIQUE INDEX idx_path ON %s (%s)", TABLE_ALBUMS, ALBUM_PATH));
+        String cacheKey = hidden ? CACHE_KEY_HIDDEN_ALBUMS : CACHE_KEY_LOCAL_ALBUMS;
+
+        if (cachedAlbums.containsKey(cacheKey)) {
+            Log.v(TAG, "using cached albums");
+            return getCachedAlums(cacheKey);
+        } else {
+            Log.v(TAG, "retrieving and caching albums");
+            return getAndCacheAlbums(hidden, sortingMode, sortingOrder);
+        }
     }
 
-    @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALBUMS);
-        db.execSQL("DROP INDEX IF EXISTS idx_path");
-        onCreate(db);
+    private Observable<Album> getCachedAlums(String cacheKey) {
+        return Observable.create((pub) -> {
+            for (Album cachedAlbum : cachedAlbums.get(cacheKey)) {
+                pub.onNext(cachedAlbum);
+            }
+
+            pub.onComplete();
+        });
     }
 
-    public void excludeAlbum(String path) {
-        SQLiteDatabase db = getWritableDatabase();
-        excludeAlbum(db, Album.withPath(path));
-        db.close();
+
+    private Observable<Album> getAndCacheAlbums(boolean hidden, SortingMode sortingMode, SortingOrder sortingOrder) {
+
+        if (cachedAlbumsSubscibe != null && !cachedAlbumsSubscibe.isDisposed())
+            cachedAlbumsSubscibe.dispose();
+
+        ArrayList<Album> albums = new ArrayList<>();
+        Observable<Album> observable = hidden ? CPHelper.getHiddenAlbums(context, getExcludedFolders()) : CPHelper.getAlbums(context, getExcludedFolders(), sortingMode, sortingOrder);
+
+        return Observable.create((pub) -> {
+
+            cachedAlbumsSubscibe = observable.subscribeOn(Schedulers.io())
+                    .map(album -> album.withSettings(getSettings(album.getPath())))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext((album) -> {
+                        pub.onNext(album);
+                        albums.add(album);
+                    })
+                    .doOnError(pub::onError)
+                    .doOnComplete(() -> {
+                        cachedAlbums.put(hidden ? CACHE_KEY_HIDDEN_ALBUMS : CACHE_KEY_LOCAL_ALBUMS, albums);
+                        pub.onComplete();
+                    })
+                    .subscribe();
+
+        });
     }
 
-    private void excludeAlbum(SQLiteDatabase db, Album album) {
-        changeSatusAlbum(db, album, EXCLUDED);
-        // TODO: 3/26/17 notify
+    private void invalidateAlbumsCache() {
+        cachedAlbums = new HashMap<>(2);
     }
 
-    public void addFolderToWhiteList(String path) {
-        SQLiteDatabase db = getWritableDatabase();
-        changeSatusAlbum(db, Album.withPath(path), INCLUDED);
-        db.close();
+    private HashSet<String> getFolders(String key) {
+        return Hawk.get(key, new HashSet<String>());
+    }
+
+    public void removeFolderFormExcluded(String path) {
+        HashSet<String> folders = getFolders(KEY_EXCLUDED_FOLDERS);
+        folders.remove(path);
+        Hawk.put(KEY_EXCLUDED_FOLDERS, folders);
+        invalidateAlbumsCache();
+    }
+
+    public void excludeFolder(String path) {
+        HashSet<String> folders = getFolders(KEY_EXCLUDED_FOLDERS);
+        folders.add(path);
+        Hawk.put(KEY_EXCLUDED_FOLDERS, folders);
+        invalidateAlbumsCache();
+    }
+
+    public void removeFolderFromIncluded(String path) {
+        HashSet<String> folders = getFolders(KEY_INCLUDED_FOLDERS);
+        folders.remove(path);
+        Hawk.put(KEY_INCLUDED_FOLDERS, folders);
+    }
+
+    public void includeFolder(String path) {
+        HashSet<String> folders = getFolders(KEY_INCLUDED_FOLDERS);
+        folders.add(path);
+        Hawk.put(KEY_INCLUDED_FOLDERS, folders);
     }
 
     public ArrayList<String> getExcludedFolders(Context context) {
-        ArrayList<String>  list = new ArrayList<>();
+
+        ArrayList<String> list = new ArrayList<>(getFolders(KEY_EXCLUDED_FOLDERS));
         HashSet<File> storageRoots = StorageHelper.getStorageRoots(context);
         for(File file : storageRoots)
             // it has a lot of garbage
             list.add(new File(file.getPath(), "Android").getPath());
 
-        list.addAll(getFolders(EXCLUDED));
         return list;
     }
 
-    private void changeSatusAlbum(SQLiteDatabase db, Album album, int status) {
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_STATUS, status);
-        if (exist(db, album.getPath())) {
-            db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ album.getPath() });
-        } else {
-            values.put(ALBUM_PATH, album.getPath());
-            values.put(ALBUM_PINNED, 0);
-            values.put(ALBUM_SORTING_MODE, SortingMode.DATE.getValue());
-            values.put(ALBUM_SORTING_ORDER, SortingOrder.DESCENDING.getValue());
-            values.put(ALBUM_ID, album.getId());
-            db.insert(TABLE_ALBUMS, null, values);
-        }
+    public ArrayList<String> getExcludedFolders() {
+        return getExcludedFolders(context);
     }
 
-    public static ContentValues getDefaults(String path) {
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_PATH, path);
-        values.put(ALBUM_PINNED, 0);
-        values.put(ALBUM_SORTING_MODE, SortingMode.DATE.getValue());
-        values.put(ALBUM_SORTING_ORDER, SortingOrder.DESCENDING.getValue());
-        values.put(ALBUM_ID, -1);
-        return values;
-    }
-
-
-    public void clearStatusFolder(String path) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_STATUS, "");
-        if (exist(db, path))
-            db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
-        // NOTE: it make no difference if the folder was included
-        //excludedFolders.remove(path);
-        db.close();
-    }
-
-    /**
-     *
-     * @param status 1 for EXCLUDED, 2 for INCLUDED
-     * @return
-     */
-    public ArrayList<String> getFolders(int status) {
-        ArrayList<String> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cur = db.query(TABLE_ALBUMS, new String[]{ALBUM_PATH}, ALBUM_STATUS + "=?", new String[]{String.valueOf(status)}, null, null, null);
-        if (cur.moveToFirst())
-            do list.add(cur.getString(0)); while (cur.moveToNext());
-        cur.close();
-        db.close();
-        return list;
-    }
-
-    public int getFoldersCount(int status) {
-        int c = 0;
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cur = db.query(TABLE_ALBUMS, new String[]{"count(*)"}, ALBUM_STATUS + "=?", new String[]{String.valueOf(status)}, null, null, null);
-        if (cur.moveToFirst())
-            c = cur.getInt(0);
-        cur.close();
-        db.close();
-        return c;
-    }
-
-    private static boolean exist(SQLiteDatabase db, String path) {
-        Cursor cur = db.rawQuery(
-                String.format("SELECT EXISTS(SELECT 1 FROM %s WHERE %s=? LIMIT 1)", TABLE_ALBUMS, ALBUM_PATH),
-                new String[]{ path });
-        boolean tracked = cur.moveToFirst() &&  cur.getInt(0) == 1;
-        cur.close();
-        return  tracked;
+    public ArrayList<String> getIncludedFolders() {
+        return new ArrayList<>(getFolders(KEY_INCLUDED_FOLDERS));
     }
 
     public void setPined(String path, boolean pinned) {
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_PINNED, pinned ? 1 : 0);
-        setValue(path, values);
+        AlbumSettings settings = getSettings(path);
+        settings.pinned = pinned;
+        saveSettings(path, settings);
     }
 
     public void setCover(String path, String mediaPath) {
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_COVER_PATH, mediaPath);
-        setValue(path, values);
+        AlbumSettings settings = getSettings(path);
+        settings.coverPath = mediaPath;
+        saveSettings(path, settings);
     }
 
     public void setSortingMode(String path, int column) {
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_SORTING_MODE, column);
-        setValue(path, values);
+        AlbumSettings settings = getSettings(path);
+        settings.sortingMode = column;
+        saveSettings(path, settings);
     }
 
     public void setSortingOrder(String path, int sortingOrder) {
-        ContentValues values = new ContentValues();
-        values.put(ALBUM_SORTING_ORDER, sortingOrder);
-        setValue(path, values);
+        AlbumSettings settings = getSettings(path);
+        settings.sortingOrder = sortingOrder;
+        saveSettings(path, settings);
     }
 
-    private void setValue(String path, ContentValues values) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(TABLE_ALBUMS, values, ALBUM_PATH+"=?", new String[]{ path });
-        db.close();
+    private static AlbumSettings getSettings(String path) {
+//        Timer timer = new Timer("new-settings");
+//        timer.start();
+        return Hawk.get(getSettingsKey(path), AlbumSettings.getDefaults());
+//        timer.stop();
+        //albumSettings;
     }
 
-    @NonNull public static AlbumSettings getSettings(SQLiteDatabase db, String path) {
-        Cursor cursor = null;
-        try {
-            if (exist(db, path)) {
-                cursor = db.query(
-                        TABLE_ALBUMS,
-                        StringUtils.asArray(
-                                ALBUM_COVER_PATH,
-                                ALBUM_SORTING_MODE,
-                                ALBUM_SORTING_ORDER,
-                                ALBUM_PINNED),
-                        ALBUM_PATH + "=?",
-                        new String[]{path},
-                        null, null, null);
-
-                if (cursor.moveToFirst())
-                    return new AlbumSettings(
-                            cursor.getString(0),
-                            cursor.getInt(1),
-                            cursor.getInt(2),
-                            cursor.getInt(3));
-            } else
-                db.insert(
-                        TABLE_ALBUMS,
-                        null,
-                        getDefaults(path));
-
-            return AlbumSettings.getDefaults();
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
+    private static void saveSettings(String path, AlbumSettings settings) {
+        Hawk.put(getSettingsKey(path), settings);
     }
+
+    private static String getSettingsKey(String path) {
+        return String.format("%s_%s", "albums_settings", path);
+    }
+
 }

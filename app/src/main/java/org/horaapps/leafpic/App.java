@@ -7,6 +7,7 @@ import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.Iconics;
 import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.NoEncryption;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.horaapps.leafpic.util.preferences.Prefs;
@@ -46,6 +47,6 @@ public class App extends Application {
 
     private void initialiseStorage() {
         Prefs.init(this);
-        Hawk.init(this).build();
+        Hawk.init(this).setEncryption(new NoEncryption()).build();
     }
 }

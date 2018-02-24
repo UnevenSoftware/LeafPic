@@ -38,7 +38,6 @@ import java.util.ArrayList;
  */
 public class BlackWhiteListActivity extends SharedMediaActivity {
 
-    public static final String EXTRA_TYPE = "typeExcluded";
 
     private RecyclerView mRecyclerView;
     private ItemsAdapter adapter;
@@ -53,15 +52,20 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         toolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.excluded_albums);
         initUi();
-        loadFolders(getIntent().getIntExtra(EXTRA_TYPE, HandlingAlbums.EXCLUDED));
+        loadFolders(true);
     }
 
-    private void loadFolders(int type) {
-        this.typeExcluded = type == HandlingAlbums.EXCLUDED;
-        folders = HandlingAlbums.getInstance(getApplicationContext()).getFolders(type);
+    private void loadFolders(boolean exluded) {
+        this.typeExcluded = exluded;
+
+        if (isExcludedMode()) {
+            setTitle(getString(R.string.excluded_items));
+            folders = HandlingAlbums.getInstance(getApplicationContext()).getExcludedFolders();
+        } else {
+            setTitle(getString(R.string.white_list));
+            folders = HandlingAlbums.getInstance(getApplicationContext()).getIncludedFolders();
+        }
         checkNothing();
-        if (isExcludedMode()) setTitle(getString(R.string.excluded_items));
-        else setTitle(getString(R.string.white_list));
         adapter.notifyDataSetChanged();
         supportInvalidateOptionsMenu();
     }
@@ -107,7 +111,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
                     }
                 }
             });
-            HandlingAlbums.getInstance(getApplicationContext()).addFolderToWhiteList(dir.getPath());
+            HandlingAlbums.getInstance(getApplicationContext()).includeFolder(dir.getPath());
             folders.add(0, dir.getPath());
             adapter.notifyItemInserted(0);
             checkNothing();
@@ -156,7 +160,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
                         }).show();
                 return true;
             case R.id.action_toggle:
-                loadFolders(isExcludedMode() ? HandlingAlbums.INCLUDED : HandlingAlbums.EXCLUDED);
+                loadFolders(isExcludedMode());
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -203,7 +207,12 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         private View.OnClickListener listener = v -> {
             String path = (String) v.getTag();
             int i = folders.indexOf(path);
-            HandlingAlbums.getInstance(getApplicationContext()).clearStatusFolder(path);
+            if (isExcludedMode()) {
+                HandlingAlbums.getInstance(getApplicationContext()).removeFolderFormExcluded(path);
+            } else {
+                HandlingAlbums.getInstance(getApplicationContext()).removeFolderFromIncluded(path);
+            }
+
             folders.remove(i);
             notifyItemRemoved(i);
             checkNothing();

@@ -54,7 +54,7 @@ public class CPHelper {
 
     }
 
-    private static Observable<Album> getAlbums(Context context, ArrayList<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
+    public static Observable<Album> getAlbums(Context context, ArrayList<String> excludedAlbums, SortingMode sortingMode, SortingOrder sortingOrder) {
 
         Query.Builder query = new Query.Builder()
                 .uri(MediaStore.Files.getContentUri("external"))
@@ -93,7 +93,7 @@ public class CPHelper {
     }
 
 
-    private static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
+    public static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
 
         boolean includeVideo = Prefs.showVideos();
         return Observable.create(subscriber -> {

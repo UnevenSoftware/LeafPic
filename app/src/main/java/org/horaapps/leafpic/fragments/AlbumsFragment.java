@@ -3,9 +3,9 @@ package org.horaapps.leafpic.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -32,12 +32,12 @@ import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
-import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
+import org.horaapps.leafpic.util.Timer;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
@@ -104,10 +104,11 @@ public class AlbumsFragment extends BaseFragment {
 
     private void displayAlbums() {
         adapter.clear();
-        SQLiteDatabase db = HandlingAlbums.getInstance(getContext().getApplicationContext()).getReadableDatabase();
-        CPHelper.getAlbums(getContext(), hidden, excuded, sortingMode(), sortingOrder())
+
+        Timer timer = new Timer("load-albums");
+        timer.start();
+        HandlingAlbums.getInstance(getContext()).getAlbums(hidden, sortingMode(), sortingOrder())
                 .subscribeOn(Schedulers.io())
-                .map(album -> album.withSettings(HandlingAlbums.getSettings(db, album.getPath())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         album -> adapter.add(album),
@@ -116,17 +117,18 @@ public class AlbumsFragment extends BaseFragment {
                             throwable.printStackTrace();
                         },
                         () -> {
-                            db.close();
                             if (getNothingToShowListener() != null)
                                 getNothingToShowListener().changedNothingToShow(getCount() == 0);
                             refresh.setRefreshing(false);
-
                             Hawk.put(hidden ? "h" : "albums", adapter.getAlbumsPaths());
+
+
+                            timer.stop();
                         });
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         displayAlbums();
     }
@@ -325,7 +327,7 @@ public class AlbumsFragment extends BaseFragment {
                 if (!hidden) {
                     hideDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.exclude).toUpperCase(), (dialog, which) -> {
                         for (Album album : adapter.getSelectedAlbums()) {
-                            db().excludeAlbum(album.getPath());
+                            db().excludeFolder(album.getPath());
                             excuded.add(album.getPath());
                         }
                         adapter.removeSelectedAlbums();
@@ -400,14 +402,14 @@ public class AlbumsFragment extends BaseFragment {
 
                     if (adapter.getSelectedCount() > 1) {
                         for (Album album : adapter.getSelectedAlbums()) {
-                            db().excludeAlbum(album.getPath());
+                            db().excludeFolder(album.getPath());
                             excuded.add(album.getPath());
                         }
                         adapter.removeSelectedAlbums();
 
                     } else {
                         String path = spinnerParents.getSelectedItem().toString();
-                        db().excludeAlbum(path);
+                        db().excludeFolder(path);
                         excuded.add(path);
                         adapter.removeAlbumsThatStartsWith(path);
                         adapter.forceSelectedCount(0);
