@@ -51,6 +51,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.MimeTypeUtils;
@@ -176,9 +177,10 @@ public class RvMediaFragment extends BaseFragment {
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-        if(Prefs.animationsEnabled()) {
-            rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
-        }
+        rv.setItemAnimator(
+                AnimationUtils.getItemAnimator(
+                        new LandingAnimator(new OvershootInterpolator(1f))
+                ));
 
         adapter = new MediaAdapter(getContext());
 

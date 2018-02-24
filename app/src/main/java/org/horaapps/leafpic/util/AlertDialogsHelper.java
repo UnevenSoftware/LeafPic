@@ -116,7 +116,10 @@ public class AlertDialogsHelper {
         RecyclerView rv = dialogLayout.findViewById(R.id.rv_progress);
         rv.setLayoutManager(new LinearLayoutManager(activity));
         rv.setHasFixedSize(true);
-        rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+        rv.setItemAnimator(
+                AnimationUtils.getItemAnimator(
+                        new LandingAnimator(new OvershootInterpolator(1f))
+                ));
         rv.setAdapter(adapter);
 
 
