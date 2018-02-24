@@ -36,6 +36,7 @@ import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.preferences.Prefs;
@@ -175,7 +176,10 @@ public class AlbumsFragment extends BaseFragment {
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         if(Prefs.animationsEnabled()) {
-            rv.setItemAnimator(new LandingAnimator(new OvershootInterpolator(1f)));
+            rv.setItemAnimator(
+                    AnimationUtils.getItemAnimator(
+                            new LandingAnimator(new OvershootInterpolator(1f))
+                    ));
         }
 
         adapter = new AlbumsAdapter(

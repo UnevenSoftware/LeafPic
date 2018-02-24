@@ -55,6 +55,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -242,9 +243,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(position);
-        if(Prefs.animationsEnabled()) {
-            mViewPager.setPageTransformer(true, new DepthPageTransformer());
-        }
+        mViewPager.setPageTransformer(true, AnimationUtils.getPageTransformer(new DepthPageTransformer()));
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

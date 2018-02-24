@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +26,15 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.filter.ImageFileFilter;
 import org.horaapps.leafpic.data.provider.ContentProviderHelper;
+import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ui.ThemedIcon;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 /**
  * Created by dnld on 01/04/16.
@@ -176,7 +179,10 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter((adapter = new ItemsAdapter()));
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(
+                AnimationUtils.getItemAnimator(
+                        new LandingAnimator(new OvershootInterpolator(1f))
+                ));
     }
 
     @CallSuper
