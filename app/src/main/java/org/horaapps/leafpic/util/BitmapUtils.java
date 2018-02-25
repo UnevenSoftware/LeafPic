@@ -43,8 +43,9 @@ public class BitmapUtils {
 
     public static int getOrientation(Uri imgPath, Context ctx){
         ExifInterface exif;
+        InputStream in = null;
         try {
-            InputStream in = ctx.getContentResolver().openInputStream(imgPath);
+            in = ctx.getContentResolver().openInputStream(imgPath);
             exif = new ExifInterface( in );
             int orientation = exif.getAttributeInt( ExifInterface.TAG_ORIENTATION, 1 );
             int rotation = 0;
@@ -65,6 +66,12 @@ public class BitmapUtils {
             return rotation;
         } catch ( IOException e ) {
             e.printStackTrace();
+        }finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {}
+            }
         }
         return 0;
     }
