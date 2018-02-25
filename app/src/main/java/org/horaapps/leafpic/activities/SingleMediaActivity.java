@@ -769,12 +769,8 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private void hideSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
-                if(Prefs.animationsEnabled()){
                     toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
                             .setDuration(200).start();
-                } else {
-                    getSupportActionBar().hide();
-                }
 
                 getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
                     @Override
@@ -809,12 +805,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
     private void showSystemUI() {
         runOnUiThread(new Runnable() {
             public void run() {
-                if (Prefs.animationsEnabled()) {
-                    toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
+                toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
                             .setDuration(240).start();
-                } else {
-                    getSupportActionBar().show();
-                }
+
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
