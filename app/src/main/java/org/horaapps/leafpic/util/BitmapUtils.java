@@ -1,13 +1,16 @@
 package org.horaapps.leafpic.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
+import android.net.Uri;
 
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by dnld on 3/25/17.
@@ -38,10 +41,11 @@ public class BitmapUtils {
         return dstBmp;
     }
 
-    public static int getOrientation(String imgPath){
+    public static int getOrientation(Uri imgPath, Context ctx){
         ExifInterface exif;
         try {
-            exif = new ExifInterface( imgPath );
+            InputStream in = ctx.getContentResolver().openInputStream(imgPath);
+            exif = new ExifInterface( in );
             int orientation = exif.getAttributeInt( ExifInterface.TAG_ORIENTATION, 1 );
             int rotation = 0;
             switch ( orientation ) {

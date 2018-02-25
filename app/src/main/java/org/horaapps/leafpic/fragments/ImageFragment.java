@@ -2,6 +2,7 @@ package org.horaapps.leafpic.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.BitmapUtils;
+
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +55,7 @@ public class ImageFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_photo, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        int orientation = BitmapUtils.getOrientation(img.getPath());
+        int orientation = BitmapUtils.getOrientation(img.getUri(),this.getContext());
         subsampling.setOrientation(orientation);
         subsampling.setImage(ImageSource.uri(img.getUri()));
         subsampling.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
