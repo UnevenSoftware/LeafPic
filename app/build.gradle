@@ -71,6 +71,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    //exifInterface
+    implementation "com.android.support:exifinterface:$supportVersion"
     // google & support
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:cardview-v7:$supportVersion"
