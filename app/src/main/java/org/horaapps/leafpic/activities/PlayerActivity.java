@@ -85,6 +85,7 @@ import org.horaapps.leafpic.views.videoplayer.CustomPlayBackController;
 import org.horaapps.leafpic.views.videoplayer.TrackSelectionHelper;
 import org.horaapps.liz.ThemedActivity;
 
+import java.io.File;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -477,8 +478,11 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
 
             case R.id.action_share:
                 Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType(getIntent().getType());
-                share.putExtra(Intent.EXTRA_STREAM, getIntent().getData());
+                final File photofile = new File(getFilesDir(),"foo.jpg");
+                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photofile));
+                final File vidfile = new File(getFilesDir(),"video.mp4");
+                share.setType("*/*");
+                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(vidfile));
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
