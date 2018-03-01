@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.support.media.ExifInterface;
 import android.net.Uri;
+import android.support.media.ExifInterface;
 
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
@@ -41,38 +41,27 @@ public class BitmapUtils {
         return dstBmp;
     }
 
-    public static int getOrientation(Uri imgPath, Context ctx){
-        ExifInterface exif;
-        InputStream in = null;
-        try {
-            in = ctx.getContentResolver().openInputStream(imgPath);
-            exif = new ExifInterface( in );
+    public static int getOrientation(Uri uri, Context ctx){
+
+        try (InputStream in = ctx.getContentResolver().openInputStream(uri)) {
+            if (in == null) {
+                return 0;
+            }
+            ExifInterface exif = new ExifInterface(in);
             int orientation = exif.getAttributeInt( ExifInterface.TAG_ORIENTATION, 1 );
-            int rotation = 0;
+
             switch ( orientation ) {
                 case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotation = SubsamplingScaleImageView.ORIENTATION_180;
-                    break;
+                    return SubsamplingScaleImageView.ORIENTATION_180;
                 case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotation = SubsamplingScaleImageView.ORIENTATION_90;
-                    break;
+                    return SubsamplingScaleImageView.ORIENTATION_90;
                 case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotation = SubsamplingScaleImageView.ORIENTATION_270;
-                    break;
+                    return SubsamplingScaleImageView.ORIENTATION_270;
                 default:
-                    rotation = SubsamplingScaleImageView.ORIENTATION_0;
-                    break;
+                    return SubsamplingScaleImageView.ORIENTATION_0;
             }
-            return rotation;
         } catch ( IOException e ) {
-            e.printStackTrace();
-        }finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ignored) {}
-            }
+            return 0;
         }
-        return 0;
     }
 }
