@@ -7,8 +7,8 @@
     android:layout_height="match_parent">
 
     <org.horaapps.liz.ui.ThemedIcon
-        android:layout_height="@dimen/icon_width_height"
-        android:layout_width="@dimen/icon_width_height"
+        android:layout_height="@dimen/icon_size"
+        android:layout_width="@dimen/icon_size"
         android:id="@+id/volume_image"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="@dimen/medium_spacing"

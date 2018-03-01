@@ -381,8 +381,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_support_report_bug_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-bug-report"
                             android:layout_marginLeft="@dimen/big_spacing"
@@ -423,8 +423,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_support_translate_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-flag"
                             android:layout_marginLeft="@dimen/big_spacing"
@@ -465,8 +465,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_support_rate_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-star"
                             android:layout_marginLeft="@dimen/big_spacing"
@@ -507,8 +507,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_support_github_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="faw-github"
                             android:layout_marginLeft="@dimen/big_spacing"
@@ -549,8 +549,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_support_donate_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="faw-gift"
                             android:layout_marginLeft="@dimen/big_spacing"
@@ -591,8 +591,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_license_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-insert-drive-file"
                             android:layout_marginLeft="@dimen/big_spacing"
@@ -633,8 +633,8 @@
 
                         <org.horaapps.liz.ui.ThemedIcon
                             android:id="@+id/about_changelog_icon"
-                            android:layout_width="@dimen/icon_width_height"
-                            android:layout_height="@dimen/icon_width_height"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             app:iiv_icon="gmd-new-releases"
                             android:layout_marginLeft="@dimen/big_spacing"

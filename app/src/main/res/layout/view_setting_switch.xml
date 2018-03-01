@@ -14,8 +14,8 @@
         android:paddingRight="@dimen/medium_spacing">
         <org.horaapps.leafpic.views.themeable.ThemedSettingsIcon
             android:id="@+id/icon"
-            android:layout_width="@dimen/icon_width_height"
-            android:layout_height="@dimen/icon_width_height"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_marginRight="@dimen/big_spacing"
             android:layout_marginLeft="@dimen/big_spacing"

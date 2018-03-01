@@ -124,8 +124,8 @@
                             <org.horaapps.liz.ui.ThemedIcon
                                 android:id="@+id/affix_vertical_icon"
                                 app:iiv_icon="gmd-view-agenda"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_width="@dimen/icon_size"
+                                android:layout_height="@dimen/icon_size"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"/>
@@ -181,8 +181,8 @@
                             <org.horaapps.liz.ui.ThemedIcon
                                 android:id="@+id/save_here_icon"
                                 app:iiv_icon="gmd-save"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_width="@dimen/icon_size"
+                                android:layout_height="@dimen/icon_size"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing" />
@@ -244,8 +244,8 @@
                             <org.horaapps.liz.ui.ThemedIcon
                                 android:id="@+id/affix_format_icon"
                                 app:iiv_icon="gmd-dns"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_width="@dimen/icon_size"
+                                android:layout_height="@dimen/icon_size"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing" />
@@ -312,8 +312,8 @@
                             <org.horaapps.liz.ui.ThemedIcon
                                 android:id="@+id/affix_quality_icon"
                                 app:iiv_icon="gmd-high-quality"
-                                android:layout_width="@dimen/icon_width_height"
-                                android:layout_height="@dimen/icon_width_height"
+                                android:layout_width="@dimen/icon_size"
+                                android:layout_height="@dimen/icon_size"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"/>

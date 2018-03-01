@@ -60,8 +60,8 @@
 
             <org.horaapps.liz.ui.ThemedIcon
                 android:id="@+id/toggle_hidden_icon"
-                android:layout_height="@dimen/icon_width_height"
-                android:layout_width="@dimen/icon_width_height"
+                android:layout_height="@dimen/icon_size"
+                android:layout_width="@dimen/icon_size"
                 android:clickable="false"
                 app:iiv_icon="gmd-folder"
                 app:iiv_color="@color/md_white_1000"
@@ -93,8 +93,8 @@
 
                 <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/create_new_folder_icon"
-                    android:layout_height="@dimen/icon_width_height"
-                    android:layout_width="@dimen/icon_width_height"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_width="@dimen/icon_size"
                     android:layout_marginEnd="@dimen/big_spacing"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
