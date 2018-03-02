@@ -7,8 +7,6 @@ import android.support.v4.content.FileProvider;
 
 import com.commonsware.cwac.provider.LegacyCompatCursorWrapper;
 
-import org.horaapps.leafpic.BuildConfig;
-
 import java.io.File;
 
 /**
@@ -23,6 +21,6 @@ public class LegacyCompatFileProvider extends FileProvider {
     }
 
     public static Uri getUri(Context context, File file) {
-        return getUriForFile(context, ApplicationData.PACKAGE_NAME + ".provider", file);
+        return getUriForFile(context, ApplicationUtils.getPackageName() + ".provider", file);
     }
 }

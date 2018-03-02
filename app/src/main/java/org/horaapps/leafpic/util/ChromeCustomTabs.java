@@ -44,7 +44,7 @@ public class ChromeCustomTabs {
         };
 
         // Bind the Chrome Custom Tabs service
-        CustomTabsClient.bindCustomTabsService(context, ApplicationData.PACKAGE_NAME, serviceConnection);
+        CustomTabsClient.bindCustomTabsService(context, ApplicationUtils.getPackageName(), serviceConnection);
 
         mCustomTabsIntent = new CustomTabsIntent.Builder()
                 .setShowTitle(true)

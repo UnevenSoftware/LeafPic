@@ -19,4 +19,19 @@
     <dimen name="nav_entry_icon_size">20dp</dimen>
     <dimen name="nav_entry_text_padding">3dp</dimen>
 
+    <!-- About -->
+    <dimen name="developer_display_image_size">100dp</dimen>
+    <dimen name="developer_image_margin">15dp</dimen>
+    <dimen name="developer_name_margin">20dp</dimen>
+    <dimen name="developer_description_padding">15dp</dimen>
+    <dimen name="developer_links_spacing">15dp</dimen>
+    <dimen name="developer_links_small_padding">5dp</dimen>
+    <dimen name="developer_small_Spacing">10dp</dimen>
+    <dimen name="developer_card_spacing">10dp</dimen>
+    <dimen name="developer_card_elevation">5dp</dimen>
+    <dimen name="about_link_icon_size">25dp</dimen>
+    <dimen name="about_link_icon_left_margin">14dp</dimen>
+    <dimen name="about_link_icon_right_margin">24dp</dimen>
+    <dimen name="about_link_padding">8dp</dimen>
+
 </resources>

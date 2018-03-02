@@ -1,2 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+
+    <style name="AboutCardStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/developer_card_spacing</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="android:foreground">@drawable/ripple</item>
+    </style>
+
 </resources>

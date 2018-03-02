@@ -9,7 +9,7 @@ import com.mikepenz.iconics.Iconics;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.leakcanary.LeakCanary;
 
-import org.horaapps.leafpic.util.ApplicationData;
+import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 
 /**
@@ -24,7 +24,7 @@ public class App extends Application {
         super.onCreate();
         mInstance = this;
 
-        ApplicationData.init(this);
+        ApplicationUtils.init(this);
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.

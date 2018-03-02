@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/about_background"
     android:layout_width="match_parent"
@@ -12,289 +11,149 @@
         layout="@layout/toolbar"
         android:background="@color/md_dark_appbar"
         android:windowActionBarOverlay="true" />
+
     <ScrollView
         android:id="@+id/aboutAct_scrollView"
-        android:scrollbarSize="@dimen/scroll_bar_size"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbarSize="@dimen/scroll_bar_size">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <!--ABOUT APP REDESIGN-->
             <android.support.v7.widget.CardView
                 android:id="@+id/about_app_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
+                android:clickable="true"
+                android:foreground="@drawable/ripple"
                 android:paddingBottom="@dimen/card_spacing"
                 app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <ImageView
                             android:id="@+id/leafpic_header"
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
                             android:scaleType="centerCrop" />
+
                         <ImageView
                             android:layout_width="200dp"
                             android:layout_height="200dp"
-                            android:src="@drawable/leaf_pic"
-                            android:scaleType="fitXY"
-                            android:padding="@dimen/sub_medium_spacing"
                             android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true" />
+                            android:layout_centerHorizontal="true"
+                            android:padding="@dimen/sub_medium_spacing"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/leaf_pic" />
                     </RelativeLayout>
+
                     <TextView
                         android:id="@+id/about_app_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/md_dark_primary_text"
-                        android:text="LeafPic Gallery"
-                        android:textSize="@dimen/big_text"
-                        android:textStyle="bold"
                         android:layout_gravity="center"
-                        android:padding="@dimen/sub_small_spacing" />
+                        android:padding="@dimen/sub_small_spacing"
+                        android:text="LeafPic Gallery"
+                        android:textColor="@color/md_dark_primary_text"
+                        android:textSize="@dimen/big_text"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/about_app_light_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/sub_small_spacing"
                         android:text="@string/app_light_description"
                         android:textColor="@color/md_dark_primary_text"
-                        android:textSize="@dimen/medium_text"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/sub_small_spacing" />
+                        android:textSize="@dimen/medium_text" />
+
                     <TextView
                         android:id="@+id/about_version_item_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/sub_small_spacing"
                         android:text="v1.0"
                         android:textColor="@color/md_grey_400"
-                        android:textSize="@dimen/medium_text"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/sub_small_spacing" />
+                        android:textSize="@dimen/medium_text" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <!--DONALD SHTJEFNI-->
+            <!-- Donald -->
             <android.support.v7.widget.CardView
                 android:id="@+id/about_donald_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                android:foreground="@drawable/ripple"
-                android:clickable="true">
-                <LinearLayout
+                style="@style/AboutCardStyle">
+
+                <org.horaapps.leafpic.views.AboutDeveloper
+                    android:id="@+id/about_developer_donald"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/donald_header_img"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:scaleType="centerCrop" />
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/donald_profile_img"
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="105dp"
-                            app:civ_border_width="1dp" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_toRightOf="@id/donald_profile_img"
-                            android:layout_marginTop="158dp">
-                            <TextView
-                                android:id="@+id/donald_shtjefni"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/sub_big_text"
-                                android:textStyle="bold"
-                                android:text="Donald Shtjefni"/>
-                            <TextView
-                                android:id="@+id/donald_shtjefni_role"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/medium_text"
-                                android:text="@string/donald_role"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-                    <TextView
-                        android:id="@+id/donald_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/sub_big_spacing"
-                        android:layout_marginLeft="@dimen/sub_big_spacing"
-                        android:layout_marginRight="@dimen/sub_big_spacing"
-                        android:text="@string/about_author_donald_description"
-                        android:textSize="@dimen/sub_medium_text"
-                        />
-                    <!--DONALD LINKS  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/sub_medium_spacing">
-                        <TextView
-                            android:id="@+id/about_author_donald_mail_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/send_email"
-                            android:textSize="@dimen/medium_text"
-                            android:textStyle="bold"
-                            android:padding="@dimen/sub_medium_spacing"
-                            android:background="@drawable/ripple"
-                            android:clickable="true" />
-                        <TextView
-                            android:id="@+id/about_author_donald_googleplus_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="GOOGLE +"
-                            android:textSize="@dimen/medium_text"
-                            android:padding="@dimen/sub_medium_spacing"
-                            android:background="@drawable/ripple"
-                            android:clickable="true" />
-                        <TextView
-                            android:id="@+id/about_author_donald_github_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="GITHUB"
-                            android:textSize="@dimen/medium_text"
-                            android:padding="@dimen/sub_medium_spacing"
-                            android:background="@drawable/ripple"
-                            android:clickable="true" />
-                    </LinearLayout>
-                </LinearLayout>
+                    app:description="@string/about_author_donald_description"
+                    app:displayImage="@drawable/donald_profile"
+                    app:headerImage="@drawable/donald_header"
+                    app:name="@string/developer_donald_name"
+                    app:role="@string/donald_role" />
+
             </android.support.v7.widget.CardView>
 
-            <!--GILBERT NDRESAJ-->
+            <!-- Calvin -->
             <android.support.v7.widget.CardView
-                android:id="@+id/about_gilbert_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                android:foreground="@drawable/ripple"
-                android:clickable="true">
-                <LinearLayout
+                android:id="@+id/about_calvin_card"
+                style="@style/AboutCardStyle">
+
+                <org.horaapps.leafpic.views.AboutDeveloper
+                    android:id="@+id/about_developer_calvin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/gilbert_header_img"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:scaleType="centerCrop" />
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/gilbert_profile_img"
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="105dp"
-                            app:civ_border_width="1dp" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_toRightOf="@id/gilbert_profile_img"
-                            android:layout_marginTop="158dp">
-                            <TextView
-                                android:id="@+id/gilbert_ndresaj"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/sub_big_text"
-                                android:textStyle="bold"
-                                android:text="Gilbert Ndresaj"/>
-                            <TextView
-                                android:id="@+id/gilbert_ndresaj_role"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/medium_text"
-                                android:text="@string/gilbert_role"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-                    <TextView
-                        android:id="@+id/gilbert_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/sub_big_spacing"
-                        android:layout_marginLeft="@dimen/sub_big_spacing"
-                        android:layout_marginRight="@dimen/sub_big_spacing"
-                        android:text="@string/about_author_gilbert_description"
-                        android:textSize="@dimen/sub_medium_text" />
-                    <!--GILBERT LINKS  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/sub_medium_spacing">
-                        <TextView
-                            android:id="@+id/about_author_gilbert_mail_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/send_email"
-                            android:textSize="@dimen/medium_text"
-                            android:textStyle="bold"
-                            android:padding="@dimen/sub_medium_spacing"
-                            android:background="@drawable/ripple"
-                            android:clickable="true" />
-                        <TextView
-                            android:id="@+id/about_author_gilbert_googleplus_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="GOOGLE +"
-                            android:textSize="@dimen/medium_text"
-                            android:padding="@dimen/sub_medium_spacing"
-                            android:background="@drawable/ripple"
-                            android:clickable="true" />
-                        <TextView
-                            android:id="@+id/about_author_gilbert_github_item"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="GITHUB"
-                            android:textSize="@dimen/medium_text"
-                            android:padding="@dimen/sub_medium_spacing"
-                            android:background="@drawable/ripple"
-                            android:clickable="true" />
-                    </LinearLayout>
-                </LinearLayout>
+                    app:description="@string/about_developer_calvin_description"
+                    app:displayImage="@drawable/calvin_profile"
+                    app:headerImage="@drawable/calvin_header"
+                    app:name="@string/developer_calvin_name"
+                    app:role="@string/calvin_role" />
+
+            </android.support.v7.widget.CardView>
+
+            <!-- Gilbert -->
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_gilbert_card"
+                style="@style/AboutCardStyle">
+
+                <org.horaapps.leafpic.views.AboutDeveloper
+                    android:id="@+id/about_developer_gilbert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:description="@string/about_author_gilbert_description"
+                    app:displayImage="@drawable/gilbert_profile"
+                    app:headerImage="@drawable/gilbert_header"
+                    app:name="@string/developer_gilbert_name"
+                    app:role="@string/gilbert_role" />
+
             </android.support.v7.widget.CardView>
 
             <!--SPECIAL THANKS-->
             <android.support.v7.widget.CardView
                 android:id="@+id/about_special_thanks_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                android:foreground="@drawable/ripple"
-                android:clickable="true">
+                style="@style/AboutCardStyle">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/about_special_thanks_title"
                         android:layout_width="match_parent"
@@ -306,40 +165,41 @@
                         android:textSize="@dimen/medium_text"
                         android:textStyle="bold" />
 
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/ll_patryk_goworowski"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/sub_big_spacing"
+                        android:orientation="vertical"
                         android:paddingEnd="@dimen/sub_big_spacing"
-                        android:orientation="vertical">
+                        android:paddingStart="@dimen/sub_big_spacing">
                         <!--Patryk Goworowski -->
                         <TextView
                             android:id="@+id/about_patryk_goworowski_item_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/small_spacing"
                             android:text="@string/about_special_thanks_patryk_goworowski_sub"
                             android:textColor="@color/md_grey_400"
-                            android:textSize="@dimen/sub_medium_text"
-                            android:layout_marginTop="@dimen/small_spacing" />
+                            android:textSize="@dimen/sub_medium_text" />
+
                         <TextView
                             android:id="@+id/about_community_members_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/small_spacing"
                             android:text="@string/about_special_thanks_members_sub"
                             android:textColor="@color/md_grey_400"
-                            android:layout_marginTop="@dimen/small_spacing"
                             android:textSize="@dimen/sub_medium_text" />
+
                         <TextView
                             android:id="@+id/about_community_you_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/medium_spacing"
+                            android:layout_marginTop="@dimen/small_spacing"
                             android:text="@string/about_special_thanks_you_sub"
                             android:textColor="@color/md_grey_400"
-                            android:textSize="@dimen/sub_medium_text"
-                            android:layout_marginTop="@dimen/small_spacing"
-                            android:layout_marginBottom="@dimen/medium_spacing" />
+                            android:textSize="@dimen/sub_medium_text" />
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -350,10 +210,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_spacing"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
+                android:clickable="true"
                 android:foreground="@drawable/ripple"
-                android:clickable="true">
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -369,301 +230,69 @@
                         android:textColor="@color/md_dark_background"
                         android:textSize="@dimen/medium_text"
                         android:textStyle="bold" />
-                    <!--REPORT BUG-->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_report_bug"
+
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_report_bug"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/about_support_report_bug_sub"
+                        app:linkIcon="@string/icon_bug_report"
+                        app:linkTitle="@string/about_support_report_bug" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_support_report_bug_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-bug-report"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/medium_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/about_support_report_bug_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_report_bug"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_support_report_bug_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_report_bug_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- TRANSLATE -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_support_translate"
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_translate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/about_support_translate_sub"
+                        app:linkIcon="@string/icon_translate"
+                        app:linkTitle="@string/about_support_translate" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_support_translate_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-flag"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/about_support_translate_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_translate"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_support_translate_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_translate_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- RATE -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_support_rate"
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/about_support_rate_sub"
+                        app:linkIcon="@string/icon_rate"
+                        app:linkTitle="@string/about_support_rate" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_support_rate_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-star"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/about_support_rate_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_rate"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_support_rate_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_rate_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- GIT HUB -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_support_github"
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_github"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/about_support_github_sub"
+                        app:linkIcon="@string/icon_github"
+                        app:linkTitle="@string/about_support_github" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_support_github_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="faw-github"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/about_support_github_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_github"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_support_github_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_support_github_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- DONATE -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_support_donate"
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_donate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/donate_sub_text"
+                        app:linkIcon="@string/icon_donate"
+                        app:linkTitle="@string/donate" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_support_donate_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="faw-gift"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/about_support_donate_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/donate"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_support_donate_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/donate_sub_text"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- LICENSE -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_license"
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_license"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/about_license_sub"
+                        app:linkIcon="@string/icon_license"
+                        app:linkTitle="@string/about_license" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_license_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-insert-drive-file"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing">
-                            <TextView
-                                android:id="@+id/about_license_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_license"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_license_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_license_sub"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- CHANGELOG -->
-                    <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/ll_about_changelog"
+                    <org.horaapps.leafpic.views.AboutLink
+                        android:id="@+id/about_link_changelog"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/ripple"
-                        android:clickable="true">
+                        app:linkDescription="@string/changelog"
+                        app:linkIcon="@string/icon_changelog"
+                        app:linkTitle="@string/changelog" />
 
-                        <org.horaapps.liz.ui.ThemedIcon
-                            android:id="@+id/about_changelog_icon"
-                            android:layout_width="@dimen/icon_size"
-                            android:layout_height="@dimen/icon_size"
-                            android:layout_gravity="center_vertical"
-                            app:iiv_icon="gmd-new-releases"
-                            android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingTop="@dimen/small_spacing"
-                            android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/medium_spacing">
-                            <TextView
-                                android:id="@+id/about_changelog_item"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/changelog"
-                                android:textColor="@color/md_dark_background"
-                                android:textSize="@dimen/medium_text" />
-                            <TextView
-                                android:id="@+id/about_changelog_item_sub"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/changelog"
-                                android:textColor="@color/md_grey_400"
-                                android:textSize="@dimen/sub_medium_text" />
-                        </LinearLayout>
-                    </LinearLayout>
                 </LinearLayout>
+
             </android.support.v7.widget.CardView>
+
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>
