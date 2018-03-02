@@ -48,6 +48,8 @@ import java.util.Locale;
 import in.uncod.android.bypass.Bypass;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
+import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_CHANGELOG;
+
 /**
  * Created by dnld on 19/05/16.
  */
@@ -255,7 +257,7 @@ public class AlertDialogsHelper {
         try {
             markdownString = getChangeLogFromAssets(activity);
         } catch (IOException e) {
-            CustomTabService.openUrl(activity, "https://github.com/HoraApps/LeafPic/blob/dev/CHANGELOG.md");
+            ChromeCustomTabs.launchUrl(activity, LEAFPIC_CHANGELOG);
             return null;
         }
         CharSequence string = bypass.markdownToSpannable(markdownString);
@@ -268,7 +270,7 @@ public class AlertDialogsHelper {
         changelogDialogBuilder.setNeutralButton(activity.getString(R.string.show_full).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CustomTabService.openUrl(activity, "https://github.com/HoraApps/LeafPic/blob/dev/CHANGELOG.md");
+                ChromeCustomTabs.launchUrl(activity, LEAFPIC_CHANGELOG);
             }
         });
         return changelogDialogBuilder.show();

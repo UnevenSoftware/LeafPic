@@ -23,7 +23,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
-import org.horaapps.leafpic.util.CustomTabService;
+import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ThemedActivity;
@@ -31,13 +31,24 @@ import org.horaapps.liz.ui.ThemedIcon;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static org.horaapps.leafpic.util.ServerConstants.MAIL_DONALD;
+import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_CROWDIN;
+import static org.horaapps.leafpic.util.ServerConstants.GITHUB_DONALD;
+import static org.horaapps.leafpic.util.ServerConstants.GITHUB_LEAFPIC;
+import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_LICENSE;
+import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_ISSUES;
+import static org.horaapps.leafpic.util.ServerConstants.GITHUB_GILBERT;
+import static org.horaapps.leafpic.util.ServerConstants.GOOGLE_ABOUT_DONALD;
+import static org.horaapps.leafpic.util.ServerConstants.GOOGLE_ABOUT_GILBERT;
+import static org.horaapps.leafpic.util.ServerConstants.MAIL_GILBERT;
+
 /**
  * Created by Jibo on 02/03/2016.
  */
 public class AboutActivity extends ThemedActivity {
 
     private Toolbar toolbar;
-    private CustomTabService cts;
+    private ChromeCustomTabs cts;
     private ScrollView scr;
     int emojiEasterEggCount = 0;
 
@@ -51,10 +62,16 @@ public class AboutActivity extends ThemedActivity {
         setContentView(R.layout.activity_about);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scr = (ScrollView) findViewById(R.id.aboutAct_scrollView);
-        cts = new CustomTabService(AboutActivity.this);
+        cts = new ChromeCustomTabs(AboutActivity.this);
 
         initUi();
         setUpActions();
+    }
+
+    @Override
+    public void onDestroy() {
+        cts.destroy();
+        super.onDestroy();
     }
 
     private void setUpActions() {
@@ -62,21 +79,21 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_support_github).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://github.com/HoraApps/LeafPic");
+                cts.launchUrl(GITHUB_LEAFPIC);
             }
         });
         ///Report bug
         findViewById(R.id.ll_about_report_bug).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://github.com/HoraApps/LeafPic/issues");
+                cts.launchUrl(LEAFPIC_ISSUES);
             }
         });
         //Crowdin
         findViewById(R.id.ll_about_support_translate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://crowdin.com/project/leafpic");
+                cts.launchUrl(LEAFPIC_CROWDIN);
             }
         });
 
@@ -94,7 +111,7 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.ll_about_license).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://github.com/HoraApps/LeafPic/blob/master/LICENSE");
+                cts.launchUrl(LEAFPIC_LICENSE);
             }
         });
 
@@ -117,19 +134,19 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.about_author_donald_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://plus.google.com/103359244653769120543/about");
+                cts.launchUrl(GOOGLE_ABOUT_DONALD);
             }
         });
         findViewById(R.id.about_author_donald_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://github.com/DNLDsht");
+                cts.launchUrl(GITHUB_DONALD);
             }
         });
         findViewById(R.id.about_author_donald_mail_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mail("dnld.sht@gmail.com");
+                mail(MAIL_DONALD);
             }
         });
 
@@ -137,19 +154,19 @@ public class AboutActivity extends ThemedActivity {
         findViewById(R.id.about_author_gilbert_googleplus_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://plus.google.com/118430643662868782426/about");
+                cts.launchUrl(GOOGLE_ABOUT_GILBERT);
             }
         });
         findViewById(R.id.about_author_gilbert_github_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cts.launchUrl("https://github.com/Mow3l");
+                cts.launchUrl(GITHUB_GILBERT);
             }
         });
         findViewById(R.id.about_author_gilbert_mail_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mail("jibo95@gmail.com");
+                mail(MAIL_GILBERT);
             }
         });
 

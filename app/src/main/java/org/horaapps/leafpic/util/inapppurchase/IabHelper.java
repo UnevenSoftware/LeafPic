@@ -32,6 +32,7 @@ import android.util.Log;
 
 import com.android.vending.billing.IInAppBillingService;
 
+import org.horaapps.leafpic.util.ApplicationData;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -227,7 +228,7 @@ public class IabHelper {
                 if (mDisposed) return;
                 logDebug("Billing service connected.");
                 mService = IInAppBillingService.Stub.asInterface(service);
-                String packageName = mContext.getPackageName();
+                String packageName = ApplicationData.PACKAGE_NAME;
                 try {
                     logDebug("Checking for in-app billing 3 support.");
 
@@ -361,7 +362,7 @@ public class IabHelper {
 
         try {
             logDebug("Constructing buy intent for " + sku + ", item type: " + itemType);
-            Bundle buyIntentBundle = mService.getBuyIntent(3, mContext.getPackageName(), sku, itemType, extraData);
+            Bundle buyIntentBundle = mService.getBuyIntent(3, ApplicationData.PACKAGE_NAME, sku, itemType, extraData);
             int response = getResponseCodeFromBundle(buyIntentBundle);
             if (response != BILLING_RESPONSE_RESULT_OK) {
                 logError("Unable to buy item, Error response: " + getResponseDesc(response));
@@ -615,7 +616,7 @@ public class IabHelper {
             }
 
             logDebug("Consuming sku: " + sku + ", token: " + token);
-            int response = mService.consumePurchase(3, mContext.getPackageName(), token);
+            int response = mService.consumePurchase(3, ApplicationData.PACKAGE_NAME, token);
             if (response == BILLING_RESPONSE_RESULT_OK) {
                 logDebug("Successfully consumed sku: " + sku);
             } else {
@@ -712,13 +713,13 @@ public class IabHelper {
     private int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException {
         // Query purchases
         logDebug("Querying owned items, item type: " + itemType);
-        logDebug("Package name: " + mContext.getPackageName());
+        logDebug("Package name: " + ApplicationData.PACKAGE_NAME);
         boolean verificationFailed = false;
         String continueToken = null;
 
         do {
             logDebug("Calling getPurchases with continuation token: " + continueToken);
-            Bundle ownedItems = mService.getPurchases(3, mContext.getPackageName(),
+            Bundle ownedItems = mService.getPurchases(3, ApplicationData.PACKAGE_NAME,
                     itemType, continueToken);
 
             int response = getResponseCodeFromBundle(ownedItems);
@@ -791,7 +792,7 @@ public class IabHelper {
 
         Bundle querySkus = new Bundle();
         querySkus.putStringArrayList(GET_SKU_DETAILS_ITEM_LIST, skuList);
-        Bundle skuDetails = mService.getSkuDetails(3, mContext.getPackageName(),
+        Bundle skuDetails = mService.getSkuDetails(3, ApplicationData.PACKAGE_NAME,
                 itemType, querySkus);
 
         if (!skuDetails.containsKey(RESPONSE_GET_SKU_DETAILS_LIST)) {
