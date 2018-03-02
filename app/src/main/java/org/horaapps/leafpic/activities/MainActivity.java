@@ -55,12 +55,14 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.*;
+
 /**
  * The Main Activity used to display Albums / Media.
  */
 public class MainActivity extends SharedMediaActivity implements
         RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener,
-        NothingToShowListener, EditModeListener, NavigationDrawer.ItemListener {
+        NothingToShowListener, EditModeListener, ItemListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
@@ -249,6 +251,7 @@ public class MainActivity extends SharedMediaActivity implements
             @Override
             public void onAuthenticated() {
                 closeDrawer();
+                selectNavigationItem(NAVIGATION_ITEM_HIDDEN_FOLDERS);
                 displayAlbums(true);
             }
 
@@ -474,41 +477,47 @@ public class MainActivity extends SharedMediaActivity implements
         displayMedia(album);
     }
 
-    public void onItemSelected(@NavigationDrawer.NavigationItem int navigationItemSelected) {
+    public void onItemSelected(@NavigationItem int navigationItemSelected) {
         closeDrawer();
         switch (navigationItemSelected) {
 
-            case NavigationDrawer.NAVIGATION_ITEM_ALL_ALBUMS:
+            case NAVIGATION_ITEM_ALL_ALBUMS:
                 displayAlbums(false);
+                selectNavigationItem(navigationItemSelected);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_ALL_MEDIA:
+            case NAVIGATION_ITEM_ALL_MEDIA:
                 displayMedia(Album.getAllMediaAlbum());
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS:
+            case NAVIGATION_ITEM_HIDDEN_FOLDERS:
                 if (Security.isPasswordOnHidden()) {
                     askPassword();
                 } else {
+                    selectNavigationItem(navigationItemSelected);
                     displayAlbums(true);
                 }
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS:
+            case NAVIGATION_ITEM_WALLPAPERS:
                 Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_DONATE:
+            case NAVIGATION_ITEM_DONATE:
                 DonateActivity.startActivity(this);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_SETTINGS:
+            case NAVIGATION_ITEM_SETTINGS:
                 SettingsActivity.startActivity(this);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_ABOUT:
+            case NAVIGATION_ITEM_ABOUT:
                 AboutActivity.startActivity(this);
                 break;
         }
+    }
+
+    private void selectNavigationItem(@NavigationItem int navItem) {
+        navigationDrawerView.selectNavItem(navItem);
     }
 }
