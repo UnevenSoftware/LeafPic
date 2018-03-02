@@ -23,6 +23,6 @@ public class LegacyCompatFileProvider extends FileProvider {
     }
 
     public static Uri getUri(Context context, File file) {
-        return getUriForFile(context, context.getPackageName() + ".provider", file);
+        return getUriForFile(context, ApplicationData.PACKAGE_NAME + ".provider", file);
     }
 }

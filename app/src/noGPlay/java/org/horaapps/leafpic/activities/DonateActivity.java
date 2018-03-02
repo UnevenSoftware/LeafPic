@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.CustomTabService;
+import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
@@ -28,7 +28,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 public class DonateActivity extends ThemedActivity {
 
     private Toolbar toolbar;
-    private CustomTabService cts;
+    private ChromeCustomTabs cts;
     private ScrollView scr;
     private Button btnDonatePP;
 
@@ -45,9 +45,14 @@ public class DonateActivity extends ThemedActivity {
         btnDonatePP = findViewById(R.id.button_donate_paypal);
 
         iniUi();
-        cts = new CustomTabService(DonateActivity.this);
+        cts = new ChromeCustomTabs(DonateActivity.this);
     }
 
+    @Override
+    public void onDestroy() {
+        cts.destroy();
+        super.onDestroy();
+    }
 
     private void iniUi() {
         setSupportActionBar(toolbar);
