@@ -25,4 +25,18 @@
         <attr name="itemIcon" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="AboutDeveloper">
+        <attr name="headerImage" format="reference" />
+        <attr name="displayImage" format="reference" />
+        <attr name="name" format="string" />
+        <attr name="role" format="string" />
+        <attr name="description" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AboutLink">
+        <attr name="linkIcon" format="string" />
+        <attr name="linkTitle" format="string" />
+        <attr name="linkDescription" format="string" />
+    </declare-styleable>
+
 </resources>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/developer_header_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/donald_header" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/developer_profile_image"
+        android:layout_width="@dimen/developer_display_image_size"
+        android:layout_height="@dimen/developer_display_image_size"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/developer_image_margin"
+        app:civ_border_width="1dp"
+        tools:src="@drawable/donald_profile" />
+
+    <LinearLayout
+        android:id="@+id/developer_title_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/developer_profile_image"
+        android:layout_marginStart="@dimen/developer_name_margin"
+        android:layout_toEndOf="@id/developer_profile_image"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/developer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sub_big_text"
+            android:textStyle="bold"
+            tools:text="Donald Shtjefni" />
+
+        <TextView
+            android:id="@+id/developer_role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/medium_text"
+            tools:text="@string/donald_role" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/developer_title_container"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/developer_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/developer_description_padding"
+            android:textSize="@dimen/sub_medium_text"
+            tools:text="@string/about_author_donald_description" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/developer_description_padding"
+            android:paddingStart="@dimen/developer_description_padding">
+
+            <TextView
+                android:id="@+id/developer_mail_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple"
+                android:padding="@dimen/developer_links_small_padding"
+                android:text="@string/send_email"
+                android:textSize="@dimen/medium_text"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/developer_google_plus_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/developer_links_spacing"
+                android:background="@drawable/ripple"
+                android:padding="@dimen/developer_links_small_padding"
+                android:text="@string/google_plus_link"
+                android:textAllCaps="true"
+                android:textSize="@dimen/medium_text" />
+
+            <TextView
+                android:id="@+id/developer_github_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/developer_links_spacing"
+                android:background="@drawable/ripple"
+                android:padding="@dimen/developer_links_small_padding"
+                android:text="@string/github_link"
+                android:textAllCaps="true"
+                android:textSize="@dimen/medium_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</merge>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.horaapps.liz.ui.ThemedIcon
+        android:id="@+id/about_link_icon"
+        android:layout_width="@dimen/about_link_icon_size"
+        android:layout_height="@dimen/about_link_icon_size"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/about_link_icon_left_margin"
+        android:layout_marginRight="@dimen/about_link_icon_right_margin" />
+
+    <TextView
+        android:id="@+id/about_link_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/about_link_icon"
+        android:text="@string/about_support_report_bug"
+        android:textColor="@color/md_dark_background"
+        android:textSize="@dimen/medium_text" />
+
+    <TextView
+        android:id="@+id/about_link_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/about_link_title"
+        android:layout_toEndOf="@id/about_link_icon"
+        android:text="@string/about_support_report_bug_sub"
+        android:textColor="@color/md_grey_400"
+        android:textSize="@dimen/sub_medium_text" />
+
+</merge>
