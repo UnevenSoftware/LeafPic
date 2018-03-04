@@ -34,6 +34,7 @@ import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.about.AboutActivity;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
@@ -55,7 +56,15 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.*;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.ItemListener;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ABOUT;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ALL_ALBUMS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ALL_MEDIA;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_DONATE;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_SETTINGS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NavigationItem;
 
 /**
  * The Main Activity used to display Albums / Media.

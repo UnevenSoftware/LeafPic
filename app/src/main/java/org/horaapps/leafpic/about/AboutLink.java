@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.views;
+package org.horaapps.leafpic.about;
 
 import android.annotation.TargetApi;
 import android.content.Context;

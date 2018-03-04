@@ -64,41 +64,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/developer_contacts"
             android:paddingEnd="@dimen/developer_description_padding"
-            android:paddingStart="@dimen/developer_description_padding">
+            android:paddingStart="@dimen/developer_description_padding" />
 
-            <TextView
-                android:id="@+id/developer_mail_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple"
-                android:padding="@dimen/developer_links_small_padding"
-                android:text="@string/send_email"
-                android:textSize="@dimen/medium_text"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/developer_google_plus_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/developer_links_spacing"
-                android:background="@drawable/ripple"
-                android:padding="@dimen/developer_links_small_padding"
-                android:text="@string/google_plus_link"
-                android:textAllCaps="true"
-                android:textSize="@dimen/medium_text" />
-
-            <TextView
-                android:id="@+id/developer_github_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/developer_links_spacing"
-                android:background="@drawable/ripple"
-                android:padding="@dimen/developer_links_small_padding"
-                android:text="@string/github_link"
-                android:textAllCaps="true"
-                android:textSize="@dimen/medium_text" />
-        </LinearLayout>
 
     </LinearLayout>
 

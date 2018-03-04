@@ -1,4 +1,4 @@
-package org.horaapps.leafpic.activities;
+package org.horaapps.leafpic.about;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -9,24 +9,25 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
-import android.view.View;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.DonateActivity;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.preferences.Prefs;
-import org.horaapps.leafpic.views.AboutDeveloper;
-import org.horaapps.leafpic.views.AboutLink;
 import org.horaapps.liz.ThemedActivity;
+import org.horaapps.liz.ui.ThemedTextView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,14 +38,14 @@ import static org.horaapps.leafpic.util.ServerConstants.GITHUB_DONALD;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_GILBERT;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_LEAFPIC;
 import static org.horaapps.leafpic.util.ServerConstants.GOOGLE_ABOUT_CALVIN;
-import static org.horaapps.leafpic.util.ServerConstants.GOOGLE_ABOUT_DONALD;
-import static org.horaapps.leafpic.util.ServerConstants.GOOGLE_ABOUT_GILBERT;
 import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_CROWDIN;
 import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_ISSUES;
 import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_LICENSE;
 import static org.horaapps.leafpic.util.ServerConstants.MAIL_CALVIN;
 import static org.horaapps.leafpic.util.ServerConstants.MAIL_DONALD;
 import static org.horaapps.leafpic.util.ServerConstants.MAIL_GILBERT;
+import static org.horaapps.leafpic.util.ServerConstants.TWITTER_ABOUT_DONALD;
+import static org.horaapps.leafpic.util.ServerConstants.TWITTER_ABOUT_GILBERT;
 
 /**
  * The Activity to show About application
@@ -54,29 +55,22 @@ import static org.horaapps.leafpic.util.ServerConstants.MAIL_GILBERT;
  * - Translators
  * - Relevant app links
  */
-public class AboutActivity extends ThemedActivity implements AboutDeveloper.LinkListener {
+public class AboutActivity extends ThemedActivity implements ContactListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.about_version_item_sub) TextView appVersion;
-    @BindView(R.id.about_app_title) TextView appTitle;
-    @BindView(R.id.about_support_title) TextView appSupportTitle;
-    @BindView(R.id.about_app_light_description) TextView aboutAppLightDescription;
-    @BindView(R.id.about_special_thanks_title) TextView specialThanksTitle;
-    @BindView(R.id.about_community_members_sub) TextView aboutCommunityMembers;
-    @BindView(R.id.about_community_you_sub) TextView aboutCommunityYou;
+    @BindView(R.id.about_version_item_sub)
+    ThemedTextView appVersion;
     @BindView(R.id.aboutAct_scrollView) ScrollView aboutScrollView;
-    @BindView(R.id.about_background) View aboutBackground;
-    @BindView(R.id.about_donald_card) CardView donaldCardView;
-    @BindView(R.id.about_calvin_card) CardView calvinCardView;
-    @BindView(R.id.about_gilbert_card) CardView gilbertCardView;
-    @BindView(R.id.about_app_card) CardView aboutAppCardView;
-    @BindView(R.id.about_special_thanks_card) CardView specialThanksCardView;
-    @BindView(R.id.about_support_card) CardView aboutSupportCardView;
-    @BindView(R.id.about_developer_donald) AboutDeveloper aboutDonald;
-    @BindView(R.id.about_developer_calvin) AboutDeveloper aboutCalvin;
-    @BindView(R.id.about_developer_gilbert) AboutDeveloper aboutGilbert;
-    @BindView(R.id.about_patryk_goworowski_item_sub) TextView specialThanksPatryk;
+    @BindView(R.id.about_developer_donald)
+    AboutCreator aboutDonald;
+    @BindView(R.id.about_developer_gilbert)
+    AboutCreator aboutGilbert;
+    @BindView(R.id.about_patryk_goworowski_item_sub)
+    ThemedTextView specialThanksPatryk;
     @BindView(R.id.about_link_changelog) AboutLink linkChangelog;
+    @BindView(R.id.list_contributors)
+    RecyclerView rvContributors;
+    ContributorsAdapter contributorsAdapter;
 
     private ChromeCustomTabs chromeTabs;
     private int emojiEasterEggCount = 0;
@@ -168,11 +162,41 @@ public class AboutActivity extends ThemedActivity implements AboutDeveloper.Link
 
     private void initUi() {
         setSupportActionBar(toolbar);
-        aboutDonald.setLinkListener(this);
-        aboutGilbert.setLinkListener(this);
-        aboutCalvin.setLinkListener(this);
         appVersion.setText(ApplicationUtils.getAppVersion());
         linkChangelog.setDescription(ApplicationUtils.getAppVersion());
+
+
+        ArrayList<Contributor> contributors = new ArrayList<>(1);
+
+        /* Calvin */
+        Contributor calvin = new Contributor(
+                getString(R.string.developer_calvin_name),
+                getString(R.string.about_developer_calvin_description),
+                R.drawable.calvin_profile);
+        calvin.setEmail(MAIL_CALVIN);
+        calvin.addSocial(getString(R.string.google_plus_link), GOOGLE_ABOUT_CALVIN);
+        calvin.addSocial(getString(R.string.github), GITHUB_CALVIN);
+        contributors.add(calvin);
+
+
+        contributorsAdapter = new ContributorsAdapter(getApplicationContext(), contributors, this);
+        rvContributors.setHasFixedSize(true);
+        rvContributors.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rvContributors.setAdapter(contributorsAdapter);
+
+
+        /* Donald */
+        ArrayList<Contact> donaldContacts = new ArrayList<>();
+        donaldContacts.add(new Contact(TWITTER_ABOUT_DONALD, getString(R.string.twitter_link)));
+        donaldContacts.add(new Contact(GITHUB_DONALD, getString(R.string.github_link)));
+        aboutDonald.setupListeners(this, MAIL_DONALD, donaldContacts);
+
+        /* Jibo */
+        ArrayList<Contact> jiboContacts = new ArrayList<>();
+        jiboContacts.add(new Contact(TWITTER_ABOUT_GILBERT, getString(R.string.twitter_link)));
+        jiboContacts.add(new Contact(GITHUB_GILBERT, getString(R.string.github_link)));
+        aboutGilbert.setupListeners(this, MAIL_GILBERT, jiboContacts);
+
         aboutGilbert.setOnClickListener(v -> emojiEasterEgg());
         specialThanksPatryk.setMovementMethod(LinkMovementMethod.getInstance());
     }
@@ -189,81 +213,16 @@ public class AboutActivity extends ThemedActivity implements AboutDeveloper.Link
         setStatusBarColor();
         setNavBarColor();
 
-        int accentColor = getAccentColor();
-        int cardBackgroundColor = getCardBackgroundColor();
-        int backgroundColor = getBackgroundColor();
-        int textColor = getTextColor();
-        int subTextColor = getSubTextColor();
-
-        specialThanksPatryk.setLinkTextColor(accentColor);
-        specialThanksTitle.setTextColor(accentColor);
-        appTitle.setTextColor(accentColor);
-        appSupportTitle.setTextColor(accentColor);
-
-        appVersion.setTextColor(subTextColor);
-        specialThanksPatryk.setTextColor(subTextColor);
-        aboutAppLightDescription.setTextColor(textColor);
-        aboutCommunityMembers.setTextColor(subTextColor);
-        aboutCommunityYou.setTextColor(subTextColor);
-
-        donaldCardView.setCardBackgroundColor(cardBackgroundColor);
-        calvinCardView.setCardBackgroundColor(cardBackgroundColor);
-        gilbertCardView.setCardBackgroundColor(cardBackgroundColor);
-        aboutAppCardView.setCardBackgroundColor(cardBackgroundColor);
-        specialThanksCardView.setCardBackgroundColor(cardBackgroundColor);
-        aboutSupportCardView.setCardBackgroundColor(cardBackgroundColor);
-
-        aboutBackground.setBackgroundColor(backgroundColor);
+        specialThanksPatryk.setLinkTextColor(getAccentColor());
     }
 
     @Override
-    public void onMailClicked(int developerId) {
-        switch (developerId) {
-            case R.id.about_developer_donald:
-                mail(MAIL_DONALD);
-                break;
-
-            case R.id.about_developer_calvin:
-                mail(MAIL_CALVIN);
-                break;
-
-            case R.id.about_developer_gilbert:
-                mail(MAIL_GILBERT);
-                break;
-        }
+    public void onContactClicked(Contact contact) {
+        chromeTabs.launchUrl(contact.getValue());
     }
 
     @Override
-    public void onGithubClicked(int developerId) {
-        switch (developerId) {
-            case R.id.about_developer_donald:
-                chromeTabs.launchUrl(GITHUB_DONALD);
-                break;
-
-            case R.id.about_developer_calvin:
-                chromeTabs.launchUrl(GITHUB_CALVIN);
-                break;
-
-            case R.id.about_developer_gilbert:
-                chromeTabs.launchUrl(GITHUB_GILBERT);
-                break;
-        }
-    }
-
-    @Override
-    public void onGooglePlusClicked(int developerId) {
-        switch (developerId) {
-            case R.id.about_developer_donald:
-                chromeTabs.launchUrl(GOOGLE_ABOUT_DONALD);
-                break;
-
-            case R.id.about_developer_calvin:
-                chromeTabs.launchUrl(GOOGLE_ABOUT_CALVIN);
-                break;
-
-            case R.id.about_developer_gilbert:
-                chromeTabs.launchUrl(GOOGLE_ABOUT_GILBERT);
-                break;
-        }
+    public void onMailClicked(String mail) {
+        mail(mail);
     }
 }

@@ -278,6 +278,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="send_via">send via&#8230;</string>
     <string name="send_email">SEND EMAIL</string>
     <string name="google_plus_link">Google+</string>
+    <string name="twitter_link">Twitter</string>
     <string name="github_link">GitHub</string>
 
     <string name="send_mail_error">There are no email clients installed.</string>
@@ -410,4 +411,6 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="stop_slide_show">Stop Slideshow</string>
     <string name="errors">Errors</string>
     <string name="waring_share_multiple_file_types">There may be problems sharing multiple file types</string>
+    <string name="creators">Creators</string>
+    <string name="major_contributors">Major contributors</string>
 </resources>

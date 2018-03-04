@@ -133,7 +133,7 @@
         </activity>
 
         <activity
-            android:name="org.horaapps.leafpic.activities.AboutActivity"
+            android:name="org.horaapps.leafpic.about.AboutActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/about"
             android:theme="@style/Theme.AppCompat.NoActionBar">

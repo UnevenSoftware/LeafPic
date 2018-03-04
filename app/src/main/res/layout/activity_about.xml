@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.horaapps.liz.ui.ThemedLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/about_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:liz_background_style="normal"
     android:orientation="vertical">
     <!--TOOLBAR-->
     <include
@@ -24,7 +25,7 @@
             android:orientation="vertical">
 
             <!--ABOUT APP REDESIGN-->
-            <android.support.v7.widget.CardView
+            <org.horaapps.liz.ui.ThemedCardView
                 android:id="@+id/about_app_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,92 +61,207 @@
                             android:src="@drawable/leaf_pic" />
                     </RelativeLayout>
 
-                    <TextView
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="accent"
                         android:id="@+id/about_app_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="@dimen/sub_small_spacing"
                         android:text="LeafPic Gallery"
-                        android:textColor="@color/md_dark_primary_text"
                         android:textSize="@dimen/big_text"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="text"
                         android:id="@+id/about_app_light_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="@dimen/sub_small_spacing"
                         android:text="@string/app_light_description"
-                        android:textColor="@color/md_dark_primary_text"
                         android:textSize="@dimen/medium_text" />
 
-                    <TextView
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="sub_text"
                         android:id="@+id/about_version_item_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="@dimen/sub_small_spacing"
                         android:text="v1.0"
-                        android:textColor="@color/md_grey_400"
                         android:textSize="@dimen/medium_text" />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </org.horaapps.liz.ui.ThemedCardView>
 
-            <!-- Donald -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/about_donald_card"
-                style="@style/AboutCardStyle">
+            <!--SUPPORT APP-->
+            <org.horaapps.liz.ui.ThemedCardView
+                android:id="@+id/about_support_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_spacing"
+                android:clickable="true"
+                android:foreground="@drawable/ripple"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
 
-                <org.horaapps.leafpic.views.AboutDeveloper
-                    android:id="@+id/about_developer_donald"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:description="@string/about_author_donald_description"
-                    app:displayImage="@drawable/donald_profile"
-                    app:headerImage="@drawable/donald_header"
-                    app:name="@string/developer_donald_name"
-                    app:role="@string/donald_role" />
+                    android:orientation="vertical">
+                    <!--ABOUT SUPPORT TITLE-->
 
-            </android.support.v7.widget.CardView>
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="accent"
+                        android:id="@+id/about_support_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/medium_spacing"
+                        android:text="@string/about_support"
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
 
-            <!-- Calvin -->
-            <android.support.v7.widget.CardView
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_report_bug"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/about_support_report_bug_sub"
+                        app:linkIcon="@string/icon_bug_report"
+                        app:linkTitle="@string/about_support_report_bug" />
+
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_translate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/about_support_translate_sub"
+                        app:linkIcon="@string/icon_translate"
+                        app:linkTitle="@string/about_support_translate" />
+
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/about_support_rate_sub"
+                        app:linkIcon="@string/icon_rate"
+                        app:linkTitle="@string/about_support_rate" />
+
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_github"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/about_support_github_sub"
+                        app:linkIcon="@string/icon_github"
+                        app:linkTitle="@string/about_support_github" />
+
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_donate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/donate_sub_text"
+                        app:linkIcon="@string/icon_donate"
+                        app:linkTitle="@string/donate" />
+
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_license"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/about_license_sub"
+                        app:linkIcon="@string/icon_license"
+                        app:linkTitle="@string/about_license" />
+
+                    <org.horaapps.leafpic.about.AboutLink
+                        android:id="@+id/about_link_changelog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:linkDescription="@string/changelog"
+                        app:linkIcon="@string/icon_changelog"
+                        app:linkTitle="@string/changelog" />
+
+                </LinearLayout>
+
+            </org.horaapps.liz.ui.ThemedCardView>
+
+
+            <!-- Creators -->
+            <org.horaapps.liz.ui.ThemedCardView
+                android:id="@+id/about_creators_card"
+                style="@style/AboutCardStyle">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="accent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/small_spacing"
+                        android:paddingBottom="@dimen/small_spacing"
+                        android:text="@string/creators"
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
+
+                    <!-- Donald -->
+                    <org.horaapps.leafpic.about.AboutCreator
+                        android:id="@+id/about_developer_donald"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/about_author_donald_description"
+                        app:displayImage="@drawable/donald_profile"
+                        app:headerImage="@drawable/donald_header"
+                        app:name="@string/developer_donald_name"
+                        app:role="@string/donald_role" />
+
+                    <!-- Gilbert -->
+                    <org.horaapps.leafpic.about.AboutCreator
+                        android:id="@+id/about_developer_gilbert"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/small_spacing"
+                        app:description="@string/about_author_gilbert_description"
+                        app:displayImage="@drawable/gilbert_profile"
+                        app:headerImage="@drawable/gilbert_header"
+                        app:name="@string/developer_gilbert_name"
+                        app:role="@string/gilbert_role" />
+                </LinearLayout>
+            </org.horaapps.liz.ui.ThemedCardView>
+
+
+            <!-- Creators -->
+            <org.horaapps.liz.ui.ThemedCardView
                 android:id="@+id/about_calvin_card"
                 style="@style/AboutCardStyle">
 
-                <org.horaapps.leafpic.views.AboutDeveloper
-                    android:id="@+id/about_developer_calvin"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:description="@string/about_developer_calvin_description"
-                    app:displayImage="@drawable/calvin_profile"
-                    app:headerImage="@drawable/calvin_header"
-                    app:name="@string/developer_calvin_name"
-                    app:role="@string/calvin_role" />
+                    android:orientation="vertical">
 
-            </android.support.v7.widget.CardView>
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="accent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/medium_spacing"
+                        android:paddingTop="@dimen/small_spacing"
+                        android:paddingBottom="@dimen/small_spacing"
+                        android:text="@string/major_contributors"
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
 
-            <!-- Gilbert -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/about_gilbert_card"
-                style="@style/AboutCardStyle">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_contributors"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                <org.horaapps.leafpic.views.AboutDeveloper
-                    android:id="@+id/about_developer_gilbert"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:description="@string/about_author_gilbert_description"
-                    app:displayImage="@drawable/gilbert_profile"
-                    app:headerImage="@drawable/gilbert_header"
-                    app:name="@string/developer_gilbert_name"
-                    app:role="@string/gilbert_role" />
+                </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </org.horaapps.liz.ui.ThemedCardView>
 
             <!--SPECIAL THANKS-->
-            <android.support.v7.widget.CardView
+            <org.horaapps.liz.ui.ThemedCardView
                 android:id="@+id/about_special_thanks_card"
                 style="@style/AboutCardStyle">
 
@@ -154,7 +270,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <org.horaapps.liz.ui.ThemedTextView
+                        app:liz_color_style="accent"
                         android:id="@+id/about_special_thanks_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -173,7 +290,8 @@
                         android:paddingEnd="@dimen/sub_big_spacing"
                         android:paddingStart="@dimen/sub_big_spacing">
                         <!--Patryk Goworowski -->
-                        <TextView
+                        <org.horaapps.liz.ui.ThemedTextView
+                            app:liz_color_style="sub_text"
                             android:id="@+id/about_patryk_goworowski_item_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -182,117 +300,30 @@
                             android:textColor="@color/md_grey_400"
                             android:textSize="@dimen/sub_medium_text" />
 
-                        <TextView
+                        <org.horaapps.liz.ui.ThemedTextView
+                            app:liz_color_style="sub_text"
                             android:id="@+id/about_community_members_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/small_spacing"
                             android:text="@string/about_special_thanks_members_sub"
-                            android:textColor="@color/md_grey_400"
                             android:textSize="@dimen/sub_medium_text" />
 
-                        <TextView
+                        <org.horaapps.liz.ui.ThemedTextView
+                            app:liz_color_style="sub_text"
                             android:id="@+id/about_community_you_sub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/medium_spacing"
                             android:layout_marginTop="@dimen/small_spacing"
                             android:text="@string/about_special_thanks_you_sub"
-                            android:textColor="@color/md_grey_400"
                             android:textSize="@dimen/sub_medium_text" />
                     </LinearLayout>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <!--SUPPORT APP-->
-            <android.support.v7.widget.CardView
-                android:id="@+id/about_support_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_spacing"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <!--ABOUT SUPPORT TITLE-->
-                    <TextView
-                        android:id="@+id/about_support_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/medium_spacing"
-                        android:paddingTop="@dimen/medium_spacing"
-                        android:text="@string/about_support"
-                        android:textColor="@color/md_dark_background"
-                        android:textSize="@dimen/medium_text"
-                        android:textStyle="bold" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_report_bug"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/about_support_report_bug_sub"
-                        app:linkIcon="@string/icon_bug_report"
-                        app:linkTitle="@string/about_support_report_bug" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_translate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/about_support_translate_sub"
-                        app:linkIcon="@string/icon_translate"
-                        app:linkTitle="@string/about_support_translate" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_rate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/about_support_rate_sub"
-                        app:linkIcon="@string/icon_rate"
-                        app:linkTitle="@string/about_support_rate" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_github"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/about_support_github_sub"
-                        app:linkIcon="@string/icon_github"
-                        app:linkTitle="@string/about_support_github" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_donate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/donate_sub_text"
-                        app:linkIcon="@string/icon_donate"
-                        app:linkTitle="@string/donate" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_license"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/about_license_sub"
-                        app:linkIcon="@string/icon_license"
-                        app:linkTitle="@string/about_license" />
-
-                    <org.horaapps.leafpic.views.AboutLink
-                        android:id="@+id/about_link_changelog"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:linkDescription="@string/changelog"
-                        app:linkIcon="@string/icon_changelog"
-                        app:linkTitle="@string/changelog" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+            </org.horaapps.liz.ui.ThemedCardView>
 
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+</org.horaapps.liz.ui.ThemedLinearLayout>

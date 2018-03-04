@@ -1,24 +1,28 @@
-package org.horaapps.leafpic.views;
+package org.horaapps.leafpic.about;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
+import org.horaapps.liz.ViewUtil;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,41 +31,42 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Custom view for showing a Developer on About screen.
  */
-public class AboutDeveloper extends RelativeLayout implements Themed {
+public class AboutCreator extends RelativeLayout implements Themed {
 
     @BindView(R.id.developer_header_image) ImageView headerImage;
     @BindView(R.id.developer_profile_image) CircleImageView profileImage;
     @BindView(R.id.developer_name) TextView devName;
     @BindView(R.id.developer_role) TextView devRole;
     @BindView(R.id.developer_description) TextView devDescription;
-    @BindView(R.id.developer_mail_link) TextView linkMail;
-    @BindView(R.id.developer_google_plus_link) TextView linkGooglePlus;
-    @BindView(R.id.developer_github_link) TextView linkGitHub;
+    /* @BindView(R.id.developer_mail_link) TextView linkMail;
+     @BindView(R.id.developer_google_plus_link) TextView linkGooglePlus;
+     @BindView(R.id.developer_github_link) TextView linkGitHub;*/
+    @BindView(R.id.developer_contacts)
+    LinearLayout devContacts;
 
-    private LinkListener linkListener;
 
-    public AboutDeveloper(@NonNull Context context) {
+    public AboutCreator(@NonNull Context context) {
         this(context, null);
     }
 
-    public AboutDeveloper(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public AboutCreator(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, -1);
     }
 
-    public AboutDeveloper(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AboutCreator(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public AboutDeveloper(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public AboutCreator(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
     }
 
     private void init(@NonNull Context context, @Nullable AttributeSet attributeSet) {
         setupView(context);
-        LayoutInflater.from(context).inflate(R.layout.view_about_developer, this, true);
+        LayoutInflater.from(context).inflate(R.layout.view_about_creator, this, true);
         ButterKnife.bind(this);
 
         if (attributeSet == null) throw new RuntimeException("Must provide developer details!");
@@ -73,11 +78,23 @@ public class AboutDeveloper extends RelativeLayout implements Themed {
     /**
      * Set the listener to be invoked when Profile links are tapped.
      */
-    public void setLinkListener(@NonNull LinkListener linkListener) {
-        this.linkListener = linkListener;
-        linkGooglePlus.setOnClickListener(v -> linkListener.onGooglePlusClicked(getId()));
-        linkMail.setOnClickListener(v -> linkListener.onMailClicked(getId()));
-        linkGitHub.setOnClickListener(v -> linkListener.onGithubClicked(getId()));
+    public void setupListeners(ContactListener listener, String mail, ArrayList<Contact> contacts) {
+
+        devContacts.removeAllViews();
+        if (mail != null) {
+            ContactButton email = new ContactButton(getContext());
+            email.setText(getContext().getString(R.string.send_email));
+            email.bold();
+            email.setOnClickListener(v -> listener.onMailClicked(mail));
+            devContacts.addView(email);
+        }
+
+        for (Contact contact : contacts) {
+            ContactButton c = new ContactButton(getContext());
+            c.setText(contact.getLabel());
+            c.setOnClickListener(v -> listener.onContactClicked(contact));
+            devContacts.addView(c);
+        }
     }
 
     private void alignProfileImageWithHeader() {
@@ -104,12 +121,12 @@ public class AboutDeveloper extends RelativeLayout implements Themed {
     }
 
     private void setupData(@NonNull Context context, @NonNull AttributeSet attributeSet) {
-        TypedArray typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.AboutDeveloper);
-        Drawable headerImage = typedArray.getDrawable(R.styleable.AboutDeveloper_headerImage);
-        Drawable profileImage = typedArray.getDrawable(R.styleable.AboutDeveloper_displayImage);
-        String displayName = typedArray.getString(R.styleable.AboutDeveloper_name);
-        String roleText = typedArray.getString(R.styleable.AboutDeveloper_role);
-        String descriptionText = typedArray.getString(R.styleable.AboutDeveloper_description);
+        TypedArray typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.AboutCreator);
+        Drawable headerImage = typedArray.getDrawable(R.styleable.AboutCreator_headerImage);
+        Drawable profileImage = typedArray.getDrawable(R.styleable.AboutCreator_displayImage);
+        String displayName = typedArray.getString(R.styleable.AboutCreator_name);
+        String roleText = typedArray.getString(R.styleable.AboutCreator_role);
+        String descriptionText = typedArray.getString(R.styleable.AboutCreator_description);
         typedArray.recycle();
 
         setHeaderImage(headerImage);
@@ -143,36 +160,16 @@ public class AboutDeveloper extends RelativeLayout implements Themed {
     public void refreshTheme(ThemeHelper themeHelper) {
         int textColor = themeHelper.getTextColor();
         int subTextColor = themeHelper.getSubTextColor();
-        int accentColor = themeHelper.getAccentColor();
         int borderColor = themeHelper.getInvertedBackgroundColor();
 
         profileImage.setBorderColor(borderColor);
         devName.setTextColor(textColor);
         devRole.setTextColor(subTextColor);
         devDescription.setTextColor(subTextColor);
-        linkGitHub.setTextColor(accentColor);
-        linkGooglePlus.setTextColor(accentColor);
-        linkMail.setTextColor(accentColor);
-    }
 
-    /**
-     * Interface to alert listeners about link clicks
-     */
-    public interface LinkListener {
+        for (View view : ViewUtil.getAllChildren(devContacts)) {
+            if (view instanceof Themed) ((Themed) view).refreshTheme(themeHelper);
+        }
 
-        /**
-         * When the "Send Mail" link is tapped
-         */
-        void onMailClicked(@IdRes int developerId);
-
-        /**
-         * When the "GitHub" link is tapped
-         */
-        void onGithubClicked(@IdRes int developerId);
-
-        /**
-         * When the "Google+" link is tapped
-         */
-        void onGooglePlusClicked(@IdRes int developerId);
     }
 }
