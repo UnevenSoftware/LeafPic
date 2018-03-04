@@ -29,7 +29,7 @@
     <dimen name="developer_small_Spacing">10dp</dimen>
     <dimen name="developer_card_spacing">10dp</dimen>
     <dimen name="developer_card_elevation">5dp</dimen>
-    <dimen name="about_link_icon_size">25dp</dimen>
+    <dimen name="about_link_icon_size">20dp</dimen>
     <dimen name="about_link_icon_left_margin">14dp</dimen>
     <dimen name="about_link_icon_right_margin">24dp</dimen>
     <dimen name="about_link_padding">8dp</dimen>

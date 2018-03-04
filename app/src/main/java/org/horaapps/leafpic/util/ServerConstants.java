@@ -17,9 +17,9 @@ public class ServerConstants {
     public static final String LEAFPIC_LICENSE = "https://github.com/HoraApps/LeafPic/blob/master/LICENSE";
     public static final String LEAFPIC_CHANGELOG = "https://github.com/HoraApps/LeafPic/blob/dev/CHANGELOG.md";
 
-    // Google+ URLs
-    public static final String GOOGLE_ABOUT_DONALD = "https://plus.google.com/103359244653769120543/about";
-    public static final String GOOGLE_ABOUT_GILBERT = "https://plus.google.com/118430643662868782426/about";
+
+    public static final String TWITTER_ABOUT_DONALD = "https://twitter.com/dnld_sht";
+    public static final String TWITTER_ABOUT_GILBERT = "https://twitter.com/GilbertNdr";
     public static final String GOOGLE_ABOUT_CALVIN = "https://plus.google.com/+CalvinNoronha2394";
 
     // Email IDs

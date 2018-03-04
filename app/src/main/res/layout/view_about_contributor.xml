@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="@dimen/small_spacing"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_spacing"
+        android:layout_marginEnd="@dimen/small_spacing"
+        android:gravity="center_vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/developer_profile_image"
+            android:layout_width="@dimen/developer_display_image_size"
+            android:layout_height="@dimen/developer_display_image_size"
+            app:civ_border_width="1dp"
+            tools:src="@drawable/donald_profile" />
+
+        <LinearLayout
+            android:id="@+id/developer_title_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:orientation="vertical">
+
+            <org.horaapps.liz.ui.ThemedTextView
+                android:id="@+id/developer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sub_big_text"
+                android:textStyle="bold"
+                tools:text="Donald Shtjefni" />
+
+            <org.horaapps.liz.ui.ThemedTextView
+                app:liz_color_style="sub_text"
+                android:id="@+id/developer_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sub_medium_text"
+                tools:text="@string/about_author_donald_description" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/sub_small_spacing"
+        android:id="@+id/developer_contacts"
+        android:paddingEnd="@dimen/developer_description_padding"
+        android:paddingStart="@dimen/developer_description_padding" />
+
+</LinearLayout>

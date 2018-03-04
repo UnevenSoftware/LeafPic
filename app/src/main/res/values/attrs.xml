@@ -25,7 +25,7 @@
         <attr name="itemIcon" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="AboutDeveloper">
+    <declare-styleable name="AboutCreator">
         <attr name="headerImage" format="reference" />
         <attr name="displayImage" format="reference" />
         <attr name="name" format="string" />
