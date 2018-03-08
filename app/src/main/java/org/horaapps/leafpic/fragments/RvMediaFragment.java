@@ -96,6 +96,11 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     @Override
+    public String getTitle() {
+        return album.getName();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -243,7 +248,10 @@ public class RvMediaFragment extends BaseFragment {
     private void updateToolbar() {
         if (getEditModeListener() != null) {
             if (editMode())
-                getEditModeListener().changedEditMode(true, adapter.getSelectedCount(), adapter.getItemCount(), v -> adapter.clearSelected(), null);
+                getEditModeListener().changedEditMode(true, adapter.getSelectedCount(), adapter.getItemCount(), v -> {
+                    adapter.clearSelected();
+                    getEditModeListener().changedEditMode(false, 0, 0, null, album.getName());
+                }, null);
 
             else getEditModeListener().changedEditMode(false, 0, 0, null, album.getName());
         }
