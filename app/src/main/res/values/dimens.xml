@@ -3,7 +3,9 @@
 
     <!-- Text Sizes -->
     <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_sub_medium">14sp</dimen>
 
     <!-- Navigation Drawer -->
     <dimen name="nav_drawer_top_padding">50dp</dimen>
@@ -21,6 +23,9 @@
 
     <!-- About -->
     <dimen name="developer_display_image_size">100dp</dimen>
+    <dimen name="contributor_display_image_size">70dp</dimen>
+    <dimen name="contributor_small_spacing">5dp</dimen>
+    <dimen name="contributor_spacing">10dp</dimen>
     <dimen name="developer_image_margin">15dp</dimen>
     <dimen name="developer_name_margin">20dp</dimen>
     <dimen name="developer_description_padding">15dp</dimen>

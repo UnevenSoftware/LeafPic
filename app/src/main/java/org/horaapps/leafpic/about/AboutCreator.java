@@ -38,12 +38,7 @@ public class AboutCreator extends RelativeLayout implements Themed {
     @BindView(R.id.developer_name) TextView devName;
     @BindView(R.id.developer_role) TextView devRole;
     @BindView(R.id.developer_description) TextView devDescription;
-    /* @BindView(R.id.developer_mail_link) TextView linkMail;
-     @BindView(R.id.developer_google_plus_link) TextView linkGooglePlus;
-     @BindView(R.id.developer_github_link) TextView linkGitHub;*/
-    @BindView(R.id.developer_contacts)
-    LinearLayout devContacts;
-
+    @BindView(R.id.developer_contacts) LinearLayout devContacts;
 
     public AboutCreator(@NonNull Context context) {
         this(context, null);

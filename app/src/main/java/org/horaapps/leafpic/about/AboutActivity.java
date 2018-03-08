@@ -58,19 +58,13 @@ import static org.horaapps.leafpic.util.ServerConstants.TWITTER_ABOUT_GILBERT;
 public class AboutActivity extends ThemedActivity implements ContactListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.about_version_item_sub)
-    ThemedTextView appVersion;
+    @BindView(R.id.about_version_item_sub) ThemedTextView appVersion;
     @BindView(R.id.aboutAct_scrollView) ScrollView aboutScrollView;
-    @BindView(R.id.about_developer_donald)
-    AboutCreator aboutDonald;
-    @BindView(R.id.about_developer_gilbert)
-    AboutCreator aboutGilbert;
-    @BindView(R.id.about_patryk_goworowski_item_sub)
-    ThemedTextView specialThanksPatryk;
+    @BindView(R.id.about_developer_donald) AboutCreator aboutDonald;
+    @BindView(R.id.about_developer_gilbert) AboutCreator aboutGilbert;
+    @BindView(R.id.about_patryk_goworowski_item_sub) ThemedTextView specialThanksPatryk;
     @BindView(R.id.about_link_changelog) AboutLink linkChangelog;
-    @BindView(R.id.list_contributors)
-    RecyclerView rvContributors;
-    ContributorsAdapter contributorsAdapter;
+    @BindView(R.id.list_contributors) RecyclerView rvContributors;
 
     private ChromeCustomTabs chromeTabs;
     private int emojiEasterEggCount = 0;
@@ -179,11 +173,10 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         contributors.add(calvin);
 
 
-        contributorsAdapter = new ContributorsAdapter(getApplicationContext(), contributors, this);
+        ContributorsAdapter contributorsAdapter = new ContributorsAdapter(this, contributors, this);
         rvContributors.setHasFixedSize(true);
         rvContributors.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rvContributors.setAdapter(contributorsAdapter);
-
 
         /* Donald */
         ArrayList<Contact> donaldContacts = new ArrayList<>();
