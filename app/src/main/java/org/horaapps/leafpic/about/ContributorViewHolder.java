@@ -17,18 +17,14 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Custom view for showing a Developer on About screen.
+ * Custom ViewHolder for populating a Contributor onto {@link ContributorsAdapter}
  */
 public class ContributorViewHolder extends ThemedViewHolder {
 
-    @BindView(R.id.developer_profile_image)
-    CircleImageView profileImage;
-    @BindView(R.id.developer_name)
-    TextView devName;
-    @BindView(R.id.developer_description)
-    TextView devDescription;
-    @BindView(R.id.developer_contacts)
-    LinearLayout devContacts;
+    @BindView(R.id.contributor_profile_image) CircleImageView profileImage;
+    @BindView(R.id.contributor_name) TextView contribName;
+    @BindView(R.id.contributor_description) TextView contribDescription;
+    @BindView(R.id.contributor_contacts) LinearLayout contribContacts;
 
     public ContributorViewHolder(View view) {
         super(view);
@@ -40,12 +36,11 @@ public class ContributorViewHolder extends ThemedViewHolder {
     }
 
     private void setName(@Nullable String name) {
-        devName.setText(name);
+        contribName.setText(name);
     }
 
-
     private void setDescription(@Nullable String description) {
-        devDescription.setText(description);
+        contribDescription.setText(description);
     }
 
     @Override
@@ -60,14 +55,14 @@ public class ContributorViewHolder extends ThemedViewHolder {
         setDescription(contributor.getDescription());
         setProfileImage(contributor.getProfileImage());
 
-        devContacts.removeAllViews();
+        contribContacts.removeAllViews();
 
         if (contributor.getEmail() != null) {
             ContactButton email = new ContactButton(itemView.getContext());
             email.setText(itemView.getContext().getString(R.string.send_email));
             email.bold();
             email.setOnClickListener(v -> listener.onMailClicked(contributor.getEmail()));
-            devContacts.addView(email);
+            contribContacts.addView(email);
         }
 
         ArrayList<Contact> contacts = contributor.getContacts();
@@ -75,7 +70,7 @@ public class ContributorViewHolder extends ThemedViewHolder {
             ContactButton c = new ContactButton(itemView.getContext());
             c.setText(contact.getLabel());
             c.setOnClickListener(v -> listener.onContactClicked(contact));
-            devContacts.addView(c);
+            contribContacts.addView(c);
         }
     }
 }
