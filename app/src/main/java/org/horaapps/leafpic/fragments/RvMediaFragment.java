@@ -78,7 +78,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by dnld on 3/13/17.
  */
 
-public class RvMediaFragment extends BaseFragment {
+public class RvMediaFragment extends BaseFragment implements MediaAdapter.MediaActionsListener {
 
     public static final String TAG = "RvMediaFragment";
     private static final String BUNDLE_ALBUM = "album";
@@ -182,25 +182,7 @@ public class RvMediaFragment extends BaseFragment {
                         new LandingAnimator(new OvershootInterpolator(1f))
                 ));
 
-        adapter = new MediaAdapter(getContext());
-
-        adapter.getClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(pos -> {
-                    if (RvMediaFragment.this.listener != null) {
-                        RvMediaFragment.this.listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), pos);
-                    }
-                });
-
-        adapter.getSelectedClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> {
-                    refresh.setEnabled(!adapter.selecting());
-                    updateToolbar();
-                    getActivity().invalidateOptionsMenu();
-                });
+        adapter = new MediaAdapter(getContext(), this);
 
         refresh.setOnRefreshListener(this::reload);
         rv.setAdapter(adapter);
@@ -213,8 +195,6 @@ public class RvMediaFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         reload();
     }
-
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -685,6 +665,18 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public boolean editMode() {
         return adapter.selecting();
+    }
+
+    @Override
+    public void onMediaSelected(int position) {
+        if (listener != null) listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), position);
+    }
+
+    @Override
+    public void onSelectMode(boolean selectMode) {
+        refresh.setEnabled(!selectMode);
+        updateToolbar();
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
