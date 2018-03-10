@@ -23,6 +23,7 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.items.ActionsListener;
 import org.horaapps.leafpic.views.SquareRelativeLayout;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
@@ -50,18 +51,18 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
     private SortingMode sortingMode;
 
     private Drawable placeholder;
-    private final MediaActionsListener mediaActionsListener;
+    private final ActionsListener actionsListener;
 
     private boolean isSelecting = false;
 
-    public MediaAdapter(Context context, MediaActionsListener mediaActionsListener) {
+    public MediaAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder, ActionsListener actionsListener) {
         super(context);
         media = new ArrayList<>();
-        sortingMode = SortingMode.DATE;
-        sortingOrder = SortingOrder.DESCENDING;
+        this.sortingMode = sortingMode;
+        this.sortingOrder = sortingOrder;
         placeholder = getThemeHelper().getPlaceHolder();
         setHasStableIds(true);
-        this.mediaActionsListener = mediaActionsListener;
+        this.actionsListener = actionsListener;
     }
 
     private void sort() {
@@ -153,12 +154,12 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
     private void startSelection() {
         isSelecting = true;
-        mediaActionsListener.onSelectMode(true);
+        actionsListener.onSelectMode(true);
     }
 
     private void stopSelection() {
         isSelecting = false;
-        mediaActionsListener.onSelectMode(false);
+        actionsListener.onSelectMode(false);
     }
 
     public boolean selecting() {
@@ -227,7 +228,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 notifySelected(f.toggleSelected());
                 notifyItemChanged(holder.getAdapterPosition());
             } else
-                mediaActionsListener.onMediaSelected(holder.getAdapterPosition());
+                actionsListener.onItemSelected(holder.getAdapterPosition());
         });
 
         holder.layout.setOnLongClickListener(v -> {
@@ -340,26 +341,5 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         public void refreshTheme(ThemeHelper themeHelper) {
             icon.setColor(Color.WHITE);
         }
-    }
-
-    /**
-     * Interface for listeners to be alerted when this entity wants to
-     * perform some actions on Media items.
-     */
-    public interface MediaActionsListener {
-
-        /**
-         * Used when the user clicks on a Media item.
-         *
-         * @param position The position that was clicked.
-         */
-        void onMediaSelected(int position);
-
-        /**
-         * Use to toggle Select Mode states
-         *
-         * @param selectMode Whether we want to be in select mode or not.
-         */
-        void onSelectMode(boolean selectMode);
     }
 }

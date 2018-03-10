@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,7 +64,7 @@ public class AlbumsFragment extends BaseFragment {
 
     private AlbumsAdapter adapter;
     private GridSpacingItemDecoration spacingDecoration;
-    private AlbumClickListener clickListener;
+    private AlbumClickListener listener;
 
     private boolean hidden = false;
     ArrayList<String> excuded = new ArrayList<>();
@@ -75,7 +74,7 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     public void setListener(AlbumClickListener clickListener) {
-        this.clickListener = clickListener;
+        this.listener = clickListener;
     }
 
     @Override
@@ -182,26 +181,7 @@ public class AlbumsFragment extends BaseFragment {
                     ));
         }
 
-        adapter = new AlbumsAdapter(
-                getContext(), sortingMode(), sortingOrder());
-
-        adapter.getClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> {
-                    if (clickListener != null)
-                        clickListener.onAlbumClick(album);
-                });
-
-        adapter.getSelectedClicks()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> {
-                    Log.wtf("asd-sel", "1");
-                    refresh.setEnabled(!adapter.selecting());
-                    updateToolbar();
-                    getActivity().invalidateOptionsMenu();
-                });
+        adapter = new AlbumsAdapter(getContext(), this);
 
         refresh.setOnRefreshListener(this::displayAlbums);
         rv.setAdapter(adapter);
@@ -209,15 +189,11 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     public SortingMode sortingMode() {
-        return adapter != null
-                ? adapter.sortingMode()
-                : AlbumsHelper.getSortingMode();
+        return adapter.sortingMode();
     }
 
     public SortingOrder sortingOrder() {
-        return adapter != null
-                ? adapter.sortingOrder()
-                : AlbumsHelper.getSortingOrder();
+        return adapter.sortingOrder();
     }
 
     private HandlingAlbums db() {
@@ -523,6 +499,19 @@ public class AlbumsFragment extends BaseFragment {
     public boolean clearSelected() {
         return adapter.clearSelected();
     }
+
+    @Override
+    public void onItemSelected(int position) {
+        if (listener != null) listener.onAlbumClick(adapter.get(position));
+    }
+
+    @Override
+    public void onSelectMode(boolean selectMode) {
+        refresh.setEnabled(!selectMode);
+        updateToolbar();
+        getActivity().invalidateOptionsMenu();
+    }
+
 
     @Override
     public void refreshTheme(ThemeHelper t) {

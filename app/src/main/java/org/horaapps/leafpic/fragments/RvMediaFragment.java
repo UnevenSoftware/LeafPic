@@ -78,7 +78,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by dnld on 3/13/17.
  */
 
-public class RvMediaFragment extends BaseFragment implements MediaAdapter.MediaActionsListener {
+public class RvMediaFragment extends BaseFragment {
 
     public static final String TAG = "RvMediaFragment";
     private static final String BUNDLE_ALBUM = "album";
@@ -182,7 +182,7 @@ public class RvMediaFragment extends BaseFragment implements MediaAdapter.MediaA
                         new LandingAnimator(new OvershootInterpolator(1f))
                 ));
 
-        adapter = new MediaAdapter(getContext(), this);
+        adapter = new MediaAdapter(getContext(), album.settings.getSortingMode(), album.settings.getSortingOrder(), this);
 
         refresh.setOnRefreshListener(this::reload);
         rv.setAdapter(adapter);
@@ -668,7 +668,7 @@ public class RvMediaFragment extends BaseFragment implements MediaAdapter.MediaA
     }
 
     @Override
-    public void onMediaSelected(int position) {
+    public void onItemSelected(int position) {
         if (listener != null) listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), position);
     }
 
