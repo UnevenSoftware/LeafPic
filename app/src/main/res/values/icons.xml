@@ -19,4 +19,7 @@
     <string name="icon_license">gmd-insert-drive-file</string>
     <string name="icon_changelog">gmd-new-releases</string>
 
+    <!-- Media -->
+    <string name="icon_play">gmd-play-circle-filled</string>
+
 </resources>
