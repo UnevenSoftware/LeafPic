@@ -1,8 +1,9 @@
 package org.horaapps.leafpic.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,80 +12,53 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.activities.SingleMediaActivity;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.BitmapUtils;
 
-import java.io.InputStream;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 
 /**
- * Created by dnld on 18/02/16.
+ * A Media Fragment for showing an Image (static)
  */
+public class ImageFragment extends BaseMediaFragment {
 
-@SuppressWarnings("ResourceType")
-public class ImageFragment extends Fragment {
+    @BindView(R.id.subsampling_view) SubsamplingScaleImageView imageView;
 
-    View view;
-    private Media img;
-    private Unbinder unbinder;
-
-    @BindView(R.id.subsampling_view)
-    SubsamplingScaleImageView subsampling;
-
-    public static ImageFragment newInstance(Media media) {
-        ImageFragment imageFragment = new ImageFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("image", media);
-        imageFragment.setArguments(args);
-        return imageFragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        img = getArguments().getParcelable("image");
+    @NonNull
+    public static ImageFragment newInstance(@NonNull Media media) {
+        return BaseMediaFragment.newInstance(new ImageFragment(), media);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_photo, container, false);
-        unbinder = ButterKnife.bind(this, view);
-
-        int orientation = BitmapUtils.getOrientation(img.getUri(),this.getContext());
-        subsampling.setOrientation(orientation);
-        subsampling.setImage(ImageSource.uri(img.getUri()));
-        subsampling.setOnClickListener(view -> ((SingleMediaActivity) getActivity()).toggleSystemUI());
-
-        return view;
+        View rootView = inflater.inflate(R.layout.fragment_photo, container, false);
+        ButterKnife.bind(this, rootView);
+        return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Uri mediaUri = media.getUri();
+        imageView.setOrientation(BitmapUtils.getOrientation(mediaUri, getContext()));
+        imageView.setImage(ImageSource.uri(mediaUri));
+        setTapListener(imageView);
+    }
 
     @Override
     public void onDestroyView() {
+        imageView.recycle();
         super.onDestroyView();
-        subsampling.recycle();
-        unbinder.unbind();
     }
 
-    /* private void rotateLoop() { //april fools
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                photoView.setRotationBy(1);
-                rotateLoop();
-            }
-        }, 5);
-    }*/
-
-    public void rotatePicture(int rotation) {
-        if (rotation == -90 && subsampling.getOrientation() == 0)
-            subsampling.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
-        else
-            subsampling.setOrientation((subsampling.getOrientation() + rotation) % 360);
+    /**
+     * Rotate the currently displaying media image.
+     *
+     * @param rotationInDegrees The rotation in degrees
+     */
+    public void rotatePicture(int rotationInDegrees) {
+        if (rotationInDegrees == -90 && imageView.getOrientation() == 0) imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
+        else imageView.setOrientation(Math.abs(imageView.getOrientation() + rotationInDegrees) % 360);
     }
 }

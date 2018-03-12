@@ -170,15 +170,17 @@ public class MainActivity extends SharedMediaActivity implements
 
         if (!pickMode) {
             Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
-            intent.putExtra("album", album);
+            intent.putExtra(SingleMediaActivity.EXTRA_ARGS_ALBUM, album);
             try {
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                intent.putExtra("media", media);
-                intent.putExtra("position", position);
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media);
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_POSITION, position);
                 startActivity(intent);
-            } catch (Exception e) {
+            } catch (Exception e) { // Putting too much data into the Bundle
+                // TODO: Find a better way to pass data between the activities - possibly a key to
+                // access a HashMap or a unique value of a singleton Data Repository of some sort.
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
-                intent.putExtra("media", media.get(position));
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media.get(position));
                 startActivity(intent);
             }
 

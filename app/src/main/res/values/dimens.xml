@@ -39,4 +39,7 @@
     <dimen name="about_link_icon_right_margin">24dp</dimen>
     <dimen name="about_link_padding">8dp</dimen>
 
+    <!-- Media -->
+    <dimen name="video_play_icon_size">50dp</dimen>
+
 </resources>
