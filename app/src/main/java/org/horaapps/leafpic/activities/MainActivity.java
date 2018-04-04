@@ -205,12 +205,17 @@ public class MainActivity extends SharedMediaActivity implements
     public void changedEditMode(boolean editMode, int selected, int total, @javax.annotation.Nullable View.OnClickListener listener, @javax.annotation.Nullable String title) {
         if (editMode) {
             updateToolbar(
-                    String.format(Locale.ENGLISH, "%d/%d", selected, total),
+                    getString(R.string.toolbar_selection_count, selected, total),
                     GoogleMaterial.Icon.gmd_check, listener);
         } else {
             if (albumsMode) resetToolbar();
             else updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
         }
+    }
+
+    @Override
+    public void onItemsSelected(int count, int total) {
+        toolbar.setTitle(getString(R.string.toolbar_selection_count, count, total));
     }
 
     @Override
