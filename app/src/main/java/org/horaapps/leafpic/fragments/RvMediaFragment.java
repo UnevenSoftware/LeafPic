@@ -680,6 +680,11 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     @Override
+    public void onSelectionCountChanged(int selectionCount, int totalCount) {
+        getEditModeListener().onItemsSelected(selectionCount, totalCount);
+    }
+
+    @Override
     public boolean clearSelected() {
         return adapter.clearSelected();
     }

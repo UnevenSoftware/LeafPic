@@ -512,6 +512,10 @@ public class AlbumsFragment extends BaseFragment {
         getActivity().invalidateOptionsMenu();
     }
 
+    @Override
+    public void onSelectionCountChanged(int selectionCount, int totalCount) {
+        getEditModeListener().onItemsSelected(selectionCount, totalCount);
+    }
 
     @Override
     public void refreshTheme(ThemeHelper t) {
