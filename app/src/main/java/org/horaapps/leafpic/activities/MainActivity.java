@@ -309,7 +309,7 @@ public class MainActivity extends SharedMediaActivity implements
         fab.setVisibility(Hawk.get(getString(R.string.preference_show_fab), false) ? View.VISIBLE : View.GONE);
         mainLayout.setBackgroundColor(getBackgroundColor());
 
-        setScrollViewColor(navigationDrawerView);
+//        setScrollViewColor(navigationDrawerView);
         setAllScrollbarsColor();
 
         navigationDrawerView.setTheme(getPrimaryColor(), getBackgroundColor(), getTextColor(), getIconColor());

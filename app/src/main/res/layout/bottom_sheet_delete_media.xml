@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:liz_background_style="normal"
+    android:layout_width="match_parent"
+    android:id="@+id/delete_background"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:textColor="@color/md_dark_primary_text"
+        android:layout_height="wrap_content"
+        android:background="@color/md_red_500"
+        android:padding="@dimen/big_spacing"
+        android:textSize="@dimen/sub_big_text"
+        android:textStyle="bold"
+        android:text="Cleaning up memories" />
+
+    <com.github.lzyzsd.circleprogress.DonutProgress
+        android:layout_marginTop="@dimen/medium_spacing"
+        android:layout_marginBottom="@dimen/medium_spacing"
+        android:id="@+id/delete_progress_bar"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:donut_progress="30" />
+
+    <ProgressBar
+
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_height="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:padding="@dimen/small_spacing"
+        android:id="@+id/txt_errors" />
+</LinearLayout>

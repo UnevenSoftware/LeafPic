@@ -39,7 +39,6 @@ import com.orhanobut.hawk.Hawk;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
@@ -49,6 +48,7 @@ import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.delete.DeleteMediaBottomSheet;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
@@ -56,7 +56,6 @@ import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
@@ -434,7 +433,23 @@ public class RvMediaFragment extends BaseFragment {
 
             case R.id.delete:
 
-                ProgressAdapter errorsAdapter = new ProgressAdapter(getContext());
+                DeleteMediaBottomSheet deleteMediaBottomSheet =
+                        DeleteMediaBottomSheet.make(adapter.getSelected(), new DeleteMediaBottomSheet.DeleteMediaListener() {
+                            @Override
+                            public void onCompleted() {
+                                adapter.clearSelected();
+                            }
+
+                            @Override
+                            public void onDeleted(Media media) {
+                                adapter.remove(media);
+                            }
+                        });
+                deleteMediaBottomSheet.show(getFragmentManager(), DeleteMediaBottomSheet.TAG);
+
+
+
+                /*ProgressAdapter errorsAdapter = new ProgressAdapter(getContext());
                 ArrayList<Media> selected = adapter.getSelected();
 
                 AlertDialog alertDialog = AlertDialogsHelper.getProgressDialogWithErrors(((ThemedActivity) getActivity()), R.string.deleting_images, errorsAdapter, selected.size());
@@ -460,7 +475,7 @@ public class RvMediaFragment extends BaseFragment {
                                     if (errorsAdapter.getItemCount() == 0)
                                         alertDialog.dismiss();
                                     adapter.clearSelected();
-                                });
+                                });*/
                 return true;
 
             //region Affix
