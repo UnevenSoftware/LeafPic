@@ -73,6 +73,7 @@ dependencies {
 
     //exifInterface
     implementation "com.android.support:exifinterface:$supportVersion"
+
     // google & support
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:cardview-v7:$supportVersion"
@@ -118,7 +119,7 @@ dependencies {
     implementation 'com.github.jetradarmobile:desertplaceholder:1.1.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.yalantis:ucrop:1.5.0'
-    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.8.0'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
     implementation 'com.github.HoraApps:Liz:-SNAPSHOT'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'

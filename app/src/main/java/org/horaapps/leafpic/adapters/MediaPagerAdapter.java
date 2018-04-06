@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -29,20 +30,24 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         this.media = media;
     }
 
-    @Override public Fragment getItem(int pos) {
+    @Override
+    public Fragment getItem(int pos) {
         Media media = this.media.get(pos);
         if (media.isVideo()) return VideoFragment.newInstance(media);
         if (media.isGif()) return GifFragment.newInstance(media);
         else return ImageFragment.newInstance(media);
     }
 
-    @Override public Object instantiateItem(ViewGroup container, int position) {
+    @NonNull
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
         registeredFragments.put(position, fragment);
         return fragment;
     }
 
-    @Override public void destroyItem(ViewGroup container, int position, Object object) {
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
         registeredFragments.remove(position);
         super.destroyItem(container, position, object);
     }
@@ -56,11 +61,13 @@ public class MediaPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    @Override public int getItemPosition(Object object) {
+    @Override
+    public int getItemPosition(@NonNull Object object) {
         return PagerAdapter.POSITION_NONE;
     }
 
-    @Override public int getCount() {
+    @Override
+    public int getCount() {
         return media.size();
     }
 }

@@ -170,15 +170,17 @@ public class MainActivity extends SharedMediaActivity implements
 
         if (!pickMode) {
             Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
-            intent.putExtra("album", album);
+            intent.putExtra(SingleMediaActivity.EXTRA_ARGS_ALBUM, album);
             try {
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                intent.putExtra("media", media);
-                intent.putExtra("position", position);
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media);
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_POSITION, position);
                 startActivity(intent);
-            } catch (Exception e) {
+            } catch (Exception e) { // Putting too much data into the Bundle
+                // TODO: Find a better way to pass data between the activities - possibly a key to
+                // access a HashMap or a unique value of a singleton Data Repository of some sort.
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
-                intent.putExtra("media", media.get(position));
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media.get(position));
                 startActivity(intent);
             }
 
@@ -203,12 +205,17 @@ public class MainActivity extends SharedMediaActivity implements
     public void changedEditMode(boolean editMode, int selected, int total, @javax.annotation.Nullable View.OnClickListener listener, @javax.annotation.Nullable String title) {
         if (editMode) {
             updateToolbar(
-                    String.format(Locale.ENGLISH, "%d/%d", selected, total),
+                    getString(R.string.toolbar_selection_count, selected, total),
                     GoogleMaterial.Icon.gmd_check, listener);
         } else {
             if (albumsMode) resetToolbar();
             else updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
         }
+    }
+
+    @Override
+    public void onItemsSelected(int count, int total) {
+        toolbar.setTitle(getString(R.string.toolbar_selection_count, count, total));
     }
 
     @Override
