@@ -148,8 +148,7 @@ public class Media implements CursorHandler, Parcelable {
         return orientation;
     }
 
-    //<editor-fold desc="Exif & More">
-// TODO remove from here!
+// git staTODO remove from here!
     @Deprecated
     public Bitmap getBitmap(){
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -157,6 +156,7 @@ public class Media implements CursorHandler, Parcelable {
         bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
         return bitmap;
     }
+
     @Deprecated
     public GeoLocation getGeoLocation()  {
         return /*metadata != null ? metadata.getLocation() :*/ null;
@@ -167,24 +167,22 @@ public class Media implements CursorHandler, Parcelable {
         this.orientation = orientation;
         // TODO: 28/08/16  find a better way
         // TODO update also content provider
-        new Thread(new Runnable() {
-            public void run() {
-                int exifOrientation = -1;
-                try {
-                    ExifInterface  exif = new ExifInterface(path);
-                    switch (orientation) {
-                        case 90: exifOrientation = ExifInterface.ORIENTATION_ROTATE_90; break;
-                        case 180: exifOrientation = ExifInterface.ORIENTATION_ROTATE_180; break;
-                        case 270: exifOrientation = ExifInterface.ORIENTATION_ROTATE_270; break;
-                        case 0: exifOrientation = ExifInterface.ORIENTATION_NORMAL; break;
-                    }
-                    if (exifOrientation != -1) {
-                        exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(exifOrientation));
-                        exif.saveAttributes();
-                    }
+        new Thread(() -> {
+            int exifOrientation = -1;
+            try {
+                ExifInterface  exif = new ExifInterface(path);
+                switch (orientation) {
+                    case 90: exifOrientation = ExifInterface.ORIENTATION_ROTATE_90; break;
+                    case 180: exifOrientation = ExifInterface.ORIENTATION_ROTATE_180; break;
+                    case 270: exifOrientation = ExifInterface.ORIENTATION_ROTATE_270; break;
+                    case 0: exifOrientation = ExifInterface.ORIENTATION_NORMAL; break;
                 }
-                catch (IOException ignored) {  }
+                if (exifOrientation != -1) {
+                    exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(exifOrientation));
+                    exif.saveAttributes();
+                }
             }
+            catch (IOException ignored) {  }
         }).start();
         return true;
     }
@@ -218,8 +216,6 @@ public class Media implements CursorHandler, Parcelable {
         }
         return false;
     }
-
-    //</editor-fold>
 
     public File getFile() {
         if (path != null) {
