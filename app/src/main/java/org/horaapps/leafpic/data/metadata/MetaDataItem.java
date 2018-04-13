@@ -76,8 +76,10 @@ class MetaDataItem {
         if(resolution) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             Bitmap bitmap = BitmapFactory.decodeFile(media.getPath(), options);
+            bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
             width = bitmap.getWidth();
             height = bitmap.getHeight();
+            options.inJustDecodeBounds = true;
         }
     }
 
