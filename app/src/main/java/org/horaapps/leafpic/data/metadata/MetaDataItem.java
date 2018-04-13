@@ -75,7 +75,6 @@ class MetaDataItem {
         this(in);
         if(resolution) {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
             Bitmap bitmap = BitmapFactory.decodeFile(media.getPath(), options);
             width = bitmap.getWidth();
             height = bitmap.getHeight();
