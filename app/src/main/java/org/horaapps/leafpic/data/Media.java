@@ -148,7 +148,7 @@ public class Media implements CursorHandler, Parcelable {
         return orientation;
     }
 
-// git staTODO remove from here!
+    //TODO remove from here!
     @Deprecated
     public Bitmap getBitmap(){
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
