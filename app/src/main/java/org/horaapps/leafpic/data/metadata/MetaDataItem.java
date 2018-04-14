@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.data.metadata;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
@@ -12,6 +13,8 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.xmp.XmpDirectory;
+
+import org.horaapps.leafpic.data.Media;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +40,8 @@ class MetaDataItem {
     private GeoLocation location = null;
     private int orientation = -1, height = -1, width = -1;
 
-    static MetaDataItem getMetadata(@NonNull InputStream in) throws ImageProcessingException, IOException {
-        return new MetaDataItem(in, true);
+    static MetaDataItem getMetadata(@NonNull InputStream in, Media media) throws ImageProcessingException, IOException {
+        return new MetaDataItem(in, true, media);
     }
 
     private MetaDataItem(InputStream in) throws ImageProcessingException, IOException {
@@ -68,14 +71,15 @@ class MetaDataItem {
         if(d != null) location  = d.getGeoLocation();
     }
 
-    private MetaDataItem(InputStream in, boolean resolution) throws ImageProcessingException, IOException {
+    private MetaDataItem(InputStream in, boolean resolution, Media media) throws ImageProcessingException, IOException {
         this(in);
         if(resolution) {
             BitmapFactory.Options options = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(media.getPath(), options);
+            bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(in, null, options);
-            width = options.outWidth;
-            height = options.outHeight;
         }
     }
 
@@ -100,10 +104,10 @@ class MetaDataItem {
 
 
     public String getResolution() {
-        if (width != -1 && -1 != height)
-            return String.format(Locale.getDefault(),"%dx%d", width, height);
-        else return "¿x?";
+        return (width != -1 && height != -1) ?
+                String.format(Locale.getDefault(),"%dx%d", width, height) : "¿x?";
     }
+
     public int getOrientation() {
         return orientation;
     }

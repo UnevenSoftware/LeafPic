@@ -25,13 +25,15 @@ public class MetadataHelper {
         MediaDetailsMap<String, String> details = new MediaDetailsMap<>();
         details.put(context.getString(R.string.path), m.getDisplayPath());
         details.put(context.getString(R.string.type), m.getMimeType());
-        if(m.getSize() != -1)
+        if(m.getSize() != -1) {
             details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(m.getSize(), true));
-        // TODO should i add this always?
-        details.put(context.getString(R.string.orientation), m.getOrientation() + "");
+        }
+        // TODO find a better way to list orientation. A number isn't very useful from a user perspective
+        // details.put(context.getString(R.string.orientation), m.getOrientation() + "");
         try {
-            MetaDataItem metadata = MetaDataItem.getMetadata(context.getContentResolver().openInputStream(m.getUri()));
-            details.put(context.getString(R.string.resolution), metadata.getResolution());
+            MetaDataItem metadata = MetaDataItem.getMetadata(context.getContentResolver().openInputStream(m.getUri()), m);
+            String res = metadata.getResolution();
+            details.put(context.getString(R.string.resolution), res);
             details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(m.getDateModified())));
             Date dateOriginal = metadata.getDateOriginal();
             if (dateOriginal != null )
@@ -53,7 +55,7 @@ public class MetadataHelper {
     }
 
     public MediaDetailsMap<String, String> getAllDetails(Context context, Media media) {
-        MediaDetailsMap<String, String> data = new MediaDetailsMap<String, String>();
+        MediaDetailsMap<String, String> data = new MediaDetailsMap<>();
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(context.getContentResolver().openInputStream(media.getUri()));
             for(Directory directory : metadata.getDirectories()) {
