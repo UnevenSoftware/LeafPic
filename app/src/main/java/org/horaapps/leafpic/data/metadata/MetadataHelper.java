@@ -30,7 +30,7 @@ public class MetadataHelper {
         // TODO should i add this always?
         details.put(context.getString(R.string.orientation), m.getOrientation() + "");
         try {
-            MetaDataItem metadata = MetaDataItem.getMetadata(context.getContentResolver().openInputStream(m.getUri()));
+            MetaDataItem metadata = MetaDataItem.getMetadata(context, m.getUri());
             details.put(context.getString(R.string.resolution), metadata.getResolution());
             details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(m.getDateModified())));
             Date dateOriginal = metadata.getDateOriginal();
