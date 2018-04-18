@@ -1,7 +1,8 @@
 package org.horaapps.leafpic.data.metadata;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
+import android.net.Uri;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -37,11 +38,12 @@ class MetaDataItem {
     private GeoLocation location = null;
     private int orientation = -1, height = -1, width = -1;
 
-    static MetaDataItem getMetadata(@NonNull InputStream in) throws ImageProcessingException, IOException {
-        return new MetaDataItem(in, true);
+    static MetaDataItem getMetadata(Context context, Uri uri) throws ImageProcessingException, IOException {
+        return new MetaDataItem(context, uri, true);
     }
 
-    private MetaDataItem(InputStream in) throws ImageProcessingException, IOException {
+    private MetaDataItem(Context context, Uri uri) throws ImageProcessingException, IOException {
+        InputStream in = context.getContentResolver().openInputStream(uri);
         Metadata metadata = ImageMetadataReader.readMetadata(in);
         handleDirectoryBase(metadata.getFirstDirectoryOfType(ExifIFD0Directory.class));
         ExifSubIFDDirectory dir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
@@ -68,14 +70,18 @@ class MetaDataItem {
         if(d != null) location  = d.getGeoLocation();
     }
 
-    private MetaDataItem(InputStream in, boolean resolution) throws ImageProcessingException, IOException {
-        this(in);
+    private MetaDataItem(Context context, Uri uri, boolean resolution) throws ImageProcessingException, IOException {
+        this(context, uri);
         if(resolution) {
+            InputStream in = context.getContentResolver().openInputStream(uri);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(in, null, options);
             width = options.outWidth;
             height = options.outHeight;
+
+            if (in != null)
+                in.close();
         }
     }
 
