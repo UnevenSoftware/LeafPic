@@ -7,16 +7,36 @@
     android:id="@+id/delete_background"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:textColor="@color/md_dark_primary_text"
-        android:layout_height="wrap_content"
-        android:background="@color/md_red_500"
-        android:padding="@dimen/big_spacing"
-        android:textSize="@dimen/sub_big_text"
-        android:textStyle="bold"
-        android:text="Cleaning up memories" />
+        android:gravity="center_vertical"
+        android:id="@+id/header"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:textColor="@color/md_dark_primary_text"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/big_spacing"
+            android:textSize="@dimen/sub_big_text"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:text="Cleaning up memories" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel_delete"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+            android:textColor="@color/md_white_1000"
+            android:layout_centerVertical="true"
+            android:text="@string/cancel"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
 
     <com.github.lzyzsd.circleprogress.DonutProgress
         android:layout_marginTop="@dimen/medium_spacing"
@@ -26,13 +46,6 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         app:donut_progress="30" />
-
-    <ProgressBar
-
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_height="10dp" />
 
     <TextView
         android:layout_width="match_parent"

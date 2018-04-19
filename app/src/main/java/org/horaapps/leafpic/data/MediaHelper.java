@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
@@ -36,6 +37,7 @@ public class MediaHelper {
         return Observable.create(subscriber -> {
             for (Media media : mediaToDelete) {
                 boolean deleteSuccess = internalDeleteMedia(context, media);
+                Log.v("delete-internal", media.getPath() + " " + deleteSuccess);
                 if (deleteSuccess) subscriber.onNext(media);
                 else subscriber.onError(new DeleteException(media));
             }

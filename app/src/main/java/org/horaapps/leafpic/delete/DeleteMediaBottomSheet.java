@@ -4,8 +4,11 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
@@ -23,6 +26,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -39,11 +43,15 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         void onDeleted(Media media);
     }
 
+
     public static final String TAG = "delete_bootomsheet";
     public static final String EXTRA_MEDIA = "media";
 
-    @BindView(R.id.title)
-    TextView title;
+    @BindView(R.id.header)
+    RelativeLayout header;
+
+    @BindView(R.id.cancel_delete)
+    AppCompatButton cancelButton;
 
     @BindView(R.id.delete_progress_bar)
     DonutProgress progress;
@@ -54,6 +62,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     private ArrayList<Media> media;
 
     DeleteMediaListener listener;
+    boolean cancelRequested = false;
 
     public void setListener(DeleteMediaListener listener) {
         this.listener = listener;
@@ -71,12 +80,12 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
 
     private void setProgress(int p) {
         progress.setProgress(p);
+        // TODO: 06/04/18 use string resource when merged in dev
         progress.setText(String.format(Locale.ENGLISH, "%d/%d", p, progress.getMax()));
     }
 
     @Override
     public void setupDialog(Dialog dialog, int style) {
-        dialog.setCancelable(false);
         ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
 
 
@@ -84,7 +93,8 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         ButterKnife.bind(this, view);
         view.setBackgroundColor(th.getBackgroundColor());
 
-        title.setBackgroundColor(th.getPrimaryColor());
+        header.setBackgroundColor(th.getPrimaryColor());
+
         txtErrors.setTextColor(th.getTextColor());
         progress.setFinishedStrokeColor(th.getAccentColor());
         progress.setTextColor(th.getTextColor());
@@ -108,6 +118,14 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
 
     }
 
+    @OnClick(R.id.cancel_delete)
+    void cancelDelete() {
+        Log.wtf(TAG, "delete stop");
+        cancelRequested = true;
+        listener.onCompleted();
+        dismiss();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +136,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         Disposable end = MediaHelper.deleteMedia(getContext(), media)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .takeUntil(m -> !cancelRequested)
                 .subscribe(
                         m -> {
                             listener.onDeleted(m);
@@ -137,6 +156,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
                             setCancelable(true);
                             listener.onCompleted();
                             if (errors.size() == 0)
+                                //Log.wtf("asd","ads");
                                 dismiss();
                             else {
                                 showErrors(errors);

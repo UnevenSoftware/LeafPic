@@ -434,17 +434,21 @@ public class RvMediaFragment extends BaseFragment {
             case R.id.delete:
 
                 DeleteMediaBottomSheet deleteMediaBottomSheet =
-                        DeleteMediaBottomSheet.make(adapter.getSelected(), new DeleteMediaBottomSheet.DeleteMediaListener() {
-                            @Override
-                            public void onCompleted() {
-                                adapter.clearSelected();
-                            }
+                        DeleteMediaBottomSheet.make(adapter.getSelected(),
+                                new DeleteMediaBottomSheet.DeleteMediaListener() {
+                                    @Override
+                                    public void onCompleted() {
+                                        //adapter.clearSelected();
+                                        //updateToolbar();
+                                        adapter.invalidateSelectedCount();
+                                    }
 
-                            @Override
-                            public void onDeleted(Media media) {
-                                adapter.remove(media);
-                            }
-                        });
+                                    @Override
+                                    public void onDeleted(Media media) {
+                                        adapter.removeSelectedMedia(media);
+                                        //updateToolbar();
+                                    }
+                                });
                 deleteMediaBottomSheet.show(getFragmentManager(), DeleteMediaBottomSheet.TAG);
 
 
