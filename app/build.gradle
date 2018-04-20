@@ -9,6 +9,7 @@ repositories {
 
 android {
     compileSdkVersion project.sdkVersion
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
@@ -50,7 +51,10 @@ android {
         }
 
         debug {
-            applicationIdSuffix ".debug"
+            //for getting the google play store to launch to the app application
+            //suffix needs to be blank
+            applicationIdSuffix ""
+            //applicationIdSuffix "debug"
             resValue "string", "app_name", "LeafPic (debug)"
         }
     }
