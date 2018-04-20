@@ -51,6 +51,10 @@ android {
         }
 
         debug {
+
+            //Because of the debug modification with the package name then the rate button
+            //will not properly go to the app in the google play store until the app is in the
+            //released version
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "LeafPic (debug)"
         }
