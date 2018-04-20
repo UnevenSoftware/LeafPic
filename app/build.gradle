@@ -51,7 +51,10 @@ android {
         }
 
         debug {
-            applicationIdSuffix ".debug"
+            //for getting the google play store to launch to the app application
+            //suffix needs to be blank
+            applicationIdSuffix ""
+            //applicationIdSuffix "debug"
             resValue "string", "app_name", "LeafPic (debug)"
         }
     }

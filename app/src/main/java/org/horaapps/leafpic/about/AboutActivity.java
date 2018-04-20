@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -104,7 +106,8 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
 
         //Launches to the app in google play, if the package name ever does change you can do this
         //by changing the org section of the URI below. -beastlyCoder
-        Uri uri = Uri.parse("market://details?id=org.horaapps.leafpic");
+        Uri uri = Uri.parse("market://details?id="+getPackageName());
+
         Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try
         {
