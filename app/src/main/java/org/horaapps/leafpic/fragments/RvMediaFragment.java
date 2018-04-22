@@ -662,6 +662,10 @@ public class RvMediaFragment extends BaseFragment {
         return adapter.getSelectedCount();
     }
 
+    public MediaAdapter getAdapter() {
+        return adapter;
+    }
+
     @Override
     public boolean editMode() {
         return adapter.selecting();

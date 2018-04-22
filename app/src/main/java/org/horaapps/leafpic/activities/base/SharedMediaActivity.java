@@ -19,6 +19,11 @@ public abstract class SharedMediaActivity extends ThemedActivity {
 
     private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
 
+    public static final int REQUEST_CODE_UPDATE_MEDIA = 502;
+    public static final String PARAM_POSITION = "Position";
+    public static final String PARAM_MEDIA = "Media";
+
+
     public void requestSdCardPermissions() {
         AlertDialog textDialog = AlertDialogsHelper.getTextDialog(this, R.string.sd_card_write_permission_title, R.string.sd_card_permissions_message);
         textDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {

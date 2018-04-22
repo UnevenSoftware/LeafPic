@@ -2,6 +2,7 @@ package org.horaapps.leafpic.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -683,6 +684,11 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             if (!b) {
                                 StringUtils.showToast(getApplicationContext(), getString(R.string.rename_error));
                                 //adapter.notifyDataSetChanged();
+                            } else {
+                                Intent intent = new Intent();
+                                intent.putExtra(PARAM_MEDIA , currentMedia);
+                                intent.putExtra(PARAM_POSITION, position);
+                                setResult(Activity.RESULT_OK, intent);
                             }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));

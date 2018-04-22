@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -22,6 +23,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -175,13 +177,13 @@ public class MainActivity extends SharedMediaActivity implements
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
                 intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media);
                 intent.putExtra(SingleMediaActivity.EXTRA_ARGS_POSITION, position);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_UPDATE_MEDIA);
             } catch (Exception e) { // Putting too much data into the Bundle
                 // TODO: Find a better way to pass data between the activities - possibly a key to
                 // access a HashMap or a unique value of a singleton Data Repository of some sort.
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
                 intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_UPDATE_MEDIA);
             }
 
         } else {
@@ -535,5 +537,38 @@ public class MainActivity extends SharedMediaActivity implements
 
     private void selectNavigationItem(@NavigationItem int navItem) {
         navigationDrawerView.selectNavItem(navItem);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+
+        if(requestCode == REQUEST_CODE_UPDATE_MEDIA) {
+            if(resultCode == Activity.RESULT_OK) {
+                updateMediaResult(resultData);
+            }
+        }
+    }
+
+    private void updateMediaResult(Intent resultData) {
+        if(resultData != null) {
+            Bundle bundle = resultData.getExtras();
+            if(bundle != null) {
+                updateMediaInFragment(bundle);
+            }
+        }
+    }
+
+    private void updateMediaInFragment(Bundle bundle){
+        if(bundle.containsKey(PARAM_POSITION) &&
+                bundle.containsKey(PARAM_MEDIA)) {
+            int position = bundle.getInt(PARAM_POSITION);
+            Media media = (Media) bundle.get(PARAM_MEDIA);
+            if (rvMediaFragment.getAdapter().getMedia()!= null &&
+                    rvMediaFragment.getAdapter().getMedia().size() > 0 ) {
+                rvMediaFragment.getAdapter().getMedia().set(position, media);
+            }
+        }
+
     }
 }
