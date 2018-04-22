@@ -101,7 +101,11 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
 
     @OnClick(R.id.about_link_rate)
     public void onRate() {
-        // TODO: Link to app store
+
+        //Until app is released this will not work because of conflicting package names
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id="+getPackageName()));
+        startActivity(intent);
     }
 
     @OnClick(R.id.about_link_github)
