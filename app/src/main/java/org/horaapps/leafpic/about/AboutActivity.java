@@ -102,10 +102,24 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
     @OnClick(R.id.about_link_rate)
     public void onRate() {
 
-        //Until app is released this will not work because of conflicting package names
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("market://details?id="+getPackageName()));
-        startActivity(intent);
+//        //Until app is released this will not work because of conflicting package names
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        //intent.setData(Uri.parse("market://details?id="+getPackageName()));
+//        intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=org.horaapps.leafpic"));
+//        startActivity(intent);
+        Uri uri = Uri.parse("market://details?id=org.horaapps.leafpic");
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=org.horaapps.leafpic" )));
+        }
     }
 
     @OnClick(R.id.about_link_github)
