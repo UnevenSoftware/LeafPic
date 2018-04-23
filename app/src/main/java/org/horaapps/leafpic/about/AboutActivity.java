@@ -101,12 +101,6 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
 
     @OnClick(R.id.about_link_rate)
     public void onRate() {
-
-//        //Until app is released this will not work because of conflicting package names
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        //intent.setData(Uri.parse("market://details?id="+getPackageName()));
-//        intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=org.horaapps.leafpic"));
-//        startActivity(intent);
         Uri uri = Uri.parse("market://details?id=org.horaapps.leafpic");
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
