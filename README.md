@@ -31,9 +31,16 @@ LeafPic is now available in a beta release on the Play Store, you can join [here
 
 #### Contributing
 
-###### Code & Issues
+###### Testing
+Do you want to be a tester? Join our Telegram group! Send a message to @dnldsht or @CalvinNoronha we will add you.
+We will release apks to test features or to check if bugs have been fixed.
+
+###### Code 
 If you are a developer and you wish to contribute to the app please fork the project
-and submit a pull request if possible make it on the [dev branch](https://github.com/HoraApps/LeafPic/tree/dev).
+and submit a pull request on the [dev branch](https://github.com/HoraApps/LeafPic/tree/dev).
+If you want jou can join us on Telegram send us a message we will add you!
+
+###### Issues
 You can trace the status of known issues on [waffle.io](https://waffle.io/HoraApps/LeafPic),
 also feel free to file a new issue (helpful description, screenshots and logcat are appreciated), or send me an [email](mailto:dnld.sht@gmail.com) if you have any questions.
 
