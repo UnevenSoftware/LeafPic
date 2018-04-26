@@ -3,8 +3,7 @@
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/HoraApps)
 # LeafPic
 <img src="/app/src/main/res/drawable/leaf_pic.png" align="left" width="200" hspace="10" vspace="10">
-LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, we also have in plan to add some useful feature.</br>
-LeafPic is now available in a beta release on the Play Store, you can join [here](https://play.google.com/apps/testing/org.horaapps.leafpic)!</br>
+LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, we also have in plan to add some useful feature.<br/>
 
 <div style="display:flex;" >
 <a href="https://f-droid.org/app/org.horaapps.leafpic">
@@ -32,7 +31,7 @@ LeafPic is now available in a beta release on the Play Store, you can join [here
 #### Contributing
 
 ###### Testing
-Do you want to be a tester? Join our Telegram group! Send a message to @dnldsht or @CalvinNoronha we will add you.
+Do you want to be a tester? Join our Telegram group! Send a message to [@dnldsht](https://t.me/dnldsht) or [@CalvinNoronha](https://t.me/CalvinNoronha) we will add you.
 We will release apks to test features or to check if bugs have been fixed.
 
 ###### Code 
