@@ -30,11 +30,13 @@ public class NavigationDrawer extends ScrollView {
     public static final int NAVIGATION_ITEM_WALLPAPERS = 1004;
     public static final int NAVIGATION_ITEM_DONATE = 1005;
     public static final int NAVIGATION_ITEM_SETTINGS = 1006;
-    public static final int NAVIGATION_ITEM_ABOUT = 1007;
+    public static final int NAVIGATION_ITEM_AFFIX = 1007;
+    public static final int NAVIGATION_ITEM_EFFECTS = 1008;
+    public static final int NAVIGATION_ITEM_ABOUT = 1009;
 
     @IntDef({NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_HIDDEN_FOLDERS,
-            NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS,
-            NAVIGATION_ITEM_ABOUT})
+            NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS, NAVIGATION_ITEM_AFFIX,
+            NAVIGATION_ITEM_EFFECTS, NAVIGATION_ITEM_ABOUT})
     public @interface NavigationItem {}
 
     @BindView(R.id.navigation_drawer_header) ViewGroup drawerHeader;
@@ -45,6 +47,8 @@ public class NavigationDrawer extends ScrollView {
     @BindView(R.id.navigation_item_wallpapers) NavigationEntry wallpapersEntry;
     @BindView(R.id.navigation_item_donate) NavigationEntry donateEntry;
     @BindView(R.id.navigation_item_settings) NavigationEntry settingsEntry;
+    @BindView(R.id.navigation_item_affix) NavigationEntry affixEntry;
+    @BindView(R.id.navigation_item_effects) NavigationEntry effectsEntry;
     @BindView(R.id.navigation_item_about) NavigationEntry aboutEntry;
     @BindView(R.id.navigation_drawer_header_version) TextView appVersion;
 
@@ -110,7 +114,7 @@ public class NavigationDrawer extends ScrollView {
 
         navigationEntries = new NavigationEntry[]
                 {albumsEntry, mediaEntry, hiddenFoldersEntry, wallpapersEntry, donateEntry,
-                        settingsEntry, aboutEntry};
+                        settingsEntry, affixEntry, effectsEntry ,aboutEntry};
         setupListeners();
     }
 
@@ -140,6 +144,8 @@ public class NavigationDrawer extends ScrollView {
             case R.id.navigation_item_wallpapers: return NAVIGATION_ITEM_WALLPAPERS;
             case R.id.navigation_item_donate: return NAVIGATION_ITEM_DONATE;
             case R.id.navigation_item_settings: return NAVIGATION_ITEM_SETTINGS;
+            case R.id.navigation_item_affix: return NAVIGATION_ITEM_AFFIX;
+            case R.id.navigation_item_effects: return NAVIGATION_ITEM_EFFECTS;
             case R.id.navigation_item_about: return NAVIGATION_ITEM_ABOUT;
         }
         return NAVIGATION_ITEM_ABOUT;

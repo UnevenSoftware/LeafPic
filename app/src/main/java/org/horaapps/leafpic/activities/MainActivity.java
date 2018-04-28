@@ -505,6 +505,17 @@ public class MainActivity extends SharedMediaActivity implements
                 DonateActivity.startActivity(this);
                 break;
 
+            case NavigationDrawer.NAVIGATION_ITEM_AFFIX:
+                Intent i = new Intent(getBaseContext(),AffixActivity.class);
+                startActivity(i);
+             //   AffixActivity.startActivity(this);
+                break;
+
+            case NavigationDrawer.NAVIGATION_ITEM_EFFECTS:
+                Intent i2 = new Intent(getBaseContext(),EffectsActivity.class);
+                startActivity(i2);
+                break;
+
             case NavigationDrawer.NAVIGATION_ITEM_SETTINGS:
                 SettingsActivity.startActivity(this);
                 break;

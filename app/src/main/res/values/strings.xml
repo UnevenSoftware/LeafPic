@@ -6,6 +6,8 @@
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
     <string name="welcome_slide_sub">A Colorful Material Designed Gallery!</string>
     <string name="made_with_love_by">Made with love by</string>
+    <string name="Effects">Effects</string>
+
 
     <!--AUTHORS-->
     <string name="donald_role">Project Manager</string>
@@ -271,8 +273,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
 
     <string name="send_mail_error">There are no email clients installed.</string>
     <string name="about_special_thanks">Special thanks</string>
-    <string name="about_special_thanks_patryk_goworowski_sub">to <a
-        href="https://plus.google.com/109304801957014561872/about">Patryk Goworowski</a> for the
+    <string name="about_special_thanks_patryk_goworowski_sub">to <a href="https://plus.google.com/109304801957014561872/about">Patryk Goworowski</a> for the
         awesome icon.
     </string>
     <string name="about_special_thanks_members_sub">
