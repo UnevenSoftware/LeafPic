@@ -1,13 +1,14 @@
 package org.horaapps.leafpic.delete;
 
-import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,7 +18,6 @@ import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.liz.ThemeHelper;
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -64,6 +65,8 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     DeleteMediaListener listener;
     boolean cancelRequested = false;
 
+    CompositeDisposable disposable = new CompositeDisposable();
+
     public void setListener(DeleteMediaListener listener) {
         this.listener = listener;
     }
@@ -84,7 +87,26 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         progress.setText(String.format(Locale.ENGLISH, "%d/%d", p, progress.getMax()));
     }
 
+
+    @Nullable
     @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
+
+
+        View view = inflater.inflate(R.layout.bottom_sheet_delete_media, container, false);
+        ButterKnife.bind(this, view);
+        view.setBackgroundColor(th.getBackgroundColor());
+
+        header.setBackgroundColor(th.getPrimaryColor());
+
+        txtErrors.setTextColor(th.getTextColor());
+        progress.setFinishedStrokeColor(th.getAccentColor());
+        progress.setTextColor(th.getTextColor());
+        return view;
+    }
+
+   /* @Override
     public void setupDialog(Dialog dialog, int style) {
         ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
 
@@ -102,7 +124,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         setProgress(0);
 
         dialog.setContentView(view);
-    }
+    }*/
 
     private void showErrors(HashSet<String> errors) {
         StringBuilder b = new StringBuilder();
@@ -127,43 +149,67 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onDestroy() {
+        disposable.dispose();
+        super.onDestroy();
 
-        media = getArguments().getParcelableArrayList(EXTRA_MEDIA);
+    }
+
+    private void done() {
+        setCancelable(true);
+        listener.onCompleted();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Bundle arguments = getArguments();
+        if (arguments == null || (media = arguments.getParcelableArrayList(EXTRA_MEDIA)) == null) {
+            done();
+            return;
+        }
+        progress.setMax(media.size());
+        setProgress(0);
 
         HashSet<String> errors = new HashSet<>(0);
-        Disposable end = MediaHelper.deleteMedia(getContext(), media)
-                .subscribeOn(Schedulers.io())
+
+        Disposable subscribe = MediaHelper.deleteMedia(getContext(), media)
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .takeUntil(m -> !cancelRequested)
+                .takeUntil(mediaBooleanPair -> !cancelRequested)
                 .subscribe(
-                        m -> {
-                            listener.onDeleted(m);
-                            setProgress((int) (progress.getProgress() + 1));
-                        },
-                        throwable -> {
-                            setProgress((int) (progress.getProgress() + 1));
+                        pair -> {
+                            if (pair.second)
+                                listener.onDeleted(pair.first);
+                            else
+                                errors.add(pair.first.getName());
 
-                            if (throwable instanceof DeleteException) {
-                                errors.add(((DeleteException) throwable).getMedia().getPath());
-                            } else {
-                                errors.add(throwable.getLocalizedMessage());
-                            }
-
+                            setProgress((int) (progress.getProgress() + 1));
+                        }, err -> {
                         },
                         () -> {
-                            setCancelable(true);
-                            listener.onCompleted();
-                            if (errors.size() == 0)
-                                //Log.wtf("asd","ads");
-                                dismiss();
-                            else {
+                            if (errors.size() > 0)
                                 showErrors(errors);
-                            }
+                            done();
+                        });
+        disposable.add(subscribe);
 
-                        }
-                );
+        /*for (Media m : media) {
+            if(cancelRequested) break;
+
+            boolean deleteSuccess = MediaHelper.internalDeleteMedia(getContext(), m);
+            if (deleteSuccess) {
+                listener.onDeleted(m);
+            } else {
+                errors.add(m.getPath());
+            }
+
+            setProgress((int) (progress.getProgress() + 1));
+        }*/
+        /*if (errors.size() > 0)
+            showErrors(errors);
+        else dismiss();*/
 
 
     }

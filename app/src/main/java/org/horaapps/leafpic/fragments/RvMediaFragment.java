@@ -441,15 +441,18 @@ public class RvMediaFragment extends BaseFragment {
                                         //adapter.clearSelected();
                                         //updateToolbar();
                                         adapter.invalidateSelectedCount();
+                                        Log.wtf("delete", "main complete ");
                                     }
 
                                     @Override
                                     public void onDeleted(Media media) {
+                                        Log.wtf("delete", "main deleted " + media.getDisplayPath());
                                         adapter.removeSelectedMedia(media);
                                         //updateToolbar();
                                     }
                                 });
-                deleteMediaBottomSheet.show(getFragmentManager(), DeleteMediaBottomSheet.TAG);
+                deleteMediaBottomSheet.showNow(getFragmentManager(), null);
+//                deleteMediaBottomSheet.show(getFragmentManager(), null);
 
 
 
