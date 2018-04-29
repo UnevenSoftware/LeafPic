@@ -4,7 +4,9 @@
 # LeafPic
 <img src="/app/src/main/res/drawable/leaf_pic.png" align="left" width="200" hspace="10" vspace="10">
 LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, we also have in plan to add some useful feature.</br>
-LeafPic is now available in a beta release on the Play Store, you can join [here](https://play.google.com/apps/testing/org.horaapps.leafpic)!</br>
+LeafPic is now available in a beta release on the Play Store.
+
+Click [here](https://play.google.com/apps/testing/org.horaapps.leafpic) to join!</br>
 
 <div style="display:flex;" >
 <a href="https://f-droid.org/app/org.horaapps.leafpic">
