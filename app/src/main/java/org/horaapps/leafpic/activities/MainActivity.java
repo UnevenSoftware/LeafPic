@@ -22,7 +22,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -35,6 +34,7 @@ import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.about.AboutActivity;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
@@ -56,12 +56,22 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.ItemListener;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ABOUT;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ALL_ALBUMS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ALL_MEDIA;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_DONATE;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_SETTINGS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NavigationItem;
+
 /**
  * The Main Activity used to display Albums / Media.
  */
 public class MainActivity extends SharedMediaActivity implements
         RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener,
-        NothingToShowListener, EditModeListener, NavigationDrawer.ItemListener {
+        NothingToShowListener, EditModeListener, ItemListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
@@ -160,15 +170,17 @@ public class MainActivity extends SharedMediaActivity implements
 
         if (!pickMode) {
             Intent intent = new Intent(getApplicationContext(), SingleMediaActivity.class);
-            intent.putExtra("album", album);
+            intent.putExtra(SingleMediaActivity.EXTRA_ARGS_ALBUM, album);
             try {
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
-                intent.putExtra("media", media);
-                intent.putExtra("position", position);
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media);
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_POSITION, position);
                 startActivity(intent);
-            } catch (Exception e) {
+            } catch (Exception e) { // Putting too much data into the Bundle
+                // TODO: Find a better way to pass data between the activities - possibly a key to
+                // access a HashMap or a unique value of a singleton Data Repository of some sort.
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
-                intent.putExtra("media", media.get(position));
+                intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media.get(position));
                 startActivity(intent);
             }
 
@@ -193,12 +205,17 @@ public class MainActivity extends SharedMediaActivity implements
     public void changedEditMode(boolean editMode, int selected, int total, @javax.annotation.Nullable View.OnClickListener listener, @javax.annotation.Nullable String title) {
         if (editMode) {
             updateToolbar(
-                    String.format(Locale.ENGLISH, "%d/%d", selected, total),
+                    getString(R.string.toolbar_selection_count, selected, total),
                     GoogleMaterial.Icon.gmd_check, listener);
         } else {
             if (albumsMode) resetToolbar();
             else updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
         }
+    }
+
+    @Override
+    public void onItemsSelected(int count, int total) {
+        toolbar.setTitle(getString(R.string.toolbar_selection_count, count, total));
     }
 
     @Override
@@ -250,6 +267,7 @@ public class MainActivity extends SharedMediaActivity implements
             @Override
             public void onAuthenticated() {
                 closeDrawer();
+                selectNavigationItem(NAVIGATION_ITEM_HIDDEN_FOLDERS);
                 displayAlbums(true);
             }
 
@@ -316,11 +334,9 @@ public class MainActivity extends SharedMediaActivity implements
         toolbar.setTitle(title);
         toolbar.setNavigationIcon(getToolbarIcon(icon));
         toolbar.setNavigationOnClickListener(onClickListener);
-        Log.wtf("asd-sel", "updateToolbar() called with: title = [" + title + "], icon = [" + icon + "], onClickListener = [" + onClickListener + "]");
     }
 
     private void resetToolbar() {
-        Log.wtf("asd-sel", "reset");
         updateToolbar(
                 getString(R.string.app_name),
                 GoogleMaterial.Icon.gmd_menu,
@@ -477,31 +493,33 @@ public class MainActivity extends SharedMediaActivity implements
         displayMedia(album);
     }
 
-    public void onItemSelected(@NavigationDrawer.NavigationItem int navigationItemSelected) {
+    public void onItemSelected(@NavigationItem int navigationItemSelected) {
         closeDrawer();
         switch (navigationItemSelected) {
 
-            case NavigationDrawer.NAVIGATION_ITEM_ALL_ALBUMS:
+            case NAVIGATION_ITEM_ALL_ALBUMS:
                 displayAlbums(false);
+                selectNavigationItem(navigationItemSelected);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_ALL_MEDIA:
+            case NAVIGATION_ITEM_ALL_MEDIA:
                 displayMedia(Album.getAllMediaAlbum());
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS:
+            case NAVIGATION_ITEM_HIDDEN_FOLDERS:
                 if (Security.isPasswordOnHidden()) {
                     askPassword();
                 } else {
+                    selectNavigationItem(navigationItemSelected);
                     displayAlbums(true);
                 }
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS:
+            case NAVIGATION_ITEM_WALLPAPERS:
                 Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_DONATE:
+            case NAVIGATION_ITEM_DONATE:
                 DonateActivity.startActivity(this);
                 break;
 
@@ -516,13 +534,17 @@ public class MainActivity extends SharedMediaActivity implements
                 startActivity(i2);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_SETTINGS:
+            case NAVIGATION_ITEM_SETTINGS:
                 SettingsActivity.startActivity(this);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_ABOUT:
+            case NAVIGATION_ITEM_ABOUT:
                 AboutActivity.startActivity(this);
                 break;
         }
+    }
+
+    private void selectNavigationItem(@NavigationItem int navItem) {
+        navigationDrawerView.selectNavItem(navItem);
     }
 }

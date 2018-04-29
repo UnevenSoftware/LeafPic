@@ -15,6 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.liz.ThemeHelper;
+import org.horaapps.liz.Themed;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Custom view which handles the home's Navigation Drawer.
  */
-public class NavigationDrawer extends ScrollView {
+public class NavigationDrawer extends ScrollView implements Themed {
 
     public static final int NAVIGATION_ITEM_ALL_ALBUMS = 1001;
     public static final int NAVIGATION_ITEM_ALL_MEDIA = 1002;
@@ -33,6 +35,12 @@ public class NavigationDrawer extends ScrollView {
     public static final int NAVIGATION_ITEM_AFFIX = 1007;
     public static final int NAVIGATION_ITEM_EFFECTS = 1008;
     public static final int NAVIGATION_ITEM_ABOUT = 1009;
+
+    @Override
+    public void refreshTheme(ThemeHelper themeHelper) {
+        selectedColor = themeHelper.getButtonBackgroundColor();
+        selectItem(selectedEntry);
+    }
 
     @IntDef({NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_HIDDEN_FOLDERS,
             NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS, NAVIGATION_ITEM_AFFIX,
@@ -54,6 +62,9 @@ public class NavigationDrawer extends ScrollView {
 
     private NavigationEntry[] navigationEntries;
     private ItemListener itemListener;
+    private NavigationEntry selectedEntry;
+
+    @ColorInt private int selectedColor;
 
     public NavigationDrawer(@NonNull Context context) {
         this(context, null);
@@ -107,6 +118,15 @@ public class NavigationDrawer extends ScrollView {
         appVersion.setText(version);
     }
 
+    /**
+     * Selects the Navigation Item in Nav Drawer.
+     *
+     * @param navItem The Nav Item to select.
+     */
+    public void selectNavItem(@NavigationItem int navItem) {
+        selectItem(getViewForSelection(navItem));
+    }
+
     private void init(@NonNull Context context) {
         setupView();
         LayoutInflater.from(context).inflate(R.layout.view_navigation_drawer, this, true);
@@ -116,6 +136,8 @@ public class NavigationDrawer extends ScrollView {
                 {albumsEntry, mediaEntry, hiddenFoldersEntry, wallpapersEntry, donateEntry,
                         settingsEntry, affixEntry, effectsEntry ,aboutEntry};
         setupListeners();
+
+        selectedEntry = albumsEntry;
     }
 
     private void setupView() {
@@ -135,6 +157,12 @@ public class NavigationDrawer extends ScrollView {
         }
     }
 
+    private void selectItem(@NonNull NavigationEntry v) {
+        selectedEntry.setBackground(null);
+        selectedEntry = v;
+        selectedEntry.setBackgroundColor(selectedColor);
+    }
+
     @NavigationItem
     private int getNavigationItemSelected(@IdRes int viewId) {
         switch (viewId) {
@@ -151,11 +179,30 @@ public class NavigationDrawer extends ScrollView {
         return NAVIGATION_ITEM_ABOUT;
     }
 
+    @NonNull
+    private NavigationEntry getViewForSelection(@NavigationItem int navItem) {
+        switch (navItem) {
+            case NAVIGATION_ITEM_ABOUT: return aboutEntry;
+            case NAVIGATION_ITEM_ALL_ALBUMS: return albumsEntry;
+            case NAVIGATION_ITEM_ALL_MEDIA: return mediaEntry;
+            case NAVIGATION_ITEM_DONATE: return donateEntry;
+            case NAVIGATION_ITEM_HIDDEN_FOLDERS: return hiddenFoldersEntry;
+            case NAVIGATION_ITEM_SETTINGS: return settingsEntry;
+            case NAVIGATION_ITEM_WALLPAPERS: return wallpapersEntry;
+            default: return albumsEntry;
+        }
+    }
+
     /**
      * Interface for clients to listen to item selections.
      */
     public interface ItemListener {
 
+        /**
+         * Alert the listener that a Navigation Item is select
+         *
+         * @param navigationItemSelected The Navigation Item selected.
+         */
         void onItemSelected(@NavigationItem int navigationItemSelected);
     }
 }

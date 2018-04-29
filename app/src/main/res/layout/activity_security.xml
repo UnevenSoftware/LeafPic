@@ -32,8 +32,8 @@
 
                 <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/active_security_icon"
-                    android:layout_width="@dimen/icon_width_height"
-                    android:layout_height="@dimen/icon_width_height"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_gravity="center_vertical"
                     app:iiv_icon="gmd-lock"
                     android:layout_marginLeft="@dimen/big_spacing"
@@ -78,8 +78,8 @@
 
                 <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/active_security_fingerprint_icon"
-                    android:layout_width="@dimen/icon_width_height"
-                    android:layout_height="@dimen/icon_width_height"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_gravity="center_vertical"
                     app:iiv_icon="gmd-fingerprint"
                     android:layout_margin="@dimen/big_spacing"
@@ -145,8 +145,8 @@
 
                     <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/security_body_apply_hidden_icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
                         android:layout_gravity="center_vertical"
                         app:iiv_icon="faw-low-vision"
                         android:layout_marginLeft="@dimen/big_spacing"
@@ -191,8 +191,8 @@
 
                     <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/security_body_apply_delete_icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         app:iiv_icon="gmd-delete"

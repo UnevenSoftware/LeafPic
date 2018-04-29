@@ -1,6 +1,5 @@
 package org.horaapps.leafpic.data;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +13,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.annotations.NotNull;
 
+import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
@@ -27,7 +27,7 @@ public class Media implements CursorHandler, Parcelable {
 
     private String path = null;
     private long dateModified = -1;
-    private String mimeType = "unknown";
+    private String mimeType = MimeTypeUtils.UNKNOWN_MIME_TYPE;
     private int orientation = 0;
 
     private String uriString = null;
@@ -40,13 +40,13 @@ public class Media implements CursorHandler, Parcelable {
     public Media(String path, long dateModified) {
         this.path = path;
         this.dateModified = dateModified;
-        this.mimeType = StringUtils.getMimeType(path);
+        this.mimeType = MimeTypeUtils.getMimeType(path);
     }
 
     public Media(File file) {
         this(file.getPath(), file.lastModified());
         this.size = file.length();
-        this.mimeType = StringUtils.getMimeType(path);
+        this.mimeType = MimeTypeUtils.getMimeType(path);
     }
 
     public Media(String path) {
@@ -56,7 +56,7 @@ public class Media implements CursorHandler, Parcelable {
     public Media(Uri mediaUri) {
         this.uriString = mediaUri.toString();
         this.path = null;
-        this.mimeType = StringUtils.getMimeType(uriString);
+        this.mimeType = MimeTypeUtils.getMimeType(uriString);
     }
 
     public Media(@NotNull Cursor cur) {

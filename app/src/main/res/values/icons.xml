@@ -13,4 +13,15 @@
     <string name="icon_effects">faw-adjust</string>
     <string name="icon_about">gmd-info-outline</string>
 
+    <!-- About -->
+    <string name="icon_bug_report">gmd-bug-report</string>
+    <string name="icon_translate">gmd-flag</string>
+    <string name="icon_rate">gmd-star</string>
+    <string name="icon_github">faw-github</string>
+    <string name="icon_license">gmd-insert-drive-file</string>
+    <string name="icon_changelog">gmd-new-releases</string>
+
+    <!-- Media -->
+    <string name="icon_play">gmd-play-circle-filled</string>
+
 </resources>

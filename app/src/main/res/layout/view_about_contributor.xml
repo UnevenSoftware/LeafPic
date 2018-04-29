@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/small_spacing"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/contributor_small_spacing">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/contributor_profile_image"
+            android:layout_width="@dimen/contributor_display_image_size"
+            android:layout_height="@dimen/contributor_display_image_size"
+            android:layout_marginBottom="@dimen/contributor_small_spacing"
+            android:layout_marginLeft="@dimen/contributor_spacing"
+            android:layout_marginRight="@dimen/contributor_spacing"
+            android:layout_marginTop="@dimen/contributor_small_spacing"
+            app:civ_border_width="1dp"
+            tools:src="@drawable/donald_profile" />
+
+        <org.horaapps.liz.ui.ThemedTextView
+            android:id="@+id/contributor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/contributor_small_spacing"
+            android:layout_marginTop="@dimen/contributor_small_spacing"
+            android:layout_toEndOf="@id/contributor_profile_image"
+            android:textSize="@dimen/text_size_title"
+            android:textStyle="bold"
+            tools:text="Donald Shtjefni" />
+
+        <org.horaapps.liz.ui.ThemedTextView
+            android:id="@+id/contributor_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contributor_name"
+            android:layout_marginStart="@dimen/contributor_small_spacing"
+            android:layout_toEndOf="@id/contributor_profile_image"
+            android:textSize="@dimen/text_size_sub_medium"
+            app:liz_color_style="sub_text"
+            tools:text="@string/about_author_donald_description" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/contributor_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/contributor_small_spacing"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/developer_description_padding"
+        android:paddingStart="@dimen/developer_description_padding" />
+
+</LinearLayout>

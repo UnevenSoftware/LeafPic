@@ -44,8 +44,8 @@
 
                     <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/white_basic_theme_icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
                         android:layout_gravity="center_vertical"
                         app:iiv_icon="gmd-invert-colors"
                         app:iiv_color="@color/md_light_primary_icon"
@@ -83,8 +83,8 @@
 
                     <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/dark_basic_theme_icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
                         android:layout_gravity="center_vertical"
                         app:iiv_icon="gmd-invert-colors"
                         app:iiv_color="@color/md_dark_primary_icon"
@@ -123,8 +123,8 @@
 
                     <org.horaapps.liz.ui.ThemedIcon
                         android:id="@+id/dark_amoled_basic_theme_icon"
-                        android:layout_width="@dimen/icon_width_height"
-                        android:layout_height="@dimen/icon_width_height"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
                         android:layout_gravity="center_vertical"
                         app:iiv_icon="gmd-invert-colors"
                         app:iiv_color="@color/md_dark_primary_icon"

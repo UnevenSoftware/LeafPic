@@ -106,6 +106,13 @@ public class Prefs {
     }
 
     /**
+     * Should use animations
+     */
+    public static boolean animationsEnabled() {
+        return !getPrefs().get(Keys.ANIMATIONS_DISABLED, Defaults.ANIMATIONS_DISABLED);
+    }
+
+    /**
      * Get the Card Style (Material / Flat / Compact)
      */
     @NonNull

@@ -23,6 +23,7 @@ import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.items.ActionsListener;
 import org.horaapps.leafpic.views.SquareRelativeLayout;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
@@ -35,44 +36,37 @@ import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 
 /**
- * Created by dnld on 1/7/16.
+ * Adapter used to display Media Items.
+ *
+ * TODO: This class needs a major cleanup. Remove code from onBindViewHolder!
  */
 public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
-    private ArrayList<Media> media;
-
-    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
-    private final PublishSubject<Media> onChangeSelectedSubject = PublishSubject.create();
-
+    private final ArrayList<Media> media;
     private int selectedCount = 0;
 
     private SortingOrder sortingOrder;
     private SortingMode sortingMode;
 
     private Drawable placeholder;
+    private final ActionsListener actionsListener;
 
-    public MediaAdapter(Context context) {
+    private boolean isSelecting = false;
+
+    public MediaAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder, ActionsListener actionsListener) {
         super(context);
         media = new ArrayList<>();
-        this.sortingMode = SortingMode.DATE;
-        this.sortingOrder = SortingOrder.DESCENDING;
+        this.sortingMode = sortingMode;
+        this.sortingOrder = sortingOrder;
         placeholder = getThemeHelper().getPlaceHolder();
         setHasStableIds(true);
+        this.actionsListener = actionsListener;
     }
 
-    public void sort() {
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            media.sort(AlbumsComparators.getComparator(sortingMode));
-            //media = media.stream().sorted(AlbumsComparators.getComparator(sortingMode)).collect(Collectors.toList());
-        else Collections.sort(media, AlbumsComparators.getComparator(sortingMode));*/
+    private void sort() {
         Collections.sort(media, MediaComparators.getComparator(sortingMode, sortingOrder));
-        /*if (sortingOrder.equals(SortingOrder.DESCENDING))
-            reverseOrder();*/
-
         notifyDataSetChanged();
     }
 
@@ -80,7 +74,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
     public long getItemId(int position) {
         return media.get(position).getUri().hashCode() ^ 1312;
     }
-
 
     public void changeSortingOrder(SortingOrder sortingOrder) {
         this.sortingOrder = sortingOrder;
@@ -121,7 +114,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         return media;
     }
 
-
     public int getSelectedCount() {
         return selectedCount;
     }
@@ -131,7 +123,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             if (media.get(i).setSelected(true))
                 notifyItemChanged(i);
         selectedCount = media.size();
-        onChangeSelectedSubject.onNext(new Media());
+        startSelection();
     }
 
     public boolean clearSelected() {
@@ -144,8 +136,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         }
 
         selectedCount = 0;
-        if (changed)
-            onChangeSelectedSubject.onNext(new Media());
+        stopSelection();
         return changed;
     }
 
@@ -156,18 +147,24 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
     private void notifySelected(boolean increase) {
         selectedCount += increase ? 1 : -1;
+        actionsListener.onSelectionCountChanged(selectedCount, getItemCount());
+
+        if (selectedCount == 0 && isSelecting) stopSelection();
+        else if (selectedCount > 0 && !isSelecting) startSelection();
+    }
+
+    private void startSelection() {
+        isSelecting = true;
+        actionsListener.onSelectMode(true);
+    }
+
+    private void stopSelection() {
+        isSelecting = false;
+        actionsListener.onSelectMode(false);
     }
 
     public boolean selecting() {
-        return selectedCount > 0;
-    }
-
-    public Observable<Integer> getClicks() {
-        return onClickSubject;
-    }
-
-    public Observable<Media> getSelectedClicks() {
-        return onChangeSelectedSubject;
+        return isSelecting;
     }
 
     @Override
@@ -196,7 +193,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 .thumbnail(0.5f)
                 .into(holder.imageView);
 
-        if(f.isVideo()) {
+        if (f.isVideo()) {
             holder.icon.setVisibility(View.VISIBLE);
             holder.path.setVisibility(View.VISIBLE);
             holder.path.setText(f.getName());
@@ -219,32 +216,29 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
             holder.icon.setIcon(CommunityMaterial.Icon.cmd_check);
             holder.icon.setVisibility(View.VISIBLE);
             holder.imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);
-            holder.layout.setPadding(15,15,15,15);
+            holder.layout.setPadding(15, 15, 15, 15);
             //ANIMS
             holder.icon.animate().alpha(1).setDuration(250);
         } else {
             holder.imageView.clearColorFilter();
-            holder.layout.setPadding(0,0,0,0);
+            holder.layout.setPadding(0, 0, 0, 0);
         }
 
         holder.layout.setOnClickListener(v -> {
             if (selecting()) {
                 notifySelected(f.toggleSelected());
-                notifyItemChanged(position);
-                onChangeSelectedSubject.onNext(f);
+                notifyItemChanged(holder.getAdapterPosition());
             } else
-                onClickSubject.onNext(position);
+                actionsListener.onItemSelected(holder.getAdapterPosition());
         });
 
         holder.layout.setOnLongClickListener(v -> {
             if (!selecting()) {
                 // If it is the first long press
                 notifySelected(f.toggleSelected());
-                notifyItemChanged(position);
-                onChangeSelectedSubject.onNext(f);
+                notifyItemChanged(holder.getAdapterPosition());
             } else {
                 selectAllUpTo(f);
-                onChangeSelectedSubject.onNext(new Media());
             }
 
             return true;

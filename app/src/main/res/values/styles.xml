@@ -1,102 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <!--LIGHT MENU THEME-->
-    <style name="LightActionBarMenu" parent="Theme.AppCompat.Light">
-        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Light</item>
-    </style>
-
-    <style name="MyApp.PopupMenu.Light" parent="Widget.AppCompat.Light.ListPopupWindow">
-        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_light_background</item>
-    </style>
-
-    <!--DARK MENU THEME-->
-    <style name="DarkActionBarMenu" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
-    </style>
-
-    <style name="MyApp.PopupMenu.Dark" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
-    </style>
-
-    <!--AMOLED DARK MENU THEME-->
-    <style name="AmoledDarkActionBarMenu" parent="Base.ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:popupMenuStyle">@style/MyApp.PopupMenu.Dark</item>
-    </style>
-
-    <style name="MyApp.PopupMenu.DarkAmoled" parent="Base.ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:popupBackground">@drawable/ic_empty_amoled</item>
-    </style>
-
-    <style name="MyToolbar" parent="Widget.AppCompat.Toolbar">
+    <style name="AboutCardStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:elevation" tools:ignore="NewApi">5dp</item>
-        <item name="theme">@style/MyToolbarTheme</item>
-
-    </style>
-
-    <style name="MyToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">#FFF</item>
-        <item name="colorControlNormal">#FFF</item>
-        <item name="colorControlHighlight">#FFF</item>
-    </style>
-
-    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <!--DIALOG THEME-->
-    <style name="AlertDialog_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/md_light_primary_icon</item><!--BOTTONI-->
-        <item name="android:textColorPrimary">@color/md_light_primary_text</item><!--TESTO-->
-    </style>
-
-    <style name="AlertDialog_Dark" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
-        <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
-        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
-    </style>
-
-    <style name="AlertDialog_Dark_Amoled" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
-        <item name="android:textColorPrimary">@color/md_dark_primary_text</item><!--TESTO-->
-        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/md_black_1000</item>
-        <item name="android:windowBackground">@color/md_black_1000</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-    </style>
-
-    <!--LICENSE DIALOG-->
-    <style name="LicenseDialog_Dark" parent="android:Theme.Dialog">
-        <item name="android:textColor">@color/md_white_1000</item>
-        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/cardview_dark_background</item>
-        <item name="colorAccent">@color/md_dark_primary_icon</item><!--BOTTONI-->
-    </style>
-
-    <!--PREFERENCE SCREEN-->
-    <style name="PreferencesThemeDark">
-        <item name="android:background">#2b2b2b</item>
-    </style>
-    <style name="PreferencesThemeLight">
-        <item name="android:background">#FAFAFA</item>
-        <!--<item name="android:background">#424242</item>-->
-    </style>
-
-    <!--Player-->
-    <style name="RootTheme" parent="android:Theme.Holo">
-    </style>
-
-    <style name="PlayerTheme" parent="@style/RootTheme">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/black</item>
-    </style>
-
-    <style name="DemoButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:minWidth">40dp</item>
+        <item name="android:layout_marginBottom">@dimen/developer_card_spacing</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="android:foreground">@drawable/ripple</item>
     </style>
 
 </resources>

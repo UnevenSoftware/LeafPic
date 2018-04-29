@@ -2,6 +2,7 @@ package org.horaapps.leafpic.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,9 +12,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -53,8 +57,10 @@ import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.fragments.BaseMediaFragment;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
@@ -66,6 +72,7 @@ import org.horaapps.liz.ColorPalette;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -78,33 +85,47 @@ import io.reactivex.schedulers.Schedulers;
  * Created by dnld on 18/02/16.
  */
 @SuppressWarnings("ResourceAsColor")
-public class SingleMediaActivity extends SharedMediaActivity {
+public class SingleMediaActivity extends SharedMediaActivity implements BaseMediaFragment.MediaTapListener {
 
     private static final String TAG = SingleMediaActivity.class.getSimpleName();
 
     private static final int SLIDE_SHOW_INTERVAL = 5000;
     private static final String ISLOCKED_ARG = "isLocked";
+
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
     public static final String ACTION_OPEN_ALBUM_LAZY = "org.horaapps.leafpic.intent.VIEW_ALBUM_LAZY";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
+    public static final String EXTRA_ARGS_ALBUM = "args_album";
+    public static final String EXTRA_ARGS_MEDIA = "args_media";
+    public static final String EXTRA_ARGS_POSITION = "args_position";
 
-    @BindView(R.id.photos_pager)
-    HackyViewPager mViewPager;
-
-    @BindView(R.id.PhotoPager_Layout)
-    RelativeLayout activityBackground;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.photos_pager) HackyViewPager mViewPager;
+    @BindView(R.id.PhotoPager_Layout) RelativeLayout activityBackground;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     private boolean fullScreenMode, customUri = false;
-    int position;
+    private int position;
 
     private Album album;
     private ArrayList<Media> media;
     private MediaPagerAdapter adapter;
     private boolean isSlideShowOn = false;
 
+    private boolean useImageMenu;
+
+    public static void startActivity(@NonNull Context context,
+                                     @Nullable Parcelable album,
+                                     @Nullable Serializable media,
+                                     int position) {
+
+        Intent intent = new Intent(context, SingleMediaActivity.class);
+        intent.putExtra(EXTRA_ARGS_ALBUM, album);
+        intent.setAction(ACTION_OPEN_ALBUM);
+        intent.putExtra(EXTRA_ARGS_MEDIA, media);
+        intent.putExtra(EXTRA_ARGS_POSITION, position);
+        context.startActivity(intent);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,15 +166,15 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     private void loadAlbum(Intent intent) {
-        album = intent.getParcelableExtra("album");
-        position = intent.getIntExtra("position", 0);
-        media = intent.getParcelableArrayListExtra("media");
+        album = intent.getParcelableExtra(EXTRA_ARGS_ALBUM);
+        position = intent.getIntExtra(EXTRA_ARGS_POSITION, 0);
+        media = intent.getParcelableArrayListExtra(EXTRA_ARGS_MEDIA);
     }
 
     private void loadAlbumsLazy(Intent intent) {
-        album = intent.getParcelableExtra("album");
-        //position = intent.getIntExtra("position", 0);
-        Media m = intent.getParcelableExtra("media");
+        album = intent.getParcelableExtra(EXTRA_ARGS_ALBUM);
+        //position = intent.getIntExtra(EXTRA_ARGS_POSITION, 0);
+        Media m = intent.getParcelableExtra(EXTRA_ARGS_MEDIA);
         media = new ArrayList<>();
         media.add(m);
         position = 0;
@@ -242,7 +263,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(position);
-        mViewPager.setPageTransformer(true, new DepthPageTransformer());
+
+        useImageMenu = isCurrentMediaImage();
+
+        mViewPager.setPageTransformer(true, AnimationUtils.getPageTransformer(new DepthPageTransformer()));
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -251,8 +276,10 @@ public class SingleMediaActivity extends SharedMediaActivity {
             @Override
             public void onPageSelected(int position) {
                 SingleMediaActivity.this.position = position;
-
                 updatePageTitle(position);
+
+                // Invalidate the options menu only when we aren't using the correct menu
+                if (isCurrentMediaImage() == useImageMenu) return;
                 supportInvalidateOptionsMenu();
             }
 
@@ -268,6 +295,12 @@ public class SingleMediaActivity extends SharedMediaActivity {
         }
     }
 
+    // TODO: Figure out how we should classify Images and GIFs
+    // This should work temporarily
+    private boolean isCurrentMediaImage() {
+        return getCurrentMedia().isImage() && !getCurrentMedia().isGif();
+    }
+
     Handler handler = new Handler();
     Runnable slideShowRunnable = new Runnable() {
         @Override
@@ -281,6 +314,11 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         }
     };
+
+    @Override
+    public void onViewTapped() {
+        toggleSystemUI();
+    }
 
     @CallSuper
     public void updateUiElements() {
@@ -372,7 +410,9 @@ public class SingleMediaActivity extends SharedMediaActivity {
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
         if (!isSlideShowOn) {
-            menu.setGroupVisible(R.id.only_photos_options, !getCurrentMedia().isVideo());
+            boolean isImage = isCurrentMediaImage();
+            useImageMenu = isImage;
+            menu.setGroupVisible(R.id.only_photos_options, isImage);
 
             if (customUri) {
                 menu.setGroupVisible(R.id.on_internal_storage, false);
@@ -381,7 +421,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
             }
         }
         return super.onPrepareOptionsMenu(menu);
-
     }
 
     @Override
@@ -444,20 +483,28 @@ public class SingleMediaActivity extends SharedMediaActivity {
 
     }
 
+    private void rotateImage(int rotationDegree) {
+        Fragment mediaFragment = adapter.getRegisteredFragment(position);
+        if (!(mediaFragment instanceof ImageFragment))
+            throw new RuntimeException("Trying to rotate a wrong media type!");
+
+        ((ImageFragment) mediaFragment).rotatePicture(rotationDegree);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case R.id.rotate_180:
-                ((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(180);
+                rotateImage(180);
                 break;
 
             case R.id.rotate_right_90:
-                ((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(90);
+                rotateImage(90);
                 break;
 
             case R.id.rotate_left_90:
-                ((ImageFragment) adapter.getRegisteredFragment(position)).rotatePicture(-90);
+                rotateImage(-90);
                 break;
 
 
@@ -689,10 +736,6 @@ public class SingleMediaActivity extends SharedMediaActivity {
                 } else handler.removeCallbacks(slideShowRunnable);
                 supportInvalidateOptionsMenu();
 
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                //return super.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -759,8 +802,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
     }
 
     public void toggleSystemUI() {
-        if (fullScreenMode)
-            showSystemUI();
+        if (fullScreenMode) showSystemUI();
         else hideSystemUI();
     }
 
@@ -769,6 +811,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             public void run() {
                 toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator())
                         .setDuration(200).start();
+
                 getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
                     @Override
                     public void onSystemUiVisibilityChange(int visibility) {
@@ -804,6 +847,7 @@ public class SingleMediaActivity extends SharedMediaActivity {
             public void run() {
                 toolbar.animate().translationY(Measure.getStatusBarHeight(getResources())).setInterpolator(new DecelerateInterpolator())
                         .setDuration(240).start();
+
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

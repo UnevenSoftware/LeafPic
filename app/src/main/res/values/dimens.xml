@@ -3,7 +3,9 @@
 
     <!-- Text Sizes -->
     <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_sub_medium">14sp</dimen>
 
     <!-- Navigation Drawer -->
     <dimen name="nav_drawer_top_padding">50dp</dimen>
@@ -18,5 +20,26 @@
     <dimen name="nav_entry_horizontal_spacing">22dp</dimen>
     <dimen name="nav_entry_icon_size">20dp</dimen>
     <dimen name="nav_entry_text_padding">3dp</dimen>
+
+    <!-- About -->
+    <dimen name="developer_display_image_size">100dp</dimen>
+    <dimen name="contributor_display_image_size">70dp</dimen>
+    <dimen name="contributor_small_spacing">5dp</dimen>
+    <dimen name="contributor_spacing">10dp</dimen>
+    <dimen name="developer_image_margin">15dp</dimen>
+    <dimen name="developer_name_margin">20dp</dimen>
+    <dimen name="developer_description_padding">15dp</dimen>
+    <dimen name="developer_links_spacing">15dp</dimen>
+    <dimen name="developer_links_small_padding">5dp</dimen>
+    <dimen name="developer_small_Spacing">10dp</dimen>
+    <dimen name="developer_card_spacing">10dp</dimen>
+    <dimen name="developer_card_elevation">5dp</dimen>
+    <dimen name="about_link_icon_size">20dp</dimen>
+    <dimen name="about_link_icon_left_margin">14dp</dimen>
+    <dimen name="about_link_icon_right_margin">24dp</dimen>
+    <dimen name="about_link_padding">8dp</dimen>
+
+    <!-- Media -->
+    <dimen name="video_play_icon_size">50dp</dimen>
 
 </resources>

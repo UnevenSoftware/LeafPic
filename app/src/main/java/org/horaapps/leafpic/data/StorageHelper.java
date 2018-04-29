@@ -21,6 +21,7 @@ import android.util.Log;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
@@ -110,7 +111,7 @@ public class StorageHelper {
 	}
 
 	public static Uri getUriForFile(Context context, File file) {
-		return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+		return FileProvider.getUriForFile(context, ApplicationUtils.getPackageName() + ".provider", file);
 	}
 
 	public static boolean copyFile(Context context, @NonNull final File source, @NonNull final File targetDir) {

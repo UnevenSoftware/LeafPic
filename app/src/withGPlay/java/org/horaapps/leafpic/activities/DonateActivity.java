@@ -22,7 +22,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SecretConstants;
-import org.horaapps.leafpic.util.CustomTabService;
+import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.inapppurchase.IabHelper;
 import org.horaapps.leafpic.util.inapppurchase.IabResult;
@@ -36,7 +36,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 public class DonateActivity extends ThemedActivity {
 
     private Toolbar toolbar;
-    private CustomTabService cts;
+    private ChromeCustomTabs cts;
     private ScrollView scr;
     private IabHelper mHelper;
     private SeekBar bar; private int progress = 2;
@@ -66,7 +66,7 @@ public class DonateActivity extends ThemedActivity {
         bar = (SeekBar) findViewById(R.id.seek_bar_donations);
 
         setNavBarColor();
-        cts = new CustomTabService(DonateActivity.this);
+        cts = new ChromeCustomTabs(this);
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);
         initUi();
         mHelper = new IabHelper(this, SecretConstants.getBase64EncodedPublicKey(getApplicationContext()));

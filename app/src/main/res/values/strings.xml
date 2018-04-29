@@ -10,8 +10,12 @@
 
 
     <!--AUTHORS-->
+    <string name="developer_donald_name" translatable="false">Donald Shtjefni</string>
+    <string name="developer_gilbert_name" translatable="false">Gilbert Ndresaj</string>
+    <string name="developer_calvin_name" translatable="false">Calvin Noronha</string>
     <string name="donald_role">Project Manager</string>
     <string name="gilbert_role">Major Designer</string>
+    <string name="calvin_role">To Be Decided</string>
 
     <!--EASTER EGG-->
     <string name="emoji_easter_egg">¯\\_(ツ)_/¯</string>
@@ -117,7 +121,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="send_to">Send to</string>
     <string name="search_menu">search</string>
     <string name="full_resolution">Full resolution</string>
-    <string name="of">%d of %d</string>
+    <string name="of">%1$d of %2$d</string>
 
     <!-- PALETTE-->
     <string name="palette">Palette</string>
@@ -184,6 +188,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="option_show_tips">Show Tips</string>
     <string name="option_show_tips_sub">It help you to understand the use of some feature.</string>
+    <string name="disable_animations">Disable Animations</string>
+    <string name="disable_animations_sub">Disable animations if there are performance issues.</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>
@@ -267,9 +273,15 @@ and this could make the media inaccessible from other apps. Use the exclude opti
         I\'m 20 years old. I love music, video games and drawing.
         I\'m also really into computer science, programming and design.
     </string>
+    <string name="about_developer_calvin_description">
+        I\'m 23 years old. I love programming and solving problems!\nI\'m also an Android &amp; Linux enthusiast.
+    </string>
     <string name="about_googleplus" translatable="false">Google+</string>
     <string name="send_via">send via&#8230;</string>
     <string name="send_email">SEND EMAIL</string>
+    <string name="google_plus_link">Google+</string>
+    <string name="twitter_link">Twitter</string>
+    <string name="github_link">GitHub</string>
 
     <string name="send_mail_error">There are no email clients installed.</string>
     <string name="about_special_thanks">Special thanks</string>
@@ -400,4 +412,10 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="start_slide_show">Start Slideshow</string>
     <string name="stop_slide_show">Stop Slideshow</string>
     <string name="errors">Errors</string>
+    <string name="waring_share_multiple_file_types">There may be problems sharing multiple file types</string>
+    <string name="creators">Creators</string>
+    <string name="major_contributors">Major contributors</string>
+
+    <string name="toolbar_selection_count" translatable="false">%1$d of %2$d</string>
+
 </resources>

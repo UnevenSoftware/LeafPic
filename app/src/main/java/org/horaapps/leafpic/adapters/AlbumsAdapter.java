@@ -19,10 +19,12 @@ import com.bumptech.glide.request.RequestOptions;
 import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Album;
+import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.AlbumsComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.items.ActionsListener;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ColorPalette;
@@ -40,8 +42,6 @@ import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by dnld on 1/7/16.
@@ -49,9 +49,6 @@ import io.reactivex.subjects.PublishSubject;
 public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
     private List<Album> albums;
-
-    private final PublishSubject<Album> onClickSubject = PublishSubject.create();
-    private final PublishSubject<Album> onChangeSelectedSubject = PublishSubject.create();
 
     private int selectedCount = 0;
 
@@ -61,24 +58,21 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     private Drawable placeholder;
     private CardViewStyle cardViewStyle;
 
-    public AlbumsAdapter(Context context, SortingMode sortingMode, SortingOrder sortingOrder) {
+    private ActionsListener actionsListener;
+    private boolean isSelecting;
+
+    public AlbumsAdapter(Context context, ActionsListener actionsListener) {
         super(context);
         albums = new ArrayList<>();
         placeholder = getThemeHelper().getPlaceHolder();
         cardViewStyle = Prefs.getCardStyle();
-        this.sortingMode = sortingMode;
-        this.sortingOrder = sortingOrder;
+        this.sortingMode = AlbumsHelper.getSortingMode();
+        this.sortingOrder = AlbumsHelper.getSortingOrder();
+        this.actionsListener = actionsListener;
     }
 
     public void sort() {
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            albums.sort(AlbumsComparators.getComparator(sortingMode));
-            //albums = albums.stream().sorted(AlbumsComparators.getComparator(sortingMode)).collect(Collectors.toList());
-        else Collections.sort(albums, AlbumsComparators.getComparator(sortingMode));*/
         Collections.sort(albums, AlbumsComparators.getComparator(sortingMode, sortingOrder));
-        /*if (sortingOrder.equals(SortingOrder.DESCENDING))
-            reverseOrder();*/
-
         notifyDataSetChanged();
     }
 
@@ -90,6 +84,10 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         }
 
         return list;
+    }
+
+    public Album get(int pos) {
+        return albums.get(pos);
     }
 
     public void notifyItemChanaged(Album album) {
@@ -139,6 +137,16 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         return null;
     }
 
+    private void startSelection() {
+        isSelecting = true;
+        actionsListener.onSelectMode(true);
+    }
+
+    private void stopSelection() {
+        isSelecting = false;
+        actionsListener.onSelectMode(false);
+    }
+
 
     public int getSelectedCount() {
         return selectedCount;
@@ -149,7 +157,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
             if (albums.get(i).setSelected(true))
                 notifyItemChanged(i);
         selectedCount = albums.size();
-        onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
+        startSelection();
     }
 
     public void removeSelectedAlbums(){
@@ -197,9 +205,7 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         }
 
         selectedCount = 0;
-
-        if (changed)
-            onChangeSelectedSubject.onNext(Album.getEmptyAlbum());
+        stopSelection();
         return changed;
     }
 
@@ -229,18 +235,14 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
 
     private void notifySelected(boolean increase) {
         selectedCount += increase ? 1 : -1;
+        actionsListener.onSelectionCountChanged(selectedCount, getItemCount());
+
+        if (selectedCount == 0 && isSelecting) stopSelection();
+        else if (selectedCount > 0 && !isSelecting) startSelection();
     }
 
     public boolean selecting() {
-        return selectedCount > 0;
-    }
-
-    public Observable<Album> getClicks() {
-        return onClickSubject;
-    }
-
-    public Observable<Album> getSelectedClicks() {
-        return onChangeSelectedSubject;
+        return isSelecting;
     }
 
     @Override
@@ -295,15 +297,13 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
             if (selecting()) {
                 notifySelected(a.toggleSelected());
                 notifyItemChanged(position);
-                onChangeSelectedSubject.onNext(a);
             } else
-                onClickSubject.onNext(a);
+                actionsListener.onItemSelected(position);
         });
 
         holder.card.setOnLongClickListener(v -> {
             notifySelected(a.toggleSelected());
             notifyItemChanged(position);
-            onChangeSelectedSubject.onNext(a);
             return true;
         });
     }
