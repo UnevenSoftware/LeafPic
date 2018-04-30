@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
@@ -22,7 +20,6 @@ import org.horaapps.liz.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,40 +35,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
 
-    public interface DeleteMediaListener {
-        void onCompleted();
+    private static final String TAG = "DeleteMediaBottomSheet";
+    private static final String EXTRA_MEDIA = "media";
 
-        void onDeleted(Media media);
-    }
+    @BindView(R.id.delete_header) ViewGroup headerLayout;
+    @BindView(R.id.delete_progress_bar) DonutProgress progressBar;
+    @BindView(R.id.delete_errors) TextView txtErrors;
 
+    private DeleteMediaListener listener;
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private boolean cancelRequested = false;
 
-    public static final String TAG = "delete_bootomsheet";
-    public static final String EXTRA_MEDIA = "media";
-
-    @BindView(R.id.header)
-    RelativeLayout header;
-
-    @BindView(R.id.cancel_delete)
-    AppCompatButton cancelButton;
-
-    @BindView(R.id.delete_progress_bar)
-    DonutProgress progress;
-
-    @BindView(R.id.txt_errors)
-    TextView txtErrors;
-
-    private ArrayList<Media> media;
-
-    DeleteMediaListener listener;
-    boolean cancelRequested = false;
-
-    CompositeDisposable disposable = new CompositeDisposable();
-
-    public void setListener(DeleteMediaListener listener) {
-        this.listener = listener;
-    }
-
-    public static DeleteMediaBottomSheet make(ArrayList<Media> media, DeleteMediaListener listener) {
+    @NonNull
+    public static DeleteMediaBottomSheet make(@Nullable ArrayList<Media> media, @Nullable DeleteMediaListener listener) {
         DeleteMediaBottomSheet deleteMediaBottomSheet = new DeleteMediaBottomSheet();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(EXTRA_MEDIA, media);
@@ -81,50 +57,23 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         return deleteMediaBottomSheet;
     }
 
-    private void setProgress(int p) {
-        progress.setProgress(p);
-        // TODO: 06/04/18 use string resource when merged in dev
-        progress.setText(String.format(Locale.ENGLISH, "%d/%d", p, progress.getMax()));
+    /**
+     * Set the listener for media deletion.
+     */
+    public void setListener(@Nullable DeleteMediaListener listener) {
+        this.listener = listener;
     }
 
+    private void setProgress(int progressPercent) {
+        progressBar.setProgress(progressPercent);
+        progressBar.setText(getString(R.string.toolbar_selection_count, progressPercent, progressBar.getMax()));
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
-
-
-        View view = inflater.inflate(R.layout.bottom_sheet_delete_media, container, false);
-        ButterKnife.bind(this, view);
-        view.setBackgroundColor(th.getBackgroundColor());
-
-        header.setBackgroundColor(th.getPrimaryColor());
-
-        txtErrors.setTextColor(th.getTextColor());
-        progress.setFinishedStrokeColor(th.getAccentColor());
-        progress.setTextColor(th.getTextColor());
-        return view;
+        return inflater.inflate(R.layout.bottom_sheet_delete_media, container, false);
     }
-
-   /* @Override
-    public void setupDialog(Dialog dialog, int style) {
-        ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
-
-
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_delete_media, null, false);
-        ButterKnife.bind(this, view);
-        view.setBackgroundColor(th.getBackgroundColor());
-
-        header.setBackgroundColor(th.getPrimaryColor());
-
-        txtErrors.setTextColor(th.getTextColor());
-        progress.setFinishedStrokeColor(th.getAccentColor());
-        progress.setTextColor(th.getTextColor());
-        progress.setMax(media.size());
-        setProgress(0);
-
-        dialog.setContentView(view);
-    }*/
 
     private void showErrors(HashSet<String> errors) {
         StringBuilder b = new StringBuilder();
@@ -135,12 +84,10 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
 
         txtErrors.setText(StringUtils.html(b.toString()));
         txtErrors.setVisibility(View.VISIBLE);
-        progress.setVisibility(View.GONE);
-
-
+        progressBar.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.cancel_delete)
+    @OnClick(R.id.delete_cancel_sheet)
     void cancelDelete() {
         Log.wtf(TAG, "delete stop");
         cancelRequested = true;
@@ -152,7 +99,6 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     public void onDestroy() {
         disposable.dispose();
         super.onDestroy();
-
     }
 
     private void done() {
@@ -163,13 +109,17 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        setupViews(view);
 
         Bundle arguments = getArguments();
+        ArrayList<Media> media;
         if (arguments == null || (media = arguments.getParcelableArrayList(EXTRA_MEDIA)) == null) {
             done();
             return;
         }
-        progress.setMax(media.size());
+
+        progressBar.setMax(media.size());
         setProgress(0);
 
         HashSet<String> errors = new HashSet<>(0);
@@ -177,7 +127,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         Disposable subscribe = MediaHelper.deleteMedia(getContext(), media)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .takeUntil(mediaBooleanPair -> !cancelRequested)
+                .takeWhile(mediaBooleanPair -> !cancelRequested)
                 .subscribe(
                         pair -> {
                             if (pair.second)
@@ -185,7 +135,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
                             else
                                 errors.add(pair.first.getName());
 
-                            setProgress((int) (progress.getProgress() + 1));
+                            setProgress((int) (progressBar.getProgress() + 1));
                         }, err -> {
                         },
                         () -> {
@@ -193,24 +143,25 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
                                 showErrors(errors);
                             done();
                         });
+
         disposable.add(subscribe);
+    }
 
-        /*for (Media m : media) {
-            if(cancelRequested) break;
+    private void setupViews(@NonNull View view) {
+        ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
+        view.setBackgroundColor(th.getBackgroundColor());
+        headerLayout.setBackgroundColor(th.getPrimaryColor());
+        txtErrors.setTextColor(th.getTextColor());
+        progressBar.setFinishedStrokeColor(th.getAccentColor());
+        progressBar.setTextColor(th.getTextColor());
+    }
 
-            boolean deleteSuccess = MediaHelper.internalDeleteMedia(getContext(), m);
-            if (deleteSuccess) {
-                listener.onDeleted(m);
-            } else {
-                errors.add(m.getPath());
-            }
+    /**
+     * Interface for listeners to get callbacks when Media items are deleted.
+     */
+    public interface DeleteMediaListener {
+        void onCompleted();
 
-            setProgress((int) (progress.getProgress() + 1));
-        }*/
-        /*if (errors.size() > 0)
-            showErrors(errors);
-        else dismiss();*/
-
-
+        void onDeleted(Media media);
     }
 }

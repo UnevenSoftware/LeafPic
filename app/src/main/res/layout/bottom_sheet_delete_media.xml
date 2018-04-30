@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    app:liz_background_style="normal"
-    android:layout_width="match_parent"
     android:id="@+id/delete_background"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:liz_background_style="normal">
 
     <RelativeLayout
+        android:id="@+id/delete_header"
         android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:id="@+id/header"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/delete_cancel_sheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/delete_bottom_sheet_spacing"
+            android:text="@string/cancel"
+            android:textColor="@color/md_white_1000"
+            android:tint="@android:color/white"
+            app:srcCompat="@drawable/ic_close" />
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/delete_cancel_sheet"
+            android:padding="@dimen/delete_bottom_sheet_spacing"
+            android:text="@string/delete_bottom_sheet_title"
             android:textColor="@color/md_dark_primary_text"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/big_spacing"
-            android:textSize="@dimen/sub_big_text"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:textStyle="bold"
-            android:text="Cleaning up memories" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cancel_delete"
-            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
-            android:textColor="@color/md_white_1000"
-            android:layout_centerVertical="true"
-            android:text="@string/cancel"
-            android:layout_alignParentEnd="true" />
+            android:textSize="@dimen/text_size_title" />
 
     </RelativeLayout>
 
-
     <com.github.lzyzsd.circleprogress.DonutProgress
-        android:layout_marginTop="@dimen/medium_spacing"
-        android:layout_marginBottom="@dimen/medium_spacing"
         android:id="@+id/delete_progress_bar"
+        android:layout_width="@dimen/delete_bottom_sheet_progress_size"
+        android:layout_height="@dimen/delete_bottom_sheet_progress_size"
         android:layout_gravity="center_horizontal"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        app:donut_progress="30" />
+        android:layout_marginBottom="@dimen/delete_bottom_sheet_progress_margin"
+        android:layout_marginTop="@dimen/delete_bottom_sheet_progress_margin"
+        app:donut_progress="1" />
 
     <TextView
+        android:id="@+id/delete_errors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:padding="@dimen/small_spacing"
-        android:id="@+id/txt_errors" />
+        android:padding="@dimen/delete_bottom_sheet_small_spacing"
+        android:visibility="gone" />
+
 </LinearLayout>

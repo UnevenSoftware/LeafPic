@@ -432,57 +432,7 @@ public class RvMediaFragment extends BaseFragment {
                 return true;
 
             case R.id.delete:
-
-                DeleteMediaBottomSheet deleteMediaBottomSheet =
-                        DeleteMediaBottomSheet.make(adapter.getSelected(),
-                                new DeleteMediaBottomSheet.DeleteMediaListener() {
-                                    @Override
-                                    public void onCompleted() {
-                                        //adapter.clearSelected();
-                                        //updateToolbar();
-                                        adapter.invalidateSelectedCount();
-                                        Log.wtf("delete", "main complete ");
-                                    }
-
-                                    @Override
-                                    public void onDeleted(Media media) {
-                                        Log.wtf("delete", "main deleted " + media.getDisplayPath());
-                                        adapter.removeSelectedMedia(media);
-                                        //updateToolbar();
-                                    }
-                                });
-                deleteMediaBottomSheet.showNow(getFragmentManager(), null);
-//                deleteMediaBottomSheet.show(getFragmentManager(), null);
-
-
-
-                /*ProgressAdapter errorsAdapter = new ProgressAdapter(getContext());
-                ArrayList<Media> selected = adapter.getSelected();
-
-                AlertDialog alertDialog = AlertDialogsHelper.getProgressDialogWithErrors(((ThemedActivity) getActivity()), R.string.deleting_images, errorsAdapter, selected.size());
-
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), (dialog, id) -> {
-                    alertDialog.dismiss();
-                });
-                alertDialog.show();
-
-                MediaHelper.deleteMedia(getContext(), selected)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(m -> {
-                                    adapter.remove(m);
-                                    errorsAdapter.add(new ProgressAdapter.ListItem(m.getName()), false);
-                                },
-                                throwable -> {
-                                    if (throwable instanceof DeleteException)
-                                        errorsAdapter.add(new ProgressAdapter.ListItem(
-                                                (DeleteException) throwable), true);
-                                },
-                                () -> {
-                                    if (errorsAdapter.getItemCount() == 0)
-                                        alertDialog.dismiss();
-                                    adapter.clearSelected();
-                                });*/
+                showDeleteBottomSheet();
                 return true;
 
             //region Affix
@@ -674,6 +624,27 @@ public class RvMediaFragment extends BaseFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDeleteBottomSheet() {
+        DeleteMediaBottomSheet.DeleteMediaListener deleteMediaListener
+                = new DeleteMediaBottomSheet.DeleteMediaListener() {
+
+            @Override
+            public void onCompleted() {
+                adapter.invalidateSelectedCount();
+            }
+
+            @Override
+            public void onDeleted(Media media) {
+                adapter.removeSelectedMedia(media);
+            }
+        };
+
+        DeleteMediaBottomSheet deleteMediaBottomSheet =
+                DeleteMediaBottomSheet.make(adapter.getSelected(), deleteMediaListener);
+
+        deleteMediaBottomSheet.showNow(getChildFragmentManager(), null);
     }
 
     public int getCount() {
