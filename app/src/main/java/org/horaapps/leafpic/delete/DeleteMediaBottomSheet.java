@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -41,10 +41,12 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     @BindView(R.id.delete_header) ViewGroup headerLayout;
     @BindView(R.id.delete_progress_bar) DonutProgress progressBar;
     @BindView(R.id.delete_errors) TextView txtErrors;
+    @BindView(R.id.delete_done_cancel_sheet)
+    AppCompatButton btnDoneCancel;
 
     private DeleteMediaListener listener;
-    private CompositeDisposable disposable = new CompositeDisposable();
-    private boolean cancelRequested = false;
+    private Disposable disposable;
+    private boolean done = false;
 
     @NonNull
     public static DeleteMediaBottomSheet make(@Nullable ArrayList<Media> media, @Nullable DeleteMediaListener listener) {
@@ -87,21 +89,31 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
         progressBar.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.delete_cancel_sheet)
+    @OnClick(R.id.delete_done_cancel_sheet)
     void cancelDelete() {
-        Log.wtf(TAG, "delete stop");
-        cancelRequested = true;
-        listener.onCompleted();
-        dismiss();
+        if (done) {
+            dismiss();
+        } else {
+            if (disposable != null && !disposable.isDisposed()) {
+                disposable.dispose();
+            }
+            Log.wtf(TAG, "delete stop");
+            listener.onCompleted();
+            dismiss();
+        }
     }
 
     @Override
     public void onDestroy() {
-        disposable.dispose();
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
         super.onDestroy();
     }
 
     private void done() {
+        done = true;
+        btnDoneCancel.setText(R.string.done);
         setCancelable(true);
         listener.onCompleted();
     }
@@ -124,10 +136,9 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
 
         HashSet<String> errors = new HashSet<>(0);
 
-        Disposable subscribe = MediaHelper.deleteMedia(getContext(), media)
+        disposable = MediaHelper.deleteMedia(getContext(), media)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .takeWhile(mediaBooleanPair -> !cancelRequested)
                 .subscribe(
                         pair -> {
                             if (pair.second)
@@ -143,8 +154,6 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
                                 showErrors(errors);
                             done();
                         });
-
-        disposable.add(subscribe);
     }
 
     private void setupViews(@NonNull View view) {

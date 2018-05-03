@@ -13,6 +13,8 @@ import org.horaapps.leafpic.util.file.DeleteException;
 import java.io.File;
 import java.util.ArrayList;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 /**
@@ -34,15 +36,18 @@ public class MediaHelper {
     }
 
 
-    public static Observable<Pair<Media, Boolean>> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
-        return Observable.create(subscriber -> {
+    public static Flowable<Pair<Media, Boolean>> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
+        return Flowable.create(subscriber -> {
             for (Media media : mediaToDelete) {
+                if (subscriber.isCancelled()) {
+                    break;
+                }
                 boolean deleteSuccess = internalDeleteMedia(context, media);
                 Log.v("delete-internal", media.getPath() + " " + deleteSuccess);
                 subscriber.onNext(new Pair<>(media, deleteSuccess));
             }
             subscriber.onComplete();
-        });
+        }, BackpressureStrategy.BUFFER);
     }
 
     public static boolean internalDeleteMedia(Context context, Media media) {
