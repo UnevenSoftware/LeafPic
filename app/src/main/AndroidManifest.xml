@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AboutActivity"
+            android:name=".about.AboutActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/about"
             android:theme="@style/Theme.AppCompat.NoActionBar">
