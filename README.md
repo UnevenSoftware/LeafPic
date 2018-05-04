@@ -3,7 +3,7 @@
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/HoraApps)
 # LeafPic
 <img src="/app/src/main/res/drawable/leaf_pic.png" align="left" width="200" hspace="10" vspace="10">
-LeafPic is a fluid, material-designed alternative gallery, it  also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, we also have in plan to add some useful feature.<br/>
+LeafPic is a fluid, material-designed alternative gallery, it also is ad-free and open source under GPLv3 license. It doesn't miss any of the main features of a stock gallery, and we also have plans to add more useful features.<br/>
 
 <div style="display:flex;" >
 <a href="https://f-droid.org/app/org.horaapps.leafpic">
@@ -37,7 +37,7 @@ We will release apks to test features or to check if bugs have been fixed.
 ###### Code 
 If you are a developer and you wish to contribute to the app please fork the project
 and submit a pull request on the [dev branch](https://github.com/HoraApps/LeafPic/tree/dev).
-If you want jou can join us on Telegram send us a message we will add you!
+If you want, you can join us on Telegram - send us a message we will add you!
 
 ###### Issues
 You can trace the status of known issues on [waffle.io](https://waffle.io/HoraApps/LeafPic),
