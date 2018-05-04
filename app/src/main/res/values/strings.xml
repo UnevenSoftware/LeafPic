@@ -189,7 +189,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="traslucent_statusbar">Translucent Status Bar</string>
     <string name="traslucent_statusbar_sub">Apply a darker primary color to the notification bar.</string>
     <string name="option_show_tips">Show Tips</string>
-    <string name="option_show_tips_sub">It help you to understand the use of some feature.</string>
+    <string name="option_show_tips_sub">Helps you to understand the use of some features.</string>
     <string name="disable_animations">Disable Animations</string>
     <string name="disable_animations_sub">Disable animations if there are performance issues.</string>
 
@@ -205,7 +205,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="card_type_compact">Compact Card</string>
 
     <string name="max_brightness">High Brightness</string>
-    <string name="max_brightness_sub">Maximum brightness when viewing a media.</string>
+    <string name="max_brightness_sub">Use maximum brightness when viewing media.</string>
     <string name="picture_orientation">Force use of accelerometer</string>
     <string name="picture_orientation_sub">Rotate even when auto rotate is locked</string>
     <string name="apply_theme">Apply Theme</string>
@@ -218,7 +218,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(Default: Left to Right)</string>
 
     <string name="video_instant_play">Instant Play</string>
-    <string name="video_instant_play_sub">It allows you to instantlly play the video, skipping the preview.</string>
+    <string name="video_instant_play_sub">Allows you to instantly play the video, skipping the preview.</string>
 
     <string name="theme">Theme</string>
     <string name="primary_color">Primary Color</string>
@@ -268,8 +268,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
 
     <string name="about_authors">Authors</string>
     <string name="about_author_donald_description">
-        I\'m 19 years old. I\'m a young software developer, I like CS in general, at most I love
-        learn doing stuff with Linux and Android. I also like TV Series.
+        I\'m 19 years old. I\'m a young software developer, I like CS in general, and more specifically, I love
+        learning and doing stuff with Linux and Android. I also like TV Series.
     </string>
     <string name="about_author_gilbert_description">
         I\'m 20 years old. I love music, video games and drawing.
