@@ -61,6 +61,12 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     private ActionsListener actionsListener;
     private boolean isSelecting;
 
+    private Album a ;
+
+    private Media f ;
+
+    private RequestOptions options;
+
     public AlbumsAdapter(Context context, ActionsListener actionsListener) {
         super(context);
         albums = new ArrayList<>();
@@ -248,12 +254,12 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final AlbumsAdapter.ViewHolder holder, int position) {
         // TODO Calvin: Major Refactor - No business logic here.
-        Album a = albums.get(position);
+        a = albums.get(position);
         holder.refreshTheme(getThemeHelper(), cardViewStyle, a.isSelected());
 
-        Media f = a.getCover();
+        f = a.getCover();
 
-        RequestOptions options = new RequestOptions()
+        options = new RequestOptions()
                 .signature(f.getSignature())
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .centerCrop()
