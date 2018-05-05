@@ -153,6 +153,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="install_shortcut">Install shortcut</string>
     <string name="landscape">Landscape</string>
     <string name="portrait">Portrait</string>
+    <string name="print_error">Unable to print the picture.</string>
 
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">General Setting</string>
