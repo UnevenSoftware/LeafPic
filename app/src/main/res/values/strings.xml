@@ -6,6 +6,8 @@
     <string name="welcome_slide_title">Welcome To LeafPic!</string>
     <string name="welcome_slide_sub">A Colorful Material Designed Gallery!</string>
     <string name="made_with_love_by">Made with love by</string>
+    <string name="Effects">Effects</string>
+
 
     <!--AUTHORS-->
     <string name="developer_donald_name" translatable="false">Donald Shtjefni</string>

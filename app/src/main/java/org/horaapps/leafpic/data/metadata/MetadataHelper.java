@@ -29,25 +29,22 @@ public class MetadataHelper {
             details.put(context.getString(R.string.size), StringUtils.humanReadableByteCount(m.getSize(), true));
         // TODO should i add this always?
         details.put(context.getString(R.string.orientation), m.getOrientation() + "");
-        try {
-            MetaDataItem metadata = MetaDataItem.getMetadata(context.getContentResolver().openInputStream(m.getUri()));
-            details.put(context.getString(R.string.resolution), metadata.getResolution());
-            details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(m.getDateModified())));
-            Date dateOriginal = metadata.getDateOriginal();
-            if (dateOriginal != null )
-                details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(dateOriginal));
+        MetaDataItem metadata = MetaDataItem.getMetadata(context, m.getUri());
+        details.put(context.getString(R.string.resolution), metadata.getResolution());
+        details.put(context.getString(R.string.date), SimpleDateFormat.getDateTimeInstance().format(new Date(m.getDateModified())));
+        Date dateOriginal = metadata.getDateOriginal();
+        if (dateOriginal != null)
+            details.put(context.getString(R.string.date_taken), SimpleDateFormat.getDateTimeInstance().format(dateOriginal));
 
-            String tmp;
-            if ((tmp = metadata.getCameraInfo()) != null)
-                details.put(context.getString(R.string.camera), tmp);
-            if ((tmp = metadata.getExifInfo()) != null)
-                details.put(context.getString(R.string.exif), tmp);
-            GeoLocation location;
-            if ((location = metadata.getLocation()) != null)
-                details.put(context.getString(R.string.location), location.toDMSString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String tmp;
+        if ((tmp = metadata.getCameraInfo()) != null)
+            details.put(context.getString(R.string.camera), tmp);
+        if ((tmp = metadata.getExifInfo()) != null)
+            details.put(context.getString(R.string.exif), tmp);
+        GeoLocation location;
+        if ((location = metadata.getLocation()) != null)
+            details.put(context.getString(R.string.location), location.toDMSString());
+
 
         return details;
     }

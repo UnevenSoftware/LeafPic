@@ -1,7 +1,9 @@
 package org.horaapps.leafpic.data.metadata;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
+import android.net.Uri;
+import android.util.Log;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -11,8 +13,8 @@ import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
-import com.drew.metadata.xmp.XmpDirectory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -27,6 +29,8 @@ import java.util.TimeZone;
 
 class MetaDataItem {
 
+    private static final String TAG = "MetaData";
+
     private static final int ORIENTATION_NORMAL = 1;
     private static final int ORIENTATION_ROTATE_180 = 3;
     private static final int ORIENTATION_ROTATE_90 = 6;  // rotate 90 cw to right it
@@ -37,48 +41,57 @@ class MetaDataItem {
     private GeoLocation location = null;
     private int orientation = -1, height = -1, width = -1;
 
-    static MetaDataItem getMetadata(@NonNull InputStream in) throws ImageProcessingException, IOException {
-        return new MetaDataItem(in, true);
+    static MetaDataItem getMetadata(Context context, Uri uri) {
+        return new MetaDataItem(context, uri);
     }
 
-    private MetaDataItem(InputStream in) throws ImageProcessingException, IOException {
-        Metadata metadata = ImageMetadataReader.readMetadata(in);
-        handleDirectoryBase(metadata.getFirstDirectoryOfType(ExifIFD0Directory.class));
-        ExifSubIFDDirectory dir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-        if(dir != null) {
-            dateOriginal = dir.getDateOriginal(TimeZone.getDefault());
-            handleDirectoryBase(dir);
-        }
-
-        XmpDirectory dir1 = metadata.getFirstDirectoryOfType(XmpDirectory.class);
-        if(dir1 != null) {
-            if (dir1.containsTag(XmpDirectory.TAG_DATETIME_ORIGINAL))
-                dateOriginal = dir1.getDate(XmpDirectory.TAG_DATETIME_ORIGINAL);
-
-            if (dir1.containsTag(XmpDirectory.TAG_MAKE))
-                make = dir1.getString(XmpDirectory.TAG_MAKE);
-            if (dir1.containsTag(XmpDirectory.TAG_MODEL))
-                model = dir1.getString(XmpDirectory.TAG_MODEL);
-
-            if (dir1.containsTag(XmpDirectory.TAG_F_NUMBER))
-                fNumber = dir1.getString(XmpDirectory.TAG_F_NUMBER);
-        }
-
-        GpsDirectory d = metadata.getFirstDirectoryOfType(GpsDirectory.class);
-        if(d != null) location  = d.getGeoLocation();
+    private MetaDataItem(Context context, Uri uri) {
+        this.load(context, uri);
     }
 
-    private MetaDataItem(InputStream in, boolean resolution) throws ImageProcessingException, IOException {
-        this(in);
-        if(resolution) {
+
+    private void load(Context context, Uri uri) {
+
+        /* Bitmap Metadata */
+        try (InputStream in = context.getContentResolver().openInputStream(uri)) {
+            if (in == null) return;
+
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(in, null, options);
             width = options.outWidth;
             height = options.outHeight;
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "loadMetadata -> file not found", e);
+            return;
+        } catch (IOException e) {
+            Log.e(TAG, "loadMetadata -> IOException", e);
+            return;
         }
-    }
 
+        /* Exif Metadata */
+        try (InputStream in = context.getContentResolver().openInputStream(uri)) {
+            if (in == null) return;
+
+            Metadata metadata = ImageMetadataReader.readMetadata(in);
+            handleDirectoryBase(metadata.getFirstDirectoryOfType(ExifIFD0Directory.class));
+            ExifSubIFDDirectory dir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+            if (dir != null) {
+                dateOriginal = dir.getDateOriginal(TimeZone.getDefault());
+                handleDirectoryBase(dir);
+            }
+
+            GpsDirectory d = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+            if (d != null) location = d.getGeoLocation();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "loadMetadata -> file not found", e);
+        } catch (IOException e) {
+            Log.e(TAG, "loadMetadata -> IOException", e);
+        } catch (ImageProcessingException e) {
+            Log.e(TAG, "loadMetadata -> file type not supported", e);
+        }
+
+    }
     private void handleDirectoryBase(ExifDirectoryBase d) {
         if(d != null) {
             if (d.containsTag(ExifDirectoryBase.TAG_MAKE))
