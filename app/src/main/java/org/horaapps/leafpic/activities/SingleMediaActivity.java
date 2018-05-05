@@ -417,6 +417,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
             menu.setGroupVisible(R.id.only_photos_options, isImage);
 
             if (customUri) {
+                // TODO: 05/05/18 some things can be done even with custom uri
                 menu.setGroupVisible(R.id.on_internal_storage, false);
                 menu.setGroupVisible(R.id.only_photos_options, false);
                 menu.findItem(R.id.sort_action).setVisible(false);
@@ -733,8 +734,13 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
             case R.id.action_print:
                 PrintHelper photoPrinter = new PrintHelper(this);
                 photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                Bitmap bitmap = BitmapFactory.decodeFile(getCurrentMedia().getPath());
-                photoPrinter.printBitmap(getCurrentMedia().getName()+" - print", bitmap);
+                try (InputStream in = getContentResolver().openInputStream(getCurrentMedia().getUri())) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    photoPrinter.printBitmap(String.format("print_%s", getCurrentMedia().getDisplayPath() ), bitmap);
+                } catch (Exception e) {
+                    Log.e("print", String.format("unable to print %s", getCurrentMedia().getUri()), e);
+                    Toast.makeText(getApplicationContext(), R.string.print_error, Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.slide_show:
