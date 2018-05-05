@@ -138,5 +138,10 @@
                 app:showAsAction="never" />
         </menu>
     </item>
+    <item
+        android:id="@+id/action_print"
+        android:title="@string/print"
+        app:showAsAction="never"
+        />
     <!-- End Albums Stuff -->
 </menu>

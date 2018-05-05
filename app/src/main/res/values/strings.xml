@@ -81,6 +81,7 @@
     <string name="rename_album">Rename album</string>
     <string name="details">Details</string>
     <string name="more">More</string>
+    <string name="print">Print</string>
     <string name="show_more">Show More</string>
     <string name="edit_with">Edit with</string>
     <string name="open_with">Open with</string>
@@ -417,5 +418,6 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="major_contributors">Major contributors</string>
 
     <string name="toolbar_selection_count" translatable="false">%1$d of %2$d</string>
+
 
 </resources>
