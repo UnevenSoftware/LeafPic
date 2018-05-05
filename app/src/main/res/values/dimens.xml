@@ -42,4 +42,10 @@
     <!-- Media -->
     <dimen name="video_play_icon_size">50dp</dimen>
 
+    <!-- Delete Bottom Sheet -->
+    <dimen name="delete_bottom_sheet_spacing">15dp</dimen>
+    <dimen name="delete_bottom_sheet_progress_size">120dp</dimen>
+    <dimen name="delete_bottom_sheet_progress_margin">16dp</dimen>
+    <dimen name="delete_bottom_sheet_small_spacing">8dp</dimen>
+
 </resources>

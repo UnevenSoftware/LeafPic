@@ -15,6 +15,7 @@ android {
         targetSdkVersion project.sdkVersion
         versionName "v0.7-alpha-1"
         versionCode 15
+        vectorDrawables.useSupportLibrary = true
     }
 
     lintOptions {
@@ -122,6 +123,8 @@ dependencies {
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
     implementation 'com.github.HoraApps:Liz:-SNAPSHOT'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
 
     // debug Only
     //debugCompile project(':inappstoragereader')

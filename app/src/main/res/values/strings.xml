@@ -417,8 +417,6 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="waring_share_multiple_file_types">There may be problems sharing multiple file types</string>
     <string name="creators">Creators</string>
     <string name="major_contributors">Major contributors</string>
-
     <string name="toolbar_selection_count" translatable="false">%1$d of %2$d</string>
-
-
+    <string name="delete_bottom_sheet_title">Cleaning up memories…</string>
 </resources>

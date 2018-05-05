@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/delete_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:liz_background_style="normal">
+
+    <RelativeLayout
+        android:id="@+id/delete_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/delete_done_cancel_sheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/delete_bottom_sheet_spacing"
+            android:text="@string/cancel"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/md_white_1000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/delete_done_cancel_sheet"
+            android:padding="@dimen/delete_bottom_sheet_spacing"
+            android:text="@string/delete_bottom_sheet_title"
+            android:textColor="@color/md_dark_primary_text"
+            android:textSize="@dimen/text_size_title" />
+
+    </RelativeLayout>
+
+    <com.github.lzyzsd.circleprogress.DonutProgress
+        android:id="@+id/delete_progress_bar"
+        android:layout_width="@dimen/delete_bottom_sheet_progress_size"
+        android:layout_height="@dimen/delete_bottom_sheet_progress_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/delete_bottom_sheet_progress_margin"
+        android:layout_marginTop="@dimen/delete_bottom_sheet_progress_margin"
+        app:donut_progress="1" />
+
+    <TextView
+        android:id="@+id/delete_errors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/delete_bottom_sheet_small_spacing"
+        android:visibility="gone" />
+
+</LinearLayout>
