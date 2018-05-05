@@ -251,6 +251,28 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         notifyItemRemoved(i);
     }
 
+    public void removeSelectedMedia(Media media) {
+        int i = this.media.indexOf(media);
+        this.media.remove(i);
+        notifyItemRemoved(i);
+
+//        this.notifySelected(false);
+    }
+
+    public void invalidateSelectedCount() {
+        int c = 0;
+        for (Media m : this.media) {
+            c += m.isSelected() ? 1 : 0;
+        }
+
+        this.selectedCount = c;
+
+        if (this.selectedCount == 0) stopSelection();
+        else {
+            this.actionsListener.onSelectionCountChanged(selectedCount, media.size());
+        }
+    }
+
     @Override
     public void refreshTheme(ThemeHelper theme) {
         placeholder = theme.getPlaceHolder();

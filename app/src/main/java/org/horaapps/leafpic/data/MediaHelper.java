@@ -4,6 +4,8 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.util.Pair;
 
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
@@ -11,6 +13,8 @@ import org.horaapps.leafpic.util.file.DeleteException;
 import java.io.File;
 import java.util.ArrayList;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 /**
@@ -32,18 +36,21 @@ public class MediaHelper {
     }
 
 
-    public static Observable<Media> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
-        return Observable.create(subscriber -> {
+    public static Flowable<Pair<Media, Boolean>> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
+        return Flowable.create(subscriber -> {
             for (Media media : mediaToDelete) {
+                if (subscriber.isCancelled()) {
+                    break;
+                }
                 boolean deleteSuccess = internalDeleteMedia(context, media);
-                if (deleteSuccess) subscriber.onNext(media);
-                else subscriber.onError(new DeleteException(media));
+                Log.v("delete-internal", media.getPath() + " " + deleteSuccess);
+                subscriber.onNext(new Pair<>(media, deleteSuccess));
             }
             subscriber.onComplete();
-        });
+        }, BackpressureStrategy.BUFFER);
     }
 
-    private static boolean internalDeleteMedia(Context context, Media media) {
+    public static boolean internalDeleteMedia(Context context, Media media) {
         File file = new File(media.getPath());
         boolean success = StorageHelper.deleteFile(context, file);
         if (success)
