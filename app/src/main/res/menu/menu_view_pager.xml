@@ -42,6 +42,11 @@
             android:title="@string/use_as"
             app:showAsAction="never"
             />
+        <item
+            android:id="@+id/action_print"
+            android:title="@string/print"
+            app:showAsAction="never"
+            />
     </group>
 
     <item
@@ -138,5 +143,4 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-    <!-- End Albums Stuff -->
 </menu>

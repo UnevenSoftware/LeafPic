@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.print.PrintHelper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -415,6 +417,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
             menu.setGroupVisible(R.id.only_photos_options, isImage);
 
             if (customUri) {
+                // TODO: 05/05/18 some things can be done even with custom uri
                 menu.setGroupVisible(R.id.on_internal_storage, false);
                 menu.setGroupVisible(R.id.only_photos_options, false);
                 menu.findItem(R.id.sort_action).setVisible(false);
@@ -726,6 +729,18 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                         getCurrentMedia().getFile()));
                 paletteIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(paletteIntent);
+                break;
+
+            case R.id.action_print:
+                PrintHelper photoPrinter = new PrintHelper(this);
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                try (InputStream in = getContentResolver().openInputStream(getCurrentMedia().getUri())) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    photoPrinter.printBitmap(String.format("print_%s", getCurrentMedia().getDisplayPath() ), bitmap);
+                } catch (Exception e) {
+                    Log.e("print", String.format("unable to print %s", getCurrentMedia().getUri()), e);
+                    Toast.makeText(getApplicationContext(), R.string.print_error, Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.slide_show:
