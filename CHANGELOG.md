@@ -7,6 +7,7 @@ v0.7
 * Affix
 * Slide Show #266
 * Show all Images Feature #416
+* Print
 * Delete/Move/Copy/Rename with progress dialog, and cancel feature #386
 
 ### Fixes

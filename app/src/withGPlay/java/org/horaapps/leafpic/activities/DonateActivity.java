@@ -93,7 +93,7 @@ public class DonateActivity extends ThemedActivity {
     }
 
     public static void startActivity(@NonNull Context context) {
-        context.startActivity(new Intent(context, SettingsActivity.class));
+        context.startActivity(new Intent(context, DonateActivity.class));
     }
 
     private void initUi(){
