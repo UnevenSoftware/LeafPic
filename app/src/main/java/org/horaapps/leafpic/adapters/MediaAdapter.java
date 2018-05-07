@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,13 +169,11 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         Media f = media.get(position);
-
-        //holder.path.setTag(f);
         holder.icon.setVisibility(View.GONE);
-        holder.layout.setBackgroundColor(getThemeHelper().getPrimaryColor());
+
 
         holder.gifIcon.setVisibility(f.isGif() ? View.VISIBLE : View.GONE);
 
@@ -183,7 +182,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 .format(DecodeFormat.PREFER_RGB_565)
                 .centerCrop()
                 .placeholder(placeholder)
-                //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
 
