@@ -50,15 +50,12 @@ import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumSettings;
-import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.MediaComparators;
-import org.horaapps.leafpic.data.sort.SortingMode;
-import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.BaseMediaFragment;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -420,7 +417,6 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                 // TODO: 05/05/18 some things can be done even with custom uri
                 menu.setGroupVisible(R.id.on_internal_storage, false);
                 menu.setGroupVisible(R.id.only_photos_options, false);
-                menu.findItem(R.id.sort_action).setVisible(false);
             }
         }
         return super.onPrepareOptionsMenu(menu);
@@ -522,63 +518,6 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                                 Toast.makeText(getApplicationContext(), R.string.copy_error, Toast.LENGTH_SHORT).show();
                         }).show();
                 break;
-
-            case R.id.name_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.NAME.getValue());
-                album.setSortingMode(SortingMode.NAME);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.date_taken_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.DATE.getValue());
-                album.setSortingMode(SortingMode.DATE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.size_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.SIZE.getValue());
-                album.setSortingMode(SortingMode.SIZE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.type_sort_action:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.TYPE.getValue());
-                album.setSortingMode(SortingMode.TYPE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.numeric_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.NUMERIC.getValue());
-                album.setSortingMode(SortingMode.NUMERIC);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.ascending_sort_order:
-                item.setChecked(!item.isChecked());
-                SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
-
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingOrder(album.getPath(), sortingOrder.getValue());
-                album.setSortingOrder(sortingOrder);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                return true;
-
 
             case R.id.action_share:
                 // TODO: 16/10/17 check if it works everywhere
