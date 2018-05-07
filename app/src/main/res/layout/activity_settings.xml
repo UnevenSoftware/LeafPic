@@ -352,6 +352,16 @@
                         android:textSize="@dimen/medium_text"
                         android:textStyle="bold"/>
 
+                    <!-- ENGLISH LANGUAGE -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_language"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/english_language_sub"
+                        app:settingIcon="gmd-add-circle"
+                        app:settingPreferenceKey="@string/preference_language"
+                        app:settingTitle="@string/english_language"/>
+
                     <!-- SUB SCALING-->
                     <org.horaapps.leafpic.views.SettingWithSwitchView
                         android:id="@+id/option_sub_scaling"

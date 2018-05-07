@@ -48,6 +48,7 @@ public class SettingsActivity extends ThemedActivity {
     @BindView(R.id.option_statusbar) SettingWithSwitchView optionStatusbar;
     @BindView(R.id.option_colored_navbar) SettingWithSwitchView optionColoredNavbar;
 
+    @BindView(R.id.option_language)SettingWithSwitchView optionLanguage;
     @BindView(R.id.option_sub_scaling) SettingWithSwitchView optionSubScaling;
     @BindView(R.id.option_disable_animations) SettingWithSwitchView optionDisableAnimations;
 
@@ -227,6 +228,7 @@ public class SettingsActivity extends ThemedActivity {
     public void onCustomThirdActClicked(View view) {
         new SinglePhotoSetting(SettingsActivity.this).show();
     }
+
 
     @OnClick(R.id.ll_map_provider)
     public void onMapProviderClicked(View view) {
