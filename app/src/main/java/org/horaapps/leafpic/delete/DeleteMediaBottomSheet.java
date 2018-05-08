@@ -33,6 +33,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by dnld on 11/03/18.
  */
 
+@Deprecated
 public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
 
     private static final String TAG = "DeleteMediaBottomSheet";
@@ -49,6 +50,7 @@ public class DeleteMediaBottomSheet extends BottomSheetDialogFragment {
     private boolean done = false;
 
     @NonNull
+    @Deprecated
     public static DeleteMediaBottomSheet make(@Nullable ArrayList<Media> media, @Nullable DeleteMediaListener listener) {
         DeleteMediaBottomSheet deleteMediaBottomSheet = new DeleteMediaBottomSheet();
         Bundle bundle = new Bundle();

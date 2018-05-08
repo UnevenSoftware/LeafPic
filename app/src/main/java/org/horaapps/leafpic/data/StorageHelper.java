@@ -21,6 +21,7 @@ import android.util.Log;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.delete.DeleteException;
 import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -202,7 +203,12 @@ public class StorageHelper {
 		if (!success) {
 			success = copyFile(context, source, target);
 			if (success) {
-				success = deleteFile(context, source);
+				try {
+					deleteFile(context, source);
+					success = true;
+				} catch (DeleteException e) {
+					success = false;
+				}
 			}
 		}
 
@@ -250,6 +256,8 @@ public class StorageHelper {
 	 */
 
 	public static boolean deleteFilesInFolder(Context context, @NonNull final File folder) {
+
+		// TODO: 07/05/18 check
 		boolean totalSuccess = true;
 
 		String[] children = folder.list();
@@ -257,9 +265,10 @@ public class StorageHelper {
 			for (String child : children) {
 				File file = new File(folder, child);
 				if (!file.isDirectory()) {
-					boolean success = deleteFile(context, file);
-					if (!success) {
-						Log.w(TAG, "Failed to delete file" + child);
+					try {
+						deleteFile(context, file);
+					} catch (DeleteException e) {
+						Log.e(TAG, "Failed to delete file", e);
 						totalSuccess = false;
 					}
 				}
@@ -276,17 +285,25 @@ public class StorageHelper {
 	 * @param file the file to be deleted.
 	 * @return True if successfully deleted.
 	 */
-	public static boolean deleteFile(Context context, @NonNull final File file) {
-
+	public static void deleteFile(Context context, @NonNull final File file) throws DeleteException {
+		StringBuilder errorCause = new StringBuilder();
 
 		//W/DocumentFile: Failed getCursor: java.lang.IllegalArgumentException: Failed to determine if A613-F0E1:.android_secure is child of A613-F0E1:: java.io.FileNotFoundException: Missing file for A613-F0E1:.android_secure at /storage/sdcard1/.android_secure
 		// First try the normal deletion.
-		boolean success = file.delete();
+
+		boolean success = false;
+
+		try {
+			success = file.delete();
+		} catch (Exception e) {
+			errorCause.append(e.getLocalizedMessage()).append(" ");
+		}
 
 		// Try with Storage Access Framework.
 		if (!success && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			DocumentFile document = getDocumentFile(context, file, false, false);
 			success = document != null && document.delete();
+			errorCause.append("Failed SAF ");
 		}
 
 		// Try the Kitkat workaround.
@@ -294,20 +311,21 @@ public class StorageHelper {
 			ContentResolver resolver = context.getContentResolver();
 
 			try {
-				Uri uri = null;//MediaStoreUtil.getUriFromFile(file.getAbsolutePath());
+				Uri uri = getUriForFile(context, file);
 				if (uri != null) {
 					resolver.delete(uri, null, null);
 				}
 				success = !file.exists();
 			}
 			catch (Exception e) {
+				errorCause.append("Failed CP: ").append(e.getLocalizedMessage());
 				Log.e(TAG, "Error when deleting file " + file.getAbsolutePath(), e);
-				return false;
+				success = false;
 			}
 		}
 
-		if(success) scanFile(context, new String[]{ file.getPath() });
-		return success;
+		if (success) scanFile(context, new String[]{file.getPath()});
+		else throw new DeleteException(file, errorCause.toString());
 	}
 
 	public static HashSet<File> getStorageRoots(Context context) {

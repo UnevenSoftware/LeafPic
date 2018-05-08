@@ -48,7 +48,7 @@ import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.delete.DeleteMediaBottomSheet;
+import org.horaapps.leafpic.progress.ProgressBottomSheet;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
@@ -627,24 +627,29 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     private void showDeleteBottomSheet() {
-        DeleteMediaBottomSheet.DeleteMediaListener deleteMediaListener
-                = new DeleteMediaBottomSheet.DeleteMediaListener() {
 
-            @Override
-            public void onCompleted() {
-                adapter.invalidateSelectedCount();
-            }
+        ArrayList<Media> selected = adapter.getSelected();
+        ArrayList<io.reactivex.Observable<Media>> sources = new ArrayList<>(selected.size());
+        for (Media media : selected)
+            sources.add(MediaHelper.deleteMediaWithExceptions(getContext().getApplicationContext(), media));
 
-            @Override
-            public void onDeleted(Media media) {
-                adapter.removeSelectedMedia(media);
-            }
-        };
+        ProgressBottomSheet<Media> bottomSheet = new ProgressBottomSheet.Builder<Media>(R.string.delete_bottom_sheet_title)
+                .autoDismiss(false)
+                .sources(sources)
+                .listener(new ProgressBottomSheet.Listener<Media>() {
+                    @Override
+                    public void onCompleted() {
+                        adapter.invalidateSelectedCount();
+                    }
 
-        DeleteMediaBottomSheet deleteMediaBottomSheet =
-                DeleteMediaBottomSheet.make(adapter.getSelected(), deleteMediaListener);
+                    @Override
+                    public void onProgress(Media item) {
+                        adapter.removeSelectedMedia(item);
+                    }
+                })
+                .build();
 
-        deleteMediaBottomSheet.showNow(getChildFragmentManager(), null);
+        bottomSheet.showNow(getChildFragmentManager(), null);
     }
 
     public int getCount() {

@@ -42,21 +42,33 @@ public class MediaHelper {
                 if (subscriber.isCancelled()) {
                     break;
                 }
-                boolean deleteSuccess = internalDeleteMedia(context, media);
-                Log.v("delete-internal", media.getPath() + " " + deleteSuccess);
-                subscriber.onNext(new Pair<>(media, deleteSuccess));
+                internalDeleteMedia(context, media);
+//                Log.v("delete-internal", media.getPath() + " " + deleteSuccess);
+                subscriber.onNext(new Pair<>(media, true));
             }
             subscriber.onComplete();
         }, BackpressureStrategy.BUFFER);
     }
 
-    public static boolean internalDeleteMedia(Context context, Media media) {
+    public static Observable<Media> deleteMediaWithExceptions(Context context, Media media) {
+        return Observable.create(subscriber -> {
+            try {
+                internalDeleteMedia(context, media);
+                subscriber.onNext(media);
+            } catch (org.horaapps.leafpic.delete.DeleteException e) {
+                subscriber.onError(e);
+            }
+            subscriber.onComplete();
+        });
+    }
+
+    public static boolean internalDeleteMedia(Context context, Media media) throws org.horaapps.leafpic.delete.DeleteException {
         File file = new File(media.getPath());
-        boolean success = StorageHelper.deleteFile(context, file);
-        if (success)
-            context.getContentResolver().delete(external,
-                    MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
-        return success;
+        StorageHelper.deleteFile(context, file);
+        Log.v("delete-int", "deleted " + file.getName());
+        context.getContentResolver().delete(external, MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
+        // TODO: 07/05/18 remove
+        return true;
     }
 
     public static boolean renameMedia(Context context, Media media, String newName) {
