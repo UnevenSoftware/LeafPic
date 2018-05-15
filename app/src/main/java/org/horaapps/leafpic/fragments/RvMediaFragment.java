@@ -48,6 +48,7 @@ import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.DeviceUtils;
@@ -86,9 +87,7 @@ public class RvMediaFragment extends BaseFragment {
 
     private Album album;
 
-    public interface MediaClickListener {
-        void onMediaClick(Album album, ArrayList<Media> media, int position);
-    }
+    private MediaClickListener mediaClickListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +112,9 @@ public class RvMediaFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof MediaClickListener) {
+            mediaClickListener = (MediaClickListener) context;
+        }
     }
 
     @Override
@@ -154,12 +156,6 @@ public class RvMediaFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
     }
 
-    private MediaClickListener listener;
-
-    public void setListener(MediaClickListener listener) {
-        this.listener = listener;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -180,8 +176,8 @@ public class RvMediaFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pos -> {
-                    if (RvMediaFragment.this.listener != null) {
-                        RvMediaFragment.this.listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), pos);
+                    if (mediaClickListener != null) {
+                        mediaClickListener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), pos);
                     }
                 });
 
@@ -287,11 +283,19 @@ public class RvMediaFragment extends BaseFragment {
 
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
             switch (sortingMode()) {
-                case NAME:  menu.findItem(R.id.name_sort_mode).setChecked(true); break;
-                case SIZE:  menu.findItem(R.id.size_sort_mode).setChecked(true); break;
-                case DATE: default:
-                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true); break;
-                case NUMERIC:  menu.findItem(R.id.numeric_sort_mode).setChecked(true); break;
+                case NAME:
+                    menu.findItem(R.id.name_sort_mode).setChecked(true);
+                    break;
+                case SIZE:
+                    menu.findItem(R.id.size_sort_mode).setChecked(true);
+                    break;
+                case DATE:
+                default:
+                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true);
+                    break;
+                case NUMERIC:
+                    menu.findItem(R.id.numeric_sort_mode).setChecked(true);
+                    break;
             }
         }
     }

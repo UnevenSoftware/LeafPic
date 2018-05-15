@@ -37,7 +37,7 @@ import static org.horaapps.leafpic.timeline.ViewHolder.TimelineViewHolder;
 public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
     private List<TimelineItem> timelineItems;
-    private List<Media> mediaItems;
+    private ArrayList<Media> mediaItems;
     private static Drawable mediaPlaceholder;
 
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
@@ -54,7 +54,7 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     }
 
     public ArrayList<Media> getMedia() {
-        return null;
+        return mediaItems;
     }
 
     public boolean clearSelected() {
@@ -152,10 +152,21 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
         } else if (viewHolder instanceof TimelineMediaViewHolder) {
             TimelineMediaViewHolder mediaHolder = (TimelineMediaViewHolder) viewHolder;
             mediaHolder.bind((Media) timelineItem);
+
+            mediaHolder.layout.setOnClickListener(v -> {
+                // Find this element's position in Media Items
+                for (int pos = 0; pos < mediaItems.size(); pos++) {
+                    Media mediaItem = mediaItems.get(pos);
+                    if (mediaItem.equals(timelineItem)) {
+                        onClickSubject.onNext(pos);
+                        return;
+                    }
+                }
+            });
         }
     }
 
-    public void setMedia(@NonNull List<Media> mediaList) {
+    public void setMedia(@NonNull ArrayList<Media> mediaList) {
         mediaItems = mediaList;
         buildTimelineItems();
     }

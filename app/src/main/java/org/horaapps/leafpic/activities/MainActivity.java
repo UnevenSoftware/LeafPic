@@ -43,6 +43,7 @@ import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.EditModeListener;
 import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
 import org.horaapps.leafpic.timeline.TimelineFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.DeviceUtils;
@@ -62,7 +63,7 @@ import butterknife.ButterKnife;
  * The Main Activity used to display Albums / Media.
  */
 public class MainActivity extends SharedMediaActivity implements
-        RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener,
+        MediaClickListener, AlbumsFragment.AlbumClickListener,
         NothingToShowListener, EditModeListener, NavigationDrawer.ItemListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
@@ -113,7 +114,6 @@ public class MainActivity extends SharedMediaActivity implements
 
         if (!albumsMode) {
             rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
-            rvMediaFragment.setListener(this);
             rvMediaFragment.setEditModeListener(this);
             rvMediaFragment.setNothingToShowListener(this);
         }
@@ -146,7 +146,6 @@ public class MainActivity extends SharedMediaActivity implements
         albumsMode = false;
         navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        rvMediaFragment.setListener(this);
         rvMediaFragment.setEditModeListener(this);
         rvMediaFragment.setNothingToShowListener(this);
 

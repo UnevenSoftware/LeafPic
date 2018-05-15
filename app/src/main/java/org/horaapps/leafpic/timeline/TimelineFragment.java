@@ -1,5 +1,6 @@
 package org.horaapps.leafpic.timeline;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -24,13 +25,13 @@ import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.BaseFragment;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
 import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.preferences.Defaults;
 import org.horaapps.liz.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +54,7 @@ public class TimelineFragment extends BaseFragment {
     @BindView(R.id.timeline_swipe_refresh_layout) SwipeRefreshLayout refreshLayout;
 
     private TimelineAdapter timelineAdapter;
-    private TimelineListener timelineListener;
+    private MediaClickListener timelineListener;
     private GridLayoutManager gridLayoutManager;
 
     private Album contentAlbum;
@@ -66,6 +67,14 @@ public class TimelineFragment extends BaseFragment {
         bundle.putParcelable(ARGS_ALBUM, album);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MediaClickListener) {
+            timelineListener = (MediaClickListener) context;
+        }
     }
 
     @Override
@@ -148,10 +157,6 @@ public class TimelineFragment extends BaseFragment {
         gridLayoutManager.setSpanCount(gridSize);
     }
 
-    public void setTimelineListener(@NonNull TimelineListener timelineListener) {
-        this.timelineListener = timelineListener;
-    }
-
     private void setupRecyclerView() {
         TimelineAdapter.TimelineItemDecorator decorator = new TimelineAdapter.TimelineItemDecorator(getContext(), R.dimen.timeline_decorator_spacing);
         gridLayoutManager = new GridLayoutManager(getContext(), getTimelineGridSize());
@@ -174,7 +179,7 @@ public class TimelineFragment extends BaseFragment {
     }
 
     private void loadAlbum() {
-        List<Media> mediaList = new ArrayList<>();
+        ArrayList<Media> mediaList = new ArrayList<>();
         CPHelper.getMedia(getContext(), contentAlbum)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -188,7 +193,7 @@ public class TimelineFragment extends BaseFragment {
                         });
     }
 
-    private void setAdapterMedia(@NonNull List<Media> mediaList) {
+    private void setAdapterMedia(@NonNull ArrayList<Media> mediaList) {
         Collections.sort(mediaList, MediaComparators.getComparator(SortingMode.DATE, SortingOrder.DESCENDING));
         timelineAdapter.setMedia(mediaList);
     }
@@ -215,13 +220,5 @@ public class TimelineFragment extends BaseFragment {
         timelineAdapter.refreshTheme(t);
         refreshLayout.setColorSchemeColors(t.getAccentColor());
         refreshLayout.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
-    }
-
-    /**
-     * Interface to report events to parent container
-     */
-    public interface TimelineListener {
-
-        void onMediaClick(Album album, ArrayList<Media> media, int position);
     }
 }
