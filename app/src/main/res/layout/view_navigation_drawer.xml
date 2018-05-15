@@ -111,15 +111,6 @@
                 app:itemText="@string/affix" />
 
             <org.horaapps.leafpic.views.navigation_drawer.NavigationEntry
-                android:id="@+id/navigation_item_effects"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:itemIcon="@string/icon_effects"
-                app:itemText="@string/Effects" />
-
-
-            <org.horaapps.leafpic.views.navigation_drawer.NavigationEntry
                 android:id="@+id/navigation_item_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -536,11 +536,6 @@ public class MainActivity extends SharedMediaActivity implements
              //   AffixActivity.startActivity(this);
                 break;
 
-            case NavigationDrawer.NAVIGATION_ITEM_EFFECTS:
-                Intent i2 = new Intent(getBaseContext(),EffectsActivity.class);
-                startActivity(i2);
-                break;
-
             case NAVIGATION_ITEM_SETTINGS:
                 SettingsActivity.startActivity(this);
                 break;
