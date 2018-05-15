@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +106,7 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
     @BindView(R.id.progress_progress_bar)
     DonutProgress progressBar;
     @BindView(R.id.progress_errors)
-    TextView txtErrors;
+    RecyclerView txtErrors;
     @BindView(R.id.progress_title)
     TextView txtTitle;
     @BindView(R.id.progress_done_cancel_sheet)

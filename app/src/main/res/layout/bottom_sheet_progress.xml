@@ -45,7 +45,7 @@
         android:layout_marginTop="@dimen/progress_bottom_sheet_progress_margin"
         app:donut_progress="1" />
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/progress_errors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
