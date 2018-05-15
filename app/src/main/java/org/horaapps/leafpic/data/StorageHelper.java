@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -32,6 +31,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.HashSet;
+
+import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 
 /**
  * Created by dnld on 26/05/16.
@@ -73,9 +74,6 @@ public class StorageHelper {
 		return result;
 	}
 
-	private static void scanFile(Context context, String[] paths) {
-		MediaScannerConnection.scanFile(context, paths, null, null);
-	}
 
 	/**
 	 * Create a folder. The folder may even be on external SD card for Kitkat.

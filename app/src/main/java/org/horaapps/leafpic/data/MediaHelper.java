@@ -110,7 +110,7 @@ public class MediaHelper {
         return success;
     }
 
-    private static void scanFile(Context context, String[] path) {
-        MediaScannerConnection.scanFile(context, path, null, null);
+    public static void scanFile(Context context, String[] path) {
+        MediaScannerConnection.scanFile(context.getApplicationContext(), path, null, null);
     }
 }

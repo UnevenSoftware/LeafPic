@@ -55,6 +55,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.ItemListener;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ABOUT;
@@ -88,12 +89,12 @@ public class MainActivity extends SharedMediaActivity implements
 
     private boolean pickMode = false;
     private boolean albumsMode;
-
+    private Unbinder unbinder;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         initUi();
         pickMode = getIntent().getBooleanExtra(ARGS_PICK_MODE, false);
@@ -163,6 +164,12 @@ public class MainActivity extends SharedMediaActivity implements
                 .replace(R.id.content, rvMediaFragment, RvMediaFragment.TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     @Override
@@ -253,7 +260,7 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     private void setupFAB() {
-        fab.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+        fab.setImageDrawable(new IconicsDrawable(getApplicationContext()).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
         fab.setOnClickListener(v -> startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)));
     }
 

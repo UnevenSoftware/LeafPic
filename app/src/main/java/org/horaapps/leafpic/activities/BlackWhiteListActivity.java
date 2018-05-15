@@ -1,6 +1,5 @@
 package org.horaapps.leafpic.activities;
 
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -34,6 +33,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+
+import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 
 /**
  * Created by dnld on 01/04/16.
@@ -95,8 +96,7 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     private void addFolder(final File dir) {
         String[] list = dir.list(new ImageFileFilter(true));
         if (list != null && list.length > 0) {
-            MediaScannerConnection.scanFile(getApplicationContext(), list, null, (s, uri) -> {
-            });
+            scanFile(getApplicationContext(), list);
             HandlingAlbums.getInstance(getApplicationContext()).addFolderToWhiteList(dir.getPath());
             folders.add(0, dir.getPath());
             adapter.notifyItemInserted(0);
