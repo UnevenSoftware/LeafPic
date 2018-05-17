@@ -390,6 +390,17 @@
                         app:settingIcon="gmd-do-not-disturb"
                         app:settingPreferenceKey="@string/preference_disable_animations"
                         app:settingTitle="@string/disable_animations"/>
+
+                    <!-- Enable Timeline -->
+                    <org.horaapps.leafpic.views.SettingWithSwitchView
+                        android:id="@+id/option_enable_timeline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:settingCaption="@string/enable_timeline_desc"
+                        app:settingIcon="@string/icon_timeline"
+                        app:settingPreferenceKey="@string/preference_enable_timeline"
+                        app:settingTitle="@string/enable_timeline_title"/>
+
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>
         </LinearLayout>

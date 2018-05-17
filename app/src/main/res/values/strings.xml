@@ -192,6 +192,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="option_show_tips_sub">Helps you to understand the use of some features.</string>
     <string name="disable_animations">Disable Animations</string>
     <string name="disable_animations_sub">Disable animations if there are performance issues.</string>
+    <string name="enable_timeline_title">Enable Timeline</string>
+    <string name="enable_timeline_desc">Enable the Timeline view for media. Experimental.</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>
@@ -419,4 +421,12 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="major_contributors">Major contributors</string>
     <string name="toolbar_selection_count" translatable="false">%1$d of %2$d</string>
     <string name="delete_bottom_sheet_title">Cleaning up memories…</string>
+
+    <!-- Timeline -->
+    <string name="timeline_grouping_menu_label">Grouping</string>
+    <string name="timeline_grouping_menu_day">Day</string>
+    <string name="timeline_grouping_menu_week">Week</string>
+    <string name="timeline_grouping_menu_month">Month</string>
+    <string name="timeline_grouping_menu_year">Year</string>
+
 </resources>

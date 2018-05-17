@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.PaletteActivity;
@@ -49,10 +48,12 @@ import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.delete.DeleteMediaBottomSheet;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
@@ -89,10 +90,6 @@ public class RvMediaFragment extends BaseFragment {
     private GridSpacingItemDecoration spacingDecoration;
 
     private Album album;
-
-    public interface MediaClickListener {
-        void onMediaClick(Album album, ArrayList<Media> media, int position);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -214,7 +211,7 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     public int columnsCount() {
-        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        return DeviceUtils.isPortrait(getResources())
                 ? Prefs.getMediaColumnsPortrait()
                 : Prefs.getMediaColumnsLandscape();
     }
@@ -498,7 +495,7 @@ public class RvMediaFragment extends BaseFragment {
                 //region Example
                 final LinearLayout llExample = dialogLayout.findViewById(R.id.affix_example);
                 llExample.setBackgroundColor(getBackgroundColor());
-                llExample.setVisibility(Hawk.get("show_tips", true) ? View.VISIBLE : View.GONE);
+                llExample.setVisibility(Prefs.getToggleValue(getContext().getString(R.string.preference_show_tips), true) ? View.VISIBLE : View.GONE);
                 final LinearLayout llExampleH = dialogLayout.findViewById(R.id.affix_example_horizontal);
                 //llExampleH.setBackgroundColor(getCardBackgroundColor());
                 final LinearLayout llExampleV = dialogLayout.findViewById(R.id.affix_example_vertical);
