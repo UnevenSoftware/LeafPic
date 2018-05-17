@@ -22,6 +22,8 @@ import org.horaapps.liz.Themed;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.horaapps.leafpic.util.ApplicationUtils.isDebug;
+
 /**
  * Custom view which handles the home's Navigation Drawer.
  */
@@ -47,7 +49,8 @@ public class NavigationDrawer extends ScrollView implements Themed {
     @IntDef({NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_HIDDEN_FOLDERS,
             NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS, NAVIGATION_ITEM_AFFIX,
             NAVIGATION_ITEM_EFFECTS, NAVIGATION_ITEM_ABOUT, NAVIGATION_ITEM_TIMELINE})
-    public @interface NavigationItem {}
+    public @interface NavigationItem {
+    }
 
     @BindView(R.id.navigation_drawer_header) ViewGroup drawerHeader;
 
@@ -134,7 +137,7 @@ public class NavigationDrawer extends ScrollView implements Themed {
      * Called on parent onStart. Use for any kind of refresh activities.
      */
     public void refresh() {
-        timelineEntry.setVisibility(Prefs.timelineEnabled() ? VISIBLE : GONE);
+        timelineEntry.setVisibility(isDebug() && Prefs.timelineEnabled() ? VISIBLE : GONE);
     }
 
     private void init(@NonNull Context context) {
@@ -176,16 +179,26 @@ public class NavigationDrawer extends ScrollView implements Themed {
     @NavigationItem
     private int getNavigationItemSelected(@IdRes int viewId) {
         switch (viewId) {
-            case R.id.navigation_item_albums: return NAVIGATION_ITEM_ALL_ALBUMS;
-            case R.id.navigation_item_all_media: return NAVIGATION_ITEM_ALL_MEDIA;
-            case R.id.navigation_item_timeline: return NAVIGATION_ITEM_TIMELINE;
-            case R.id.navigation_item_hidden_albums: return NAVIGATION_ITEM_HIDDEN_FOLDERS;
-            case R.id.navigation_item_wallpapers: return NAVIGATION_ITEM_WALLPAPERS;
-            case R.id.navigation_item_donate: return NAVIGATION_ITEM_DONATE;
-            case R.id.navigation_item_settings: return NAVIGATION_ITEM_SETTINGS;
-            case R.id.navigation_item_affix: return NAVIGATION_ITEM_AFFIX;
-            case R.id.navigation_item_effects: return NAVIGATION_ITEM_EFFECTS;
-            case R.id.navigation_item_about: return NAVIGATION_ITEM_ABOUT;
+            case R.id.navigation_item_albums:
+                return NAVIGATION_ITEM_ALL_ALBUMS;
+            case R.id.navigation_item_all_media:
+                return NAVIGATION_ITEM_ALL_MEDIA;
+            case R.id.navigation_item_timeline:
+                return NAVIGATION_ITEM_TIMELINE;
+            case R.id.navigation_item_hidden_albums:
+                return NAVIGATION_ITEM_HIDDEN_FOLDERS;
+            case R.id.navigation_item_wallpapers:
+                return NAVIGATION_ITEM_WALLPAPERS;
+            case R.id.navigation_item_donate:
+                return NAVIGATION_ITEM_DONATE;
+            case R.id.navigation_item_settings:
+                return NAVIGATION_ITEM_SETTINGS;
+            case R.id.navigation_item_affix:
+                return NAVIGATION_ITEM_AFFIX;
+            case R.id.navigation_item_effects:
+                return NAVIGATION_ITEM_EFFECTS;
+            case R.id.navigation_item_about:
+                return NAVIGATION_ITEM_ABOUT;
         }
         return NAVIGATION_ITEM_ABOUT;
     }
@@ -193,15 +206,24 @@ public class NavigationDrawer extends ScrollView implements Themed {
     @NonNull
     private NavigationEntry getViewForSelection(@NavigationItem int navItem) {
         switch (navItem) {
-            case NAVIGATION_ITEM_ABOUT: return aboutEntry;
-            case NAVIGATION_ITEM_ALL_ALBUMS: return albumsEntry;
-            case NAVIGATION_ITEM_ALL_MEDIA: return mediaEntry;
-            case NAVIGATION_ITEM_DONATE: return donateEntry;
-            case NAVIGATION_ITEM_HIDDEN_FOLDERS: return hiddenFoldersEntry;
-            case NAVIGATION_ITEM_SETTINGS: return settingsEntry;
-            case NAVIGATION_ITEM_WALLPAPERS: return wallpapersEntry;
-            case NAVIGATION_ITEM_TIMELINE: return timelineEntry;
-            default: return albumsEntry;
+            case NAVIGATION_ITEM_ABOUT:
+                return aboutEntry;
+            case NAVIGATION_ITEM_ALL_ALBUMS:
+                return albumsEntry;
+            case NAVIGATION_ITEM_ALL_MEDIA:
+                return mediaEntry;
+            case NAVIGATION_ITEM_DONATE:
+                return donateEntry;
+            case NAVIGATION_ITEM_HIDDEN_FOLDERS:
+                return hiddenFoldersEntry;
+            case NAVIGATION_ITEM_SETTINGS:
+                return settingsEntry;
+            case NAVIGATION_ITEM_WALLPAPERS:
+                return wallpapersEntry;
+            case NAVIGATION_ITEM_TIMELINE:
+                return timelineEntry;
+            default:
+                return albumsEntry;
         }
     }
 
