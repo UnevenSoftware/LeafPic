@@ -19,15 +19,14 @@ import android.view.ViewGroup;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
+import org.horaapps.leafpic.data.filter.FilterMode;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.BaseFragment;
-import org.horaapps.leafpic.fragments.RvMediaFragment;
 import org.horaapps.leafpic.interfaces.MediaClickListener;
-import org.horaapps.leafpic.items.ActionsListener;
 import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.preferences.Defaults;
 import org.horaapps.liz.ThemeHelper;
@@ -51,6 +50,7 @@ public class TimelineFragment extends BaseFragment {
 
     private static final String KEY_ALBUM = "key_album";
     private static final String KEY_GROUPING_MODE = "key_grouping_mode";
+    private static final String KEY_FILTER_MODE = "key_filter_mode";
 
     @BindView(R.id.timeline_items) RecyclerView timelineItems;
     @BindView(R.id.timeline_swipe_refresh_layout) SwipeRefreshLayout refreshLayout;
@@ -62,6 +62,7 @@ public class TimelineFragment extends BaseFragment {
     private Album contentAlbum;
 
     private GroupingMode groupingMode;
+    private FilterMode filterMode;
 
     public static TimelineFragment newInstance(@NonNull Album album) {
         TimelineFragment fragment = new TimelineFragment();
@@ -87,6 +88,7 @@ public class TimelineFragment extends BaseFragment {
         if (savedInstanceState != null) {
             contentAlbum = savedInstanceState.getParcelable(KEY_ALBUM);
             groupingMode = (GroupingMode) savedInstanceState.get(KEY_GROUPING_MODE);
+            filterMode = (FilterMode) savedInstanceState.get(KEY_FILTER_MODE);
             return;
         }
 
@@ -94,7 +96,10 @@ public class TimelineFragment extends BaseFragment {
         Bundle arguments = getArguments();
         if (arguments == null) return;
         contentAlbum = arguments.getParcelable(ARGS_ALBUM);
-        groupingMode = GroupingMode.DAY; // Default
+
+        // Set defaults
+        groupingMode = GroupingMode.DAY;
+        filterMode = FilterMode.ALL;
     }
 
     @Nullable
@@ -120,39 +125,83 @@ public class TimelineFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_timeline, menu);
+
+        menu.findItem(getMenuForGroupingMode(groupingMode)).setChecked(true);
+        menu.findItem(getMenuForFilterMode(filterMode)).setChecked(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         GroupingMode selectedGrouping = getGroupingMode(item.getItemId());
-        if (selectedGrouping == null) return false;
+        if (selectedGrouping != null) {
+            groupingMode = selectedGrouping;
+            item.setChecked(true);
+            timelineAdapter.setGroupingMode(groupingMode);
+            return true;
+        }
 
-        groupingMode = selectedGrouping;
-        timelineAdapter.setGroupingMode(groupingMode);
-        item.setChecked(true);
-        return true;
+        FilterMode selectedFilter = getFilterMode(item.getItemId());
+        if (selectedFilter != null) {
+            filterMode = selectedFilter;
+            item.setChecked(true);
+            loadAlbum();
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(KEY_ALBUM, contentAlbum);
         outState.putSerializable(KEY_GROUPING_MODE, groupingMode);
+        outState.putSerializable(KEY_FILTER_MODE, filterMode);
         super.onSaveInstanceState(outState);
     }
 
     @Nullable
     private GroupingMode getGroupingMode(@IdRes int menuId) {
         switch (menuId) {
-            case R.id.timeline_grouping_day:
-                return GroupingMode.DAY;
-            case R.id.timeline_grouping_week:
-                return GroupingMode.WEEK;
-            case R.id.timeline_grouping_month:
-                return GroupingMode.MONTH;
-            case R.id.timeline_grouping_year:
-                return GroupingMode.YEAR;
-            default:
-                return null;
+            case R.id.timeline_grouping_day: return GroupingMode.DAY;
+            case R.id.timeline_grouping_week: return GroupingMode.WEEK;
+            case R.id.timeline_grouping_month: return GroupingMode.MONTH;
+            case R.id.timeline_grouping_year: return GroupingMode.YEAR;
+            default: return null;
+        }
+    }
+
+    @IdRes
+    private int getMenuForGroupingMode(@NonNull GroupingMode groupingMode) {
+        switch (groupingMode) {
+            case DAY: return R.id.timeline_grouping_day;
+            case WEEK: return R.id.timeline_grouping_week;
+            case MONTH: return R.id.timeline_grouping_month;
+            case YEAR: return R.id.timeline_grouping_year;
+            default: return R.id.timeline_grouping_day;
+        }
+    }
+
+    @Nullable
+    private FilterMode getFilterMode(@IdRes int menuId) {
+        switch (menuId) {
+            case R.id.all_media_filter: return FilterMode.ALL;
+            case R.id.video_media_filter: return FilterMode.VIDEO;
+            case R.id.image_media_filter: return FilterMode.IMAGES;
+            case R.id.gifs_media_filter: return FilterMode.GIF;
+            default: return null;
+        }
+    }
+
+    @IdRes
+    private int getMenuForFilterMode(@NonNull FilterMode filterMode) {
+        switch (filterMode) {
+            case ALL: return R.id.all_media_filter;
+            case IMAGES: return R.id.image_media_filter;
+            case GIF: return R.id.gifs_media_filter;
+            case VIDEO: return R.id.video_media_filter;
+
+            case NO_VIDEO:
+            default: return R.id.all_media_filter;
         }
     }
 
@@ -190,7 +239,7 @@ public class TimelineFragment extends BaseFragment {
         CPHelper.getMedia(getContext(), contentAlbum)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(media -> MediaFilter.getFilter(contentAlbum.filterMode()).accept(media))
+                .filter(media -> MediaFilter.getFilter(filterMode).accept(media))
                 .subscribe(mediaList::add,
                         throwable -> refreshLayout.setRefreshing(false),
                         () -> {

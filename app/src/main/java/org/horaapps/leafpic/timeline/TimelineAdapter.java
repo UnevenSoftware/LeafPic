@@ -142,7 +142,8 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(TimelineViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull TimelineViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
         TimelineItem timelineItem = getItem(position);
 
         if (viewHolder instanceof TimelineHeaderViewHolder) {

@@ -39,7 +39,6 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
-import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.EditModeListener;
 import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
@@ -80,7 +79,13 @@ public class MainActivity extends SharedMediaActivity implements
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
-    private static final String SAVE_ALBUM_MODE = "album_mode";
+    private static final String SAVE_FRAGMENT_MODE = "fragment_mode";
+
+    public @interface FragmentMode {
+        int MODE_ALBUMS = 1001;
+        int MODE_MEDIA = 1002;
+        int MODE_TIMELINE = 1003;
+    }
 
     @BindView(R.id.fab_camera) FloatingActionButton fab;
     @BindView(R.id.drawer_layout) DrawerLayout navigationDrawer;
@@ -90,10 +95,12 @@ public class MainActivity extends SharedMediaActivity implements
 
     private AlbumsFragment albumsFragment;
     private RvMediaFragment rvMediaFragment;
+    private TimelineFragment timelineFragment;
 
     private boolean pickMode = false;
-    private boolean albumsMode;
     private Unbinder unbinder;
+
+    @FragmentMode private int fragmentMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,7 +113,7 @@ public class MainActivity extends SharedMediaActivity implements
 
         if (savedInstanceState == null) {
             // Add AlbumsFragment to UI
-            albumsMode = true;
+            fragmentMode = FragmentMode.MODE_ALBUMS;
 
             albumsFragment = new AlbumsFragment();
             getSupportFragmentManager()
@@ -125,31 +132,41 @@ public class MainActivity extends SharedMediaActivity implements
         // We have some instance state
         restoreState(savedInstanceState);
 
-        if (!albumsMode) {
-            rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
-            rvMediaFragment.setListener(this);
-            rvMediaFragment.setEditModeListener(this);
-            rvMediaFragment.setNothingToShowListener(this);
-        }
+        switch (fragmentMode) {
 
-        albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
-        albumsFragment.setListener(this);
-        albumsFragment.setEditModeListener(this);
-        albumsFragment.setNothingToShowListener(this);
+            case FragmentMode.MODE_MEDIA:
+                rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
+                rvMediaFragment.setListener(this);
+                rvMediaFragment.setEditModeListener(this);
+                rvMediaFragment.setNothingToShowListener(this);
+                break;
+
+            case FragmentMode.MODE_ALBUMS:
+                albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+                albumsFragment.setListener(this);
+                albumsFragment.setEditModeListener(this);
+                albumsFragment.setNothingToShowListener(this);
+                break;
+
+            case FragmentMode.MODE_TIMELINE:
+                timelineFragment = (TimelineFragment) getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG);
+                timelineFragment.setEditModeListener(this);
+                timelineFragment.setNothingToShowListener(this);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(SAVE_ALBUM_MODE, albumsMode);
+        outState.putInt(SAVE_FRAGMENT_MODE, fragmentMode);
         super.onSaveInstanceState(outState);
     }
 
     private void restoreState(@NonNull Bundle savedInstance) {
-        albumsMode = savedInstance.getBoolean(SAVE_ALBUM_MODE, true);
+        fragmentMode = savedInstance.getInt(SAVE_FRAGMENT_MODE, FragmentMode.MODE_ALBUMS);
     }
 
     private void displayAlbums(boolean hidden) {
-        albumsMode = true;
+        fragmentMode = FragmentMode.MODE_ALBUMS;
         navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         albumsFragment.displayAlbums(hidden);
     }
@@ -157,7 +174,7 @@ public class MainActivity extends SharedMediaActivity implements
     public void displayMedia(Album album) {
         rvMediaFragment = RvMediaFragment.make(album);
 
-        albumsMode = false;
+        fragmentMode = FragmentMode.MODE_MEDIA;
         navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         rvMediaFragment.setListener(this);
@@ -174,7 +191,7 @@ public class MainActivity extends SharedMediaActivity implements
     public void displayTimeline(Album album) {
         TimelineFragment fragment = TimelineFragment.newInstance(album);
 
-        albumsMode = false;
+        fragmentMode = FragmentMode.MODE_TIMELINE;
         navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         fragment.setEditModeListener(this);
@@ -230,14 +247,15 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     @Override
-    public void changedEditMode(boolean editMode, int selected, int total, @javax.annotation.Nullable View.OnClickListener listener, @javax.annotation.Nullable String title) {
+    public void changedEditMode(boolean editMode, int selected, int total, @Nullable View.OnClickListener listener, @Nullable String title) {
         if (editMode) {
             updateToolbar(
                     getString(R.string.toolbar_selection_count, selected, total),
                     GoogleMaterial.Icon.gmd_check, listener);
+        } else if (inAlbumMode()) {
+            resetToolbar();
         } else {
-            if (albumsMode) resetToolbar();
-            else updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
+            updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
         }
     }
 
@@ -257,9 +275,10 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     public void goBackToAlbums() {
-        albumsMode = true;
+        fragmentMode = FragmentMode.MODE_ALBUMS;
         navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportFragmentManager().popBackStack();
+        selectNavigationItem(NAVIGATION_ITEM_ALL_ALBUMS);
     }
 
     private void initUi() {
@@ -509,21 +528,17 @@ public class MainActivity extends SharedMediaActivity implements
 
     @Override
     public void onBackPressed() {
-
-        if (albumsMode) {
+        if (inAlbumMode()) {
             if (!albumsFragment.onBackPressed()) {
-                if (navigationDrawer.isDrawerOpen(GravityCompat.START))
-                    closeDrawer();
+                if (navigationDrawer.isDrawerOpen(GravityCompat.START)) closeDrawer();
                 else finish();
             }
-        } else {
-            // TODO: Refactor this logic!
-            if (getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG) != null) {
-                goBackToAlbums();
-                return;
-            }
-            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG)).onBackPressed())
-                goBackToAlbums();
+
+        } else if (inTimelineMode()) {
+            goBackToAlbums();
+
+        } else if (inMediaMode() && !rvMediaFragment.onBackPressed()) {
+            goBackToAlbums();
         }
     }
 
@@ -590,5 +605,17 @@ public class MainActivity extends SharedMediaActivity implements
 
     private void selectNavigationItem(@NavigationItem int navItem) {
         navigationDrawerView.selectNavItem(navItem);
+    }
+
+    private boolean inAlbumMode() {
+        return fragmentMode == FragmentMode.MODE_ALBUMS;
+    }
+
+    private boolean inMediaMode() {
+        return fragmentMode == FragmentMode.MODE_MEDIA;
+    }
+
+    private boolean inTimelineMode() {
+        return fragmentMode == FragmentMode.MODE_TIMELINE;
     }
 }
