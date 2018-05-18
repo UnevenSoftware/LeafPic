@@ -112,19 +112,9 @@ public class MainActivity extends SharedMediaActivity implements
         pickMode = getIntent().getBooleanExtra(ARGS_PICK_MODE, false);
 
         if (savedInstanceState == null) {
-            // Add AlbumsFragment to UI
             fragmentMode = FragmentMode.MODE_ALBUMS;
-
-            albumsFragment = new AlbumsFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content, albumsFragment, AlbumsFragment.TAG)
-                    .addToBackStack(null)
-                    .commit();
-
-            albumsFragment.setListener(this);
-            albumsFragment.setEditModeListener(this);
-            albumsFragment.setNothingToShowListener(this);
+            initAlbumsFragment();
+            setContentFragment();
 
             return;
         }
@@ -155,6 +145,21 @@ public class MainActivity extends SharedMediaActivity implements
         }
     }
 
+    private void setContentFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, albumsFragment, AlbumsFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void initAlbumsFragment() {
+        albumsFragment = new AlbumsFragment();
+        albumsFragment.setListener(this);
+        albumsFragment.setEditModeListener(this);
+        albumsFragment.setNothingToShowListener(this);
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SAVE_FRAGMENT_MODE, fragmentMode);
@@ -168,7 +173,9 @@ public class MainActivity extends SharedMediaActivity implements
     private void displayAlbums(boolean hidden) {
         fragmentMode = FragmentMode.MODE_ALBUMS;
         navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        if (albumsFragment == null) initAlbumsFragment();
         albumsFragment.displayAlbums(hidden);
+        setContentFragment();
     }
 
     public void displayMedia(Album album) {
