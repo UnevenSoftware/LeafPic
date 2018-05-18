@@ -113,6 +113,13 @@ public class Prefs {
     }
 
     /**
+     * Whether the Timeline view is enabled.
+     */
+    public static boolean timelineEnabled() {
+        return getPrefs().get(Keys.TIMELINE_ENABLED, Defaults.TIMELINE_ENABLED);
+    }
+
+    /**
      * Get the Card Style (Material / Flat / Compact)
      */
     @NonNull

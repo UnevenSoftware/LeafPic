@@ -3,7 +3,7 @@ package org.horaapps.leafpic.data;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,17 +13,33 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.drew.lang.GeoLocation;
 import com.drew.lang.annotations.NotNull;
 
+import org.horaapps.leafpic.timeline.data.TimelineItem;
+import org.horaapps.leafpic.util.ArrayUtils;
 import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 
-/**
- * Created by dnld on 26/04/16.
- */
-public class Media implements CursorHandler, Parcelable {
+// TODO Calvin: Separate out the logic here
+// Ideally, we should have separate data classes for images, videos & gifs
+// Base class can be Media, and others should extend
+// Try to separate out Database logic and projections from this class
+public class Media implements TimelineItem, CursorHandler, Parcelable {
+
+    private static final String[] sProjection = new String[] {
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.DATE_TAKEN,
+            MediaStore.Images.Media.MIME_TYPE,
+            MediaStore.Images.Media.SIZE,
+            MediaStore.Images.Media.ORIENTATION
+    };
+
+    private static final int CURSOR_POS_DATA = ArrayUtils.getIndex(sProjection, MediaStore.Images.Media.DATA);
+    private static final int CURSOR_POS_DATE_TAKEN = ArrayUtils.getIndex(sProjection, MediaStore.Images.Media.DATE_TAKEN);
+    private static final int CURSOR_POS_MIME_TYPE = ArrayUtils.getIndex(sProjection, MediaStore.Images.Media.MIME_TYPE);
+    private static final int CURSOR_POS_SIZE = ArrayUtils.getIndex(sProjection, MediaStore.Images.Media.SIZE);
+    private static final int CURSOR_POS_ORIENTATION = ArrayUtils.getIndex(sProjection, MediaStore.Images.Media.ORIENTATION);
 
     private String path = null;
     private long dateModified = -1;
@@ -35,7 +51,8 @@ public class Media implements CursorHandler, Parcelable {
     private long size = -1;
     private boolean selected = false;
 
-    public Media() { }
+    public Media() {
+    }
 
     public Media(String path, long dateModified) {
         this.path = path;
@@ -60,26 +77,20 @@ public class Media implements CursorHandler, Parcelable {
     }
 
     public Media(@NotNull Cursor cur) {
-        this.path = cur.getString(0);
-        this.dateModified = cur.getLong(1);
-        this.mimeType = cur.getString(2);
-        this.size = cur.getLong(3);
-        this.orientation = cur.getInt(4);
+        this.path = cur.getString(CURSOR_POS_DATA);
+        this.dateModified = cur.getLong(CURSOR_POS_DATE_TAKEN);
+        this.mimeType = cur.getString(CURSOR_POS_MIME_TYPE);
+        this.size = cur.getLong(CURSOR_POS_SIZE);
+        this.orientation = cur.getInt(CURSOR_POS_ORIENTATION);
     }
 
     @Override
-    public Media handle(Cursor cu) throws SQLException {
+    public Media handle(Cursor cu) {
         return new Media(cu);
     }
 
     public static String[] getProjection() {
-        return new String[]{
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.MIME_TYPE,
-                MediaStore.Images.Media.SIZE,
-                MediaStore.Images.Media.ORIENTATION
-        };
+        return sProjection;
     }
 
     public void setUri(String uriString) {
@@ -109,11 +120,17 @@ public class Media implements CursorHandler, Parcelable {
         return selected;
     }
 
-    public boolean isGif() { return mimeType.endsWith("gif"); }
+    public boolean isGif() {
+        return mimeType.endsWith("gif");
+    }
 
-    public boolean isImage() { return mimeType.startsWith("image"); }
+    public boolean isImage() {
+        return mimeType.startsWith("image");
+    }
 
-    public boolean isVideo() { return mimeType.startsWith("video"); }
+    public boolean isVideo() {
+        return mimeType.startsWith("video");
+    }
 
     public Uri getUri() {
         return uriString != null ? Uri.parse(uriString) : Uri.fromFile(new File(path));
@@ -151,14 +168,15 @@ public class Media implements CursorHandler, Parcelable {
     //<editor-fold desc="Exif & More">
 // TODO remove from here!
     @Deprecated
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        bitmap = Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
         return bitmap;
     }
+
     @Deprecated
-    public GeoLocation getGeoLocation()  {
+    public GeoLocation getGeoLocation() {
         return /*metadata != null ? metadata.getLocation() :*/ null;
     }
 
@@ -171,19 +189,27 @@ public class Media implements CursorHandler, Parcelable {
             public void run() {
                 int exifOrientation = -1;
                 try {
-                    ExifInterface  exif = new ExifInterface(path);
+                    ExifInterface exif = new ExifInterface(path);
                     switch (orientation) {
-                        case 90: exifOrientation = ExifInterface.ORIENTATION_ROTATE_90; break;
-                        case 180: exifOrientation = ExifInterface.ORIENTATION_ROTATE_180; break;
-                        case 270: exifOrientation = ExifInterface.ORIENTATION_ROTATE_270; break;
-                        case 0: exifOrientation = ExifInterface.ORIENTATION_NORMAL; break;
+                        case 90:
+                            exifOrientation = ExifInterface.ORIENTATION_ROTATE_90;
+                            break;
+                        case 180:
+                            exifOrientation = ExifInterface.ORIENTATION_ROTATE_180;
+                            break;
+                        case 270:
+                            exifOrientation = ExifInterface.ORIENTATION_ROTATE_270;
+                            break;
+                        case 0:
+                            exifOrientation = ExifInterface.ORIENTATION_NORMAL;
+                            break;
                     }
                     if (exifOrientation != -1) {
                         exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(exifOrientation));
                         exif.saveAttributes();
                     }
+                } catch (IOException ignored) {
                 }
-                catch (IOException ignored) {  }
             }
         }).start();
         return true;
@@ -207,9 +233,9 @@ public class Media implements CursorHandler, Parcelable {
     }
 
     @Deprecated
-    public boolean fixDate(){
+    public boolean fixDate() {
         long newDate = getDateTaken();
-        if (newDate != -1){
+        if (newDate != -1) {
             File f = new File(path);
             if (f.setLastModified(newDate)) {
                 dateModified = newDate;
@@ -266,4 +292,9 @@ public class Media implements CursorHandler, Parcelable {
             return new Media[size];
         }
     };
+
+    @Override
+    public int getTimelineType() {
+        return TYPE_MEDIA;
+    }
 }

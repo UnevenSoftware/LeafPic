@@ -43,7 +43,10 @@ import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.EditModeListener;
 import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
+import org.horaapps.leafpic.timeline.TimelineFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
@@ -64,6 +67,7 @@ import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVI
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_DONATE;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_SETTINGS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_TIMELINE;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NavigationItem;
 
@@ -71,7 +75,7 @@ import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.Navi
  * The Main Activity used to display Albums / Media.
  */
 public class MainActivity extends SharedMediaActivity implements
-        RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener,
+        MediaClickListener, AlbumsFragment.AlbumClickListener,
         NothingToShowListener, EditModeListener, ItemListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
@@ -90,6 +94,7 @@ public class MainActivity extends SharedMediaActivity implements
     private boolean pickMode = false;
     private boolean albumsMode;
     private Unbinder unbinder;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +171,22 @@ public class MainActivity extends SharedMediaActivity implements
                 .commit();
     }
 
+    public void displayTimeline(Album album) {
+        TimelineFragment fragment = TimelineFragment.newInstance(album);
+
+        albumsMode = false;
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        fragment.setEditModeListener(this);
+        fragment.setNothingToShowListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, fragment, TimelineFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     protected void onDestroy() {
         unbinder.unbind();
@@ -228,7 +249,7 @@ public class MainActivity extends SharedMediaActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        if (DeviceUtils.isPortrait(getResources())) {
             fab.setVisibility(View.VISIBLE);
             fab.animate().translationY(fab.getHeight() * 2).start();
         } else
@@ -369,6 +390,12 @@ public class MainActivity extends SharedMediaActivity implements
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        navigationDrawerView.refresh();
+    }
+
     //region MENU
 
     @Override
@@ -490,6 +517,11 @@ public class MainActivity extends SharedMediaActivity implements
                 else finish();
             }
         } else {
+            // TODO: Refactor this logic!
+            if (getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG) != null) {
+                goBackToAlbums();
+                return;
+            }
             if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG)).onBackPressed())
                 goBackToAlbums();
         }
@@ -513,6 +545,11 @@ public class MainActivity extends SharedMediaActivity implements
                 displayMedia(Album.getAllMediaAlbum());
                 break;
 
+            case NAVIGATION_ITEM_TIMELINE:
+                displayTimeline(Album.getAllMediaAlbum());
+                selectNavigationItem(navigationItemSelected);
+                break;
+
             case NAVIGATION_ITEM_HIDDEN_FOLDERS:
                 if (Security.isPasswordOnHidden()) {
                     askPassword();
@@ -531,13 +568,13 @@ public class MainActivity extends SharedMediaActivity implements
                 break;
 
             case NavigationDrawer.NAVIGATION_ITEM_AFFIX:
-                Intent i = new Intent(getBaseContext(),AffixActivity.class);
+                Intent i = new Intent(getBaseContext(), AffixActivity.class);
                 startActivity(i);
-             //   AffixActivity.startActivity(this);
+                //   AffixActivity.startActivity(this);
                 break;
 
             case NavigationDrawer.NAVIGATION_ITEM_EFFECTS:
-                Intent i2 = new Intent(getBaseContext(),EffectsActivity.class);
+                Intent i2 = new Intent(getBaseContext(), EffectsActivity.class);
                 startActivity(i2);
                 break;
 
