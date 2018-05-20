@@ -95,7 +95,6 @@ public class MainActivity extends SharedMediaActivity implements
 
     private AlbumsFragment albumsFragment;
     private RvMediaFragment rvMediaFragment;
-    private TimelineFragment timelineFragment;
 
     private boolean pickMode = false;
     private Unbinder unbinder;
@@ -139,9 +138,10 @@ public class MainActivity extends SharedMediaActivity implements
                 break;
 
             case FragmentMode.MODE_TIMELINE:
-                timelineFragment = (TimelineFragment) getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG);
+                TimelineFragment timelineFragment = (TimelineFragment) getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG);
                 timelineFragment.setEditModeListener(this);
                 timelineFragment.setNothingToShowListener(this);
+                setupUiForTimeline();
         }
     }
 
@@ -172,7 +172,7 @@ public class MainActivity extends SharedMediaActivity implements
 
     private void displayAlbums(boolean hidden) {
         fragmentMode = FragmentMode.MODE_ALBUMS;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        unlockNavigationDrawer();
         if (albumsFragment == null) initAlbumsFragment();
         albumsFragment.displayAlbums(hidden);
         setContentFragment();
@@ -182,7 +182,7 @@ public class MainActivity extends SharedMediaActivity implements
         rvMediaFragment = RvMediaFragment.make(album);
 
         fragmentMode = FragmentMode.MODE_MEDIA;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        lockNavigationDrawer();
 
         rvMediaFragment.setListener(this);
         rvMediaFragment.setEditModeListener(this);
@@ -199,7 +199,6 @@ public class MainActivity extends SharedMediaActivity implements
         TimelineFragment fragment = TimelineFragment.newInstance(album);
 
         fragmentMode = FragmentMode.MODE_TIMELINE;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         fragment.setEditModeListener(this);
         fragment.setNothingToShowListener(this);
@@ -209,6 +208,8 @@ public class MainActivity extends SharedMediaActivity implements
                 .replace(R.id.content, fragment, TimelineFragment.TAG)
                 .addToBackStack(null)
                 .commit();
+
+        setupUiForTimeline();
     }
 
     @Override
@@ -260,7 +261,7 @@ public class MainActivity extends SharedMediaActivity implements
                     getString(R.string.toolbar_selection_count, selected, total),
                     GoogleMaterial.Icon.gmd_check, listener);
         } else if (inAlbumMode()) {
-            resetToolbar();
+            showDefaultToolbar();
         } else {
             updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
         }
@@ -283,9 +284,11 @@ public class MainActivity extends SharedMediaActivity implements
 
     public void goBackToAlbums() {
         fragmentMode = FragmentMode.MODE_ALBUMS;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        unlockNavigationDrawer();
         getSupportFragmentManager().popBackStack();
+        albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
         selectNavigationItem(NAVIGATION_ITEM_ALL_ALBUMS);
+        showDefaultToolbar();
     }
 
     private void initUi() {
@@ -384,13 +387,13 @@ public class MainActivity extends SharedMediaActivity implements
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
     }
 
-    public void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
+    private void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
         toolbar.setTitle(title);
         toolbar.setNavigationIcon(getToolbarIcon(icon));
         toolbar.setNavigationOnClickListener(onClickListener);
     }
 
-    private void resetToolbar() {
+    private void showDefaultToolbar() {
         updateToolbar(
                 getString(R.string.app_name),
                 GoogleMaterial.Icon.gmd_menu,
@@ -618,5 +621,18 @@ public class MainActivity extends SharedMediaActivity implements
 
     private boolean inTimelineMode() {
         return fragmentMode == FragmentMode.MODE_TIMELINE;
+    }
+
+    private void lockNavigationDrawer() {
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    private void unlockNavigationDrawer() {
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    private void setupUiForTimeline() {
+        lockNavigationDrawer();
+        updateToolbar(getString(R.string.timeline_toolbar_title), GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
     }
 }

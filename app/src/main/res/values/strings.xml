@@ -408,6 +408,7 @@
     <string name="delete_bottom_sheet_title">Cleaning up memories…</string>
 
     <!-- Timeline -->
+    <string name="timeline_toolbar_title">Timeline</string>
     <string name="timeline_grouping_menu_label">Grouping</string>
     <string name="timeline_grouping_menu_day">Day</string>
     <string name="timeline_grouping_menu_week">Week</string>
