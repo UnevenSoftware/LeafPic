@@ -4,13 +4,13 @@
     <!-- Navigation Drawer -->
     <string name="icon_albums">gmd-folder</string>
     <string name="icon_all_media">gmd_photo_library</string>
+    <string name="icon_timeline">gmd-timeline</string>
     <string name="icon_hidden_folders">faw-low-vision</string>
     <string name="icon_tags">faw-tag</string>
     <string name="icon_wallpapers">gmd-wallpaper</string>
     <string name="icon_donate">faw-gift</string>
     <string name="icon_settings">gmd-settings</string>
     <string name="icon_affix">faw-th-large</string>
-    <string name="icon_effects">faw-adjust</string>
     <string name="icon_about">gmd-info-outline</string>
 
     <!-- About -->

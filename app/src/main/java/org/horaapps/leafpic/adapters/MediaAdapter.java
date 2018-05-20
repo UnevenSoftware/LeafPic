@@ -33,6 +33,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
@@ -321,6 +322,12 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
     public void clear() {
         media.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setMedia(@NonNull List<Media> mediaList) {
+        media.clear();
+        media.addAll(mediaList);
         notifyDataSetChanged();
     }
 

@@ -28,4 +28,8 @@ public class ApplicationUtils {
     public static String getAppVersion() {
         return BuildConfig.VERSION_NAME;
     }
+
+    public static boolean isDebug() {
+        return BuildConfig.DEBUG;
+    }
 }
