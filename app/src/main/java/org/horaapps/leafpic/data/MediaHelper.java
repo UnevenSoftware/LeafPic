@@ -4,17 +4,12 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Pair;
 
 import org.horaapps.leafpic.progress.ProgressException;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 /**
@@ -24,33 +19,7 @@ import io.reactivex.Observable;
 public class MediaHelper {
     private static Uri external = MediaStore.Files.getContentUri("external");
 
-
-
-    public static Observable<Media> deleteMedia(Context context, Media mediaToDelete) {
-        return Observable.create(subscriber -> {
-            boolean deleteSuccess = internalDeleteMedia(context, mediaToDelete);
-            if (deleteSuccess) subscriber.onNext(mediaToDelete);
-            else subscriber.onError(new DeleteException(mediaToDelete));
-            subscriber.onComplete();
-        });
-    }
-
-
-    public static Flowable<Pair<Media, Boolean>> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
-        return Flowable.create(subscriber -> {
-            for (Media media : mediaToDelete) {
-                if (subscriber.isCancelled()) {
-                    break;
-                }
-                internalDeleteMedia(context, media);
-//                Log.v("delete-internal", media.getPath() + " " + deleteSuccess);
-                subscriber.onNext(new Pair<>(media, true));
-            }
-            subscriber.onComplete();
-        }, BackpressureStrategy.BUFFER);
-    }
-
-    public static Observable<Media> deleteMediaWithExceptions(Context context, Media media) {
+    public static Observable<Media> deleteMedia(Context context, Media media) {
         return Observable.create(subscriber -> {
             try {
                 internalDeleteMedia(context, media);

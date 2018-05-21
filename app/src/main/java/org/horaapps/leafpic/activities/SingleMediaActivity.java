@@ -65,7 +65,6 @@ import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.HackyViewPager;
 import org.horaapps.liz.ColorPalette;
@@ -470,10 +469,9 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             }
                         },
                         err -> {
-                            if (err instanceof DeleteException)
-                                Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
-                            else
-                                Toast.makeText(this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                            // TODO: 21/05/18 add progress show errors better?
+
+                            Toast.makeText(getApplicationContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
                         },
                         () -> {
                             adapter.notifyDataSetChanged();

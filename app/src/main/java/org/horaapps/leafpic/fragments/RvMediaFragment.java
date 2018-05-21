@@ -52,8 +52,8 @@ import org.horaapps.leafpic.progress.ProgressBottomSheet;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
-import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.DeviceUtils;
+import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
@@ -627,7 +627,7 @@ public class RvMediaFragment extends BaseFragment {
         ArrayList<Media> selected = adapter.getSelected();
         ArrayList<io.reactivex.Observable<Media>> sources = new ArrayList<>(selected.size());
         for (Media media : selected)
-            sources.add(MediaHelper.deleteMediaWithExceptions(getContext().getApplicationContext(), media));
+            sources.add(MediaHelper.deleteMedia(getContext().getApplicationContext(), media));
 
         ProgressBottomSheet<Media> bottomSheet = new ProgressBottomSheet.Builder<Media>(R.string.delete_bottom_sheet_title)
                 .autoDismiss(false)

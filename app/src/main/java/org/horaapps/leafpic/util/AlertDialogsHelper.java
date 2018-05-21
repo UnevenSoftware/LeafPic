@@ -10,13 +10,10 @@ import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,7 +29,6 @@ import com.drew.lang.GeoLocation;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.metadata.MediaDetailsMap;
 import org.horaapps.leafpic.data.metadata.MetadataHelper;
@@ -46,7 +42,6 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 import in.uncod.android.bypass.Bypass;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 import static org.horaapps.leafpic.util.ServerConstants.LEAFPIC_CHANGELOG;
 
@@ -96,38 +91,6 @@ public class AlertDialogsHelper {
         dialogTitle.setText(title);
         dialogMessage.setText(Message);
         dialogMessage.setTextColor(activity.getTextColor());
-        builder.setView(dialogLayout);
-        return builder.create();
-    }
-
-    public static AlertDialog getProgressDialogWithErrors(ThemedActivity activity, @StringRes int title, ProgressAdapter adapter, int max) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, activity.getDialogStyle());
-        View dialogLayout = activity.getLayoutInflater().inflate(R.layout.dialog_list_progress, null);
-        final int[] progress = {0};
-        TextView dialogTitle = dialogLayout.findViewById(R.id.text_dialog_title);
-        TextView progressMessage = dialogLayout.findViewById(R.id.name_folder);
-        ((ProgressBar) dialogLayout.findViewById(org.horaapps.leafpic.R.id.progress_dialog_loading)).getIndeterminateDrawable()
-                .setColorFilter(activity.getPrimaryColor(), android.graphics.PorterDuff.Mode.SRC_ATOP);
-
-        adapter.setListener(item -> {
-            progress[0]++;
-            dialogTitle.setText(activity.getString(title, progress[0], max));
-            progressMessage.setText(item.getName());
-        });
-
-        RecyclerView rv = dialogLayout.findViewById(R.id.rv_progress);
-        rv.setLayoutManager(new LinearLayoutManager(activity));
-        rv.setHasFixedSize(true);
-        rv.setItemAnimator(
-                AnimationUtils.getItemAnimator(
-                        new LandingAnimator(new OvershootInterpolator(1f))
-                ));
-        rv.setAdapter(adapter);
-
-
-        ((CardView) dialogLayout.findViewById(org.horaapps.leafpic.R.id.message_card)).setCardBackgroundColor(activity.getCardBackgroundColor());
-        dialogTitle.setBackgroundColor(activity.getPrimaryColor());
-        dialogTitle.setText(activity.getString(title, progress[0], max));
         builder.setView(dialogLayout);
         return builder.create();
     }
