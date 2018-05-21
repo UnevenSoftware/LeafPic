@@ -21,7 +21,8 @@ import android.util.Log;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.delete.DeleteException;
+import org.horaapps.leafpic.progress.ErrorCause;
+import org.horaapps.leafpic.progress.ProgressException;
 import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -206,7 +207,7 @@ public class StorageHelper {
 				try {
 					deleteFile(context, source);
 					success = true;
-				} catch (DeleteException e) {
+				} catch (ProgressException e) {
 					success = false;
 				}
 			}
@@ -267,7 +268,7 @@ public class StorageHelper {
 				if (!file.isDirectory()) {
 					try {
 						deleteFile(context, file);
-					} catch (DeleteException e) {
+					} catch (ProgressException e) {
 						Log.e(TAG, "Failed to delete file", e);
 						totalSuccess = false;
 					}
@@ -285,8 +286,8 @@ public class StorageHelper {
 	 * @param file the file to be deleted.
 	 * @return True if successfully deleted.
 	 */
-	public static void deleteFile(Context context, @NonNull final File file) throws DeleteException {
-		StringBuilder errorCause = new StringBuilder();
+	public static void deleteFile(Context context, @NonNull final File file) throws ProgressException {
+		ErrorCause error = new ErrorCause(file.getName());
 
 		//W/DocumentFile: Failed getCursor: java.lang.IllegalArgumentException: Failed to determine if A613-F0E1:.android_secure is child of A613-F0E1:: java.io.FileNotFoundException: Missing file for A613-F0E1:.android_secure at /storage/sdcard1/.android_secure
 		// First try the normal deletion.
@@ -296,14 +297,14 @@ public class StorageHelper {
 		try {
 			success = file.delete();
 		} catch (Exception e) {
-			errorCause.append(e.getLocalizedMessage()).append(" ");
+			error.addCause(e.getLocalizedMessage());
 		}
 
 		// Try with Storage Access Framework.
 		if (!success && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			DocumentFile document = getDocumentFile(context, file, false, false);
 			success = document != null && document.delete();
-			errorCause.append("Failed SAF ");
+			error.addCause("Failed SAF");
 		}
 
 		// Try the Kitkat workaround.
@@ -318,14 +319,14 @@ public class StorageHelper {
 				success = !file.exists();
 			}
 			catch (Exception e) {
-				errorCause.append("Failed CP: ").append(e.getLocalizedMessage());
+				error.addCause(String.format("Failed CP: %s", e.getLocalizedMessage()));
 				Log.e(TAG, "Error when deleting file " + file.getAbsolutePath(), e);
 				success = false;
 			}
 		}
 
 		if (success) scanFile(context, new String[]{file.getPath()});
-		else throw new DeleteException(file, errorCause.toString());
+		else throw new ProgressException(error);
 	}
 
 	public static HashSet<File> getStorageRoots(Context context) {

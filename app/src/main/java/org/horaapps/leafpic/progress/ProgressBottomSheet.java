@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +17,10 @@ import android.widget.TextView;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
 import org.horaapps.leafpic.R;
-import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.liz.ThemeHelper;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -106,7 +107,7 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
     @BindView(R.id.progress_progress_bar)
     DonutProgress progressBar;
     @BindView(R.id.progress_errors)
-    RecyclerView txtErrors;
+    RecyclerView rvErrors;
     @BindView(R.id.progress_title)
     TextView txtTitle;
     @BindView(R.id.progress_done_cancel_sheet)
@@ -153,16 +154,24 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         return inflater.inflate(R.layout.bottom_sheet_progress, container, false);
     }
 
-    private void showErrors(HashSet<String> errors) {
-        StringBuilder b = new StringBuilder();
-        b.append("<b>").append("Errors:").append("</b>").append("<br/>");
-
-        for (String error : errors)
-            b.append("<i>").append(" - ").append(error).append("</i>").append("<br/>");
-
-        txtErrors.setText(StringUtils.html(b.toString()));
-        txtErrors.setVisibility(View.VISIBLE);
+    private void showErrors(List<ErrorCause> errors) {
+        ErrorCauseAdapter adapter = new ErrorCauseAdapter(getContext(), errors);
+        rvErrors.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvErrors.setAdapter(adapter);
+        rvErrors.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void showErrors(CompositeException exceptions) {
+        ArrayList<ErrorCause> errors = new ArrayList<>(exceptions.size());
+        for (Throwable throwable : exceptions.getExceptions())
+            errors.add(ErrorCause.fromThrowable(throwable));
+
+        showErrors(errors);
+    }
+
+    private void showErrors(Throwable exception) {
+        showErrors(Collections.singletonList(ErrorCause.fromThrowable(exception)));
     }
 
     @OnClick(R.id.progress_done_cancel_sheet)
@@ -201,15 +210,12 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         progressBar.setMax(sources.size());
         setProgress(0);
 
-        HashSet<String> errors = new HashSet<>(0);
 
 
         disposable = Observable.mergeDelayError(sources)
                 .observeOn(AndroidSchedulers.mainThread(), true)
                 .subscribeOn(Schedulers.newThread())
                 .doFinally(() -> {
-                    if (errors.size() > 0)
-                        showErrors(errors);
                     done();
                     if (autoDismiss)
                         dismiss();
@@ -218,18 +224,9 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
                     listener.onProgress(item);
                     setProgress((int) (progressBar.getProgress() + 1));
                 }, err -> {
-
                     // Note: progress is useless here since errors are delayed
-                    if (err instanceof CompositeException) {
-                        List<Throwable> exceptions = ((CompositeException) err).getExceptions();
-                        for (Throwable e : exceptions) {
-                            errors.add(e.toString());
-//                            setProgress((int) (progressBar.getProgress() + 1));
-                        }
-                    } else {
-                        errors.add(err.toString());
-//                        setProgress((int) (progressBar.getProgress() + 1));
-                    }
+                    if (err instanceof CompositeException) showErrors(((CompositeException) err));
+                    else showErrors(err);
                 });
     }
 
@@ -237,7 +234,6 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         ThemeHelper th = ThemeHelper.getInstanceLoaded(getContext());
         view.setBackgroundColor(th.getBackgroundColor());
         headerLayout.setBackgroundColor(th.getPrimaryColor());
-        txtErrors.setTextColor(th.getTextColor());
         progressBar.setFinishedStrokeColor(th.getAccentColor());
         progressBar.setTextColor(th.getTextColor());
         txtTitle.setText(title);

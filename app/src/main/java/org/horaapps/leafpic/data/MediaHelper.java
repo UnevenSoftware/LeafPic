@@ -4,9 +4,9 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Pair;
 
+import org.horaapps.leafpic.progress.ProgressException;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.file.DeleteException;
 
@@ -55,19 +55,18 @@ public class MediaHelper {
             try {
                 internalDeleteMedia(context, media);
                 subscriber.onNext(media);
-            } catch (org.horaapps.leafpic.delete.DeleteException e) {
+            } catch (ProgressException e) {
                 subscriber.onError(e);
             }
             subscriber.onComplete();
         });
     }
 
-    public static boolean internalDeleteMedia(Context context, Media media) throws org.horaapps.leafpic.delete.DeleteException {
+    public static boolean internalDeleteMedia(Context context, Media media) throws ProgressException {
         File file = new File(media.getPath());
         StorageHelper.deleteFile(context, file);
-        Log.v("delete-int", "deleted " + file.getName());
         context.getContentResolver().delete(external, MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
-        // TODO: 07/05/18 remove
+
         return true;
     }
 

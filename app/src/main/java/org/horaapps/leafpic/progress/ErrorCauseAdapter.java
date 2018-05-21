@@ -9,13 +9,15 @@ import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemedAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ErrorCauseAdapter extends ThemedAdapter<ErrorCauseViewHolder> {
 
-    private ArrayList<ErrorCause> errors;
+    private List<ErrorCause> errors;
 
-    public ErrorCauseAdapter(Context context) {
+    public ErrorCauseAdapter(Context context, List<ErrorCause> errors) {
         super(context);
+        this.errors = errors;
     }
 
     public void setErrors(ArrayList<ErrorCause> errors) {
