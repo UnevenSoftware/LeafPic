@@ -39,11 +39,13 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
-import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.EditModeListener;
 import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
+import org.horaapps.leafpic.timeline.TimelineFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
@@ -55,6 +57,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.ItemListener;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ABOUT;
@@ -63,6 +66,7 @@ import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVI
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_DONATE;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_HIDDEN_FOLDERS;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_SETTINGS;
+import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_TIMELINE;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_WALLPAPERS;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NavigationItem;
 
@@ -70,12 +74,18 @@ import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.Navi
  * The Main Activity used to display Albums / Media.
  */
 public class MainActivity extends SharedMediaActivity implements
-        RvMediaFragment.MediaClickListener, AlbumsFragment.AlbumClickListener,
+        MediaClickListener, AlbumsFragment.AlbumClickListener,
         NothingToShowListener, EditModeListener, ItemListener {
 
     public static final String ARGS_PICK_MODE = "pick_mode";
 
-    private static final String SAVE_ALBUM_MODE = "album_mode";
+    private static final String SAVE_FRAGMENT_MODE = "fragment_mode";
+
+    public @interface FragmentMode {
+        int MODE_ALBUMS = 1001;
+        int MODE_MEDIA = 1002;
+        int MODE_TIMELINE = 1003;
+    }
 
     @BindView(R.id.fab_camera) FloatingActionButton fab;
     @BindView(R.id.drawer_layout) DrawerLayout navigationDrawer;
@@ -87,31 +97,23 @@ public class MainActivity extends SharedMediaActivity implements
     private RvMediaFragment rvMediaFragment;
 
     private boolean pickMode = false;
-    private boolean albumsMode;
+    private Unbinder unbinder;
+
+    @FragmentMode private int fragmentMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         initUi();
         pickMode = getIntent().getBooleanExtra(ARGS_PICK_MODE, false);
 
         if (savedInstanceState == null) {
-            // Add AlbumsFragment to UI
-            albumsMode = true;
-
-            albumsFragment = new AlbumsFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content, albumsFragment, AlbumsFragment.TAG)
-                    .addToBackStack(null)
-                    .commit();
-
-            albumsFragment.setListener(this);
-            albumsFragment.setEditModeListener(this);
-            albumsFragment.setNothingToShowListener(this);
+            fragmentMode = FragmentMode.MODE_ALBUMS;
+            initAlbumsFragment();
+            setContentFragment();
 
             return;
         }
@@ -119,14 +121,40 @@ public class MainActivity extends SharedMediaActivity implements
         // We have some instance state
         restoreState(savedInstanceState);
 
-        if (!albumsMode) {
-            rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
-            rvMediaFragment.setListener(this);
-            rvMediaFragment.setEditModeListener(this);
-            rvMediaFragment.setNothingToShowListener(this);
-        }
+        switch (fragmentMode) {
 
-        albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+            case FragmentMode.MODE_MEDIA:
+                rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
+                rvMediaFragment.setListener(this);
+                rvMediaFragment.setEditModeListener(this);
+                rvMediaFragment.setNothingToShowListener(this);
+                break;
+
+            case FragmentMode.MODE_ALBUMS:
+                albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+                albumsFragment.setListener(this);
+                albumsFragment.setEditModeListener(this);
+                albumsFragment.setNothingToShowListener(this);
+                break;
+
+            case FragmentMode.MODE_TIMELINE:
+                TimelineFragment timelineFragment = (TimelineFragment) getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG);
+                timelineFragment.setEditModeListener(this);
+                timelineFragment.setNothingToShowListener(this);
+                setupUiForTimeline();
+        }
+    }
+
+    private void setContentFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, albumsFragment, AlbumsFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void initAlbumsFragment() {
+        albumsFragment = new AlbumsFragment();
         albumsFragment.setListener(this);
         albumsFragment.setEditModeListener(this);
         albumsFragment.setNothingToShowListener(this);
@@ -134,25 +162,27 @@ public class MainActivity extends SharedMediaActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(SAVE_ALBUM_MODE, albumsMode);
+        outState.putInt(SAVE_FRAGMENT_MODE, fragmentMode);
         super.onSaveInstanceState(outState);
     }
 
     private void restoreState(@NonNull Bundle savedInstance) {
-        albumsMode = savedInstance.getBoolean(SAVE_ALBUM_MODE, true);
+        fragmentMode = savedInstance.getInt(SAVE_FRAGMENT_MODE, FragmentMode.MODE_ALBUMS);
     }
 
     private void displayAlbums(boolean hidden) {
-        albumsMode = true;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        fragmentMode = FragmentMode.MODE_ALBUMS;
+        unlockNavigationDrawer();
+        if (albumsFragment == null) initAlbumsFragment();
         albumsFragment.displayAlbums(hidden);
+        setContentFragment();
     }
 
     public void displayMedia(Album album) {
         rvMediaFragment = RvMediaFragment.make(album);
 
-        albumsMode = false;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        fragmentMode = FragmentMode.MODE_MEDIA;
+        lockNavigationDrawer();
 
         rvMediaFragment.setListener(this);
         rvMediaFragment.setEditModeListener(this);
@@ -163,6 +193,29 @@ public class MainActivity extends SharedMediaActivity implements
                 .replace(R.id.content, rvMediaFragment, RvMediaFragment.TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public void displayTimeline(Album album) {
+        TimelineFragment fragment = TimelineFragment.newInstance(album);
+
+        fragmentMode = FragmentMode.MODE_TIMELINE;
+
+        fragment.setEditModeListener(this);
+        fragment.setNothingToShowListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, fragment, TimelineFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+
+        setupUiForTimeline();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     @Override
@@ -202,14 +255,15 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     @Override
-    public void changedEditMode(boolean editMode, int selected, int total, @javax.annotation.Nullable View.OnClickListener listener, @javax.annotation.Nullable String title) {
+    public void changedEditMode(boolean editMode, int selected, int total, @Nullable View.OnClickListener listener, @Nullable String title) {
         if (editMode) {
             updateToolbar(
                     getString(R.string.toolbar_selection_count, selected, total),
                     GoogleMaterial.Icon.gmd_check, listener);
+        } else if (inAlbumMode()) {
+            showDefaultToolbar();
         } else {
-            if (albumsMode) resetToolbar();
-            else updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
+            updateToolbar(title, GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
         }
     }
 
@@ -221,7 +275,7 @@ public class MainActivity extends SharedMediaActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        if (DeviceUtils.isPortrait(getResources())) {
             fab.setVisibility(View.VISIBLE);
             fab.animate().translationY(fab.getHeight() * 2).start();
         } else
@@ -229,9 +283,12 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     public void goBackToAlbums() {
-        albumsMode = true;
-        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        fragmentMode = FragmentMode.MODE_ALBUMS;
+        unlockNavigationDrawer();
         getSupportFragmentManager().popBackStack();
+        albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+        selectNavigationItem(NAVIGATION_ITEM_ALL_ALBUMS);
+        showDefaultToolbar();
     }
 
     private void initUi() {
@@ -253,7 +310,7 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     private void setupFAB() {
-        fab.setImageDrawable(new IconicsDrawable(this).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
+        fab.setImageDrawable(new IconicsDrawable(getApplicationContext()).icon(GoogleMaterial.Icon.gmd_camera_alt).color(Color.WHITE));
         fab.setOnClickListener(v -> startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)));
     }
 
@@ -330,13 +387,13 @@ public class MainActivity extends SharedMediaActivity implements
         drawableScrollBar.setColorFilter(new PorterDuffColorFilter(getPrimaryColor(), PorterDuff.Mode.SRC_ATOP));
     }
 
-    public void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
+    private void updateToolbar(String title, IIcon icon, View.OnClickListener onClickListener) {
         toolbar.setTitle(title);
         toolbar.setNavigationIcon(getToolbarIcon(icon));
         toolbar.setNavigationOnClickListener(onClickListener);
     }
 
-    private void resetToolbar() {
+    private void showDefaultToolbar() {
         updateToolbar(
                 getString(R.string.app_name),
                 GoogleMaterial.Icon.gmd_menu,
@@ -360,6 +417,12 @@ public class MainActivity extends SharedMediaActivity implements
             findViewById(R.id.ll_emoji_easter_egg).setVisibility(View.GONE);
             findViewById(R.id.nothing_to_show_placeholder).setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        navigationDrawerView.refresh();
     }
 
     //region MENU
@@ -475,16 +538,17 @@ public class MainActivity extends SharedMediaActivity implements
 
     @Override
     public void onBackPressed() {
-
-        if (albumsMode) {
+        if (inAlbumMode()) {
             if (!albumsFragment.onBackPressed()) {
-                if (navigationDrawer.isDrawerOpen(GravityCompat.START))
-                    closeDrawer();
+                if (navigationDrawer.isDrawerOpen(GravityCompat.START)) closeDrawer();
                 else finish();
             }
-        } else {
-            if (!((BaseFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG)).onBackPressed())
-                goBackToAlbums();
+
+        } else if (inTimelineMode()) {
+            goBackToAlbums();
+
+        } else if (inMediaMode() && !rvMediaFragment.onBackPressed()) {
+            goBackToAlbums();
         }
     }
 
@@ -506,6 +570,11 @@ public class MainActivity extends SharedMediaActivity implements
                 displayMedia(Album.getAllMediaAlbum());
                 break;
 
+            case NAVIGATION_ITEM_TIMELINE:
+                displayTimeline(Album.getAllMediaAlbum());
+                selectNavigationItem(navigationItemSelected);
+                break;
+
             case NAVIGATION_ITEM_HIDDEN_FOLDERS:
                 if (Security.isPasswordOnHidden()) {
                     askPassword();
@@ -524,16 +593,10 @@ public class MainActivity extends SharedMediaActivity implements
                 break;
 
             case NavigationDrawer.NAVIGATION_ITEM_AFFIX:
-                Intent i = new Intent(getBaseContext(),AffixActivity.class);
+                Intent i = new Intent(getBaseContext(), AffixActivity.class);
                 startActivity(i);
-             //   AffixActivity.startActivity(this);
+                //   AffixActivity.startActivity(this);
                 break;
-
-            case NavigationDrawer.NAVIGATION_ITEM_EFFECTS:
-                Intent i2 = new Intent(getBaseContext(),EffectsActivity.class);
-                startActivity(i2);
-                break;
-
             case NAVIGATION_ITEM_SETTINGS:
                 SettingsActivity.startActivity(this);
                 break;
@@ -546,5 +609,30 @@ public class MainActivity extends SharedMediaActivity implements
 
     private void selectNavigationItem(@NavigationItem int navItem) {
         navigationDrawerView.selectNavItem(navItem);
+    }
+
+    private boolean inAlbumMode() {
+        return fragmentMode == FragmentMode.MODE_ALBUMS;
+    }
+
+    private boolean inMediaMode() {
+        return fragmentMode == FragmentMode.MODE_MEDIA;
+    }
+
+    private boolean inTimelineMode() {
+        return fragmentMode == FragmentMode.MODE_TIMELINE;
+    }
+
+    private void lockNavigationDrawer() {
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    private void unlockNavigationDrawer() {
+        navigationDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    private void setupUiForTimeline() {
+        lockNavigationDrawer();
+        updateToolbar(getString(R.string.timeline_toolbar_title), GoogleMaterial.Icon.gmd_arrow_back, v -> goBackToAlbums());
     }
 }

@@ -3,7 +3,6 @@ package org.horaapps.leafpic.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 
@@ -12,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 
 /**
  * Created by Jibo on 09/05/2016.
@@ -61,7 +62,7 @@ public class Affix {
                 OutputStream os = new FileOutputStream(file);
                 bmp.compress(options.getFormat(), options.getQuality(), os);
                 os.close();
-                MediaScannerConnection.scanFile(context, new String[]{ file.getAbsolutePath() }, null, null);
+                scanFile(context, new String[]{file.getAbsolutePath()});
             }
         } catch(IOException e) {
             Log.e("combineImages", "problem combining images", e);

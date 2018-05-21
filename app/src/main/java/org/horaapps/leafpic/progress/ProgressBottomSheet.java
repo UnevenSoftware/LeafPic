@@ -211,7 +211,6 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         setProgress(0);
 
 
-
         disposable = Observable.mergeDelayError(sources)
                 .observeOn(AndroidSchedulers.mainThread(), true)
                 .subscribeOn(Schedulers.newThread())

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.horaapps.leafpic.activities.MainActivity">
+
+    <item
+        android:id="@+id/timeline_menu_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/filter_menu_title"
+        app:showAsAction="ifRoom">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/all_media_filter"
+                    android:checked="true"
+                    android:title="@string/all"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/video_media_filter"
+                    android:title="@string/videos"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/image_media_filter"
+                    android:title="@string/images"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/gifs_media_filter"
+                    android:title="@string/gifs"
+                    app:showAsAction="never" />
+
+            </group>
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/timeline_menu_grouping"
+        android:icon="@drawable/ic_group"
+        android:title="@string/timeline_grouping_menu_label"
+        app:showAsAction="ifRoom">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/timeline_grouping_day"
+                    android:checked="true"
+                    android:title="@string/timeline_grouping_menu_day"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/timeline_grouping_week"
+                    android:title="@string/timeline_grouping_menu_week"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/timeline_grouping_month"
+                    android:title="@string/timeline_grouping_menu_month"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/timeline_grouping_year"
+                    android:title="@string/timeline_grouping_menu_year"
+                    app:showAsAction="never" />
+
+            </group>
+
+        </menu>
+
+    </item>
+
+</menu>
