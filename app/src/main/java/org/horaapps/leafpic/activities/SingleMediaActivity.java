@@ -78,6 +78,7 @@ import java.util.Collections;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -180,7 +181,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
 
         ArrayList<Media> list = new ArrayList<>();
 
-        CPHelper.getMedia(getApplicationContext(), album)
+        Disposable disposable = CPHelper.getMedia(getApplicationContext(), album)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media) && !media.equals(m))
@@ -208,6 +209,8 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             updatePageTitle(position);
 
                         });
+
+        disposeLater(disposable);
     }
 
     private void loadUri(Uri uri) {
@@ -459,7 +462,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
     private void deleteCurrentMedia() {
         Media currentMedia = getCurrentMedia();
 
-        MediaHelper.deleteMedia(getApplicationContext(), currentMedia)
+        Disposable disposable = MediaHelper.deleteMedia(getApplicationContext(), currentMedia)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(deleted -> {
@@ -477,6 +480,8 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             adapter.notifyDataSetChanged();
                             updatePageTitle(mViewPager.getCurrentItem());
                         });
+
+        disposeLater(disposable);
 
 
     }
