@@ -156,7 +156,6 @@ public class Media implements TimelineItem, CursorHandler, Parcelable {
         return dateModified;
     }
 
-
     public ObjectKey getSignature() {
         return new ObjectKey(getDateModified() + getPath() + getOrientation());
     }

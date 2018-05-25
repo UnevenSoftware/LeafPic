@@ -17,11 +17,9 @@ public class GLideRotateTransformation extends BitmapTransformation {
 
     private float rotateRotationAngle = 0f;
 
-
     public GLideRotateTransformation(float rotateRotationAngle) {
         this.rotateRotationAngle = rotateRotationAngle;
     }
-
 
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {

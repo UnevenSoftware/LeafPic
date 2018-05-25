@@ -202,7 +202,6 @@ public class AlbumsFragment extends BaseFragment {
         return HandlingAlbums.getInstance(getContext().getApplicationContext());
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.grid_albums, menu);

@@ -22,6 +22,7 @@ package org.horaapps.leafpic.util.inapppurchase;
  * call {@link #getResult()}.
  */
 public class IabException extends Exception {
+
     IabResult mResult;
 
     public IabException(IabResult r) {

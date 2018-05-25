@@ -60,7 +60,6 @@ public class DeleteAlbumsDialog extends DialogFragment {
         dialogTitle.setText(title);
     }
 
-
     class DeleteAlbums extends AsyncTask<String, Integer, Boolean> {
 
         @Override

@@ -20,11 +20,9 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
-
     public static String[] asArray(String... a) {
         return a;
     }
-
 
     public static String getPhotoNameByPath(String path) {
         String b[] = path.split("/");

@@ -62,6 +62,7 @@ public class AlbumSettings implements Serializable, Parcelable {
     }
 
     public static final Parcelable.Creator<AlbumSettings> CREATOR = new Parcelable.Creator<AlbumSettings>() {
+
         @Override
         public AlbumSettings createFromParcel(Parcel source) {
             return new AlbumSettings(source);

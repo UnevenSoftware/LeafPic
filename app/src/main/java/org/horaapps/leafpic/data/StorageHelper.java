@@ -276,8 +276,6 @@ public class StorageHelper {
 		return totalSuccess;
 	}
 
-
-
 	/**
 	 * Delete a file. May be even on external SD card.
 	 *
@@ -481,7 +479,6 @@ public class StorageHelper {
 		return Hawk.get("sd_card_path", null);
 	}
 
-
 	public static String getMediaPath(final Context context, final Uri uri)
 	{
 		// DocumentProvider
@@ -606,7 +603,6 @@ public class StorageHelper {
 		}
 		return null;
 	}
-
 
 	/**
 	 * @param uri The Uri to check.

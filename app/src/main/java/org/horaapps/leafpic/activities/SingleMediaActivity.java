@@ -245,7 +245,6 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
         customUri = true;
     }
 
-
     private void initUi() {
 
         setSupportActionBar(toolbar);
@@ -452,7 +451,6 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
             }
         }
     }
-
 
     private void displayAlbums() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));

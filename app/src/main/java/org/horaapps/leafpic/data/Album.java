@@ -362,6 +362,7 @@ public class Album implements CursorHandler, Parcelable {
 	}
 
 	public static final Parcelable.Creator<Album> CREATOR = new Parcelable.Creator<Album>() {
+
 		@Override
 		public Album createFromParcel(Parcel source) {
 			return new Album(source);

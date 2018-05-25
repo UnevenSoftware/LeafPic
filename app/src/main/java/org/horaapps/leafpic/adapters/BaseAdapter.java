@@ -36,7 +36,6 @@ public abstract class BaseAdapter<T, VH extends ThemedViewHolder> extends Themed
         return context;
     }
 
-
    /* public void setClickListener(OnItemClickListener<T> clickListener) {
         this.clickListener = clickListener;
     }

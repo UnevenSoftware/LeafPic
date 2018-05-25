@@ -313,7 +313,6 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
         }
     }
 
-
     private void releasePlayer() {
         if (player != null) {
             shouldAutoPlay = player.getPlayWhenReady();

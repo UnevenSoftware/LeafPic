@@ -17,6 +17,7 @@ import io.reactivex.Observable;
  */
 
 public class MediaHelper {
+
     private static Uri external = MediaStore.Files.getContentUri("external");
 
     public static Observable<Media> deleteMedia(Context context, Media media) {
