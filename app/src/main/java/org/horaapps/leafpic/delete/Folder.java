@@ -9,6 +9,7 @@ import org.horaapps.leafpic.util.StringUtils;
 
 @Deprecated
 public class Folder {
+
     int count = -1;
     int progress = 0;
     String path;

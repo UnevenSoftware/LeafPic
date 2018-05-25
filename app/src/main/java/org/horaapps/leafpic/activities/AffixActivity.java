@@ -44,9 +44,8 @@ public class AffixActivity extends Activity implements OnClickListener {
     Canvas canvas;
     Paint paint;
 
-
-
     private ArrayList<String> images;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +61,7 @@ public class AffixActivity extends Activity implements OnClickListener {
 
 
     }
+
     public void onClick(View v) {
 
         int which = -1;

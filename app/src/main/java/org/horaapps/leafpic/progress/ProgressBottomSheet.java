@@ -39,7 +39,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
 
-
     /**
      * Interface for listeners to get callbacks when items are processed.
      */

@@ -42,7 +42,6 @@ import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 public class BlackWhiteListActivity extends SharedMediaActivity {
 
     public static final String EXTRA_TYPE = "typeExcluded";
-
     private RecyclerView mRecyclerView;
     private ItemsAdapter adapter;
     private Toolbar toolbar;

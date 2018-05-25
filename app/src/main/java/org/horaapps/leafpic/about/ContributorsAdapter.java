@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class ContributorsAdapter extends ThemedAdapter<ContributorViewHolder> {
 
     private ContactListener listener;
-
     private ArrayList<Contributor> contributors;
 
     ContributorsAdapter(Context context, ArrayList<Contributor> contributors, ContactListener listener) {
@@ -32,7 +31,6 @@ public class ContributorsAdapter extends ThemedAdapter<ContributorViewHolder> {
 
     @Override
     public void onBindViewHolder(ContributorViewHolder holder, int position) {
-
         Contributor contributor = contributors.get(position);
         holder.load(contributor, listener);
         super.onBindViewHolder(holder, position);

@@ -535,7 +535,6 @@ public class MainActivity extends SharedMediaActivity implements
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (inAlbumMode()) {

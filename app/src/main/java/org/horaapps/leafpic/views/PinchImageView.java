@@ -23,7 +23,6 @@ import java.util.Queue;
  */
 public class PinchImageView extends ImageView {
 
-
     ////////////////////////////////配置参数////////////////////////////////
 
     /**
@@ -40,7 +39,6 @@ public class PinchImageView extends ImageView {
      * 图片最大放大比例
      */
     private static final float MAX_SCALE = 4f;
-
 
     ////////////////////////////////监听器////////////////////////////////
 
@@ -69,7 +67,6 @@ public class PinchImageView extends ImageView {
         //默认的long click会在任何长按情况下都会触发，所以搞成自己的
         mOnLongClickListener = l;
     }
-
 
     ////////////////////////////////公共状态获取////////////////////////////////
 
@@ -291,7 +288,6 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////公共状态设置////////////////////////////////
 
     /**
@@ -384,7 +380,6 @@ public class PinchImageView extends ImageView {
         //重绘
         invalidate();
     }
-
 
     ////////////////////////////////对外广播事件////////////////////////////////
 
@@ -523,7 +518,6 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////用于重载定制////////////////////////////////
 
     /**
@@ -563,7 +557,6 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////初始化////////////////////////////////
 
     public PinchImageView(Context context) {
@@ -591,7 +584,6 @@ public class PinchImageView extends ImageView {
     public void setScaleType(ScaleType scaleType) {
     }
 
-
     ////////////////////////////////绘制////////////////////////////////
 
     @Override
@@ -613,7 +605,6 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////有效性判断////////////////////////////////
 
     /**
@@ -627,7 +618,6 @@ public class PinchImageView extends ImageView {
         return getDrawable() != null && getDrawable().getIntrinsicWidth() > 0 && getDrawable().getIntrinsicHeight() > 0
                 && getWidth() > 0 && getHeight() > 0;
     }
-
 
     ////////////////////////////////mask动画处理////////////////////////////////
 
@@ -702,7 +692,6 @@ public class PinchImageView extends ImageView {
             invalidate();
         }
     }
-
 
     ////////////////////////////////手势动画处理////////////////////////////////
 

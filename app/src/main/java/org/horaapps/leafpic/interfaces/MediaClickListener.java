@@ -6,5 +6,6 @@ import org.horaapps.leafpic.data.Media;
 import java.util.ArrayList;
 
 public interface MediaClickListener {
+
     void onMediaClick(Album album, ArrayList<Media> media, int position);
 }

@@ -147,7 +147,6 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         actionsListener.onSelectMode(false);
     }
 
-
     public int getSelectedCount() {
         return selectedCount;
     }
@@ -338,7 +337,6 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     public int getItemCount() {
         return albums.size();
     }
-
 
     static class ViewHolder extends ThemedViewHolder {
 

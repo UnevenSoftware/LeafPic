@@ -5,6 +5,7 @@ package org.horaapps.leafpic;
  * Created by Jibo on 20/11/2016.
  */
 public enum CardViewStyle {
+
     MATERIAL(0, R.layout.card_album_material),
     FLAT(1, R.layout.card_album_flat),
     COMPACT(2, R.layout.card_album_compact);

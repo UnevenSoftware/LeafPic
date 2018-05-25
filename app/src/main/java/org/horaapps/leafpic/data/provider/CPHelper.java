@@ -27,7 +27,6 @@ import io.reactivex.ObservableEmitter;
 
 public class CPHelper {
 
-
     public static Observable<Album> getAlbums(Context context, boolean hidden, ArrayList<String> excluded ,SortingMode sortingMode, SortingOrder sortingOrder) {
         return hidden ? getHiddenAlbums(context, excluded) : getAlbums(context, excluded, sortingMode, sortingOrder);
     }
@@ -92,7 +91,6 @@ public class CPHelper {
         return QueryUtils.query(query.build(), context.getContentResolver(), Album::new);
     }
 
-
     private static Observable<Album> getHiddenAlbums(Context context, ArrayList<String> excludedAlbums) {
 
         boolean includeVideo = Prefs.showVideos();
@@ -113,7 +111,6 @@ public class CPHelper {
             }
         });
     }
-
 
     private static void fetchRecursivelyHiddenFolder(File dir, ObservableEmitter<Album> emitter, ArrayList<String> excludedAlbums, boolean includeVideo) {
         if (!isExcluded(dir.getPath(), excludedAlbums)) {
@@ -157,7 +154,6 @@ public class CPHelper {
         for(String s : excludedAlbums) if (path.startsWith(s)) return true;
         return false;
     }
-
 
     //region Media
 
