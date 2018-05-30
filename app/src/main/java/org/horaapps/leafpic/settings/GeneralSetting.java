@@ -55,7 +55,7 @@ public class GeneralSetting extends ThemedSetting {
         getActivity().themeSeekBar(barFoldersL);
         getActivity().themeSeekBar(barMediaL);
 
-        // Portrait Orientation
+        /** Portrait Orientation */
         int folderColumnsPortrait = Prefs.getFolderColumnsPortrait();
         int mediaColumnsPortrait = Prefs.getMediaColumnsPortrait();
         nColFolders.setText(String.valueOf(folderColumnsPortrait));
@@ -84,7 +84,7 @@ public class GeneralSetting extends ThemedSetting {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // Landscape Orientation
+        /** Landscape Orientation */
         int folderColumnsLandscape = Prefs.getFolderColumnsLandscape();
         int mediaColumnsLandscape = Prefs.getMediaColumnsLandscape();
         nColFoldersL.setText(String.valueOf(folderColumnsLandscape));

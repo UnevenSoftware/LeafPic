@@ -5,6 +5,7 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        tools:parentTag="FrameLayout">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,6 +13,7 @@
         android:paddingBottom="@dimen/sub_medium_spacing"
         android:paddingTop="@dimen/sub_medium_spacing"
         android:paddingRight="@dimen/medium_spacing">
+
         <org.horaapps.leafpic.views.themeable.ThemedSettingsIcon
             android:id="@+id/icon"
             android:layout_width="@dimen/icon_size"
@@ -20,16 +22,19 @@
             android:layout_marginRight="@dimen/big_spacing"
             android:layout_marginLeft="@dimen/big_spacing"
             app:iiv_icon="gmd-android"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginEnd="44dp">
+
                 <org.horaapps.leafpic.views.themeable.ThemedSettingsTitle
                     android:id="@+id/title"
                     style="@style/Base.TextAppearance.AppCompat.Subhead"
@@ -37,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/md_grey_200"
                     tools:text="title text goes here"/>
+
                 <org.horaapps.leafpic.views.themeable.ThemedSettingsCaption
                     android:id="@+id/caption"
                     style="@style/TextAppearance.AppCompat.Caption"
@@ -44,7 +50,9 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/md_grey_400"
                     tools:text="caption text goes here"/>
+
             </LinearLayout>
+
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/toggle"
                 android:layout_width="wrap_content"
@@ -54,6 +62,7 @@
                 android:hapticFeedbackEnabled="true"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"/>
+
         </RelativeLayout>
     </LinearLayout>
 </merge>

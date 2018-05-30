@@ -6,10 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/card_corner_radius">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/dialog_changelog_title"
             android:layout_width="match_parent"
@@ -20,14 +22,17 @@
             android:textSize="@dimen/sub_big_text"
             android:textStyle="bold"
             android:text="@string/changelog"/>
+
         <ScrollView
             android:id="@+id/changelog_scrollview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,6 +41,7 @@
                     android:padding="@dimen/big_spacing"
                     android:textSize="@dimen/medium_text"
                     android:text="@string/changelog" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

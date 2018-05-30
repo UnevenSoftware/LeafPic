@@ -34,11 +34,13 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
+
                     <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/general_setting_title"
                         android:layout_width="match_parent"
@@ -96,6 +98,7 @@
                         app:settingIcon="gmd-info"
                         app:settingPreferenceKey="@string/preference_show_tips"
                         app:settingTitle="@string/option_show_tips"/>
+
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
@@ -109,11 +112,13 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
+
                     <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/theme_setting_title"
                         android:layout_width="match_parent"
@@ -205,6 +210,7 @@
                         app:settingMinApi="21"
                         app:settingPreferenceKey="@string/preference_colored_nav_bar"
                         app:settingTitle="@string/colored_navbar"/>
+
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
@@ -218,11 +224,13 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
+
                     <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/picture_setting_title"
                         android:layout_width="match_parent"
@@ -275,6 +283,7 @@
                         app:settingIcon="gmd-compare-arrows"
                         app:settingPreferenceKey="@string/preference_swipe_direction_inverted"
                         app:settingTitle="@string/media_viewer_swipe_direction"/>
+
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>
 
@@ -288,11 +297,13 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
+
                     <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/video_setting_title"
                         android:layout_width="match_parent"
@@ -336,11 +347,13 @@
                 android:foreground="@drawable/ripple"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="@dimen/card_elevation">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_spacing">
+
                     <org.horaapps.leafpic.views.themeable.ThemedSettingsCategory
                         android:id="@+id/advanced_setting_title"
                         android:layout_width="match_parent"

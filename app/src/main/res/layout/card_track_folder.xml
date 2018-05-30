@@ -16,6 +16,7 @@
         app:iiv_icon="gmd-folder"
         android:layout_marginLeft="@dimen/big_spacing"
         android:layout_marginRight="@dimen/big_spacing" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,20 +32,21 @@
             android:layout_centerVertical="true"
             android:orientation="vertical"
             android:layout_marginEnd="44dp">
+
             <TextView
                 android:id="@+id/folder_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/md_dark_background"
-                android:textSize="16sp"
-                />
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/folder_path"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/md_grey_400"
-                android:textSize="14sp"
-                />
+                android:textSize="14sp" />
+
         </LinearLayout>
 
         <org.horaapps.liz.ui.ThemedIcon
@@ -53,7 +55,7 @@
             android:layout_height="@dimen/icon_size"
             app:iiv_icon="gmd-remove-circle"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-             />
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 </LinearLayout>

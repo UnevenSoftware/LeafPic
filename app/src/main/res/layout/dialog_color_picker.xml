@@ -6,13 +6,16 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="1dp"
     android:id="@+id/dialog_card">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/dialog_title"
                 android:layout_width="match_parent"
@@ -22,18 +25,21 @@
                 android:padding="@dimen/big_spacing"
                 android:textSize="@dimen/sub_big_text"
                 android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/container_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/medium_spacing">
+
                 <uz.shift.colorpicker.LineColorPicker
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/color_picker_primary"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     app:orientation="horizontal" />
+
                 <uz.shift.colorpicker.LineColorPicker
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/color_picker_primary_2"
@@ -41,6 +47,7 @@
                     android:layout_height="45dp"
                     app:orientation="horizontal"
                     android:layout_marginTop="14dp" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

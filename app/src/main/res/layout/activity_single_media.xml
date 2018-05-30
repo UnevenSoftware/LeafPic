@@ -5,18 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat"
-    >
+    android:theme="@style/ThemeOverlay.AppCompat">
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
         android:background="@color/md_dark_appbar"
-        android:windowActionBarOverlay="true"
-        />
+        android:windowActionBarOverlay="true" />
+
     <org.horaapps.leafpic.views.HackyViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/photos_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
     <include layout="@layout/there_is_nothing_to_show"/>
+
 </RelativeLayout>

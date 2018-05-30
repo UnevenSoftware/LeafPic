@@ -33,6 +33,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+/**
+ * The Settings Activity used to select settings.
+ */
 public class SettingsActivity extends ThemedActivity {
     private Toolbar toolbar;
 

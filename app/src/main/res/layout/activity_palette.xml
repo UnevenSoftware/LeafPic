@@ -72,9 +72,7 @@
                             android:textSize="@dimen/sub_medium_text" />
 
                     </LinearLayout>
-
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -93,9 +91,6 @@
                     android:layout_height="wrap_content" />
 
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
-
     </android.support.v4.widget.NestedScrollView>
-
 </LinearLayout>

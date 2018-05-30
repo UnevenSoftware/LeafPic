@@ -18,41 +18,36 @@
 
 package org.horaapps.leafpic.util;
 
-/* Copied from GNU coreutils-8.23/lib/filevercmp.c
-   Java implementation is highly inefficient, because it copies strings symbol by symbol. */
+/** Copied from GNU coreutils-8.23/lib/filevercmp.c
+ *  Java implementation is highly inefficient, because it copies strings symbol by symbol. */
 public class NumericComparator {
 
   public static final String TAG = "NumericComparator";
 
-  /* Compare version strings:
-
-  This function compares strings S1 and S2:
-  1) By PREFIX in the same way as strcmp.
-  2) Then by VERSION (most similarly to version compare of Debian's dpkg).
-     Leading zeros in version numbers are ignored.
-  3) If both (PREFIX and  VERSION) are equal, strcmp function is used for
-     comparison. So this function can return 0 if (and only if) strings S1
-     and S2 are identical.
-
-  It returns number >0 for S1 > S2, 0 for S1 == S2 and number <0 for S1 < S2.
-
-  This function compares strings, in a way that if VER1 and VER2 are version
-  numbers and PREFIX and SUFFIX (SUFFIX defined as (\.[A-Za-z~][A-Za-z0-9~]*)*)
-  are strings then VER1 < VER2 implies filevercmp (PREFIX VER1 SUFFIX,
-  PREFIX VER2 SUFFIX) < 0.
-
-  This function is intended to be a replacement for strverscmp. */
-
+  /** Compare version strings:
+   *  This function compares strings S1 and S2:
+   *  1) By PREFIX in the same way as strcmp.
+   *  2) Then by VERSION (most similarly to version compare of Debian's dpkg).
+   *  Leading zeros in version numbers are ignored.
+   *  3) If both (PREFIX and  VERSION) are equal, strcmp function is used for
+   *  comparison. So this function can return 0 if (and only if) strings S1
+   *  and S2 are identical.
+   *  It returns number >0 for S1 > S2, 0 for S1 == S2 and number <0 for S1 < S2.
+   *  This function compares strings, in a way that if VER1 and VER2 are version
+   *  numbers and PREFIX and SUFFIX (SUFFIX defined as (\.[A-Za-z~][A-Za-z0-9~]*)*)
+   *  are strings then VER1 < VER2 implies filevercmp (PREFIX VER1 SUFFIX,
+   *  PREFIX VER2 SUFFIX) < 0.
+   *  This function is intended to be a replacement for strverscmp. */
   public static int filevercmp (String s1, String s2) {
     String s1_suffix, s2_suffix;
     int s1_len, s2_len, result;
 
-    /* easy comparison to see if strings are identical */
+    /** easy comparison to see if strings are identical */
     int simple_cmp = strcmp (s1, s2);
     if (simple_cmp == 0)
       return 0;
 
-    /* special handle for "", "." and ".." */
+    /** special handle for "", "." and ".." */
     if (s1 == null || s1.length() == 0)
       return -1;
     if (s2 == null || s2.length() == 0)
@@ -66,7 +61,7 @@ public class NumericComparator {
     if (0 == strcmp ("..", s2))
       return 1;
 
-    /* special handle for other hidden files */
+    /** special handle for other hidden files */
     if (s1.codePointAt(0) == '.' && s2.codePointAt(0) != '.')
       return -1;
     if (s1.codePointAt(0) != '.' && s2.codePointAt(0) == '.')
@@ -76,13 +71,13 @@ public class NumericComparator {
       s2 = s2.substring(1, s2.length());
     }
 
-    /* "cut" file suffixes */
+    /** "cut" file suffixes */
     s1_suffix = match_suffix (s1);
     s2_suffix = match_suffix (s2);
     s1_len = s1.length() - s1_suffix.length();
     s2_len = s2.length() - s2_suffix.length();
 
-    /* restore file suffixes if strings are identical after "cut" */
+    /** restore file suffixes if strings are identical after "cut" */
     if ((s1_suffix.length() > 0 || s2_suffix.length() > 0) && (s1_len == s2_len) && 0 == strncmp (s1, s2, s1_len)) {
       s1_len = s1.length();
       s2_len = s2.length();
@@ -92,16 +87,15 @@ public class NumericComparator {
     return result == 0 ? simple_cmp : result;
   }
 
-  /* slightly modified verrevcmp function from dpkg
-  S1, S2 - compared string
-  S1_LEN, S2_LEN - length of strings to be scanned
-
-  This implements the algorithm for comparison of version strings
-  specified by Debian and now widely adopted.  The detailed
-  specification can be found in the Debian Policy Manual in the
-  section on the 'Version' control field.  This version of the code
-  implements that from s5.6.12 of Debian Policy v3.8.0.1
-  http://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version */
+  /** slightly modified verrevcmp function from dpkg
+   *  S1, S2 - compared string
+   *  S1_LEN, S2_LEN - length of strings to be scanned
+   *  This implements the algorithm for comparison of version strings
+   *  specified by Debian and now widely adopted.  The detailed
+   *  specification can be found in the Debian Policy Manual in the
+   *  section on the 'Version' control field.  This version of the code
+   *  implements that from s5.6.12 of Debian Policy v3.8.0.1
+   *  http://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version */
   public static int verrevcmp (String s1, String s2) {
     int s1_pos = 0;
     int s2_pos = 0;
@@ -138,10 +132,10 @@ public class NumericComparator {
     return 0;
   }
 
-  /* The biggest Unicode character value we can have: http://unicode.org/faq/utf_bom.html#gen6 */
+  /** The biggest Unicode character value we can have: http://unicode.org/faq/utf_bom.html#gen6 */
   private static final int UNICODE_MAX = 0x10FFFF;
 
-  /* verrevcmp helper function */
+  /** verrevcmp helper function */
   private static int order (int c) {
     if (c_isdigit (c))
       return 0;
@@ -153,9 +147,9 @@ public class NumericComparator {
       return (int) c + UNICODE_MAX + 1;
   }
 
-  /* Match a file suffix defined by this regular expression:
-  /(\.[A-Za-z~][A-Za-z0-9~]*)*$/
-  Returns empty string if not found. */
+  /** Match a file suffix defined by this regular expression:
+   *  /(\.[A-Za-z~][A-Za-z0-9~]*)*$/
+   *  Returns empty string if not found. */
   private static String match_suffix (String str)
   {
     String match = "";
@@ -177,15 +171,14 @@ public class NumericComparator {
     return match;
   }
 
-  /* The strcmp() function compares the two strings s1 and s2.
-     It returns an integer less than, equal to, or greater than zero if s1 is found,
-     respectively, to be less than, to match, or be greater than s2. */
+  /** The strcmp() function compares the two strings s1 and s2.
+   *  It returns an integer less than, equal to, or greater than zero if s1 is found,
+   *  respectively, to be less than, to match, or be greater than s2. */
   private static int strcmp(final String s1, final String s2) {
     return s1.compareTo(s2);
   }
 
-  /* The strncmp() function is similar to strcmp(), except it compares the only first (at most) n bytes of s1 and s2.
-  */
+  /** The strncmp() function is similar to strcmp(), except it compares the only first (at most) n bytes of s1 and s2. */
   private static int strncmp(final String s1, final String s2, int len) {
     int len1 = Math.min(len, s1.length());
     int len2 = Math.min(len, s2.length());

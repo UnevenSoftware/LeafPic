@@ -10,12 +10,13 @@
         android:id="@+id/dialog_card_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        >
+        app:cardCornerRadius="@dimen/card_corner_radius">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/dialog_title"
                 android:layout_width="match_parent"
@@ -47,8 +48,8 @@
                             android:layout_height="@dimen/icon_size"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/big_spacing"
-                            android:layout_marginRight="@dimen/big_spacing"
-                            />
+                            android:layout_marginRight="@dimen/big_spacing" />
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -57,29 +58,32 @@
                             android:paddingTop="@dimen/medium_spacing"
                             android:paddingRight="@dimen/medium_spacing"
                             android:paddingBottom="@dimen/small_spacing">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical"
                                 android:layout_marginEnd="44dp">
+
                                 <TextView
                                     android:id="@+id/apply_theme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/apply_theme"
                                     android:textColor="@color/md_dark_background"
-                                    android:textSize="16sp"
-                                    />
+                                    android:textSize="16sp" />
+
                                 <TextView
                                     android:id="@+id/apply_theme_3thAct_title_Sub"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/use_primary_color_in_the_viewer"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="14sp" />
+
                             </LinearLayout>
+
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/sw_apply_theme"
                                 android:layout_width="wrap_content"
@@ -88,8 +92,8 @@
                                 android:button="@null"
                                 android:hapticFeedbackEnabled="true"
                                 android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                />
+                                android:layout_alignParentEnd="true" />
+
                         </RelativeLayout>
                     </LinearLayout>
 
@@ -101,13 +105,13 @@
                         android:orientation="horizontal"
                         android:background="@drawable/ripple"
                         android:clickable="true"
-                        android:padding="8dp"
-                        >
+                        android:padding="8dp">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
+                            android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/seek_bar_alpha_title"
                                 android:layout_width="wrap_content"
@@ -115,8 +119,8 @@
                                 android:paddingLeft="20dp"
                                 android:text="@string/transparency"
                                 android:textColor="@color/md_dark_background"
-                                android:textSize="16sp"
-                                />
+                                android:textSize="16sp" />
+
                             <TextView
                                 android:id="@+id/seek_bar_alpha_title_Sub"
                                 android:layout_width="wrap_content"
@@ -124,18 +128,19 @@
                                 android:paddingLeft="20dp"
                                 android:text="@string/transparency_sub"
                                 android:textColor="@color/md_grey_400"
-                                android:textSize="14sp"
-                                />
+                                android:textSize="14sp" />
+
                         </LinearLayout>
                     </LinearLayout>
+
                     <RelativeLayout
                         android:id="@+id/container_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        >
+                        android:paddingRight="16dp">
+
                         <uz.shift.colorpicker.LineColorPicker
                             xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/pickerTransparent"
@@ -143,6 +148,7 @@
                             android:layout_height="60dp"
                             app:orientation="horizontal"
                             app:selectedColorIndex="0" />
+
                     </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
