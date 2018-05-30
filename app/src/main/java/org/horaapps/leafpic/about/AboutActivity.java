@@ -91,6 +91,7 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         super.onDestroy();
     }
 
+    /** Select List */
     @OnClick(R.id.about_link_report_bug)
     public void onReportBug() {
         chromeTabs.launchUrl(LEAFPIC_ISSUES);
@@ -105,8 +106,8 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
     public void onRate() {
         Uri uri = Uri.parse(String.format("market://details?id=%s", BuildConfig.APPLICATION_ID));
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
+        /** To count with Play market backstack, After pressing back button,
+         * to taken back to our application, we need to add following flags to intent. */
 
         int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 
@@ -179,7 +180,7 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
 
         ArrayList<Contributor> contributors = new ArrayList<>(1);
 
-        /* Calvin */
+        /** Calvin */
         Contributor calvin = new Contributor(
                 getString(R.string.developer_calvin_name),
                 getString(R.string.about_developer_calvin_description),
@@ -195,13 +196,13 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         rvContributors.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rvContributors.setAdapter(contributorsAdapter);
 
-        /* Donald */
+        /** Donald */
         ArrayList<Contact> donaldContacts = new ArrayList<>();
         donaldContacts.add(new Contact(TWITTER_ABOUT_DONALD, getString(R.string.twitter_link)));
         donaldContacts.add(new Contact(GITHUB_DONALD, getString(R.string.github_link)));
         aboutDonald.setupListeners(this, MAIL_DONALD, donaldContacts);
 
-        /* Jibo */
+        /** Jibo */
         ArrayList<Contact> jiboContacts = new ArrayList<>();
         jiboContacts.add(new Contact(TWITTER_ABOUT_GILBERT, getString(R.string.twitter_link)));
         jiboContacts.add(new Contact(GITHUB_GILBERT, getString(R.string.github_link)));

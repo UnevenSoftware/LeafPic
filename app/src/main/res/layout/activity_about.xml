@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:liz_background_style="normal"
     android:orientation="vertical">
+
     <!--TOOLBAR-->
     <include
         android:id="@+id/toolbar"
@@ -59,6 +60,7 @@
                             android:padding="@dimen/sub_medium_spacing"
                             android:scaleType="fitXY"
                             android:src="@drawable/leaf_pic" />
+
                     </RelativeLayout>
 
                     <org.horaapps.liz.ui.ThemedTextView
@@ -91,7 +93,9 @@
                         android:padding="@dimen/sub_small_spacing"
                         android:text="v1.0"
                         android:textSize="@dimen/medium_text" />
+
                 </LinearLayout>
+
             </org.horaapps.liz.ui.ThemedCardView>
 
             <!--SUPPORT APP-->
@@ -226,7 +230,9 @@
                         app:headerImage="@drawable/gilbert_header"
                         app:name="@string/developer_gilbert_name"
                         app:role="@string/gilbert_role" />
+
                 </LinearLayout>
+
             </org.horaapps.liz.ui.ThemedCardView>
 
 
@@ -318,8 +324,11 @@
                             android:layout_marginTop="@dimen/small_spacing"
                             android:text="@string/about_special_thanks_you_sub"
                             android:textSize="@dimen/sub_medium_text" />
+
                     </LinearLayout>
+
                 </LinearLayout>
+
             </org.horaapps.liz.ui.ThemedCardView>
 
         </LinearLayout>
