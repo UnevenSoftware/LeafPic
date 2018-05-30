@@ -52,6 +52,7 @@ public class AlbumSettings implements Serializable, Parcelable {
         dest.writeInt(this.filterMode == null ? -1 : this.filterMode.ordinal());
     }
 
+    /** This is the constructor used by CREATOR. */
     protected AlbumSettings(Parcel in) {
         this.coverPath = in.readString();
         this.sortingMode = in.readInt();
@@ -61,6 +62,7 @@ public class AlbumSettings implements Serializable, Parcelable {
         this.filterMode = tmpFilterMode == -1 ? null : FilterMode.values()[tmpFilterMode];
     }
 
+    /** It is a non-null static field that must be in parcelable. */
     public static final Parcelable.Creator<AlbumSettings> CREATOR = new Parcelable.Creator<AlbumSettings>() {
 
         @Override

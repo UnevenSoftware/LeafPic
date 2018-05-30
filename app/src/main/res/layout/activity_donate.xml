@@ -79,7 +79,6 @@
                         android:textSize="@dimen/medium_text" />
 
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
             <!--DONATE GOOGLE PLAY-->
@@ -161,7 +160,6 @@
                         android:clickable="true" />
 
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
             <!--DONATE PAYPAL-->
@@ -231,7 +229,6 @@
                         android:clickable="true"/>
 
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
 
             <!--DONATE BITCOIN -->
@@ -290,11 +287,7 @@
                         android:clickable="true" />
 
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

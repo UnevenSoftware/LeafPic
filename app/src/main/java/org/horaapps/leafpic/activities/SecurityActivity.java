@@ -27,6 +27,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by dnld on 22/05/16.
+ * The Security Activity used to select the locking method.
  */
 public class SecurityActivity extends ThemedActivity {
 

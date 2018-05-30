@@ -5,19 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="2dp"
-        android:id="@+id/message_card"
-        >
+        android:id="@+id/message_card">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/text_dialog_title"
                     android:layout_width="match_parent"
@@ -27,6 +30,7 @@
                     android:padding="@dimen/big_spacing"
                     android:textSize="@dimen/sub_big_text"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text_dialog_message"
                     android:layout_width="match_parent"
@@ -36,12 +40,14 @@
                     android:paddingLeft="@dimen/medium_spacing"
                     android:singleLine="false"
                     android:textSize="@dimen/medium_text" />
+
                 <android.support.v7.widget.AppCompatSpinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/medium_spacing"
                     android:layout_marginRight="@dimen/medium_spacing"
                     android:id="@+id/parents_folder"/>
+
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

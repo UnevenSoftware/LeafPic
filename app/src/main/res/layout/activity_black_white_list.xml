@@ -64,9 +64,6 @@
                     android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
 
             </LinearLayout>
-
         </RelativeLayout>
-
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>

@@ -95,7 +95,6 @@
                         android:textSize="@dimen/medium_text" />
 
                 </LinearLayout>
-
             </org.horaapps.liz.ui.ThemedCardView>
 
             <!--SUPPORT APP-->
@@ -183,7 +182,6 @@
                         app:linkTitle="@string/changelog" />
 
                 </LinearLayout>
-
             </org.horaapps.liz.ui.ThemedCardView>
 
 
@@ -232,7 +230,6 @@
                         app:role="@string/gilbert_role" />
 
                 </LinearLayout>
-
             </org.horaapps.liz.ui.ThemedCardView>
 
 
@@ -263,7 +260,6 @@
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
-
             </org.horaapps.liz.ui.ThemedCardView>
 
             <!--SPECIAL THANKS-->
@@ -326,13 +322,8 @@
                             android:textSize="@dimen/sub_medium_text" />
 
                     </LinearLayout>
-
                 </LinearLayout>
-
             </org.horaapps.liz.ui.ThemedCardView>
-
         </LinearLayout>
-
     </ScrollView>
-
 </org.horaapps.liz.ui.ThemedLinearLayout>

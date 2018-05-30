@@ -297,7 +297,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
     }
 
     // TODO: Figure out how we should classify Images and GIFs
-    // This should work temporarily
+    /** This should work temporarily **/
     private boolean isCurrentMediaImage() {
         return getCurrentMedia().isImage() && !getCurrentMedia().isGif();
     }

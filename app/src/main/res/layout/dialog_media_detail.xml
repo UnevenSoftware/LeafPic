@@ -6,10 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/card_corner_radius">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/details_title"
             android:layout_width="match_parent"
@@ -20,26 +22,31 @@
             android:background="@color/md_red_500"
             android:textSize="@dimen/sub_big_text"
             android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/photo_map"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:visibility="gone" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:clickable="true"
                 android:background="@drawable/ripple">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/ll_list_details"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/small_spacing" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,6 +57,7 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:background="@drawable/ripple" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

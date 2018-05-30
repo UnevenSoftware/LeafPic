@@ -9,6 +9,7 @@
     android:padding="@dimen/big_spacing"
     android:foreground="@drawable/ripple"
     android:clickable="true">
+
     <TextView
         android:id="@+id/palette_item_text"
         android:layout_width="match_parent"
@@ -16,4 +17,5 @@
         android:textColor="@color/md_dark_primary_text"
         android:textSize="@dimen/sub_big_text"
         android:text="Color" />
+
 </LinearLayout>

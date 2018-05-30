@@ -68,7 +68,5 @@
             android:paddingEnd="@dimen/developer_description_padding"
             android:paddingStart="@dimen/developer_description_padding" />
 
-
     </LinearLayout>
-
 </merge>

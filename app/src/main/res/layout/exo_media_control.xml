@@ -21,13 +21,14 @@
     android:layout_gravity="bottom"
     android:orientation="vertical"
     android:layoutDirection="ltr">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="@dimen/v_spacing_player_bars"
-        android:paddingBottom="@dimen/v_spacing_player_bars"
-        >
+        android:paddingBottom="@dimen/v_spacing_player_bars">
+
         <TextView android:id="@+id/time_current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,12 +37,14 @@
             android:textStyle="bold"
             android:paddingStart="@dimen/sub_small_spacing"
             android:textColor="@color/accent_white"/>
+
         <SeekBar android:id="@+id/mediacontroller_progress"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_height="32dp"
             style="?android:attr/progressBarStyleHorizontal"/>
+
         <TextView android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +52,7 @@
             android:textSize="@dimen/sub_medium_text"
             android:textStyle="bold"
             android:paddingEnd="@dimen/sub_small_spacing"
+
             android:textColor="@color/accent_white"/>
     </LinearLayout>
 
@@ -95,6 +99,6 @@
             android:contentDescription="@string/exo_controls_previous_description"
             android:visibility="gone"
             style="@style/ExoMediaButton.Next" />
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

@@ -7,12 +7,13 @@
     android:layout_width="wrap_content"
     android:foreground="@drawable/ripple"
     android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/photo_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-    />
+        android:scaleType="centerCrop" />
+
     <TextView
         android:id="@+id/photo_path"
         android:layout_width="match_parent"
@@ -52,4 +53,5 @@
         app:iiv_color="@color/md_white_1000"
         app:iiv_icon="gmd-play-circle-filled"
         tools:targetApi="lollipop" />
+
 </org.horaapps.leafpic.views.SquareRelativeLayout>

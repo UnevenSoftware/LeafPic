@@ -6,10 +6,12 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/card_corner_radius"
     android:id="@+id/dialog_card_view_style">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/dialog_card_view_style_title"
             android:layout_width="match_parent"
@@ -20,6 +22,7 @@
             android:text="@string/album_card_view"
             android:textSize="@dimen/sub_big_text"
             android:textStyle="bold"/>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -46,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/radio_group_card_view_style"
                     android:orientation="vertical">
+
                     <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -65,23 +69,23 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/medium_text"
                         android:id="@+id/radio_card_material"
-                        android:text="@string/card_type_material"
-                        />
+                        android:text="@string/card_type_material" />
+
                     <RadioButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/medium_text"
                         android:id="@+id/radio_card_flat"
-                        android:text="@string/card_type_flat"
-                        />
+                        android:text="@string/card_type_flat" />
+
                     <RadioButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/medium_text"
                         android:id="@+id/radio_card_compact"
                         android:text="@string/card_type_compact" />
-                </RadioGroup>
 
+                </RadioGroup>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
