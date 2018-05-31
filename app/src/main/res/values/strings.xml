@@ -415,5 +415,10 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="major_contributors">Major contributors</string>
 
     <string name="toolbar_selection_count" translatable="false">%1$d of %2$d</string>
+    <string name="editor">Edit</string>
+    <string name="crop">Crop</string>
+    <string name="filter">Filters</string>
+    <string name="imagefilter">Image Filter</string>
+    <string name="filter_success">Filtered Image saved on device!</string>
 
 </resources>

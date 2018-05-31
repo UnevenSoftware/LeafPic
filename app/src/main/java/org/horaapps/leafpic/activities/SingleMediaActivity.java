@@ -587,13 +587,21 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                 startActivity(Intent.createChooser(share, getString(R.string.send_to)));
                 return true;
 
-            case R.id.action_edit:
+            case R.id.action_crop:
                 // TODO: 16/10/17 redo
                 Uri mDestinationUri = Uri.fromFile(new File(getCacheDir(), "croppedImage.png"));
                 Uri uri = Uri.fromFile(new File(getCurrentMedia().getPath()));
                 UCrop uCrop = UCrop.of(uri, mDestinationUri);
                 uCrop.withOptions(getUcropOptions());
                 uCrop.start(SingleMediaActivity.this);
+                break;
+
+            case R.id.action_filter:
+                Intent imagefilterIntent = new Intent(getApplicationContext(), ImageFilterActivity.class);
+                imagefilterIntent.setData(LegacyCompatFileProvider.getUri(this,
+                        getCurrentMedia().getFile()));
+                imagefilterIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(imagefilterIntent);
                 break;
 
             case R.id.action_use_as:

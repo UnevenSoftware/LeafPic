@@ -42,4 +42,12 @@
     <!-- Media -->
     <dimen name="video_play_icon_size">50dp</dimen>
 
+    <!-- Filter -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="thumbnail_size">80dp</dimen>
+    <dimen name="recycler_size">100dp</dimen>
+    <dimen name="thumbnail_horizontal_padding">8dp</dimen>
+    <dimen name="thumbnail_vertical_padding">10dp</dimen>
+
 </resources>
