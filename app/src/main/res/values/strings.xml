@@ -420,5 +420,6 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="filter">Filters</string>
     <string name="imagefilter">Image Filter</string>
     <string name="filter_success">Filtered Image saved on device!</string>
+    <string name="filter_place_holder">filter place holder</string>
 
 </resources>
