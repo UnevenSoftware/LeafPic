@@ -7,6 +7,7 @@ import org.horaapps.leafpic.util.StringUtils;
  * Created by dnld on 7/2/17.
  */
 
+@Deprecated
 public class Folder {
     int count = -1;
     int progress = 0;

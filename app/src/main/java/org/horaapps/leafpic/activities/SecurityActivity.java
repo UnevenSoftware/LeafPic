@@ -169,10 +169,7 @@ public class SecurityActivity extends ThemedActivity {
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(org.horaapps.leafpic.R.string.cancel).toUpperCase(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                swActiveSecurity.setChecked(false);
-                setSwitchColor(getAccentColor(), swActiveSecurity);
-                toggleEnabledChild(swActiveSecurity.isChecked());
-                Security.clearPassword();
+                toggleResetSecurity();
             }
         });
 
@@ -185,12 +182,28 @@ public class SecurityActivity extends ThemedActivity {
                             swActiveSecurity.setChecked(true);
                             toggleEnabledChild(true);
                             Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.remember_password_message, Toast.LENGTH_SHORT).show();
-                        } else Toast.makeText(SecurityActivity.this, R.string.error_contact_developer, Toast.LENGTH_SHORT).show();
-                    } else Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.password_dont_match, Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.error_password_length, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SecurityActivity.this, R.string.error_contact_developer, Toast.LENGTH_SHORT).show();
+                            toggleResetSecurity();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.password_dont_match, Toast.LENGTH_SHORT).show();
+                        toggleResetSecurity();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), org.horaapps.leafpic.R.string.error_password_length, Toast.LENGTH_SHORT).show();
+                    toggleResetSecurity();
+                }
             }
         });
         dialog.show();
+    }
+
+    private void toggleResetSecurity (){
+        swActiveSecurity.setChecked(false);
+        setSwitchColor(getAccentColor(), swActiveSecurity);
+        toggleEnabledChild(swActiveSecurity.isChecked());
+        Security.clearPassword();
     }
 
     private void toggleEnabledChild(boolean enable) {

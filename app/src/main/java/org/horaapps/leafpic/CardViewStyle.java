@@ -10,6 +10,7 @@ public enum CardViewStyle {
     COMPACT(2, R.layout.card_album_compact);
 
     private static final int size = CardViewStyle.values().length;
+
     int value;
     int layout;
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -23,6 +22,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 import static org.horaapps.leafpic.util.BitmapUtils.addWhiteBorder;
 import static org.horaapps.leafpic.util.BitmapUtils.getCroppedBitmap;
 
@@ -84,7 +84,6 @@ public class AlbumsHelper {
         Prefs.setAlbumSortingOrder(sortingOrder);
     }
 
-    public static void scanFile(Context context, String[] path) {  MediaScannerConnection.scanFile(context, path, null, null); }
 
     public static void hideAlbum(String path, Context context) {
         File dirName = new File(path);

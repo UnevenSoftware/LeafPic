@@ -13,7 +13,6 @@ import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
-import com.drew.metadata.xmp.XmpDirectory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -80,20 +79,6 @@ class MetaDataItem {
             if (dir != null) {
                 dateOriginal = dir.getDateOriginal(TimeZone.getDefault());
                 handleDirectoryBase(dir);
-            }
-
-            XmpDirectory dir1 = metadata.getFirstDirectoryOfType(XmpDirectory.class);
-            if (dir1 != null) {
-                if (dir1.containsTag(XmpDirectory.TAG_DATETIME_ORIGINAL))
-                    dateOriginal = dir1.getDate(XmpDirectory.TAG_DATETIME_ORIGINAL);
-
-                if (dir1.containsTag(XmpDirectory.TAG_MAKE))
-                    make = dir1.getString(XmpDirectory.TAG_MAKE);
-                if (dir1.containsTag(XmpDirectory.TAG_MODEL))
-                    model = dir1.getString(XmpDirectory.TAG_MODEL);
-
-                if (dir1.containsTag(XmpDirectory.TAG_F_NUMBER))
-                    fNumber = dir1.getString(XmpDirectory.TAG_F_NUMBER);
             }
 
             GpsDirectory d = metadata.getFirstDirectoryOfType(GpsDirectory.class);

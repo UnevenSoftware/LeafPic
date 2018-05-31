@@ -8,31 +8,32 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-    <uses-feature android:name="android.hardware.fingerprint"
-        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.fingerprint"
+        android:required="false" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
-        android:name="org.horaapps.leafpic.App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/Theme.AppCompat">
-
         <activity
-            android:name="org.horaapps.leafpic.activities.PlayerActivity"
+            android:name=".activities.PlayerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/video_player"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="http" />
@@ -41,16 +42,15 @@
                 <data android:scheme="asset" />
                 <data android:scheme="file" />
                 <data android:mimeType="video/*" />
-
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.SplashScreen"
+            android:name=".activities.SplashScreen"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.APP_GALLERY" />
             </intent-filter>
@@ -63,7 +63,6 @@
                 <data android:mimeType="image/*" />
                 <data android:mimeType="video/*" />
             </intent-filter>
-
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.PICK" />
 
@@ -76,22 +75,21 @@
                 <action android:name="com.horaapps.leafpic.OPEN_ALBUM" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.albumsAct" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.SingleMediaActivity"
-            android:label="@string/app_name"
+            android:name=".activities.SingleMediaActivity"
             android:configChanges="orientation|screenSize|uiMode|screenLayout|navigation"
-            android:parentActivityName="org.horaapps.leafpic.activities.MainActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -99,95 +97,101 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.albumPhoto" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="com.android.camera.action.REVIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*"/>
-                <data android:mimeType="video/*"/>
+
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
             </intent-filter>
-
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SETTING" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.about.AboutActivity"
+            android:name=".about.AboutActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/about"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.ABOUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.SecurityActivity"
+            android:name=".activities.SecurityActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:label="@string/security">
+            android:label="@string/security"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SECURITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.DonateActivity"
+            android:name=".activities.DonateActivity"
             android:label="@string/donate"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.DONATE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.BlackWhiteListActivity"
+            android:name=".activities.BlackWhiteListActivity"
             android:label="@string/chose_folders"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.ExcludedAlbums" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="org.horaapps.leafpic.activities.PaletteActivity"
+            android:name=".activities.PaletteActivity"
             android:label="@string/palette"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.PALETTE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="org.horaapps.leafpic.activities.ImageFilterActivity"
             android:label="@string/imagefilter"
@@ -202,30 +206,34 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+=
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <!-- <meta-data
+        <!--
+             <meta-data
             android:name="org.horaapps.leafpic.CustomGlideModule"
-            android:value="GlideModule" /> -->
+            android:value="GlideModule" />
+        -->
 
         <provider
             android:name=".util.LegacyCompatFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <service
             android:name=".LookForMediaJob"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <activity android:name=".activities.AffixActivity" />
     </application>
+
 </manifest>

@@ -50,4 +50,21 @@
     <dimen name="thumbnail_horizontal_padding">8dp</dimen>
     <dimen name="thumbnail_vertical_padding">10dp</dimen>
 
+    <!-- Delete Bottom Sheet TODO: remove -->
+    <dimen name="delete_bottom_sheet_spacing">15dp</dimen>
+    <dimen name="delete_bottom_sheet_progress_size">120dp</dimen>
+    <dimen name="delete_bottom_sheet_progress_margin">16dp</dimen>
+    <dimen name="delete_bottom_sheet_small_spacing">8dp</dimen>
+
+    <!-- Timeline Header -->
+    <dimen name="timeline_header_text_padding">10dp</dimen>
+    <dimen name="timeline_decorator_spacing">1dp</dimen>
+
+    <!-- Progress Bottom Sheet -->
+    <dimen name="progress_bottom_sheet_spacing">15dp</dimen>
+    <dimen name="progress_bottom_sheet_progress_size">120dp</dimen>
+    <dimen name="progress_bottom_sheet_progress_margin">16dp</dimen>
+    <dimen name="progress_bottom_sheet_small_spacing">8dp</dimen>
+
+
 </resources>
