@@ -46,7 +46,7 @@ import java.util.List;
  * Created by temidayo on 30/05/2018.
  */
 
-class ImageFilterActivity extends ThemedActivity implements ThumbnailCallback {
+public class ImageFilterActivity extends ThemedActivity implements ThumbnailCallback {
     static {
         System.loadLibrary("NativeImageProcessor");
     }
