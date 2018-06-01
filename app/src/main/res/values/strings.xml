@@ -421,5 +421,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="imagefilter">Image Filter</string>
     <string name="filter_success">Filtered Image saved on device!</string>
     <string name="filter_place_holder">filter place holder</string>
+    <string name="marketurl">market://details?id=</string>
+    <string name="playstoreuri">http://play.google.com/store/apps/details?id=%s</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -33,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_CALVIN;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_DONALD;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_GILBERT;
@@ -101,7 +104,19 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
 
     @OnClick(R.id.about_link_rate)
     public void onRate() {
-        // TODO: Link to app store
+        Uri uri = Uri.parse(String.format("%s%s", getString(R.string.marketurl), getBaseContext().getPackageName()));
+        Intent redirecttoStore = new Intent(Intent.ACTION_VIEW, uri);
+        if (LOLLIPOP <= SDK_INT) {
+            redirecttoStore.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        }
+        try {
+            startActivity(redirecttoStore);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(String.format(getString(R.string.playstoreuri), getBaseContext().getPackageName()))));
+        }
     }
 
     @OnClick(R.id.about_link_github)
