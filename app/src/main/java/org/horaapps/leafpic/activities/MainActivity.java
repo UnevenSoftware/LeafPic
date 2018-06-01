@@ -39,6 +39,7 @@ import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.fragments.AlbumsFragment;
+import org.horaapps.leafpic.fragments.BaseFragment;
 import org.horaapps.leafpic.fragments.EditModeListener;
 import org.horaapps.leafpic.fragments.NothingToShowListener;
 import org.horaapps.leafpic.fragments.RvMediaFragment;
@@ -59,6 +60,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static org.horaapps.leafpic.activities.SingleMediaActivity.REQUEST_CODE_ON_UPDATE_MEDIA;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.ItemListener;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ABOUT;
 import static org.horaapps.leafpic.views.navigation_drawer.NavigationDrawer.NAVIGATION_ITEM_ALL_ALBUMS;
@@ -228,13 +230,13 @@ public class MainActivity extends SharedMediaActivity implements
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM);
                 intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media);
                 intent.putExtra(SingleMediaActivity.EXTRA_ARGS_POSITION, position);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_ON_UPDATE_MEDIA);
             } catch (Exception e) { // Putting too much data into the Bundle
                 // TODO: Find a better way to pass data between the activities - possibly a key to
                 // access a HashMap or a unique value of a singleton Data Repository of some sort.
                 intent.setAction(SingleMediaActivity.ACTION_OPEN_ALBUM_LAZY);
                 intent.putExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA, media.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_ON_UPDATE_MEDIA);
             }
 
         } else {
@@ -246,6 +248,33 @@ public class MainActivity extends SharedMediaActivity implements
             res.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             setResult(RESULT_OK, res);
             finish();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_ON_UPDATE_MEDIA) {
+            if (data != null) {
+                ArrayList<Media> media = data.getParcelableArrayListExtra(SingleMediaActivity.EXTRA_ARGS_MEDIA);
+                BaseFragment fragment = getCurrentFragment();
+                if (fragment != null) {
+                    fragment.updateMedia(media);
+                }
+            }
+        }
+    }
+
+    private BaseFragment getCurrentFragment () {
+        switch (fragmentMode) {
+            case FragmentMode.MODE_MEDIA:
+                return (BaseFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
+            case FragmentMode.MODE_ALBUMS:
+                return (BaseFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
+            case FragmentMode.MODE_TIMELINE:
+                return (BaseFragment) getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG);
+            default: return null;
         }
     }
 

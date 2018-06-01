@@ -1,9 +1,12 @@
 package org.horaapps.leafpic.fragments;
 
 
+import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.items.ActionsListener;
 import org.horaapps.liz.Themed;
 import org.horaapps.liz.ThemedFragment;
+
+import java.util.ArrayList;
 
 /**
  * Created by dnld on 4/3/17.
@@ -36,5 +39,8 @@ public abstract class BaseFragment extends ThemedFragment implements IFragment, 
 
     public void setNothingToShowListener(NothingToShowListener nothingToShowListener) {
         this.nothingToShowListener = nothingToShowListener;
+    }
+    public void updateMedia(ArrayList<Media> media) {
+
     }
 }

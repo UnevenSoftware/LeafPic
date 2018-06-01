@@ -93,6 +93,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
     private static final String ISLOCKED_ARG = "isLocked";
 
     public static final String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.intent.VIEW_ALBUM";
+    public static final int REQUEST_CODE_ON_UPDATE_MEDIA = 100;
     public static final String ACTION_OPEN_ALBUM_LAZY = "org.horaapps.leafpic.intent.VIEW_ALBUM_LAZY";
     private static final String ACTION_REVIEW = "com.android.camera.action.REVIEW";
 
@@ -453,6 +454,14 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent result= new Intent();
+        result.putExtra(EXTRA_ARGS_MEDIA, media);
+        setResult(RESULT_OK, result);
+        super.onBackPressed();
+
+    }
 
     private void displayAlbums() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -629,6 +638,8 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             if (!b) {
                                 StringUtils.showToast(getApplicationContext(), getString(R.string.rename_error));
                                 //adapter.notifyDataSetChanged();
+                            } else {
+                                updateCurrentMedia(currentMedia);
                             }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
@@ -702,6 +713,9 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
         return media.get(position);
     }
 
+    public void updateCurrentMedia(Media media) {
+        this.media.set(position, media);
+    }
 
     private void updateBrightness(float level) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();

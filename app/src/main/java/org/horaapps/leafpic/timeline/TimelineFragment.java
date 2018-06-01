@@ -294,4 +294,11 @@ public class TimelineFragment extends BaseFragment {
     public void onSelectionCountChanged(int selectionCount, int totalCount) {
         // TODO: Implement via this interface
     }
+
+    @Override
+    public void updateMedia(ArrayList<Media> media) {
+        if (timelineAdapter!=null) {
+            timelineAdapter.setMedia(media);
+        }
+    }
 }
