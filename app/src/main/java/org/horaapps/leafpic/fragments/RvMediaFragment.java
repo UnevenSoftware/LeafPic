@@ -34,12 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
-import org.horaapps.leafpic.adapters.ProgressAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
@@ -49,14 +47,16 @@ import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.interfaces.MediaClickListener;
+import org.horaapps.leafpic.progress.ProgressBottomSheet;
 import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.MimeTypeUtils;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
@@ -90,10 +90,6 @@ public class RvMediaFragment extends BaseFragment {
     private GridSpacingItemDecoration spacingDecoration;
 
     private Album album;
-
-    public interface MediaClickListener {
-        void onMediaClick(Album album, ArrayList<Media> media, int position);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -215,7 +211,7 @@ public class RvMediaFragment extends BaseFragment {
     }
 
     public int columnsCount() {
-        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        return DeviceUtils.isPortrait(getResources())
                 ? Prefs.getMediaColumnsPortrait()
                 : Prefs.getMediaColumnsLandscape();
     }
@@ -433,34 +429,7 @@ public class RvMediaFragment extends BaseFragment {
                 return true;
 
             case R.id.delete:
-
-                ProgressAdapter errorsAdapter = new ProgressAdapter(getContext());
-                ArrayList<Media> selected = adapter.getSelected();
-
-                AlertDialog alertDialog = AlertDialogsHelper.getProgressDialogWithErrors(((ThemedActivity) getActivity()), R.string.deleting_images, errorsAdapter, selected.size());
-
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, this.getString(R.string.cancel).toUpperCase(), (dialog, id) -> {
-                    alertDialog.dismiss();
-                });
-                alertDialog.show();
-
-                MediaHelper.deleteMedia(getContext(), selected)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(m -> {
-                                    adapter.remove(m);
-                                    errorsAdapter.add(new ProgressAdapter.ListItem(m.getName()), false);
-                                },
-                                throwable -> {
-                                    if (throwable instanceof DeleteException)
-                                        errorsAdapter.add(new ProgressAdapter.ListItem(
-                                                (DeleteException) throwable), true);
-                                },
-                                () -> {
-                                    if (errorsAdapter.getItemCount() == 0)
-                                        alertDialog.dismiss();
-                                    adapter.clearSelected();
-                                });
+                showDeleteBottomSheet();
                 return true;
 
             //region Affix
@@ -526,7 +495,7 @@ public class RvMediaFragment extends BaseFragment {
                 //region Example
                 final LinearLayout llExample = dialogLayout.findViewById(R.id.affix_example);
                 llExample.setBackgroundColor(getBackgroundColor());
-                llExample.setVisibility(Hawk.get("show_tips", true) ? View.VISIBLE : View.GONE);
+                llExample.setVisibility(Prefs.getToggleValue(getContext().getString(R.string.preference_show_tips), true) ? View.VISIBLE : View.GONE);
                 final LinearLayout llExampleH = dialogLayout.findViewById(R.id.affix_example_horizontal);
                 //llExampleH.setBackgroundColor(getCardBackgroundColor());
                 final LinearLayout llExampleV = dialogLayout.findViewById(R.id.affix_example_vertical);
@@ -652,6 +621,31 @@ public class RvMediaFragment extends BaseFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDeleteBottomSheet() {
+        ArrayList<Media> selected = adapter.getSelected();
+        ArrayList<io.reactivex.Observable<Media>> sources = new ArrayList<>(selected.size());
+        for (Media media : selected)
+            sources.add(MediaHelper.deleteMedia(getContext().getApplicationContext(), media));
+
+        ProgressBottomSheet<Media> bottomSheet = new ProgressBottomSheet.Builder<Media>(R.string.delete_bottom_sheet_title)
+                .autoDismiss(false)
+                .sources(sources)
+                .listener(new ProgressBottomSheet.Listener<Media>() {
+                    @Override
+                    public void onCompleted() {
+                        adapter.invalidateSelectedCount();
+                    }
+
+                    @Override
+                    public void onProgress(Media item) {
+                        adapter.removeSelectedMedia(item);
+                    }
+                })
+                .build();
+
+        bottomSheet.showNow(getChildFragmentManager(), null);
     }
 
     public int getCount() {

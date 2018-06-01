@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -36,6 +37,7 @@ import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.preferences.Prefs;
@@ -126,7 +128,7 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         displayAlbums();
     }
@@ -149,7 +151,7 @@ public class AlbumsFragment extends BaseFragment {
     }
 
     public int columnsCount() {
-        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        return DeviceUtils.isPortrait(getResources())
                 ? Prefs.getFolderColumnsPortrait()
                 : Prefs.getFolderColumnsLandscape();
     }
@@ -164,7 +166,7 @@ public class AlbumsFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_albums, container, false);
         ButterKnife.bind(this, v);

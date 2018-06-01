@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -21,6 +20,8 @@ import android.util.Log;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.progress.ErrorCause;
+import org.horaapps.leafpic.progress.ProgressException;
 import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.StringUtils;
 
@@ -32,6 +33,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.HashSet;
+
+import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 
 /**
  * Created by dnld on 26/05/16.
@@ -73,9 +76,6 @@ public class StorageHelper {
 		return result;
 	}
 
-	private static void scanFile(Context context, String[] paths) {
-		MediaScannerConnection.scanFile(context, paths, null, null);
-	}
 
 	/**
 	 * Create a folder. The folder may even be on external SD card for Kitkat.
@@ -202,7 +202,12 @@ public class StorageHelper {
 		if (!success) {
 			success = copyFile(context, source, target);
 			if (success) {
-				success = deleteFile(context, source);
+				try {
+					deleteFile(context, source);
+					success = true;
+				} catch (ProgressException e) {
+					success = false;
+				}
 			}
 		}
 
@@ -250,6 +255,8 @@ public class StorageHelper {
 	 */
 
 	public static boolean deleteFilesInFolder(Context context, @NonNull final File folder) {
+
+		// TODO: 07/05/18 check
 		boolean totalSuccess = true;
 
 		String[] children = folder.list();
@@ -257,9 +264,10 @@ public class StorageHelper {
 			for (String child : children) {
 				File file = new File(folder, child);
 				if (!file.isDirectory()) {
-					boolean success = deleteFile(context, file);
-					if (!success) {
-						Log.w(TAG, "Failed to delete file" + child);
+					try {
+						deleteFile(context, file);
+					} catch (ProgressException e) {
+						Log.e(TAG, "Failed to delete file", e);
 						totalSuccess = false;
 					}
 				}
@@ -276,17 +284,25 @@ public class StorageHelper {
 	 * @param file the file to be deleted.
 	 * @return True if successfully deleted.
 	 */
-	public static boolean deleteFile(Context context, @NonNull final File file) {
-
+	public static void deleteFile(Context context, @NonNull final File file) throws ProgressException {
+		ErrorCause error = new ErrorCause(file.getName());
 
 		//W/DocumentFile: Failed getCursor: java.lang.IllegalArgumentException: Failed to determine if A613-F0E1:.android_secure is child of A613-F0E1:: java.io.FileNotFoundException: Missing file for A613-F0E1:.android_secure at /storage/sdcard1/.android_secure
 		// First try the normal deletion.
-		boolean success = file.delete();
+
+		boolean success = false;
+
+		try {
+			success = file.delete();
+		} catch (Exception e) {
+			error.addCause(e.getLocalizedMessage());
+		}
 
 		// Try with Storage Access Framework.
 		if (!success && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			DocumentFile document = getDocumentFile(context, file, false, false);
 			success = document != null && document.delete();
+			error.addCause("Failed SAF");
 		}
 
 		// Try the Kitkat workaround.
@@ -294,20 +310,21 @@ public class StorageHelper {
 			ContentResolver resolver = context.getContentResolver();
 
 			try {
-				Uri uri = null;//MediaStoreUtil.getUriFromFile(file.getAbsolutePath());
+				Uri uri = getUriForFile(context, file);
 				if (uri != null) {
 					resolver.delete(uri, null, null);
 				}
 				success = !file.exists();
 			}
 			catch (Exception e) {
+				error.addCause(String.format("Failed CP: %s", e.getLocalizedMessage()));
 				Log.e(TAG, "Error when deleting file " + file.getAbsolutePath(), e);
-				return false;
+				success = false;
 			}
 		}
 
-		if(success) scanFile(context, new String[]{ file.getPath() });
-		return success;
+		if (success) scanFile(context, new String[]{file.getPath()});
+		else throw new ProgressException(error);
 	}
 
 	public static HashSet<File> getStorageRoots(Context context) {

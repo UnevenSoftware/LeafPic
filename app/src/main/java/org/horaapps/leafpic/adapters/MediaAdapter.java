@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
@@ -168,13 +170,11 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         Media f = media.get(position);
-
-        //holder.path.setTag(f);
         holder.icon.setVisibility(View.GONE);
-        holder.layout.setBackgroundColor(getThemeHelper().getPrimaryColor());
+
 
         holder.gifIcon.setVisibility(f.isGif() ? View.VISIBLE : View.GONE);
 
@@ -183,7 +183,6 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 .format(DecodeFormat.PREFER_RGB_565)
                 .centerCrop()
                 .placeholder(placeholder)
-                //.animate(R.anim.fade_in)//TODO:DONT WORK WELL
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
 
 
@@ -251,6 +250,28 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         notifyItemRemoved(i);
     }
 
+    public void removeSelectedMedia(Media media) {
+        int i = this.media.indexOf(media);
+        this.media.remove(i);
+        notifyItemRemoved(i);
+
+//        this.notifySelected(false);
+    }
+
+    public void invalidateSelectedCount() {
+        int c = 0;
+        for (Media m : this.media) {
+            c += m.isSelected() ? 1 : 0;
+        }
+
+        this.selectedCount = c;
+
+        if (this.selectedCount == 0) stopSelection();
+        else {
+            this.actionsListener.onSelectionCountChanged(selectedCount, media.size());
+        }
+    }
+
     @Override
     public void refreshTheme(ThemeHelper theme) {
         placeholder = theme.getPlaceHolder();
@@ -301,6 +322,12 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
 
     public void clear() {
         media.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setMedia(@NonNull List<Media> mediaList) {
+        media.clear();
+        media.addAll(mediaList);
         notifyDataSetChanged();
     }
 

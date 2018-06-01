@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.print.PrintHelper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -48,24 +50,21 @@ import org.horaapps.leafpic.adapters.MediaPagerAdapter;
 import org.horaapps.leafpic.animations.DepthPageTransformer;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumSettings;
-import org.horaapps.leafpic.data.HandlingAlbums;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.StorageHelper;
 import org.horaapps.leafpic.data.filter.MediaFilter;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.MediaComparators;
-import org.horaapps.leafpic.data.sort.SortingMode;
-import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.fragments.BaseMediaFragment;
 import org.horaapps.leafpic.fragments.ImageFragment;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
+import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.HackyViewPager;
 import org.horaapps.liz.ColorPalette;
@@ -79,6 +78,7 @@ import java.util.Collections;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -181,7 +181,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
 
         ArrayList<Media> list = new ArrayList<>();
 
-        CPHelper.getMedia(getApplicationContext(), album)
+        Disposable disposable = CPHelper.getMedia(getApplicationContext(), album)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media) && !media.equals(m))
@@ -209,6 +209,8 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             updatePageTitle(position);
 
                         });
+
+        disposeLater(disposable);
     }
 
     private void loadUri(Uri uri) {
@@ -399,7 +401,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
         super.onConfigurationChanged(newConfig);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        if (DeviceUtils.isLandscape(getResources()))
             params.setMargins(0, 0, Measure.getNavigationBarSize(SingleMediaActivity.this).x, 0);
         else
             params.setMargins(0, 0, 0, 0);
@@ -415,9 +417,9 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
             menu.setGroupVisible(R.id.only_photos_options, isImage);
 
             if (customUri) {
+                // TODO: 05/05/18 some things can be done even with custom uri
                 menu.setGroupVisible(R.id.on_internal_storage, false);
                 menu.setGroupVisible(R.id.only_photos_options, false);
-                menu.findItem(R.id.sort_action).setVisible(false);
             }
         }
         return super.onPrepareOptionsMenu(menu);
@@ -460,7 +462,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
     private void deleteCurrentMedia() {
         Media currentMedia = getCurrentMedia();
 
-        MediaHelper.deleteMedia(getApplicationContext(), currentMedia)
+        Disposable disposable = MediaHelper.deleteMedia(getApplicationContext(), currentMedia)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(deleted -> {
@@ -470,15 +472,16 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             }
                         },
                         err -> {
-                            if (err instanceof DeleteException)
-                                Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
-                            else
-                                Toast.makeText(this, err.getMessage(), Toast.LENGTH_SHORT).show();
+                            // TODO: 21/05/18 add progress show errors better?
+
+                            Toast.makeText(getApplicationContext(), err.getMessage(), Toast.LENGTH_SHORT).show();
                         },
                         () -> {
                             adapter.notifyDataSetChanged();
                             updatePageTitle(mViewPager.getCurrentItem());
                         });
+
+        disposeLater(disposable);
 
 
     }
@@ -519,63 +522,6 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                                 Toast.makeText(getApplicationContext(), R.string.copy_error, Toast.LENGTH_SHORT).show();
                         }).show();
                 break;
-
-            case R.id.name_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.NAME.getValue());
-                album.setSortingMode(SortingMode.NAME);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.date_taken_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.DATE.getValue());
-                album.setSortingMode(SortingMode.DATE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.size_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.SIZE.getValue());
-                album.setSortingMode(SortingMode.SIZE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.type_sort_action:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.TYPE.getValue());
-                album.setSortingMode(SortingMode.TYPE);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.numeric_sort_mode:
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingMode(album.getPath(), SortingMode.NUMERIC.getValue());
-                album.setSortingMode(SortingMode.NUMERIC);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                item.setChecked(true);
-                return true;
-
-            case R.id.ascending_sort_order:
-                item.setChecked(!item.isChecked());
-                SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
-
-                HandlingAlbums.getInstance(getApplicationContext())
-                        .setSortingOrder(album.getPath(), sortingOrder.getValue());
-                album.setSortingOrder(sortingOrder);
-                this.album.sortPhotos();
-                adapter.swapDataSet(media);
-                return true;
-
 
             case R.id.action_share:
                 // TODO: 16/10/17 check if it works everywhere
@@ -734,6 +680,18 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                         getCurrentMedia().getFile()));
                 paletteIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(paletteIntent);
+                break;
+
+            case R.id.action_print:
+                PrintHelper photoPrinter = new PrintHelper(this);
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                try (InputStream in = getContentResolver().openInputStream(getCurrentMedia().getUri())) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    photoPrinter.printBitmap(String.format("print_%s", getCurrentMedia().getDisplayPath() ), bitmap);
+                } catch (Exception e) {
+                    Log.e("print", String.format("unable to print %s", getCurrentMedia().getUri()), e);
+                    Toast.makeText(getApplicationContext(), R.string.print_error, Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.slide_show:

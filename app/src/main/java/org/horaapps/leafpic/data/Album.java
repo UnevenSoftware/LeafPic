@@ -70,7 +70,7 @@ public class Album implements CursorHandler, Parcelable {
 	}
 
 	@Override
-	public Album handle(Cursor cur) throws SQLException {
+	public Album handle(Cursor cur) {
 		return new Album(cur);
 	}
 

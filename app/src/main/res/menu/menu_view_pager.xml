@@ -2,16 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.horaapps.leafpic.activities.SingleMediaActivity"
->
-    <item
-        android:id="@+id/slide_show"
-        android:title="@string/start_slide_show"
-        app:showAsAction="never"/>
+    tools:context="org.horaapps.leafpic.activities.SingleMediaActivity">
+
 
     <group android:id="@+id/only_photos_options">
 
         <item
+
             android:title="@string/editor"
             app:showAsAction="never">
             <menu>
@@ -28,6 +25,7 @@
 
             </menu>
         </item>
+
         <item
             android:id="@+id/action_rotate"
             android:orderInCategory="2"
@@ -49,52 +47,22 @@
             android:id="@+id/action_palette"
             android:title="@string/palette"
             app:showAsAction="never"
+            android:orderInCategory="3"
             />
         <item
             android:id="@+id/action_use_as"
             android:title="@string/use_as"
+            android:orderInCategory="8"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/action_print"
+            android:orderInCategory="10"
+            android:title="@string/print"
             app:showAsAction="never"
             />
     </group>
 
-    <item
-        android:id="@+id/sort_action"
-        android:title="@string/sort_menu_title"
-        app:showAsAction="never">
-        <menu xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              tools:context=".PhotosActivity">
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/name_sort_mode"
-                    android:title="@string/name"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/date_taken_sort_mode"
-                    android:checked="true"
-                    android:title="@string/date"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/size_sort_mode"
-                    android:title="@string/size"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/type_sort_action"
-                    android:title="@string/type"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/numeric_sort_mode"
-                    android:title="@string/numeric"
-                    app:showAsAction="never" />
-            </group>
-            <group android:checkableBehavior="all">
-                <item
-                    android:id="@+id/ascending_sort_order"
-                    android:title="@string/ascending"
-                    app:showAsAction="never" />
-            </group>
-        </menu>
-    </item>
     <group android:id="@+id/on_internal_storage">
         <item
             android:id="@+id/action_share"
@@ -111,28 +79,38 @@
     <item
         android:id="@+id/action_copy"
         android:title="@string/copy_to"
+        android:orderInCategory="6"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_move"
         android:title="@string/move_to"
+        android:orderInCategory="7"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_rename"
         android:title="@string/rename"
         app:showAsAction="never"
+        android:orderInCategory="9"
         />
     </group>
 
     <item
         android:id="@+id/action_details"
         android:title="@string/details"
+        android:orderInCategory="4"
         app:showAsAction="never"
         />
+
     <item
         android:title="@string/more"
+        android:orderInCategory="11"
         app:showAsAction="never">
         <menu>
+            <item
+                android:id="@+id/slide_show"
+                android:title="@string/start_slide_show"
+                app:showAsAction="never" />
             <item
                 android:id="@+id/action_edit_with"
                 android:title="@string/edit_with"
@@ -151,5 +129,4 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-    <!-- End Albums Stuff -->
 </menu>

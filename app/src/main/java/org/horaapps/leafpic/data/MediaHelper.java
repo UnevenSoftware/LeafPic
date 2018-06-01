@@ -5,11 +5,10 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import org.horaapps.leafpic.progress.ProgressException;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.leafpic.util.file.DeleteException;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import io.reactivex.Observable;
 
@@ -20,36 +19,23 @@ import io.reactivex.Observable;
 public class MediaHelper {
     private static Uri external = MediaStore.Files.getContentUri("external");
 
-
-
-    public static Observable<Media> deleteMedia(Context context, Media mediaToDelete) {
+    public static Observable<Media> deleteMedia(Context context, Media media) {
         return Observable.create(subscriber -> {
-            boolean deleteSuccess = internalDeleteMedia(context, mediaToDelete);
-            if (deleteSuccess) subscriber.onNext(mediaToDelete);
-            else subscriber.onError(new DeleteException(mediaToDelete));
-            subscriber.onComplete();
-        });
-    }
-
-
-    public static Observable<Media> deleteMedia(Context context, ArrayList<Media> mediaToDelete) {
-        return Observable.create(subscriber -> {
-            for (Media media : mediaToDelete) {
-                boolean deleteSuccess = internalDeleteMedia(context, media);
-                if (deleteSuccess) subscriber.onNext(media);
-                else subscriber.onError(new DeleteException(media));
+            try {
+                internalDeleteMedia(context, media);
+                subscriber.onNext(media);
+            } catch (ProgressException e) {
+                subscriber.onError(e);
             }
             subscriber.onComplete();
         });
     }
 
-    private static boolean internalDeleteMedia(Context context, Media media) {
+    public static boolean internalDeleteMedia(Context context, Media media) throws ProgressException {
         File file = new File(media.getPath());
-        boolean success = StorageHelper.deleteFile(context, file);
-        if (success)
-            context.getContentResolver().delete(external,
-                    MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
-        return success;
+        StorageHelper.deleteFile(context, file);
+        context.getContentResolver().delete(external, MediaStore.MediaColumns.DATA + "=?", new String[]{file.getPath()});
+        return true;
     }
 
     public static boolean renameMedia(Context context, Media media, String newName) {
@@ -103,7 +89,7 @@ public class MediaHelper {
         return success;
     }
 
-    private static void scanFile(Context context, String[] path) {
-        MediaScannerConnection.scanFile(context, path, null, null);
+    public static void scanFile(Context context, String[] path) {
+        MediaScannerConnection.scanFile(context.getApplicationContext(), path, null, null);
     }
 }

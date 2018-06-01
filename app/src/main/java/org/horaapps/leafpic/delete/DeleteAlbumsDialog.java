@@ -30,6 +30,7 @@ import java.util.ArrayList;
  * Created by dnld on 6/29/17.
  */
 
+@Deprecated
 public class DeleteAlbumsDialog extends DialogFragment {
 
     ThemeHelper t;
