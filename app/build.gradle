@@ -8,7 +8,7 @@ repositories {
 
 
 android {
-    compileSdkVersion project.sdkVersion
+    compileSdkVersion 26
     defaultConfig {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
@@ -17,31 +17,25 @@ android {
         versionCode 15
         vectorDrawables.useSupportLibrary = true
     }
-
     lintOptions {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
         abortOnError false
     }
-
     dexOptions {
         jumboMode = true
     }
-
     // This is handled for you by the 2.0+ Gradle Plugin
     aaptOptions {
         additionalParameters "--no-version-vectors"
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     signingConfigs {
         release
     }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -55,9 +49,7 @@ android {
             resValue "string", "app_name", "LeafPic (debug)"
         }
     }
-
     flavorDimensions "default"
-
     productFlavors {
         noGPlay {
             dimension "default"
@@ -67,14 +59,13 @@ android {
             dimension "default"
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
     //exifInterface
     implementation "com.android.support:exifinterface:$supportVersion"
-
     // google & support
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:cardview-v7:$supportVersion"
@@ -90,49 +81,49 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.6.0'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.6.0'
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.6.0'
-
     // utils
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     implementation 'com.github.Commit451:bypasses:1.1.0'
+
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.drewnoakes:metadata-extractor:2.11.0'
     implementation "com.orhanobut:hawk:2.0.1"
-    implementation 'com.commonsware.cwac:provider:0.4.3'
 
+    implementation 'com.commonsware.cwac:provider:0.4.3'
     // rxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     //it is recommended to keep the same version of rxAndroid
+
     implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
-//    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+//  implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     // icons
     implementation 'com.mikepenz:iconics-core:3.0.3@aar'
     implementation "com.mikepenz:iconics-views:3.0.3@aar"
+
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
     implementation 'com.mikepenz:fontawesome-typeface:4.7.0.2@aar'
-
     // ui
     implementation 'uz.shift:colorpicker:0.5@aar'
     implementation 'com.github.jetradarmobile:desertplaceholder:1.1.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.zomato:androidphotofilters:1.0.1'
+
     implementation 'com.github.yalantis:ucrop:2.2.2'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
     implementation 'com.github.HoraApps:Liz:-SNAPSHOT'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
 
-
     // debug Only
     //debugCompile project(':inappstoragereader')
     implementation 'cat.ereza:customactivityoncrash:2.2.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
-
     // TODO check them out
     implementation 'com.turingtechnologies.materialscrollbar:lib:10.0.3'
     implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'

@@ -1,0 +1,46 @@
+<LinearLayout android:id="@+id/r"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/accent_white"
+    tools:context=".activities.ImageFilterActivity">
+
+    <!--TOOLBAR-->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:background="@color/md_dark_appbar"
+        android:windowActionBarOverlay="true" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/place_holder_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/accent_white"
+        android:contentDescription="@string/filter_place_holder" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/accent_white">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/thumbnails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/thumbnail_vertical_padding"
+            android:layout_marginTop="@dimen/thumbnail_vertical_padding"
+            android:clipToPadding="false"/>
+
+    </RelativeLayout>
+</RelativeLayout>
+</LinearLayout>

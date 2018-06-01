@@ -6,12 +6,26 @@
 
 
     <group android:id="@+id/only_photos_options">
+
         <item
-            android:id="@+id/action_edit"
-            android:title="@string/edit"
-            app:showAsAction="never"
-            android:orderInCategory="5"
-            />
+
+            android:title="@string/editor"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/action_crop"
+                    android:title="@string/crop"
+                    app:showAsAction="never"
+                    />
+                <item
+                    android:id="@+id/action_filter"
+                    android:title="@string/filter"
+                    app:showAsAction="never"
+                    />
+
+            </menu>
+        </item>
+
         <item
             android:id="@+id/action_rotate"
             android:orderInCategory="2"

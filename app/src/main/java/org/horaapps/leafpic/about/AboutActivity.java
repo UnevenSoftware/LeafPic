@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
-import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.DonateActivity;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
@@ -35,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_CALVIN;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_DONALD;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_GILBERT;
@@ -103,23 +104,18 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
 
     @OnClick(R.id.about_link_rate)
     public void onRate() {
-        Uri uri = Uri.parse(String.format("market://details?id=%s", BuildConfig.APPLICATION_ID));
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
-
-        int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-
-        goToMarket.addFlags(flags);
-
+        Uri uri = Uri.parse(String.format("%s%s", getString(R.string.marketurl), getBaseContext().getPackageName()));
+        Intent redirecttoStore = new Intent(Intent.ACTION_VIEW, uri);
+        if (LOLLIPOP <= SDK_INT) {
+            redirecttoStore.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        }
         try {
-            startActivity(goToMarket);
+            startActivity(redirecttoStore);
         } catch (ActivityNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(String.format("http://play.google.com/store/apps/details?id=%s", BuildConfig.APPLICATION_ID))));
+                    Uri.parse(String.format(getString(R.string.playstoreuri), getBaseContext().getPackageName()))));
         }
     }
 
@@ -149,6 +145,7 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         alertDialog.show();
     }
 
+    //TODO: EMOJI EASTER EGG - NOTHING TO SHOW
     private void emojiEasterEgg() {
         emojiEasterEggCount++;
         if (emojiEasterEggCount > 3) {
@@ -158,7 +155,8 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
                             + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
             Prefs.setShowEasterEgg(!showEasterEgg);
             emojiEasterEggCount = 0;
-        }
+        } else
+            Toast.makeText(getBaseContext(), String.valueOf(emojiEasterEggCount), Toast.LENGTH_SHORT).show();
     }
 
     private void mail(String mail) {
