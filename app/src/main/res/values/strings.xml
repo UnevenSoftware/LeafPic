@@ -88,6 +88,7 @@
     <string name="new_folder">New Folder</string>
     <string name="create_new_folder">Create new folder</string>
     <string name="view">View</string>
+    <string name="print">Print</string>
 
     <!--DIALOG MESSAGES-->
     <string name="hide_album_message">
@@ -150,6 +151,7 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="install_shortcut">Install shortcut</string>
     <string name="landscape">Landscape</string>
     <string name="portrait">Portrait</string>
+    <string name="print_error">Unable to print the picture</string>
 
     <!--SETTINGS PREFERENCES-->
     <string name="general_setting">General Setting</string>
@@ -212,7 +214,8 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="load_full_image_when_zoom_in">Load full image when zoomed in</string>
     <string name="media_viewer_swipe_direction">Swipe Direction</string>
     <string name="media_viewer_swipe_direction_sub">Change the swipe direction of the media viewer.(Default: Left to Right)</string>
-
+    <string name="enable_timeline_desc">Enable the Timeline view for media. Experimental.</string>
+    <string name="enable_timeline_title">Enable Timeline</string>
     <string name="video_instant_play">Instant Play</string>
     <string name="video_instant_play_sub">It allows you to instantlly play the video, skipping the preview.</string>
 
@@ -423,5 +426,14 @@ and this could make the media inaccessible from other apps. Use the exclude opti
     <string name="filter_place_holder">filter place holder</string>
     <string name="marketurl">market://details?id=</string>
     <string name="playstoreuri">http://play.google.com/store/apps/details?id=%s</string>
+    <string name="delete_bottom_sheet_title">Cleaning up memories…</string>
+
+    <!-- Timeline -->
+    <string name="timeline_toolbar_title">Timeline</string>
+    <string name="timeline_grouping_menu_label">Grouping</string>
+    <string name="timeline_grouping_menu_day">Day</string>
+    <string name="timeline_grouping_menu_week">Week</string>
+    <string name="timeline_grouping_menu_month">Month</string>
+    <string name="timeline_grouping_menu_year">Year</string>
 
 </resources>

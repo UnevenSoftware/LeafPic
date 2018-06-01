@@ -111,6 +111,7 @@ dependencies {
     implementation 'uz.shift:colorpicker:0.5@aar'
     implementation 'com.github.jetradarmobile:desertplaceholder:1.1.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.zomato:androidphotofilters:1.0.1'
 
     implementation 'com.github.yalantis:ucrop:2.2.2'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
