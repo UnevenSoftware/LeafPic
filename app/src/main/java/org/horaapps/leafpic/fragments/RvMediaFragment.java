@@ -56,6 +56,7 @@ import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.MimeTypeUtils;
+import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
@@ -429,7 +430,23 @@ public class RvMediaFragment extends BaseFragment {
                 return true;
 
             case R.id.delete:
-                showDeleteBottomSheet();
+
+                if (Security.isPasswordOnDelete()) {
+
+                    Security.authenticateUser(((ThemedActivity) getActivity()), new Security.AuthCallBack() {
+                        @Override
+                        public void onAuthenticated() {
+                            showDeleteBottomSheet();
+                        }
+
+                        @Override
+                        public void onError() {
+                            Toast.makeText(getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    showDeleteBottomSheet();
+                }
                 return true;
 
             //region Affix
