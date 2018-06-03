@@ -27,6 +27,7 @@ import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by dnld on 22/05/16.
+ * The Security Activity used to select the locking method.
  */
 public class SecurityActivity extends ThemedActivity {
 
@@ -52,7 +53,6 @@ public class SecurityActivity extends ThemedActivity {
         swFingerPrint = (SwitchCompat) findViewById(R.id.active_security_fingerprint_switch);
         llFingerprint = (LinearLayout) findViewById(R.id.ll_active_security_fingerprint);
 
-
         initUi();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fingerprintHandler = new FingerprintHandler(this, null);
@@ -64,7 +64,6 @@ public class SecurityActivity extends ThemedActivity {
         }else{
             llFingerprint.setVisibility(View.GONE);
         }
-
 
         /** - SWITCHES - **/
         /** - ACTIVE SECURITY - **/
@@ -227,7 +226,6 @@ public class SecurityActivity extends ThemedActivity {
             ((TextView) findViewById(org.horaapps.leafpic.R.id.active_security_fingerprint_item_title)).setTextColor(getSubTextColor());
         }
     }
-
 
     @CallSuper
     @Override

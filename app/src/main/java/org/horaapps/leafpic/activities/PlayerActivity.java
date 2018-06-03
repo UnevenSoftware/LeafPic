@@ -209,11 +209,11 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        // See whether the player view wants to handle media or DPAD keys events.
+        /** See whether the player view wants to handle media or DPAD keys events. */
         return simpleExoPlayerView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
     }
 
-    // Internal methods
+    /** Internal methods */
     private void initializePlayer() {
         Intent intent = getIntent();
         boolean needNewPlayer = player == null;
@@ -312,7 +312,6 @@ public class PlayerActivity extends ThemedActivity implements CustomPlayBackCont
             default: throw new IllegalStateException("Unsupported type: " + type);
         }
     }
-
 
     private void releasePlayer() {
         if (player != null) {

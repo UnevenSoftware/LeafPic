@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
 public class SettingBasic extends FrameLayout implements Themed {
+
     private final String iconString;
     @StringRes private final int titleRes;
     @StringRes private final int captionRes;

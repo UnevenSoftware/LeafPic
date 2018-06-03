@@ -10,12 +10,13 @@
         android:id="@+id/affix_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="2dp"
-        >
+        app:cardCornerRadius="2dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/affix_title"
                     android:layout_width="match_parent"
@@ -26,12 +27,13 @@
                     android:textColor="@color/md_dark_primary_text"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/affix_scrollView"
-                    android:scrollbarSize="4dip"
-                    >
+                    android:scrollbarSize="4dip">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,6 +56,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:weightSum="2">
+
                                 <TextView
                                     android:id="@+id/affix_example_horizontal_txt1"
                                     android:layout_width="0dp"
@@ -66,6 +69,7 @@
                                     android:padding="@dimen/big_spacing"
                                     android:gravity="center"
                                     android:layout_weight="1"/>
+
                                 <TextView
                                     android:id="@+id/affix_example_horizontal_txt2"
                                     android:layout_width="0dp"
@@ -78,6 +82,7 @@
                                     android:padding="@dimen/big_spacing"
                                     android:gravity="center"
                                     android:layout_weight="1"/>
+
                             </LinearLayout>
 
                             <!--VERTICAL-->
@@ -87,6 +92,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:visibility="gone">
+
                                 <TextView
                                     android:id="@+id/affix_example_vertical_txt1"
                                     android:layout_width="match_parent"
@@ -98,6 +104,7 @@
                                     android:layout_margin="@dimen/small_spacing"
                                     android:padding="@dimen/big_spacing"
                                     android:gravity="center"/>
+
                                 <TextView
                                     android:id="@+id/affix_example_vertical_txt2"
                                     android:layout_width="match_parent"
@@ -109,6 +116,7 @@
                                     android:layout_margin="@dimen/small_spacing"
                                     android:padding="@dimen/big_spacing"
                                     android:gravity="center"/>
+
                             </LinearLayout>
                         </LinearLayout>
 
@@ -129,6 +137,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"/>
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -137,11 +146,13 @@
                                 android:paddingTop="@dimen/medium_spacing"
                                 android:paddingRight="@dimen/medium_spacing"
                                 android:paddingBottom="@dimen/small_spacing">
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
                                     android:layout_marginEnd="44dp">
+
                                     <TextView
                                         android:id="@+id/affix_vertical_title"
                                         android:layout_width="wrap_content"
@@ -149,6 +160,7 @@
                                         android:text="@string/affix_vertical"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="@dimen/medium_text"/>
+
                                     <TextView
                                         android:id="@+id/affix_vertical_sub"
                                         android:layout_width="wrap_content"
@@ -156,7 +168,9 @@
                                         android:text="@string/affix_vertical_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp" />
+
                                 </LinearLayout>
+
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/affix_vertical_switch"
                                     android:layout_width="wrap_content"
@@ -166,6 +180,7 @@
                                     android:hapticFeedbackEnabled="true"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentEnd="true"/>
+
                             </RelativeLayout>
                         </LinearLayout>
 
@@ -186,6 +201,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing" />
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -194,12 +210,14 @@
                                 android:paddingTop="@dimen/medium_spacing"
                                 android:paddingRight="@dimen/medium_spacing"
                                 android:paddingBottom="@dimen/small_spacing">
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
                                     android:orientation="vertical"
                                     android:layout_marginEnd="44dp">
+
                                     <TextView
                                         android:id="@+id/save_here_title"
                                         android:layout_width="wrap_content"
@@ -207,6 +225,7 @@
                                         android:text="@string/affix_save_here"
                                         android:textColor="@color/md_dark_background"
                                         android:textSize="16sp" />
+
                                     <TextView
                                         android:id="@+id/save_here_sub"
                                         android:layout_width="wrap_content"
@@ -214,7 +233,9 @@
                                         android:text="@string/affix_save_here_sub"
                                         android:textColor="@color/md_grey_400"
                                         android:textSize="14sp" />
+
                                 </LinearLayout>
+
                                 <android.support.v7.widget.SwitchCompat
                                     android:id="@+id/save_here_switch"
                                     android:layout_width="wrap_content"
@@ -223,8 +244,8 @@
                                     android:button="@null"
                                     android:hapticFeedbackEnabled="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_alignParentEnd="true"
-                                    />
+                                    android:layout_alignParentEnd="true" />
+
                             </RelativeLayout>
                         </LinearLayout>
 
@@ -238,8 +259,7 @@
                             android:clickable="true"
                             android:paddingTop="@dimen/small_spacing"
                             android:paddingRight="@dimen/medium_spacing"
-                            android:paddingBottom="@dimen/small_spacing"
-                            >
+                            android:paddingBottom="@dimen/small_spacing">
 
                             <org.horaapps.liz.ui.ThemedIcon
                                 android:id="@+id/affix_format_icon"
@@ -249,11 +269,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/compression_settings_title"
                                     android:layout_width="match_parent"
@@ -262,36 +284,41 @@
                                     android:layout_gravity="center_vertical"
                                     android:textColor="@color/md_dark_background"
                                     android:textSize="16sp"/>
+
                                 <TextView
                                     android:id="@+id/affix_format_sub"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/affix_format_sub"
                                     android:textColor="@color/md_grey_400"
-                                    android:textSize="14sp"
-                                    />
+                                    android:textSize="14sp" />
+
                                 <RadioGroup
                                     android:id="@+id/radio_format"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingTop="4dp"
                                     android:orientation="horizontal">
+
                                     <android.support.v7.widget.AppCompatRadioButton
                                         android:id="@+id/radio_jpeg"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="JPEG"
                                         android:checked="true" />
+
                                     <android.support.v7.widget.AppCompatRadioButton
                                         android:id="@+id/radio_png"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="PNG" />
+
                                     <android.support.v7.widget.AppCompatRadioButton
                                         android:id="@+id/radio_webp"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="WebP" />
+
                                 </RadioGroup>
                             </LinearLayout>
                         </LinearLayout>
@@ -317,11 +344,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/big_spacing"
                                 android:layout_marginRight="@dimen/big_spacing"/>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:id="@+id/affix_quality_title"
                                     android:layout_width="match_parent"
@@ -330,12 +359,14 @@
                                     android:textColor="@color/md_grey_400"
                                     android:paddingBottom="3dp"
                                     android:textSize="14sp" />
+
                                 <SeekBar
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:progress="50"
                                     android:max="100"
                                     android:id="@+id/seek_bar_quality" />
+
                             </LinearLayout>
                         </LinearLayout>
                 </LinearLayout>

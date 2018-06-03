@@ -29,7 +29,9 @@ import java.util.List;
 
 /**
  * Created by Jibo on 02/03/2016.
+ * The Palette Activity used to analyze the colors in the picture.
  */
+
 public class PaletteActivity extends ThemedActivity {
 
     private Toolbar toolbar;
@@ -127,6 +129,7 @@ public class PaletteActivity extends ThemedActivity {
 
     /*** - PALETTE ITEM ON CLICK - ***/
     private View.OnClickListener onClickListener = new View.OnClickListener() {
+        /** Copies the selected color to the clipboard. */
         @Override
         public void onClick(View view) {
             String text = ((TextView) view.findViewById(R.id.palette_item_text)).getText().toString();

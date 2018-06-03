@@ -60,6 +60,7 @@
                         android:textColor="@color/md_dark_background"
                         android:text=""
                         android:textSize="14sp" />
+
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView

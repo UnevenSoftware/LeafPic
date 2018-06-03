@@ -6,19 +6,23 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"
             android:background="@color/md_dark_appbar"
             android:windowActionBarOverlay="true" />
+
         <RelativeLayout
             android:id="@+id/rl_ea"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <!--THERE IS NOTHING TO SHOW-->
             <include layout="@layout/there_is_nothing_to_show"/>
 
@@ -27,6 +31,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <android.support.v7.widget.CardView
                     android:id="@+id/white_list_decription_card"
                     android:layout_width="match_parent"
@@ -37,8 +42,8 @@
                     app:cardElevation="@dimen/card_elevation"
                     android:foreground="@drawable/ripple"
                     android:clickable="true"
-                    android:visibility="gone"
-                    >
+                    android:visibility="gone">
+
                     <TextView
                         android:id="@+id/white_list_decription_txt"
                         android:layout_width="wrap_content"
@@ -48,13 +53,16 @@
                         android:textSize="@dimen/medium_text"
                         android:layout_gravity="center"
                         android:padding="@dimen/medium_spacing" />
+
                 </android.support.v7.widget.CardView>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/excluded_albums"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical"
                     android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

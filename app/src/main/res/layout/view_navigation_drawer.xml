@@ -125,7 +125,5 @@
                 app:itemText="@string/about" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </merge>

@@ -29,6 +29,9 @@ import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * The Affix Activity used to merge pictures into one.
+ */
 public class AffixActivity extends Activity implements OnClickListener {
 
     static final int PICKED_ONE = 0;
@@ -44,9 +47,8 @@ public class AffixActivity extends Activity implements OnClickListener {
     Canvas canvas;
     Paint paint;
 
-
-
     private ArrayList<String> images;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class AffixActivity extends Activity implements OnClickListener {
 
 
     }
+
     public void onClick(View v) {
 
         int which = -1;
@@ -142,7 +145,7 @@ public class AffixActivity extends Activity implements OnClickListener {
                 Bitmap.Config.ARGB_4444);
 
         try {
-            // Load up the image's dimensions not the image itself
+            /** Load up the image's dimensions not the image itself */
             BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
             bmpFactoryOptions.inJustDecodeBounds = true;
             returnBmp = BitmapFactory.decodeStream(getContentResolver()
@@ -154,8 +157,8 @@ public class AffixActivity extends Activity implements OnClickListener {
             Log.v("HEIGHTRATIO", "" + heightRatio);
             Log.v("WIDTHRATIO", "" + widthRatio);
 
-            // If both of the ratios are greater than 1, one of the sides of the
-            // image is greater than the screen
+            /** If both of the ratios are greater than 1, one of the sides of the
+             *  image is greater than the screen */
             if (heightRatio > 1 && widthRatio > 1) {
                 if (heightRatio > widthRatio) {
                     // Height ratio is larger, scale according to it
@@ -167,7 +170,7 @@ public class AffixActivity extends Activity implements OnClickListener {
             }
 
 
-            // Decode it for real
+            /** Decode it for real */
             bmpFactoryOptions.inJustDecodeBounds = false;
             returnBmp = BitmapFactory.decodeStream(getContentResolver()
                     .openInputStream(imageFileUri), null, bmpFactoryOptions);

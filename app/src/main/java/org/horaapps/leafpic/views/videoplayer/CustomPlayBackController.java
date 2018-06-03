@@ -189,7 +189,6 @@ public class CustomPlayBackController extends FrameLayout {
         hideAfterTimeout();
     }
 
-
     //Hides the controller.
     public void hide() {
         if (isVisible()) {
@@ -202,7 +201,6 @@ public class CustomPlayBackController extends FrameLayout {
             hideAtMs = C.TIME_UNSET;
         }
     }
-
 
     //Returns whether the controller is currently visible.
     public boolean isVisible() {

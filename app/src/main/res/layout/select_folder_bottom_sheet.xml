@@ -30,22 +30,23 @@
             android:paddingStart="22dp"
             android:paddingEnd="24dp"
             android:foreground="@drawable/ripple"
-            android:clickable="true"
-            >
+            android:clickable="true">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/bottom_sheet_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/md_dark_primary_text"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/bottom_sheet_sub_title"
                     android:layout_width="wrap_content"
@@ -54,8 +55,8 @@
                     android:textSize="14sp"
                     android:text="@string/local_folder"
                     android:ellipsize="start"
-                    android:textStyle="italic"
-                    />
+                    android:textStyle="italic" />
+
             </LinearLayout>
 
             <org.horaapps.liz.ui.ThemedIcon
@@ -67,6 +68,7 @@
                 app:iiv_color="@color/md_white_1000"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -76,11 +78,13 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:paddingStart="10dp">
+
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/storage_spinner"
                 android:spinnerMode="dropdown"/>
+
             <RelativeLayout
                 android:id="@+id/rl_create_new_folder"
                 android:layout_width="match_parent"
@@ -88,8 +92,7 @@
                 android:paddingTop="@dimen/medium_spacing"
                 android:paddingBottom="@dimen/medium_spacing"
                 android:foreground="@drawable/ripple"
-                android:clickable="true"
-                >
+                android:clickable="true">
 
                 <org.horaapps.liz.ui.ThemedIcon
                     android:id="@+id/create_new_folder_icon"
@@ -100,6 +103,7 @@
                     android:layout_gravity="end"
                     app:iiv_icon="gmd-create-new-folder"
                     app:iiv_color="@color/md_white_1000"/>
+
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
@@ -113,6 +117,7 @@
         android:minHeight="400dp"
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -125,8 +130,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        />
+        android:theme="@style/ThemeOverlay.AppCompat.Light" />
     <!--app:layout_behavior="org.horaapps.leafpic.views.FabScrollBehaviour"-->
 
 </android.support.design.widget.CoordinatorLayout>

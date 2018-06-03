@@ -11,6 +11,7 @@ import android.widget.Scroller;
  */
 
 public class ZoomImageView {
+
   private boolean draggingDown = false;
   private float dragY;
   private float translationX;

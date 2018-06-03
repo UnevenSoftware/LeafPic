@@ -5,18 +5,23 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.progress.ProgressException;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by dnld on 8/8/17.
  */
 
 public class MediaHelper {
+
     private static Uri external = MediaStore.Files.getContentUri("external");
 
     public static Observable<Media> deleteMedia(Context context, Media media) {
@@ -28,6 +33,32 @@ public class MediaHelper {
                 subscriber.onError(e);
             }
             subscriber.onComplete();
+        });
+    }
+
+    public static Observable<Album> deleteAlbum(Context context, Album album) {
+        return Observable.create(subscriber -> {
+
+            ArrayList<Observable<Media>> sources = new ArrayList<>(album.getCount());
+
+            CPHelper.getMedia(context, album)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            media -> sources.add(MediaHelper.deleteMedia(context.getApplicationContext(), media)),
+                            subscriber::onError,
+                            () -> Observable.mergeDelayError(sources)
+                                    .observeOn(AndroidSchedulers.mainThread(), true)
+                                    .subscribeOn(Schedulers.newThread())
+                                    .subscribe(
+                                            item -> {
+                                            },
+                                            subscriber::onError,
+                                            () -> {
+                                                subscriber.onNext(album);
+                                                subscriber.onComplete();
+                                            })
+                    );
         });
     }
 

@@ -246,7 +246,6 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
         customUri = true;
     }
 
-
     private void initUi() {
 
         setSupportActionBar(toolbar);
@@ -299,7 +298,7 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
     }
 
     // TODO: Figure out how we should classify Images and GIFs
-    // This should work temporarily
+    /** This should work temporarily **/
     private boolean isCurrentMediaImage() {
         return getCurrentMedia().isImage() && !getCurrentMedia().isGif();
     }
@@ -460,9 +459,8 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
         result.putExtra(EXTRA_ARGS_MEDIA, media);
         setResult(RESULT_OK, result);
         super.onBackPressed();
-
     }
-
+  
     private void displayAlbums() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();

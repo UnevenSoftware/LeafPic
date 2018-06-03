@@ -25,4 +25,5 @@
         android:text="1/80"
         android:singleLine="false"
         android:textSize="@dimen/medium_text" />
+
 </RelativeLayout>

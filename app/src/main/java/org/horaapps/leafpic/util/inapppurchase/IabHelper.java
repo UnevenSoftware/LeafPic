@@ -71,6 +71,7 @@ import java.util.List;
  * @author Bruno Oliveira (Google)
  */
 public class IabHelper {
+
     // Billing response codes
     public static final int BILLING_RESPONSE_RESULT_OK = 0;
     public static final int BILLING_RESPONSE_RESULT_USER_CANCELED = 1;

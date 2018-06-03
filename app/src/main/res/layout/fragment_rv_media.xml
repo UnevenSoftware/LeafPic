@@ -4,13 +4,13 @@
     android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/media"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:clipToPadding="false"
-    android:scrollbars="vertical"
-    android:scrollbarThumbVertical="@drawable/ic_scrollbar"
-    />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
 </android.support.v4.widget.SwipeRefreshLayout>

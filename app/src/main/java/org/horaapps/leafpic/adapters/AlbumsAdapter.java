@@ -147,7 +147,6 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         actionsListener.onSelectMode(false);
     }
 
-
     public int getSelectedCount() {
         return selectedCount;
     }
@@ -192,6 +191,27 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
         }
 
         notifyDataSetChanged();
+    }
+
+    public void removeAlbum(Album album) {
+        int i = albums.indexOf(album);
+        albums.remove(i);
+        notifyItemRemoved(i);
+
+    }
+
+    public void invalidateSelectedCount() {
+        int c = 0;
+        for (Album m : this.albums) {
+            c += m.isSelected() ? 1 : 0;
+        }
+
+        this.selectedCount = c;
+
+        if (this.selectedCount == 0) stopSelection();
+        else {
+            this.actionsListener.onSelectionCountChanged(selectedCount, albums.size());
+        }
     }
 
     public boolean clearSelected() {
@@ -338,7 +358,6 @@ public class AlbumsAdapter extends ThemedAdapter<AlbumsAdapter.ViewHolder> {
     public int getItemCount() {
         return albums.size();
     }
-
 
     static class ViewHolder extends ThemedViewHolder {
 

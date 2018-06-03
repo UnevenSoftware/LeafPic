@@ -22,9 +22,9 @@ import java.io.File;
 import java.io.IOException;
 
 // TODO Calvin: Separate out the logic here
-// Ideally, we should have separate data classes for images, videos & gifs
-// Base class can be Media, and others should extend
-// Try to separate out Database logic and projections from this class
+/** Ideally, we should have separate data classes for images, videos & gifs
+ *  Base class can be Media, and others should extend
+ *  Try to separate out Database logic and projections from this class */
 public class Media implements TimelineItem, CursorHandler, Parcelable {
 
     private static final String[] sProjection = new String[] {
@@ -155,7 +155,6 @@ public class Media implements TimelineItem, CursorHandler, Parcelable {
     public Long getDateModified() {
         return dateModified;
     }
-
 
     public ObjectKey getSignature() {
         return new ObjectKey(getDateModified() + getPath() + getOrientation());

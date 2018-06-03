@@ -120,7 +120,7 @@ public class MainActivity extends SharedMediaActivity implements
             return;
         }
 
-        // We have some instance state
+        /** We have some instance state */
         restoreState(savedInstanceState);
 
         switch (fragmentMode) {
@@ -454,7 +454,7 @@ public class MainActivity extends SharedMediaActivity implements
         navigationDrawerView.refresh();
     }
 
-    //region MENU
+    /**region MENU */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -558,12 +558,11 @@ public class MainActivity extends SharedMediaActivity implements
 
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
+                /** If we got here, the user's action was not recognized.
+                 *  Invoke the superclass to handle it. */
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     @Override
     public void onBackPressed() {

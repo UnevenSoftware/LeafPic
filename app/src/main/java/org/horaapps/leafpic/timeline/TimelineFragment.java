@@ -92,12 +92,12 @@ public class TimelineFragment extends BaseFragment {
             return;
         }
 
-        // Get content from arguments
+        /** Get content from arguments */
         Bundle arguments = getArguments();
         if (arguments == null) return;
         contentAlbum = arguments.getParcelable(ARGS_ALBUM);
 
-        // Set defaults
+        /** Set defaults */
         groupingMode = GroupingMode.DAY;
         filterMode = FilterMode.ALL;
     }

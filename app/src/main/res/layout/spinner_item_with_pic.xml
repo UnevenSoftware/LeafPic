@@ -13,6 +13,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="@dimen/medium_spacing"
         app:iiv_color="@color/md_dark_primary_text" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,4 +22,5 @@
         android:textSize="@dimen/medium_text"
         android:textColor="@color/md_dark_primary_text"
         android:id="@+id/volume_name" />
+
 </LinearLayout>

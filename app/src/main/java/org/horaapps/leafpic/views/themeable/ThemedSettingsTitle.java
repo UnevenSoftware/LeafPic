@@ -11,6 +11,7 @@ import org.horaapps.liz.Themed;
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
 public class ThemedSettingsTitle extends android.support.v7.widget.AppCompatTextView implements Themed {
+
     public ThemedSettingsTitle(Context context) {
         this(context, null);
     }

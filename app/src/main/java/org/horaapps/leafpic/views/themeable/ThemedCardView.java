@@ -12,6 +12,7 @@ import org.horaapps.liz.Themed;
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
 public class ThemedCardView extends CardView implements Themed {
+
     public ThemedCardView(Context context) {
         this(context, null);
     }

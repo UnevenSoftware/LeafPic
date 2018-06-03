@@ -12,6 +12,7 @@ import org.horaapps.liz.ui.ThemedIcon;
  * Created by darken (darken@darken.eu) on 04.03.2017.
  */
 public class ThemedSettingsIcon extends ThemedIcon implements Themed {
+
     public ThemedSettingsIcon(Context context) {
         this(context, null);
     }

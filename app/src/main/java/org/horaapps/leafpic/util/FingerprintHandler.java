@@ -95,7 +95,6 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
             fingerprintSupported = false;
         }
 
-
         return fingerprintSupported;
     }
 
@@ -112,7 +111,6 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
                 doAuth(fingerprintManager, cryptoObject);
             }
         }
-
     }
 
     private void generateKey() throws FingerprintException {
@@ -149,7 +147,6 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
     }
 
-
     public boolean initCipher() {
         try {
             cipher = Cipher.getInstance(
@@ -175,7 +172,6 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
             throw new RuntimeException("Failed to init Cipher", e);
         }
     }
-
 
     private class FingerprintException extends Exception {
         FingerprintException(Exception e) {

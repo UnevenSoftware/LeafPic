@@ -32,9 +32,11 @@ import org.horaapps.leafpic.adapters.AlbumsAdapter;
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.data.AlbumsHelper;
 import org.horaapps.leafpic.data.HandlingAlbums;
+import org.horaapps.leafpic.data.MediaHelper;
 import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.progress.ProgressBottomSheet;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.DeviceUtils;
@@ -46,6 +48,7 @@ import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -201,7 +204,6 @@ public class AlbumsFragment extends BaseFragment {
     private HandlingAlbums db() {
         return HandlingAlbums.getInstance(getContext().getApplicationContext());
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -403,58 +405,6 @@ public class AlbumsFragment extends BaseFragment {
                 return true;
 
             case R.id.delete:
-               /* class DeleteAlbums extends AsyncTask<String, Integer, Boolean> {
-
-                    //private AlertDialog dialog;
-                    List<Album> selectedAlbums;
-                    DeleteAlbumsDialog newFragment;
-
-
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-                        newFragment = new DeleteAlbumsDialog();
-                        Bundle b = new Bundle();
-                        b.putParcelableArrayList("albums", ((ArrayList<Album>) adapter.getSelectedAlbums()));
-
-                        newFragment.setArguments(b);
-                        newFragment.show(getFragmentManager(), "dialog");
-                        //newFragment.setTitle("asd");
-
-                        //dialog = AlertDialogsHelper.getProgressDialog(((ThemedActivity) getActivity()), getString(R.string.delete), getString(R.string.deleting_images));
-                        //dialog.show();
-
-
-                    }
-
-                    @Override
-                    protected Boolean doInBackground(String... arg0) {
-
-                        return true;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Boolean result) {
-                        *//*if (result) {
-                            if (albumsMode) {
-                                albumsAdapter.clearSelected();
-                                //albumsAdapter.notifyDataSetChanged();
-                            } else {
-                                if (getAlbum().getMedia().size() == 0) {
-                                    getAlbums().removeCurrentAlbum();
-                                    albumsAdapter.notifyDataSetChanged();
-                                    displayAlbums();
-                                } else
-                                    oldMediaAdapter.swapDataSet(getAlbum().getMedia());
-                            }
-                        } else requestSdCardPermissions();
-
-                        supportInvalidateOptionsMenu();
-                        checkNothing();
-                        dialog.dismiss();*//*
-                    }
-                }*/
-
 
                 final AlertDialog alertDialog = AlertDialogsHelper.getTextDialog(((ThemedActivity) getActivity()), R.string.delete, R.string.delete_album_message);
 
@@ -466,7 +416,7 @@ public class AlbumsFragment extends BaseFragment {
                         Security.authenticateUser(((ThemedActivity) getActivity()), new Security.AuthCallBack() {
                             @Override
                             public void onAuthenticated() {
-                                /*new DeleteAlbums().execute();*/
+                                showDeleteBottomSheet();
                             }
 
                             @Override
@@ -474,7 +424,9 @@ public class AlbumsFragment extends BaseFragment {
                                 Toast.makeText(getContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }/* else new DeleteAlbums().execute();*/
+                    } else {
+                        showDeleteBottomSheet();
+                    }
                 });
                 alertDialog.show();
                 return true;
@@ -482,6 +434,31 @@ public class AlbumsFragment extends BaseFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDeleteBottomSheet() {
+        List<Album> selected = adapter.getSelectedAlbums();
+        ArrayList<io.reactivex.Observable<Album>> sources = new ArrayList<>(selected.size());
+        for (Album media : selected)
+            sources.add(MediaHelper.deleteAlbum(getContext().getApplicationContext(), media));
+
+        ProgressBottomSheet<Album> bottomSheet = new ProgressBottomSheet.Builder<Album>(R.string.delete_bottom_sheet_title)
+                .autoDismiss(false)
+                .sources(sources)
+                .listener(new ProgressBottomSheet.Listener<Album>() {
+                    @Override
+                    public void onCompleted() {
+                        adapter.invalidateSelectedCount();
+                    }
+
+                    @Override
+                    public void onProgress(Album item) {
+                        adapter.removeAlbum(item);
+                    }
+                })
+                .build();
+
+        bottomSheet.showNow(getChildFragmentManager(), null);
     }
 
     public int getCount() {

@@ -23,8 +23,8 @@ public enum StaticMapProvider {
 
   public int getValue() { return value;}
 
-// String.format is locale dependent, we need to force a locale with point instead of comma in decimals,
-// otherwise (at least) mapbox does not work in some countries
+/** String.format is locale dependent, we need to force a locale with point instead of comma in decimals,
+ *  otherwise (at least) mapbox does not work in some countries */
   public String getUrl(GeoLocation location) {
     if (value>=1 && value <=3) //MAP_MOX invert coordinates
       return String.format(Locale.US, getUrl(value), location.getLongitude(), location.getLatitude());

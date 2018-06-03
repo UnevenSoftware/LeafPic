@@ -24,6 +24,7 @@ package org.horaapps.leafpic.util.inapppurchase;
  * calling {@link #isSuccess()} and {@link #isFailure()}.
  */
 public class IabResult {
+
     int mResponse;
     String mMessage;
 

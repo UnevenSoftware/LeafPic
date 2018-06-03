@@ -5,11 +5,9 @@
         android:id="@+id/action_add"
         android:title="@string/add"
         android:visible="false"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_toggle"
         android:title="@string/white_list"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 </menu>
