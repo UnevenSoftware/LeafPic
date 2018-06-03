@@ -627,6 +627,13 @@ public class SingleMediaActivity extends SharedMediaActivity implements BaseMedi
                             if (!b) {
                                 StringUtils.showToast(getApplicationContext(), getString(R.string.rename_error));
                                 //adapter.notifyDataSetChanged();
+                            } else {
+                                // Move to the albums view once file is renamed
+                                // Not moving to album screen would cause the
+                                // back action on the parent activity to hold
+                                // the stale file name, and hence the file would
+                                // not be found
+                                displayAlbums();
                             }
                         } else
                             StringUtils.showToast(getApplicationContext(), getString(R.string.nothing_changed));
