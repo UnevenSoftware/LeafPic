@@ -62,24 +62,29 @@ public class SplashScreen extends SharedMediaActivity {
         setNavBarColor();
         setStatusBarColor();
 
-        pickMode = getIntent().getAction().equals(Intent.ACTION_GET_CONTENT) || getIntent().getAction().equals(Intent.ACTION_PICK);
+        String action = getIntent().getAction();
+
+        if (action != null) {
+            pickMode = action.equals(Intent.ACTION_GET_CONTENT) || action.equals(Intent.ACTION_PICK);
+        }
 
         if (PermissionUtils.isStoragePermissionsGranted(this)) {
 
 
-            if (getIntent().getAction().equals(ACTION_OPEN_ALBUM)) {
-                    Bundle data = getIntent().getExtras();
-                    if (data != null) {
-                        String ab = data.getString("albumPath");
-                        if (ab != null) {
-                            File dir = new File(ab);
-                            //tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
-                            // TODO: 4/10/17 handle
-                            start();
-                        }
-                    } else StringUtils.showToast(getApplicationContext(), "Album not found");
-                } else  // default intent
-                    start();
+            if (action != null && action.equals(ACTION_OPEN_ALBUM)) {
+                Bundle data = getIntent().getExtras();
+                if (data != null) {
+                    String ab = data.getString("albumPath");
+                    if (ab != null) {
+                        File dir = new File(ab);
+                        //tmpAlbum = new Album(getApplicationContext(), dir.getAbsolutePath(), data.getInt("albumId", -1), dir.getName(), -1);
+                        // TODO: 4/10/17 handle
+                        start();
+                    }
+                } else StringUtils.showToast(getApplicationContext(), "Album not found");
+            } else {  // default intent
+                start();
+            }
 
 
         } else
@@ -92,7 +97,7 @@ public class SplashScreen extends SharedMediaActivity {
         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
 
         if (pickMode) {
-            intent.putExtra(MainActivity.ARGS_PICK_MODE, pickMode);
+            intent.putExtra(MainActivity.ARGS_PICK_MODE, true);
             startActivityForResult(intent, PICK_MEDIA_REQUEST);
         } else {
             startActivity(intent);
