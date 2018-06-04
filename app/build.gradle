@@ -13,8 +13,8 @@ android {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion project.sdkVersion
-        versionName "v0.7-alpha-1"
-        versionCode 15
+        versionName "v0.7-alpha-2"
+        versionCode 16
         vectorDrawables.useSupportLibrary = true
     }
 
