@@ -457,12 +457,6 @@ public class CustomPlayBackController extends FrameLayout {
 
         }
 
-       /* @Override
-        public void onPositionDiscontinuity() {
-            updateNavigation();
-            updateProgress();
-        }*/
-
         @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             updateNavigation();
