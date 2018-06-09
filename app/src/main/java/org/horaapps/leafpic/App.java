@@ -1,6 +1,6 @@
 package org.horaapps.leafpic;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -15,7 +15,7 @@ import org.horaapps.leafpic.util.preferences.Prefs;
 /**
  * Created by dnld on 28/04/16.
  */
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private static App mInstance;
 

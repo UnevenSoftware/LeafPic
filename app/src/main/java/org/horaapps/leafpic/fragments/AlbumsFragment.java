@@ -60,7 +60,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by dnld on 3/13/17.
  */
 
-public class AlbumsFragment extends BaseFragment {
+public class AlbumsFragment extends BaseMediaGridFragment {
 
     public static final String TAG = "AlbumsFragment";
 
@@ -78,10 +78,6 @@ public class AlbumsFragment extends BaseFragment {
         void onAlbumClick(Album album);
     }
 
-    public void setListener(AlbumClickListener clickListener) {
-        this.listener = clickListener;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +88,7 @@ public class AlbumsFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof AlbumClickListener) listener = (AlbumClickListener) context;
     }
 
     @Override

@@ -118,7 +118,7 @@ public class MainActivity extends SharedMediaActivity implements
             return;
         }
 
-        /** We have some instance state */
+        /* We have some instance state */
         restoreState(savedInstanceState);
 
         switch (fragmentMode) {
@@ -126,21 +126,13 @@ public class MainActivity extends SharedMediaActivity implements
             case FragmentMode.MODE_MEDIA:
                 rvMediaFragment = (RvMediaFragment) getSupportFragmentManager().findFragmentByTag(RvMediaFragment.TAG);
                 rvMediaFragment.setListener(this);
-                rvMediaFragment.setEditModeListener(this);
-                rvMediaFragment.setNothingToShowListener(this);
                 break;
 
             case FragmentMode.MODE_ALBUMS:
                 albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
-                albumsFragment.setListener(this);
-                albumsFragment.setEditModeListener(this);
-                albumsFragment.setNothingToShowListener(this);
                 break;
 
             case FragmentMode.MODE_TIMELINE:
-                TimelineFragment timelineFragment = (TimelineFragment) getSupportFragmentManager().findFragmentByTag(TimelineFragment.TAG);
-                timelineFragment.setEditModeListener(this);
-                timelineFragment.setNothingToShowListener(this);
                 setupUiForTimeline();
         }
     }
@@ -155,9 +147,6 @@ public class MainActivity extends SharedMediaActivity implements
 
     private void initAlbumsFragment() {
         albumsFragment = new AlbumsFragment();
-        albumsFragment.setListener(this);
-        albumsFragment.setEditModeListener(this);
-        albumsFragment.setNothingToShowListener(this);
     }
 
     @Override
@@ -185,8 +174,6 @@ public class MainActivity extends SharedMediaActivity implements
         lockNavigationDrawer();
 
         rvMediaFragment.setListener(this);
-        rvMediaFragment.setEditModeListener(this);
-        rvMediaFragment.setNothingToShowListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -199,9 +186,6 @@ public class MainActivity extends SharedMediaActivity implements
         TimelineFragment fragment = TimelineFragment.newInstance(album);
 
         fragmentMode = FragmentMode.MODE_TIMELINE;
-
-        fragment.setEditModeListener(this);
-        fragment.setNothingToShowListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()

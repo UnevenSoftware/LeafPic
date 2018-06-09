@@ -79,7 +79,7 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by dnld on 3/13/17.
  */
 
-public class RvMediaFragment extends BaseFragment {
+public class RvMediaFragment extends BaseMediaGridFragment {
 
     public static final String TAG = "RvMediaFragment";
     private static final String BUNDLE_ALBUM = "album";
