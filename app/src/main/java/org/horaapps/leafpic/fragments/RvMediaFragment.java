@@ -707,4 +707,11 @@ public class RvMediaFragment extends BaseMediaGridFragment {
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
     }
+
+    @Override
+    public void updateMedia(ArrayList<Media> media) {
+        if (adapter != null) {
+            adapter.setMedia(media);
+        }
+    }
 }
