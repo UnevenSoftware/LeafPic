@@ -13,17 +13,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:windowActionBarOverlay="true" />
 
     <org.horaapps.leafpic.views.videoplayer.CustomExoPlayerView
         android:id="@+id/player_view"
@@ -34,6 +30,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="#88000000"
         android:orientation="vertical">
 
@@ -51,4 +48,13 @@
 
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:windowActionBarOverlay="true" />
+
+</RelativeLayout>

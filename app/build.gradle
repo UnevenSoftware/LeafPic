@@ -1,9 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 repositories {
     maven { url  "http://dl.bintray.com/dasar/maven" }
     maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
     maven { url "https://jitpack.io" }
+    mavenCentral()
 }
 
 
@@ -13,9 +15,11 @@ android {
         applicationId "org.horaapps.leafpic"
         minSdkVersion 19
         targetSdkVersion project.sdkVersion
-        versionName "v0.7-alpha-1"
-        versionCode 15
+        versionName "v0.7-alpha-2"
+        versionCode 16
         vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled true
     }
 
     lintOptions {
@@ -132,6 +136,8 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
 
     // TODO check them out
     implementation 'com.turingtechnologies.materialscrollbar:lib:10.0.3'

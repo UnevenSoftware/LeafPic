@@ -25,7 +25,7 @@ import org.horaapps.leafpic.data.provider.CPHelper;
 import org.horaapps.leafpic.data.sort.MediaComparators;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-import org.horaapps.leafpic.fragments.BaseFragment;
+import org.horaapps.leafpic.fragments.BaseMediaGridFragment;
 import org.horaapps.leafpic.interfaces.MediaClickListener;
 import org.horaapps.leafpic.util.DeviceUtils;
 import org.horaapps.leafpic.util.preferences.Defaults;
@@ -42,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Fragment which shows the Timeline.
  */
-public class TimelineFragment extends BaseFragment {
+public class TimelineFragment extends BaseMediaGridFragment {
 
     public static final String TAG = "TimelineFragment";
 
