@@ -156,12 +156,20 @@ public class AlbumsFragment extends BaseMediaGridFragment {
                 : Prefs.getFolderColumnsLandscape();
     }
 
-    private void updateToolbar() {
-        if (getEditModeListener() != null) {
-            if (editMode())
-                getEditModeListener().changedEditMode(true, adapter.getSelectedCount(), adapter.getItemCount(), v -> adapter.clearSelected(), null);
-            else getEditModeListener().changedEditMode(false, 0, 0, null, null);
-        }
+    @Override
+    public int getTotalCount() {
+        return adapter.getItemCount();
+    }
+
+    @Override
+    public View.OnClickListener getToolbarButtonListener(boolean editMode) {
+        if (editMode) return null;
+        else return v -> adapter.clearSelected();
+    }
+
+    @Override
+    public String getToolbarTitle() {
+        return null;
     }
 
     @Nullable

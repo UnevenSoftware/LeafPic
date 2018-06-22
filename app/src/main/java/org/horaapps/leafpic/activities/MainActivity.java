@@ -95,6 +95,7 @@ public class MainActivity extends SharedMediaActivity implements
 
     private AlbumsFragment albumsFragment;
     private RvMediaFragment rvMediaFragment;
+    private TimelineFragment timelineFragment;
 
     private boolean pickMode = false;
     private Unbinder unbinder;
@@ -146,6 +147,7 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     private void initAlbumsFragment() {
+        unreferenceFragments();
         albumsFragment = new AlbumsFragment();
     }
 
@@ -168,6 +170,7 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     public void displayMedia(Album album) {
+        unreferenceFragments();
         rvMediaFragment = RvMediaFragment.make(album);
 
         fragmentMode = FragmentMode.MODE_MEDIA;
@@ -183,13 +186,14 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     public void displayTimeline(Album album) {
-        TimelineFragment fragment = TimelineFragment.newInstance(album);
+        unreferenceFragments();
+        timelineFragment = TimelineFragment.Companion.newInstance(album);
 
         fragmentMode = FragmentMode.MODE_TIMELINE;
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content, fragment, TimelineFragment.TAG)
+                .replace(R.id.content, timelineFragment, TimelineFragment.TAG)
                 .addToBackStack(null)
                 .commit();
 
@@ -267,12 +271,22 @@ public class MainActivity extends SharedMediaActivity implements
     }
 
     public void goBackToAlbums() {
+        unreferenceFragments();
         fragmentMode = FragmentMode.MODE_ALBUMS;
         unlockNavigationDrawer();
         getSupportFragmentManager().popBackStack();
         albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag(AlbumsFragment.TAG);
         selectNavigationItem(NAVIGATION_ITEM_ALL_ALBUMS);
         showDefaultToolbar();
+    }
+
+    private void unreferenceFragments() {
+        // TODO Calvin: This is a hack for the current back button behavior.
+        // Refactor the logic to avoid these member variables.
+        // Allow the GC to reclaim the fragments for now
+        timelineFragment = null;
+        rvMediaFragment = null;
+        albumsFragment = null;
     }
 
     private void initUi() {
@@ -527,7 +541,7 @@ public class MainActivity extends SharedMediaActivity implements
                 else finish();
             }
 
-        } else if (inTimelineMode()) {
+        } else if (inTimelineMode() && !timelineFragment.onBackPressed()) {
             goBackToAlbums();
 
         } else if (inMediaMode() && !rvMediaFragment.onBackPressed()) {

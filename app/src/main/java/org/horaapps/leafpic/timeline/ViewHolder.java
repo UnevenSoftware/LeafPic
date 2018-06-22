@@ -83,7 +83,7 @@ public class ViewHolder {
             this.placeholderImage = placeholder;
         }
 
-        void bind(@NonNull Media mediaItem) {
+        void bind(@NonNull Media mediaItem, boolean isSelected) {
             // TODO: Refactor this logic!
             icon.setVisibility(View.GONE);
             gifIcon.setVisibility(mediaItem.isGif() ? View.VISIBLE : View.GONE);
@@ -115,7 +115,7 @@ public class ViewHolder {
                 path.animate().alpha(0).setDuration(250);
             }
 
-            if (mediaItem.isSelected()) {
+            if (isSelected) {
                 icon.setIcon(CommunityMaterial.Icon.cmd_check);
                 icon.setVisibility(View.VISIBLE);
                 imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);

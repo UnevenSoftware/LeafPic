@@ -105,6 +105,8 @@ public class Media implements TimelineItem, CursorHandler, Parcelable {
         return mimeType;
     }
 
+    // TODO Calvin: Do not store adapter selection in a Media data class.
+    // This does not belong here.
     public boolean isSelected() {
         return selected;
     }

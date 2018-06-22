@@ -4,58 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.horaapps.leafpic.activities.MainActivity">
 
-    <item
-        android:id="@+id/timeline_menu_filter"
-        android:icon="@drawable/ic_filter"
-        android:title="@string/filter_menu_title"
-        app:showAsAction="ifRoom">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/all_media_filter"
-                    android:checked="true"
-                    android:title="@string/all"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/video_media_filter"
-                    android:title="@string/videos"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/image_media_filter"
-                    android:title="@string/images"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/gifs_media_filter"
-                    android:title="@string/gifs"
-                    app:showAsAction="never" />
-            </group>
-        </menu>
-    </item>
-    <item
-        android:id="@+id/timeline_menu_grouping"
-        android:icon="@drawable/ic_group"
-        android:title="@string/timeline_grouping_menu_label"
-        app:showAsAction="ifRoom">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/timeline_grouping_day"
-                    android:checked="true"
-                    android:title="@string/timeline_grouping_menu_day"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/timeline_grouping_week"
-                    android:title="@string/timeline_grouping_menu_week"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/timeline_grouping_month"
-                    android:title="@string/timeline_grouping_menu_month"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/timeline_grouping_year"
-                    android:title="@string/timeline_grouping_menu_year"
-                    app:showAsAction="never" />
-            </group>
-        </menu>
-    </item>
+    <group android:id="@+id/timeline_view_items">
+
+        <item
+            android:id="@+id/timeline_menu_filter"
+            android:icon="@drawable/ic_filter"
+            android:title="@string/filter_menu_title"
+            app:showAsAction="ifRoom">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/all_media_filter"
+                        android:checked="true"
+                        android:title="@string/all"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/video_media_filter"
+                        android:title="@string/videos"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/image_media_filter"
+                        android:title="@string/images"
+                        app:showAsAction="never" />
+                    <item
+                        android:id="@+id/gifs_media_filter"
+                        android:title="@string/gifs"
+                        app:showAsAction="never" />
+                </group>
+            </menu>
+        </item>
+
+        <item
+            android:id="@+id/timeline_menu_grouping"
+            android:icon="@drawable/ic_group"
+            android:title="@string/timeline_grouping_menu_label"
+            app:showAsAction="ifRoom">
+
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/timeline_grouping_day"
+                        android:checked="true"
+                        android:title="@string/timeline_grouping_menu_day"
+                        app:showAsAction="never" />
+
+                    <item
+                        android:id="@+id/timeline_grouping_week"
+                        android:title="@string/timeline_grouping_menu_week"
+                        app:showAsAction="never" />
+
+                    <item
+                        android:id="@+id/timeline_grouping_month"
+                        android:title="@string/timeline_grouping_menu_month"
+                        app:showAsAction="never" />
+
+                    <item
+                        android:id="@+id/timeline_grouping_year"
+                        android:title="@string/timeline_grouping_menu_year"
+                        app:showAsAction="never" />
+
+                </group>
+
+            </menu>
+
+        </item>
+
+    </group>
+
+    <group android:id="@+id/timeline_edit_items">
+
+        <item
+            android:id="@+id/timeline_share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/share"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/timeline_menu_delete"
+            android:icon="@drawable/ic_delete"
+            android:title="@string/delete"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/timeline_menu_exclude"
+            android:title="@string/exclude"
+            android:visible="false"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/timeline_menu_shortcut"
+            android:title="@string/install_shortcut"
+            android:visible="false"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/timeline_menu_hide"
+            android:title="@string/hide"
+            android:visible="false"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/timeline_menu_select_all"
+            android:icon="@drawable/ic_select_all"
+            android:title="@string/select_all"
+            app:showAsAction="ifRoom" />
+
+    </group>
+
 </menu>
