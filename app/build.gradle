@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 repositories {
-    maven { url  "http://dl.bintray.com/dasar/maven" }
+    maven { url "https://dl.bintray.com/dasar/maven" }
     maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
     maven { url "https://jitpack.io" }
     mavenCentral()
