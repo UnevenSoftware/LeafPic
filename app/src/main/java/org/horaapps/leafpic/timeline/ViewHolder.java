@@ -13,6 +13,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
@@ -102,6 +103,7 @@ public class ViewHolder {
                     .into(imageView);
 
             if (mediaItem.isVideo()) {
+                icon.setIcon(GoogleMaterial.Icon.gmd_play_circle_filled);
                 icon.setVisibility(View.VISIBLE);
                 path.setVisibility(View.VISIBLE);
                 path.setText(mediaItem.getName());
