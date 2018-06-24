@@ -17,6 +17,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Album;
@@ -193,6 +194,7 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
                 .into(holder.imageView);
 
         if (f.isVideo()) {
+            holder.icon.setIcon(GoogleMaterial.Icon.gmd_play_circle_filled);
             holder.icon.setVisibility(View.VISIBLE);
             holder.path.setVisibility(View.VISIBLE);
             holder.path.setText(f.getName());

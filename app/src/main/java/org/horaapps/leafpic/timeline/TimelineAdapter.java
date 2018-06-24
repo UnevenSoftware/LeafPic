@@ -2,7 +2,6 @@ package org.horaapps.leafpic.timeline;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,18 +13,19 @@ import android.view.ViewGroup;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.SortingOrder;
+import org.horaapps.leafpic.items.ActionsListener;
 import org.horaapps.leafpic.timeline.data.TimelineHeaderModel;
 import org.horaapps.leafpic.timeline.data.TimelineItem;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
+import java.util.Set;
 
 import static org.horaapps.leafpic.timeline.ViewHolder.TimelineHeaderViewHolder;
 import static org.horaapps.leafpic.timeline.ViewHolder.TimelineMediaViewHolder;
@@ -38,19 +38,27 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
     private List<TimelineItem> timelineItems;
     private ArrayList<Media> mediaItems;
-    private static Drawable mediaPlaceholder;
 
-    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
     private SortingOrder sortingOrder;
     private GroupingMode groupingMode;
     private int timelineGridSize;
 
-    public TimelineAdapter(@NonNull Context context, int timelineGridSize) {
+    private final ActionsListener actionsListener;
+
+    /**
+     * This set maintains the selected positions by user.
+     */
+    private Set<Integer> selectedPositions;
+
+    public TimelineAdapter(@NonNull Context context, ActionsListener actionsListener, int timelineGridSize) {
         super(context);
         timelineItems = new ArrayList<>();
         this.timelineGridSize = timelineGridSize;
 
         this.sortingOrder = SortingOrder.DESCENDING;
+        selectedPositions = new HashSet<>();
+
+        this.actionsListener = actionsListener;
     }
 
     public ArrayList<Media> getMedia() {
@@ -58,7 +66,49 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     }
 
     public boolean clearSelected() {
+        Set<Integer> oldSelections = new HashSet<>(selectedPositions);
+        selectedPositions.clear();
+        for (int selectedPos : oldSelections) notifyItemChanged(selectedPos);
         return true;
+    }
+
+    public int getSelectedCount() {
+        return selectedPositions.size();
+    }
+
+    public int getMediaCount() {
+        return mediaItems.size();
+    }
+
+    /**
+     * Get the list of Selected Media.
+     *
+     * @return A list containing the selected Media items.
+     */
+    public List<Media> getSelectedMedia() {
+        List<Media> selectedMedia = new ArrayList<>();
+        for (int selectedPos : selectedPositions) {
+            selectedMedia.add((Media) timelineItems.get(selectedPos));
+        }
+        return selectedMedia;
+    }
+
+    /**
+     * Select all elements within the Timeline view.
+     */
+    public void selectAll() {
+        int timelineItemSize = timelineItems.size();
+        for (int pos = 0; pos < timelineItemSize; pos++) {
+
+            TimelineItem timelineItem = getItem(pos);
+            if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) continue;
+
+            // Select the element
+            selectedPositions.add(pos);
+        }
+
+        notifyDataSetChanged();
+        actionsListener.onSelectionCountChanged(selectedPositions.size(), mediaItems.size());
     }
 
     /**
@@ -85,8 +135,9 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
         this.timelineGridSize = timelineGridSize;
     }
 
+    @NonNull
     @Override
-    public ViewHolder.TimelineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder.TimelineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         if (viewType == TimelineItem.TYPE_HEADER) {
             return new TimelineHeaderViewHolder(LayoutInflater.from(context).inflate(
@@ -94,15 +145,13 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
                     parent,
                     false));
 
-        } else if (viewType == TimelineItem.TYPE_MEDIA) {
-            return new TimelineMediaViewHolder(LayoutInflater.from(context).inflate(
-                    R.layout.card_photo,
-                    parent,
-                    false),
-                    ThemeHelper.getPlaceHolder(context));
-        }
-        return null;
+        } else return new TimelineMediaViewHolder(LayoutInflater.from(context).inflate(
+                R.layout.card_photo,
+                parent,
+                false),
+                ThemeHelper.getPlaceHolder(context));
     }
+
 
     public void setGridLayoutManager(GridLayoutManager gridLayoutManager) {
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -123,12 +172,8 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
         timelineItems.clear();
     }
 
-    public boolean selecting() {
-        return false;
-    }
-
-    public Observable<Integer> getClicks() {
-        return onClickSubject;
+    public boolean isSelecting() {
+        return !selectedPositions.isEmpty();
     }
 
     @Override
@@ -149,25 +194,73 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
         if (viewHolder instanceof TimelineHeaderViewHolder) {
             TimelineHeaderViewHolder headerViewHolder = (TimelineHeaderViewHolder) viewHolder;
             headerViewHolder.bind((TimelineHeaderModel) timelineItem);
+
         } else if (viewHolder instanceof TimelineMediaViewHolder) {
             TimelineMediaViewHolder mediaHolder = (TimelineMediaViewHolder) viewHolder;
-            mediaHolder.bind((Media) timelineItem);
+            mediaHolder.bind((Media) timelineItem, selectedPositions.contains(position));
 
             mediaHolder.layout.setOnClickListener(v -> {
-                // Find this element's position in Media Items
-                for (int pos = 0; pos < mediaItems.size(); pos++) {
-                    Media mediaItem = mediaItems.get(pos);
-                    if (mediaItem.equals(timelineItem)) {
-                        onClickSubject.onNext(pos);
-                        return;
-                    }
-                }
+                if (isSelecting()) triggerSelection(mediaHolder.getAdapterPosition());
+                else displayMedia(timelineItem);
             });
+
+            mediaHolder.layout.setOnLongClickListener(v -> {
+                if (isSelecting()) triggerSelectionAllUpTo(mediaHolder.getAdapterPosition());
+                else triggerSelection(mediaHolder.getAdapterPosition());
+                return true;
+            });
+        }
+    }
+
+    private void displayMedia(TimelineItem timelineItem) {
+        for (int pos = 0; pos < mediaItems.size(); pos++) {
+            Media mediaItem = mediaItems.get(pos);
+            if (mediaItem.equals(timelineItem)) {
+                actionsListener.onItemSelected(pos);
+                return;
+            }
+        }
+    }
+
+    private void triggerSelection(int elementPos) {
+        int oldCount = selectedPositions.size();
+
+        if (selectedPositions.contains(elementPos)) selectedPositions.remove(elementPos);
+        else selectedPositions.add(elementPos);
+
+        if (oldCount == 0 && isSelecting()) actionsListener.onSelectMode(true);
+        else if (oldCount == 1 && !isSelecting()) actionsListener.onSelectMode(false);
+        else actionsListener.onSelectionCountChanged(selectedPositions.size(), mediaItems.size());
+
+        notifyItemChanged(elementPos);
+    }
+
+    private void triggerSelectionAllUpTo(int elemPos) {
+
+        int indexRightBeforeOrAfter = -1, minOffset = Integer.MAX_VALUE;
+
+        for (Integer selectedPosition : selectedPositions) {
+            int offset = Math.abs(elemPos - selectedPosition);
+            if (offset < minOffset) {
+                minOffset = offset;
+                indexRightBeforeOrAfter = selectedPosition;
+            }
+        }
+
+        if(indexRightBeforeOrAfter != -1) {
+            for (int index = Math.min(elemPos, indexRightBeforeOrAfter); index <= Math.max(elemPos, indexRightBeforeOrAfter); index++) {
+                if (timelineItems.get(index) != null && timelineItems.get(index) instanceof Media) {
+                    selectedPositions.add(index);
+                    notifyItemChanged(index);
+                }
+            }
+            actionsListener.onSelectionCountChanged(selectedPositions.size(), mediaItems.size());
         }
     }
 
     public void setMedia(@NonNull ArrayList<Media> mediaList) {
         mediaItems = mediaList;
+        selectedPositions.clear();
         buildTimelineItems();
     }
 
@@ -211,6 +304,25 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     @Override
     public int getItemCount() {
         return timelineItems.size();
+    }
+
+    /**
+     * Removes an item from this Timeline adapter.
+     *
+     * @param item The item to remove.
+     */
+    public void removeItem(@Nullable Media item) {
+        for (int pos = 0; pos < timelineItems.size(); pos++) {
+            TimelineItem timelineItem = timelineItems.get(pos);
+            if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) continue;
+
+            Media mediaItem = (Media) timelineItem;
+            if (!mediaItem.equals(item)) continue;
+
+            timelineItems.remove(pos);
+            notifyItemRemoved(pos);
+            break;
+        }
     }
 
     public static class TimelineItemDecorator extends RecyclerView.ItemDecoration {

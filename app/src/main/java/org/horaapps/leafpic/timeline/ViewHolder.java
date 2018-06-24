@@ -13,6 +13,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
@@ -83,7 +84,7 @@ public class ViewHolder {
             this.placeholderImage = placeholder;
         }
 
-        void bind(@NonNull Media mediaItem) {
+        void bind(@NonNull Media mediaItem, boolean isSelected) {
             // TODO: Refactor this logic!
             icon.setVisibility(View.GONE);
             gifIcon.setVisibility(mediaItem.isGif() ? View.VISIBLE : View.GONE);
@@ -102,6 +103,7 @@ public class ViewHolder {
                     .into(imageView);
 
             if (mediaItem.isVideo()) {
+                icon.setIcon(GoogleMaterial.Icon.gmd_play_circle_filled);
                 icon.setVisibility(View.VISIBLE);
                 path.setVisibility(View.VISIBLE);
                 path.setText(mediaItem.getName());
@@ -115,7 +117,7 @@ public class ViewHolder {
                 path.animate().alpha(0).setDuration(250);
             }
 
-            if (mediaItem.isSelected()) {
+            if (isSelected) {
                 icon.setIcon(CommunityMaterial.Icon.cmd_check);
                 icon.setVisibility(View.VISIBLE);
                 imageView.setColorFilter(0x88000000, PorterDuff.Mode.SRC_ATOP);

@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -53,9 +52,8 @@ import org.horaapps.leafpic.util.Affix;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.DeviceUtils;
-import org.horaapps.leafpic.util.LegacyCompatFileProvider;
 import org.horaapps.leafpic.util.Measure;
-import org.horaapps.leafpic.util.MimeTypeUtils;
+import org.horaapps.leafpic.util.MediaUtils;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
@@ -65,9 +63,7 @@ import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -217,13 +213,20 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                 : Prefs.getMediaColumnsLandscape();
     }
 
-    private void updateToolbar() {
-        if (getEditModeListener() != null) {
-            if (editMode())
-                getEditModeListener().changedEditMode(true, adapter.getSelectedCount(), adapter.getItemCount(), v -> adapter.clearSelected(), null);
+    @Override
+    public int getTotalCount() {
+        return adapter.getItemCount();
+    }
 
-            else getEditModeListener().changedEditMode(false, 0, 0, null, album.getName());
-        }
+    @Override
+    public View.OnClickListener getToolbarButtonListener(boolean editMode) {
+        if (editMode) return null;
+        else return v -> adapter.clearSelected();
+    }
+
+    @Override
+    public String getToolbarTitle() {
+        return editMode() ? null : album.getName();
     }
 
     public SortingMode sortingMode() {
@@ -317,40 +320,7 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                 return true;
 
             case R.id.sharePhotos:
-                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-
-                HashMap<String, Integer> types = new HashMap<>();
-                ArrayList<Uri> files = new ArrayList<>();
-
-                for (Media f : adapter.getSelected()) {
-                    String mimeType = MimeTypeUtils.getTypeMime(f.getMimeType());
-                    int count = 0;
-                    if (types.containsKey(mimeType)) {
-                        count = types.get(mimeType);
-                    }
-                    types.put(mimeType, count);
-                    files.add(LegacyCompatFileProvider.getUri(getContext(), f.getFile()));
-                }
-
-                Set<String> fileTypes = types.keySet();
-                if (fileTypes.size() > 1) {
-                    Toast.makeText(getContext(), R.string.waring_share_multiple_file_types, Toast.LENGTH_SHORT).show();
-                }
-
-                int max = -1;
-                String type = null;
-                for (String fileType : fileTypes) {
-                    Integer count = types.get(fileType);
-                    if (count > max) {
-                        type = fileType;
-                    }
-                }
-
-                intent.setType(type + "/*");
-
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
+                MediaUtils.shareMedia(getContext(), adapter.getSelected());
                 return true;
 
             case R.id.set_as_cover:
@@ -641,15 +611,8 @@ public class RvMediaFragment extends BaseMediaGridFragment {
     }
 
     private void showDeleteBottomSheet() {
-        ArrayList<Media> selected = adapter.getSelected();
-        ArrayList<io.reactivex.Observable<Media>> sources = new ArrayList<>(selected.size());
-        for (Media media : selected)
-            sources.add(MediaHelper.deleteMedia(getContext().getApplicationContext(), media));
-
-        ProgressBottomSheet<Media> bottomSheet = new ProgressBottomSheet.Builder<Media>(R.string.delete_bottom_sheet_title)
-                .autoDismiss(false)
-                .sources(sources)
-                .listener(new ProgressBottomSheet.Listener<Media>() {
+        MediaUtils.deleteMedia(getContext(), adapter.getSelected(), getChildFragmentManager(),
+                new ProgressBottomSheet.Listener<Media>() {
                     @Override
                     public void onCompleted() {
                         adapter.invalidateSelectedCount();
@@ -659,10 +622,7 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                     public void onProgress(Media item) {
                         adapter.removeSelectedMedia(item);
                     }
-                })
-                .build();
-
-        bottomSheet.showNow(getChildFragmentManager(), null);
+                });
     }
 
     public int getCount() {
