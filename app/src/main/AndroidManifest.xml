@@ -29,7 +29,7 @@
             android:name=".activities.PlayerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/video_player"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
