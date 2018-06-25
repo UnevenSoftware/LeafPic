@@ -18,7 +18,7 @@ android {
         versionName "v0.7-alpha-2"
         versionCode 16
         vectorDrawables.useSupportLibrary = true
-
+        resConfigs "en"
         multiDexEnabled true
     }
 
