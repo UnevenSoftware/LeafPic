@@ -1,7 +1,5 @@
 package org.horaapps.leafpic;
 
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.support.multidex.MultiDexApplication;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -14,15 +12,11 @@ import com.squareup.leakcanary.LeakCanary;
 import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 
-import java.util.Locale;
-
-import static org.horaapps.leafpic.settings.ChangedLocale.getLocale;
-
 /**
  * Created by dnld on 28/04/16.
  */
 public class App extends MultiDexApplication {
-    public static boolean switchChecked = false;
+
     private static App mInstance;
     @Override
     public void onCreate() {
@@ -42,28 +36,6 @@ public class App extends MultiDexApplication {
 
         registerFontIcons();
         initialiseStorage();
-        setLocale();
-    }
-    public static void setSwitchChecked(boolean switchChecked) {
-        App.switchChecked = switchChecked;
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setLocale();
-    }
-
-    public void setLocale() {
-        if (switchChecked) {
-            final Resources resources = getResources();
-            final Configuration configuration = resources.getConfiguration();
-
-            final Locale locale = getLocale(this);
-            if (!configuration.locale.equals(locale)) {
-                configuration.setLocale(locale);
-                resources.updateConfiguration(configuration, null);
-            }
-        }
     }
 
     public static App getInstance() {

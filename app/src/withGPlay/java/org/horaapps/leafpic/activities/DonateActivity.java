@@ -27,13 +27,13 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.inapppurchase.IabHelper;
 import org.horaapps.leafpic.util.inapppurchase.IabResult;
 import org.horaapps.leafpic.util.inapppurchase.Purchase;
-import org.horaapps.liz.ThemedActivity;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by Jibo on 02/03/2016.
  */
-public class DonateActivity extends ThemedActivity {
+public class DonateActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private ChromeCustomTabs cts;

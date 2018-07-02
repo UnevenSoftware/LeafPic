@@ -22,11 +22,11 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.DonateActivity;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.leafpic.util.AlertDialogsHelper;
 import org.horaapps.leafpic.util.ApplicationUtils;
 import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.preferences.Prefs;
-import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedTextView;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ import static org.horaapps.leafpic.util.ServerConstants.TWITTER_ABOUT_GILBERT;
  * - Translators
  * - Relevant app links
  */
-public class AboutActivity extends ThemedActivity implements ContactListener {
+public class AboutActivity extends BaseActivity implements ContactListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.about_version_item_sub) ThemedTextView appVersion;

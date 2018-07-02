@@ -104,10 +104,9 @@
                         android:id="@+id/option_language"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="onClickEnglish"
                         app:settingCaption="@string/option_change_language_sub"
-                        app:settingIcon="gmd-info"
-                        app:settingPreferenceKey="@string/preference_show_tips"
+                        app:settingIcon="gmd-translate"
+                        app:settingPreferenceKey="@string/preference_force_english"
                         app:settingTitle="@string/option_change_language" />
                 </LinearLayout>
             </org.horaapps.leafpic.views.themeable.ThemedCardView>

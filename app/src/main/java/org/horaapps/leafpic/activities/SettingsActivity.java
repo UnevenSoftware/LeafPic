@@ -17,15 +17,16 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.leafpic.settings.CardViewStyleSetting;
 import org.horaapps.leafpic.settings.ColorsSetting;
 import org.horaapps.leafpic.settings.GeneralSetting;
 import org.horaapps.leafpic.settings.MapProviderSetting;
 import org.horaapps.leafpic.settings.SinglePhotoSetting;
 import org.horaapps.leafpic.util.Security;
+import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.SettingWithSwitchView;
 import org.horaapps.liz.ColorPalette;
-import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ViewUtil;
 
 import butterknife.BindView;
@@ -36,7 +37,7 @@ import butterknife.Unbinder;
 /**
  * The Settings Activity used to select settings.
  */
-public class SettingsActivity extends ThemedActivity {
+public class SettingsActivity extends BaseActivity {
     private Toolbar toolbar;
 
     @BindView(R.id.option_max_brightness) SettingWithSwitchView optionMaxBrightness;
@@ -99,6 +100,7 @@ public class SettingsActivity extends ThemedActivity {
         }
         ScrollView scrollView = findViewById(R.id.settingAct_scrollView);
         setScrollViewColor(scrollView);
+        setTitle(R.string.settings);
     }
 
     @Override
@@ -213,6 +215,13 @@ public class SettingsActivity extends ThemedActivity {
                 updateUiElements();
             }
         }, getAccentColor());
+    }
+
+    @OnClick(R.id.option_language)
+    public void forceEnglishChanged() {
+        if(Prefs.forceEnglish()) forceEnglish();
+        else restoreDefaultLocale();
+        Toast.makeText(getApplicationContext(), R.string.restart_app, Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.ll_custom_icon_color)

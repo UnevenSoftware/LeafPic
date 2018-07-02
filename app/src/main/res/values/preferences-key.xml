@@ -16,6 +16,7 @@
     <string name="preference_transparency">set_alpha</string>
     <string name="preference_map_provider">map_provider</string>
     <string name="preference_show_tips">show_tips</string>
+    <string name="preference_force_english">force_english_locale</string>
     <string name="preference_custom_icon_color">custom_icon_color</string>
 
     <string name="preference_internal_uri_extsdcard_photos">uri_extsdcard_photos</string>

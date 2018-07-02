@@ -22,8 +22,8 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.liz.ThemedActivity;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * The Palette Activity used to analyze the colors in the picture.
  */
 
-public class PaletteActivity extends ThemedActivity {
+public class PaletteActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private ImageView paletteImg;

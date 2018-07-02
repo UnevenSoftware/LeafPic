@@ -30,6 +30,7 @@ public final class Defaults {
     public static final boolean SHOW_ALBUM_PATH = false;
 
     public static final int LAST_VERSION_CODE = 0;
+    public static final boolean FORCE_ENGLISH = false;
     public static final boolean SHOW_EASTER_EGG = false;
 
     public static final boolean ANIMATIONS_DISABLED = false;

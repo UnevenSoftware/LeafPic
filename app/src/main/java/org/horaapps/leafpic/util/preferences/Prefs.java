@@ -132,6 +132,10 @@ public class Prefs {
         return getPrefs().get(Keys.LAST_VERSION_CODE, Defaults.LAST_VERSION_CODE);
     }
 
+    public static boolean forceEnglish() {
+        return getPrefs().get(Keys.FORCE_ENGLISH, Defaults.FORCE_ENGLISH);
+    }
+
     /********** SETTERS **********/
 
     /**
