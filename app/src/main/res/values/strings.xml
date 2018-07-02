@@ -190,6 +190,8 @@
     <string name="disable_animations_sub">Disable animations if there are performance issues.</string>
     <string name="enable_timeline_title">Enable Timeline</string>
     <string name="enable_timeline_desc">Enable the Timeline view for media. Experimental.</string>
+    <string name="option_change_language_sub">Change language to English</string>
+    <string name="option_change_language">Language</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>
