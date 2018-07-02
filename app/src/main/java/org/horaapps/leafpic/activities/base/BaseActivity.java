@@ -28,7 +28,7 @@ public abstract class BaseActivity extends ThemedActivity {
     }
 
     public void forceEnglish() {
-        changeLocale(new Locale("it"));
+        changeLocale(new Locale("en"));
     }
 
     public void restoreDefaultLocale() {
