@@ -83,6 +83,7 @@ public class AboutActivity extends BaseActivity implements ContactListener {
         chromeTabs = new ChromeCustomTabs(AboutActivity.this);
 
         initUi();
+        setTitle(R.string.about);
     }
 
     @Override

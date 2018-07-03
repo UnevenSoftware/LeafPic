@@ -31,10 +31,6 @@ public abstract class BaseActivity extends ThemedActivity {
         changeLocale(new Locale("en"));
     }
 
-    public void restoreDefaultLocale() {
-        changeLocale(Locale.getDefault());
-    }
-
     private void changeLocale(Locale locale) {
         Configuration configuration = getResources().getConfiguration();
         Locale currentLocale;

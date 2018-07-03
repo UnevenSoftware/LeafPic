@@ -64,7 +64,7 @@ public class DonateActivity extends BaseActivity {
         setContentView(org.horaapps.leafpic.R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         bar = (SeekBar) findViewById(R.id.seek_bar_donations);
-
+        setTitle(R.string.donate);
         setNavBarColor();
         cts = new ChromeCustomTabs(this);
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);

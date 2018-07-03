@@ -48,7 +48,7 @@ public class PaletteActivity extends BaseActivity {
         setContentView(R.layout.activity_palette);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         paletteImg = (ImageView) findViewById(R.id.palette_image);
-
+        setTitle(R.string.palette);
         setSupportActionBar(toolbar);
         uri = getIntent().getData();
         paletteImg.setImageURI(null);

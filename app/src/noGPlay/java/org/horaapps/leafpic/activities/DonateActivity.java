@@ -45,6 +45,7 @@ public class DonateActivity extends BaseActivity {
         btnDonatePP = findViewById(R.id.button_donate_paypal);
 
         iniUi();
+        setTitle(R.string.donate);
         cts = new ChromeCustomTabs(DonateActivity.this);
     }
 

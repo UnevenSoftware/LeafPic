@@ -24,7 +24,6 @@ import org.horaapps.leafpic.settings.GeneralSetting;
 import org.horaapps.leafpic.settings.MapProviderSetting;
 import org.horaapps.leafpic.settings.SinglePhotoSetting;
 import org.horaapps.leafpic.util.Security;
-import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.leafpic.views.SettingWithSwitchView;
 import org.horaapps.liz.ColorPalette;
 import org.horaapps.liz.ViewUtil;
@@ -219,8 +218,6 @@ public class SettingsActivity extends BaseActivity {
 
     @OnClick(R.id.option_language)
     public void forceEnglishChanged() {
-        if(Prefs.forceEnglish()) forceEnglish();
-        else restoreDefaultLocale();
         Toast.makeText(getApplicationContext(), R.string.restart_app, Toast.LENGTH_SHORT).show();
     }
 

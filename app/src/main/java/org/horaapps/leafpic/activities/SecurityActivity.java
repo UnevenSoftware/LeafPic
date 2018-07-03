@@ -54,6 +54,7 @@ public class SecurityActivity extends BaseActivity {
         llFingerprint = (LinearLayout) findViewById(R.id.ll_active_security_fingerprint);
 
         initUi();
+        setTitle(R.string.security);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fingerprintHandler = new FingerprintHandler(this, null);
             if(fingerprintHandler.isFingerprintSupported()){
