@@ -70,6 +70,11 @@ public class MediaHelper {
     }
 
     public static boolean renameMedia(Context context, Media media, String newName) {
+        // return if filename didn't change
+        String oldFilename = media.getName();
+        if (oldFilename.equals(newName))
+            return true;
+
         boolean success = false;
         try {
             File from = new File(media.getPath());
