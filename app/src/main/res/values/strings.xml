@@ -103,7 +103,7 @@
     <string name="unhide_album_message">Unhiding this album will also make the media available for other apps.</string>
 
     <string name="new_folder_message">The new folder will be created in the current path, and the media will then be copied or moved in the new folder.</string>
-    <string name="card_style_alert">NOTE: Restart the app for the changes to take effect.</string>
+    <string name="restart_app">NOTE: Restart the app for the changes to take effect.</string>
     <string name="show_album_path">Show album path</string>
     <string name="show_preview_image_name">Show preview image name</string>
     <string name="show_media_count">Show media count</string>
@@ -190,6 +190,8 @@
     <string name="disable_animations_sub">Disable animations if there are performance issues.</string>
     <string name="enable_timeline_title">Enable Timeline</string>
     <string name="enable_timeline_desc">Enable the Timeline view for media. Experimental.</string>
+    <string name="option_change_language_sub">Change language to English</string>
+    <string name="option_change_language">Language</string>
 
     <string name="media_viewer">Media Viewer</string>
     <string name="media_viewer_theme">Media Viewer Theme</string>

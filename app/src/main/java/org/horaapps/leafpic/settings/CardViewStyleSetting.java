@@ -155,7 +155,7 @@ public class CardViewStyleSetting extends ThemedSetting {
                 Prefs.setCardStyle(cardViewStyle);
                 Prefs.setShowMediaCount(chkShowMediaCount.isChecked());
                 Prefs.setShowAlbumPath(chkShowAlbumPath.isChecked());
-                Toast.makeText(getActivity(), getActivity().getString(R.string.card_style_alert), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getString(R.string.restart_app), Toast.LENGTH_SHORT).show();
             }
         });
         builder.setView(dialogLayout);

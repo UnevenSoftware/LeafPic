@@ -27,6 +27,7 @@ public final class Keys {
     public static final String SHOW_EASTER_EGG = "show_easter_egg";
 
     public static final String ANIMATIONS_DISABLED = "disable_animations";
+    public static final String FORCE_ENGLISH = "force_english_locale";
 
     // Feature flags
     public static final String TIMELINE_ENABLED = "enable_timeline";

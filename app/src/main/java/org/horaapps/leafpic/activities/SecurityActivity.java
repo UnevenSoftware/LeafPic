@@ -19,17 +19,17 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.orhanobut.hawk.Hawk;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.leafpic.util.FingerprintHandler;
 import org.horaapps.leafpic.util.Security;
 import org.horaapps.liz.ThemeHelper;
-import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by dnld on 22/05/16.
  * The Security Activity used to select the locking method.
  */
-public class SecurityActivity extends ThemedActivity {
+public class SecurityActivity extends BaseActivity {
 
     private Toolbar toolbar;
 
@@ -54,6 +54,7 @@ public class SecurityActivity extends ThemedActivity {
         llFingerprint = (LinearLayout) findViewById(R.id.ll_active_security_fingerprint);
 
         initUi();
+        setTitle(R.string.security);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fingerprintHandler = new FingerprintHandler(this, null);
             if(fingerprintHandler.isFingerprintSupported()){

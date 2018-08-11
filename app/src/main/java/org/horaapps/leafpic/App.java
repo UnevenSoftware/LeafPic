@@ -18,7 +18,6 @@ import org.horaapps.leafpic.util.preferences.Prefs;
 public class App extends MultiDexApplication {
 
     private static App mInstance;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -28,6 +27,8 @@ public class App extends MultiDexApplication {
 
         /** This process is dedicated to LeakCanary for heap analysis.
          *  You should not init your app in this process. */
+
+        
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }

@@ -78,19 +78,19 @@ import com.google.android.exoplayer2.util.Util;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.leafpic.util.Measure;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.videoplayer.CustomExoPlayerView;
 import org.horaapps.leafpic.views.videoplayer.CustomPlayBackController;
 import org.horaapps.leafpic.views.videoplayer.TrackSelectionHelper;
-import org.horaapps.liz.ThemedActivity;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.UUID;
 
-public class PlayerActivity extends ThemedActivity implements CustomPlayBackController.VisibilityListener {
+public class PlayerActivity extends BaseActivity implements CustomPlayBackController.VisibilityListener {
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
     public static final String DRM_LICENSE_URL = "drm_license_url";

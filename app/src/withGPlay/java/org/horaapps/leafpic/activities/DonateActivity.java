@@ -27,13 +27,13 @@ import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.inapppurchase.IabHelper;
 import org.horaapps.leafpic.util.inapppurchase.IabResult;
 import org.horaapps.leafpic.util.inapppurchase.Purchase;
-import org.horaapps.liz.ThemedActivity;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by Jibo on 02/03/2016.
  */
-public class DonateActivity extends ThemedActivity {
+public class DonateActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private ChromeCustomTabs cts;
@@ -64,7 +64,7 @@ public class DonateActivity extends ThemedActivity {
         setContentView(org.horaapps.leafpic.R.layout.activity_donate);
         toolbar = (Toolbar) findViewById(org.horaapps.leafpic.R.id.toolbar);
         bar = (SeekBar) findViewById(R.id.seek_bar_donations);
-
+        setTitle(R.string.donate);
         setNavBarColor();
         cts = new ChromeCustomTabs(this);
         scr = (ScrollView)findViewById(org.horaapps.leafpic.R.id.donateAct_scrollView);

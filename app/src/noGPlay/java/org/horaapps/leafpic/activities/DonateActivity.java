@@ -17,15 +17,15 @@ import android.widget.TextView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.horaapps.leafpic.R;
+import org.horaapps.leafpic.activities.base.BaseActivity;
 import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.StringUtils;
-import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
 
 /**
  * Created by Jibo on 02/03/2016.
  */
-public class DonateActivity extends ThemedActivity {
+public class DonateActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private ChromeCustomTabs cts;
@@ -45,6 +45,7 @@ public class DonateActivity extends ThemedActivity {
         btnDonatePP = findViewById(R.id.button_donate_paypal);
 
         iniUi();
+        setTitle(R.string.donate);
         cts = new ChromeCustomTabs(DonateActivity.this);
     }
 
