@@ -3,11 +3,11 @@ package org.horaapps.leafpic.data;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.media.ExifInterface;
 
 import com.bumptech.glide.signature.ObjectKey;
 import com.drew.lang.GeoLocation;

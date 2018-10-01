@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.orhanobut.hawk.Hawk;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ThemedActivity;

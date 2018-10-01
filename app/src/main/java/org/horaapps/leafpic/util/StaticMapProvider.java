@@ -4,8 +4,9 @@ import com.drew.lang.GeoLocation;
 
 import org.horaapps.leafpic.SecretConstants;
 
-// needed for Local.US
 import java.util.Locale;
+
+// needed for Local.US
 
 /**
  * Created by dnld on 04/09/16.
