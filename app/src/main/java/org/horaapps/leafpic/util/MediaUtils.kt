@@ -7,7 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.FragmentManager
 import android.widget.Toast
-import org.horaapps.leafpic.R
 import org.horaapps.leafpic.data.Media
 import org.horaapps.leafpic.data.MediaHelper
 import org.horaapps.leafpic.progress.ProgressBottomSheet

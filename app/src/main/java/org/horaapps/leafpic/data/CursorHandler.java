@@ -2,8 +2,6 @@ package org.horaapps.leafpic.data;
 
 import android.database.Cursor;
 
-import java.sql.SQLException;
-
 /**
  * Created by dnld on 3/13/17.
  */

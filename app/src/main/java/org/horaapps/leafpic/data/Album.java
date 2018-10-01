@@ -12,7 +12,6 @@ import org.horaapps.leafpic.data.sort.SortingOrder;
 import org.horaapps.leafpic.util.StringUtils;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
