@@ -97,8 +97,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.6.0'
 
     // utils
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0' //surumu 4.7.1 den 4.8.0 ya yukseltildi
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'  //surumu 4.7.1 den 4.8.0 ya yukseltildi
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     implementation 'com.github.Commit451:bypasses:1.1.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
@@ -134,8 +134,8 @@ dependencies {
     // debug Only
     //debugCompile project(':inappstoragereader')
     implementation 'cat.ereza:customactivityoncrash:2.2.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2' //1.5.4den 1.6.2 yeyukseltildi
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'  //1.5.4den 1.6.2 yeyukseltildi
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:multidex:1.0.3'
