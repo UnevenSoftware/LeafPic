@@ -3,28 +3,38 @@
 <resources>
   <!--LEAF PIC STRING'S-->
   <!--<string name="app_name">LeafPic</string>-->
-  <string name="app_light_description">Rengarenk bir materyal galeri.</string>
+  <string name="app_light_description">Rengarenk Bir Materyal Galeri.</string>
   <string name="team_name">HoraApps</string>
   <string name="welcome_slide_title">LeafPic\'e Hoşgeldiniz!</string>
-  <string name="welcome_slide_sub">Renkli madde düzenleme galerisi!</string>
+  <string name="welcome_slide_sub">Renkli Materyal Tasarım Galerisi!</string>
   <string name="made_with_love_by">Severek yapılan</string>
+
+
   <!--AUTHORS-->
   <string name="donald_role">Proje Yöneticisi</string>
   <string name="gilbert_role">Ana Tasarımcı</string>
+
+
+  <!--FINGERPRINT-->
+  <string name="fp_not_supported">Maalesef, parmak izi doğrulaması desteklenmiyor.</string>
+  <string name="fp_not_configured">Yapılandırılmış parmak izi yok. </string>
+  <string name="fp_not_enabled_sls">Güvenli kilit ekranı etkin değil.</string>
+
+
   <!-- ACTIONS -->
   <string name="sort">Sıralama</string>
   <string name="camera">Kamera</string>
-  <string name="exclude">Hariç tut</string>
+  <string name="exclude">Çıkar</string>
   <string name="cancel">İptal</string>
   <string name="delete">Sil</string>
   <string name="hide">Gizle</string>
   <string name="unhide">Göster</string>
   <string name="ok_action">TAMAM</string>
-  <string name="rename_photo_action">Fotoğrafı yeniden adlandır</string>
+  <string name="rename_photo_action">Fotoğrafı Yeniden adlandır</string>
   <string name="drawer_open">Navigasyon çekmecesini aç</string>
-  <string name="drawer_close">Navigasyon çekmecesini kapa</string>
+  <string name="drawer_close">Navigasyon çekmecesini kapat</string>
   <string name="refresh">Yenile</string>
-  <string name="sent_to_action">Şuraya gönder</string>
+  <string name="sent_to_action">Gönder</string>
   <string name="filter_menu_title">Filtre</string>
   <string name="all">Hepsi</string>
   <string name="videos">Video</string>
@@ -33,102 +43,146 @@
   <string name="sort_menu_title">Sıralama</string>
   <string name="name">İsim</string>
   <string name="date">Tarih</string>
-  <string name="date_taken">Çekildiği tarih</string>
+  <string name="date_taken">Çekildiği Tarih</string>
+
   <string name="size">Boyut</string>
   <string name="numeric">Sayı olarak</string>
   <string name="ascending">Küçükten Büyüğe</string>
+
   <string name="select_all">Hepsini Seç</string>
   <string name="clear_selected">Seçilenleri Temizle</string>
+
   <string name="share">Paylaş</string>
   <string name="rotate">Döndür</string>
   <string name="rotate_right_90">Sağa 90° Döndür</string>
-  <string name="rotate_left_90">Sola 90 ° Döndür</string>
+  <string name="rotate_left_90">Sola 90° Döndür</string>
   <string name="rotate_180">180° Döndür</string>
-  <string name="copy_to">Şuraya kopyala</string>
-  <string name="move_to">Şuraya taşı</string>
+  <string name="copy_to">Kopyala</string>
+  <string name="move_to">Taşı</string>
   <string name="use_as">Olarak kullanmak</string>
   <string name="edit">Düzenle</string>
-  <string name="fix_date">Tarihi düzelt</string>
+  <string name="fix_date">Tarihi Düzelt</string>
   <string name="rename">Yeniden Adlandır</string>
-  <string name="rename_album">Albümü yeniden adlandır</string>
+  <string name="rename_album">Albümü Yeniden Adlandır</string>
   <string name="details">Ayrıntılar</string>
   <string name="more">Daha Fazla</string>
   <string name="show_more">Daha Fazla Göster</string>
-  <string name="edit_with">İle Düzenle</string>
-  <string name="open_with">Birlikte aç</string>
-  <string name="upload">Karşıya yükle</string>
-  <string name="set_preview">Önizleme olarak ayarla</string>
-  <string name="clear_preview">Önizlemeyi temizle</string>
+  <string name="edit_with">Düzenle</string>
+  <string name="open_with">Birlikte Aç</string>
+  <string name="upload">Karşıya Yükle</string>
+  <string name="set_preview">Önizleme Olarak Ayarla</string>
+  <string name="clear_preview">Önizlemeyi Temizle</string>
   <string name="new_folder">Yeni Klasör</string>
-  <string name="create_new_folder">Yeni klasör oluştur</string>
+  <string name="create_new_folder">Yeni Klasör Oluştur</string>
+  <string name="view">Görünüm</string>
+
+
   <!--DIALOG MESSAGES-->
   <string name="delete_album_message">Seçili albümü silmek istediğinden emin misin?</string>
   <string name="delete_albums_message">Seçili albümleri silmek istediğinden emin misin?</string>
   <string name="delete_photo_message">Bu medyayı silmek istediğinizden emin misiniz?</string>
   <string name="delete_photos_message">Seçili medyaları silmek istediğinden emin misin?</string>
+  <string name="hide_album_message">Bu albümü gizlerken klasörde bir .nomedia dosyası oluşturacaktır. Bu, medyayı diğer uygulamalardan erişilemez hale getirebilir. Bunu yapmak istemiyorsanız Çıkar seçeneğini kullanın.</string>
   <string name="hide_albums_message">Seçilen albümleri gizlemek istediğinden emin misin? </string>
-  <string name="exclude_album_message">
-Bu klasörü hariç tutarak tüm alt klasörlerini de hariç tutmuş olursunuz. Aşağıda aynı seviyede olan tüm klasörlerin bir üst seçmenize olanak veren bir listesini bulabilirsiniz.    </string>
-  <string name="new_folder_message">Mevcut yolda yeni bir klasör oluşturulacak;
-        daha sonra medya yeni klasöre taşınacak veya kopyalanacak.
-    </string>
+  <string name="unhide_album_message">Bu albümü diğer uygulamalar için de kullanılabilir kılar.</string>
+  <string name="exclude_album_message">Bu klasörü çıkararak tüm alt klasörlerini de çıkarmış olursunuz. Aşağıda aynı seviyede olan tüm klasörlerin bir üst seçmenize olanak veren bir listesini bulabilirsiniz.    </string>
+  <string name="exclude_albums_message">Seçili albümleri çıkarmak istediğinizden emin misiniz?\nBu albümlerin üst öğelerini çıkarmak istiyorsanız, klasörün üst öğesini seçmesine izin vermek için açılır bir menü bulunduğunu unutmayın.</string>
+  <string name="new_folder_message">Mevcut yolda yeni bir klasör oluşturulacak.Daha sonra medya yeni klasöre taşınacak veya kopyalanacak.</string>
+  <string name="card_style_alert">NOT: Değişikliklerin etkili olması için uygulamayı yeniden başlatın.</string>
+
+  <string name="show_album_path">Albüm yolunu göster</string>
+  <string name="show_preview_image_name">Önizleme resmin adını göster</string>
+  <string name="show_media_count">Medya sayısını göster</string>
+  <string name="changelog">Değişiklikler</string>
+  <string name="album_path">Albüm Yolu</string>
+
+
   <!-- ITEMS -->
   <string name="singular_photo">Fotoğraf</string>
   <string name="plural_photos">Fotoğraflar</string>
-  <string name="video_player">Video oynatıcı</string>
+  <string name="video_player">Video Oynatıcı</string>
   <string name="media">Ortam</string>
-  <string name="send_to">Şuraya gönder</string>
+  <string name="send_to">Gönder</string>
   <string name="search_menu">Ara</string>
   <string name="full_resolution">Tam çözünürlük</string>
   <string name="of">/</string>
+
+  <!--PALETTE-->
+  <string name="palette">Palet</string>
+  <string name="colors">Renkler</string>
+  <string name="color">Renk</string>
+  <string name="copy_clipboard">Panoya kopyalandı</string>
+
+
   <!-- AFFIX -->
   <string name="affix">İliştir</string>
   <string name="affix_vertical">Dikey İliştir</string>
   <string name="affix_vertical_sub">Varsayılan olarak yatay yönü ayarlayın.</string>
   <string name="affix_save_here">Bu albüme kaydet</string>
   <string name="affix_save_here_sub">Sonuç bu albüme kaydedilecektir</string>
-  <string name="affix_format">Resim biçimi</string>
-  <string name="affix_format_sub">Kullanılabilir biçimler</string>
-  <string name="affix_text">Ortamınız iliştiriliyor, lütfen bekleyin...</string>
+  <string name="affix_format">Resim Biçimi</string>
+  <string name="affix_format_sub">Kullanılabilir Biçimler</string>
+  <string name="affix_text">Ortamınız iliştiriliyor, Lütfen Bekleyin...</string>
   <string name="affix_error">Video iliştiremezsiniz, en az 2 resim seçmelisiniz.</string>
   <string name="quality">Kalite</string>
+
+
   <!-- RANDOM -->
+  <string name="album">Albüm</string>
   <string name="done">Tamamdır!</string>
   <string name="there_is_nothing_to_show">Burada gösterilecek birşey yok</string>
   <string name="insert_a_name">Bir şey ekle</string>
   <string name="nothing_changed">Hiçbir şey değişmedi!</string>
-  <string name="install_shortcut">Kısayol yükle</string>
+  <string name="install_shortcut">Kısayol Yükle</string>
+  <string name="portrait">Portre</string>
+  <string name="print_error">Resim yazdırılamıyor</string>
+
+
   <!--SETTINGS PREFERENCES-->
   <string name="general_setting">Genel Ayarlar</string>
   <string name="folder">Klasör</string>
+  <string name="folders">Klasörler</string>
   <string name="color_palette">Renk Paleti</string>
   <string name="app_intro_skip">Tanıtım Atlandı!</string>
+
+
   <!-- SECURITY-->
   <string name="security">Güvenlik</string>
-  <string name="active_security">Parola ile erişim</string>
+  <string name="active_security">Parola İle Arişim</string>
   <string name="password">Parola</string>
-  <string name="confirm_password">Parolayı doğrulayın</string>
-  <string name="wrong_password">Yanlış şifre</string>
-  <string name="type_password">Parolayı ekleyiniz</string>
-  <string name="security_sub">Medyanızı korumak için bir şifre ayarlayın.</string>
+  <string name="confirm_password">Parolayı Doğrulayın</string>
+  <string name="wrong_password">Yanlış Parola</string>
+  <string name="type_password">Parolayı Ekleyiniz</string>
+  <string name="security_sub">Medyanızı korumak için bir parola ayarlayın.</string>
   <string name="remember_password_message">Not: Parola değiştirildi, eğer onu unutursanız uygulama verilerini temizlemelisiniz.</string>
-  <string name="apply_password_on">için parola kullan</string>
+  <string name="apply_password_on">Parola Kullan:</string>
   <string name="fingerprint">Parmak izi</string>
-  <string name="clear_password">Parolayı temizle</string>
+  <string name="clear_password">Parolayı Temizle</string>
   <string name="error_password_length">Parola uzunluğu en az 4 karakterdir</string>
+
+
   <!-- SETTINGS -->
   <string name="settings">Ayarlar</string>
+
   <string name="general">Genel</string>
-  <string name="auto_update_media">Ortamı otomatik olarak güncelle</string>
+  <string name="auto_update_media">Medyayı otomatik olarak güncelle</string>
   <string name="auto_update_media_sub">Görüntüleriniz çok fazla olduğunda devre dışı bırakmanız gerekir.</string>
   <string name="traslucent_statusbar">Yarı-Saydam Durum Çubuğu</string>
   <string name="traslucent_statusbar_sub">Bildirim çubuğuna daha koyu bir birincil renk uygula.</string>
-  <string name="excluded_albums">Hariç tutulan albümler</string>
-  <string name="excluded_albums_sub">Dışlanan albümleri geri al.</string>
+  <string name="excluded_albums">Çıkarılan Albümler</string>
+  <string name="excluded_albums_sub">Çıkarılan Albümleri Geri Al.</string>
+  <string name="option_show_tips">İpuçlarını Göster</string>
+  <string name="option_show_tips_sub">Bazı özelliklerin kullanımını anlamanıza yardımcı olur.</string>
+  <string name="disable_animations">Animasyonları Devre Dışı Bırak</string>
+  <string name="disable_animations_sub">Performans sorunları varsa animasyonları devre dışı bırakın.</string>
+  <string name="enable_timeline_title">Zaman Çizelgesini Etkinleştir</string>
+  <string name="enable_timeline_desc">Medya için Zaman Çizelgesi görünümünü etkinleştirin. </string>
+
   <string name="media_viewer">Medya Görüntüleyici</string>
   <string name="media_viewer_theme">Medya Görüntüleyici Teması</string>
   <string name="custom_3thAct">Özelleştirilmiş Görüntüleyici</string>
   <string name="custom_3thAct_sub">Temayı fotoğraf önizleyicisine uygula.</string>
+
   <string name="max_brightness">Yüksek Parlaklık</string>
   <string name="max_brightness_sub">Medya görüntülenirken en yüksek parlaklık.</string>
   <string name="picture_orientation">Döndürme için güç kullanma sensörü</string>
@@ -141,6 +195,9 @@ Bu klasörü hariç tutarak tüm alt klasörlerini de hariç tutmuş olursunuz. 
   <string name="load_full_image_when_zoom_in">Yakınlaştırırken resmin tamamını yükle</string>
   <string name="media_viewer_swipe_direction">Kaydırma Yönü</string>
   <string name="media_viewer_swipe_direction_sub">Medya görüntüleyicisinin geçirme yönünü değiştir.(Varsayılan Metin: Soldan Sağa)</string>
+
+  <string name="video_instant_play_sub">Önizlemeyi atlayarak, videoyu anında oynatmanıza izin verir.</string>
+
   <string name="theme">Tema</string>
   <string name="primary_color">Birincil Renk</string>
   <string name="primary_color_sub">Arayüzde kullanılan ana renk.</string>
@@ -150,50 +207,59 @@ Bu klasörü hariç tutarak tüm alt klasörlerini de hariç tutmuş olursunuz. 
   <string name="base_theme_sub">Bir temel tema seç</string>
   <string name="white">Açık</string>
   <string name="dark">Koyu</string>
-  <string name="dark_amoled">Koyu AMOLED</string>
+  <string name="dark_amoled">Siyah</string>
   <string name="colored_navbar">Gezinti Çubuğunu Renklendir</string>
   <string name="colored_navbar_sub">Birincil rengi gezinti çubuğuna uygula.</string>
   <string name="internal_player">Dahili Video oynatıcı</string>
   <string name="internal_player_sub">Dahili video oynatıcısını kullan</string>
+
   <!--DONATE STRINGS-->
   <string name="donate_googleplay">Google Play Store</string>
   <string name="donate_payppal">PayPal</string>
   <string name="donate_bitcoin">Bitcoin</string>
   <string name="donate_header_text">
-Merhaba,\nBiz LeafPic için gönüllü çalışan bağımsız bir grubuz,
-bu bizim ilk uygulamamız, bu nedenle sizlerin geri dönüşlerinden çok şey öğrendik. Eğer çalışmamızı beğendiyseniz takdirinizi bağış yaparak gösterebilirsiniz.\nYardımlarınızla bu projeyi daha iyi bir hale getireceğiz ve yeni projeler yapacağız.   </string>
+    Merhaba,\nBiz LeafPic için gönüllü çalışan bağımsız bir grubuz.
+    Bu bizim ilk uygulamamız, bu nedenle geri bildirimlerinizle öğreneceğimiz çok şey var.
+    Eğer çalışmamızı beğendiyseniz takdirinizi bağış yaparak gösterebilirsiniz.\n
+    Yardımlarınızla bu projeyi daha iyi bir hale getireceğiz ve yeni projeler yapacağız.   </string>
   <string name="donate_sub_text">Uygulamanın gelişimini desteklemek için bize bir şey bağışlamayı düşünün.</string>
-  <string name="thank_you">Teşekkür ederim!</string>
+  <string name="thank_you">Teşekkürler</string>
   <string name="address_copied">Adres panoya kopyalandı</string>
   <string name="coming_soon">Pek Yakında!</string>
   <string name="google_takes">Google her bağıştan %30 pay alır.</string>
-  <string name="paypal_text">Saniyeler içinde masraf olmadan bize para göndermek için izin verin bana,
-Eğer kullandığınız kredi kartı PayPal ise bağış 0,35€ ve %4 standart bir ücret alıyor </string>
+  <string name="paypal_text">Saniyeler içinde masraf olmadan bize para göndermek için izin verin.Eğer kullandığınız kredi kartı PayPal ise bağış 0,35€ ve %4 standart bir ücret alıyor </string>
+
+
   <!--ABOUT STRINGS-->
   <string name="about">Hakkında</string>
-  <string name="about_version">Sürüm</string>
+  <string name="about_version">Versiyon</string>
   <string name="about_license"> Lisans</string>
   <string name="about_license_sub">LeafPic\'in kullandığı GPLv3 lisansı koşullarına gözat.</string>
   <string name="about_library_license">Kütüphane Lisansları</string>
   <string name="about_library_license_sub">LeafPic\'de kullanılan üçüncü parti kütüphaneleri kontrol et.</string>
   <string name="about_authors">Yazarlar</string>
-  <string name="about_author_donald_description">
-19 yaşındayım.Genç bir yazılım geliştiricisiyim, genel olarak bilgisayar bilimlerini ve en çok da Linux ve Android ile ilgili işleri öğrenmeyi severim.Ayrıca TV dizilerini de severim.
- </string>
-  <string name="about_author_gilbert_description">        20 yaşındayım.Müzik,video oyunları ve çizim yapmayı seviyorum.
-        Ayrıca bilgisayar bilimi içinden programlama ve düzenlemeyi seviyorum.
-    </string>
+
+  <string name="about_author_donald_description">19 yaşındayım.Genç bir yazılım geliştiricisiyim, genel olarak bilgisayar bilimlerini ve en çok da Linux ve Android ile ilgili işleri öğrenmeyi severim.Ayrıca TV dizilerini de severim.</string>
+  <string name="about_author_gilbert_description"> 20 yaşındayım.Müzik,video oyunları ve çizim yapmayı seviyorum.Ayrıca bilgisayar bilimi içinden programlama ve düzenlemeyi seviyorum.</string>
+  <string name="about_developer_calvin_description">23 yaşındayım. Programlamayı ve problem çözmeyi çok seviyorum. Aynı zamanda bir Android ve Linux meraklısıyım.</string>
+
   <string name="send_via">&#8230; ile gönder</string>
   <string name="send_email">E-POSTA GÖNDER</string>
   <string name="send_mail_error">Kurulu e-posta istemcisi yok.</string>
+
   <string name="about_special_thanks">Teşekkürler</string>
   <string name="about_special_thanks_patryk_goworowski_sub"><a
       href="https://plus.google.com/109304801957014561872/about"> Patryk Goworowski\'ye muhteşemsimge için.</a></string>
-  <string name="about_special_thanks_members_sub">
-tüm çeviriler için Crowdin topluluğuna    </string>
-  <string name="about_special_thanks_you_sub">
-uygulamayı kullanmanız için    </string>
-  <string name="about_support">Geliştirmeyi destekle</string>
+  <string name="about_special_thanks_members_sub">Çevirileri için Kübra Nur Saruhan ve Crowdin Topluluğuna Teşekkürler   </string>
+  <string name="about_special_thanks_you_sub">Uygulamayı Kullanmandığınız İçin Teşekkürler  </string>
+
+  <!--FINGERPRINT-->
+  <string name="fingerprint_instruction">Kimliğinizi doğrulamak için parmak ucunuzu Giriş düğmesine yerleştirin.</string>
+  <string name="fingerprint_instruction_short">Parmakizi Kullan</string>
+  <string name="fingerprint_alt_mode">Parola Kullan</string>
+  <string name="fingerprint_error">Parmakizi Hatası</string>
+
+  <string name="about_support">Geliştirmeyi Destekle</string>
   <string name="about_support_translate">Çeviri</string>
   <string name="about_support_translate_sub">LeafPic\'in daha fazla dile çevrilmesine yardım et.</string>
   <string name="about_support_report_bug">Hata bildir</string>
@@ -202,6 +268,7 @@ uygulamayı kullanmanız için    </string>
   <string name="about_support_rate_sub">Eğer LeafPic\' i sevdiyseniz olumlu bir değerlendirme bırakın.</string>
   <string name="about_support_github">GitHub</string>
   <string name="about_support_github_sub">Çatal repo değişikliklerini bastırın ya da sorunları gönderin.</string>
+
   <!--PHOTO DETAILS-->
   <string name="path">Yol</string>
   <string name="type">Tür</string>
@@ -210,13 +277,18 @@ uygulamayı kullanmanız için    </string>
   <string name="device">Aygıt</string>
   <string name="orientation">Yön</string>
   <string name="location">Konum</string>
+
+
   <!--DRAWER ITEMS -->
   <string name="local_folder">Yerel Klasörler</string>
-  <string name="hidden_folder">Gizlenmiş Klasörler</string>
+  <string name="all_media">Tüm Medya</string>
+  <string name="hidden_folder">Gizli Klasörler</string>
   <string name="tags">Etiketler</string>
   <string name="timeline">Zaman Çizelgesi</string>
   <string name="wallpapers">Duvar Kağıtları</string>
   <string name="donate">Bağış</string>
+
+
   <!--VIDEO PLayer-->
   <string name="enable_background_audio">Arka planda oynat</string>
   <string name="video">Video</string>
@@ -224,6 +296,8 @@ uygulamayı kullanmanız için    </string>
   <string name="text">Metin</string>
   <string name="retry">Yeniden Dene</string>
   <string name="off">Kapalı</string>
+
+
   <!-- ERRORS -->
   <string name="error_drm_not_supported">Korumalı içerik Android 4.3 veya daha sonrasını destekler</string>
   <string name="error_drm_unsupported_scheme">Bu aygıt DRM düzeni zorunluluğunu desteklemez</string>
@@ -233,17 +307,65 @@ uygulamayı kullanmanız için    </string>
   <string name="unable_to_fix_date">Tarih düzeltme olanaksız</string>
   <string name="compression_settings">Sıkıştırma ayarları</string>
   <string name="include_video">Video içersin</string>
+  <string name="include_video_sub">Videoları Göster.</string>
+  <string name="fab_options">FAB Göster</string>
+  <string name="fab_options_sub">Floating butonu göster.</string>
   <string name="map_provider">Harita Sağlayıcı</string>
-  <string name="map_provider_sub">Harita kaynağını seç</string>
+  <string name="map_provider_sub">Harita Kaynağını Seç</string>
   <string name="insert_something">Bir şey ekleyin!</string>
   <string name="password_dont_match">Parola eşleşmiyor</string>
   <string name="chose_the_map_provider">Harita sağlayıcı seçin</string>
   <string name="use_google_static_maps_faster">Google statik haritaları kullan</string>
   <string name="use_openstreetmap_slower">Açık Sokak Haritası Kullan (Yavaş)</string>
   <string name="sd_card_write_permission_title">SD Kart yazma izni</string>
-  <string name="got_permission_wr_sdcard">SD-Kart\'a yazmak için izin alındı.</string>
+  <string name="got_permission_wr_sdcard">SD-Karta yazmak için izin alındı.</string>
   <string name="multi_column">Çoklu sütun</string>
-  <string name="multi_column_sub">Klasörler ve medyalar için kaç sütun istediğinizi seçin    </string>
-  <string name="columns">sütunlar</string>
+  <string name="multi_column_sub">Klasörler ve medyalar için kaç sütun istediğinizi seçin </string>
+  <string name="columns">Sütunlar</string>
   <string name="advanced">İleri düzey</string>
+
+  <string name="sd_card_permissions_message">Bir sonraki ekranda,SD kart kaynagını sol kenar çubuğundan seçin ve SD karta yazma iznini vermek için alt kısımda onaylayın.</string>
+
+  <string name="use_mediastore_provider">Alternatif medya sağlayıcısı</string>
+  <string name="use_media_store_sub">Bazı klasörleri özlüyorsanız veya albümlerle ilgili sorun yaşıyorsanız, bu seçeneği etkinleştirin.</string>
+
+  <string name="pin">En Üste Sabitle</string>
+  <string name="un_pin">Sabitlemeyi Kaldır</string>
+  <string name="new_file_created">Yeni Dosya Oluşturuldu</string>
+  <string name="sub_scaling_image_view">Alt Ölçeklendirme Resim Görünümü</string>
+  <string name="sub_scaling_image_view_sub">Daha iyi bir yakınlaştırma yönetimine ve net bir görüntüye sahip olmanıza izin verir. Ancak şu anda gerçekten optimize edilmemiştir.</string>
+  <string name="error_contact_developer">Bir şeyler ters gitti, lütfen geliştiriciyle iletişim kurun.</string>
+  <string name="chose_folders">Klasörleri Seç</string>
+  <string name="internal_storage">Dahili Depolama</string>
+  <string name="extrnal_storage">Harici depolama</string>
+  <string name="white_list">Beyaz Liste</string>
+  <string name="chose_albums_to_display">Hangi albümlerin gösterileceğini seçin</string>
+  <string name="use_primary_color_in_the_viewer">Görüntüleyicide birincil renk kullanma</string>
+  <string name="add">Ekle</string>
+  <string name="excluded_items">Çıkarılan öğeler</string>
+  <string name="manage_your_folders">Klasörlerinizi yönetin</string>
+  <string name="manage_your_folders_sub">Burada çıkarılan klasörleri işleyebilir ve gösterilmeyen klasörlere dahil edebilirsiniz</string>
+  <string name="white_list_explaination">Listelenmemiş klasörleri veya bazı ortamların eksik olan klasörleri ekleyebilirsiniz. Beyaz liste klasörler, cihaz boş moddayken düzenli aralıklarla taranır.Performans sorunlarına neden olmaz.</string>
+  <string name="no_media_in_this_folder">Bu klasörde medya yok.</string>
+  <string name="error_occured_open_media">Bu medya açılırken bir hata oluştu.</string>
+  <string name="error_thumbnail">Albüm için küçük resim bulunamıyor.</string>
+  <string name="no_app_to_perform">Bu işlemi yapacak bir uygulama bulunamadı.</string>
+  <string name="deleting_images">%d/%d mediyayı att!</string>
+  <string name="start_slide_show">Slayt Gösterisini Başlat</string>
+  <string name="stop_slide_show">Slayt Gösterisini Durdur</string>
+  <string name="errors">Hata</string>
+  <string name="waring_share_multiple_file_types">Birden fazla dosya türünü paylaşılırken sorunlar olabilir.</string>
+  <string name="creators">Kurucular</string>
+  <string name="major_contributors">Büyük Katkı</string>
+  <string name="delete_bottom_sheet_title">Hafıza temizleniyor...</string>
+
+  <!-- Timeline -->
+  <string name="timeline_toolbar_title">Zaman Çizelgesi</string>
+  <string name="timeline_grouping_menu_label">Gruplama</string>
+  <string name="timeline_grouping_menu_day">Gün</string>
+  <string name="timeline_grouping_menu_week">Hafta</string>
+  <string name="timeline_grouping_menu_month">Ay</string>
+  <string name="timeline_grouping_menu_year">Yıl</string>
+
+
 </resources>
