@@ -1,7 +1,6 @@
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/leafpic/localized.svg)](https://crowdin.com/project/leafpic)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/HoraApps)
-
-**PSA**: We are moving on [gitlab](https://gitlab.com/HoraApps/LeafPic), the repo on Github will remain as a mirror. Don't submit PR on gihub. 
+ 
 
 # LeafPic
 <img src="https://gitlab.com/HoraApps/LeafPic/raw/abdf97052596380b8d4b838c6ab4a7c1bf854522/app/src/main/res/drawable/leaf_pic.png" align="left" width="200" hspace="10" vspace="10">
