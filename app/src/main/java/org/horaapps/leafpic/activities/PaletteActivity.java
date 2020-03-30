@@ -46,8 +46,8 @@ public class PaletteActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_palette);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        paletteImg = (ImageView) findViewById(R.id.palette_image);
+        toolbar = findViewById(R.id.toolbar);
+        paletteImg = findViewById(R.id.palette_image);
 
         setSupportActionBar(toolbar);
         uri = getIntent().getData();

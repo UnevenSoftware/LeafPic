@@ -40,8 +40,8 @@ public class DonateActivity extends ThemedActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        scr = (ScrollView) findViewById(R.id.donateAct_scrollView);
+        toolbar = findViewById(R.id.toolbar);
+        scr = findViewById(R.id.donateAct_scrollView);
         btnDonatePP = findViewById(R.id.button_donate_paypal);
 
         iniUi();

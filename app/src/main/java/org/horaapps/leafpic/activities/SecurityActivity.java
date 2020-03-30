@@ -45,13 +45,13 @@ public class SecurityActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security);
-        llroot = (LinearLayout) findViewById(R.id.root);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        swActiveSecurity = (SwitchCompat) findViewById(R.id.active_security_switch);
-        swApplySecurityDelete = (SwitchCompat) findViewById(R.id.security_body_apply_delete_switch);
-        swApplySecurityHidden = (SwitchCompat) findViewById(R.id.security_body_apply_hidden_switch);
-        swFingerPrint = (SwitchCompat) findViewById(R.id.active_security_fingerprint_switch);
-        llFingerprint = (LinearLayout) findViewById(R.id.ll_active_security_fingerprint);
+        llroot = findViewById(R.id.root);
+        toolbar = findViewById(R.id.toolbar);
+        swActiveSecurity = findViewById(R.id.active_security_switch);
+        swApplySecurityDelete = findViewById(R.id.security_body_apply_delete_switch);
+        swApplySecurityHidden = findViewById(R.id.security_body_apply_hidden_switch);
+        swFingerPrint = findViewById(R.id.active_security_fingerprint_switch);
+        llFingerprint = findViewById(R.id.ll_active_security_fingerprint);
 
         initUi();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

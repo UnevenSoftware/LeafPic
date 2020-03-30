@@ -66,7 +66,7 @@ public class SettingsActivity extends ThemedActivity {
         setContentView(R.layout.activity_settings);
 
         unbinder = ButterKnife.bind(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
