@@ -53,11 +53,11 @@ public class AffixActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_affix);
-        compositeImageView = (ImageView) this
+        compositeImageView = this
                 .findViewById(R.id.CompositeImageView);
 
-        choosePicture1 = (Button) this.findViewById(R.id.ChoosePictureButton1);
-        choosePicture2 = (Button) this.findViewById(R.id.ChoosePictureButton2);
+        choosePicture1 = this.findViewById(R.id.ChoosePictureButton1);
+        choosePicture2 = this.findViewById(R.id.ChoosePictureButton2);
 
         choosePicture1.setOnClickListener(this);
         choosePicture2.setOnClickListener(this);
