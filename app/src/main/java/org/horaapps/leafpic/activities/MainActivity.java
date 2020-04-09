@@ -107,7 +107,6 @@ public class MainActivity extends SharedMediaActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         unbinder = ButterKnife.bind(this);
-
         initUi();
         pickMode = getIntent().getBooleanExtra(ARGS_PICK_MODE, false);
 
@@ -372,7 +371,7 @@ public class MainActivity extends SharedMediaActivity implements
         mainLayout.setBackgroundColor(getBackgroundColor());
 
 //        setScrollViewColor(navigationDrawerView);
-        setAllScrollbarsColor();
+//        setAllScrollbarsColor();
 
         navigationDrawerView.setTheme(getPrimaryColor(), getBackgroundColor(), getTextColor(), getIconColor());
 

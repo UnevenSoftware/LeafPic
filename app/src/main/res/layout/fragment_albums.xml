@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+    <org.horaapps.leafpic.adapters.CustomRecyclerView
         android:id="@+id/albums"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:clipToPadding="false"
-        android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+        android:scrollbars="vertical" />
 
 </android.support.v4.widget.SwipeRefreshLayout>

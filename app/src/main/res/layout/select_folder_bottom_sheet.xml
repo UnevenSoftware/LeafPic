@@ -110,13 +110,12 @@
 
     <!-- ITEMS RECYCLE VIEW -->
 
-    <android.support.v7.widget.RecyclerView
+    <org.horaapps.leafpic.adapters.CustomRecyclerView
         android:id="@+id/folders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="400dp"
-        android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@drawable/ic_scrollbar" />
+        android:scrollbars="vertical"/>
 
     </LinearLayout>
 
