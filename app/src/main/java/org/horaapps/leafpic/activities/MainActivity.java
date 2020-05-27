@@ -265,6 +265,7 @@ public class MainActivity extends SharedMediaActivity implements
         super.onConfigurationChanged(newConfig);
         fab.setVisibility(View.VISIBLE);
         fab.animate().translationY(fab.getHeight() * 2).start();
+        
     }
 
     public void goBackToAlbums() {
