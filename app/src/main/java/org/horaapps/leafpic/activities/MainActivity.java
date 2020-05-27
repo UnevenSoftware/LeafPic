@@ -263,8 +263,11 @@ public class MainActivity extends SharedMediaActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        fab.setVisibility(View.VISIBLE);
-        fab.animate().translationY(fab.getHeight() * 2).start();
+        if (DeviceUtils.isPortrait(getResources())) {
+            fab.setVisibility(View.VISIBLE);
+            fab.animate().translationY(fab.getHeight() * 2).start();
+        } else
+            fab.setVisibility(View.GONE);
     }
 
     public void goBackToAlbums() {
