@@ -10,6 +10,7 @@ import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_timeline.*
+import org.horaapps.leafpic.R
 import org.horaapps.leafpic.data.Album
 import org.horaapps.leafpic.data.Media
 import org.horaapps.leafpic.data.filter.FilterMode
