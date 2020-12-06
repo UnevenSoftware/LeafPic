@@ -1,3 +1,5 @@
+## This project is no longer maintained
+
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/leafpic/localized.svg)](https://crowdin.com/project/leafpic)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/HoraApps)
  
@@ -30,10 +32,6 @@ LeafPic is a fluid, material-designed alternative gallery, it also is ad-free an
 </div>
 
 #### Contributing
-
-###### Testing
-Do you want to be a tester? Join our Telegram group! Send a message to [@dnldsht](https://t.me/dnldsht) or [@CalvinNoronha](https://t.me/CalvinNoronha) we will add you.
-We will release apks to test features or to check if bugs have been fixed.
 
 ###### Code 
 If you are a developer and you wish to contribute to the app please fork the project
