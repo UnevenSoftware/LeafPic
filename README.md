@@ -32,11 +32,11 @@ LeafPic is a fluid, material-designed alternative gallery, it also is ad-free an
 </div>
 
 #### Contributing
+## This project is no longer maintained
 
 ###### Code 
 If you are a developer and you wish to contribute to the app please fork the project
 and submit a pull request on the [dev branch](https://gitlab.com/HoraApps/LeafPic/tree/dev).
-If you want, you can join us on Telegram - send us a message we will add you!
 
 ###### Issues
 You can trace the status of known issues [here](https://gitlab.com/HoraApps/LeafPic/issues),
