@@ -169,7 +169,7 @@ public class SelectAlbumBuilder extends BottomSheetDialogFragment {
         contentView.findViewById(R.id.rl_bottom_sheet_title).setBackgroundColor(theme.getPrimaryColor());
         exploreModePanel.setBackgroundColor(theme.getPrimaryColor());
         contentView.findViewById(R.id.ll_select_folder).setBackgroundColor(theme.getCardBackgroundColor());
-        theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
+//        theme.setColorScrollBarDrawable(ContextCompat.getDrawable(dialog.getContext(), R.drawable.ic_scrollbar));
         mRecyclerView.setBackgroundColor(theme.getBackgroundColor());
 
         fabDone = contentView.findViewById(R.id.fab_bottomsheet_done);
