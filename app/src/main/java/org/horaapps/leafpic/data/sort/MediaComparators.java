@@ -1,18 +1,15 @@
 package org.horaapps.leafpic.data.sort;
 
 import android.support.annotation.NonNull;
-
 import org.horaapps.leafpic.data.AlbumSettings;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.timeline.data.TimelineHeaderModel;
 import org.horaapps.leafpic.util.NumericComparator;
-
 import java.util.Comparator;
 
 /**
  * Created by dnld on 26/04/16.
  */
-
 public class MediaComparators {
 
     public static Comparator<Media> getComparator(AlbumSettings settings) {
@@ -20,8 +17,7 @@ public class MediaComparators {
     }
 
     public static Comparator<Media> getComparator(SortingMode sortingMode, SortingOrder sortingOrder) {
-        return sortingOrder == SortingOrder.ASCENDING
-                ? getComparator(sortingMode) : reverse(getComparator(sortingMode));
+        return sortingOrder == SortingOrder.ASCENDING ? getComparator(sortingMode) : reverse(getComparator(sortingMode));
     }
 
     public static Comparator<TimelineHeaderModel> getTimelineComparator(@NonNull SortingOrder sortingOrder) {
@@ -29,12 +25,18 @@ public class MediaComparators {
     }
 
     public static Comparator<Media> getComparator(SortingMode sortingMode) {
-        switch (sortingMode) {
-            case NAME: return getNameComparator();
-            case DATE: default: return getDateComparator();
-            case SIZE: return getSizeComparator();
-            case TYPE: return getTypeComparator();
-            case NUMERIC: return getNumericComparator();
+        switch(sortingMode) {
+            case NAME:
+                return getNameComparator();
+            case DATE:
+            default:
+                return getDateComparator();
+            case SIZE:
+                return getSizeComparator();
+            case TYPE:
+                return getTypeComparator();
+            case NUMERIC:
+                return getNumericComparator();
         }
     }
 

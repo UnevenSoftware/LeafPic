@@ -10,14 +10,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.orhanobut.hawk.Hawk;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
-
 import java.security.MessageDigest;
 
 /**
@@ -68,38 +65,31 @@ public class Security {
     public static void authenticateUser(final ThemedActivity activity, final AuthCallBack passwordInterface) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, activity.getDialogStyle());
         CancellationSignal mCancellationSignal = new CancellationSignal();
-
         final View view = activity.getLayoutInflater().inflate(org.horaapps.leafpic.R.layout.dialog_password, null);
         final TextView passwordDialogTitle = view.findViewById(org.horaapps.leafpic.R.id.password_dialog_title);
         final CardView passwordDialogCard = view.findViewById(org.horaapps.leafpic.R.id.password_dialog_card);
         final EditText editTextPassword = view.findViewById(org.horaapps.leafpic.R.id.password_edittxt);
         final ThemedIcon fingerprintIcon = view.findViewById(R.id.fingerprint_icon);
-
-
         passwordDialogTitle.setBackgroundColor(activity.getPrimaryColor());
         passwordDialogCard.setBackgroundColor(activity.getCardBackgroundColor());
         ThemeHelper.setCursorColor(editTextPassword, activity.getTextColor());
         editTextPassword.getBackground().mutate().setColorFilter(activity.getTextColor(), PorterDuff.Mode.SRC_ATOP);
         editTextPassword.setTextColor(activity.getTextColor());
         fingerprintIcon.setColor(activity.getIconColor());
-
         builder.setView(view);
-
         builder.setPositiveButton(activity.getString(R.string.ok_action).toUpperCase(), (dialog, which) -> {
             // NOTE: set this empty, later will be overwrite to avoid the dismiss
         });
-
         builder.setNegativeButton(activity.getString(R.string.cancel).toUpperCase(), (dialog, which) -> hideKeyboard(activity, editTextPassword.getWindowToken()));
-
         final AlertDialog dialog = builder.create();
         dialog.show();
         showKeyboard(activity);
         editTextPassword.requestFocus();
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && Security.isFingerprintUsed()) {
             FingerprintHandler fingerprintHandler = new FingerprintHandler(activity, mCancellationSignal);
             if (fingerprintHandler.isFingerprintSupported()) {
                 fingerprintHandler.setOnFingerprintResult(new FingerprintHandler.CallBack() {
+
                     @Override
                     public void onSuccess() {
                         hideKeyboard(activity, editTextPassword.getWindowToken());
@@ -112,7 +102,6 @@ public class Security {
                         // TODO: 9/9/17 siplaymessage
                     }
                 });
-
                 fingerprintHandler.startAuth();
             } else {
                 fingerprintIcon.setVisibility(View.GONE);
@@ -120,7 +109,6 @@ public class Security {
         } else {
             fingerprintIcon.setVisibility(View.GONE);
         }
-
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             if (checkPassword(editTextPassword.getText().toString())) {
                 hideKeyboard(activity, editTextPassword.getWindowToken());
@@ -152,7 +140,8 @@ public class Security {
             StringBuilder hexString = new StringBuilder();
             for (byte aHash : hash) {
                 String hex = Integer.toHexString(0xff & aHash);
-                if (hex.length() == 1) hexString.append('0');
+                if (hex.length() == 1)
+                    hexString.append('0');
                 hexString.append(hex);
             }
             return hexString.toString();
@@ -162,7 +151,9 @@ public class Security {
     }
 
     public interface AuthCallBack {
+
         void onAuthenticated();
+
         void onError();
     }
 }

@@ -2,7 +2,6 @@ package org.horaapps.leafpic.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
 import org.horaapps.leafpic.BuildConfig;
 
 /**

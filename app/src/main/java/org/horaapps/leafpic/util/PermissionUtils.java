@@ -31,7 +31,7 @@ public final class PermissionUtils {
     }
 
     public static void requestPermissions(Object o, int permissionId, String... permissions) {
-       if (o instanceof Activity) {
+        if (o instanceof Activity) {
             ActivityCompat.requestPermissions((AppCompatActivity) o, permissions, permissionId);
         }
     }

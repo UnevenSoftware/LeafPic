@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.Queue;
 public class PinchImageView extends ImageView {
 
     ////////////////////////////////配置参数////////////////////////////////
-
     /**
      * 图片缩放动画时间
      */
@@ -41,7 +39,6 @@ public class PinchImageView extends ImageView {
     private static final float MAX_SCALE = 4f;
 
     ////////////////////////////////监听器////////////////////////////////
-
     /**
      * 外界点击事件
      *
@@ -69,7 +66,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////公共状态获取////////////////////////////////
-
     /**
      * 手势状态：自由状态
      *
@@ -289,7 +285,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////公共状态设置////////////////////////////////
-
     /**
      * 执行当前outerMatrix到指定outerMatrix渐变的动画
      * <p>
@@ -382,7 +377,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////对外广播事件////////////////////////////////
-
     /**
      * 外部矩阵变化事件通知监听器
      */
@@ -519,7 +513,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////用于重载定制////////////////////////////////
-
     /**
      * 获取图片最大可放大的比例
      * <p>
@@ -558,7 +551,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////初始化////////////////////////////////
-
     public PinchImageView(Context context) {
         super(context);
         initView();
@@ -585,7 +577,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////绘制////////////////////////////////
-
     @Override
     protected void onDraw(Canvas canvas) {
         //在绘制前设置变换矩阵
@@ -606,7 +597,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////有效性判断////////////////////////////////
-
     /**
      * 判断当前情况是否能执行手势相关计算
      * <p>
@@ -615,12 +605,10 @@ public class PinchImageView extends ImageView {
      * @return 是否能执行手势相关计算
      */
     private boolean isReady() {
-        return getDrawable() != null && getDrawable().getIntrinsicWidth() > 0 && getDrawable().getIntrinsicHeight() > 0
-                && getWidth() > 0 && getHeight() > 0;
+        return getDrawable() != null && getDrawable().getIntrinsicWidth() > 0 && getDrawable().getIntrinsicHeight() > 0 && getWidth() > 0 && getHeight() > 0;
     }
 
     ////////////////////////////////mask动画处理////////////////////////////////
-
     /**
      * mask修改的动画
      * <p>
@@ -694,7 +682,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////手势动画处理////////////////////////////////
-
     /**
      * 在单指模式下:
      * 记录上一次手指的位置,用于计算新的位置和上一次位置的差值.
@@ -1215,7 +1202,7 @@ public class PinchImageView extends ImageView {
             setFloatValues(0, 1f);
             setDuration(1000000);
             addUpdateListener(this);
-            mVector = new float[]{vectorX, vectorY};
+            mVector = new float[] { vectorX, vectorY };
         }
 
         @Override
@@ -1299,9 +1286,7 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////防止内存抖动复用对象////////////////////////////////
-
     /**
      * 对象池
      * <p>
@@ -1429,9 +1414,7 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////数学计算工具类////////////////////////////////
-
     /**
      * 数学计算工具类
      */
@@ -1531,7 +1514,7 @@ public class PinchImageView extends ImageView {
          * @return float[]{x, y}
          */
         public static float[] getCenterPoint(float x1, float y1, float x2, float y2) {
-            return new float[]{(x1 + x2) / 2f, (y1 + y2) / 2f};
+            return new float[] { (x1 + x2) / 2f, (y1 + y2) / 2f };
         }
 
         /**
@@ -1544,7 +1527,7 @@ public class PinchImageView extends ImageView {
             if (matrix != null) {
                 float[] value = new float[9];
                 matrix.getValues(value);
-                return new float[]{value[0], value[4]};
+                return new float[] { value[0], value[4] };
             } else {
                 return new float[2];
             }

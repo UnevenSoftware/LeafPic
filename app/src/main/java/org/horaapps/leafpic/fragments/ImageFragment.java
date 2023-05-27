@@ -7,14 +7,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.util.BitmapUtils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,7 +20,8 @@ import butterknife.ButterKnife;
  */
 public class ImageFragment extends BaseMediaFragment {
 
-    @BindView(R.id.subsampling_view) SubsamplingScaleImageView imageView;
+    @BindView(R.id.subsampling_view)
+    SubsamplingScaleImageView imageView;
 
     @NonNull
     public static ImageFragment newInstance(@NonNull Media media) {
@@ -58,7 +56,9 @@ public class ImageFragment extends BaseMediaFragment {
      * @param rotationInDegrees The rotation in degrees
      */
     public void rotatePicture(int rotationInDegrees) {
-        if (rotationInDegrees == -90 && imageView.getOrientation() == 0) imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
-        else imageView.setOrientation(Math.abs(imageView.getOrientation() + rotationInDegrees) % 360);
+        if (rotationInDegrees == -90 && imageView.getOrientation() == 0)
+            imageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_270);
+        else
+            imageView.setOrientation(Math.abs(imageView.getOrientation() + rotationInDegrees) % 360);
     }
 }

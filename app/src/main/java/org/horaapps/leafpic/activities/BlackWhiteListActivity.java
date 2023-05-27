@@ -16,9 +16,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBuilder;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -28,12 +26,9 @@ import org.horaapps.leafpic.util.AnimationUtils;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ui.ThemedIcon;
-
 import java.io.File;
 import java.util.ArrayList;
-
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
-
 import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 
 /**
@@ -42,10 +37,15 @@ import static org.horaapps.leafpic.data.MediaHelper.scanFile;
 public class BlackWhiteListActivity extends SharedMediaActivity {
 
     public static final String EXTRA_TYPE = "typeExcluded";
+
     private RecyclerView mRecyclerView;
+
     private ItemsAdapter adapter;
+
     private Toolbar toolbar;
+
     private ArrayList<String> folders = new ArrayList<>();
+
     private boolean typeExcluded;
 
     @Override
@@ -62,8 +62,10 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         typeExcluded = type == HandlingAlbums.EXCLUDED;
         folders = HandlingAlbums.getInstance(getApplicationContext()).getFolders(type);
         checkNothing();
-        if (isExcludedMode()) setTitle(getString(R.string.excluded_items));
-        else setTitle(getString(R.string.white_list));
+        if (isExcludedMode())
+            setTitle(getString(R.string.excluded_items));
+        else
+            setTitle(getString(R.string.white_list));
         adapter.notifyDataSetChanged();
         supportInvalidateOptionsMenu();
     }
@@ -71,7 +73,6 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     private boolean isExcludedMode() {
         return typeExcluded;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,14 +108,9 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
     }
 
     private void checkNothing() {
-        findViewById(R.id.white_list_decription_card).setVisibility(
-                showDescriptionCard() ? View.VISIBLE : View.GONE);
-
-        findViewById(R.id.nothing_to_show_placeholder).setVisibility(
-                showNothingToShowPlaceholder() ? View.VISIBLE : View.GONE);
-
-        findViewById(R.id.ll_emoji_easter_egg).setVisibility(
-                showEasterEgg() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.white_list_decription_card).setVisibility(showDescriptionCard() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.nothing_to_show_placeholder).setVisibility(showNothingToShowPlaceholder() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.ll_emoji_easter_egg).setVisibility(showEasterEgg() ? View.VISIBLE : View.GONE);
     }
 
     private boolean showDescriptionCard() {
@@ -131,13 +127,9 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case R.id.action_add:
-                SelectAlbumBuilder.with(getSupportFragmentManager())
-                        .title(getString(R.string.chose_folders))
-                        .exploreMode(true)
-                        .force(true)
-                        .onFolderSelected(path -> addFolder(new File(path))).show();
+                SelectAlbumBuilder.with(getSupportFragmentManager()).title(getString(R.string.chose_folders)).exploreMode(true).force(true).onFolderSelected(path -> addFolder(new File(path))).show();
                 return true;
             case R.id.action_toggle:
                 loadFolders(isExcludedMode() ? HandlingAlbums.INCLUDED : HandlingAlbums.EXCLUDED);
@@ -146,24 +138,19 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void initUi() {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter((adapter = new ItemsAdapter()));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 1));
-        mRecyclerView.setItemAnimator(
-                AnimationUtils.getItemAnimator(
-                        new LandingAnimator(new OvershootInterpolator(1f))
-                ));
+        mRecyclerView.setItemAnimator(AnimationUtils.getItemAnimator(new LandingAnimator(new OvershootInterpolator(1f))));
     }
 
     @CallSuper
     @Override
-    public void updateUiElements(){
+    public void updateUiElements() {
         super.updateUiElements();
         toolbar.setBackgroundColor(getPrimaryColor());
         mRecyclerView.setBackgroundColor(getBackgroundColor());
@@ -176,7 +163,6 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         //TODO: EMOJI EASTER EGG - THERE'S NOTHING TO SHOW
         ((TextView) findViewById(R.id.emoji_easter_egg)).setTextColor(getSubTextColor());
         ((TextView) findViewById(R.id.nothing_to_show_text_emoji_easter_egg)).setTextColor(getSubTextColor());
-
         findViewById(org.horaapps.leafpic.R.id.rl_ea).setBackgroundColor(getBackgroundColor());
     }
 
@@ -204,7 +190,6 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
             holder.path.setText(itm);
             holder.name.setText(StringUtils.getName(itm));
             holder.imgRemove.setTag(itm);
-
             holder.name.setTextColor(getTextColor());
             holder.path.setTextColor(getSubTextColor());
             holder.imgFolder.setColor(getIconColor());
@@ -217,8 +202,11 @@ public class BlackWhiteListActivity extends SharedMediaActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
+
             LinearLayout layout;
+
             ThemedIcon imgFolder, imgRemove;
+
             TextView name, path;
 
             ViewHolder(View itemView) {

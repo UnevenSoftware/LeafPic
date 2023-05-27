@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.fragments;
 
 import android.content.Context;
-
 import org.horaapps.liz.ThemedFragment;
 
 /**
@@ -14,7 +13,6 @@ public abstract class BaseFragment extends ThemedFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         if (context instanceof NothingToShowListener)
             nothingToShowListener = (NothingToShowListener) context;
     }

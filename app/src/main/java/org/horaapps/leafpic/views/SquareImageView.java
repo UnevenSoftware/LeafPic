@@ -26,5 +26,4 @@ public class SquareImageView extends ImageView {
         // Set a square layout.
         super.onMeasure(widthMeasureSpec, widthMeasureSpec);
     }
-
 }

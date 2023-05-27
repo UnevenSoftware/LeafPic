@@ -5,13 +5,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedViewHolder;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -21,10 +18,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ContributorViewHolder extends ThemedViewHolder {
 
-    @BindView(R.id.contributor_profile_image) CircleImageView profileImage;
-    @BindView(R.id.contributor_name) TextView contribName;
-    @BindView(R.id.contributor_description) TextView contribDescription;
-    @BindView(R.id.contributor_contacts) LinearLayout contribContacts;
+    @BindView(R.id.contributor_profile_image)
+    CircleImageView profileImage;
+
+    @BindView(R.id.contributor_name)
+    TextView contribName;
+
+    @BindView(R.id.contributor_description)
+    TextView contribDescription;
+
+    @BindView(R.id.contributor_contacts)
+    LinearLayout contribContacts;
 
     public ContributorViewHolder(View view) {
         super(view);
@@ -54,9 +58,7 @@ public class ContributorViewHolder extends ThemedViewHolder {
         setName(contributor.getName());
         setDescription(contributor.getDescription());
         setProfileImage(contributor.getProfileImage());
-
         contribContacts.removeAllViews();
-
         if (contributor.getEmail() != null) {
             ContactButton email = new ContactButton(itemView.getContext());
             email.setText(itemView.getContext().getString(R.string.send_email));
@@ -64,7 +66,6 @@ public class ContributorViewHolder extends ThemedViewHolder {
             email.setOnClickListener(v -> listener.onMailClicked(contributor.getEmail()));
             contribContacts.addView(email);
         }
-
         ArrayList<Contact> contacts = contributor.getContacts();
         for (Contact contact : contacts) {
             ContactButton c = new ContactButton(itemView.getContext());

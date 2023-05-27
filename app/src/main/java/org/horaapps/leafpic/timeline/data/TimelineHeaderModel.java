@@ -2,7 +2,6 @@ package org.horaapps.leafpic.timeline.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -13,6 +12,7 @@ import java.util.GregorianCalendar;
 public class TimelineHeaderModel implements TimelineItem {
 
     private Calendar calendar;
+
     private String headerText;
 
     public TimelineHeaderModel(@NonNull Date date) {

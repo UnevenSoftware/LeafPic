@@ -18,28 +18,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.liz.ThemedActivity;
-
 import java.util.List;
 
 /**
  * Created by Jibo on 02/03/2016.
  * The Palette Activity used to analyze the colors in the picture.
  */
-
 public class PaletteActivity extends ThemedActivity {
 
     private Toolbar toolbar;
+
     private ImageView paletteImg;
+
     private Uri uri;
 
     private Palette palette;
+
     private RecyclerView rvPalette;
+
     private PaletteAdapter paletteAdapter;
 
     @Override
@@ -48,12 +48,10 @@ public class PaletteActivity extends ThemedActivity {
         setContentView(R.layout.activity_palette);
         toolbar = findViewById(R.id.toolbar);
         paletteImg = findViewById(R.id.palette_image);
-
         setSupportActionBar(toolbar);
         uri = getIntent().getData();
         paletteImg.setImageURI(null);
         paletteImg.setImageURI(uri);
-
         setPalette();
     }
 
@@ -61,20 +59,18 @@ public class PaletteActivity extends ThemedActivity {
     @Override
     public void updateUiElements() {
         super.updateUiElements();
-
         toolbar.setBackgroundColor(getPrimaryColor());
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
         setStatusBarColor();
         setNavBarColor();
         setRecentApp(getString(R.string.palette));
-
         findViewById(R.id.palette_background).setBackgroundColor(getBackgroundColor());
         ((CardView) findViewById(R.id.palette_colors_card)).setCardBackgroundColor(getCardBackgroundColor());
         ((CardView) findViewById(R.id.palette_image_card)).setCardBackgroundColor(getCardBackgroundColor());
@@ -82,10 +78,10 @@ public class PaletteActivity extends ThemedActivity {
         ((TextView) findViewById(R.id.palette_image_caption)).setTextColor(getSubTextColor());
     }
 
-    public void setPalette(){
+    public void setPalette() {
         Bitmap myBitmap = ((BitmapDrawable) paletteImg.getDrawable()).getBitmap();
-        ((TextView) findViewById(R.id.palette_image_title)).setText(uri.getPath().substring(uri.getPath().lastIndexOf("/")+1));
-        ((TextView)findViewById(R.id.palette_image_caption)).setText(uri.getPath());
+        ((TextView) findViewById(R.id.palette_image_title)).setText(uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1));
+        ((TextView) findViewById(R.id.palette_image_caption)).setText(uri.getPath());
         palette = Palette.from(myBitmap).generate();
         rvPalette = (RecyclerView) findViewById(R.id.paletteRecycler);
         rvPalette.setLayoutManager(new LinearLayoutManager(this));
@@ -94,11 +90,16 @@ public class PaletteActivity extends ThemedActivity {
         rvPalette.setAdapter(paletteAdapter);
     }
 
-    /*** - PALETTE ADAPTER - ***/
+    /**
+     * - PALETTE ADAPTER - **
+     */
     private class PaletteAdapter extends RecyclerView.Adapter<PaletteActivity.PaletteAdapter.ViewHolder> {
 
         private List<Palette.Swatch> swatches;
-        private PaletteAdapter(List<Palette.Swatch> sws){this.swatches = sws;}
+
+        private PaletteAdapter(List<Palette.Swatch> sws) {
+            this.swatches = sws;
+        }
 
         public PaletteActivity.PaletteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.palette_item, parent, false);
@@ -114,11 +115,16 @@ public class PaletteActivity extends ThemedActivity {
             holder.itemBackground.setBackgroundColor(sw.getRgb());
         }
 
-        public int getItemCount() {return null != swatches ? swatches.size() : 0;}
+        public int getItemCount() {
+            return null != swatches ? swatches.size() : 0;
+        }
 
         class ViewHolder extends RecyclerView.ViewHolder {
+
             TextView txtColor;
+
             LinearLayout itemBackground;
+
             ViewHolder(View itemView) {
                 super(itemView);
                 txtColor = (TextView) itemView.findViewById(R.id.palette_item_text);
@@ -127,9 +133,14 @@ public class PaletteActivity extends ThemedActivity {
         }
     }
 
-    /*** - PALETTE ITEM ON CLICK - ***/
+    /**
+     * - PALETTE ITEM ON CLICK - **
+     */
     private View.OnClickListener onClickListener = new View.OnClickListener() {
-        /** Copies the selected color to the clipboard. */
+
+        /**
+         * Copies the selected color to the clipboard.
+         */
         @Override
         public void onClick(View view) {
             String text = ((TextView) view.findViewById(R.id.palette_item_text)).getText().toString();

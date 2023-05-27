@@ -6,7 +6,6 @@ package org.horaapps.leafpic.views;
  * <p/>
  * Julia Zudikova
  */
-
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -68,5 +67,4 @@ public class HackyViewPager extends ViewPager {
     public void setLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }
-
 }

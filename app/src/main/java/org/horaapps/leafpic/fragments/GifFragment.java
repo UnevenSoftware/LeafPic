@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import org.horaapps.leafpic.data.Media;
-
 import pl.droidsonroids.gif.GifImageView;
 
 /**
@@ -21,10 +19,7 @@ public class GifFragment extends BaseMediaFragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         GifImageView photoView = new GifImageView(getContext());
         photoView.setImageURI(media.getUri());
         setTapListener(photoView);

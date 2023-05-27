@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
-
 import org.horaapps.liz.ThemeHelper;
 
 /**
@@ -18,9 +17,12 @@ import org.horaapps.liz.ThemeHelper;
 public class ChromeCustomTabs {
 
     private CustomTabsServiceConnection serviceConnection;
+
     private CustomTabsIntent mCustomTabsIntent;
 
-    @ColorInt private int toolbarColor;
+    @ColorInt
+    private int toolbarColor;
+
     private Context context;
 
     public ChromeCustomTabs(@NonNull Context context) {
@@ -30,8 +32,8 @@ public class ChromeCustomTabs {
     }
 
     private void initService() {
-
         serviceConnection = new CustomTabsServiceConnection() {
+
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
                 customTabsClient.warmup(0L);
@@ -42,14 +44,9 @@ public class ChromeCustomTabs {
                 // NO-OP
             }
         };
-
         // Bind the Chrome Custom Tabs service
         CustomTabsClient.bindCustomTabsService(context, ApplicationUtils.getPackageName(), serviceConnection);
-
-        mCustomTabsIntent = new CustomTabsIntent.Builder()
-                .setShowTitle(true)
-                .setToolbarColor(toolbarColor)
-                .build();
+        mCustomTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).setToolbarColor(toolbarColor).build();
     }
 
     public void launchUrl(String Url) {

@@ -1,12 +1,12 @@
 package org.horaapps.leafpic.progress;
 
 import android.support.annotation.Nullable;
-
 import java.util.ArrayList;
 
 public class ErrorCause {
 
     private String title;
+
     private ArrayList<String> causes;
 
     public ErrorCause(String title, ArrayList<String> causes) {
@@ -31,10 +31,12 @@ public class ErrorCause {
         return causes.size() > 0;
     }
 
-    public @Nullable
-    ErrorCause get() {
-        if (hasErrors()) return this;
-        else return null;
+    @Nullable
+    public ErrorCause get() {
+        if (hasErrors())
+            return this;
+        else
+            return null;
     }
 
     public ArrayList<String> getCauses() {
@@ -45,17 +47,16 @@ public class ErrorCause {
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append(title).append("\n");
-
         for (String cause : causes) {
             b.append(cause).append("\n");
         }
-
         return b.toString();
     }
 
     public static ErrorCause fromThrowable(Throwable throwable) {
         if (throwable instanceof ProgressException)
             return ((ProgressException) throwable).getError();
-        else return new ErrorCause(throwable.getMessage());
+        else
+            return new ErrorCause(throwable.getMessage());
     }
 }

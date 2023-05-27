@@ -18,6 +18,7 @@ public class Measure {
         DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
         return Math.round(px * (displayMetrics.ydpi / DisplayMetrics.DENSITY_DEFAULT));
     }
+
     public static float dpToPx(int dp, Context context) {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
@@ -26,28 +27,24 @@ public class Measure {
         int resourceId = r.getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0)
             return r.getDimensionPixelSize(resourceId);
-
         return 0;
     }
 
-    public static int getNavBarHeight(Context ct){
+    public static int getNavBarHeight(Context ct) {
         return getNavigationBarSize(ct).y;
     }
 
     public static Point getNavigationBarSize(Context context) {
         Point appUsableSize = getAppUsableScreenSize(context);
         Point realScreenSize = getRealScreenSize(context);
-
         // navigation bar on the right
         if (appUsableSize.x < realScreenSize.x) {
             return new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
         }
-
         // navigation bar at the bottom
         if (appUsableSize.y < realScreenSize.y) {
             return new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
         }
-
         // navigation bar is not present
         return new Point();
     }
@@ -70,7 +67,7 @@ public class Measure {
 
     public static int rotateBy(int current, int degrees) {
         // TODO: 21/08/16 a better way should exist
-    /*int rotation = current + degrees;
+        /*int rotation = current + degrees;
     if (rotation > 359) rotation -=360;
     if (rotation < 0) rotation +=360;*/
         return (current + degrees) % 360;

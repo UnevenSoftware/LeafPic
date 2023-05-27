@@ -31,9 +31,7 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.PaletteActivity;
 import org.horaapps.leafpic.adapters.MediaAdapter;
@@ -61,10 +59,8 @@ import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedIcon;
-
 import java.util.ArrayList;
 import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -74,16 +70,20 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
 /**
  * Created by dnld on 3/13/17.
  */
-
 public class RvMediaFragment extends BaseMediaGridFragment {
 
     public static final String TAG = "RvMediaFragment";
+
     private static final String BUNDLE_ALBUM = "album";
 
-    @BindView(R.id.media) RecyclerView rv;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout refresh;
+    @BindView(R.id.media)
+    RecyclerView rv;
+
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout refresh;
 
     private MediaAdapter adapter;
+
     private GridSpacingItemDecoration spacingDecoration;
 
     private Album album;
@@ -96,7 +96,6 @@ public class RvMediaFragment extends BaseMediaGridFragment {
             album = getArguments().getParcelable(BUNDLE_ALBUM);
             return;
         }
-
         album = savedInstanceState.getParcelable(BUNDLE_ALBUM);
     }
 
@@ -128,22 +127,15 @@ public class RvMediaFragment extends BaseMediaGridFragment {
     private void loadAlbum(Album album) {
         this.album = album;
         adapter.setupFor(album);
-        CPHelper.getMedia(getContext(), album)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media))
-                .subscribe(media -> adapter.add(media),
-                        throwable -> {
-                            refresh.setRefreshing(false);
-                            Log.wtf("asd", throwable);
-                        },
-                        () -> {
-                            album.setCount(getCount());
-                            if (getNothingToShowListener() != null)
-                                getNothingToShowListener().changedNothingToShow(getCount() == 0);
-                            refresh.setRefreshing(false);
-                        });
-
+        CPHelper.getMedia(getContext(), album).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).filter(media -> MediaFilter.getFilter(album.filterMode()).accept(media)).subscribe(media -> adapter.add(media), throwable -> {
+            refresh.setRefreshing(false);
+            Log.wtf("asd", throwable);
+        }, () -> {
+            album.setCount(getCount());
+            if (getNothingToShowListener() != null)
+                getNothingToShowListener().changedNothingToShow(getCount() == 0);
+            refresh.setRefreshing(false);
+        });
     }
 
     @Override
@@ -161,25 +153,17 @@ public class RvMediaFragment extends BaseMediaGridFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_rv_media, container, false);
         ButterKnife.bind(this, v);
-
         int spanCount = columnsCount();
         spacingDecoration = new GridSpacingItemDecoration(spanCount, Measure.pxToDp(3, getContext()), true);
         rv.setHasFixedSize(true);
         rv.addItemDecoration(spacingDecoration);
         rv.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-        rv.setItemAnimator(
-                AnimationUtils.getItemAnimator(
-                        new LandingAnimator(new OvershootInterpolator(1f))
-                ));
-
+        rv.setItemAnimator(AnimationUtils.getItemAnimator(new LandingAnimator(new OvershootInterpolator(1f))));
         adapter = new MediaAdapter(getContext(), album.settings.getSortingMode(), album.settings.getSortingOrder(), this);
-
         refresh.setOnRefreshListener(this::reload);
         rv.setAdapter(adapter);
-
         return v;
     }
 
@@ -197,7 +181,6 @@ public class RvMediaFragment extends BaseMediaGridFragment {
 
     public void setUpColumns() {
         int columnsCount = columnsCount();
-
         if (columnsCount != ((GridLayoutManager) rv.getLayoutManager()).getSpanCount()) {
             ((GridLayoutManager) rv.getLayoutManager()).getSpanCount();
             rv.removeItemDecoration(spacingDecoration);
@@ -208,9 +191,7 @@ public class RvMediaFragment extends BaseMediaGridFragment {
     }
 
     public int columnsCount() {
-        return DeviceUtils.isPortrait(getResources())
-                ? Prefs.getMediaColumnsPortrait()
-                : Prefs.getMediaColumnsLandscape();
+        return DeviceUtils.isPortrait(getResources()) ? Prefs.getMediaColumnsPortrait() : Prefs.getMediaColumnsLandscape();
     }
 
     @Override
@@ -220,8 +201,10 @@ public class RvMediaFragment extends BaseMediaGridFragment {
 
     @Override
     public View.OnClickListener getToolbarButtonListener(boolean editMode) {
-        if (editMode) return null;
-        else return v -> adapter.clearSelected();
+        if (editMode)
+            return null;
+        else
+            return v -> adapter.clearSelected();
     }
 
     @Override
@@ -241,107 +224,92 @@ public class RvMediaFragment extends BaseMediaGridFragment {
         return HandlingAlbums.getInstance(getContext().getApplicationContext());
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
         inflater.inflate(R.menu.grid_media, menu);
-
         menu.findItem(R.id.select_all).setIcon(ThemeHelper.getToolbarIcon(getContext(), GoogleMaterial.Icon.gmd_select_all));
         menu.findItem(R.id.delete).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_delete)));
-        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_share)));
-        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(),(GoogleMaterial.Icon.gmd_sort)));
+        menu.findItem(R.id.sharePhotos).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_share)));
+        menu.findItem(R.id.sort_action).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_sort)));
         menu.findItem(R.id.filter_menu).setIcon(ThemeHelper.getToolbarIcon(getContext(), (GoogleMaterial.Icon.gmd_filter_list)));
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-
         boolean editMode = editMode();
         boolean oneSelected = getSelectedCount() == 1;
-
         menu.setGroupVisible(R.id.general_album_items, !editMode);
         menu.setGroupVisible(R.id.edit_mode_items, editMode);
         menu.setGroupVisible(R.id.one_selected_items, oneSelected);
-
-        menu.findItem(R.id.select_all).setTitle(
-                getSelectedCount() == getCount()
-                        ? R.string.clear_selected
-                        : R.string.select_all);
+        menu.findItem(R.id.select_all).setTitle(getSelectedCount() == getCount() ? R.string.clear_selected : R.string.select_all);
         if (editMode) {
             menu.findItem(R.id.filter_menu).setVisible(false);
             menu.findItem(R.id.sort_action).setVisible(false);
         } else {
             menu.findItem(R.id.filter_menu).setVisible(true);
             menu.findItem(R.id.sort_action).setVisible(true);
-
             menu.findItem(R.id.ascending_sort_order).setChecked(sortingOrder() == SortingOrder.ASCENDING);
-            switch (sortingMode()) {
-                case NAME:  menu.findItem(R.id.name_sort_mode).setChecked(true); break;
-                case SIZE:  menu.findItem(R.id.size_sort_mode).setChecked(true); break;
-                case DATE: default:
-                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true); break;
-                case NUMERIC:  menu.findItem(R.id.numeric_sort_mode).setChecked(true); break;
+            switch(sortingMode()) {
+                case NAME:
+                    menu.findItem(R.id.name_sort_mode).setChecked(true);
+                    break;
+                case SIZE:
+                    menu.findItem(R.id.size_sort_mode).setChecked(true);
+                    break;
+                case DATE:
+                default:
+                    menu.findItem(R.id.date_taken_sort_mode).setChecked(true);
+                    break;
+                case NUMERIC:
+                    menu.findItem(R.id.numeric_sort_mode).setChecked(true);
+                    break;
             }
         }
-
         super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
+        switch(item.getItemId()) {
             case R.id.all_media_filter:
                 album.setFilterMode(FilterMode.ALL);
                 item.setChecked(true);
                 reload();
                 return true;
-
             case R.id.video_media_filter:
                 album.setFilterMode(FilterMode.VIDEO);
                 item.setChecked(true);
                 reload();
                 return true;
-
             case R.id.image_media_filter:
                 album.setFilterMode(FilterMode.IMAGES);
                 item.setChecked(true);
                 reload();
                 return true;
-
             case R.id.gifs_media_filter:
                 album.setFilterMode(FilterMode.GIF);
                 item.setChecked(true);
                 reload();
                 return true;
-
             case R.id.sharePhotos:
                 MediaUtils.shareMedia(getContext(), adapter.getSelected());
                 return true;
-
             case R.id.set_as_cover:
                 String path = adapter.getFirstSelected().getPath();
                 album.setCover(path);
                 db().setCover(album.getPath(), path);
                 adapter.clearSelected();
                 return true;
-
             case R.id.action_palette:
                 Intent paletteIntent = new Intent(getActivity(), PaletteActivity.class);
                 paletteIntent.setData(adapter.getFirstSelected().getUri());
                 startActivity(paletteIntent);
                 return true;
-
             case R.id.rename:
                 final EditText editTextNewName = new EditText(getActivity());
                 editTextNewName.setText(StringUtils.getPhotoNameByPath(adapter.getFirstSelected().getPath()));
-
                 AlertDialog renameDialog = AlertDialogsHelper.getInsertTextDialog(((ThemedActivity) getActivity()), editTextNewName, R.string.rename_photo_action);
-
                 renameDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), (dialog, which) -> {
                     if (editTextNewName.length() != 0) {
                         boolean b = MediaHelper.renameMedia(getActivity(), adapter.getFirstSelected(), editTextNewName.getText().toString());
@@ -349,48 +317,44 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                             StringUtils.showToast(getActivity(), getString(R.string.rename_error));
                             //adapter.notifyDataSetChanged();
                         } else
-                            adapter.clearSelected(); // Deselect media if rename successful
+                            // Deselect media if rename successful
+                            adapter.clearSelected();
                     } else
                         StringUtils.showToast(getActivity(), getString(R.string.nothing_changed));
                 });
                 renameDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel).toUpperCase(), (dialog, which) -> dialog.dismiss());
                 renameDialog.show();
                 return true;
-
             case R.id.select_all:
                 if (adapter.getSelectedCount() == adapter.getItemCount())
                     adapter.clearSelected();
-                else adapter.selectAll();
+                else
+                    adapter.selectAll();
                 return true;
-
             case R.id.name_sort_mode:
                 adapter.changeSortingMode(SortingMode.NAME);
                 HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.NAME.getValue());
                 album.setSortingMode(SortingMode.NAME);
                 item.setChecked(true);
                 return true;
-
             case R.id.date_taken_sort_mode:
                 adapter.changeSortingMode(SortingMode.DATE);
                 HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.DATE.getValue());
                 album.setSortingMode(SortingMode.DATE);
                 item.setChecked(true);
                 return true;
-
             case R.id.size_sort_mode:
                 adapter.changeSortingMode(SortingMode.SIZE);
                 HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.SIZE.getValue());
                 album.setSortingMode(SortingMode.SIZE);
                 item.setChecked(true);
                 return true;
-
             case R.id.numeric_sort_mode:
                 adapter.changeSortingMode(SortingMode.NUMERIC);
                 HandlingAlbums.getInstance(getContext()).setSortingMode(album.getPath(), SortingMode.NUMERIC.getValue());
                 album.setSortingMode(SortingMode.NUMERIC);
                 item.setChecked(true);
                 return true;
-
             case R.id.ascending_sort_order:
                 item.setChecked(!item.isChecked());
                 SortingOrder sortingOrder = SortingOrder.fromValue(item.isChecked());
@@ -398,12 +362,10 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                 HandlingAlbums.getInstance(getContext()).setSortingOrder(album.getPath(), sortingOrder.getValue());
                 album.setSortingOrder(sortingOrder);
                 return true;
-
             case R.id.delete:
-
                 if (Security.isPasswordOnDelete()) {
-
                     Security.authenticateUser(((ThemedActivity) getActivity()), new Security.AuthCallBack() {
+
                         @Override
                         public void onAuthenticated() {
                             showDeleteBottomSheet();
@@ -418,13 +380,12 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                     showDeleteBottomSheet();
                 }
                 return true;
-
             //region Affix
             // TODO: 11/21/16 move away from here
             case R.id.affix:
-
                 //region Async MediaAffix
                 class affixMedia extends AsyncTask<Affix.Options, Integer, Void> {
+
                     private AlertDialog dialog;
 
                     @Override
@@ -438,18 +399,19 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                     protected Void doInBackground(Affix.Options... arg0) {
                         ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
                         for (int i = 0; i < adapter.getSelectedCount(); i++) {
-                            if(!adapter.getSelected().get(i).isVideo())
+                            if (!adapter.getSelected().get(i).isVideo())
                                 bitmapArray.add(adapter.getSelected().get(i).getBitmap());
                         }
-
                         if (bitmapArray.size() > 1)
                             Affix.AffixBitmapList(getActivity(), bitmapArray, arg0[0]);
-                        else getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getContext(), R.string.affix_error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        else
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), R.string.affix_error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         return null;
                     }
 
@@ -460,25 +422,18 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                     }
                 }
                 //endregion
-
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), getDialogStyle());
                 final View dialogLayout = getLayoutInflater().inflate(R.layout.dialog_affix, null);
-
                 dialogLayout.findViewById(R.id.affix_title).setBackgroundColor(getPrimaryColor());
                 ((CardView) dialogLayout.findViewById(R.id.affix_card)).setCardBackgroundColor(getCardBackgroundColor());
-
                 //ITEMS
                 final SwitchCompat swVertical = dialogLayout.findViewById(R.id.affix_vertical_switch);
                 final SwitchCompat swSaveHere = dialogLayout.findViewById(R.id.save_here_switch);
-
                 final LinearLayout llSwVertical = dialogLayout.findViewById(R.id.ll_affix_vertical);
                 final LinearLayout llSwSaveHere = dialogLayout.findViewById(R.id.ll_affix_save_here);
-
                 final RadioGroup radioFormatGroup = dialogLayout.findViewById(R.id.radio_format);
-
                 final TextView txtQuality = dialogLayout.findViewById(R.id.affix_quality_title);
                 final SeekBar seekQuality = dialogLayout.findViewById(R.id.seek_bar_quality);
-
                 //region Example
                 final LinearLayout llExample = dialogLayout.findViewById(R.id.affix_example);
                 llExample.setBackgroundColor(getBackgroundColor());
@@ -487,58 +442,53 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                 //llExampleH.setBackgroundColor(getCardBackgroundColor());
                 final LinearLayout llExampleV = dialogLayout.findViewById(R.id.affix_example_vertical);
                 //llExampleV.setBackgroundColor(getCardBackgroundColor());
-
-
                 //endregion
-
                 //region THEME STUFF
                 getThemeHelper().setScrollViewColor(dialogLayout.findViewById(R.id.affix_scrollView));
-
-                /** TextViews **/
+                /**
+                 * TextViews *
+                 */
                 int color = getTextColor();
                 ((TextView) dialogLayout.findViewById(R.id.affix_vertical_title)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.compression_settings_title)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.save_here_title)).setTextColor(color);
-
                 //Example Stuff
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt1)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_horizontal_txt2)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt1)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_example_vertical_txt2)).setTextColor(color);
-
-
-                /** Sub TextViews **/
+                /**
+                 * Sub TextViews *
+                 */
                 color = getThemeHelper().getSubTextColor();
                 ((TextView) dialogLayout.findViewById(R.id.save_here_sub)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_vertical_sub)).setTextColor(color);
                 ((TextView) dialogLayout.findViewById(R.id.affix_format_sub)).setTextColor(color);
                 txtQuality.setTextColor(color);
-
-                /** Icons **/
+                /**
+                 * Icons *
+                 */
                 color = getIconColor();
                 ((ThemedIcon) dialogLayout.findViewById(R.id.affix_quality_icon)).setColor(color);
                 ((ThemedIcon) dialogLayout.findViewById(R.id.affix_format_icon)).setColor(color);
                 ((ThemedIcon) dialogLayout.findViewById(R.id.affix_vertical_icon)).setColor(color);
                 ((ThemedIcon) dialogLayout.findViewById(R.id.save_here_icon)).setColor(color);
-
                 //Example bg
                 color = getCardBackgroundColor();
                 dialogLayout.findViewById(R.id.affix_example_horizontal_txt1).setBackgroundColor(color);
                 dialogLayout.findViewById(R.id.affix_example_horizontal_txt2).setBackgroundColor(color);
                 dialogLayout.findViewById(R.id.affix_example_vertical_txt1).setBackgroundColor(color);
                 dialogLayout.findViewById(R.id.affix_example_vertical_txt2).setBackgroundColor(color);
-
                 seekQuality.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
                 seekQuality.getThumb().setColorFilter(new PorterDuffColorFilter(getAccentColor(), PorterDuff.Mode.SRC_IN));
-
                 getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_jpeg));
                 getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_png));
                 getThemeHelper().themeRadioButton(dialogLayout.findViewById(R.id.radio_webp));
-                getThemeHelper().setSwitchCompactColor( swSaveHere, getAccentColor());
-                getThemeHelper().setSwitchCompactColor( swVertical, getAccentColor());
+                getThemeHelper().setSwitchCompactColor(swSaveHere, getAccentColor());
+                getThemeHelper().setSwitchCompactColor(swVertical, getAccentColor());
                 //#endregion
-
                 seekQuality.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         txtQuality.setText(StringUtils.html(String.format(Locale.getDefault(), "%s <b>%d</b>", getString(R.string.quality), progress)));
@@ -546,18 +496,16 @@ public class RvMediaFragment extends BaseMediaGridFragment {
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
                     }
                 });
                 seekQuality.setProgress(50);
-
                 swVertical.setClickable(false);
                 llSwVertical.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         swVertical.setChecked(!swVertical.isChecked());
@@ -566,21 +514,21 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                         llExampleV.setVisibility(swVertical.isChecked() ? View.VISIBLE : View.GONE);
                     }
                 });
-
                 swSaveHere.setClickable(false);
                 llSwSaveHere.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         swSaveHere.setChecked(!swSaveHere.isChecked());
                         getThemeHelper().setSwitchCompactColor(swSaveHere, getAccentColor());
                     }
                 });
-
                 builder.setView(dialogLayout);
                 builder.setPositiveButton(this.getString(R.string.ok_action).toUpperCase(), new DialogInterface.OnClickListener() {
+
                     public void onClick(DialogInterface dialog, int id) {
                         Bitmap.CompressFormat compressFormat;
-                        switch (radioFormatGroup.getCheckedRadioButtonId()) {
+                        switch(radioFormatGroup.getCheckedRadioButtonId()) {
                             case R.id.radio_jpeg:
                             default:
                                 compressFormat = Bitmap.CompressFormat.JPEG;
@@ -592,37 +540,30 @@ public class RvMediaFragment extends BaseMediaGridFragment {
                                 compressFormat = Bitmap.CompressFormat.WEBP;
                                 break;
                         }
-
-                        Affix.Options options = new Affix.Options(
-                                swSaveHere.isChecked() ? adapter.getFirstSelected().getPath() : Affix.getDefaultDirectoryPath(),
-                                compressFormat,
-                                seekQuality.getProgress(),
-                                swVertical.isChecked());
+                        Affix.Options options = new Affix.Options(swSaveHere.isChecked() ? adapter.getFirstSelected().getPath() : Affix.getDefaultDirectoryPath(), compressFormat, seekQuality.getProgress(), swVertical.isChecked());
                         new affixMedia().execute(options);
                     }
                 });
                 builder.setNegativeButton(this.getString(R.string.cancel).toUpperCase(), null);
                 builder.show();
                 return true;
-            //endregion
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void showDeleteBottomSheet() {
-        MediaUtils.deleteMedia(getContext(), adapter.getSelected(), getChildFragmentManager(),
-                new ProgressBottomSheet.Listener<Media>() {
-                    @Override
-                    public void onCompleted() {
-                        adapter.invalidateSelectedCount();
-                    }
+        MediaUtils.deleteMedia(getContext(), adapter.getSelected(), getChildFragmentManager(), new ProgressBottomSheet.Listener<Media>() {
 
-                    @Override
-                    public void onProgress(Media item) {
-                        adapter.removeSelectedMedia(item);
-                    }
-                });
+            @Override
+            public void onCompleted() {
+                adapter.invalidateSelectedCount();
+            }
+
+            @Override
+            public void onProgress(Media item) {
+                adapter.removeSelectedMedia(item);
+            }
+        });
     }
 
     public int getCount() {
@@ -640,7 +581,8 @@ public class RvMediaFragment extends BaseMediaGridFragment {
 
     @Override
     public void onItemSelected(int position) {
-        if (listener != null) listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), position);
+        if (listener != null)
+            listener.onMediaClick(RvMediaFragment.this.album, adapter.getMedia(), position);
     }
 
     @Override

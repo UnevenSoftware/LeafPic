@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.horaapps.leafpic.util.inapppurchase;
 
 import android.content.BroadcastReceiver;
@@ -38,6 +37,7 @@ public class IabBroadcastReceiver extends BroadcastReceiver {
      * Listener interface for received broadcast messages.
      */
     public interface IabBroadcastListener {
+
         void receivedBroadcast();
     }
 
