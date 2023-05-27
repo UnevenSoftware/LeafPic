@@ -196,7 +196,7 @@ public class RvMediaFragment extends BaseMediaGridFragment {
 
     @Override
     public int getTotalCount() {
-        return adapter.getItemCount();
+        return getItemCountFromAdapter();
     }
 
     @Override
@@ -567,7 +567,7 @@ public class RvMediaFragment extends BaseMediaGridFragment {
     }
 
     public int getCount() {
-        return adapter.getItemCount();
+        return getItemCountFromAdapter();
     }
 
     public int getSelectedCount() {
@@ -608,5 +608,9 @@ public class RvMediaFragment extends BaseMediaGridFragment {
         adapter.refreshTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
+    }
+
+    public int getItemCountFromAdapter() {
+        return adapter.getItemCount();
     }
 }

@@ -189,9 +189,7 @@ public class SettingsActivity extends ThemedActivity {
 
             @Override
             public void onColorSelected(int color) {
-                Hawk.put(getString(R.string.preference_primary_color), color);
-                updateTheme();
-                updateUiElements();
+                putAndThemeUpdate(color);
             }
 
             @Override
@@ -203,9 +201,7 @@ public class SettingsActivity extends ThemedActivity {
 
             @Override
             public void onColorChanged(int color) {
-                Hawk.put(getString(R.string.preference_primary_color), color);
-                updateTheme();
-                updateUiElements();
+                putAndThemeUpdate(color);
             }
         }, getPrimaryColor());
     }
@@ -217,9 +213,7 @@ public class SettingsActivity extends ThemedActivity {
 
             @Override
             public void onColorSelected(int color) {
-                Hawk.put(getString(R.string.preference_accent_color), color);
-                updateTheme();
-                updateUiElements();
+                putUpdateThemeUI(color);
             }
 
             @Override
@@ -231,9 +225,7 @@ public class SettingsActivity extends ThemedActivity {
 
             @Override
             public void onColorChanged(int color) {
-                Hawk.put(getString(R.string.preference_accent_color), color);
-                updateTheme();
-                updateUiElements();
+                putUpdateThemeUI(color);
             }
         }, getAccentColor());
     }
@@ -262,5 +254,17 @@ public class SettingsActivity extends ThemedActivity {
     @OnClick(R.id.ll_n_columns)
     public void onChangeColumnsClicked(View view) {
         new GeneralSetting(SettingsActivity.this).editNumberOfColumns();
+    }
+
+    public void putAndThemeUpdate(int color) {
+        Hawk.put(getString(R.string.preference_primary_color), color);
+        updateTheme();
+        updateUiElements();
+    }
+
+    public void putUpdateThemeUI(int color) {
+        Hawk.put(getString(R.string.preference_accent_color), color);
+        updateTheme();
+        updateUiElements();
     }
 }

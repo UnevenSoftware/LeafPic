@@ -222,16 +222,12 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
     }
 
     public void remove(Media media) {
-        int i = this.media.indexOf(media);
-        this.media.remove(i);
-        notifyItemRemoved(i);
+        removeItemAtIndex(media);
     }
 
     public void removeSelectedMedia(Media media) {
-        int i = this.media.indexOf(media);
-        this.media.remove(i);
-        notifyItemRemoved(i);
         //        this.notifySelected(false);
+        removeItemAtIndex(media);
     }
 
     public void invalidateSelectedCount() {
@@ -342,5 +338,11 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         public void refreshTheme(ThemeHelper themeHelper) {
             icon.setColor(Color.WHITE);
         }
+    }
+
+    public void removeItemAtIndex(Media media) {
+        int i = this.media.indexOf(media);
+        this.media.remove(i);
+        notifyItemRemoved(i);
     }
 }

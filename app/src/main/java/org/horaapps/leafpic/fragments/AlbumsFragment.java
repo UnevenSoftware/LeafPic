@@ -150,7 +150,7 @@ public class AlbumsFragment extends BaseMediaGridFragment {
 
     @Override
     public int getTotalCount() {
-        return adapter.getItemCount();
+        return getItemCount();
     }
 
     @Override
@@ -417,7 +417,7 @@ public class AlbumsFragment extends BaseMediaGridFragment {
     }
 
     public int getCount() {
-        return adapter.getItemCount();
+        return getItemCount();
     }
 
     public int getSelectedCount() {
@@ -458,5 +458,9 @@ public class AlbumsFragment extends BaseMediaGridFragment {
         adapter.refreshTheme(t);
         refresh.setColorSchemeColors(t.getAccentColor());
         refresh.setProgressBackgroundColorSchemeColor(t.getBackgroundColor());
+    }
+
+    public int getItemCount() {
+        return adapter.getItemCount();
     }
 }

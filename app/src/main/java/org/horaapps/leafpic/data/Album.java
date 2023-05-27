@@ -243,12 +243,7 @@ public class Album implements CursorHandler, Parcelable {
     }
 
     public boolean copySelectedPhotos(Context context, String folderPath) {
-        /*boolean success = true;
-		for (Media media : selectedMedia)
-			if(!copyPhoto(context, media.getPath(), folderPath))
-				success = false;
-		return success;*/
-        return false;
+        return copyMediaToFolder(context, folderPath);
     }
 
     @Override
@@ -311,7 +306,7 @@ public class Album implements CursorHandler, Parcelable {
 
 		}
 		return success;*/
-        return false;
+        return copyMediaToFolder(context, newName);
     }
 
     @Deprecated
@@ -355,4 +350,13 @@ public class Album implements CursorHandler, Parcelable {
             return new Album[size];
         }
     };
+
+    public boolean copyMediaToFolder(Context context, String folderPath) {
+        /*boolean success = true;
+		for (Media media : selectedMedia)
+			if(!copyPhoto(context, media.getPath(), folderPath))
+				success = false;
+		return success;*/
+        return false;
+    }
 }
