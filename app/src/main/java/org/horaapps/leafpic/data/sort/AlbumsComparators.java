@@ -2,7 +2,6 @@ package org.horaapps.leafpic.data.sort;
 
 import org.horaapps.leafpic.data.Album;
 import org.horaapps.leafpic.util.NumericComparator;
-
 import java.util.Comparator;
 
 /**
@@ -10,14 +9,14 @@ import java.util.Comparator;
  */
 public class AlbumsComparators {
 
-
     private static Comparator<Album> getComparator(SortingMode sortingMode, Comparator<Album> base) {
-        switch (sortingMode) {
+        switch(sortingMode) {
             case NAME:
                 return getNameComparator(base);
             case SIZE:
                 return getSizeComparator(base);
-            case DATE: default:
+            case DATE:
+            default:
                 return getDateComparator(base);
             case NUMERIC:
                 return getNumericComparator(base);
@@ -25,11 +24,8 @@ public class AlbumsComparators {
     }
 
     public static Comparator<Album> getComparator(SortingMode sortingMode, SortingOrder sortingOrder) {
-
         Comparator<Album> comparator = getComparator(sortingMode, getBaseComparator(sortingOrder));
-
-        return sortingOrder == SortingOrder.ASCENDING
-                ? comparator : reverse(comparator);
+        return sortingOrder == SortingOrder.ASCENDING ? comparator : reverse(comparator);
     }
 
     private static Comparator<Album> reverse(Comparator<Album> comparator) {
@@ -37,13 +33,13 @@ public class AlbumsComparators {
     }
 
     private static Comparator<Album> getBaseComparator(SortingOrder sortingOrder) {
-        return sortingOrder == SortingOrder.ASCENDING
-                ? getPinned() : getReversedPinned();
+        return sortingOrder == SortingOrder.ASCENDING ? getPinned() : getReversedPinned();
     }
 
     private static Comparator<Album> getPinned() {
         return (o1, o2) -> {
-            if (o1.isPinned() == o2.isPinned()) return 0;
+            if (o1.isPinned() == o2.isPinned())
+                return 0;
             return o1.isPinned() ? -1 : 1;
         };
     }
@@ -52,7 +48,7 @@ public class AlbumsComparators {
         return (o1, o2) -> getPinned().compare(o2, o1);
     }
 
-    private static Comparator<Album> getDateComparator(Comparator<Album> base){
+    private static Comparator<Album> getDateComparator(Comparator<Album> base) {
         return (a1, a2) -> {
             int res = base.compare(a1, a2);
             if (res == 0)

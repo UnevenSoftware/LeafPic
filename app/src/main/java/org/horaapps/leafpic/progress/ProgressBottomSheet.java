@@ -13,16 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.github.lzyzsd.circleprogress.DonutProgress;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,24 +32,29 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by dnld on 11/03/18.
  */
-
 public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
 
     /**
      * Interface for listeners to get callbacks when items are processed.
      */
     public interface Listener<T> {
+
         void onCompleted();
 
         void onProgress(T item);
     }
 
     public static class Builder<T> {
+
         @StringRes
         int title;
+
         boolean showCancel = true;
+
         boolean autoDismiss = false;
+
         List<? extends ObservableSource<? extends T>> sources;
+
         Listener<T> listener;
 
         public Builder(int title) {
@@ -83,19 +84,15 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         public ProgressBottomSheet<T> build() {
             if (sources == null)
                 throw new RuntimeException("You must pass a list of observables");
-
             if (listener == null)
                 Log.w(TAG, "You have not set a listener");
-
             ProgressBottomSheet<T> bottomSheet = new ProgressBottomSheet<>();
-
             bottomSheet.setTitle(title);
             bottomSheet.setAutoDismiss(autoDismiss);
             bottomSheet.setShowCancel(showCancel);
             bottomSheet.setSources(sources);
             bottomSheet.setListener(listener);
             return bottomSheet;
-
         }
     }
 
@@ -103,24 +100,33 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
 
     @BindView(R.id.progress_header)
     ViewGroup headerLayout;
+
     @BindView(R.id.progress_progress_bar)
     DonutProgress progressBar;
+
     @BindView(R.id.progress_errors)
     RecyclerView rvErrors;
+
     @BindView(R.id.progress_title)
     TextView txtTitle;
+
     @BindView(R.id.progress_done_cancel_sheet)
     AppCompatButton btnDoneCancel;
 
     private Disposable disposable;
+
     private boolean done = false;
+
     @StringRes
     int title;
-    boolean showCancel = true;
-    boolean autoDismiss = false;
-    List<? extends ObservableSource<? extends T>> sources;
-    Listener<T> listener;
 
+    boolean showCancel = true;
+
+    boolean autoDismiss = false;
+
+    List<? extends ObservableSource<? extends T>> sources;
+
+    Listener<T> listener;
 
     public void setTitle(int title) {
         this.title = title;
@@ -163,9 +169,7 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
 
     private void showErrors(CompositeException exceptions) {
         ArrayList<ErrorCause> errors = new ArrayList<>(exceptions.size());
-        for (Throwable throwable : exceptions.getExceptions())
-            errors.add(ErrorCause.fromThrowable(throwable));
-
+        for (Throwable throwable : exceptions.getExceptions()) errors.add(ErrorCause.fromThrowable(throwable));
         showErrors(errors);
     }
 
@@ -178,7 +182,8 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         if (done) {
             dismiss();
         } else {
-            if (disposable != null && !disposable.isDisposed()) disposable.dispose();
+            if (disposable != null && !disposable.isDisposed())
+                disposable.dispose();
             listener.onCompleted();
             dismiss();
         }
@@ -205,27 +210,22 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         setupViews(view);
-
         progressBar.setMax(sources.size());
         setProgress(0);
-
-
-        disposable = Observable.mergeDelayError(sources)
-                .observeOn(AndroidSchedulers.mainThread(), true)
-                .subscribeOn(Schedulers.newThread())
-                .doFinally(() -> {
-                    done();
-                    if (autoDismiss)
-                        dismiss();
-                })
-                .subscribe(item -> {
-                    listener.onProgress(item);
-                    setProgress((int) (progressBar.getProgress() + 1));
-                }, err -> {
-                    // Note: progress is useless here since errors are delayed
-                    if (err instanceof CompositeException) showErrors(((CompositeException) err));
-                    else showErrors(err);
-                });
+        disposable = Observable.mergeDelayError(sources).observeOn(AndroidSchedulers.mainThread(), true).subscribeOn(Schedulers.newThread()).doFinally(() -> {
+            done();
+            if (autoDismiss)
+                dismiss();
+        }).subscribe(item -> {
+            listener.onProgress(item);
+            setProgress((int) (progressBar.getProgress() + 1));
+        }, err -> {
+            // Note: progress is useless here since errors are delayed
+            if (err instanceof CompositeException)
+                showErrors(((CompositeException) err));
+            else
+                showErrors(err);
+        });
     }
 
     private void setupViews(@NonNull View view) {
@@ -235,6 +235,7 @@ public class ProgressBottomSheet<T> extends BottomSheetDialogFragment {
         progressBar.setFinishedStrokeColor(th.getAccentColor());
         progressBar.setTextColor(th.getTextColor());
         txtTitle.setText(title);
-        if (!showCancel) btnDoneCancel.setVisibility(View.GONE);
+        if (!showCancel)
+            btnDoneCancel.setVisibility(View.GONE);
     }
 }

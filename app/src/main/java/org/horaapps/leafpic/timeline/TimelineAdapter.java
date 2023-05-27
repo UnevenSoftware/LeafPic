@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.data.Media;
 import org.horaapps.leafpic.data.sort.SortingOrder;
@@ -19,14 +18,12 @@ import org.horaapps.leafpic.timeline.data.TimelineItem;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ThemedAdapter;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import static org.horaapps.leafpic.timeline.ViewHolder.TimelineHeaderViewHolder;
 import static org.horaapps.leafpic.timeline.ViewHolder.TimelineMediaViewHolder;
 import static org.horaapps.leafpic.timeline.ViewHolder.TimelineViewHolder;
@@ -37,10 +34,13 @@ import static org.horaapps.leafpic.timeline.ViewHolder.TimelineViewHolder;
 public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
     private List<TimelineItem> timelineItems;
+
     private ArrayList<Media> mediaItems;
 
     private SortingOrder sortingOrder;
+
     private GroupingMode groupingMode;
+
     private int timelineGridSize;
 
     private final ActionsListener actionsListener;
@@ -54,10 +54,8 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
         super(context);
         timelineItems = new ArrayList<>();
         this.timelineGridSize = timelineGridSize;
-
         this.sortingOrder = SortingOrder.DESCENDING;
         selectedPositions = new HashSet<>();
-
         this.actionsListener = actionsListener;
     }
 
@@ -99,14 +97,12 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     public void selectAll() {
         int timelineItemSize = timelineItems.size();
         for (int pos = 0; pos < timelineItemSize; pos++) {
-
             TimelineItem timelineItem = getItem(pos);
-            if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) continue;
-
+            if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER)
+                continue;
             // Select the element
             selectedPositions.add(pos);
         }
-
         notifyDataSetChanged();
         actionsListener.onSelectionCountChanged(selectedPositions.size(), mediaItems.size());
     }
@@ -116,9 +112,8 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
      */
     public void setGroupingMode(@NonNull GroupingMode groupingMode) {
         this.groupingMode = groupingMode;
-
-        if (mediaItems == null) return;
-
+        if (mediaItems == null)
+            return;
         // Rebuild the Timeline Items
         buildTimelineItems();
     }
@@ -140,28 +135,20 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     public ViewHolder.TimelineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         if (viewType == TimelineItem.TYPE_HEADER) {
-            return new TimelineHeaderViewHolder(LayoutInflater.from(context).inflate(
-                    R.layout.view_timeline_header,
-                    parent,
-                    false));
-
-        } else return new TimelineMediaViewHolder(LayoutInflater.from(context).inflate(
-                R.layout.card_photo,
-                parent,
-                false),
-                ThemeHelper.getPlaceHolder(context));
+            return new TimelineHeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_timeline_header, parent, false));
+        } else
+            return new TimelineMediaViewHolder(LayoutInflater.from(context).inflate(R.layout.card_photo, parent, false), ThemeHelper.getPlaceHolder(context));
     }
-
 
     public void setGridLayoutManager(GridLayoutManager gridLayoutManager) {
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
             @Override
             public int getSpanSize(int position) {
                 TimelineItem timelineItem = getItem(position);
-
                 // If we have a header item, occupy the entire width
-                if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) return timelineGridSize;
-
+                if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER)
+                    return timelineGridSize;
                 // Else, a media item takes up a single space
                 return 1;
             }
@@ -190,23 +177,23 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     public void onBindViewHolder(@NonNull TimelineViewHolder viewHolder, int position) {
         super.onBindViewHolder(viewHolder, position);
         TimelineItem timelineItem = getItem(position);
-
         if (viewHolder instanceof TimelineHeaderViewHolder) {
             TimelineHeaderViewHolder headerViewHolder = (TimelineHeaderViewHolder) viewHolder;
             headerViewHolder.bind((TimelineHeaderModel) timelineItem);
-
         } else if (viewHolder instanceof TimelineMediaViewHolder) {
             TimelineMediaViewHolder mediaHolder = (TimelineMediaViewHolder) viewHolder;
             mediaHolder.bind((Media) timelineItem, selectedPositions.contains(position));
-
             mediaHolder.layout.setOnClickListener(v -> {
-                if (isSelecting()) triggerSelection(mediaHolder.getAdapterPosition());
-                else displayMedia(timelineItem);
+                if (isSelecting())
+                    triggerSelection(mediaHolder.getAdapterPosition());
+                else
+                    displayMedia(timelineItem);
             });
-
             mediaHolder.layout.setOnLongClickListener(v -> {
-                if (isSelecting()) triggerSelectionAllUpTo(mediaHolder.getAdapterPosition());
-                else triggerSelection(mediaHolder.getAdapterPosition());
+                if (isSelecting())
+                    triggerSelectionAllUpTo(mediaHolder.getAdapterPosition());
+                else
+                    triggerSelection(mediaHolder.getAdapterPosition());
                 return true;
             });
         }
@@ -224,21 +211,21 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
 
     private void triggerSelection(int elementPos) {
         int oldCount = selectedPositions.size();
-
-        if (selectedPositions.contains(elementPos)) selectedPositions.remove(elementPos);
-        else selectedPositions.add(elementPos);
-
-        if (oldCount == 0 && isSelecting()) actionsListener.onSelectMode(true);
-        else if (oldCount == 1 && !isSelecting()) actionsListener.onSelectMode(false);
-        else actionsListener.onSelectionCountChanged(selectedPositions.size(), mediaItems.size());
-
+        if (selectedPositions.contains(elementPos))
+            selectedPositions.remove(elementPos);
+        else
+            selectedPositions.add(elementPos);
+        if (oldCount == 0 && isSelecting())
+            actionsListener.onSelectMode(true);
+        else if (oldCount == 1 && !isSelecting())
+            actionsListener.onSelectMode(false);
+        else
+            actionsListener.onSelectionCountChanged(selectedPositions.size(), mediaItems.size());
         notifyItemChanged(elementPos);
     }
 
     private void triggerSelectionAllUpTo(int elemPos) {
-
         int indexRightBeforeOrAfter = -1, minOffset = Integer.MAX_VALUE;
-
         for (Integer selectedPosition : selectedPositions) {
             int offset = Math.abs(elemPos - selectedPosition);
             if (offset < minOffset) {
@@ -246,8 +233,7 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
                 indexRightBeforeOrAfter = selectedPosition;
             }
         }
-
-        if(indexRightBeforeOrAfter != -1) {
+        if (indexRightBeforeOrAfter != -1) {
             for (int index = Math.min(elemPos, indexRightBeforeOrAfter); index <= Math.max(elemPos, indexRightBeforeOrAfter); index++) {
                 if (timelineItems.get(index) != null && timelineItems.get(index) instanceof Media) {
                     selectedPositions.add(index);
@@ -280,9 +266,7 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     private List<TimelineItem> getTimelineItems(@NonNull List<Media> mediaList) {
         // Preprocessing - Add headers in the list of media
         // TODO: Think of ways to optimise / improve this logic
-
         List<TimelineItem> timelineItemList = new ArrayList<>();
-
         int headersAdded = 0;
         Calendar currentDate = null;
         for (int position = 0; position < mediaList.size(); position++) {
@@ -295,7 +279,6 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
                 timelineItemList.add(position + headersAdded, timelineHeaderModel);
                 headersAdded++;
             }
-
             timelineItemList.add(mediaList.get(position));
         }
         return timelineItemList;
@@ -314,11 +297,11 @@ public class TimelineAdapter extends ThemedAdapter<TimelineViewHolder> {
     public void removeItem(@Nullable Media item) {
         for (int pos = 0; pos < timelineItems.size(); pos++) {
             TimelineItem timelineItem = timelineItems.get(pos);
-            if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER) continue;
-
+            if (timelineItem.getTimelineType() == TimelineItem.TYPE_HEADER)
+                continue;
             Media mediaItem = (Media) timelineItem;
-            if (!mediaItem.equals(item)) continue;
-
+            if (!mediaItem.equals(item))
+                continue;
             timelineItems.remove(pos);
             notifyItemRemoved(pos);
             break;

@@ -1,22 +1,20 @@
 package org.horaapps.leafpic.adapters;
 
 import android.content.Context;
-
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
 import org.horaapps.liz.ThemedAdapter;
 import org.horaapps.liz.ThemedViewHolder;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by dnld on 01/04/17.
  */
-
 public abstract class BaseAdapter<T, VH extends ThemedViewHolder> extends ThemedAdapter<VH> implements Themed {
 
     private List<T> items;
+
     /*    private OnItemClickListener<T> clickListener;
         private OnItemLongClickListener<T> longClickListener;*/
     private Context context;
@@ -36,7 +34,7 @@ public abstract class BaseAdapter<T, VH extends ThemedViewHolder> extends Themed
         return context;
     }
 
-   /* public void setClickListener(OnItemClickListener<T> clickListener) {
+    /* public void setClickListener(OnItemClickListener<T> clickListener) {
         this.clickListener = clickListener;
     }
 
@@ -54,7 +52,6 @@ public abstract class BaseAdapter<T, VH extends ThemedViewHolder> extends Themed
             return longClickListener.onItemLongClick(itm, parent, pos);
         return false;
     }*/
-
     public List<T> getItems() {
         return items;
     }

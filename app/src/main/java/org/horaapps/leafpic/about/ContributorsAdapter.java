@@ -3,19 +3,17 @@ package org.horaapps.leafpic.about;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemedAdapter;
-
 import java.util.ArrayList;
 
 /**
  * Created by dnld on 04/03/18.
  */
-
 public class ContributorsAdapter extends ThemedAdapter<ContributorViewHolder> {
 
     private ContactListener listener;
+
     private ArrayList<Contributor> contributors;
 
     ContributorsAdapter(Context context, ArrayList<Contributor> contributors, ContactListener listener) {
@@ -40,5 +38,4 @@ public class ContributorsAdapter extends ThemedAdapter<ContributorViewHolder> {
     public int getItemCount() {
         return contributors.size();
     }
-
 }

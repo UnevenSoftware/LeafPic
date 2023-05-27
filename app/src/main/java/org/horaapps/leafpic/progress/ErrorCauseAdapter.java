@@ -4,10 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemedAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 

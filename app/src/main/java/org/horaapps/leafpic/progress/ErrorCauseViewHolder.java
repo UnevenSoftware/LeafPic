@@ -1,12 +1,10 @@
 package org.horaapps.leafpic.progress;
 
 import android.view.View;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemedViewHolder;
 import org.horaapps.liz.ui.ThemedLinearLayout;
 import org.horaapps.liz.ui.ThemedTextView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -25,7 +23,6 @@ public class ErrorCauseViewHolder extends ThemedViewHolder {
 
     public void load(ErrorCause errorCause) {
         title.setText(errorCause.getTitle());
-
         causes.removeAllViews();
         for (String c : errorCause.getCauses()) {
             ThemedTextView textView = new ThemedTextView(itemView.getContext());

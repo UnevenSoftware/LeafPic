@@ -12,14 +12,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.mikepenz.iconics.IconicsDrawable;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
 import org.horaapps.liz.ui.ThemedIcon;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,9 +25,14 @@ import butterknife.ButterKnife;
  */
 public class AboutLink extends RelativeLayout implements Themed {
 
-    @BindView(R.id.about_link_icon) ThemedIcon linkIcon;
-    @BindView(R.id.about_link_title) TextView linkTitle;
-    @BindView(R.id.about_link_description) TextView linkDescription;
+    @BindView(R.id.about_link_icon)
+    ThemedIcon linkIcon;
+
+    @BindView(R.id.about_link_title)
+    TextView linkTitle;
+
+    @BindView(R.id.about_link_description)
+    TextView linkDescription;
 
     public AboutLink(@NonNull Context context) {
         this(context, null);
@@ -55,15 +57,14 @@ public class AboutLink extends RelativeLayout implements Themed {
         setupView(context);
         LayoutInflater.from(context).inflate(R.layout.view_about_link, this, true);
         ButterKnife.bind(this);
-
-        if (attributeSet == null) return;
+        if (attributeSet == null)
+            return;
         setupData(context, attributeSet);
     }
 
     private void setupView(@NonNull Context context) {
         setBackground(ContextCompat.getDrawable(context, R.drawable.ripple));
         setGravity(Gravity.CENTER_VERTICAL);
-
         int padding = getResources().getDimensionPixelOffset(R.dimen.about_link_padding);
         setPadding(padding, padding, padding, padding);
     }
@@ -74,11 +75,10 @@ public class AboutLink extends RelativeLayout implements Themed {
         String linkIcon = typedArray.getString(R.styleable.AboutLink_linkIcon);
         String linkDescription = typedArray.getString(R.styleable.AboutLink_linkDescription);
         typedArray.recycle();
-
         setText(titleText);
         setDescription(linkDescription);
-
-        if (linkIcon == null) return;
+        if (linkIcon == null)
+            return;
         setIcon(linkIcon);
     }
 
@@ -102,7 +102,6 @@ public class AboutLink extends RelativeLayout implements Themed {
         int textColor = themeHelper.getTextColor();
         int subTextColor = themeHelper.getSubTextColor();
         int iconColor = themeHelper.getIconColor();
-
         linkIcon.setColor(iconColor);
         linkTitle.setTextColor(textColor);
         linkDescription.setTextColor(subTextColor);

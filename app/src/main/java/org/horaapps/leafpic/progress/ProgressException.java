@@ -23,11 +23,15 @@ public class ProgressException extends Exception {
 
     @Override
     public String getMessage() {
-        return toString();
+        return toStringOverride();
     }
 
     @Override
     public String getLocalizedMessage() {
+        return toStringOverride();
+    }
+
+    public String toStringOverride() {
         return toString();
     }
 }

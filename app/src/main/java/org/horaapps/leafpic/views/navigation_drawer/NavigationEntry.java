@@ -13,12 +13,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.mikepenz.iconics.IconicsDrawable;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ui.ThemedIcon;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,8 +24,11 @@ import butterknife.ButterKnife;
  */
 public class NavigationEntry extends LinearLayout {
 
-    @BindView(R.id.navigation_item_icon) ThemedIcon navIcon;
-    @BindView(R.id.navigation_item_text) TextView navText;
+    @BindView(R.id.navigation_item_icon)
+    ThemedIcon navIcon;
+
+    @BindView(R.id.navigation_item_text)
+    TextView navText;
 
     public NavigationEntry(@NonNull Context context) {
         this(context, null);
@@ -71,8 +71,8 @@ public class NavigationEntry extends LinearLayout {
         setupView(context);
         LayoutInflater.from(context).inflate(R.layout.view_navigation_entry, this, true);
         ButterKnife.bind(this);
-
-        if (attributeSet == null) return;
+        if (attributeSet == null)
+            return;
         setupData(context, attributeSet);
     }
 
@@ -80,7 +80,6 @@ public class NavigationEntry extends LinearLayout {
         setOrientation(LinearLayout.HORIZONTAL);
         setBackground(ContextCompat.getDrawable(context, R.drawable.ripple));
         setGravity(Gravity.CENTER_VERTICAL);
-
         int verticalPadding = getResources().getDimensionPixelOffset(R.dimen.nav_entry_vertical_spacing);
         int horizontalPadding = getResources().getDimensionPixelOffset(R.dimen.nav_entry_horizontal_spacing);
         setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding);
@@ -91,10 +90,9 @@ public class NavigationEntry extends LinearLayout {
         String displayText = typedArray.getString(R.styleable.NavigationEntry_itemText);
         String displayIcon = typedArray.getString(R.styleable.NavigationEntry_itemIcon);
         typedArray.recycle();
-
         setText(displayText);
-
-        if (displayIcon == null) return;
+        if (displayIcon == null)
+            return;
         setIcon(displayIcon);
     }
 

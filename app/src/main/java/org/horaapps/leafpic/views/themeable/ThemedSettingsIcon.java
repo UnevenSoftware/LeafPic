@@ -3,7 +3,6 @@ package org.horaapps.leafpic.views.themeable;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
 import org.horaapps.liz.ui.ThemedIcon;

@@ -2,11 +2,9 @@ package org.horaapps.leafpic.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import org.horaapps.leafpic.data.filter.FilterMode;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
-
 import java.io.Serializable;
 
 /**
@@ -15,8 +13,11 @@ import java.io.Serializable;
 public class AlbumSettings implements Serializable, Parcelable {
 
     String coverPath;
+
     int sortingMode, sortingOrder;
+
     boolean pinned;
+
     FilterMode filterMode = FilterMode.ALL;
 
     public static AlbumSettings getDefaults() {
@@ -52,7 +53,9 @@ public class AlbumSettings implements Serializable, Parcelable {
         dest.writeInt(this.filterMode == null ? -1 : this.filterMode.ordinal());
     }
 
-    /** This is the constructor used by CREATOR. */
+    /**
+     * This is the constructor used by CREATOR.
+     */
     protected AlbumSettings(Parcel in) {
         this.coverPath = in.readString();
         this.sortingMode = in.readInt();
@@ -62,7 +65,9 @@ public class AlbumSettings implements Serializable, Parcelable {
         this.filterMode = tmpFilterMode == -1 ? null : FilterMode.values()[tmpFilterMode];
     }
 
-    /** It is a non-null static field that must be in parcelable. */
+    /**
+     * It is a non-null static field that must be in parcelable.
+     */
     public static final Parcelable.Creator<AlbumSettings> CREATOR = new Parcelable.Creator<AlbumSettings>() {
 
         @Override

@@ -10,33 +10,36 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SubtitleView;
-
 import org.horaapps.leafpic.R;
-
 import java.util.List;
 
 /**
  * Created by dnld on 12/6/16.
  */
-
 public final class CustomExoPlayerView extends FrameLayout {
 
     private final View surfaceView;
+
     private final View shutterView;
+
     private final SubtitleView subtitleLayout;
+
     private final AspectRatioFrameLayout layout;
+
     private final CustomPlayBackController controller;
+
     private final ComponentListener componentListener;
 
     private SimpleExoPlayer player;
+
     private boolean useController = true;
+
     private int controllerShowTimeoutMs;
 
     public CustomExoPlayerView(Context context) {
@@ -49,13 +52,11 @@ public final class CustomExoPlayerView extends FrameLayout {
 
     public CustomExoPlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         boolean useTextureView = false;
         int resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT;
         int rewindMs = CustomPlayBackController.DEFAULT_REWIND_MS;
         int fastForwardMs = CustomPlayBackController.DEFAULT_FAST_FORWARD_MS;
         int controllerShowTimeoutMs = CustomPlayBackController.DEFAULT_SHOW_TIMEOUT_MS;
-
         LayoutInflater.from(context).inflate(R.layout.exo_player, this);
         componentListener = new ComponentListener();
         layout = findViewById(R.id.video_frame);
@@ -64,17 +65,13 @@ public final class CustomExoPlayerView extends FrameLayout {
         subtitleLayout = findViewById(R.id.subtitles);
         subtitleLayout.setUserDefaultStyle();
         subtitleLayout.setUserDefaultTextSize();
-
         controller = findViewById(R.id.control);
         controller.hide();
         controller.setRewindIncrementMs(rewindMs);
         controller.setFastForwardIncrementMs(fastForwardMs);
         this.controllerShowTimeoutMs = controllerShowTimeoutMs;
-
         View view = useTextureView ? new TextureView(context) : new SurfaceView(context);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         view.setLayoutParams(params);
         surfaceView = view;
         layout.addView(surfaceView, 0);
@@ -89,7 +86,6 @@ public final class CustomExoPlayerView extends FrameLayout {
             return;
         }
         if (this.player != null) {
-
             this.player.removeListener(componentListener);
             this.player.removeTextOutput(componentListener);
             this.player.removeVideoListener(componentListener);
@@ -106,9 +102,7 @@ public final class CustomExoPlayerView extends FrameLayout {
         if (shutterView != null) {
             shutterView.setVisibility(VISIBLE);
         }
-
         if (player != null) {
-
             if (surfaceView instanceof TextureView) {
                 player.setVideoTextureView((TextureView) surfaceView);
             } else if (surfaceView instanceof SurfaceView) {
@@ -149,15 +143,21 @@ public final class CustomExoPlayerView extends FrameLayout {
         return controllerShowTimeoutMs;
     }
 
-    public void setControllerShowTimeoutMs(int controllerShowTimeoutMs) {this.controllerShowTimeoutMs = controllerShowTimeoutMs;}
+    public void setControllerShowTimeoutMs(int controllerShowTimeoutMs) {
+        this.controllerShowTimeoutMs = controllerShowTimeoutMs;
+    }
 
-    public void setControllerVisibilityListener(CustomPlayBackController.VisibilityListener listener) {controller.setVisibilityListener(listener);}
+    public void setControllerVisibilityListener(CustomPlayBackController.VisibilityListener listener) {
+        controller.setVisibilityListener(listener);
+    }
 
     public void setRewindIncrementMs(int rewindMs) {
         controller.setRewindIncrementMs(rewindMs);
     }
 
-    public void setFastForwardIncrementMs(int fastForwardMs) {controller.setFastForwardIncrementMs(fastForwardMs);}
+    public void setFastForwardIncrementMs(int fastForwardMs) {
+        controller.setFastForwardIncrementMs(fastForwardMs);
+    }
 
     public View getVideoSurfaceView() {
         return surfaceView;
@@ -194,16 +194,13 @@ public final class CustomExoPlayerView extends FrameLayout {
             return true;
         }
         int playbackState = player.getPlaybackState();
-        return (playbackState == Player.STATE_IDLE
-                || playbackState == Player.STATE_ENDED || !player.getPlayWhenReady());
+        return (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED || !player.getPlayWhenReady());
     }
-
 
     private void maybeShowController(boolean isForced) {
         if (!useController || player == null) {
             return;
         }
-
         boolean wasShowingIndefinitely = controller.isVisible() && controller.getShowTimeoutMs() <= 0;
         boolean shouldShowIndefinitely = shouldShowControllerIndefinitely();
         if (isForced || wasShowingIndefinitely || shouldShowIndefinitely) {
@@ -215,8 +212,7 @@ public final class CustomExoPlayerView extends FrameLayout {
         controller.hide();
     }
 
-    private final class ComponentListener extends Player.DefaultEventListener implements TextOutput,
-            SimpleExoPlayer.VideoListener {
+    private final class ComponentListener extends Player.DefaultEventListener implements TextOutput, SimpleExoPlayer.VideoListener {
 
         // TextRenderer.Output implementation
         @Override
@@ -246,6 +242,5 @@ public final class CustomExoPlayerView extends FrameLayout {
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             maybeShowController(false);
         }
-
     }
 }

@@ -33,5 +33,4 @@ public class SquareRelativeLayout extends RelativeLayout {
         // Set a square layout.
         super.onMeasure(widthMeasureSpec, widthMeasureSpec);
     }
-
 }

@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.Queue;
 public class PinchImageView extends ImageView {
 
     ////////////////////////////////配置参数////////////////////////////////
-
     /**
      * 图片缩放动画时间
      */
@@ -41,7 +39,6 @@ public class PinchImageView extends ImageView {
     private static final float MAX_SCALE = 4f;
 
     ////////////////////////////////监听器////////////////////////////////
-
     /**
      * 外界点击事件
      *
@@ -69,7 +66,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////公共状态获取////////////////////////////////
-
     /**
      * 手势状态：自由状态
      *
@@ -289,7 +285,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////公共状态设置////////////////////////////////
-
     /**
      * 执行当前outerMatrix到指定outerMatrix渐变的动画
      * <p>
@@ -382,7 +377,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////对外广播事件////////////////////////////////
-
     /**
      * 外部矩阵变化事件通知监听器
      */
@@ -474,10 +468,8 @@ public class PinchImageView extends ImageView {
         } else {
             //如果监听列表被修改锁定,那么就在其副本上修改
             //其副本将会在锁定解除时替换回监听列表
-            if (mOuterMatrixChangedListenersCopy == null) {
-                if (mOuterMatrixChangedListeners != null) {
-                    mOuterMatrixChangedListenersCopy = new ArrayList<OuterMatrixChangedListener>(mOuterMatrixChangedListeners);
-                }
+            if (mOuterMatrixChangedListenersCopy == null && mOuterMatrixChangedListeners != null) {
+                mOuterMatrixChangedListenersCopy = new ArrayList<OuterMatrixChangedListener>(mOuterMatrixChangedListeners);
             }
             if (mOuterMatrixChangedListenersCopy != null) {
                 mOuterMatrixChangedListenersCopy.remove(listener);
@@ -507,19 +499,15 @@ public class PinchImageView extends ImageView {
         //减锁
         mDispatchOuterMatrixChangedLock--;
         //如果是递归的情况,mDispatchOuterMatrixChangedLock可能大于1,只有减到0才能算列表的锁定解除
-        if (mDispatchOuterMatrixChangedLock == 0) {
-            //如果期间有修改列表,那么副本将不为null
-            if (mOuterMatrixChangedListenersCopy != null) {
-                //将副本替换掉正式的列表
-                mOuterMatrixChangedListeners = mOuterMatrixChangedListenersCopy;
-                //清空副本
-                mOuterMatrixChangedListenersCopy = null;
-            }
+        if (mDispatchOuterMatrixChangedLock == 0 && mOuterMatrixChangedListenersCopy != null) {
+            //将副本替换掉正式的列表
+            mOuterMatrixChangedListeners = mOuterMatrixChangedListenersCopy;
+            //清空副本
+            mOuterMatrixChangedListenersCopy = null;
         }
     }
 
     ////////////////////////////////用于重载定制////////////////////////////////
-
     /**
      * 获取图片最大可放大的比例
      * <p>
@@ -558,7 +546,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////初始化////////////////////////////////
-
     public PinchImageView(Context context) {
         super(context);
         initView();
@@ -585,7 +572,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////绘制////////////////////////////////
-
     @Override
     protected void onDraw(Canvas canvas) {
         //在绘制前设置变换矩阵
@@ -606,7 +592,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////有效性判断////////////////////////////////
-
     /**
      * 判断当前情况是否能执行手势相关计算
      * <p>
@@ -615,12 +600,10 @@ public class PinchImageView extends ImageView {
      * @return 是否能执行手势相关计算
      */
     private boolean isReady() {
-        return getDrawable() != null && getDrawable().getIntrinsicWidth() > 0 && getDrawable().getIntrinsicHeight() > 0
-                && getWidth() > 0 && getHeight() > 0;
+        return getDrawable() != null && getDrawable().getIntrinsicWidth() > 0 && getDrawable().getIntrinsicHeight() > 0 && getWidth() > 0 && getHeight() > 0;
     }
 
     ////////////////////////////////mask动画处理////////////////////////////////
-
     /**
      * mask修改的动画
      * <p>
@@ -694,7 +677,6 @@ public class PinchImageView extends ImageView {
     }
 
     ////////////////////////////////手势动画处理////////////////////////////////
-
     /**
      * 在单指模式下:
      * 记录上一次手指的位置,用于计算新的位置和上一次位置的差值.
@@ -805,18 +787,14 @@ public class PinchImageView extends ImageView {
             mPinchMode = PINCH_MODE_FREE;
         } else if (action == MotionEvent.ACTION_POINTER_UP) {
             //多个手指情况下抬起一个手指,此时需要是缩放模式才触发
-            if (mPinchMode == PINCH_MODE_SCALE) {
-                //抬起的点如果大于2，那么缩放模式还有效，但是有可能初始点变了，重新测量初始点
-                if (event.getPointerCount() > 2) {
-                    //如果还没结束缩放模式，但是第一个点抬起了，那么让第二个点和第三个点作为缩放控制点
-                    if (event.getAction() >> 8 == 0) {
-                        saveScaleContext(event.getX(1), event.getY(1), event.getX(2), event.getY(2));
-                        //如果还没结束缩放模式，但是第二个点抬起了，那么让第一个点和第三个点作为缩放控制点
-                    } else if (event.getAction() >> 8 == 1) {
-                        saveScaleContext(event.getX(0), event.getY(0), event.getX(2), event.getY(2));
-                    }
+            if (mPinchMode == PINCH_MODE_SCALE && event.getPointerCount() > 2) {
+                //如果还没结束缩放模式，但是第一个点抬起了，那么让第二个点和第三个点作为缩放控制点
+                if (event.getAction() >> 8 == 0) {
+                    saveScaleContext(event.getX(1), event.getY(1), event.getX(2), event.getY(2));
+                    //如果还没结束缩放模式，但是第二个点抬起了，那么让第一个点和第三个点作为缩放控制点
+                } else if (event.getAction() >> 8 == 1) {
+                    saveScaleContext(event.getX(0), event.getY(0), event.getX(2), event.getY(2));
                 }
-                //如果抬起的点等于2,那么此时只剩下一个点,也不允许进入单指模式,因为此时可能图片没有在正确的位置上
             }
             //第一个点按下，开启滚动模式，记录开始滚动的点
         } else if (action == MotionEvent.ACTION_DOWN) {
@@ -837,24 +815,22 @@ public class PinchImageView extends ImageView {
             mPinchMode = PINCH_MODE_SCALE;
             //保存缩放的两个手指
             saveScaleContext(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            if (!(mScaleAnimator != null && mScaleAnimator.isRunning())) {
-                //在滚动模式下移动
-                if (mPinchMode == PINCH_MODE_SCROLL) {
-                    //每次移动产生一个差值累积到图片位置上
-                    scrollBy(event.getX() - mLastMovePoint.x, event.getY() - mLastMovePoint.y);
-                    //记录新的移动点
-                    mLastMovePoint.set(event.getX(), event.getY());
-                    //在缩放模式下移动
-                } else if (mPinchMode == PINCH_MODE_SCALE && event.getPointerCount() > 1) {
-                    //两个缩放点间的距离
-                    float distance = MathUtils.getDistance(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-                    //保存缩放点中点
-                    float[] lineCenter = MathUtils.getCenterPoint(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-                    mLastMovePoint.set(lineCenter[0], lineCenter[1]);
-                    //处理缩放
-                    scale(mScaleCenter, mScaleBase, distance, mLastMovePoint);
-                }
+        } else if (action == MotionEvent.ACTION_MOVE && !(mScaleAnimator != null && mScaleAnimator.isRunning())) {
+            //在滚动模式下移动
+            if (mPinchMode == PINCH_MODE_SCROLL) {
+                //每次移动产生一个差值累积到图片位置上
+                scrollBy(event.getX() - mLastMovePoint.x, event.getY() - mLastMovePoint.y);
+                //记录新的移动点
+                mLastMovePoint.set(event.getX(), event.getY());
+                //在缩放模式下移动
+            } else if (mPinchMode == PINCH_MODE_SCALE && event.getPointerCount() > 1) {
+                //两个缩放点间的距离
+                float distance = MathUtils.getDistance(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                //保存缩放点中点
+                float[] lineCenter = MathUtils.getCenterPoint(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                mLastMovePoint.set(lineCenter[0], lineCenter[1]);
+                //处理缩放
+                scale(mScaleCenter, mScaleBase, distance, mLastMovePoint);
             }
         }
         //无论如何都处理各种外部手势
@@ -1215,7 +1191,7 @@ public class PinchImageView extends ImageView {
             setFloatValues(0, 1f);
             setDuration(1000000);
             addUpdateListener(this);
-            mVector = new float[]{vectorX, vectorY};
+            mVector = new float[] { vectorX, vectorY };
         }
 
         @Override
@@ -1299,9 +1275,7 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////防止内存抖动复用对象////////////////////////////////
-
     /**
      * 对象池
      * <p>
@@ -1429,9 +1403,7 @@ public class PinchImageView extends ImageView {
         }
     }
 
-
     ////////////////////////////////数学计算工具类////////////////////////////////
-
     /**
      * 数学计算工具类
      */
@@ -1531,7 +1503,7 @@ public class PinchImageView extends ImageView {
          * @return float[]{x, y}
          */
         public static float[] getCenterPoint(float x1, float y1, float x2, float y2) {
-            return new float[]{(x1 + x2) / 2f, (y1 + y2) / 2f};
+            return new float[] { (x1 + x2) / 2f, (y1 + y2) / 2f };
         }
 
         /**
@@ -1544,7 +1516,7 @@ public class PinchImageView extends ImageView {
             if (matrix != null) {
                 float[] value = new float[9];
                 matrix.getValues(value);
-                return new float[]{value[0], value[4]};
+                return new float[] { value[0], value[4] };
             } else {
                 return new float[2];
             }

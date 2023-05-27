@@ -16,9 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.widget.ScrollView;
 import android.widget.Toast;
-
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-
 import org.horaapps.leafpic.BuildConfig;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.DonateActivity;
@@ -28,13 +26,10 @@ import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ThemedActivity;
 import org.horaapps.liz.ui.ThemedTextView;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_CALVIN;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_DONALD;
 import static org.horaapps.leafpic.util.ServerConstants.GITHUB_GILBERT;
@@ -59,16 +54,32 @@ import static org.horaapps.leafpic.util.ServerConstants.TWITTER_ABOUT_GILBERT;
  */
 public class AboutActivity extends ThemedActivity implements ContactListener {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.about_version_item_sub) ThemedTextView appVersion;
-    @BindView(R.id.aboutAct_scrollView) ScrollView aboutScrollView;
-    @BindView(R.id.about_developer_donald) AboutCreator aboutDonald;
-    @BindView(R.id.about_developer_gilbert) AboutCreator aboutGilbert;
-    @BindView(R.id.about_patryk_goworowski_item_sub) ThemedTextView specialThanksPatryk;
-    @BindView(R.id.about_link_changelog) AboutLink linkChangelog;
-    @BindView(R.id.list_contributors) RecyclerView rvContributors;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.about_version_item_sub)
+    ThemedTextView appVersion;
+
+    @BindView(R.id.aboutAct_scrollView)
+    ScrollView aboutScrollView;
+
+    @BindView(R.id.about_developer_donald)
+    AboutCreator aboutDonald;
+
+    @BindView(R.id.about_developer_gilbert)
+    AboutCreator aboutGilbert;
+
+    @BindView(R.id.about_patryk_goworowski_item_sub)
+    ThemedTextView specialThanksPatryk;
+
+    @BindView(R.id.about_link_changelog)
+    AboutLink linkChangelog;
+
+    @BindView(R.id.list_contributors)
+    RecyclerView rvContributors;
 
     private ChromeCustomTabs chromeTabs;
+
     private int emojiEasterEggCount = 0;
 
     public static void startActivity(@NonNull Context context) {
@@ -81,7 +92,6 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
         chromeTabs = new ChromeCustomTabs(AboutActivity.this);
-
         initUi();
     }
 
@@ -91,7 +101,9 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         super.onDestroy();
     }
 
-    /** Select List */
+    /**
+     * Select List
+     */
     @OnClick(R.id.about_link_report_bug)
     public void onReportBug() {
         chromeTabs.launchUrl(LEAFPIC_ISSUES);
@@ -106,21 +118,18 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
     public void onRate() {
         Uri uri = Uri.parse(String.format("market://details?id=%s", BuildConfig.APPLICATION_ID));
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        /** To count with Play market backstack, After pressing back button,
-         * to taken back to our application, we need to add following flags to intent. */
-
+        /**
+         * To count with Play market backstack, After pressing back button,
+         * to taken back to our application, we need to add following flags to intent.
+         */
         int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-
         goToMarket.addFlags(flags);
-
         try {
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(String.format("http://play.google.com/store/apps/details?id=%s", BuildConfig.APPLICATION_ID))));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("http://play.google.com/store/apps/details?id=%s", BuildConfig.APPLICATION_ID))));
         }
     }
 
@@ -142,11 +151,8 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
     @OnClick(R.id.about_link_changelog)
     public void onChangelog() {
         AlertDialog alertDialog = AlertDialogsHelper.showChangelogDialog(this);
-        alertDialog.setButton(
-                DialogInterface.BUTTON_POSITIVE,
-                getString(R.string.ok_action).toUpperCase(),
-                (dialogInterface, i) -> {
-                });
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok_action).toUpperCase(), (dialogInterface, i) -> {
+        });
         alertDialog.show();
     }
 
@@ -154,9 +160,7 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         emojiEasterEggCount++;
         if (emojiEasterEggCount > 3) {
             boolean showEasterEgg = Prefs.showEasterEgg();
-            Toast.makeText(this,
-                    (!showEasterEgg ? this.getString(R.string.easter_egg_enable) : this.getString(R.string.easter_egg_disable))
-                            + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, (!showEasterEgg ? this.getString(R.string.easter_egg_enable) : this.getString(R.string.easter_egg_disable)) + " " + this.getString(R.string.emoji_easter_egg), Toast.LENGTH_SHORT).show();
             Prefs.setShowEasterEgg(!showEasterEgg);
             emojiEasterEggCount = 0;
         }
@@ -176,38 +180,33 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         setSupportActionBar(toolbar);
         appVersion.setText(ApplicationUtils.getAppVersion());
         linkChangelog.setDescription(ApplicationUtils.getAppVersion());
-
-
         ArrayList<Contributor> contributors = new ArrayList<>(1);
-
-        /** Calvin */
-        Contributor calvin = new Contributor(
-                getString(R.string.developer_calvin_name),
-                getString(R.string.about_developer_calvin_description),
-                R.drawable.calvin_profile);
+        /**
+         * Calvin
+         */
+        Contributor calvin = new Contributor(getString(R.string.developer_calvin_name), getString(R.string.about_developer_calvin_description), R.drawable.calvin_profile);
         calvin.setEmail(MAIL_CALVIN);
         calvin.addSocial(getString(R.string.google_plus_link), GOOGLE_ABOUT_CALVIN);
         calvin.addSocial(getString(R.string.github), GITHUB_CALVIN);
         contributors.add(calvin);
-
-
         ContributorsAdapter contributorsAdapter = new ContributorsAdapter(this, contributors, this);
         rvContributors.setHasFixedSize(true);
         rvContributors.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rvContributors.setAdapter(contributorsAdapter);
-
-        /** Donald */
+        /**
+         * Donald
+         */
         ArrayList<Contact> donaldContacts = new ArrayList<>();
         donaldContacts.add(new Contact(TWITTER_ABOUT_DONALD, getString(R.string.twitter_link)));
         donaldContacts.add(new Contact(GITHUB_DONALD, getString(R.string.github_link)));
         aboutDonald.setupListeners(this, MAIL_DONALD, donaldContacts);
-
-        /** Jibo */
+        /**
+         * Jibo
+         */
         ArrayList<Contact> jiboContacts = new ArrayList<>();
         jiboContacts.add(new Contact(TWITTER_ABOUT_GILBERT, getString(R.string.twitter_link)));
         jiboContacts.add(new Contact(GITHUB_GILBERT, getString(R.string.github_link)));
         aboutGilbert.setupListeners(this, MAIL_GILBERT, jiboContacts);
-
         aboutGilbert.setOnClickListener(v -> emojiEasterEgg());
         specialThanksPatryk.setMovementMethod(LinkMovementMethod.getInstance());
     }
@@ -219,11 +218,9 @@ public class AboutActivity extends ThemedActivity implements ContactListener {
         toolbar.setBackgroundColor(getPrimaryColor());
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
         setScrollViewColor(aboutScrollView);
         setStatusBarColor();
         setNavBarColor();
-
         specialThanksPatryk.setLinkTextColor(getAccentColor());
     }
 

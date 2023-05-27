@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
 

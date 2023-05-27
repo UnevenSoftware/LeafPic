@@ -17,14 +17,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import org.horaapps.leafpic.LookForMediaJob;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
 import org.horaapps.leafpic.util.PermissionUtils;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.liz.ColorPalette;
-
 import java.io.File;
 
 /**
@@ -36,41 +34,34 @@ public class SplashScreen extends SharedMediaActivity {
     private final String TAG = SplashScreen.class.getSimpleName();
 
     private final int EXTERNAL_STORAGE_PERMISSIONS = 12;
+
     private static final int PICK_MEDIA_REQUEST = 44;
 
     final static String CONTENT = "content";
 
     final static int ALBUMS_PREFETCHED = 2376;
+
     final static int PHOTOS_PREFETCHED = 2567;
+
     final static int ALBUMS_BACKUP = 1312;
+
     private boolean pickMode = false;
+
     public final static String ACTION_OPEN_ALBUM = "org.horaapps.leafpic.OPEN_ALBUM";
 
     //private Album tmpAlbum;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(org.horaapps.leafpic.R.layout.activity_splash);
-
-
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setNavBarColor();
         setStatusBarColor();
-
         String action = getIntent().getAction();
-
         if (action != null) {
             pickMode = action.equals(Intent.ACTION_GET_CONTENT) || action.equals(Intent.ACTION_PICK);
         }
-
         if (PermissionUtils.isStoragePermissionsGranted(this)) {
-
-
             if (action != null && action.equals(ACTION_OPEN_ALBUM)) {
                 Bundle data = getIntent().getExtras();
                 if (data != null) {
@@ -81,21 +72,19 @@ public class SplashScreen extends SharedMediaActivity {
                         // TODO: 4/10/17 handle
                         start();
                     }
-                } else StringUtils.showToast(getApplicationContext(), "Album not found");
-            } else {  // default intent
+                } else
+                    StringUtils.showToast(getApplicationContext(), "Album not found");
+            } else {
+                // default intent
                 start();
             }
-
-
         } else
             PermissionUtils.requestPermissions(this, EXTERNAL_STORAGE_PERMISSIONS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-
         //startLookingForMedia();
     }
 
     private void start() {
         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-
         if (pickMode) {
             intent.putExtra(MainActivity.ARGS_PICK_MODE, true);
             startActivityForResult(intent, PICK_MEDIA_REQUEST);
@@ -106,63 +95,53 @@ public class SplashScreen extends SharedMediaActivity {
     }
 
     private void startLookingForMedia() {
-
         new Thread(() -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP /* TODO  && (has included folders) */) {
-
-                JobInfo job = new JobInfo.Builder(0, new ComponentName(getApplicationContext(), LookForMediaJob.class))
-                        .setPeriodic(1000)
-                        .setRequiresDeviceIdle(true)
-                        .build();
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) /* TODO  && (has included folders) */
+            {
+                JobInfo job = new JobInfo.Builder(0, new ComponentName(getApplicationContext(), LookForMediaJob.class)).setPeriodic(1000).setRequiresDeviceIdle(true).build();
                 JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
                 if (scheduler.getAllPendingJobs().size() == 0)
-                    Log.wtf(TAG, scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS
-                            ? "LookForMediaJob scheduled successfully!" : "LookForMediaJob scheduled failed!");
-
+                    Log.wtf(TAG, scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS ? "LookForMediaJob scheduled successfully!" : "LookForMediaJob scheduled failed!");
             }
         }).start();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
+        switch(requestCode) {
             case PICK_MEDIA_REQUEST:
                 if (resultCode == RESULT_OK) {
                     setResult(RESULT_OK, data);
                     finish();
                 }
                 break;
-            default: super.onActivityResult(requestCode, resultCode, data);
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     @Override
     public void setNavBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ColorPalette.getTransparentColor(
-                    ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), 70));
+            getWindow().setStatusBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), 70));
         }
     }
 
     @Override
     protected void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(
-                    ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), 70));
+            getWindow().setNavigationBarColor(ColorPalette.getTransparentColor(ContextCompat.getColor(getApplicationContext(), org.horaapps.leafpic.R.color.md_black_1000), 70));
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
+        switch(requestCode) {
             case EXTERNAL_STORAGE_PERMISSIONS:
                 boolean gotPermission = grantResults.length > 0;
-
                 for (int result : grantResults) {
                     gotPermission &= result == PackageManager.PERMISSION_GRANTED;
                 }
-
                 if (gotPermission) {
                     start();
                 } else {

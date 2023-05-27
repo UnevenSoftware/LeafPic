@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.ui.ThemedTextView;
@@ -13,7 +12,6 @@ import org.horaapps.liz.ui.ThemedTextView;
 /**
  * Created by dnld on 04/03/18.
  */
-
 public class ContactButton extends ThemedTextView {
 
     public ContactButton(Context context) {

@@ -13,9 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.ChromeCustomTabs;
 import org.horaapps.leafpic.util.StringUtils;
@@ -28,8 +26,11 @@ import org.horaapps.liz.ui.ThemedIcon;
 public class DonateActivity extends ThemedActivity {
 
     private Toolbar toolbar;
+
     private ChromeCustomTabs cts;
+
     private ScrollView scr;
+
     private Button btnDonatePP;
 
     public static void startActivity(@NonNull Context context) {
@@ -43,7 +44,6 @@ public class DonateActivity extends ThemedActivity {
         toolbar = findViewById(R.id.toolbar);
         scr = findViewById(R.id.donateAct_scrollView);
         btnDonatePP = findViewById(R.id.button_donate_paypal);
-
         iniUi();
         cts = new ChromeCustomTabs(DonateActivity.this);
     }
@@ -58,23 +58,23 @@ public class DonateActivity extends ThemedActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(getToolbarIcon(GoogleMaterial.Icon.gmd_arrow_back));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
         findViewById(R.id.donate_googleplay_card).setVisibility(View.GONE);
-
         btnDonatePP.setText(getString(R.string.donate).toUpperCase());
         btnDonatePP.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 cts.launchUrl("https://www.paypal.me/HoraApps");
             }
         });
-
         findViewById(R.id.donate_bitcoin_item).setOnLongClickListener(new View.OnLongClickListener() {
+
             @Override
             public boolean onLongClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -95,29 +95,23 @@ public class DonateActivity extends ThemedActivity {
         setNavBarColor();
         themeButton(btnDonatePP);
         setRecentApp(getString(R.string.donate));
-
         ((TextView) findViewById(R.id.team_name)).setTextColor(getAccentColor());
         ((TextView) findViewById(R.id.donate_googleplay_item_title)).setTextColor(getAccentColor());
         ((TextView) findViewById(R.id.donate_paypal_item_title)).setTextColor(getAccentColor());
         ((TextView) findViewById(R.id.donate_bitcoin_item_title)).setTextColor(getAccentColor());
-
         findViewById(R.id.donate_background).setBackgroundColor(getBackgroundColor());
-
         int color = getCardBackgroundColor();
         ((CardView) findViewById(R.id.donate_header_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(R.id.donate_paypal_card)).setCardBackgroundColor(color);
         ((CardView) findViewById(R.id.donate_bitcoin_card)).setCardBackgroundColor(color);
-
         color = getIconColor();
         ((ThemedIcon) findViewById(R.id.donate_paypal_icon_title)).setColor(color);
         ((ThemedIcon) findViewById(R.id.donate_bitcoin_icon_title)).setColor(color);
         ((ThemedIcon) findViewById(R.id.donate_header_icon)).setColor(color);
-
         color = getTextColor();
         ((TextView) findViewById(R.id.donate_paypal_item)).setTextColor(color);
         ((TextView) findViewById(R.id.donate_bitcoin_item)).setTextColor(color);
         ((TextView) findViewById(R.id.donate_header_item)).setTextColor(color);
-
         setScrollViewColor(scr);
     }
 }

@@ -2,7 +2,6 @@ package org.horaapps.leafpic.util.preferences;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
 import org.horaapps.leafpic.CardViewStyle;
 import org.horaapps.leafpic.data.sort.SortingMode;
 import org.horaapps.leafpic.data.sort.SortingOrder;
@@ -29,8 +28,9 @@ public class Prefs {
         sharedPrefs = new SharedPrefs(context);
     }
 
-    /********** GETTERS **********/
-
+    /**
+     * ******* GETTERS *********
+     */
     /**
      * Get number of folder columns to display in Portrait orientation
      */
@@ -64,8 +64,7 @@ public class Prefs {
      */
     @NonNull
     public static SortingMode getAlbumSortingMode() {
-        return SortingMode.fromValue(
-                getPrefs().get(Keys.ALBUM_SORTING_MODE, Defaults.ALBUM_SORTING_MODE));
+        return SortingMode.fromValue(getPrefs().get(Keys.ALBUM_SORTING_MODE, Defaults.ALBUM_SORTING_MODE));
     }
 
     /**
@@ -73,8 +72,7 @@ public class Prefs {
      */
     @NonNull
     public static SortingOrder getAlbumSortingOrder() {
-        return SortingOrder.fromValue(
-                getPrefs().get(Keys.ALBUM_SORTING_ORDER, Defaults.ALBUM_SORTING_ORDER));
+        return SortingOrder.fromValue(getPrefs().get(Keys.ALBUM_SORTING_ORDER, Defaults.ALBUM_SORTING_ORDER));
     }
 
     /**
@@ -124,16 +122,16 @@ public class Prefs {
      */
     @NonNull
     public static CardViewStyle getCardStyle() {
-        return CardViewStyle.fromValue(
-                getPrefs().get(Keys.CARD_STYLE, Defaults.CARD_STYLE));
+        return CardViewStyle.fromValue(getPrefs().get(Keys.CARD_STYLE, Defaults.CARD_STYLE));
     }
 
     public static int getLastVersionCode() {
         return getPrefs().get(Keys.LAST_VERSION_CODE, Defaults.LAST_VERSION_CODE);
     }
 
-    /********** SETTERS **********/
-
+    /**
+     * ******* SETTERS *********
+     */
     /**
      * Set the number of folder columns in Portrait orientation.
      */
@@ -219,7 +217,6 @@ public class Prefs {
     }
 
     // ***** TODO Calvin: These methods does not belong here, DO NOT expose generic methods to clients
-
     @Deprecated
     public static void setToggleValue(@NonNull String key, boolean value) {
         getPrefs().put(key, value);
@@ -231,7 +228,6 @@ public class Prefs {
     }
 
     // ***** Remove these methods when SettingWithSwitchView is refactored.
-
     @NonNull
     private static SharedPrefs getPrefs() {
         if (sharedPrefs == null) {

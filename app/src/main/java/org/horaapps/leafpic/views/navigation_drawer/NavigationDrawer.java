@@ -13,15 +13,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.util.preferences.Prefs;
 import org.horaapps.liz.ThemeHelper;
 import org.horaapps.liz.Themed;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 import static org.horaapps.leafpic.util.ApplicationUtils.isDebug;
 
 /**
@@ -30,13 +27,21 @@ import static org.horaapps.leafpic.util.ApplicationUtils.isDebug;
 public class NavigationDrawer extends ScrollView implements Themed {
 
     public static final int NAVIGATION_ITEM_ALL_ALBUMS = 1001;
+
     public static final int NAVIGATION_ITEM_ALL_MEDIA = 1002;
+
     public static final int NAVIGATION_ITEM_HIDDEN_FOLDERS = 1003;
+
     public static final int NAVIGATION_ITEM_WALLPAPERS = 1004;
+
     public static final int NAVIGATION_ITEM_DONATE = 1005;
+
     public static final int NAVIGATION_ITEM_SETTINGS = 1006;
+
     public static final int NAVIGATION_ITEM_AFFIX = 1007;
+
     public static final int NAVIGATION_ITEM_ABOUT = 1009;
+
     public static final int NAVIGATION_ITEM_TIMELINE = 1010;
 
     @Override
@@ -45,29 +50,51 @@ public class NavigationDrawer extends ScrollView implements Themed {
         selectItem(selectedEntry);
     }
 
-    @IntDef({NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_HIDDEN_FOLDERS,
-            NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS, NAVIGATION_ITEM_AFFIX,
-            NAVIGATION_ITEM_ABOUT, NAVIGATION_ITEM_TIMELINE})
-    public @interface NavigationItem {}
+    @IntDef({ NAVIGATION_ITEM_ALL_ALBUMS, NAVIGATION_ITEM_ALL_MEDIA, NAVIGATION_ITEM_HIDDEN_FOLDERS, NAVIGATION_ITEM_WALLPAPERS, NAVIGATION_ITEM_DONATE, NAVIGATION_ITEM_SETTINGS, NAVIGATION_ITEM_AFFIX, NAVIGATION_ITEM_ABOUT, NAVIGATION_ITEM_TIMELINE })
+    public @interface NavigationItem {
+    }
 
-    @BindView(R.id.navigation_drawer_header) ViewGroup drawerHeader;
+    @BindView(R.id.navigation_drawer_header)
+    ViewGroup drawerHeader;
 
-    @BindView(R.id.navigation_item_albums) NavigationEntry albumsEntry;
-    @BindView(R.id.navigation_item_all_media) NavigationEntry mediaEntry;
-    @BindView(R.id.navigation_item_timeline) NavigationEntry timelineEntry;
-    @BindView(R.id.navigation_item_hidden_albums) NavigationEntry hiddenFoldersEntry;
-    @BindView(R.id.navigation_item_wallpapers) NavigationEntry wallpapersEntry;
-    @BindView(R.id.navigation_item_donate) NavigationEntry donateEntry;
-    @BindView(R.id.navigation_item_settings) NavigationEntry settingsEntry;
-    @BindView(R.id.navigation_item_affix) NavigationEntry affixEntry;
-    @BindView(R.id.navigation_item_about) NavigationEntry aboutEntry;
-    @BindView(R.id.navigation_drawer_header_version) TextView appVersion;
+    @BindView(R.id.navigation_item_albums)
+    NavigationEntry albumsEntry;
+
+    @BindView(R.id.navigation_item_all_media)
+    NavigationEntry mediaEntry;
+
+    @BindView(R.id.navigation_item_timeline)
+    NavigationEntry timelineEntry;
+
+    @BindView(R.id.navigation_item_hidden_albums)
+    NavigationEntry hiddenFoldersEntry;
+
+    @BindView(R.id.navigation_item_wallpapers)
+    NavigationEntry wallpapersEntry;
+
+    @BindView(R.id.navigation_item_donate)
+    NavigationEntry donateEntry;
+
+    @BindView(R.id.navigation_item_settings)
+    NavigationEntry settingsEntry;
+
+    @BindView(R.id.navigation_item_affix)
+    NavigationEntry affixEntry;
+
+    @BindView(R.id.navigation_item_about)
+    NavigationEntry aboutEntry;
+
+    @BindView(R.id.navigation_drawer_header_version)
+    TextView appVersion;
 
     private NavigationEntry[] navigationEntries;
+
     private ItemListener itemListener;
+
     private NavigationEntry selectedEntry;
 
-    @ColorInt private int selectedColor;
+    @ColorInt
+    private int selectedColor;
 
     public NavigationDrawer(@NonNull Context context) {
         this(context, null);
@@ -102,12 +129,9 @@ public class NavigationDrawer extends ScrollView implements Themed {
      * @param textColor       Color for item text
      * @param iconColor       Color for icons
      */
-    public void setTheme(@ColorInt int primaryColor, @ColorInt int backgroundColor,
-                         @ColorInt int textColor, @ColorInt int iconColor) {
-
+    public void setTheme(@ColorInt int primaryColor, @ColorInt int backgroundColor, @ColorInt int textColor, @ColorInt int iconColor) {
         setBackgroundColor(backgroundColor);
         drawerHeader.setBackgroundColor(primaryColor);
-
         for (NavigationEntry navigationEntry : navigationEntries) {
             navigationEntry.setTextColor(textColor);
             navigationEntry.setIconColor(iconColor);
@@ -141,12 +165,8 @@ public class NavigationDrawer extends ScrollView implements Themed {
         setupView();
         LayoutInflater.from(context).inflate(R.layout.view_navigation_drawer, this, true);
         ButterKnife.bind(this);
-
-        navigationEntries = new NavigationEntry[]
-                {albumsEntry, mediaEntry, hiddenFoldersEntry, wallpapersEntry, donateEntry,
-                        settingsEntry, affixEntry, aboutEntry, timelineEntry};
+        navigationEntries = new NavigationEntry[] { albumsEntry, mediaEntry, hiddenFoldersEntry, wallpapersEntry, donateEntry, settingsEntry, affixEntry, aboutEntry, timelineEntry };
         setupListeners();
-
         selectedEntry = albumsEntry;
     }
 
@@ -157,11 +177,10 @@ public class NavigationDrawer extends ScrollView implements Themed {
 
     private void setupListeners() {
         OnClickListener onClickListener = v -> {
-            if (itemListener == null) return;
-
+            if (itemListener == null)
+                return;
             itemListener.onItemSelected(getNavigationItemSelected(v.getId()));
         };
-
         for (NavigationEntry navigationEntry : navigationEntries) {
             navigationEntry.setOnClickListener(onClickListener);
         }
@@ -175,7 +194,7 @@ public class NavigationDrawer extends ScrollView implements Themed {
 
     @NavigationItem
     private int getNavigationItemSelected(@IdRes int viewId) {
-        switch (viewId) {
+        switch(viewId) {
             case R.id.navigation_item_albums:
                 return NAVIGATION_ITEM_ALL_ALBUMS;
             case R.id.navigation_item_all_media:
@@ -200,7 +219,7 @@ public class NavigationDrawer extends ScrollView implements Themed {
 
     @NonNull
     private NavigationEntry getViewForSelection(@NavigationItem int navItem) {
-        switch (navItem) {
+        switch(navItem) {
             case NAVIGATION_ITEM_ABOUT:
                 return aboutEntry;
             case NAVIGATION_ITEM_ALL_ALBUMS:

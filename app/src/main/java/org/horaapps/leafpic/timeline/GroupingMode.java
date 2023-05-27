@@ -1,7 +1,6 @@
 package org.horaapps.leafpic.timeline;
 
 import android.support.annotation.NonNull;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -16,6 +15,7 @@ public enum GroupingMode {
      * eg: All media taken on 23rd October, 1994
      */
     DAY {
+
         @Override
         public boolean isInGroup(@NonNull Calendar left, @NonNull Calendar right) {
             return WEEK.isInGroup(left, right) && isDayOfMonthSame(left, right);
@@ -26,13 +26,14 @@ public enum GroupingMode {
         public String getGroupHeader(@NonNull Calendar calendar) {
             return getFormattedDate(HEADER_PATTERN_DAY, calendar);
         }
-    },
-
+    }
+    ,
     /**
      * Group the Timeline items by WEEK.
      * eg: All media taken on 4th week of October, 1994
      */
     WEEK {
+
         @Override
         public boolean isInGroup(@NonNull Calendar left, @NonNull Calendar right) {
             return MONTH.isInGroup(left, right) && isWeekOfMonthSame(left, right);
@@ -43,13 +44,14 @@ public enum GroupingMode {
         public String getGroupHeader(@NonNull Calendar calendar) {
             return "Week " + getFormattedDate(HEADER_PATTERN_WEEK, calendar);
         }
-    },
-
+    }
+    ,
     /**
      * Group the Timeline items by MONTH.
      * eg: All media taken in October, 1994.
      */
     MONTH {
+
         @Override
         public boolean isInGroup(@NonNull Calendar left, @NonNull Calendar right) {
             return YEAR.isInGroup(left, right) && isMonthOfYearSame(left, right);
@@ -60,13 +62,14 @@ public enum GroupingMode {
         public String getGroupHeader(@NonNull Calendar calendar) {
             return getFormattedDate(HEADER_PATTERN_MONTH, calendar);
         }
-    },
-
+    }
+    ,
     /**
      * Group the Timeline items by YEAR.
      * eg: All media taken in 1994.
      */
     YEAR {
+
         @Override
         public boolean isInGroup(@NonNull Calendar left, @NonNull Calendar right) {
             return isYearSame(left, right);
@@ -77,12 +80,16 @@ public enum GroupingMode {
         public String getGroupHeader(@NonNull Calendar calendar) {
             return getFormattedDate(HEADER_PATTERN_YEAR, calendar);
         }
-    };
+    }
+    ;
 
     // Must be below Enum constants. Consistency, I'm sorry :)
     private static final String HEADER_PATTERN_DAY = "E, d MMM yyyy";
+
     private static final String HEADER_PATTERN_WEEK = "W, MMM yyyy";
+
     private static final String HEADER_PATTERN_MONTH = "MMM yyyy";
+
     private static final String HEADER_PATTERN_YEAR = "yyyy";
 
     /**
