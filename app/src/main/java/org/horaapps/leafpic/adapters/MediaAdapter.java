@@ -274,11 +274,9 @@ public class MediaAdapter extends ThemedAdapter<MediaAdapter.ViewHolder> {
         }
         if (indexRightBeforeOrAfter != -1) {
             for (int index = Math.min(targetIndex, indexRightBeforeOrAfter); index <= Math.max(targetIndex, indexRightBeforeOrAfter); index++) {
-                if (media.get(index) != null) {
-                    if (media.get(index).setSelected(true)) {
-                        notifySelected(true);
-                        notifyItemChanged(index);
-                    }
+                if (media.get(index) != null && media.get(index).setSelected(true)) {
+                    notifySelected(true);
+                    notifyItemChanged(index);
                 }
             }
         }

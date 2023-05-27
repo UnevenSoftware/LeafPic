@@ -468,10 +468,8 @@ public class PinchImageView extends ImageView {
         } else {
             //如果监听列表被修改锁定,那么就在其副本上修改
             //其副本将会在锁定解除时替换回监听列表
-            if (mOuterMatrixChangedListenersCopy == null) {
-                if (mOuterMatrixChangedListeners != null) {
-                    mOuterMatrixChangedListenersCopy = new ArrayList<OuterMatrixChangedListener>(mOuterMatrixChangedListeners);
-                }
+            if (mOuterMatrixChangedListenersCopy == null && mOuterMatrixChangedListeners != null) {
+                mOuterMatrixChangedListenersCopy = new ArrayList<OuterMatrixChangedListener>(mOuterMatrixChangedListeners);
             }
             if (mOuterMatrixChangedListenersCopy != null) {
                 mOuterMatrixChangedListenersCopy.remove(listener);
@@ -501,14 +499,11 @@ public class PinchImageView extends ImageView {
         //减锁
         mDispatchOuterMatrixChangedLock--;
         //如果是递归的情况,mDispatchOuterMatrixChangedLock可能大于1,只有减到0才能算列表的锁定解除
-        if (mDispatchOuterMatrixChangedLock == 0) {
-            //如果期间有修改列表,那么副本将不为null
-            if (mOuterMatrixChangedListenersCopy != null) {
-                //将副本替换掉正式的列表
-                mOuterMatrixChangedListeners = mOuterMatrixChangedListenersCopy;
-                //清空副本
-                mOuterMatrixChangedListenersCopy = null;
-            }
+        if (mDispatchOuterMatrixChangedLock == 0 && mOuterMatrixChangedListenersCopy != null) {
+            //将副本替换掉正式的列表
+            mOuterMatrixChangedListeners = mOuterMatrixChangedListenersCopy;
+            //清空副本
+            mOuterMatrixChangedListenersCopy = null;
         }
     }
 
@@ -792,18 +787,14 @@ public class PinchImageView extends ImageView {
             mPinchMode = PINCH_MODE_FREE;
         } else if (action == MotionEvent.ACTION_POINTER_UP) {
             //多个手指情况下抬起一个手指,此时需要是缩放模式才触发
-            if (mPinchMode == PINCH_MODE_SCALE) {
-                //抬起的点如果大于2，那么缩放模式还有效，但是有可能初始点变了，重新测量初始点
-                if (event.getPointerCount() > 2) {
-                    //如果还没结束缩放模式，但是第一个点抬起了，那么让第二个点和第三个点作为缩放控制点
-                    if (event.getAction() >> 8 == 0) {
-                        saveScaleContext(event.getX(1), event.getY(1), event.getX(2), event.getY(2));
-                        //如果还没结束缩放模式，但是第二个点抬起了，那么让第一个点和第三个点作为缩放控制点
-                    } else if (event.getAction() >> 8 == 1) {
-                        saveScaleContext(event.getX(0), event.getY(0), event.getX(2), event.getY(2));
-                    }
+            if (mPinchMode == PINCH_MODE_SCALE && event.getPointerCount() > 2) {
+                //如果还没结束缩放模式，但是第一个点抬起了，那么让第二个点和第三个点作为缩放控制点
+                if (event.getAction() >> 8 == 0) {
+                    saveScaleContext(event.getX(1), event.getY(1), event.getX(2), event.getY(2));
+                    //如果还没结束缩放模式，但是第二个点抬起了，那么让第一个点和第三个点作为缩放控制点
+                } else if (event.getAction() >> 8 == 1) {
+                    saveScaleContext(event.getX(0), event.getY(0), event.getX(2), event.getY(2));
                 }
-                //如果抬起的点等于2,那么此时只剩下一个点,也不允许进入单指模式,因为此时可能图片没有在正确的位置上
             }
             //第一个点按下，开启滚动模式，记录开始滚动的点
         } else if (action == MotionEvent.ACTION_DOWN) {
@@ -824,24 +815,22 @@ public class PinchImageView extends ImageView {
             mPinchMode = PINCH_MODE_SCALE;
             //保存缩放的两个手指
             saveScaleContext(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            if (!(mScaleAnimator != null && mScaleAnimator.isRunning())) {
-                //在滚动模式下移动
-                if (mPinchMode == PINCH_MODE_SCROLL) {
-                    //每次移动产生一个差值累积到图片位置上
-                    scrollBy(event.getX() - mLastMovePoint.x, event.getY() - mLastMovePoint.y);
-                    //记录新的移动点
-                    mLastMovePoint.set(event.getX(), event.getY());
-                    //在缩放模式下移动
-                } else if (mPinchMode == PINCH_MODE_SCALE && event.getPointerCount() > 1) {
-                    //两个缩放点间的距离
-                    float distance = MathUtils.getDistance(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-                    //保存缩放点中点
-                    float[] lineCenter = MathUtils.getCenterPoint(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-                    mLastMovePoint.set(lineCenter[0], lineCenter[1]);
-                    //处理缩放
-                    scale(mScaleCenter, mScaleBase, distance, mLastMovePoint);
-                }
+        } else if (action == MotionEvent.ACTION_MOVE && !(mScaleAnimator != null && mScaleAnimator.isRunning())) {
+            //在滚动模式下移动
+            if (mPinchMode == PINCH_MODE_SCROLL) {
+                //每次移动产生一个差值累积到图片位置上
+                scrollBy(event.getX() - mLastMovePoint.x, event.getY() - mLastMovePoint.y);
+                //记录新的移动点
+                mLastMovePoint.set(event.getX(), event.getY());
+                //在缩放模式下移动
+            } else if (mPinchMode == PINCH_MODE_SCALE && event.getPointerCount() > 1) {
+                //两个缩放点间的距离
+                float distance = MathUtils.getDistance(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                //保存缩放点中点
+                float[] lineCenter = MathUtils.getCenterPoint(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                mLastMovePoint.set(lineCenter[0], lineCenter[1]);
+                //处理缩放
+                scale(mScaleCenter, mScaleBase, distance, mLastMovePoint);
             }
         }
         //无论如何都处理各种外部手势

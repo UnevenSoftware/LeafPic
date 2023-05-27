@@ -90,10 +90,8 @@ public class AlbumsHelper {
     public static void unHideAlbum(String path, Context context) {
         File dirName = new File(path);
         File file = new File(dirName, ".nomedia");
-        if (file.exists()) {
-            if (file.delete())
-                scanFile(context, new String[] { file.getAbsolutePath() });
-        }
+        if (file.exists() && file.delete())
+            scanFile(context, new String[] { file.getAbsolutePath() });
     }
 
     public static boolean deleteAlbum(Album album, Context context) {

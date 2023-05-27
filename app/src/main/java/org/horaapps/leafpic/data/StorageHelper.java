@@ -383,10 +383,8 @@ public class StorageHelper {
         } else {
             HashSet<File> storageRoots = StorageHelper.getStorageRoots(context);
             for (File root : storageRoots) {
-                if (root != null) {
-                    if ((file.getPath().indexOf(root.getPath())) != -1)
-                        suffixPathPart = file.getAbsolutePath().substring(file.getPath().length());
-                }
+                if (root != null && (file.getPath().indexOf(root.getPath())) != -1)
+                    suffixPathPart = file.getAbsolutePath().substring(file.getPath().length());
             }
         }
         if (suffixPathPart == null) {
